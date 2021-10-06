@@ -113,7 +113,7 @@
                     
                     <div class="modal-body">
                       <!-- form start -->
-                      <form id="form-usuario" name="form-usuario"  method="POST">                      
+                      <form id="form-usuario" name="form-usuario"  method="POST" >                      
                         <div class="card-body">
                           <div class="row" id="cargando-1-fomulario">
                             <!-- id usuario -->
@@ -199,7 +199,7 @@
                             <div class="col-lg-4">
                               <div class="form-group">
                                 <label for="password">Contraseña <small>(por defecto "1234")</small></label>
-                                <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña">
+                                <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" autocomplete="off">
                                 <input type="hidden" name="password-old"   id="password-old"  >
                               </div>
                             </div>

@@ -59,11 +59,11 @@ switch ($_GET["op"]){
 				}				
 
 				if (empty($idusuario)){
-					$rspta=$usuario->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$permiso);
+					$rspta=$usuario->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$permisos);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 				}
 				else {
-					$rspta=$usuario->editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$permiso);
+					$rspta=$usuario->editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$permisos);
 					echo $rspta ? "ok" : "Usuario no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
@@ -223,12 +223,12 @@ switch ($_GET["op"]){
 	    {
 	        //Declaramos las variables de sesión
 	        $_SESSION['idusuario']=$fetch->idusuario;
-	        $_SESSION['nombre']=$fetch->nombre;
+	        $_SESSION['nombre']=$fetch->nombres;
 	        $_SESSION['imagen']=$fetch->imagen;
 	        $_SESSION['login']=$fetch->login;
 			$_SESSION['cargo']=$fetch->cargo;
 			$_SESSION['tipo_documento']=$fetch->tipo_documento;
-			$_SESSION['num_documento']=$fetch->num_documento;
+			$_SESSION['num_documento']=$fetch->numero_documento;
 			$_SESSION['telefono']=$fetch->telefono;
 			$_SESSION['email']=$fetch->email;
 

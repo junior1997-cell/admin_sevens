@@ -111,9 +111,9 @@ Class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login,$clave)
     {
-    	$sql="SELECT idusuario,nombre,tipo_documento,num_documento,telefono,email,cargo,login,imagen,tipo_documento,num_documento 
-    	FROM admin_sevens.usuario 
-    	WHERE login='$login' AND password='$clave' AND estado='1'"; 
+    	$sql="SELECT u.idusuario, t.nombres,t.tipo_documento,t.numero_documento,t.telefono,t.email,u.cargo,u.login,t.imagen,t.tipo_documento
+		FROM admin_sevens.usuario as u, admin_sevens.trabajador as t
+		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.idusuario = t.idtrabajador;"; 
     	return ejecutarConsulta($sql);  
     }
 }
