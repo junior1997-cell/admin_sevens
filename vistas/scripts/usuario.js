@@ -104,8 +104,8 @@ function listar() {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
-//Función para guardar o editar
 
+//Función para guardar o editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-usuario")[0]);
