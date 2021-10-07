@@ -6,10 +6,10 @@ function init() {
   listar();
 
   //Mostramos los permisos
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) {
+  $.post("../ajax/usuario.php?op=permisos&id=", function (r) {  $("#permisos").html(r); });
 
-    $("#permisos").html(r);
-  });
+  //Mostramos los trabajadores
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
   $("#bloc_Accesos").addClass("menu-open");
 
@@ -17,10 +17,15 @@ function init() {
 
   $("#lUsuario").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) {
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
 
-    $("#submit-form-usuario").submit();
+  //Initialize Select2 Elements
+  $("#trabajador").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione trabajador",
+    allowClear: true,
   });
+  
 
   //Initialize Select2 Elements
   $("#cargo").select2({
@@ -28,132 +33,42 @@ function init() {
     placeholder: "Selecione cargo",
     allowClear: true,
   });
-
-  $("#cargo").val("").trigger("change");
+  $("#trabajador").val("null").trigger("change");
+  $("#cargo").val("Administrador").trigger("change");
 
   // Formato para telefono
-  $("[data-mask]").inputmask();
-
-  $("#foto2_i").click(function() {
-
-		$('#foto2').trigger('click');
-	});
-
-  $("#foto2").change(function(e) {
-
-		addImage(e,$("#foto2").attr("id"))
-	});
+  $("[data-mask]").inputmask();   
 }
-/* PREVISUALIZAR LAS IMAGENES */
-function addImage(e,id) {
-
-	console.log(id);
-
-	var file = e.target.files[0], imageType = /image.*/;
-	
-	if (e.target.files[0]) {
-
-		var sizeByte = file.size;
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(imageType)){
-			// return;
-			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>foto-ejemplo.webp </b>');
-
-			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		}else{
-
-			if (sizekiloBytes <= 2048) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-					var result = e.target.result;
-					$("#"+id+"_i").attr("src", result);
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-                '<div class="col-md-12">'+
-							  file.name +
-                '</div>'+
-                '<div class="col-md-12">'+
-                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-                '</div>'+
-              '</div>'+
-						'');
-					toastr.success('Imagen aceptada.')
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-
-				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada')
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-		}
-	}else{
-
-		toastr.error('Seleccione una Imagen');$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		$("#"+id+"_nombre").html("");
-	}	
-	
-}
-
-function foto2_eliminar() {
-
-	$("#foto2").val("");
-
-	$("#foto2_i").attr("src", "../dist/img/default/img_defecto.png");
-
-	$("#foto2_nombre").html("");
-}
+ 
 
 function seleccion() {
 
-  if ($("#cargo").select2("val") == null) {
+  if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == null) {
 
-    $("#cargo_validar").show();
+    $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
 
   } else {
 
-    $("#cargo_validar").hide();
+    $("#trabajador_validar").hide();
   }
 }
 
 //Función limpiar
 function limpiar() {
+  //Mostramos los trabajadores
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) {   $("#trabajador").html(r);  });
+
   $("#idusuario").val("");
-  $("#nombre").val("");
-  $("#num_documento").val("");
-  $("#direccion").val("");
-  $("#telefono").val("");
-  $("#email").val("");
-  $("#cargo").val("").trigger("change"); 
+  $("#trabajador_c").html("Trabajador");
+  $("#trabajador").val("null").trigger("change"); 
+  $("#trabajador_old").val(""); 
+  $("#cargo").val("Administrador").trigger("change"); 
   $("#login").val("");
   $("#password").val("");
-  $("#password-old").val("");
-
-  $("#foto2_i").attr("src", "../dist/img/default/img_defecto.png");
-	$("#foto2").val("");
-	$("#foto2_actual").val("");  
-  $("#foto2_nombre").html("");  
+  $("#password-old").val("");   
   
   //Mostramos los permisos
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) {
-
-    $("#permisos").html(r);
-  });
+  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
 }
 
 //Función Listar
@@ -223,7 +138,8 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
-
+  $("#trabajador").val("").trigger("change"); 
+  $("#trabajador_c").html("(Nuevo) Trabajador");
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
@@ -231,17 +147,12 @@ function mostrar(idusuario) {
 
   $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-
-    $("#nombre").val(data.nombre);     
-    $("#tipo_documento").val(data.tipo_documento).trigger("change");
-    $("#num_documento").val(data.num_documento);
-    $("#direccion").val(data.direccion);
-    $("#telefono").val(data.telefono);
-    $("#email").val(data.email);
+    
+    $("#trabajador_old").val(data.idtrabajador); 
     $("#cargo").val(data.cargo).trigger("change"); 
     $("#login").val(data.login);
     $("#password-old").val(data.password);
@@ -274,10 +185,16 @@ function desactivar(idusuario) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
+        if (e == 'ok') {
 
-        Swal.fire("Desactivado!", "Tu usuario ha sido desactivado.", "success");
-    
-        tabla.ajax.reload();
+          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
+  
+          tabla.ajax.reload();
+          
+        }else{
+  
+          Swal.fire("Error!", e, "error");
+        }
       });      
     }
   });   
@@ -285,7 +202,9 @@ function desactivar(idusuario) {
 
 //Función para activar registros
 function activar(idusuario) {
+
   Swal.fire({
+
     title: "¿Está Seguro de  Activar  el Usuario?",
     text: "Este usuario tendra acceso al sistema",
     icon: "warning",
@@ -293,15 +212,24 @@ function activar(idusuario) {
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, activar!",
+
   }).then((result) => {
+
     if (result.isConfirmed) {
+
       $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
 
-        Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");
+        if (e == 'ok') {
 
-        tabla.ajax.reload();
-      });
-      
+          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
+  
+          tabla.ajax.reload();
+          
+        }else{
+  
+          Swal.fire("Error!", e, "error");
+        }
+      });      
     }
   });      
 }
@@ -314,13 +242,13 @@ $(function () {
 
     submitHandler: function (e) {
 
-      if ($("#cargo").select2("val") == null) {
-
-        $("#cargo_validar").show();
+      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
+        
+        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
 
       } else {
 
-        $("#cargo_validar").hide();
+        $("#trabajador_validar").hide();
 
         guardaryeditar(e);
       }
@@ -329,49 +257,11 @@ $(function () {
 
   $("#form-usuario").validate({
     rules: {
-      tipo_documento: { required: true },
-      num_documento: { required: true, minlength: 6, maxlength: 20 },
-      nombre: { required: true, minlength: 6, maxlength: 100 },
-      email: { email: true, minlength: 10, maxlength: 50 },
-      direccion: { minlength: 5, maxlength: 70 },
-      telefono: { minlength: 8 },
-      cargo2: { required: true, minlength: 3, maxlength: 20 },
       login: { required: true, minlength: 3, maxlength: 20 },
       password: {minlength: 4, maxlength: 20 },
       // terms: { required: true },
     },
     messages: {
-      tipo_documento: {
-        required: "Por favor selecione un tipo de documento", 
-      },
-      num_documento: {
-        required: "Ingrese un numero de documento",
-        minlength: "El numero documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El numero documento debe tener como MÁXIMO 20 caracteres.",
-      },
-      nombre: {
-        required: "Por favor ingrese los nombres y apellidos",
-        minlength: "El numero documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El numero documento debe tener como MÁXIMO 100 caracteres.",
-      },
-      email: {
-        required: "Por favor ingrese un correo electronico.",
-        email: "Por favor ingrese un coreo electronico válido.",
-        minlength: "El correo electronico debe tener MÍNIMO 10 caracteres.",
-        maxlength: "El correo electronico debe tener como MÁXIMO 50 caracteres.",
-      },
-      direccion: {
-        minlength: "La dirección debe tener MÍNIMO 5 caracteres.",
-        maxlength: "La dirección debe tener como MÁXIMO 70 caracteres.",
-      },
-      telefono: {
-        minlength: "El teléfono debe tener MÍNIMO 8 caracteres.",
-      },
-      cargo2: {
-        required: "Por favor seleccione un cargo.",
-        minlength: "El cargo debe tener MÍNIMO 3 caracteres.",
-        maxlength: "El cargo debe tener como MÁXIMO 20 caracteres.",
-      },
       login: {
         required: "Por favor ingrese un login.",
         minlength: "El login debe tener MÍNIMO 4 caracteres.",
@@ -401,13 +291,13 @@ $(function () {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
 
-      if ($("#cargo").select2("val") == null) {
-
-        $("#cargo_validar").show();
+      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
+         
+        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
 
       } else {
 
-        $("#cargo_validar").hide();
+        $("#trabajador_validar").hide();
       }       
     },
   });

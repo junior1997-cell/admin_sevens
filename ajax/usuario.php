@@ -7,18 +7,13 @@ require_once "../modelos/Usuario.php";
 
 $usuario=new Usuario();
 
-$idusuario		= isset($_POST["idusuario"])? limpiarCadena($_POST["idusuario"]):"";
-$nombre 		= isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
-$tipo_documento	= isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-$num_documento	= isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
-$direccion		= isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
-$telefono		= isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
-$email			= isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
+$idusuario		= isset($_POST["idusuario"])? limpiarCadena($_POST["idusuario"]):""; 
+$trabajador		= isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
+$trabajador_old	= isset($_POST["trabajador_old"])? limpiarCadena($_POST["trabajador_old"]):"";
 $cargo			= isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
 $login			= isset($_POST["login"])? limpiarCadena($_POST["login"]):"";
 $clave			= isset($_POST["password"])? limpiarCadena($_POST["password"]):"";
 $clave_old		= isset($_POST["password-old"])? limpiarCadena($_POST["password-old"]):"";
-$imagen			= isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 $permiso 		= isset($_POST['permiso'])? $_POST['permiso']:"";
 
 switch ($_GET["op"]){
@@ -31,24 +26,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['acceso']==1)
 			{
-				$clavehash="";
-
-				// if ( !empty($imagen) ) {
-					if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
-
-						$imagen=$_POST["foto2_actual"];
-					} else {
-
-						$ext = explode(".", $_FILES["foto2"]["name"]);
-
-						if ($_FILES['foto2']['type'] == "image/jpg" || $_FILES['foto2']['type'] == "image/jpeg" || $_FILES['foto2']['type'] == "image/png")
-						{
-							$imagen = round(microtime(true)) . '.' . end($ext);
-
-							move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/usuarios/" . $imagen);
-						}
-					}
-				// }
+				$clavehash="";				 
 				
 				if ( !empty($clave) ) {
 					//Hash SHA256 en la contraseña
@@ -59,11 +37,13 @@ switch ($_GET["op"]){
 				}				
 
 				if (empty($idusuario)){
-					$rspta=$usuario->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$permisos);
+
+					$rspta=$usuario->insertar($trabajador, $cargo, $login, $clavehash, $permiso);
+
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
-				}
-				else {
-					$rspta=$usuario->editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$permisos);
+				} else {
+					$rspta=$usuario->editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clavehash, $permiso);
+					
 					echo $rspta ? "ok" : "Usuario no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
@@ -82,15 +62,15 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
-			{
+			if ($_SESSION['acceso']==1) {
+
 				$rspta=$usuario->desactivar($idusuario);
- 				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
+
+ 				echo $rspta ? "ok" : "Usuario no se puede desactivar";
+				//Fin de las validaciones de acceso
+			} else {
+
+		  		require 'noacceso.php';
 			}
 		}		
 	break;
@@ -106,7 +86,7 @@ switch ($_GET["op"]){
 			if ($_SESSION['acceso']==1)
 			{
 				$rspta=$usuario->activar($idusuario);
- 				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+ 				echo $rspta ? "ok" : "Usuario no se puede activar";
 			//Fin de las validaciones de acceso
 			}
 			else
@@ -117,37 +97,35 @@ switch ($_GET["op"]){
 	break;
 
 	case 'mostrar':
-		if (!isset($_SESSION["nombre"]))
-		{
+		if (!isset($_SESSION["nombre"])){
+
 		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
+
+		}else{
+
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
-			{
+			if ($_SESSION['acceso']==1)	{
+
 				$rspta=$usuario->mostrar($idusuario);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
+				//Fin de las validaciones de acceso
+			}else{
+
+		  		require 'noacceso.php';
 			}
 		}		
 	break;
 
 	case 'listar':
-		if (!isset($_SESSION["nombre"]))
-		{
+		if (!isset($_SESSION["nombre"])){
+
 		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
+
+		}else{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
-			{
+			if ($_SESSION['acceso']==1)	{
+
 				$rspta=$usuario->listar();
 		 		//Vamos a declarar un array
 		 		$data= Array();
@@ -158,10 +136,14 @@ switch ($_GET["op"]){
 		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idusuario.')"><i class="far fa-trash-alt  "></i></button>':
 		 					'<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>',
-		 				"1"=>$reg->nombre,
-		 				"2"=>$reg->tipo_documento,
-		 				"3"=>$reg->num_documento,
-		 				"4"=>$reg->telefono,
+		 				"1"=>'<div class="user-block">
+								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image">
+								<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
+								<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+							</div>',
+		 				"2"=>$reg->telefono,
+		 				"3"=>$reg->login,
+		 				"4"=>$reg->cargo,
 		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
@@ -255,6 +237,15 @@ switch ($_GET["op"]){
 
 	    }
 	    echo json_encode($fetch);
+	break;
+	case 'select2Trabajador': 
+
+		$rspta = $usuario->select2_trabajador();
+
+		while ($reg = $rspta->fetch_object())
+				{
+				echo '<option value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
+				}
 	break;
 
 	case 'salir':
