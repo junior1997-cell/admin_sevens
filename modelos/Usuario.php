@@ -11,11 +11,14 @@ Class Usuario
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clave,$imagen,$permisos)
+	public function insertar($trabajador,$cargo,$login,$clave,$permisos)
 	{
-		$sql="INSERT INTO usuario (nombre,tipo_documento,num_documento,direccion,telefono,email,cargo,login,password,imagen)
-		VALUES ('$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email','$cargo','$login','$clave','$imagen')";
-		//return ejecutarConsulta($sql);		
+		// insertamos al usuario
+		$sql="INSERT INTO usuario ( idtrabajador, cargo, login, password) VALUES ('$trabajador','$cargo','$login','$clave')";
+		// marcamos al trabajador como usuario
+		$sql2="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";	
+		ejecutarConsulta($sql2);
+
 		$num_elementos=0;	$sw=true;
 
 		if ($permisos != "" ) {
@@ -41,10 +44,25 @@ Class Usuario
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clave,$imagen,$permisos)
+	public function editar($idusuario,$trabajador_old,$trabajador,$cargo,$login,$clave,$permisos)
 	{
-		$sql="UPDATE usuario SET nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email',cargo='$cargo',login='$login',password='$clave',imagen='$imagen' WHERE idusuario='$idusuario'";		 	
+		if (!empty($trabajador) ) {
 
+			$sql="UPDATE usuario SET idtrabajador='$trabajador', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
+			
+			// desmarcamos al trabajador old como usuario
+			$sql3="UPDATE trabajador SET estado_usuario='0' WHERE idtrabajador='$trabajador_old';";
+			ejecutarConsulta($sql3);
+			// marcamos al trabajador new como usuario
+			$sql4="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";
+			ejecutarConsulta($sql4);
+		} else {
+			$sql="UPDATE usuario SET idtrabajador='$trabajador_old', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
+		}
+		
+				 	
+		
+		
 		$num_elementos=0;	$sw=true;
 
 		if ($permisos != "" ) {
@@ -78,6 +96,7 @@ Class Usuario
 	public function desactivar($idusuario)
 	{
 		$sql="UPDATE usuario SET estado='0' WHERE idusuario='$idusuario'";
+
 		return ejecutarConsulta($sql);
 	}
 
@@ -85,6 +104,7 @@ Class Usuario
 	public function activar($idusuario)
 	{
 		$sql="UPDATE usuario SET estado='1' WHERE idusuario='$idusuario'";
+
 		return ejecutarConsulta($sql);
 	}
 
@@ -92,13 +112,16 @@ Class Usuario
 	public function mostrar($idusuario)
 	{
 		$sql="SELECT * FROM usuario WHERE idusuario='$idusuario'";
+
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM usuario";
+		$sql="SELECT u.idusuario, t.nombres,t.tipo_documento,t.numero_documento,t.telefono,t.email,u.cargo,u.login,t.imagen,t.tipo_documento, u.estado
+		FROM admin_sevens.usuario as u, admin_sevens.trabajador as t
+		WHERE  u.idtrabajador = t.idtrabajador;";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los permisos marcados
@@ -113,9 +136,16 @@ Class Usuario
     {
     	$sql="SELECT u.idusuario, t.nombres,t.tipo_documento,t.numero_documento,t.telefono,t.email,u.cargo,u.login,t.imagen,t.tipo_documento
 		FROM admin_sevens.usuario as u, admin_sevens.trabajador as t
-		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.idusuario = t.idtrabajador;"; 
+		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.idtrabajador = t.idtrabajador;"; 
     	return ejecutarConsulta($sql);  
     }
+
+	//Seleccionar Trabajador Select2
+	public function select2_trabajador()
+	{
+		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1' and estado_usuario='0';";
+		return ejecutarConsulta($sql);		
+	}
 }
 
 ?>
