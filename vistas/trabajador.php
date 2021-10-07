@@ -117,7 +117,7 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="tipo_documento">Tipo de documento</label>
-                                                        <select name="tipo_documento" id="tipo_documento" class="form-control" onchange="seleccion();" placeholder="Tipo de documento">
+                                                        <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
                                                             <option selected value="DNI">DNI</option>
                                                             <option value="RUC">RUC</option>
                                                             <option value="CEDULA">CEDULA</option>
@@ -186,7 +186,7 @@
                                                 <div class="col-lg-2">
                                                     <div class="form-group">
                                                         <label for="tipo_trabajador">Tipo trabajador</label>
-                                                        <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="selecciontrab();">
+                                                        <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;">
                                                             <option value="Técnico">Técnico</option>
                                                             <option value="Obrero">Obrero</option>
                                                         </select>
@@ -197,7 +197,7 @@
                                                 <div class="col-lg-2">
                                                     <div class="form-group">
                                                         <label for="cargo">Cargo</label>
-                                                        <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;" onchange="seleccioncargo();">
+                                                        <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;">
                                                             <option value="Maestro">Maestro</option>
                                                             <option value="Operario">Operario</option>
                                                             <option value="Oficial">Oficial</option>
@@ -224,7 +224,7 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="banco">Banco</label>
-                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="seleccion();">
+                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
                                                             <option value="1">BCP</option>
                                                             <option value="2">BBVA</option>
                                                             <option value="3">SCOTIA BANK</option>
@@ -245,21 +245,21 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                                        <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" placeholder="Titular de la cuenta" />
+                                                        <input type="number" step="0.10" name="sueldo_mensual" class="form-control" id="sueldo_mensual" placeholder="Titular de la cuenta" />
                                                     </div>
                                                 </div>
                                                 <!-- Sueldo(Diario) -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_diario">Sueldo(Diario)</label>
-                                                        <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" placeholder="Titular de la cuenta" />
+                                                        <input type="number" step="0.10" name="sueldo_diario" class="form-control" id="sueldo_diario" placeholder="Titular de la cuenta" />
                                                     </div>
                                                 </div>
                                                 <!-- Sueldo(Hora) -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_hora">Sueldo(Hora)</label>
-                                                        <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" placeholder="Titular de la cuenta" />
+                                                        <input type="number" step="0.10" name="sueldo_hora" class="form-control" id="sueldo_hora" placeholder="Titular de la cuenta" />
                                                     </div>
                                                 </div>
                                                 <!-- imagen -->

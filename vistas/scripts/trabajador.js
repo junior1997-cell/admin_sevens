@@ -104,30 +104,6 @@ function foto2_eliminar() {
 	$("#foto2_nombre").html("");
 }
 
-function selecciontrab() {
-
-  if ($("#tipo_trabajador").select2("val") == null) {
-
-    $("#tipo_trab_validar").show();
-
-  } else {
-
-    $("#tipo_trab_validar").hide();
-  }
-}
-
-function seleccioncargo() {
-
-  if ($("#cargo").select2("val") == null) {
-
-    $("#cargo_validar").show();
-
-  } else {
-
-    $("#cargo_validar").hide();
-  }
-}
-
 /**
  tipo_documento
  nombre
@@ -320,22 +296,14 @@ init();
 
 $(function () {
 
- /* $.validator.setDefaults({
+  $.validator.setDefaults({
 
    submitHandler: function (e) {
 
-      if ($("#cargo").select2("val") == null) {
-
-        $("#cargo_validar").show();
-
-      } else {
-
-        $("#cargo_validar").hide();
-
         guardaryeditar(e);
-      }
+
     },
-  });*/
+  });
 
   $("#form-trabajador").validate({
     rules: {
@@ -418,19 +386,11 @@ $(function () {
       $(element).addClass("is-invalid");
     },
 
-   /* unhighlight: function (element, errorClass, validClass) {
+   unhighlight: function (element, errorClass, validClass) {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
 
-      if ($("#cargo").select2("val") == null) {
-
-        $("#cargo_validar").show();
-
-      } else {
-
-        $("#cargo_validar").hide();
-      }       
-    },*/
+    },
 
 
 
