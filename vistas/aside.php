@@ -60,7 +60,7 @@
           </ul>
         </li>
         <!-- OTROS -->
-        <li class="nav-header">Otros</li>
+        <li class="nav-header">Modulos</li>
         <li class="nav-item">
           <a href="pages/calendar.html" class="nav-link">
             <i class="nav-icon far fa-calendar-alt"></i>
