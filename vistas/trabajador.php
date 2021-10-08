@@ -60,7 +60,7 @@
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <table id="tabla-trabajadors" class="table table-bordered table-striped display">
+                                        <table id="tabla-trabajadors" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
                                                     <th class="">Aciones</th>
