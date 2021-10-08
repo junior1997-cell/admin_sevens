@@ -80,14 +80,14 @@
           </a>
         </li>
         <!-- PROYECTOS -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a href="pages/kanban.html" class="nav-link">
             <i class="nav-icon fas fa-columns"></i>
             <p>
               Proyectos
             </p>
           </a>
-        </li>
+        </li> -->
         <!-- TRABAJADORES -->
         <li class="nav-item">
           <a href="trabajador.php" class="nav-link">

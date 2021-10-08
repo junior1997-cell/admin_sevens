@@ -66,3 +66,28 @@
 .text-reset {
   color: inherit !important;
 }
+
+
+.desarrollador-whatsapp {
+  color: black !important;
+}
+
+.desarrollador-whatsapp:hover {
+  color: #28a745 !important;
+}
+
+.desarrollador-facebook {
+  color: black !important;
+}
+
+.desarrollador-facebook:hover {
+  color: #007bff !important;
+}
+
+.desarrollador-linkedin {
+  color: black !important;
+}
+
+.desarrollador-linkedin:hover {
+  color: #007bff !important;
+}

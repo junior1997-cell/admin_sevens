@@ -108,7 +108,7 @@ function guardaryeditar(e) {
          
 				limpiar();
 
-        $("#modal-agregar-proveedor").modal("hide");
+        $("#modal-agregar-proveedores").modal("hide");
 
 			}else{
 

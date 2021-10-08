@@ -17,7 +17,7 @@
         require 'head.php';
         ?>
     </head>
-    <body class="hold-transition sidebar-mini">
+    <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
             <?php
