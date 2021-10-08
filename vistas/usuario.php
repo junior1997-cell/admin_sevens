@@ -206,15 +206,15 @@
         require 'script.php';
         ?>
       <!-- Bootstrap 4 -->
-      <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <!-- <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
       <!-- jquery-validation -->
-      <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-      <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+      <!-- <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+      <script src="../plugins/jquery-validation/additional-methods.min.js"></script> -->
       <!-- InputMask -->
-      <script src="../plugins/moment/moment.min.js"></script>
-      <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>    
+      <!-- <script src="../plugins/moment/moment.min.js"></script>
+      <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>     -->
       <!-- sweetalert2 -->
-      <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+      <!-- <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script> -->
 
       <script type="text/javascript" src="scripts/usuario.js"></script>
 

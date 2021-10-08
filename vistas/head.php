@@ -23,6 +23,9 @@
 <!-- Toastr -->
 <link rel="stylesheet" href="../plugins/toastr/toastr.min.css">
 
+<!-- daterange picker -->
+<link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
+
 <!-- Theme style -->
 <link rel="stylesheet" href="../dist/css/adminlte.min.css" />
 

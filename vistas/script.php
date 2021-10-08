@@ -1,9 +1,6 @@
 <!-- jQuery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
 
-<!-- <script>
-  $.widget.bridge("uibutton", $.ui.button);
-</script> -->
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -11,6 +8,17 @@
 <script src="../plugins/select2/js/select2.full.min.js"></script>
 <!-- Toastr -->
 <script src="../plugins/toastr/toastr.min.js"></script>
+
+<!-- jquery-validation -->
+<script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+
+<!-- InputMask -->
+<script src="../plugins/moment/moment.min.js"></script>
+<script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
+
+<!-- date-range-picker -->
+<script src="../plugins/daterangepicker/daterangepicker.js"></script>
 
 <!-- DataTables  & Plugins -->
 <script src="../plugins/datatables2/jquery.dataTables.min.js"></script>    
@@ -23,6 +31,9 @@
 <!-- Responsive datatable -->
 <script src="../plugins/datatables2/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="../plugins/datatables2/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+<!-- sweetalert2 -->
+<script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
 <!-- <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -42,3 +53,7 @@
 <script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
+
+<?php          
+    require 'contacto_desarrollador.php';
+?>
