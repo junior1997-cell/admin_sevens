@@ -245,21 +245,21 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                                        <input type="number" step="0.10" name="sueldo_mensual" class="form-control" id="sueldo_mensual" placeholder="Titular de la cuenta" />
+                                                        <input type="number" step="0.10" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
                                                     </div>
                                                 </div>
                                                 <!-- Sueldo(Diario) -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
-                                                        <label for="sueldo_diario">Sueldo(Diario)</label>
-                                                        <input type="number" step="0.10" name="sueldo_diario" class="form-control" id="sueldo_diario" placeholder="Titular de la cuenta" />
+                                                        <label for="sueldo_diario">Sueldo( 24 Diario)</label>
+                                                        <input type="number" step="0.10" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
                                                     </div>
                                                 </div>
                                                 <!-- Sueldo(Hora) -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
-                                                        <label for="sueldo_hora">Sueldo(Hora)</label>
-                                                        <input type="number" step="0.10" name="sueldo_hora" class="form-control" id="sueldo_hora" placeholder="Titular de la cuenta" />
+                                                        <label for="sueldo_hora">Sueldo(8 Hora)</label>
+                                                        <input type="number" step="0.10" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly/>
                                                     </div>
                                                 </div>
                                                 <!-- imagen -->
@@ -294,6 +294,148 @@
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Modal ver trabajador-->
+                    <div class="modal fade" id="modal-ver-trabajador">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Datos trabajador</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span class="text-danger" aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div id="datostrabajador" >
+                                    
+                                        <!--<div class="card-body" style="background-color: #d3a49430;border-radius: 9px;">
+                                            <div class="row" id="cargando-1-fomulario">
+                                                
+                                                <div class="col-lg-4">
+                                                    <img
+                                                        onerror="this.src='../dist/img/default/img_defecto.png';"
+                                                        src="../dist/img/default/img_defecto.png"
+                                                        class="img-thumbnail"
+                                                        id="foto2_i"
+                                                        style="cursor: pointer !important; border-radius: 50%; width: 150px;"
+                                                    />
+                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
+                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                                    <div class="text-center" id="foto2_nombre"></div>
+                                                </div>                                                
+                                                <div class="col-lg-8">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="nombre">Nombre y Apellidos/Razon Social</label>
+                                                            <br>
+                                                            <small>David Melvin</small>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="num_documento">N° de documento</label>
+                                                                <br>
+                                                                <small>88888888888</small>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                                <div class="col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <label for="nombre">Dirección</label> <br>
+                                                            <small>Jr los angeles</small>
+                                                        </div>
+                                                        <div class="col-12">
+                                                             <label for="email">Correo electrónico</label> <br>
+                                                            <small>aaaaa@upeu.edu.pe</small>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>                                                
+                                                <div class="col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="nombre">Teléfono</label> <br>
+                                                            <small>921305675</small>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                            <label for="email">Fecha Nacimiento</label> <br>
+                                                            <small>20/10/1999</small>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>                                                
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="tipo_trabajador">Tipo trabajador</label>
+                                                        <small>Técnico</small>
+                                                    </div>
+                                                </div>                                               
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="cargo">Cargo</label> <br>
+                                                        <small>Maestro</small>
+                                                    </div>
+                                                </div>                                                
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="desempeño">Desempeño</label> 
+                                                        <small>Desempeño</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="c_bancaria">Cuenta Bancaria</label>
+                                                        <small>Cuenta Bancaria</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="banco">Banco</label> <br>
+                                                        <small>SCOTIA BANK</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="tutular_cuenta">Titular-cuenta</label>
+                                                        <small>Titular de la cuenta</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="sueldo_mensual">Sueldo(Mensual)</label>
+                                                        <small>Sueldo(Mensual)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="sueldo_diario">Sueldo( 24 Diario)</label>
+                                                        <small>Sueldo(Mensual)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="sueldo_hora">Sueldo(8 Hora)</label>
+                                                        <small>Sueldo(Mensual)</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                    </div>
                                 </div>
                             </div>
                         </div>

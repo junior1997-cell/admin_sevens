@@ -105,6 +105,7 @@ function foto2_eliminar() {
 }
 
 /**
+ idtrabajador
  tipo_documento
  nombre
  num_documento
@@ -121,12 +122,21 @@ function foto2_eliminar() {
  sueldo_diario
  sueldo_hora
  */
+function sueld_mensual(){
+var sueldo_mensual = $('#sueldo_mensual').val()
+var sueldo_diario=(sueldo_mensual/30).toFixed(1);
+var sueldo_horas=(sueldo_diario/8).toFixed(1);
+$("#sueldo_diario").val(sueldo_diario);
+$("#sueldo_hora").val(sueldo_horas);
+
+}
 
 
 //Función limpiar
 function limpiar() {
   $("#idtrabajador").val(""); 
-  $("#tipo_documento").val(""); 
+  //$("#tipo_documento").val(""); 
+  $("#tipo_documento option[value='DNI']").attr("selected", true);
   $("#nombre").val(""); 
   $("#num_documento").val(""); 
   $("#direccion").val(""); 
@@ -134,10 +144,12 @@ function limpiar() {
   $("#email").val(""); 
   $("#nacimiento").val(""); 
   $("#tipo_trabajador").val(""); 
+  $("#cargo").val(""); 
   $("#desempenio").val("");  
   $("#c_bancaria").val("");  
   $("#banco").val("");  
   $("#tutular_cuenta").val("");   
+  $("#sueldo_mensual").val("");   
   $("#sueldo_diario").val("");   
   $("#sueldo_hora").val("");   
 
@@ -214,6 +226,143 @@ function guardaryeditar(e) {
   });
 }
 
+function verdatos(idtrabajador){
+
+  console.log('id_verdatos'+idtrabajador);
+  
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+
+  $('#datostrabajador').html('');
+  var verdatos='';
+  var imagenver='';
+
+  $("#modal-ver-trabajador").modal("show")
+  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+    
+    //$("#foto2_ver").attr("src", "../dist/img/usuarios/" + data.imagen);
+    if (data.imagen!="") {
+      imagenver=data.imagen;
+    }else{
+      imagenver=img_defecto.png;
+    }
+
+ verdatos=''+
+  '<div class="card-body" style="background-color: #d3a49430;border-radius: 9px;">'+
+      '<div class="row" id="cargando-1-fomulario">'+
+          '<div class="col-lg-4">'+
+          '<img src="../dist/img/usuarios/'+imagenver+'" class="img-thumbnail" style="cursor: pointer !important; border-radius: 50%; width: 150px; height: 129px;"/>'+
+          '</div>'+                                                
+          '<div class="col-lg-8">'+
+              '<div class="row">'+
+                  '<div class="col-12">'+
+                  '<div class="form-group">'+
+                      '<label for="nombre">Nombre y Apellidos/Razon Social</label>'+
+                      '<br>'+
+                      '<small>'+data.nombres+'</small>'+
+                  '</div>'+
+                  '</div>'+
+                  '<div class="col-12">'+
+                      '<div class="form-group">'+
+                          '<label for="num_documento">N° de documento</label>'+
+                          '<br>'+
+                          '<small>'+data.numero_documento+'</small>'+
+                      '</div>'+
+                  '</div>'+
+              '</div>'+
+          '</div>'+                                                
+          '<div class="col-lg-6">'+
+              '<div class="row">'+
+                  '<div class="col-12">'+
+                      '<label for="nombre">Dirección</label><br>'+
+                      '<small>'+data.direccion+'</small>'+
+                  '</div>'+
+                  '<div class="col-12">'+
+                        '<label for="email">Correo electrónico</label><br>'+
+                      '<small>'+data.email+'</small>'+
+                  '</div>'+
+              '</div>'+
+          '</div>'+                                               
+          '<div class="col-lg-6">'+
+              '<div class="row">'+
+                  '<div class="col-12">'+
+                  '<div class="form-group">'+
+                      '<label for="nombre">Teléfono</label><br>'+
+                      '<small>'+data.telefono+'</small>'+
+                  '</div>'+
+                  '</div>'+
+                  '<div class="col-12">'+
+                      '<div class="form-group">'+
+                      '<label for="email">Fecha Nacimiento</label><br>'+
+                      '<small>'+data.fecha_nacimiento+'</small>'+
+                      '</div>'+
+                  '</div>'+
+              '</div>'+
+          '</div>'+                                                
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="tipo_trabajador">Tipo trabajador</label>'+
+                  '<small>Técnico</small>'+
+              '</div>'+
+          '</div>'+                                               
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="cargo">Cargo</label> <br>'+
+                  '<small>Maestro</small>'+
+              '</div>'+
+          '</div>'+                                                
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="desempeño">Desempeño</label>'+
+                  '<small>Desempeño</small>'+
+              '</div>'+
+           '</div>'+
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="c_bancaria">Cuenta Bancaria</label>'+
+                  '<small>Cuenta Bancaria</small>'+
+              '</div>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="banco">Banco</label> <br>'+
+                  '<small>SCOTIA BANK</small>'+
+              '</div>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="tutular_cuenta">Titular-cuenta</label>'+
+                  '<small>Titular de la cuenta</small>'+
+              '</div>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="sueldo_mensual">Sueldo(Mensual)</label>'+
+                  '<small>Sueldo(Mensual)</small>'+
+              '</div>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="sueldo_diario">Sueldo( 24 Diario)</label>'+
+                  '<small>Sueldo(Mensual)</small>'+
+              '</div>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+              '<div class="form-group">'+
+                  '<label for="sueldo_hora">Sueldo(8 Hora)</label>'+
+                  '<small>Sueldo(Mensual)</small>'+
+              '</div>'+
+          '</div>'+
+      '</div>'+
+    '</div>'
+  
+  $("#datostrabajador").append(verdatos);
+});
+
+}
+
 function mostrar(idtrabajador) {
 
   $("#cargando-1-fomulario").hide();
@@ -228,22 +377,32 @@ function mostrar(idtrabajador) {
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
-    $("#nombre").val(data.nombre);     
-    $("#tipo_documento").val(data.tipo_documento).trigger("change");
-    $("#num_documento").val(data.num_documento);
-    $("#direccion").val(data.direccion);
-    $("#telefono").val(data.telefono);
-    $("#email").val(data.email);
-    $("#login").val(data.login);
-    $("#password-old").val(data.password);
-    $("#idtrabajador").val(data.idtrabajador);
+
+     $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
+     $("#nombre").val(data.nombres);
+     $("#num_documento").val(data.numero_documento);
+     $("#direccion").val(data.direccion);
+     $("#telefono").val(data.telefono);
+     $("#email").val(data.email);
+     $("#nacimiento").val(data.fecha_nacimiento);
+     $("#tipo_trabajador option[value='"+data.tipo_trabajador+"']").attr("selected", true);
+     $("#cargo option[value='"+data.cargo+"']").attr("selected", true);
+     $("#desempenio").val(data.desempeno);
+     $("#c_bancaria").val(data.cuenta_bancaria);
+     $("#banco").val(data.idbancos);
+     $("#tutular_cuenta").val(data.titular_cuenta);
+     $("#sueldo_mensual").val(data.sueldo_mensual);
+     $("#sueldo_diario").val(data.sueldo_diario);
+     $("#sueldo_hora").val(data.sueldo_hora);
+     $("#idtrabajador").val(data.idtrabajador);
 
     if (data.imagen != "") {
 
-			$("#foto2_i").attr("src", "../dist/img/trabajadors/" + data.imagen);
+			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
 
 			$("#foto2_actual").val(data.imagen);
 		}
+    edades();
   });
 }
 
@@ -251,7 +410,7 @@ function mostrar(idtrabajador) {
 function desactivar(idtrabajador) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar  el trabajador?",
-    text: "Este trabajador no podrá ingresar al sistema!",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
