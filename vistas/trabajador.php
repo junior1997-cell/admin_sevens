@@ -311,130 +311,7 @@
                                 </div>
 
                                 <div class="modal-body">
-                                    <div id="datostrabajador" >
-                                    
-                                        <!--<div class="card-body" style="background-color: #d3a49430;border-radius: 9px;">
-                                            <div class="row" id="cargando-1-fomulario">
-                                                
-                                                <div class="col-lg-4">
-                                                    <img
-                                                        onerror="this.src='../dist/img/default/img_defecto.png';"
-                                                        src="../dist/img/default/img_defecto.png"
-                                                        class="img-thumbnail"
-                                                        id="foto2_i"
-                                                        style="cursor: pointer !important; border-radius: 50%; width: 150px;"
-                                                    />
-                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
-                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                                    <div class="text-center" id="foto2_nombre"></div>
-                                                </div>                                                
-                                                <div class="col-lg-8">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="nombre">Nombre y Apellidos/Razon Social</label>
-                                                            <br>
-                                                            <small>David Melvin</small>
-                                                        </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label for="num_documento">N° de documento</label>
-                                                                <br>
-                                                                <small>88888888888</small>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>                                                
-                                                <div class="col-lg-6">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <label for="nombre">Dirección</label> <br>
-                                                            <small>Jr los angeles</small>
-                                                        </div>
-                                                        <div class="col-12">
-                                                             <label for="email">Correo electrónico</label> <br>
-                                                            <small>aaaaa@upeu.edu.pe</small>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>                                                
-                                                <div class="col-lg-6">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="nombre">Teléfono</label> <br>
-                                                            <small>921305675</small>
-                                                        </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                            <label for="email">Fecha Nacimiento</label> <br>
-                                                            <small>20/10/1999</small>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>                                                
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="tipo_trabajador">Tipo trabajador</label>
-                                                        <small>Técnico</small>
-                                                    </div>
-                                                </div>                                               
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="cargo">Cargo</label> <br>
-                                                        <small>Maestro</small>
-                                                    </div>
-                                                </div>                                                
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="desempeño">Desempeño</label> 
-                                                        <small>Desempeño</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="c_bancaria">Cuenta Bancaria</label>
-                                                        <small>Cuenta Bancaria</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="banco">Banco</label> <br>
-                                                        <small>SCOTIA BANK</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="tutular_cuenta">Titular-cuenta</label>
-                                                        <small>Titular de la cuenta</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                                        <small>Sueldo(Mensual)</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="sueldo_diario">Sueldo( 24 Diario)</label>
-                                                        <small>Sueldo(Mensual)</small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                                                        <small>Sueldo(Mensual)</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
+                                    <div id="datostrabajador" class="class-style">
                                     </div>
                                 </div>
                             </div>
@@ -456,6 +333,18 @@
         
         require 'script.php';
         ?>
+        <style>
+            .class-style label{
+                font-size: 14px;
+            }
+            .class-style small {
+                background-color: #f4f7ee;
+                border: solid 1px #ce542a21;
+                margin-left: 3px;
+                padding: 5px;
+                border-radius: 6px;
+            }
+        </style>
         <!-- Bootstrap 4 -->
         <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- jquery-validation -->

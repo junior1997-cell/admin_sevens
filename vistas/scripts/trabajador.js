@@ -258,18 +258,12 @@ function verdatos(idtrabajador){
           '<div class="col-lg-8">'+
               '<div class="row">'+
                   '<div class="col-12">'+
-                  '<div class="form-group">'+
-                      '<label for="nombre">Nombre y Apellidos/Razon Social</label>'+
-                      '<br>'+
+                      '<label for="nombre">Nombre y Apellidos/Razon Social</label><br>'+
                       '<small>'+data.nombres+'</small>'+
                   '</div>'+
-                  '</div>'+
                   '<div class="col-12">'+
-                      '<div class="form-group">'+
-                          '<label for="num_documento">N° de documento</label>'+
-                          '<br>'+
+                          '<label for="num_documento">N° de documento</label><br>'+
                           '<small>'+data.numero_documento+'</small>'+
-                      '</div>'+
                   '</div>'+
               '</div>'+
           '</div>'+                                                
@@ -281,78 +275,58 @@ function verdatos(idtrabajador){
                   '</div>'+
                   '<div class="col-12">'+
                         '<label for="email">Correo electrónico</label><br>'+
-                      '<small>'+data.email+'</small>'+
+                        '<small>'+data.email+'</small>'+
                   '</div>'+
               '</div>'+
           '</div>'+                                               
           '<div class="col-lg-6">'+
               '<div class="row">'+
-                  '<div class="col-12">'+
-                  '<div class="form-group">'+
+                  '<div class="col-12" style="margin: 0px !important;">'+
                       '<label for="nombre">Teléfono</label><br>'+
                       '<small>'+data.telefono+'</small>'+
                   '</div>'+
-                  '</div>'+
-                  '<div class="col-12">'+
-                      '<div class="form-group">'+
+                  '<div class="col-12" style="margin-bottom: 10px;">'+
                       '<label for="email">Fecha Nacimiento</label><br>'+
                       '<small>'+data.fecha_nacimiento+'</small>'+
-                      '</div>'+
                   '</div>'+
               '</div>'+
           '</div>'+                                                
           '<div class="col-lg-4">'+
-              '<div class="form-group">'+
                   '<label for="tipo_trabajador">Tipo trabajador</label>'+
-                  '<small>Técnico</small>'+
-              '</div>'+
+                  '<small>'+data.tipo_trabajador+'</small>'+
           '</div>'+                                               
           '<div class="col-lg-4">'+
-              '<div class="form-group">'+
                   '<label for="cargo">Cargo</label> <br>'+
-                  '<small>Maestro</small>'+
-              '</div>'+
+                  '<small>'+data.cargo+'</small>'+
           '</div>'+                                                
           '<div class="col-lg-4">'+
-              '<div class="form-group">'+
-                  '<label for="desempeño">Desempeño</label>'+
-                  '<small>Desempeño</small>'+
-              '</div>'+
+                  '<label for="desempeño">Desempeño</label> <br>'+
+                  '<small>'+data.desempeno+'</small>'+
            '</div>'+
           '<div class="col-lg-4">'+
-              '<div class="form-group">'+
                   '<label for="c_bancaria">Cuenta Bancaria</label>'+
-                  '<small>Cuenta Bancaria</small>'+
-              '</div>'+
+                  '<small>'+data.cuenta_bancaria+'</small>'+
           '</div>'+
           '<div class="col-lg-4">'+
-              '<div class="form-group">'+
                   '<label for="banco">Banco</label> <br>'+
-                  '<small>SCOTIA BANK</small>'+
-              '</div>'+
+                  '<small>'+data.idbancos+'</small>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+                  '<label for="tutular_cuenta">Titular-cuenta</label> <br>'+
+                  '<small>'+data.titular_cuenta+'</small>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+                  '<label for="sueldo_mensual">Sueldo(Mensual)</label> <br>'+
+                  '<small>'+data.sueldo_mensual+'</small>'+
+          '</div>'+
+          '<div class="col-lg-4">'+
+                  '<label for="sueldo_diario">Sueldo( 24 Diario)</label> <br>'+
+                  '<small>'+data.sueldo_diario+'</small>'+
           '</div>'+
           '<div class="col-lg-4">'+
               '<div class="form-group">'+
-                  '<label for="tutular_cuenta">Titular-cuenta</label>'+
-                  '<small>Titular de la cuenta</small>'+
-              '</div>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-              '<div class="form-group">'+
-                  '<label for="sueldo_mensual">Sueldo(Mensual)</label>'+
-                  '<small>Sueldo(Mensual)</small>'+
-              '</div>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-              '<div class="form-group">'+
-                  '<label for="sueldo_diario">Sueldo( 24 Diario)</label>'+
-                  '<small>Sueldo(Mensual)</small>'+
-              '</div>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-              '<div class="form-group">'+
-                  '<label for="sueldo_hora">Sueldo(8 Hora)</label>'+
-                  '<small>Sueldo(Mensual)</small>'+
+                  '<label for="sueldo_hora">Sueldo(8 Hora)</label><br>'+
+                  '<small>'+data.sueldo_hora+'</small>'+
               '</div>'+
           '</div>'+
       '</div>'+
