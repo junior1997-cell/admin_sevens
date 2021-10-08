@@ -3,30 +3,23 @@ ob_start();
 if (strlen(session_id()) < 1){
 	session_start();//Validamos si existe o no la sesión
 }
-require_once "../modelos/trabajador.php";
+require_once "../modelos/proveedor.php";
 
-$trabajador=new Trabajador();
+$proveedor=new Proveedor();
 
-//$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
+//$idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$tutular_cuenta	
 
-$idtrabajador		= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
+$idproveedor		= isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";
 $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 $tipo_documento	    = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
 $num_documento	    = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
 $direccion		    = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
 $telefono		    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
-$nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
-$tipo_trabajador	= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
-$desempenio	        = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";
 $c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
-$email			    = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
-$cargo			    = isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
+$c_detracciones		= isset($_POST["c_detracciones"])? limpiarCadena($_POST["c_detracciones"]):"";
 $banco			    = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
 $tutular_cuenta		= isset($_POST["tutular_cuenta"])? limpiarCadena($_POST["tutular_cuenta"]):"";
-$sueldo_diario		= isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
-$sueldo_mensual 	= isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
-$sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
-$imagen			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+
 
 
 switch ($_GET["op"]){
@@ -41,29 +34,13 @@ switch ($_GET["op"]){
 			{
 				$clavehash="";
 
-				// if ( !empty($imagen) ) {
-					if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
 
-						$imagen=$_POST["foto2_actual"];
-					} else {
-
-						$ext = explode(".", $_FILES["foto2"]["name"]);
-
-						if ($_FILES['foto2']['type'] == "image/jpg" || $_FILES['foto2']['type'] == "image/jpeg" || $_FILES['foto2']['type'] == "image/png")
-						{
-							$imagen = round(microtime(true)) . '.' . end($ext);
-
-							move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/usuarios/" . $imagen);
-						}
-					}
-				// }	
-
-				if (empty($idtrabajador)){
-					$rspta=$trabajador->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen);
+				if (empty($idproveedor)){
+					$rspta=$proveedor->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$tutular_cuenta);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 				}
 				else {
-					$rspta=$trabajador->editar($idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen);
+					$rspta=$proveedor->editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$tutular_cuenta);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
@@ -84,7 +61,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['acceso']==1)
 			{
-				$rspta=$trabajador->desactivar($idtrabajador);
+				$rspta=$proveedor->desactivar($idproveedor);
  				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
 			//Fin de las validaciones de acceso
 			}
@@ -105,7 +82,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['acceso']==1)
 			{
-				$rspta=$trabajador->activar($idtrabajador);
+				$rspta=$proveedor->activar($idproveedor);
  				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 			//Fin de las validaciones de acceso
 			}
@@ -126,7 +103,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['acceso']==1)
 			{
-				$rspta=$trabajador->mostrar($idtrabajador);
+				$rspta=$proveedor->mostrar($idproveedor);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -148,26 +125,26 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['acceso']==1)
 			{
-				$rspta=$trabajador->listar();
+				$rspta=$proveedor->listar();
 		 		//Vamos a declarar un array
 		 		$data= Array();
+				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
 
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
-							' <button class="btn btn-success" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
-							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
-							' <button class="btn btn-success" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
+		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor.')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idproveedor.')"><i class="far fa-trash-alt  "></i></button>'.
+							' <button class="btn btn-success" onclick="verdatos('.$reg->idproveedor.')"><i class="far fa-eye"></i></button>':
+							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor.')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary" onclick="activar('.$reg->idproveedor.')"><i class="fa fa-check"></i></button>'.
+							' <button class="btn btn-success" onclick="verdatos('.$reg->idproveedor.')"><i class="far fa-eye"></i></button>',
 						"1"=>'<div class="user-block">
-							 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image">
-							 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-							 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-						 	</div>',
-		 				"2"=>$reg->cuenta_bancaria,
-		 				"3"=>$reg->sueldo_mensual,
-		 				"4"=>$reg->tipo_trabajador.' / '.$reg->cargo,
+							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
+							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_documento .': '. $reg->ruc .' </span>
+							</div>',
+		 				"2"=>$reg->direccion,
+		 				"3"=>$reg->cuenta_bancaria.' / '.$reg->cuenta_detracciones,
+		 				"4"=>$reg->titular_cuenta,
 		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
