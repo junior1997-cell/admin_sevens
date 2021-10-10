@@ -54,7 +54,7 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
                                         <h3 class="card-title">
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proveedores" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proveedor" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
                                             Admnistra de manera eficiente a tus proveedores.
                                         </h3>
                                     </div>
@@ -64,10 +64,10 @@
                                             <thead>
                                                 <tr>
                                                     <th class="">Aciones</th>
-                                                    <th>Nombres</th>
-                                                    <th>Telefono</th>
-                                                    <th>Email</th>
-                                                    <th>Direccion</th>
+                                                    <th>Proveedor</th>
+                                                    <th>Dirección</th>
+                                                    <th>C. bancaria / C. detracciones </th>
+                                                    <th>Titular cuenta</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -75,10 +75,10 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Aciones</th>
-                                                    <th>Nombres</th>
-                                                    <th>Telefono</th>
-                                                    <th>Email</th>
-                                                    <th>Direccion</th>
+                                                    <th>Proveedor</th>
+                                                    <th>Dirección</th>
+                                                    <th>C. bancaria / C. detracciones</th>
+                                                    <th>Titular cuenta</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -95,7 +95,7 @@
                     <!-- /.container-fluid -->
 
                     <!-- Modal agregar proveedores -->
-                    <div class="modal fade" id="modal-agregar-proveedores">
+                    <div class="modal fade" id="modal-agregar-proveedor">
                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -170,7 +170,7 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="fecha_nacimiento">Cuenta Detracciones</label>
-                                                        <input type="number" name="c_detracciones" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
+                                                        <input type="number" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Bancaria" />
                                                     </div>
                                                 </div>
                                                 <!-- banco -->
@@ -190,8 +190,8 @@
                                                 <!-- Titular de la cuenta -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
-                                                        <label for="tutular_cuenta">Titular de la cuenta</label>
-                                                        <input type="text" name="tutular_cuenta" class="form-control" id="tutular_cuenta" placeholder="Titular de la cuenta" />
+                                                        <label for="titular_cuenta">Titular de la cuenta</label>
+                                                        <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
                                                     </div>
                                                 </div>
                                             </div>

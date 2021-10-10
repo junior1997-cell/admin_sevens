@@ -245,21 +245,21 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                                        <input type="number" step="0.10" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
+                                                        <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
                                                     </div>
                                                 </div>
                                                 <!-- Sueldo(Diario) -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_diario">Sueldo( 24 Diario)</label>
-                                                        <input type="number" step="0.10" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
+                                                        <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
                                                     </div>
                                                 </div>
                                                 <!-- Sueldo(Hora) -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                                                        <input type="number" step="0.10" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly/>
+                                                        <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly/>
                                                     </div>
                                                 </div>
                                                 <!-- imagen -->

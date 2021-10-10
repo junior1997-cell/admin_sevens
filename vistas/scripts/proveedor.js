@@ -32,7 +32,7 @@ function init() {
  c_bancaria
  c_detracciones
  banco
- tutular_cuenta
+ titular_cuenta
  */
 
 
@@ -48,7 +48,7 @@ function limpiar() {
   $("#c_detracciones").val("");  
   //$("#banco").val("");
   $("#banco option[value='BCP']").attr("selected", true);  
-  $("#tutular_cuenta").val("");   
+  $("#titular_cuenta").val("");   
   
 }
 
@@ -108,7 +108,7 @@ function guardaryeditar(e) {
          
 				limpiar();
 
-        $("#modal-agregar-proveedores").modal("hide");
+        $("#modal-agregar-proveedor").modal("hide");
 
 			}else{
 
@@ -133,14 +133,14 @@ function mostrar(idproveedor) {
     $("#cargando-2-fomulario").hide();
 
      $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
-     $("#nombre").val(data.nombres);
-     $("#num_documento").val(data.numero_documento);
+     $("#nombre").val(data.razon_social);
+     $("#num_documento").val(data.ruc);
      $("#direccion").val(data.direccion);
      $("#telefono").val(data.telefono);
-     $("#banco option[value='"+data.idbanco+"']").attr("selected", true);
+     $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
      $("#c_bancaria").val(data.cuenta_bancaria);
      $("#c_detracciones").val(data.cuenta_detracciones);
-     $("#tutular_cuenta").val(data.titular_cuenta);
+     $("#titular_cuenta").val(data.titular_cuenta);
      $("#idproveedor").val(data.idproveedor);
 
   });
@@ -214,7 +214,7 @@ $(function () {
       c_detracciones: { minlength: 14, maxlength: 14},
       c_bancaria: { minlength: 14, maxlength: 14},
       banco: { required: true},
-      tutular_cuenta: { minlength: 4},
+      titular_cuenta: { minlength: 4},
 
 
       // terms: { required: true },

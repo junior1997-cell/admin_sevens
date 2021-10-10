@@ -7,7 +7,7 @@ require_once "../modelos/proveedor.php";
 
 $proveedor=new Proveedor();
 
-//$idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$tutular_cuenta	
+//$idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
 
 $idproveedor		= isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";
 $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
@@ -18,7 +18,7 @@ $telefono		    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):""
 $c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
 $c_detracciones		= isset($_POST["c_detracciones"])? limpiarCadena($_POST["c_detracciones"]):"";
 $banco			    = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
-$tutular_cuenta		= isset($_POST["tutular_cuenta"])? limpiarCadena($_POST["tutular_cuenta"]):"";
+$titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
 
 
 
@@ -36,11 +36,11 @@ switch ($_GET["op"]){
 
 
 				if (empty($idproveedor)){
-					$rspta=$proveedor->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$tutular_cuenta);
+					$rspta=$proveedor->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 				}
 				else {
-					$rspta=$proveedor->editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$tutular_cuenta);
+					$rspta=$proveedor->editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
@@ -133,11 +133,9 @@ switch ($_GET["op"]){
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idproveedor.')"><i class="far fa-trash-alt  "></i></button>'.
-							' <button class="btn btn-success" onclick="verdatos('.$reg->idproveedor.')"><i class="far fa-eye"></i></button>':
+		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idproveedor.')"><i class="far fa-trash-alt  "></i></button>':
 							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idproveedor.')"><i class="fa fa-check"></i></button>'.
-							' <button class="btn btn-success" onclick="verdatos('.$reg->idproveedor.')"><i class="far fa-eye"></i></button>',
+		 					' <button class="btn btn-primary" onclick="activar('.$reg->idproveedor.')"><i class="fa fa-check"></i></button>',
 						"1"=>'<div class="user-block">
 							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
 							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_documento .': '. $reg->ruc .' </span>
