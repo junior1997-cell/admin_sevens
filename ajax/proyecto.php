@@ -5,11 +5,13 @@
 
     session_start();//Validamos si existe o no la sesión
   }
-  if (!isset($_SESSION["nombre"])) {
-
+  if (!isset($_SESSION["nombre"])) {    
+     
 		header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		
+		die();
+
 	} else {
+    
     require_once "../modelos/Proyecto.php";
 
     $proyecto = new Proyecto();
@@ -21,10 +23,10 @@
     $nombre_proyecto		  = isset($_POST["nombre_proyecto"])? limpiarCadena($_POST["nombre_proyecto"]):"";
     $ubicacion				    = isset($_POST["ubicacion"])? limpiarCadena($_POST["ubicacion"]):"";
     $actividad_trabajo		= isset($_POST["actividad_trabajo"])? limpiarCadena($_POST["actividad_trabajo"]):"";
-    $empresa_acargo 		  = isset($_POST['empresa_acargo'])? $_POST['empresa_acargo']:"";
+    $empresa_acargo 		  = isset($_POST['empresa_acargo'])? limpiarCadena($_POST['empresa_acargo']):"";
     $costo					      = isset($_POST["costo"])? limpiarCadena($_POST["costo"]):"";
-    $fecha_inicio			    = substr(isset($_POST["fecha_inicio_fin"])? limpiarCadena($_POST["fecha_inicio_fin"]):"", 0, 10);
-    $fecha_fin				    = substr(isset($_POST["fecha_inicio_fin"])? limpiarCadena($_POST["fecha_inicio_fin"]):"", 13, 22);
+    $fecha_inicio			    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 0, 10);
+    $fecha_fin				    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 13, 22);
     $plazo		            = isset($_POST["plazo"])? limpiarCadena($_POST["plazo"]):"";
 
     $doc1_contrato_obra		= isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
@@ -36,7 +38,8 @@
     $doc3_inicio_obra		  = isset($_POST["doc3"])? limpiarCadena($_POST["doc3"]):"";
     $doc_old_2		        = isset($_POST["doc_old_3"])? limpiarCadena($_POST["doc_old_3"]):"";
 
-    // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
+    // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,
+    // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
     switch ($_GET["op"]){
 
       case 'guardaryeditar':
@@ -60,11 +63,11 @@
 
               $flat_doc1 = true;
 
-              $ext_p     = explode(".", $_FILES["doc1"]["name"]);
+              $ext_doc1     = explode(".", $_FILES["doc1"]["name"]);
 
               if ( $_FILES['doc1']['type'] == "application/pdf" ) {
                 
-                $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_p);
+                $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
                 move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pdf/" . $doc1);
               }
@@ -81,13 +84,13 @@
 
               $flat_doc2 = true;
 
-              $ext_p     = explode(".", $_FILES["doc2"]["name"]);
+              $ext_doc2     = explode(".", $_FILES["doc2"]["name"]);
 
               if ( $_FILES['doc2']['type'] == "application/pdf" ) {
                 
-                $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_p);
+                $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
 
-                move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pdf/" . $doc1);
+                move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pdf/" . $doc2);
               }
             }	
 
@@ -102,38 +105,63 @@
 
               $flat_doc3 = true;
 
-              $ext_p     = explode(".", $_FILES["doc3"]["name"]);
+              $ext_doc3     = explode(".", $_FILES["doc3"]["name"]);
 
               if ( $_FILES['doc3']['type'] == "application/pdf" ) {
                 
-                $doc3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_p);
+                $doc3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
 
-                move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/pdf/" . $doc1);
+                move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/pdf/" . $doc3);
               }
             }	
 
             if (empty($idproyecto)){
-
+              // insertamos en la bd
               $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1,$doc2,$doc3);
-
-              echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+              // echo $rspta ;
+              echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
             } else {
-              if ($flat_foto == true) {
+              // validamos si existe el doc para eliminarlo
+              if ($flat_doc1 == true) {
 
-                $datos_f        = $proyecto->obtenerDoc1($idcomunicado);
+                $datos_f1        = $proyecto->obtenerDoc1($idproyecto);
 
-                $nombre_img_ant = $datos_f->fetch_object()->foto;
+                $doc1_ant = $datos_f1->fetch_object()->doc1_contrato_obra;
 
-                if ($nombre_img_ant != "") {
+                if ($doc1_ant != "") {
 
-                  unlink("../dist/pdf/" . $nombre_img_ant);
+                  unlink("../dist/pdf/" . $doc1_ant);
+                }
+              }
+
+              if ($flat_doc2 == true) {
+
+                $datos_f2        = $proyecto->obtenerDoc2($idproyecto);
+
+                $doc2_ant = $datos_f2->fetch_object()->doc2_entrega_terreno;
+
+                if ($doc2_ant != "") {
+
+                  unlink("../dist/pdf/" . $doc2_ant);
+                }
+              }
+
+              if ($flat_doc3 == true) {
+
+                $datos_f3        = $proyecto->obtenerDoc3($idproyecto);
+
+                $doc3_ant = $datos_f3->fetch_object()->doc3_inicio_obra;
+
+                if ($doc3_ant != "") {
+
+                  unlink("../dist/pdf/" . $doc3_ant);
                 }
               }
 
               $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1,$doc2,$doc3);
               
-              echo $rspta ? "ok" : "Usuario no se pudo actualizar";
+              echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
             }
             //Fin de las validaciones de acceso
           } else {
@@ -147,6 +175,7 @@
         if (!isset($_SESSION["nombre"])){
 
           header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+          die();
 
         }	else {
           //Validamos el acceso solo al usuario logueado y autorizado.
@@ -167,6 +196,7 @@
         if (!isset($_SESSION["nombre"]))
         {
           header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+          die();
         }	else {
 
           //Validamos el acceso solo al usuario logueado y autorizado.
@@ -210,30 +240,53 @@
 
           header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
 
-        }else{
+        } else {
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ( $_SESSION['acceso'] == 1 )	{
 
             $rspta=$proyecto->listar();
             //Vamos a declarar un array
             $data= Array();
 
             while ($reg=$rspta->fetch_object()){
+
+              $estado = "";
+
+              if ($reg->estado == '2') {
+
+                $estado = '<span class="text-center badge badge-danger">No empezado</span>';
+
+              } else {
+
+                if ($reg->estado == '1') {
+
+                  $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+
+                } else {
+
+                  $estado = '<span class="text-center badge badge-success">Terminado</span>';
+                }                
+              }
+              
               $data[]=array(
-                "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger" onclick="desactivar('.$reg->idusuario.')"><i class="far fa-trash-alt  "></i></button>':
-                  '<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-primary" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>',
+                "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger" onclick="desactivar('.$reg->idproyecto.')"><i class="far fa-trash-alt  "></i></button>':
+                  '<button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-primary" onclick="activar('.$reg->idproyecto.')"><i class="fa fa-check"></i></button>',
                 "1"=>'<div class="user-block">
-                    <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image">
-                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
+                    <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
+                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. substr($reg->empresa, 0, 20).'...</p></span>
                     <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                   </div>',
-                "2"=>$reg->telefono,
-                "3"=>$reg->login,
-                "4"=>$reg->cargo,
-                "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-                '<span class="text-center badge badge-danger">Desactivado</span>'
+                "2"=>$reg->nombre_proyecto,
+                "3"=>$reg->ubicacion,
+                "4"=>$reg->costo,
+                "5"=>'<center>
+                    <a tipe="btn btn-danger" class="btnMostrarPlanClasePDF resplandor"   href="#" >
+                      <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
+                    </a>
+                  </center>',
+                "6"=> $estado
                 );
             }
             $results = array(

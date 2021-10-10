@@ -11,107 +11,47 @@ Class Proyecto
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($trabajador,$cargo,$login,$clave,$permisos)
+	public function insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1,$doc2,$doc3)
 	{
 		// insertamos al usuario
-		$sql="INSERT INTO usuario ( idtrabajador, cargo, login, password) VALUES ('$trabajador','$cargo','$login','$clave')";
-		// marcamos al trabajador como usuario
-		$sql2="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";	
-		ejecutarConsulta($sql2);
-
-		$num_elementos=0;	$sw=true;
-
-		if ($permisos != "" ) {
-
-			$idusuarionew = ejecutarConsulta_retornarID($sql);			
-
-			while ($num_elementos < count($permisos))
-			{
-				$sql_detalle = "INSERT INTO usuario_permiso(idusuario, idpermiso) VALUES('$idusuarionew', '$permisos[$num_elementos]')";
-				ejecutarConsulta($sql_detalle) or $sw = false;
-				$num_elementos=$num_elementos + 1;
-			}
-		}
-
-		if ($permisos != "") {
-
-			return $sw;
-
-		} else {
-
-			return ejecutarConsulta($sql);
-		}		
+		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa,nombre_proyecto, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio, fecha_fin, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra) 
+		VALUES ('$tipo_documento','$numero_documento','$empresa','$nombre_proyecto','$ubicacion','$actividad_trabajo','$empresa_acargo','$costo','$fecha_inicio','$fecha_fin','$doc1','$doc2','$doc3');";
+		return ejecutarConsulta($sql);
+		// $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
+		 
+		// return $sql;
+	 	
 	}
 
 	//Implementamos un método para editar registros
 	public function editar($idusuario,$trabajador_old,$trabajador,$cargo,$login,$clave,$permisos)
 	{
-		if (!empty($trabajador) ) {
-
-			$sql="UPDATE usuario SET idtrabajador='$trabajador', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
+		 
+		$sql="UPDATE proyecto SET idtrabajador='$trabajador', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
 			
-			// desmarcamos al trabajador old como usuario
-			$sql3="UPDATE trabajador SET estado_usuario='0' WHERE idtrabajador='$trabajador_old';";
-			ejecutarConsulta($sql3);
-			// marcamos al trabajador new como usuario
-			$sql4="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";
-			ejecutarConsulta($sql4);
-		} else {
-			$sql="UPDATE usuario SET idtrabajador='$trabajador_old', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
-		}
-		
-				 	
-		
-		
-		$num_elementos=0;	$sw=true;
-
-		if ($permisos != "" ) {
-
-			ejecutarConsulta($sql);
-
-			//Eliminamos todos los permisos asignados para volverlos a registrar
-			$sqldel="DELETE FROM usuario_permiso WHERE idusuario='$idusuario'";
-
-			ejecutarConsulta($sqldel);
-
-			while ($num_elementos < count($permisos)){
-
-				$sql_detalle = "INSERT INTO usuario_permiso(idusuario, idpermiso) VALUES('$idusuario', '$permisos[$num_elementos]')";
-				ejecutarConsulta($sql_detalle) or $sw = false;
-				$num_elementos=$num_elementos + 1;
-			}
-		}
-
-		if ($permisos != "") {
-
-			return $sw;
-
-		} else {
-
-			return ejecutarConsulta($sql);
-		}
+		ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para desactivar categorías
-	public function desactivar($idusuario)
+	public function desactivar($idproyecto)
 	{
-		$sql="UPDATE usuario SET estado='0' WHERE idusuario='$idusuario'";
+		$sql="UPDATE proyecto SET estado='0' WHERE idproyecto='$idproyecto'";
 
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para activar categorías
-	public function activar($idusuario)
+	public function activar($idproyecto)
 	{
-		$sql="UPDATE usuario SET estado='1' WHERE idusuario='$idusuario'";
+		$sql="UPDATE proyecto SET estado='1' WHERE idproyecto='$idproyecto'";
 
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idusuario)
+	public function mostrar($idproyecto)
 	{
-		$sql="SELECT * FROM usuario WHERE idusuario='$idusuario'";
+		$sql="SELECT * FROM proyecto WHERE idproyecto='$idproyecto'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -119,9 +59,7 @@ Class Proyecto
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT u.idusuario, t.nombres,t.tipo_documento,t.numero_documento,t.telefono,t.email,u.cargo,u.login,t.imagen,t.tipo_documento, u.estado
-		FROM admin_sevens.usuario as u, admin_sevens.trabajador as t
-		WHERE  u.idtrabajador = t.idtrabajador;";
+		$sql="SELECT *	FROM admin_sevens.proyecto;";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -133,6 +71,13 @@ Class Proyecto
     }
 
 	public function obtenerDoc2($idproyecto) {
+
+        $sql = "SELECT doc1_contrato_obra FROM proyecto WHERE idproyecto='$idproyecto'";
+		
+        return ejecutarConsulta($sql);
+    }
+
+	public function obtenerDoc3($idproyecto) {
 
         $sql = "SELECT doc1_contrato_obra FROM proyecto WHERE idproyecto='$idproyecto'";
 		

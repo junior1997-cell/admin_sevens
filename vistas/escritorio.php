@@ -147,10 +147,11 @@
                           <thead>
                             <tr>
                               <th class="">Aciones</th>
-                              <th>Nombres</th>
-                              <th>Telefono</th>
-                              <th>Usuario</th>
-                              <th>Cargo</th>
+                              <th>Empresa</th>
+                              <th>Nombre de proyecto</th>
+                              <th>Ubicación</th>
+                              <th>Costo</th>
+                              <th>Documentos</th>
                               <th>Estado</th>
                             </tr>
                           </thead>
@@ -159,11 +160,12 @@
                           </tbody>
                           <tfoot>
                             <tr>
-                              <th>Aciones</th>
-                              <th>Nombres</th>
-                              <th>Telefono</th>
-                              <th>Usuario</th>
-                              <th>Cargo</th>
+                              <th class="">Aciones</th>
+                              <th>Empresa</th>
+                              <th>Nombre de proyecto</th>
+                              <th>Ubicación</th>
+                              <th>Costo</th>
+                              <th>Documentos</th>
                               <th>Estado</th>
                             </tr>
                           </tfoot>
@@ -376,6 +378,14 @@
                                 <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
                               </div>
                               <div class="text-center" id="doc3_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+                            <!-- barprogress -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                              <div class="progress" id="div_barra_progress">
+                                <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
+                                </div>
+                              </div>
                             </div>                                          
 
                           </div>  

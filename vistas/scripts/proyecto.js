@@ -21,16 +21,22 @@ function limpiar() {
   $("#fecha_inicio_fin").val("");    
   $("#plazo").val(""); 
   $("#costo").val(""); 
-  $("#empresa_acargo").val(""); 
+  $("#empresa_acargo").val("Seven's Ingenieros SAC"); 
 
   $("#doc1").val(""); 
   $("#doc_old_1").val(""); 
+  $("#doc1_nombre").html('');
+  $("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
   $("#doc2").val(""); 
-  $("#doc_old_2").val(""); 
+  $("#doc_old_2").val("");
+  $("#doc2_nombre").html('');
+  $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
   $("#doc3").val(""); 
-  $("#doc_old_3").val(""); 
+  $("#doc_old_3").val("");
+  $("#do3_nombre").html('');
+  $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >'); 
 
 }
 
@@ -67,22 +73,86 @@ function listar() {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
+
+//Función para guardar o editar
+function guardaryeditar(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-proyecto")[0]);
+
+  $.ajax({
+    url: "../ajax/proyecto.php?op=guardaryeditar",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {
+
+        tabla.ajax.reload();	
+
+        Swal.fire("Correcto!", "Proyecto registrado correctamente", "success");	      
+         
+				limpiar();
+
+        $("#modal-agregar-proyecto").modal("hide");        
+
+			}else{
+
+        Swal.fire("Error!", datos, "error");
+				 
+			}
+    },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            setTimeout(l_m, 600);
+          }
+        }
+      }, false);
+      return xhr;
+    }
+  });
+}
+
+function l_m(){
+  
+  // limpiar();
+  $("#barra_progress").css({"width":'0%'});
+  $("#barra_progress").text("0%");
+  
+}
+
 //Función para desactivar registros
 function desactivar(idusuario) {
   Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el Usuario?",
-    text: "Este usuario no podrá ingresar al sistema!",
+    title: "¿Está Seguro de  Terminar  el proyecto ?",
+    text: "No podras agregar o editar: provedores, trabajadores!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
+    confirmButtonText: "Si, terminar!",
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
         if (e == 'ok') {
 
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
+          Swal.fire("Desactivado!", "Tu proyecto ha sido Terminado.", "success");		 
   
           tabla.ajax.reload();
           
@@ -100,13 +170,13 @@ function activar(idusuario) {
 
   Swal.fire({
 
-    title: "¿Está Seguro de  Activar  el Usuario?",
-    text: "Este usuario tendra acceso al sistema",
+    title: "¿Está Seguro de  Reactivar  el Proyecto?",
+    text: "Tendras acceso a editar o agregar: proveedores o trabajadores!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
+    confirmButtonText: "Si, Reactivar!",
 
   }).then((result) => {
 
@@ -116,7 +186,7 @@ function activar(idusuario) {
 
         if (e == 'ok') {
 
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
+          Swal.fire("Activado!", "Tu Proyecto ha sido Reactivado.", "success");		 
   
           tabla.ajax.reload();
           
@@ -134,20 +204,27 @@ init();
 $(function () {
 
   //Date range picker
-  $('#fecha_inicio_fin').daterangepicker();
-  // $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
-  //     $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-  // });
+  $('#fecha_inicio_fin').daterangepicker({
+    autoUpdateInput: false,
+      locale: {
+      cancelLabel: 'Clear'
+    }
+  });
 
-  // $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
-  //     $(this).val('');
-  // });
+  $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+  });
+
+  $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
 
   // validamo el formulario
   $.validator.setDefaults({
 
     submitHandler: function (e) {
-
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      // $("#chat").animate({ scrollTop: $(this).prop("scrollHeight")}, 1000);
       guardaryeditar(e);       
     },
   });

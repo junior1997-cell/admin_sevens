@@ -32,8 +32,15 @@ switch ($_GET["op"]){
 					//Hash SHA256 en la contraseña
 					$clavehash = hash("SHA256",$clave);
 				} else {
-					// enviamos la contraseña antigua
-					$clavehash = $clave_old;
+					if (!empty($clave_old)) {
+						// enviamos la contraseña antigua
+						$clavehash = $clave_old;
+					} else {
+						//Hash SHA256 en la contraseña
+						$clavehash = hash("SHA256","1234");
+					}
+					
+					
 				}				
 
 				if (empty($idusuario)){
