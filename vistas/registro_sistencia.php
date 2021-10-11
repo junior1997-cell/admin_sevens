@@ -58,16 +58,20 @@
                                             Admnistra de manera eficiente a tus asistencia.
                                         </h3>
                                     </div>
+                                    
                                     <!-- /.card-header -->
                                     <div class="card-body">
                                         <table id="tabla-asistencia" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
                                                     <th class="">Aciones</th>
-                                                    <th>asistencia</th>
-                                                    <th>Dirección</th>
-                                                    <th>C. bancaria / C. detracciones </th>
-                                                    <th>Titular cuenta</th>
+                                                    <th>Nombre</th>
+                                                    <th>Horas</th>
+                                                    <th>Horas extras </th>
+                                                    <th>Sueldo mensual </th>
+                                                    <th>Pago / hora</th>
+                                                    <th>Jonal diario</th>
+                                                    <th>Sabatical</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -75,10 +79,13 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Aciones</th>
-                                                    <th>asistencia</th>
-                                                    <th>Dirección</th>
-                                                    <th>C. bancaria / C. detracciones</th>
-                                                    <th>Titular cuenta</th>
+                                                    <th>Nombre</th>
+                                                    <th>Horas</th>
+                                                    <th>Horas extras </th>
+                                                    <th>Sueldo mensual </th>
+                                                    <th>Pago / hora</th>
+                                                    <th>Jonal diario</th>
+                                                    <th>Sabatical</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>

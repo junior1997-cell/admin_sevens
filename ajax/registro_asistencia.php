@@ -187,24 +187,31 @@ switch ($_GET["op"]){
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
-
+					$jonal_diario = '';
 		 		while ($reg=$rspta->fetch_object()){
+					//$jonal_diario=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
+					$jonal_diario=$reg->sueldo_hora*8;
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>':
 							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>',
 						"1"=>'<div class="user-block">
-							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
-							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_documento .': '. $reg->ruc .' </span>
-							<span class="description" style="margin-left: 0px !important;"> Cargo : '. $reg->cargo  .' </span>
+							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
+							style="color: #000000 !important;">'. $reg->cargo .' : </b> '. $reg->nombre .'</p></span>
+							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_doc .': '. $reg->num_doc .' </span>
 							</div>',
 		 				"2"=>$reg->total_horas,
 		 				"3"=>$reg->horas_extras,
-		 				"4"=>$reg->sueldo_hora,
-		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+		 				"4"=>$reg->sueldo_mensual,
+		 				"5"=>$reg->sueldo_hora,
+		 				"6"=>$jonal_diario,
+		 				"7"=>$reg->total_sabatical,
+		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
+
+						 $jonal_diario=0;
 		 		}
 		 		$results = array(
 		 			"sEcho"=>1, //Información para el datatables

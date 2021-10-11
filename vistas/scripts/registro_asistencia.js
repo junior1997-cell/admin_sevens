@@ -3,7 +3,7 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
   
-  //listar();
+  listar();
 
     //Mostramos los trabajadores
     $.post("../ajax/registro_asistencia.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
