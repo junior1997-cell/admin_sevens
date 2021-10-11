@@ -33,7 +33,15 @@ Class Proyecto
 	}
 
 	//Implementamos un método para desactivar categorías
-	public function desactivar($idproyecto)
+	public function empezar_proyecto($idproyecto)
+	{
+		$sql="UPDATE proyecto SET estado='1' WHERE idproyecto='$idproyecto'";
+
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para activar categorías
+	public function terminar_proyecto($idproyecto)
 	{
 		$sql="UPDATE proyecto SET estado='0' WHERE idproyecto='$idproyecto'";
 
@@ -41,9 +49,9 @@ Class Proyecto
 	}
 
 	//Implementamos un método para activar categorías
-	public function activar($idproyecto)
+	public function reiniciar_proyecto($idproyecto)
 	{
-		$sql="UPDATE proyecto SET estado='1' WHERE idproyecto='$idproyecto'";
+		$sql="UPDATE proyecto SET estado='2' WHERE idproyecto='$idproyecto'";
 
 		return ejecutarConsulta($sql);
 	}

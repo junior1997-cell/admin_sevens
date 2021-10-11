@@ -409,6 +409,70 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Modal ver los documentos subidos -->
+              <div class="modal fade" id="modal-ver-docs">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Documentos subidos</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                      <div class="row" id="cargando-1-fomulario">
+
+                        <!-- Pdf 1 -->
+                        <div class="col-md-6 mb-4" >      
+                          <div id="verdoc1" class="text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                            <h4>Cargando...</h4>
+                          </div>
+                          <div class="text-center" id="verdoc1_nombre">
+                            <!-- aqui va el nombre del pdf -->
+                          </div>
+                        </div> 
+
+                        <!-- Pdf 2 -->
+                        <div class="col-md-6 mb-4" >                            
+                          <div id="verdoc2" class="text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                            <h4>Cargando...</h4>
+                          </div>
+                          <div class="text-center" id="verdoc2_nombre">
+                            <!-- aqui va el nombre del pdf -->
+                          </div>
+                        </div>
+                        
+                        <!-- Pdf 3 -->
+                        <div class="col-md-12 mb-4" >                             
+                          <div id="verdoc3" class="text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                            <h4>Cargando...</h4>
+                          </div>
+                          <div class="text-center" id="verdoc3_nombre">
+                            <!-- aqui va el nombre del pdf -->
+                        </div>
+                        </div>                                                                     
+
+                      </div>  
+
+                      <div class="row" id="cargando-2-fomulario" style="display: none;">
+                        <div class="col-lg-12 text-center">
+                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                          <h4>Cargando...</h4>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                    <div class="modal-footer justify-content-end">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>                  
+                  </div>
+                </div>
+              </div>
             </section>
             <!-- /.content -->
           </div>
@@ -463,6 +527,11 @@
               console.log('hola');
             }
           }
+        </script>
+        <script>
+          $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+          })
         </script>
       </body>
     </html>

@@ -72,6 +72,8 @@ function listar() {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+
+  $('[data-toggle="tooltip"]').tooltip();
 }
 
 //Función para guardar o editar
@@ -140,19 +142,19 @@ function l_m(){
 //Función para desactivar registros
 function empezar_proyecto(idproyecto) {
   Swal.fire({
-    title: "¿Está Seguro de  Terminar  el proyecto ?",
-    text: "No podras agregar o editar: provedores, trabajadores!",
+    title: "¿Está Seguro de  Empezar  el proyecto ?",
+    text: "Tendras acceso a agregar o editar: provedores, trabajadores!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, terminar!",
+    confirmButtonText: "Si, Empezar!",
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/proyecto.php?op=empezar_proyecto", { idproyecto: idproyecto }, function (e) {
         if (e == 'ok') {
 
-          Swal.fire("Desactivado!", "Tu proyecto ha sido Terminado.", "success");		 
+          Swal.fire("En curso!", "Tu proyecto esta en curso.", "success");		 
   
           tabla.ajax.reload();
           
@@ -170,13 +172,13 @@ function terminar_proyecto(idproyecto) {
 
   Swal.fire({
 
-    title: "¿Está Seguro de  Reactivar  el Proyecto?",
-    text: "Tendras acceso a editar o agregar: proveedores o trabajadores!",
+    title: "¿Está Seguro de  Terminar  el Proyecto?",
+    text: "No tendras acceso a editar o agregar: proveedores o trabajadores!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Reactivar!",
+    confirmButtonText: "Si, Terminar!",
 
   }).then((result) => {
 
@@ -186,7 +188,7 @@ function terminar_proyecto(idproyecto) {
 
         if (e == 'ok') {
 
-          Swal.fire("Activado!", "Tu Proyecto ha sido Reactivado.", "success");		 
+          Swal.fire("Terminado!", "Tu Proyecto ha sido terminado.", "success");		 
   
           tabla.ajax.reload();
           
@@ -205,7 +207,7 @@ function reiniciar_proyecto(idproyecto) {
   Swal.fire({
 
     title: "¿Está Seguro de  Reactivar  el Proyecto?",
-    text: "Tendras acceso a editar o agregar: proveedores o trabajadores!",
+    text: "Despues de esto tendrás que empezar el proyecto!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -220,7 +222,7 @@ function reiniciar_proyecto(idproyecto) {
 
         if (e == 'ok') {
 
-          Swal.fire("Activado!", "Tu Proyecto ha sido Reactivado.", "success");		 
+          Swal.fire("Reactivado!", "Tu Proyecto ha sido Reactivado.", "success");		 
   
           tabla.ajax.reload();
           
@@ -239,6 +241,7 @@ $(function () {
 
   //Date range picker
   $('#fecha_inicio_fin').daterangepicker({
+    parentEl: "#divChooseDossier .modal-body",
     autoUpdateInput: false,
       locale: {
       cancelLabel: 'Clear'
@@ -481,16 +484,16 @@ function calcular_palzo() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addImage(e,$("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
 
 $("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
-$("#doc2").change(function(e) {  addImage(e,$("#doc2").attr("id")) });
+$("#doc2").change(function(e) {  addDocs(e,$("#doc2").attr("id")) });
 
 $("#doc3_i").click(function() {  $('#doc3').trigger('click'); });
-$("#doc3").change(function(e) {  addImage(e,$("#doc3").attr("id")) });
+$("#doc3").change(function(e) {  addDocs(e,$("#doc3").attr("id")) });
 
 /* PREVISUALIZAR LAS IMAGENES */
-function addImage(e,id) {
+function addDocs(e,id) {
   $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 	console.log(id);
 
@@ -611,4 +614,166 @@ function doc3_eliminar() {
 	$("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
 	$("#doc3_nombre").html("");
+}
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
+function ver_modal_docs(verdoc1, verdoc2, verdoc3) {
+  console.log(verdoc1, verdoc2, verdoc3);
+  $('#modal-ver-docs').modal("show");
+
+  if (verdoc1 == "") {
+
+    $('#verdoc1').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc1_nombre").html("Contratro de obra"+
+      '<div class="col-md-12 row">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+          '</div>'+
+
+          '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+  } else {
+
+    $('#verdoc1').html('<embed src="../dist/pdf/'+verdoc1+'" type="application/pdf" width="100%" height="200px" />');
+
+    $("#verdoc1_nombre").html("Contratro de obra"+
+      '<div class="col-md-12 row">'+
+          '<div class="col-md-6 ">'+
+            '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'" download="Contratro de obra" style="padding:0px 6px 0px 12px !important;" type="button" >'+
+              '<i class="fas fa-download"></i>'+
+            '</a>'+
+          '</div>'+
+          '<div class="col-md-6 ">'+
+            '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc1+'"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+              'Ver completo <i class="fas fa-expand"></i>'+
+            '</a>'+
+          '</div>'+
+      '</div>'+
+    '');
+  }
+  
+  if (verdoc2 == "") {
+
+    $('#verdoc2').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc2_nombre").html("Entrega de terreno"+
+      '<div class="col-md-12 row">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+        '</div>'+
+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+
+  } else {
+
+    $('#verdoc2').html('<embed src="../dist/pdf/'+verdoc2+'" type="application/pdf" width="100%" height="200px" />');
+
+    $("#verdoc2_nombre").html("Entrega de terreno"+
+      '<div class="col-md-12 row">'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'" download="Entrega de terreno" style="padding:0px 6px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+        '</div>'+
+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc2+'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" >'+
+          'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+  }
+
+  if (verdoc3 == "") {
+
+    $('#verdoc3').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc3_nombre").html("Inicio de obra"+
+      '<div class="col-md-12 row">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+          '</div>'+
+
+          '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+
+  } else {
+
+    $('#verdoc3').html('<embed src="../dist/pdf/'+verdoc3+'" type="application/pdf" width="100%" height="200px" />');
+
+    $("#verdoc3_nombre").html("Inicio de obra"+
+    '<div class="col-md-12 row">'+
+      '<div class="col-md-6">'+
+        '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'" download="Inicio de obra" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+          '<i class="fas fa-download"></i>'+
+        '</a>'+
+      '</div>'+
+      '<div class="col-md-6">'+
+        '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc3+'" target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+          'Ver completo <i class="fas fa-expand"></i>'+
+        '</a>'+
+      '</div>'+
+    '</div>'+
+  '');
+  }  
+  
+}
+
+function no_pdf() {
+  toastr.error("No hay PDF disponible, suba un PDF en el apartado de editar!!")
+}
+
+function mostrar(idproyecto) { 
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+
+  $("#modal-agregar-proyecto").modal("show")
+
+  $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);   
+
+    // $("#cargando-1-fomulario").show();
+    // $("#cargando-2-fomulario").hide();
+    
+    // $("#trabajador_old").val(data.idtrabajador); 
+    // $("#cargo").val(data.cargo).trigger("change"); 
+    // $("#login").val(data.login);
+    // $("#password-old").val(data.password);
+    // $("#idusuario").val(data.idusuario);
+
+    // if (data.imagen != "") {
+
+		// 	$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
+
+		// 	$("#foto2_actual").val(data.imagen);
+		// }
+  });  
 }

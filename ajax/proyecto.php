@@ -181,9 +181,9 @@
           //Validamos el acceso solo al usuario logueado y autorizado.
           if ($_SESSION['acceso']==1) {
 
-            $rspta=$proyecto->desactivar($idusuario);
+            $rspta=$proyecto->empezar_proyecto($idproyecto);
 
-            echo $rspta ? "ok" : "Usuario no se puede desactivar";
+            echo $rspta ? "ok" : "No se logro empezar el proyecto";
             //Fin de las validaciones de acceso
           } else {
 
@@ -202,9 +202,9 @@
           //Validamos el acceso solo al usuario logueado y autorizado.
           if ($_SESSION['acceso']==1)	{
 
-            $rspta=$proyecto->activar($idusuario);
+            $rspta=$proyecto->terminar_proyecto($idproyecto);
 
-            echo $rspta ? "ok" : "Usuario no se puede activar";
+            echo $rspta ? "ok" : "No se logro terminar el proyecto";
             //Fin de las validaciones de acceso
           }	else {
 
@@ -223,9 +223,9 @@
           //Validamos el acceso solo al usuario logueado y autorizado.
           if ($_SESSION['acceso']==1)	{
 
-            $rspta=$proyecto->activar($idusuario);
+            $rspta=$proyecto->reiniciar_proyecto($idproyecto);
 
-            echo $rspta ? "ok" : "Usuario no se puede activar";
+            echo $rspta ? "ok" : "No se logro reiniciar el proyecto";
             //Fin de las validaciones de acceso
           }	else {
 
@@ -245,7 +245,7 @@
           //Validamos el acceso solo al usuario logueado y autorizado.
           if ($_SESSION['acceso']==1)	{
 
-            $rspta=$proyecto->mostrar($idusuario);
+            $rspta=$proyecto->mostrar($idproyecto);
             //Codificar el resultado utilizando json
             echo json_encode($rspta);
             //Fin de las validaciones de acceso
@@ -277,32 +277,38 @@
               if ($reg->estado == '2') {
 
                 $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-                $acciones = '<button class="btn btn-primary" onclick="activar('.$reg->idproyecto.')"><i class="fa fa-check"></i></button>';
+                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')"data-toggle="tooltip" data-placement="top" title="Empezar proyecto"><i class="fa fa-check"></i></button>';
               } else {
 
                 if ($reg->estado == '1') {
 
                   $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                  $acciones = '<button class="btn btn-danger" onclick="desactivar('.$reg->idproyecto.')"><i class="far fa-trash-alt  "></i></button>';
+                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-placement="top" title="Terminar proyecto"><i class="fas fa-times"></i></button>';
                 } else {
 
                   $estado = '<span class="text-center badge badge-success">Terminado</span>';
-                  $acciones = '<button class="btn btn-primary" onclick="activar('.$reg->idproyecto.')"><i class="fa fa-check"></i></button>';
+                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-placement="top" title="Reiniciar proyecto"><i class="fas fa-sync-alt"></i></button>';
                 }                
               }
+
+              if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
+
+              if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
+              
+              $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra'";
               
               $data[]=array(
-                "0"=>'<button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.$acciones,
+                "0"=>'<button class="btn bg-secondary" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-folder"></i></button><button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.$acciones.'<button class="btn bg-info" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-eye"></i></button>',
                 "1"=>'<div class="user-block">
                     <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
-                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. substr($reg->empresa, 0, 20).'...</p></span>
+                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
                     <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                   </div>',
-                "2"=>$reg->nombre_proyecto,
+                "2"=> '<span class="description">'.$nombre_proyecto.'</span>' ,
                 "3"=>$reg->ubicacion,
                 "4"=>$reg->costo,
                 "5"=>'<center>
-                    <a tipe="btn btn-danger" class="btnMostrarPlanClasePDF resplandor"   href="#" >
+                    <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')" >
                       <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
                     </a>
                   </center>',
