@@ -52,16 +52,23 @@ switch ($_GET["op"]){
 
 				}else{
 					$horas_acumuladas=floatval($horas_desglose)+$datos['horas_trabajo'];
+
 					$caculamos = floatval( substr($horas_acumuladas/44, 0, 1));
+
 					if ( $caculamos == $datos['sabatical'] && $horas_acumuladas < 44) {
+
 						$sabatical=0;
+
 					}else {
+
 						if ( $caculamos == $datos['sabatical'] && $horas_acumuladas >= 44) {
+
 							$sabatical=0;
+
 						}else {
+
 							$sabatical=1;
-						}
-						 
+						}						 
 					}
 
 					if (floatval($horas_desglose)>8) {
