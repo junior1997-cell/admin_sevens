@@ -79,6 +79,15 @@
             </p>
           </a>
         </li>
+        <!-- PROVEEDORES -->
+        <li class="nav-item">
+          <a href="registro_sistencia.php" class="nav-link">
+            <i class="nav-icon far fa-image"></i>
+            <p>
+                Registro Asistencia
+            </p>
+          </a>
+        </li>
         <!-- PROYECTOS -->
         <!-- <li class="nav-item">
           <a href="pages/kanban.html" class="nav-link">
