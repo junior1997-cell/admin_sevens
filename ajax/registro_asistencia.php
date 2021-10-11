@@ -173,7 +173,7 @@ switch ($_GET["op"]){
 		}		
 	break;
 
-	/*case 'listar':
+	case 'listar':
 		if (!isset($_SESSION["nombre"]))
 		{
 		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
@@ -190,17 +190,18 @@ switch ($_GET["op"]){
 
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idasistencia_trabajador.')"><i class="far fa-trash-alt  "></i></button>':
-							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idasistencia_trabajador.')"><i class="fa fa-check"></i></button>',
+		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>':
+							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>',
 						"1"=>'<div class="user-block">
 							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
 							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_documento .': '. $reg->ruc .' </span>
+							<span class="description" style="margin-left: 0px !important;"> Cargo : '. $reg->cargo  .' </span>
 							</div>',
-		 				"2"=>$reg->direccion,
-		 				"3"=>$reg->cuenta_bancaria.' / '.$reg->cuenta_detracciones,
-		 				"4"=>$reg->titular_cuenta,
+		 				"2"=>$reg->total_horas,
+		 				"3"=>$reg->horas_extras,
+		 				"4"=>$reg->sueldo_hora,
 		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
@@ -218,7 +219,7 @@ switch ($_GET["op"]){
 		  	require 'noacceso.php';
 			}
 		}
-	break;*/
+	break;
 
 	case 'select2Trabajador': 
 

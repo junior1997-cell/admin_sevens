@@ -62,7 +62,8 @@ Class Asistencia_trabajador
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM asistencia_trabajador";
+		$sql="SELECT atr.idasistencia_trabajador as idasistecia, t.nombres as nombre, t.tipo_documento as tipo_doc, t.numero_documento as num_doc, t.cargo as cargo  , t.imagen as foto, t.sueldo_hora as sueldo_hora, SUM(atr.horas_trabajador) as total_horas, SUM(atr.horas_extras_dia) as horas_extras, SUM(atr.sabatical) as total_sabatical
+		FROM  asistencia_trabajador as atr, trabajador as t WHERE atr.idtrabajador=t.idtrabajador  AND t.estado=1 GROUP BY atr.idtrabajador";
 		return ejecutarConsulta($sql);		
 	}
 	//traemos el sueldo po hora del trabajador
