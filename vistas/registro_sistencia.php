@@ -66,10 +66,10 @@
                                                 <tr>
                                                     <th class="">Aciones</th>
                                                     <th>Nombre</th>
-                                                    <th>Horas</th>
-                                                    <th>Horas extras </th>
-                                                    <th>Sueldo mensual </th>
-                                                    <th>Pago / hora</th>
+                                                    <th>total Horas</th>
+                                                    <th>Pago / hora </th>
+                                                    <th>Pago acumulado</th>
+                                                    <th>Sueldo mensual</th>
                                                     <th>Jonal diario</th>
                                                     <th>Sabatical</th>
                                                     <th>Estado</th>
@@ -80,10 +80,10 @@
                                                 <tr>
                                                     <th>Aciones</th>
                                                     <th>Nombre</th>
-                                                    <th>Horas</th>
-                                                    <th>Horas extras </th>
-                                                    <th>Sueldo mensual </th>
-                                                    <th>Pago / hora</th>
+                                                    <th>total Horas</th>
+                                                    <th>Pago / hora </th>
+                                                    <th>Pago acumulado</th>
+                                                    <th>Sueldo mensual</th>
                                                     <th>Jonal diario</th>
                                                     <th>Sabatical</th>
                                                     <th>Estado</th>

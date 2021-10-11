@@ -188,9 +188,11 @@ switch ($_GET["op"]){
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
 					$jonal_diario = '';
+					$sueldo_acumudado='';
 		 		while ($reg=$rspta->fetch_object()){
 					//$jonal_diario=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
 					$jonal_diario=$reg->sueldo_hora*8;
+					$sueldo_acumudado=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>':
@@ -201,10 +203,10 @@ switch ($_GET["op"]){
 							style="color: #000000 !important;">'. $reg->cargo .' : </b> '. $reg->nombre .'</p></span>
 							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_doc .': '. $reg->num_doc .' </span>
 							</div>',
-		 				"2"=>$reg->total_horas,
-		 				"3"=>$reg->horas_extras,
-		 				"4"=>$reg->sueldo_mensual,
-		 				"5"=>$reg->sueldo_hora,
+		 				"2"=>$reg->total_horas+$reg->horas_extras,
+		 				"3"=>$reg->sueldo_hora,
+		 				"4"=>round($sueldo_acumudado, 2),
+		 				"5"=>$reg->sueldo_mensual,
 		 				"6"=>$jonal_diario,
 		 				"7"=>$reg->total_sabatical,
 		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
@@ -212,6 +214,7 @@ switch ($_GET["op"]){
 		 				);
 
 						 $jonal_diario=0;
+						 $sueldo_acumudado=0;
 		 		}
 		 		$results = array(
 		 			"sEcho"=>1, //Información para el datatables
