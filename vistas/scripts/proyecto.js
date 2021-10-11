@@ -138,7 +138,7 @@ function l_m(){
 }
 
 //Función para desactivar registros
-function desactivar(idusuario) {
+function empezar_proyecto(idproyecto) {
   Swal.fire({
     title: "¿Está Seguro de  Terminar  el proyecto ?",
     text: "No podras agregar o editar: provedores, trabajadores!",
@@ -149,7 +149,7 @@ function desactivar(idusuario) {
     confirmButtonText: "Si, terminar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
+      $.post("../ajax/proyecto.php?op=empezar_proyecto", { idproyecto: idproyecto }, function (e) {
         if (e == 'ok') {
 
           Swal.fire("Desactivado!", "Tu proyecto ha sido Terminado.", "success");		 
@@ -166,7 +166,7 @@ function desactivar(idusuario) {
 }
 
 //Función para activar registros
-function activar(idusuario) {
+function terminar_proyecto(idproyecto) {
 
   Swal.fire({
 
@@ -182,7 +182,41 @@ function activar(idusuario) {
 
     if (result.isConfirmed) {
 
-      $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
+      $.post("../ajax/proyecto.php?op=terminar_proyecto", { idproyecto: idproyecto }, function (e) {
+
+        if (e == 'ok') {
+
+          Swal.fire("Activado!", "Tu Proyecto ha sido Reactivado.", "success");		 
+  
+          tabla.ajax.reload();
+          
+        }else{
+  
+          Swal.fire("Error!", e, "error");
+        }
+      });      
+    }
+  });      
+}
+
+//Función para activar registros
+function reiniciar_proyecto(idproyecto) {
+
+  Swal.fire({
+
+    title: "¿Está Seguro de  Reactivar  el Proyecto?",
+    text: "Tendras acceso a editar o agregar: proveedores o trabajadores!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Reactivar!",
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      $.post("../ajax/proyecto.php?op=reiniciar_proyecto", { idproyecto: idproyecto }, function (e) {
 
         if (e == 'ok') {
 

@@ -31,7 +31,7 @@ switch ($_GET["op"]){
 				$pago_dia='';
 				$horas_extras='';
 				$pago_horas_extras='';
-				$horas_desglose = substr($horas_trabajo_dia, 0, 2).'.'.(substr($horas_trabajo_dia, 3, 5)*100)/60;
+				$horas_desglose = substr($horas_trabajo_dia, 0, 2).'.'.(floatval(substr($horas_trabajo_dia, 3, 5))*100)/60;
 
 
 				$sueldoxhora_trab=$asist_trabajador->sueldoxhora($trabajador);
@@ -52,11 +52,16 @@ switch ($_GET["op"]){
 
 				}else{
 					$horas_acumuladas=floatval($horas_desglose)+$datos['horas_trabajo'];
-
-					if ($horas_acumuladas==44) {
-						$sabatical=1;
-					}else {
+					$caculamos = floatval( substr($horas_acumuladas/44, 0, 1));
+					if ( $caculamos == $datos['sabatical'] && $horas_acumuladas < 44) {
 						$sabatical=0;
+					}else {
+						if ( $caculamos == $datos['sabatical'] && $horas_acumuladas >= 44) {
+							$sabatical=0;
+						}else {
+							$sabatical=1;
+						}
+						 
 					}
 
 					if (floatval($horas_desglose)>8) {
@@ -71,7 +76,7 @@ switch ($_GET["op"]){
 					$pago_dia=floatval($horas_desglose)*$sueldoxhora_trab['sueldo_hora'];
 				}
 
-				//var_dump($sabatical,$datos['sabatical']);die;
+				// var_dump($sabatical,substr($horas_acumuladas/44, 0, 1));die;
 
 				if (empty($idasistencia_trabajador)){
 					$rspta=$asist_trabajador->insertar($trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical);
@@ -81,6 +86,7 @@ switch ($_GET["op"]){
 					$rspta=$asist_trabajador->editar($idasistencia_trabajador,$trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
+				echo "hora acumulada: $horas_acumuladas, sabatical: $sabatical, divicion: $caculamos "." bd_sabatico".$datos['sabatical'];
 				$horas_acumuladas='';
 				$horas_trabajo='';
 				$sabatical='';

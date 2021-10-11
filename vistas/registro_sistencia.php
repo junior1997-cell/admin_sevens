@@ -96,7 +96,7 @@
 
                     <!-- Modal agregar asistencia -->
                     <div class="modal fade" id="modal-agregar-asistencia">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-dialog /*modal-dialog-scrollable*/ modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title">Agregar asistencia</h4>
@@ -128,7 +128,15 @@
                                                 <div class="col-lg-5">
                                                     <div class="form-group">
                                                         <label for="horas_tabajo">Horas de trabajo</label>
-                                                        <input type="time" name="horas_tabajo" class="form-control" id="horas_tabajo" placeholder="Ingrese las horas de trabajo" />
+                                                        <!-- <input type="time" name="horas_tabajo" class="form-control" id="horas_tabajo" placeholder="Ingrese las horas de trabajo" /> -->
+                                                    
+
+                                                        <div class="input-group date" id="timepicker" data-target-input="nearest">
+                                                            <input id="horas_tabajo" name="horas_tabajo" placeholder="Ingrese las horas de trabajo" type="text" class="form-control datetimepicker-input" data-target="#timepicker" data-inputmask='"mask": "99:99"' data-mask/>
+                                                            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

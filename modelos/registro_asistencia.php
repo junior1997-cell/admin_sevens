@@ -80,7 +80,7 @@ Class Asistencia_trabajador
 	//Seleccionar Trabajador Select2
 	public function select2_trabajador()
 	{
-		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento, cargo FROM trabajador WHERE estado='1' and estado_usuario='0';";
+		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento, cargo FROM trabajador WHERE estado='1';";
 		return ejecutarConsulta($sql);		
 	}
 

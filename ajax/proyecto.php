@@ -171,7 +171,7 @@
         }		
       break;
 
-      case 'desactivar':
+      case 'empezar_proyecto':
         if (!isset($_SESSION["nombre"])){
 
           header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
@@ -192,7 +192,28 @@
         }		
       break;
 
-      case 'activar':
+      case 'terminar_proyecto':
+        if (!isset($_SESSION["nombre"]))
+        {
+          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+          die();
+        }	else {
+
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ($_SESSION['acceso']==1)	{
+
+            $rspta=$proyecto->activar($idusuario);
+
+            echo $rspta ? "ok" : "Usuario no se puede activar";
+            //Fin de las validaciones de acceso
+          }	else {
+
+            require 'noacceso.php';
+          }
+        }		
+      break;
+
+      case 'reiniciar_proyecto':
         if (!isset($_SESSION["nombre"]))
         {
           header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
@@ -251,28 +272,27 @@
             while ($reg=$rspta->fetch_object()){
 
               $estado = "";
+              $acciones = "";
 
               if ($reg->estado == '2') {
 
                 $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-
+                $acciones = '<button class="btn btn-primary" onclick="activar('.$reg->idproyecto.')"><i class="fa fa-check"></i></button>';
               } else {
 
                 if ($reg->estado == '1') {
 
                   $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-
+                  $acciones = '<button class="btn btn-danger" onclick="desactivar('.$reg->idproyecto.')"><i class="far fa-trash-alt  "></i></button>';
                 } else {
 
                   $estado = '<span class="text-center badge badge-success">Terminado</span>';
+                  $acciones = '<button class="btn btn-primary" onclick="activar('.$reg->idproyecto.')"><i class="fa fa-check"></i></button>';
                 }                
               }
               
               $data[]=array(
-                "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger" onclick="desactivar('.$reg->idproyecto.')"><i class="far fa-trash-alt  "></i></button>':
-                  '<button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-primary" onclick="activar('.$reg->idproyecto.')"><i class="fa fa-check"></i></button>',
+                "0"=>'<button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.$acciones,
                 "1"=>'<div class="user-block">
                     <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
                     <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. substr($reg->empresa, 0, 20).'...</p></span>

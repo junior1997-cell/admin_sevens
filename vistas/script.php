@@ -20,6 +20,9 @@
 <!-- date-range-picker -->
 <script src="../plugins/daterangepicker/daterangepicker.js"></script>
 
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
 <!-- DataTables  & Plugins -->
 <script src="../plugins/datatables2/jquery.dataTables.min.js"></script>    
 <script src="../plugins/datatables2/dataTables.buttons.min.js"></script>
