@@ -1,8 +1,8 @@
 <!-- Footer -->
 <footer class="main-footer">
-  <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-  All rights reserved.
-  <div class="float-right d-none d-sm-inline-block"><b>Version</b> 3.1.0</div>
+  <strong id="copyright">Copyright &copy; 2021 - <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script> <a href="escritorio.php">SevensIngenieros.SAC</a>.</strong>
+  Todos los derechos reservados  .
+  <div class="float-right d-none d-sm-inline-block"><b>Version</b> 0.0.1</div>
 </footer>
 
 <!-- Control Sidebar -->

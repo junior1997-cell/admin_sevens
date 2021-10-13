@@ -5,11 +5,11 @@ function init() {
   
   listar();
 
-  $("#bloc_Accesos").addClass("menu-open");
+  // $("#bloc_Accesos").addClass("menu-open");
 
-  $("#mAccesos").addClass("active");
+  $("#mProveedor").addClass("active");
 
-  $("#lproveedor").addClass("active");
+  // $("#lproveedor").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {
 

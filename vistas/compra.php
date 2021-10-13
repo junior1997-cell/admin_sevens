@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Escritorio</title>
+        <title>Admin Sevens | Compras</title>
         <?php
           require 'head.php';
         ?>
@@ -22,9 +22,9 @@
         
         <div class="wrapper">
           <!-- Preloader -->
-          <div class="preloader flex-column justify-content-center align-items-center">
+          <!-- <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__shake" src="../dist/svg/logo-principal.svg" alt="AdminLTELogo" width="360" />
-          </div>
+          </div> -->
         
           <?php
             require 'nav.php';
@@ -38,13 +38,13 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0">Tablero</h1>
+                    <h1 class="m-0">Compras</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item"><a href="escritorio.php">Home</a></li>
-                      <li class="breadcrumb-item active">Tablero</li>
+                      <li class="breadcrumb-item"><a href="compra.php">Home</a></li>
+                      <li class="breadcrumb-item active">Compras</li>
                     </ol>
                   </div>
                   <!-- /.col -->
@@ -54,79 +54,7 @@
               <!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
-
-            <!-- Main content -->
-            <section class="content">
-              <div class="container-fluid">
-                <!-- Small boxes (Stat box) -->
-                <div class="row">
-                  <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                      <div class="inner">
-                        <h3>150</h3>
-
-                        <p>Total de Proyectos</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-bag"></i>
-                      </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                      <div class="inner">
-                        <h3>53<sup style="font-size: 20px;">%</sup></h3>
-
-                        <p>Total de Proveedores</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                      </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                      <div class="inner">
-                        <h3>44</h3>
-
-                        <p>Toal de Trabajadores</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                      </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                      <div class="inner">
-                        <h3>65</h3>
-
-                        <p>Total de Servicio</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                      </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-                  <!-- ./col -->
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-
+            
             <!-- Main content -->
             <section class="content">
               <div class="container-fluid">
@@ -138,12 +66,12 @@
                           <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proyecto" onclick="limpiar();">
                           <i class="fas fa-plus-circle"></i> Agregar
                           </button>
-                          Proyectos                        
+                          Compras                        
                         </h3>                      
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-proyectos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
                               <th class="">Aciones</th>
@@ -510,7 +438,7 @@
         ?>
          
 
-        <script type="text/javascript" src="scripts/proyecto.js"></script>
+        <script type="text/javascript" src="scripts/compra.js"></script>
         <!-- previzualizamos el pdf cargado -->
         <script type="text/javascript">
           function PreviewImage() {
