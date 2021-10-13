@@ -11,11 +11,11 @@ Class Proyecto
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1,$doc2,$doc3)
+	public function insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3)
 	{
 		// insertamos al usuario
-		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa,nombre_proyecto, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio, fecha_fin, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra) 
-		VALUES ('$tipo_documento','$numero_documento','$empresa','$nombre_proyecto','$ubicacion','$actividad_trabajo','$empresa_acargo','$costo','$fecha_inicio','$fecha_fin','$doc1','$doc2','$doc3');";
+		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa,nombre_proyecto, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio, fecha_fin, plazo, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra) 
+		VALUES ('$tipo_documento','$numero_documento','$empresa','$nombre_proyecto','$ubicacion','$actividad_trabajo','$empresa_acargo','$costo','$fecha_inicio','$fecha_fin','$plazo','$doc1','$doc2','$doc3');";
 		return ejecutarConsulta($sql);
 		// $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
 		 
@@ -24,12 +24,17 @@ Class Proyecto
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idusuario,$trabajador_old,$trabajador,$cargo,$login,$clave,$permisos)
+	public function editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3)
 	{
 		 
-		$sql="UPDATE proyecto SET idtrabajador='$trabajador', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
+		$sql="UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', 
+			empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', ubicacion = '$ubicacion',
+			actividad_trabajo = '$actividad_trabajo', empresa_acargo = '$empresa_acargo', 
+			costo = '$costo', fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', 
+			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3'
+		 WHERE idproyecto='$idproyecto'";
 			
-		ejecutarConsulta($sql);
+		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para desactivar categorías
@@ -80,14 +85,14 @@ Class Proyecto
 
 	public function obtenerDoc2($idproyecto) {
 
-        $sql = "SELECT doc1_contrato_obra FROM proyecto WHERE idproyecto='$idproyecto'";
+        $sql = "SELECT doc2_entrega_terreno FROM proyecto WHERE idproyecto='$idproyecto'";
 		
         return ejecutarConsulta($sql);
     }
 
 	public function obtenerDoc3($idproyecto) {
 
-        $sql = "SELECT doc1_contrato_obra FROM proyecto WHERE idproyecto='$idproyecto'";
+        $sql = "SELECT doc3_inicio_obra FROM proyecto WHERE idproyecto='$idproyecto'";
 		
         return ejecutarConsulta($sql);
     }

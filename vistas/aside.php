@@ -24,70 +24,88 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- ESCRITORIO -->
-        <li class="nav-item">
-          <a href="escritorio.php" class="nav-link" id="mEscritorio">
-            <i class="nav-icon fas fa-th"></i>
-            <p>
-              Escritorio
-              <span class="right badge badge-danger">New</span>
-            </p>
-          </a>
-        </li>
-        <!-- ACCESOS -->
-        <li class="nav-item" id="bloc_Accesos">
-          <a href="#" class="nav-link" id="mAccesos">
-            <i class="nav-icon fas fa-copy"></i>
-            <p>
-              Accesos
-              <i class="fas fa-angle-left right"></i>
-              <span class="badge badge-info right">6</span>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="usuario.php" class="nav-link" id="lUsuario">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Usuarios</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="permiso.php" class="nav-link" id="lPermiso">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Permisos</p>
-              </a>
-            </li>            
-          </ul>
-        </li>
-        <!-- OTROS -->
-        <li class="nav-header">Modulos</li>
-        <li class="nav-item">
-          <a href="pages/calendar.html" class="nav-link">
-            <i class="nav-icon far fa-calendar-alt"></i>
-            <p>
-              Clientes
-              <span class="badge badge-info right">2</span>
-            </p>
-          </a>
-        </li>
-        <!-- PROVEEDORES -->
-        <li class="nav-item">
-          <a href="proveedor.php" class="nav-link">
-            <i class="nav-icon far fa-image"></i>
-            <p>
-              Proveedores
-            </p>
-          </a>
-        </li>
-        <!-- PROVEEDORES -->
-        <li class="nav-item">
-          <a href="registro_sistencia.php" class="nav-link">
-            <i class="nav-icon far fa-image"></i>
-            <p>
-                Registro Asistencia
-            </p>
-          </a>
-        </li>
+        
+        <?php if ($_SESSION['escritorio']==1) {  ?>
+          <!-- ESCRITORIO -->
+          <li class="nav-item">
+            <a href="escritorio.php" class="nav-link" id="mEscritorio">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Escritorio
+                <span class="right badge badge-danger">New</span>
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['escritorio']==1) {  ?>
+          <!-- ACCESOS -->
+          <li class="nav-item" id="bloc_Accesos">
+            <a href="#" class="nav-link" id="mAccesos">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Accesos
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">6</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="usuario.php" class="nav-link" id="lUsuario">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Usuarios</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="permiso.php" class="nav-link" id="lPermiso">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Permisos</p>
+                </a>
+              </li>            
+            </ul>
+          </li>
+        <?php  }  ?>
+
+      </ul>
+      
+      <ul class="nav nav-pills nav-sidebar flex-column" >
+        <?php if ($_SESSION['escritorio']==1) {  ?>
+          <!-- OTROS -->
+          <li class="nav-header">Modulos</li>
+          <li class="nav-item">
+            <a href="pages/calendar.html" class="nav-link">
+              <i class="nav-icon far fa-calendar-alt"></i>
+              <p>
+                Clientes
+                <span class="badge badge-info right">2</span>
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['escritorio']==1) {  ?>
+          <!-- PROVEEDORES -->
+          <li class="nav-item">
+            <a href="proveedor.php" class="nav-link">
+              <i class="nav-icon far fa-image"></i>
+              <p>
+                Proveedores
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['escritorio']==1) {  ?>
+          <!-- PROVEEDORES -->
+          <li class="nav-item">
+            <a href="registro_sistencia.php" class="nav-link">
+              <i class="nav-icon far fa-image"></i>
+              <p>
+                  Registro Asistencia
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
         <!-- PROYECTOS -->
         <!-- <li class="nav-item">
           <a href="pages/kanban.html" class="nav-link">
@@ -97,16 +115,17 @@
             </p>
           </a>
         </li> -->
-        <!-- TRABAJADORES -->
-        <li class="nav-item">
-          <a href="trabajador.php" class="nav-link">
-            <i class="nav-icon fas fa-columns"></i>
-            <p>
-              Trabajadores
-            </p>
-          </a>
-        </li>
-         
+        <?php if ($_SESSION['escritorio']==1) {  ?>
+          <!-- TRABAJADORES -->
+          <li class="nav-item">
+            <a href="trabajador.php" class="nav-link">
+              <i class="nav-icon fas fa-columns"></i>
+              <p>
+                Trabajadores
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
       </ul>
        
     </nav>

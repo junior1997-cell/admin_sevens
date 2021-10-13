@@ -94,7 +94,7 @@ function guardaryeditar(e) {
 
         tabla.ajax.reload();	
 
-        Swal.fire("Correcto!", "Proyecto registrado correctamente", "success");	      
+        Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	      
          
 				limpiar();
 
@@ -240,21 +240,9 @@ init();
 $(function () {
 
   //Date range picker
-  $('#fecha_inicio_fin').daterangepicker({
-    parentEl: "#divChooseDossier .modal-body",
-    autoUpdateInput: false,
-      locale: {
-      cancelLabel: 'Clear'
-    }
-  });
+  $('#fecha_inicio_fin').daterangepicker();
 
-  $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
-  });
-
-  $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-  });
+  
 
   // validamo el formulario
   $.validator.setDefaults({
@@ -275,7 +263,7 @@ $(function () {
       ubicacion: {minlength: 6, maxlength: 300},
       actividad_trabajo: {minlength: 6},
       empresa_acargo: {minlength: 6, maxlength: 200},
-      costo:{minlength: 1, maxlength: 11},
+      
       fecha_inicio_fin:{required: true,minlength: 1, maxlength: 25}
     },
     messages: {
@@ -286,29 +274,26 @@ $(function () {
       },
       empresa: {
         required: "Este campo es requerido.",
-        minlength: "La contraseña debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 200 caracteres.",
+        minlength: "La Empresa debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La Empresa debe tener como MÁXIMO 200 caracteres.",
       },
       nombre_proyecto: {
         required: "Este campo es requerido.",
-        minlength: "La contraseña debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 200 caracteres.",
+        minlength: "El nombre de proyecto debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La nombre de proyecto debe tener como MÁXIMO 200 caracteres.",
       },
       ubicacion: {
-        minlength: "La contraseña debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 300 caracteres.",
+        minlength: "La ubicación debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La ubicación debe tener como MÁXIMO 300 caracteres.",
       },
       actividad_trabajo: {
-        minlength: "La contraseña debe tener MÍNIMO 6 caracteres.",
+        minlength: "La actividad de trabajo debe tener MÍNIMO 6 caracteres.",
       },
       empresa_acargo: {
-        minlength: "La contraseña debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 200 caracteres.",
+        minlength: "La Empresa a cargo debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La Empresa a cargo debe tener como MÁXIMO 200 caracteres.",
       },
-      costo: {
-        minlength: "La contraseña debe tener MÍNIMO 1 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 11 caracteres.",
-      },
+     
       fecha_inicio_fin: {
         required: "Este campo es requerido.",
       },
@@ -492,7 +477,7 @@ $("#doc2").change(function(e) {  addDocs(e,$("#doc2").attr("id")) });
 $("#doc3_i").click(function() {  $('#doc3').trigger('click'); });
 $("#doc3").change(function(e) {  addDocs(e,$("#doc3").attr("id")) });
 
-/* PREVISUALIZAR LAS IMAGENES */
+/* PREVISUALIZAR LOS DOCUMENTOS */
 function addDocs(e,id) {
   $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 	console.log(id);
@@ -750,8 +735,10 @@ function no_pdf() {
   toastr.error("No hay PDF disponible, suba un PDF en el apartado de editar!!")
 }
 
-function mostrar(idproyecto) { 
+function mostrar(idproyecto) {
+
   $("#cargando-1-fomulario").hide();
+
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-proyecto").modal("show")
@@ -760,20 +747,148 @@ function mostrar(idproyecto) {
 
     data = JSON.parse(data);  console.log(data);   
 
-    // $("#cargando-1-fomulario").show();
-    // $("#cargando-2-fomulario").hide();
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
     
-    // $("#trabajador_old").val(data.idtrabajador); 
-    // $("#cargo").val(data.cargo).trigger("change"); 
-    // $("#login").val(data.login);
-    // $("#password-old").val(data.password);
-    // $("#idusuario").val(data.idusuario);
+    $("#idproyecto").val(data.idproyecto);  
+    $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
+    $("#numero_documento").val(data.numero_documento); 
+    $("#empresa").val(data.empresa); 
+    $("#nombre_proyecto").val(data.nombre_proyecto);
+    $("#ubicacion").val(data.ubicacion); 
+    $("#actividad_trabajo").val(data.actividad_trabajo);  
+       
+    $("#plazo").val(data.plazo); 
+    $("#costo").val(data.costo); 
+    $("#empresa_acargo").val(data.empresa_acargo); 
 
-    // if (data.imagen != "") {
+    let fi = data.fecha_inicio.replace('-', '/');
+    let ff = data.fecha_fin.replace('-', '/');  
+    let fii = fi.replace('-', '/');
+    let fff = ff.replace('-', '/'); console.log(fii ); console.log(fff );
+    $("#fecha_inicio_fin").val(fii + ' - ' + fff); 
+    // $('#fecha_inicio_fin').daterangepicker({ startDate: fii, endDate: fff });
+    // $('#fecha_inicio_fin').data('daterangepicker').setStartDate(fii);
+    // $('#fecha_inicio_fin').data('daterangepicker').setEndDate(fff);
 
-		// 	$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
+    if (data.doc1_contrato_obra != ""  ) {
 
-		// 	$("#foto2_actual").val(data.imagen);
-		// }
+      $("#doc_old_1").val(data.doc1_contrato_obra); 
+
+      $("#doc1_nombre").html('Contrato de obra');
+
+      $("#doc1_ver").html('<iframe src="../dist/pdf/'+data.doc1_contrato_obra+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+    
+    } else {
+
+      $("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
+
+      $("#doc1_nombre").html('');
+
+      $("#doc_old_1").val(""); 
+    }
+
+    if (data.doc2_entrega_terreno != "" ) {
+
+      $("#doc_old_2").val(data.doc2_entrega_terreno);
+
+      $("#doc2_nombre").html('Entrega de terreno');
+
+      $("#doc2_ver").html('<iframe src="../dist/pdf/'+data.doc2_entrega_terreno+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+    
+    } else {
+
+      $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
+
+      $("#doc2_nombre").html('');
+
+      $("#doc_old_2").val("");
+    }
+    
+    if (data.doc3_inicio_obra != "" ) {
+
+      $("#doc_old_3").val(data.doc3_inicio_obra);
+
+      $("#do3_nombre").html('Inicio de obra');
+
+      $("#doc3_ver").html('<iframe src="../dist/pdf/'+data.doc3_inicio_obra+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+    
+    } else {
+
+      $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
+
+      $("#do3_nombre").html('');
+
+      $("#doc_old_3").val("");
+    }
+     
   });  
+}
+
+function mostrar_detalle(idproyecto) {
+  $("#modal-ver-detalle").modal("show");
+
+  
+  $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);   
+
+    $('#cargando-detalle-proyecto').html(''+
+      '<div class="col-12">'+
+        '<div class="card">'+
+          '<div class="card-body  ">'+
+            '<table class="table table-hover table-bordered">' +           
+              '<tbody>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Empresa</th>'+
+                  '<td>'+data.empresa+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Documento</th>'+
+                  '<td>'+data.tipo_documento+': '+data.numero_documento+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Nombre de  proyecto</th>'+
+                  '<td>'+data.nombre_proyecto +'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Ubicación</th>'+
+                  '<td>'+data.ubicacion+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Actividad del trabajo</th>'+
+                  '<td>'+data.actividad_trabajo+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Fecha inicio/fin</th>'+
+                  '<td>'+data.fecha_inicio+' - ' + data.fecha_fin+'</td>'+
+                '</tr>'+
+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Plazo</th>'+                                
+                  '<td>'+data.plazo+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Costo total</th>'+
+                  '<td>'+data.costo+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Empresa a cargo</th>'+
+                  '<td>'+data.empresa_acargo+'</td>'+
+                '</tr>'+
+              '</tbody>'+
+            '</table>'+         
+          '</div>'+
+        '</div>'+
+      '</div>'+ 
+    '');
+    // data.doc1_contrato_obra 
+    // data.doc2_entrega_terreno    
+    // data.doc3_inicio_obra
+     
+  });
+}
+
+function abrir_proyecto(idproyecto) {
+  Swal.fire("Abierto!", "Proyecto abierto corrrectamente", "success");
 }

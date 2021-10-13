@@ -276,7 +276,7 @@
                               </div>
                             </div>
 
-                            <!-- Actividad del trabajo -->
+                            <!-- Plazo -->
                             <div class="col-lg-3">
                               <div class="form-group">
                                 <label for="plazo">Plazo <small>(días calendario)</small></label>
@@ -292,7 +292,7 @@
                                   <div class="input-group-prepend">
                                     <span class="input-group-text">S/. </span>
                                   </div>
-                                  <input type="number" step="0.10" name="costo" id="costo" class="form-control"  placeholder="Costo" min="1" >
+                                  <input type="number"  name="costo" id="costo" class="form-control"  placeholder="Costo" min="1" >
                                 </div>
                               </div>
                             </div>
@@ -422,7 +422,7 @@
                     </div>
                     
                     <div class="modal-body">
-                      <div class="row" id="cargando-1-fomulario">
+                      <div class="row" >
 
                         <!-- Pdf 1 -->
                         <div class="col-md-6 mb-4" >      
@@ -457,9 +457,29 @@
                         </div>
                         </div>                                                                     
 
-                      </div>  
+                      </div>                      
+                    </div>
 
-                      <div class="row" id="cargando-2-fomulario" style="display: none;">
+                    <div class="modal-footer justify-content-end">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+
+              <!-- Modal ver detalle del proyecto -->
+              <div class="modal fade" id="modal-ver-detalle">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="detalle_titl">Detalle del proyecto</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                      <div class="row" id="cargando-detalle-proyecto">
                         <div class="col-lg-12 text-center">
                           <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
                           <h4>Cargando...</h4>
@@ -467,12 +487,12 @@
                       </div>
                       <!-- /.card-body -->
                     </div>
-                    <div class="modal-footer justify-content-end">
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>                  
+                                       
                   </div>
                 </div>
               </div>
+
+
             </section>
             <!-- /.content -->
           </div>

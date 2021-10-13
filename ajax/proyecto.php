@@ -117,7 +117,7 @@
 
             if (empty($idproyecto)){
               // insertamos en la bd
-              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1,$doc2,$doc3);
+              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3);
               // echo $rspta ;
               echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
@@ -125,7 +125,7 @@
               // validamos si existe el doc para eliminarlo
               if ($flat_doc1 == true) {
 
-                $datos_f1        = $proyecto->obtenerDoc1($idproyecto);
+                $datos_f1 = $proyecto->obtenerDoc1($idproyecto);
 
                 $doc1_ant = $datos_f1->fetch_object()->doc1_contrato_obra;
 
@@ -137,7 +137,7 @@
 
               if ($flat_doc2 == true) {
 
-                $datos_f2        = $proyecto->obtenerDoc2($idproyecto);
+                $datos_f2 = $proyecto->obtenerDoc2($idproyecto);
 
                 $doc2_ant = $datos_f2->fetch_object()->doc2_entrega_terreno;
 
@@ -149,7 +149,7 @@
 
               if ($flat_doc3 == true) {
 
-                $datos_f3        = $proyecto->obtenerDoc3($idproyecto);
+                $datos_f3 = $proyecto->obtenerDoc3($idproyecto);
 
                 $doc3_ant = $datos_f3->fetch_object()->doc3_inicio_obra;
 
@@ -159,7 +159,7 @@
                 }
               }
 
-              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1,$doc2,$doc3);
+              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3);
               
               echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
             }
@@ -293,19 +293,21 @@
 
               if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
 
+              if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
+
               if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
               
               $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra'";
               
               $data[]=array(
-                "0"=>'<button class="btn bg-secondary" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-folder"></i></button><button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.$acciones.'<button class="btn bg-info" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-eye"></i></button>',
+                "0"=>'<button class="btn bg-secondary" onclick="abrir_proyecto('.$reg->idproyecto.')"><i class="fas fa-folder"></i></button><button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.$acciones.'<button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')"><i class="fas fa-eye"></i></button>',
                 "1"=>'<div class="user-block">
                     <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
                     <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
                     <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                   </div>',
                 "2"=> '<span class="description">'.$nombre_proyecto.'</span>' ,
-                "3"=>$reg->ubicacion,
+                "3"=>$ubicacion,
                 "4"=>$reg->costo,
                 "5"=>'<center>
                     <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')" >
