@@ -1,23 +1,7 @@
 var tabla;
 //Función que se ejecuta al inicio
 function init(){ 
-  if ( localStorage.getItem('nube_idproyecto') ) {
-
-    console.log(localStorage.getItem('nube_idproyecto'));
-
-    $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  localStorage.getItem('nube_nombre_proyecto'));
-
-    $("#ver-proyecto").show();
-
-    $("#ver-otros-modulos-1").show();
-
-  }else{
-    $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
-
-    $("#ver-proyecto").hide();
-
-    $("#ver-otros-modulos-1").hide();
-  }
+  
 
   tablero();
 
