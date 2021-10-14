@@ -6,10 +6,14 @@
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="escritorio.php" class="nav-link">Home</a>
+      <a href="escritorio.php" class="nav-link"> <i class="fas fa-home"></i> Home</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link">Contacto <i class="fas fa-user-secret"></i></a>
+      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> Contacto</a>
+    </li>
+
+    <li class="nav-item d-none d-sm-inline-block">
+      <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"> <i class="fas fa-tools"></i> Selecciona un proyecto </a>
     </li>
   </ul>
 

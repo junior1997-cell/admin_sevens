@@ -1,7 +1,26 @@
 var tabla;
 //Función que se ejecuta al inicio
 function init(){ 
-  
+  if ( localStorage.getItem('nube_idproyecto') ) {
+
+    console.log(localStorage.getItem('nube_idproyecto'));
+
+    $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  localStorage.getItem('nube_nombre_proyecto'));
+
+    $("#ver-proyecto").show();
+
+    $("#ver-otros-modulos-1").show();
+
+  }else{
+    $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
+
+    $("#ver-proyecto").hide();
+
+    $("#ver-otros-modulos-1").hide();
+  }
+
+  tablero();
+
   listar();
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });
@@ -73,7 +92,8 @@ function listar() {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
-  $('[data-toggle="tooltip"]').tooltip();
+   
+  
 }
 
 //Función para guardar o editar
@@ -601,9 +621,7 @@ function doc3_eliminar() {
 	$("#doc3_nombre").html("");
 }
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-})
+ 
 
 function ver_modal_docs(verdoc1, verdoc2, verdoc3) {
   console.log(verdoc1, verdoc2, verdoc3);
@@ -889,6 +907,63 @@ function mostrar_detalle(idproyecto) {
   });
 }
 
-function abrir_proyecto(idproyecto) {
+function tablero() {   
+
+  $.post("../ajax/proyecto.php?op=tablero-proyectos",  function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data);
+    $("#cantidad_proyectos").html(data.cantidad_proyectos);
+
+  });  
+
+  $.post("../ajax/proyecto.php?op=tablero-proveedores",  function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data);
+    $("#cantidad_proveedores").html(data.cantidad_proveedores);
+  });
+
+  $.post("../ajax/proyecto.php?op=tablero-trabjadores",  function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data);
+    $("#cantidad_trabajadores").html(data.cantidad_trabajadores);
+  });
+
+  $.post("../ajax/proyecto.php?op=tablero-servicio",  function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data);
+    $("#cantidad_servicios").html(data.cantidad_servicios);
+  });
+}
+
+function abrir_proyecto(idproyecto,nombre_proyecto) {
+
+  $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
+
+  localStorage.setItem('nube_idproyecto', idproyecto);
+
+  localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
+  
+  // mostramos el nombre en el NAV
+  $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  nombre_proyecto);
+  $("#ver-proyecto").show();
+  $("#ver-otros-modulos").show();
+
+  setTimeout(function() {
+    $("#ver-otros-modulos-1").fadeOut(0);
+  },0);
+
+  setTimeout(function() {
+    $("#ver-otros-modulos-2").fadeIn(150);
+  },4);
+
+  setTimeout(function() {
+    $("#ver-otros-modulos-2").fadeOut(200);
+  },400);
+
+  setTimeout(function() {
+    $("#ver-otros-modulos-1").fadeIn(400);
+  },500);
+
   Swal.fire("Abierto!", "Proyecto abierto corrrectamente", "success");
+  // tabla.ajax.reload();
 }

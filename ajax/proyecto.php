@@ -256,6 +256,91 @@
         }		
       break;
 
+      case 'tablero-proyectos':
+
+        if (!isset($_SESSION["nombre"])){
+
+          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+
+        }else{
+
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ($_SESSION['acceso']==1)	{
+
+            $rspta=$proyecto->tablero_proyectos();
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta);
+            //Fin de las validaciones de acceso
+          }else{
+
+            require 'noacceso.php';
+          }
+        }		
+      break;
+      case 'tablero-proveedores':
+
+        if (!isset($_SESSION["nombre"])){
+
+          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+
+        }else{
+
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ($_SESSION['acceso']==1)	{
+
+            $rspta=$proyecto->tablero_proveedores();
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta);
+            //Fin de las validaciones de acceso
+          }else{
+
+            require 'noacceso.php';
+          }
+        }		
+      break;
+      case 'tablero-trabjadores':
+
+        if (!isset($_SESSION["nombre"])){
+
+          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+
+        }else{
+
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ($_SESSION['acceso']==1)	{
+
+            $rspta=$proyecto->tablero_trabajadores();
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta);
+            //Fin de las validaciones de acceso
+          }else{
+
+            require 'noacceso.php';
+          }
+        }		
+      break;
+      case 'tablero-servicio':
+
+        if (!isset($_SESSION["nombre"])){
+
+          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+
+        }else{
+
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ($_SESSION['acceso']==1)	{
+
+            $rspta=$proyecto->tablero_servicio();
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta);
+            //Fin de las validaciones de acceso
+          }else{
+
+            require 'noacceso.php';
+          }
+        }		
+      break;
+
       case 'listar':
         if (!isset($_SESSION["nombre"])){
 
@@ -277,17 +362,17 @@
               if ($reg->estado == '2') {
 
                 $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')"data-toggle="tooltip" data-placement="top" title="Empezar proyecto"><i class="fa fa-check"></i></button>';
+                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" style="margin-right: 3px !important;"><i class="fa fa-check"></i></button>';
               } else {
 
                 if ($reg->estado == '1') {
 
                   $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-placement="top" title="Terminar proyecto"><i class="fas fa-times"></i></button>';
+                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" style="margin-right: 3px !important;"><i class="fas fa-times"></i></button>';
                 } else {
 
                   $estado = '<span class="text-center badge badge-success">Terminado</span>';
-                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-placement="top" title="Reiniciar proyecto"><i class="fas fa-sync-alt"></i></button>';
+                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" style="margin-right: 3px !important;"><i class="fas fa-sync-alt"></i></button>';
                 }                
               }
 
@@ -296,25 +381,38 @@
               if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
 
               if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
-              
-              $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra'";
-              
-              $data[]=array(
-                "0"=>'<button class="btn bg-secondary" onclick="abrir_proyecto('.$reg->idproyecto.')"><i class="fas fa-folder"></i></button><button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')"><i class="fas fa-pencil-alt"></i></button>'.$acciones.'<button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')"><i class="fas fa-eye"></i></button>',
-                "1"=>'<div class="user-block">
-                    <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
-                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
-                    <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                  </div>',
-                "2"=> '<span class="description">'.$nombre_proyecto.'</span>' ,
-                "3"=>$ubicacion,
-                "4"=>$reg->costo,
-                "5"=>'<center>
-                    <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')" >
-                      <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
-                    </a>
-                  </center>',
-                "6"=> $estado
+                
+                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_proyecto'";
+
+                $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra'";
+
+                $tool = '"tooltip"'; $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }) </script>";                
+
+                $data[]=array(
+                  "0"=>'<button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
+                      <i class="fas fa-folder"></i>
+                    </button> 
+                    <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" style="margin-right: 3px !important;">
+                      <i class="fas fa-pencil-alt"></i> 
+                    </button>
+                    '.$acciones.'
+                    <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
+                      <i class="fas fa-eye"></i>
+                    </button> ',
+                  "1"=>'<div class="user-block">
+                      <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
+                      <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
+                      <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+                    </div>',
+                  "2"=> '<span class="description" >'.$nombre_proyecto.'</span>' ,
+                  "3"=>$ubicacion,
+                  "4"=>$reg->costo,
+                  "5"=>'<center>
+                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                        <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
+                      </a>
+                    </center>',
+                  "6"=> $estado.''.$toltip
                 );
             }
             $results = array(

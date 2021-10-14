@@ -60,66 +60,66 @@
               <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
+
+                  <!-- CANIDAD DE PROYECTOS -->
                   <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-info">
                       <div class="inner">
-                        <h3>150</h3>
+                        <h3 id="cantidad_proyectos" > <i class="fas fa-spinner fa-pulse "></i> </h3>
 
                         <p>Total de Proyectos</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-bag"></i>
                       </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                      <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                   </div>
-                  <!-- ./col -->
+
+                  <!-- CANTIDAD DE PROVEEDORES -->
                   <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-success">
                       <div class="inner">
-                        <h3>53<sup style="font-size: 20px;">%</sup></h3>
-
-                        <p>Total de Proveedores</p>
+                        <h3 id="cantidad_proveedores"> <i class="fas fa-spinner fa-pulse "></i> </h3>
+                        <p>Total de Proveedores activos</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                       </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                      <a href="proveedor.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                   </div>
-                  <!-- ./col -->
+
+                  <!-- CANTIDAD DE TRABAJADORES -->
                   <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-warning">
                       <div class="inner">
-                        <h3>44</h3>
+                        <h3 id="cantidad_trabajadores"> <i class="fas fa-spinner fa-pulse "></i> </h3>
 
-                        <p>Toal de Trabajadores</p>
+                        <p>Total de Trabajadores activos</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-person-add"></i>
                       </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                      <a href="trabajador.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                   </div>
-                  <!-- ./col -->
+
+                  <!-- CANTIDAD DE SERVICIOS -->
                   <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-danger">
                       <div class="inner">
-                        <h3>65</h3>
+                        <h3 id="cantidad_servicios"> <i class="fas fa-spinner fa-pulse "></i> </h3>
 
                         <p>Total de Servicio</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                       </div>
-                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                      <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                   </div>
-                  <!-- ./col -->
+
                 </div>
                 <!-- /.row -->
               </div>
@@ -511,48 +511,45 @@
          
 
         <script type="text/javascript" src="scripts/proyecto.js"></script>
+        
         <!-- previzualizamos el pdf cargado -->
         <script type="text/javascript">
           function PreviewImage() {
 
-            pdffile=document.getElementById("doc").files[0];
+            // pdffile=document.getElementById("doc").files[0];
 
-            antiguopdf=$("#docActual").val();
+            // antiguopdf=$("#docActual").val();
 
-            if(pdffile === undefined){
+            // if(pdffile === undefined){
 
-              var dr = antiguopdf;
+            //   var dr = antiguopdf;
 
-              if (dr == "") {
+            //   if (dr == "") {
 
-                $("#ver_pdf").html(''+
-                  '<div class="alert alert-danger alert-dismissible">'+
-                      '<button style="color: white !important;" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
-                      '<h4><i class="icon fa fa-warning"></i> Alerta!</h4>'+
-                      'Seleciona un documento y luego PULSE el boton AMARILLO.'+
-                  '</div>'
-                );
+            //     $("#ver_pdf").html(''+
+            //       '<div class="alert alert-danger alert-dismissible">'+
+            //           '<button style="color: white !important;" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+            //           '<h4><i class="icon fa fa-warning"></i> Alerta!</h4>'+
+            //           'Seleciona un documento y luego PULSE el boton AMARILLO.'+
+            //       '</div>'
+            //     );
 
-              } else {
+            //   } else {
 
-                $("#ver_pdf").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-              }
-              // console.log('hola'+dr);
-            }else{
+            //     $("#ver_pdf").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+            //   }
+            //   // console.log('hola'+dr);
+            // }else{
 
-              pdffile_url=URL.createObjectURL(pdffile);
+            //   pdffile_url=URL.createObjectURL(pdffile);
 
-              $("#ver_pdf").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+            //   $("#ver_pdf").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
-              console.log('hola');
-            }
+            //   console.log('hola');
+            // }
           }
         </script>
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          })
-        </script>
+        
       </body>
     </html>
     <?php    

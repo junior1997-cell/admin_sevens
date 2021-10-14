@@ -76,8 +76,20 @@
         <?php  }  ?>
 
       </ul>
-      
-      <ul class="nav nav-pills nav-sidebar flex-column" >
+      <!-- cargando -->
+      <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-2" style="display: none !important;">      
+        <li class="nav-header">Modulos</li>        
+        <li class="nav-item">
+          <a href="#" class="nav-link" >
+          <i class="fas fa-spinner fa-pulse "></i>
+            <p>
+              Cargando...
+            </p>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-1" >
         <!-- OTROS -->
         <li class="nav-header">Modulos</li>
 
@@ -155,6 +167,8 @@
         <?php  }  ?>
 
       </ul>
+
+     
        
     </nav>
     <!-- /.sidebar-menu -->
