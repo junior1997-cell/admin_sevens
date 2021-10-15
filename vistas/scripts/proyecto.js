@@ -921,11 +921,16 @@ function tablero() {
 
 function abrir_proyecto(idproyecto,nombre_proyecto) {
 
+  if (localStorage.setItem('nube_idproyecto', idproyecto)) {
+    $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder"></i>')
+  }
+
   $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
 
   localStorage.setItem('nube_idproyecto', idproyecto);
 
   localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
+
   
   // mostramos el nombre en el NAV
   $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  nombre_proyecto);

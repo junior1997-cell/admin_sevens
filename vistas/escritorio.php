@@ -549,6 +549,21 @@
             // }
           }
         </script>
+        <script>
+          if ( localStorage.getItem('nube_idproyecto') ) {
+
+            console.log(localStorage.getItem('nube_idproyecto'));
+
+            $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  localStorage.getItem('nube_nombre_proyecto'));
+
+            $("#ver-otros-modulos-1").show();
+
+          }else{
+            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
+
+            $("#ver-otros-modulos-1").hide();
+          }
+        </script>
         
       </body>
     </html>
