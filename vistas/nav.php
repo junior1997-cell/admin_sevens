@@ -13,7 +13,7 @@
     </li>
 
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"> <i class="fas fa-tools"></i> Selecciona un proyecto </a>
+      <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </a>
     </li>
   </ul>
 

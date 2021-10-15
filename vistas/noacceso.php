@@ -27,7 +27,7 @@
       <div class="error-content">
         <h3><i class="fas fa-exclamation-triangle text-warning"></i> ¡UPS! No autorizado.</h3>
 
-        <p>No tienes permiso para recibir ese contenido. Puedes <a href="../index.html">regresar al inicio</a> o comunicate con el administrador de este sistema.</p>
+        <p>No tienes permiso para recibir ese contenido. Puedes <a href="escritorio.php">regresar al inicio</a> o comunicate con el administrador de este sistema.</p>
 
         <form class="search-form">
           <div class="input-group">

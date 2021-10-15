@@ -23,7 +23,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['asistencia_trabajador']==1)
 			{
 				$horas_acumuladas='';
 				$horas_trabajo='';
@@ -117,7 +117,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['asistencia_trabajador']==1)
 			{
 				$rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
  				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
@@ -138,7 +138,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['asistencia_trabajador']==1)
 			{
 				$rspta=$asist_trabajador->activar($idasistencia_trabajador);
  				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
@@ -159,7 +159,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['asistencia_trabajador']==1)
 			{
 				$rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
 		 		//Codificar el resultado utilizando json
@@ -181,7 +181,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['asistencia_trabajador']==1)
 			{
 				$rspta=$asist_trabajador->listar();
 		 		//Vamos a declarar un array

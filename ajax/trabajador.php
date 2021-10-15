@@ -37,7 +37,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['trabajador']==1)
 			{
 				$clavehash="";
 
@@ -82,7 +82,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['trabajador']==1)
 			{
 				$rspta=$trabajador->desactivar($idtrabajador);
  				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
@@ -103,7 +103,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['trabajador']==1)
 			{
 				$rspta=$trabajador->activar($idtrabajador);
  				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
@@ -124,7 +124,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['trabajador']==1)
 			{
 				$rspta=$trabajador->mostrar($idtrabajador);
 		 		//Codificar el resultado utilizando json
@@ -146,7 +146,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['trabajador']==1)
 			{
 				$rspta=$trabajador->listar();
 		 		//Vamos a declarar un array

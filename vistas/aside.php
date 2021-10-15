@@ -47,7 +47,7 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>
+        <?php if ($_SESSION['acceso']==1) {  ?>
           <!-- ACCESOS -->
           <li class="nav-item" id="bloc_Accesos">
             <a href="#" class="nav-link" id="mAccesos">
@@ -93,7 +93,7 @@
         <!-- OTROS -->
         <li class="nav-header">Modulos</li>
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>
+        <?php if ($_SESSION['trabajador']==1) {  ?>
           <!-- TRABAJADORES -->
           <li class="nav-item">
             <a href="trabajador.php" class="nav-link" id="mTrabajador">
@@ -106,31 +106,31 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>
+        <?php if ($_SESSION['asistencia_trabajador']==1) {  ?>
           <!-- REGISTRO DE ASISTENCIA -->
           <li class="nav-item">
             <a href="registro_sistencia.php" class="nav-link" id="mAsistencia">
               <i class="fas fa-clipboard-list nav-icon"></i>
               <p>
-                  Registro Asistencia
+                Asistencia del trabajador
               </p>
             </a>
           </li>
         <?php  }  ?> 
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>
+        <?php if ($_SESSION['pago_trabajador']==1) {  ?>
           <!-- PAGOSD E TRABAJADORES -->
           <li class="nav-item">
             <a href="pago_trabajador.php" class="nav-link" id="mPagosTrabajador">
               <i class="fas fa-dollar-sign nav-icon"></i>
               <p>
-                  Pagos de Trabajadores
+                  Pago del Trabajador
               </p>
             </a>
           </li>
         <?php  }  ?>       
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>
+        <?php if ($_SESSION['proveedor']==1) {  ?>
           <!-- PROVEEDORES -->
           <li class="nav-item">
             <a href="proveedor.php" class="nav-link" id="mProveedor">
@@ -142,7 +142,8 @@
           </li>
         <?php  }  ?>        
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>         
+        <?php if ($_SESSION['compra']==1) {  ?>   
+          <!-- COMPRAS -->      
           <li class="nav-item">
             <a href="compra.php" class="nav-link" id="mCompra">
               <i class="fas fa-shopping-cart nav-icon"></i>
@@ -154,7 +155,8 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['escritorio']==1) {  ?>         
+        <?php if ($_SESSION['servicio']==1) {  ?>  
+          <!-- SERVICIO -->       
           <li class="nav-item">
             <a href="servicio.php" class="nav-link" id="mServicio">
               <i class="nav-icon far fa-handshake"></i>

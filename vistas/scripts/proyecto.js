@@ -1,7 +1,6 @@
 var tabla;
 //Función que se ejecuta al inicio
 function init(){ 
-  
 
   tablero();
 
@@ -145,6 +144,7 @@ function l_m(){
 
 //Función para desactivar registros
 function empezar_proyecto(idproyecto) {
+  $(".tooltip").hide();
   Swal.fire({
     title: "¿Está Seguro de  Empezar  el proyecto ?",
     text: "Tendras acceso a agregar o editar: provedores, trabajadores!",
@@ -173,7 +173,7 @@ function empezar_proyecto(idproyecto) {
 
 //Función para activar registros
 function terminar_proyecto(idproyecto) {
-
+  $(".tooltip").hide();
   Swal.fire({
 
     title: "¿Está Seguro de  Terminar  el Proyecto?",
@@ -207,7 +207,7 @@ function terminar_proyecto(idproyecto) {
 
 //Función para activar registros
 function reiniciar_proyecto(idproyecto) {
-
+  $(".tooltip").hide();
   Swal.fire({
 
     title: "¿Está Seguro de  Reactivar  el Proyecto?",
@@ -238,6 +238,7 @@ function reiniciar_proyecto(idproyecto) {
     }
   });      
 }
+
 init();
 
 
@@ -730,7 +731,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3) {
     '</div>'+
   '');
   }  
-  
+  $(".tooltip").hide();
 }
 
 function no_pdf() {
@@ -824,13 +825,14 @@ function mostrar(idproyecto) {
       $("#doc_old_3").val("");
     }
      
-  });  
+  });
+  $(".tooltip").hide();  
 }
 
 function mostrar_detalle(idproyecto) {
+
   $("#modal-ver-detalle").modal("show");
 
-  
   $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
@@ -889,6 +891,8 @@ function mostrar_detalle(idproyecto) {
     // data.doc3_inicio_obra
      
   });
+
+  $(".tooltip").hide();
 }
 
 function tablero() {   
@@ -921,8 +925,10 @@ function tablero() {
 
 function abrir_proyecto(idproyecto,nombre_proyecto) {
 
-  if (localStorage.setItem('nube_idproyecto', idproyecto)) {
-    $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder"></i>')
+  if ( localStorage.getItem('nube_idproyecto') ) {
+
+    $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>')
+
   }
 
   $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
@@ -933,7 +939,7 @@ function abrir_proyecto(idproyecto,nombre_proyecto) {
 
   
   // mostramos el nombre en el NAV
-  $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  nombre_proyecto);
+  $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' +  nombre_proyecto);
   $("#ver-proyecto").show();
   $("#ver-otros-modulos").show();
 
@@ -955,4 +961,7 @@ function abrir_proyecto(idproyecto,nombre_proyecto) {
 
   Swal.fire("Abierto!", "Proyecto abierto corrrectamente", "success");
   // tabla.ajax.reload();
+  $(".tooltip").hide();
 }
+
+  

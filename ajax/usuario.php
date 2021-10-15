@@ -234,14 +234,14 @@ switch ($_GET["op"]){
 			}
 
 			//Determinamos los accesos del usuario
-			in_array(1,$valores)?$_SESSION['trabajadores']=1:$_SESSION['trabajadores']=0;
-			in_array(2,$valores)?$_SESSION['proveedores']=1:$_SESSION['proveedores']=0;
-			in_array(3,$valores)?$_SESSION['acceso']=1:$_SESSION['acceso']=0;
-			in_array(4,$valores)?$_SESSION['escritorio']=1:$_SESSION['escritorio']=0;
-			// in_array(5,$valores)?$_SESSION['acceso']=1:$_SESSION['acceso']=0;
-			// in_array(6,$valores)?$_SESSION['consultac']=1:$_SESSION['consultac']=0;
-			// in_array(7,$valores)?$_SESSION['consultav']=1:$_SESSION['consultav']=0;
-
+			in_array(1,$valores)?$_SESSION['escritorio']=1:$_SESSION['escritorio']=0;
+			in_array(2,$valores)?$_SESSION['acceso']=1:$_SESSION['acceso']=0;
+			in_array(3,$valores)?$_SESSION['trabajador']=1:$_SESSION['trabajador']=0;
+			in_array(4,$valores)?$_SESSION['asistencia_trabajador']=1:$_SESSION['asistencia_trabajador']=0;
+			in_array(5,$valores)?$_SESSION['pago_trabajador']=1:$_SESSION['pago_trabajador']=0;
+			in_array(6,$valores)?$_SESSION['proveedor']=1:$_SESSION['proveedor']=0;
+			in_array(7,$valores)?$_SESSION['compra']=1:$_SESSION['compra']=0;
+			in_array(8,$valores)?$_SESSION['servicio']=1:$_SESSION['servicio']=0;
 	    }
 	    echo json_encode($fetch);
 	break;

@@ -185,20 +185,23 @@
         })
       </script>
       <script>
-        if ( localStorage.getItem('nube_idproyecto') ) {
+          if ( localStorage.getItem('nube_idproyecto') ) {
 
-          console.log(localStorage.getItem('nube_idproyecto'));
+            console.log("icon_folder_"+localStorage.getItem('nube_idproyecto'));
 
-          $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  localStorage.getItem('nube_nombre_proyecto'));
+            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' +  localStorage.getItem('nube_nombre_proyecto'));
 
-          $("#ver-otros-modulos-1").show();
+            $("#ver-otros-modulos-1").show();
 
-        }else{
-          $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
+            // $('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
 
-          $("#ver-otros-modulos-1").hide();
-        }
-      </script>
+          }else{
+            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
+
+            $("#ver-otros-modulos-1").hide();
+          }
+          
+        </script>
       </body>
     </html> 
     

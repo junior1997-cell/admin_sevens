@@ -50,7 +50,7 @@
 
         } else {
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             //*DOC 1*//
             if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
@@ -179,7 +179,7 @@
 
         }	else {
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1) {
+          if ($_SESSION['escritorio']==1) {
 
             $rspta=$proyecto->empezar_proyecto($idproyecto);
 
@@ -200,7 +200,7 @@
         }	else {
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->terminar_proyecto($idproyecto);
 
@@ -221,7 +221,7 @@
         }	else {
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->reiniciar_proyecto($idproyecto);
 
@@ -243,7 +243,7 @@
         }else{
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->mostrar($idproyecto);
             //Codificar el resultado utilizando json
@@ -265,7 +265,7 @@
         }else{
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->tablero_proyectos();
             //Codificar el resultado utilizando json
@@ -286,7 +286,7 @@
         }else{
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->tablero_proveedores();
             //Codificar el resultado utilizando json
@@ -307,7 +307,7 @@
         }else{
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->tablero_trabajadores();
             //Codificar el resultado utilizando json
@@ -328,7 +328,7 @@
         }else{
 
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['acceso']==1)	{
+          if ($_SESSION['escritorio']==1)	{
 
             $rspta=$proyecto->tablero_servicio();
             //Codificar el resultado utilizando json
@@ -348,7 +348,7 @@
 
         } else {
           //Validamos el acceso solo al usuario logueado y autorizado.
-          if ( $_SESSION['acceso'] == 1 )	{
+          if ( $_SESSION['escritorio'] == 1 )	{
 
             $rspta=$proyecto->listar();
             //Vamos a declarar un array
@@ -362,17 +362,17 @@
               if ($reg->estado == '2') {
 
                 $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" style="margin-right: 3px !important;"><i class="fa fa-check"></i></button>';
+                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
               } else {
 
                 if ($reg->estado == '1') {
 
                   $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" style="margin-right: 3px !important;"><i class="fas fa-times"></i></button>';
+                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
                 } else {
 
                   $estado = '<span class="text-center badge badge-success">Terminado</span>';
-                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" style="margin-right: 3px !important;"><i class="fas fa-sync-alt"></i></button>';
+                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
                 }                
               }
 
@@ -386,13 +386,13 @@
 
                 $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra'";
 
-                $tool = '"tooltip"'; $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }) </script>";                
+                $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 
                 $data[]=array(
                   "0"=>'<button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
                       <i class="fas fa-folder"></i>
                     </button> 
-                    <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" style="margin-right: 3px !important;">
+                    <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
                       <i class="fas fa-pencil-alt"></i> 
                     </button>
                     '.$acciones.'
