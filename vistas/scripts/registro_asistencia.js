@@ -5,14 +5,14 @@ function init() {
   
   listar();
 
-    //Mostramos los trabajadores
-    $.post("../ajax/registro_asistencia.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
+  //Mostramos los trabajadores
+  $.post("../ajax/registro_asistencia.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
-  $("#bloc_Accesos").addClass("menu-open");
+  // $("#bloc_Accesos").addClass("menu-open");
 
-  $("#mAccesos").addClass("active");
+  $("#mAsistencia").addClass("active");
 
-  $("#lasistencia").addClass("active");
+  // $("#lasistencia").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {
 

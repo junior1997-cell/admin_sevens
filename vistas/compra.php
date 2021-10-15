@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Escritorio</title>
+        <title>Admin Sevens | Compras</title>
         <?php
           require 'head.php';
         ?>
@@ -22,9 +22,9 @@
         
         <div class="wrapper">
           <!-- Preloader -->
-          <div class="preloader flex-column justify-content-center align-items-center">
+          <!-- <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__shake" src="../dist/svg/logo-principal.svg" alt="AdminLTELogo" width="360" />
-          </div>
+          </div> -->
         
           <?php
             require 'nav.php';
@@ -38,13 +38,13 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0">Tablero</h1>
+                    <h1 class="m-0">Compras</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item"><a href="escritorio.php">Home</a></li>
-                      <li class="breadcrumb-item active">Tablero</li>
+                      <li class="breadcrumb-item"><a href="compra.php">Home</a></li>
+                      <li class="breadcrumb-item active">Compras</li>
                     </ol>
                   </div>
                   <!-- /.col -->
@@ -54,79 +54,7 @@
               <!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
-
-            <!-- Main content -->
-            <section class="content">
-              <div class="container-fluid">
-                <!-- Small boxes (Stat box) -->
-                <div class="row">
-
-                  <!-- CANIDAD DE PROYECTOS -->
-                  <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                      <div class="inner">
-                        <h3 id="cantidad_proyectos" > <i class="fas fa-spinner fa-pulse "></i> </h3>
-
-                        <p>Total de Proyectos</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-bag"></i>
-                      </div>
-                      <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-
-                  <!-- CANTIDAD DE PROVEEDORES -->
-                  <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                      <div class="inner">
-                        <h3 id="cantidad_proveedores"> <i class="fas fa-spinner fa-pulse "></i> </h3>
-                        <p>Total de Proveedores activos</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                      </div>
-                      <a href="proveedor.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-
-                  <!-- CANTIDAD DE TRABAJADORES -->
-                  <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                      <div class="inner">
-                        <h3 id="cantidad_trabajadores"> <i class="fas fa-spinner fa-pulse "></i> </h3>
-
-                        <p>Total de Trabajadores activos</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                      </div>
-                      <a href="trabajador.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-
-                  <!-- CANTIDAD DE SERVICIOS -->
-                  <div class="col-lg-3 col-6">
-                    <div class="small-box bg-danger">
-                      <div class="inner">
-                        <h3 id="cantidad_servicios"> <i class="fas fa-spinner fa-pulse "></i> </h3>
-
-                        <p>Total de Servicio</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                      </div>
-                      <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                  </div>
-
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-
+            
             <!-- Main content -->
             <section class="content">
               <div class="container-fluid">
@@ -138,12 +66,12 @@
                           <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proyecto" onclick="limpiar();">
                           <i class="fas fa-plus-circle"></i> Agregar
                           </button>
-                          Proyectos                        
+                          Compras                        
                         </h3>                      
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-proyectos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
                               <th class="">Aciones</th>
@@ -510,61 +438,49 @@
         ?>
          
 
-        <script type="text/javascript" src="scripts/proyecto.js"></script>
-        
+        <script type="text/javascript" src="scripts/compra.js"></script>
         <!-- previzualizamos el pdf cargado -->
         <script type="text/javascript">
           function PreviewImage() {
 
-            // pdffile=document.getElementById("doc").files[0];
+            pdffile=document.getElementById("doc").files[0];
 
-            // antiguopdf=$("#docActual").val();
+            antiguopdf=$("#docActual").val();
 
-            // if(pdffile === undefined){
+            if(pdffile === undefined){
 
-            //   var dr = antiguopdf;
+              var dr = antiguopdf;
 
-            //   if (dr == "") {
+              if (dr == "") {
 
-            //     $("#ver_pdf").html(''+
-            //       '<div class="alert alert-danger alert-dismissible">'+
-            //           '<button style="color: white !important;" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
-            //           '<h4><i class="icon fa fa-warning"></i> Alerta!</h4>'+
-            //           'Seleciona un documento y luego PULSE el boton AMARILLO.'+
-            //       '</div>'
-            //     );
+                $("#ver_pdf").html(''+
+                  '<div class="alert alert-danger alert-dismissible">'+
+                      '<button style="color: white !important;" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                      '<h4><i class="icon fa fa-warning"></i> Alerta!</h4>'+
+                      'Seleciona un documento y luego PULSE el boton AMARILLO.'+
+                  '</div>'
+                );
 
-            //   } else {
+              } else {
 
-            //     $("#ver_pdf").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-            //   }
-            //   // console.log('hola'+dr);
-            // }else{
+                $("#ver_pdf").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+              }
+              // console.log('hola'+dr);
+            }else{
 
-            //   pdffile_url=URL.createObjectURL(pdffile);
+              pdffile_url=URL.createObjectURL(pdffile);
 
-            //   $("#ver_pdf").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+              $("#ver_pdf").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
-            //   console.log('hola');
-            // }
+              console.log('hola');
+            }
           }
         </script>
         <script>
-          if ( localStorage.getItem('nube_idproyecto') ) {
-
-            console.log(localStorage.getItem('nube_idproyecto'));
-
-            $("#ver-proyecto").html('<i class="fas fa-tools"></i> ' +  localStorage.getItem('nube_nombre_proyecto'));
-
-            $("#ver-otros-modulos-1").show();
-
-          }else{
-            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
-
-            $("#ver-otros-modulos-1").hide();
-          }
+          $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+          })
         </script>
-        
       </body>
     </html>
     <?php    

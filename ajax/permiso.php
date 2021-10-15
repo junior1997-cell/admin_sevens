@@ -49,12 +49,12 @@
 					$rspta=$permiso->ver_usuarios($id_permiso);
 					//Vamos a declarar un array
 					$data= Array();
-
+					$imagen_error = "this.src='../dist/svg/user_default.svg'";
 					while ($reg=$rspta->fetch_object()){
 
 						$data[]=array(
 							"0"=>'<div class="user-block">
-								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image">
+								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
 								<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
 								<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
 							</div>',

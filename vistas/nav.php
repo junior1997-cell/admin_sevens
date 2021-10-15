@@ -6,10 +6,14 @@
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="escritorio.php" class="nav-link">Home</a>
+      <a href="escritorio.php" class="nav-link"> <i class="fas fa-home"></i> Home</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link">Contacto <i class="fas fa-user-secret"></i></a>
+      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> Contacto</a>
+    </li>
+
+    <li class="nav-item d-none d-sm-inline-block">
+      <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"> <i class="fas fa-tools"></i> Selecciona un proyecto </a>
     </li>
   </ul>
 
@@ -18,7 +22,7 @@
     <!-- Navbar Search -->
     <!-- <li class="nav-item">
       <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search">sasassas</i>
       </a>
       <div class="navbar-search-block">
         <form class="form-inline">
@@ -40,7 +44,7 @@
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown ">
       <a class="nav-link" data-toggle="dropdown" href="#">
-        <img src="../dist/img/usuarios/<?php echo $_SESSION['imagen']; ?>" class="user-image img-circle" alt="User Image" width="30"> 
+        <img src="../dist/img/usuarios/<?php echo $_SESSION['imagen']; ?>" class="user-image img-circle" alt="User Image" width="30" onerror="this.src='../dist/svg/user_default.svg';"> 
              
         <span class="hidden-xs"><?php echo $_SESSION['nombre']; ?></span>
       </a>
@@ -53,7 +57,7 @@
             <h5 class="widget-user-desc"><?php echo $_SESSION['cargo']; ?></h5>
           </div>
           <div class="widget-user-image">
-            <img class="img-circle elevation-2" src="../dist/img/usuarios/<?php echo $_SESSION['imagen']; ?>" alt="User Avatar" />
+            <img class="img-circle elevation-2" src="../dist/img/usuarios/<?php echo $_SESSION['imagen']; ?>" alt="User Avatar" onerror="this.src='../dist/svg/user_default.svg';" />
           </div>
           <div class="card-footer">
             <span class="dropdown-item dropdown-header">Info personal</span>

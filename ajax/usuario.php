@@ -136,7 +136,7 @@ switch ($_GET["op"]){
 				$rspta=$usuario->listar();
 		 		//Vamos a declarar un array
 		 		$data= Array();
-
+				$imagen_error = "this.src='../dist/svg/user_default.svg'";
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
@@ -144,7 +144,7 @@ switch ($_GET["op"]){
 		 					'<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>',
 		 				"1"=>'<div class="user-block">
-								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image">
+								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
 								<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
 								<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
 							</div>',
