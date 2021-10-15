@@ -235,7 +235,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['acceso']==1)
+			if ($_SESSION['asistencia_trabajador']==1)
 			{
 				$idtrabajador= '1';
 				$rspta=$asist_trabajador->registro_asist_trab($idtrabajador);
