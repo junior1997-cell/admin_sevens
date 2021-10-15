@@ -59,24 +59,36 @@ Class Asistencia_trabajador
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	//Implementar un método para listar los registros
+	//Implementar un método para listar asistencia
 	public function listar()
 	{
-		$sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombre, t.tipo_documento as tipo_doc, t.numero_documento as num_doc, 
-		t.cargo as cargo  , t.imagen as imagen, t.sueldo_hora as sueldo_hora,t.sueldo_mensual as sueldo_mensual, SUM(atr.horas_trabajador) as total_horas, 
-		SUM(atr.horas_extras_dia) as horas_extras, SUM(atr.sabatical) as total_sabatical, atr.estado as estado
-		FROM  asistencia_trabajador as atr, trabajador as t WHERE atr.idtrabajador=t.idtrabajador  AND t.estado=1 GROUP BY atr.idtrabajador";
+		$sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombre, t.tipo_documento as tipo_doc, 
+		t.numero_documento as num_doc, t.cargo as cargo , t.imagen as imagen, t.sueldo_hora as sueldo_hora,
+		t.sueldo_mensual as sueldo_mensual, SUM(atr.horas_trabajador) as total_horas, SUM(atr.horas_extras_dia) as horas_extras, 
+		SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect 
+		FROM asistencia_trabajador as atr, trabajador as t, proyecto as p 
+		WHERE atr.idtrabajador=t.idtrabajador AND t.estado=1 AND t.idproyecto=1 AND t.idproyecto=p.idproyecto GROUP BY atr.idtrabajador";
 		return ejecutarConsulta($sql);		
 	}
+	
 	//traemos el sueldo po hora del trabajador
 	public function sueldoxhora($idtrabajador){
-		$sql="SELECT t.sueldo_hora AS sueldo_hora FROM trabajador as t WHERE t.idtrabajador='$idtrabajador'";
+		$sql="SELECT t.sueldo_hora AS sueldo_hora FROM trabajador as t WHERE t.idtrabajador='$idtrabajador' AND t.idproyecto=1";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+	//visualizar registro asistencia por dìa
+	public function registro_asist_trab($id_trabajador){
+		$sql="SELECT atr.idasistencia_trabajador as idasistencia, atr.horas_trabajador as horas_trabajador, 
+		atr.horas_extras_dia as horas_extras_dia, atr.sabatical as sabatical, atr.fecha as fecha, t.nombres as nombres, 
+		t.numero_documento as numero_documento, p.fecha_inicio as fecha_inicio_p FROM asistencia_trabajador as atr, trabajador as t, proyecto as p WHERE 
+		atr.idtrabajador='$id_trabajador' AND atr.idtrabajador=t.idtrabajador AND t.idproyecto=1 AND t.idproyecto=p.idproyecto";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 	//=========================
+		//visualizar Horas y sueldo
 	public function horas_acumulada($trabajador){
 		$sql="SELECT sum(atr.horas_trabajador) as horas_trabajo,sum(atr.sabatical) as sabatical
-		FROM asistencia_trabajador as atr, trabajador as t WHERE atr.idtrabajador='$trabajador' AND atr.idtrabajador= t.idtrabajador";
+		FROM asistencia_trabajador as atr, trabajador as t WHERE atr.idtrabajador='$trabajador' AND atr.idtrabajador= t.idtrabajador AND t.idproyecto=1";
 		return ejecutarConsultaSimpleFila($sql);
 		
 	}

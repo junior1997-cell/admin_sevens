@@ -161,6 +161,49 @@ function justificar(idasistencia) {
   console.log('holaaaaa');
  
 }
+// ver_asistencias
+function ver_asistencias(idtrabajador,fecha_inicio_proyect) {
+  console.log(idtrabajador,fecha_inicio_proyect);
+  
+  $("#cargando-1-fomulario").hide();
+  $("#tabla-asistencia-trab").hide();
+  $("#card-titulo-registrar").hide();
+  $("#cargando-2-fomulario").show();
+  $("#ver_asistencia").show();
+  $("#card-titulo").show();
+
+  $.post("../ajax/registro_asistencia.php?op=ver_asistencia_trab", { idtrabajador: idtrabajador,fecha_inicio_proyect:fecha_inicio_proyect  }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);   
+
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+
+     $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
+     $("#nombre").val(data.razon_social);
+     $("#num_documento").val(data.ruc);
+     $("#direccion").val(data.direccion);
+     $("#telefono").val(data.telefono);
+     $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
+     $("#c_bancaria").val(data.cuenta_bancaria);
+     $("#c_detracciones").val(data.cuenta_detracciones);
+     $("#titular_cuenta").val(data.titular_cuenta);
+     $("#idproveedor").val(data.idproveedor);
+
+  });
+
+ // $("#modal-ver-asistencia").modal("show")
+
+ 
+}
+function regresar_principal(){
+  $("#cargando-1-fomulario").show();
+  $("#tabla-asistencia-trab").show();
+  $("#card-titulo-registrar").show();
+  $("#cargando-2-fomulario").hide();
+  $("#ver_asistencia").hide();
+  $("#card-titulo").hide();
+}
 
 init();
 

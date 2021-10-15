@@ -53,43 +53,124 @@
                             <div class="col-12">
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
-                                        <h3 class="card-title">
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                                        <h3 class="card-title" id="card-titulo-registrar">
+                                            <button type="button"  class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
                                             Admnistra de manera eficiente a tus asistencia.
+                                        </h3>
+                                        <h3 class="card-title" id="card-titulo" style="display: none;">
+                                            <button type="button" class="btn bg-gradient-warning" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                                            Hola mi nombre es Junior.
                                         </h3>
                                     </div>
                                     
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <table id="tabla-asistencia" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                            <thead>
-                                                <tr>
-                                                    <th class="">Aciones</th>
-                                                    <th>Nombre</th>
-                                                    <th>total Horas</th>
-                                                    <th>Pago / hora </th>
-                                                    <th>Pago acumulado</th>
-                                                    <th>Sueldo mensual</th>
-                                                    <th>Jonal diario</th>
-                                                    <th>Sabatical</th>
-                                                    <th>Estado</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Aciones</th>
-                                                    <th>Nombre</th>
-                                                    <th>total Horas</th>
-                                                    <th>Pago / hora </th>
-                                                    <th>Pago acumulado</th>
-                                                    <th>Sueldo mensual</th>
-                                                    <th>Jonal diario</th>
-                                                    <th>Sabatical</th>
-                                                    <th>Estado</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                        <div id="tabla-asistencia-trab">
+                                            <table id="tabla-asistencia" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="">Aciones</th>
+                                                        <th>Nombre</th>
+                                                        <th>total Horas</th>
+                                                        <th>Pago / hora </th>
+                                                        <th>Pago acumulado</th>
+                                                        <th>Sueldo mensual</th>
+                                                        <th>Jonal diario</th>
+                                                        <th>Sabatical</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Aciones</th>
+                                                        <th>Nombre</th>
+                                                        <th>total Horas</th>
+                                                        <th>Pago / hora </th>
+                                                        <th>Pago acumulado</th>
+                                                        <th>Sueldo mensual</th>
+                                                        <th>Jonal diario</th>
+                                                        <th>Sabatical</th>
+
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <div id="ver_asistencia" style="display: none;">
+                                        <div class="table-responsive">
+                                            <div class="table-responsive-lg" style="overflow-x:scroll;">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">First</th>
+                                                        <th scope="col">Last</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">Handle</th>
+                                                        <th scope="col">H/N</th>
+                                                        <th scope="col">H/E</th>
+                                                        <th scope="col">Sabatical</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                        <th scope="row">H/N</th>
+                                                        <td>Mark</td>
+                                                        <td>Otto</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        </tr>
+                                                        <tr>
+                                                        <tr>
+                                                        <th scope="row">H/E</th>
+                                                        <td>Mark</td>
+                                                        <td>Otto</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        <td>@mdo</td>
+                                                        </tr>
+                                                        <tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -170,7 +251,7 @@
 
                     <!--Modal ver asistencia-->
                     <div class="modal fade" id="modal-ver-asistencia">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title">Datos asistencia</h4>

@@ -193,11 +193,9 @@ switch ($_GET["op"]){
 					//$jonal_diario=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
 					$jonal_diario=$reg->sueldo_hora*8;
 					$sueldo_acumudado=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
+					$ver_asistencia="'$reg->idtrabajador','$reg->fecha_inicio_proyect'";
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>':
-							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>',
+		 				"0"=>'<button class="btn btn-info" onclick="ver_asistencias('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
 						"1"=>'<div class="user-block">
 							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
 							style="color: #000000 !important;">'. $reg->cargo .' : </b> '. $reg->nombre .'</p></span>
@@ -208,9 +206,7 @@ switch ($_GET["op"]){
 		 				"4"=>round($sueldo_acumudado, 2),
 		 				"5"=>$reg->sueldo_mensual,
 		 				"6"=>$jonal_diario,
-		 				"7"=>$reg->total_sabatical,
-		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-		 				'<span class="text-center badge badge-danger">Desactivado</span>'
+		 				"7"=>$reg->total_sabatical
 		 				);
 
 						 $jonal_diario=0;
@@ -229,6 +225,29 @@ switch ($_GET["op"]){
 		  	require 'noacceso.php';
 			}
 		}
+	break;
+	
+	case 'ver_asistencia_trab':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['acceso']==1)
+			{
+				$idtrabajador= '1';
+				$rspta=$asist_trabajador->registro_asist_trab($idtrabajador);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
 	break;
 
 	case 'select2Trabajador': 
