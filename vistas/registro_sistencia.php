@@ -198,6 +198,9 @@
                                     <form id="form-asistencia" name="form-asistencia" method="POST">
                                         <div class="card-body">
                                             <div class="row" id="cargando-1-fomulario">
+                                                <!-- id proyecto -->
+                                                <input type="hidden" name="idproyecto" id="idproyecto" />
+                                                
                                                 <!-- id asistencia -->
                                                 <input type="hidden" name="idasistencia" id="idasistencia" />
 

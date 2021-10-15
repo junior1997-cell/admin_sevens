@@ -8,7 +8,7 @@ require_once "../modelos/proveedor.php";
 $proveedor=new Proveedor();
 
 //$idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
-
+$idproyecto		= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
 $idproveedor		= isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";
 $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 $tipo_documento	    = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
@@ -36,8 +36,8 @@ switch ($_GET["op"]){
 
 
 				if (empty($idproveedor)){
-					$rspta=$proveedor->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
-					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+					$rspta=$proveedor->insertar($idproyecto	,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
+					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
 					$rspta=$proveedor->editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
@@ -125,7 +125,8 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['proveedor']==1)
 			{
-				$rspta=$proveedor->listar();
+				$nube_idproyecto = $_GET["nube_idproyecto"];
+				$rspta=$proveedor->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta

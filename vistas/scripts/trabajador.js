@@ -3,7 +3,9 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
   
-  listar();
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  listar( localStorage.getItem('nube_idproyecto') );
 
   // $("#bloc_Accesos").addClass("menu-open");
 
@@ -143,8 +145,10 @@ function limpiar() {
   $("#telefono").val(""); 
   $("#email").val(""); 
   $("#nacimiento").val(""); 
-  $("#tipo_trabajador").val(""); 
-  $("#cargo").val(""); 
+  $('#tipo_trabajador option:selected').removeAttr('selected');
+  $('#cargo option:selected').removeAttr('selected');
+  // $("#").val(""); 
+  // $("#").val(""); 
   $("#desempenio").val("");  
   $("#c_bancaria").val("");  
   $("#banco").val("");  
@@ -161,7 +165,7 @@ function limpiar() {
 }
 
 //Función Listar
-function listar() {
+function listar( nube_idproyecto ) {
 
   tabla=$('#tabla-trabajadors').dataTable({
     "responsive": true,
@@ -171,7 +175,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/trabajador.php?op=listar',
+        url: '../ajax/trabajador.php?op=listar&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -238,22 +242,20 @@ function verdatos(idtrabajador){
   var imagenver='';
 
   $("#modal-ver-trabajador").modal("show")
+
   $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data);  //console.log(data); 
     
     //$("#foto2_ver").attr("src", "../dist/img/usuarios/" + data.imagen);
-    if (data.imagen!="") {
-      imagenver=data.imagen;
-    }else{
-      imagenver=img_defecto.png;
-    }
+     
+    var img_error = "'../dist/svg/user_default.svg'";
 
- verdatos=''+
-  '<div class="card-body" style="background-color: #d3a49430;border-radius: 9px;">'+
+    verdatos=''+
+    '<div class="card-body" style="background-color: #d3a49430;border-radius: 9px;">'+
       '<div class="row" id="cargando-1-fomulario">'+
           '<div class="col-lg-4">'+
-          '<img src="../dist/img/usuarios/'+imagenver+'" class="img-thumbnail" style="cursor: pointer !important; border-radius: 50%; width: 150px; height: 129px;"/>'+
+          '<img src="../dist/img/usuarios/'+data.imagen+'" class="img-thumbnail" style="cursor: pointer !important; border-radius: 50%; width: 150px; height: 129px;" onerror="this.src='+img_error+';"/>'+
           '</div>'+                                                
           '<div class="col-lg-8">'+
               '<div class="row">'+

@@ -11,10 +11,10 @@ Class Trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen)
+	public function insertar($idproyecto,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen)
 	{
-		$sql="INSERT INTO trabajador (idbancos,nombres,tipo_documento,numero_documento,fecha_nacimiento,desempeno,cargo,tipo_trabajador,cuenta_bancaria,titular_cuenta,sueldo_mensual,sueldo_diario,sueldo_hora,direccion,telefono,email,imagen)
-		VALUES ('$banco','$nombre','$tipo_documento','$num_documento','$nacimiento','$desempenio','$cargo','$tipo_trabajador','$c_bancaria','$tutular_cuenta','$sueldo_mensual','$sueldo_diario','$sueldo_hora','$direccion','$telefono','$email','$imagen')";
+		$sql="INSERT INTO trabajador (idproyecto,idbancos,nombres,tipo_documento,numero_documento,fecha_nacimiento,desempeno,cargo,tipo_trabajador,cuenta_bancaria,titular_cuenta,sueldo_mensual,sueldo_diario,sueldo_hora,direccion,telefono,email,imagen)
+		VALUES ('$idproyecto','$banco','$nombre','$tipo_documento','$num_documento','$nacimiento','$desempenio','$cargo','$tipo_trabajador','$c_bancaria','$tutular_cuenta','$sueldo_mensual','$sueldo_diario','$sueldo_hora','$direccion','$telefono','$email','$imagen')";
 		
 		return ejecutarConsulta($sql);
 			
@@ -55,9 +55,9 @@ Class Trabajador
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT * FROM trabajador";
+		$sql="SELECT * FROM trabajador WHERE idproyecto = '$nube_idproyecto'; ";
 		return ejecutarConsulta($sql);		
 	}
 

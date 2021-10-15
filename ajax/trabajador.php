@@ -8,7 +8,7 @@ require_once "../modelos/trabajador.php";
 $trabajador=new Trabajador();
 
 //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
-
+$idproyecto		= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
 $idtrabajador		= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
 $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 $tipo_documento	    = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
@@ -57,13 +57,17 @@ switch ($_GET["op"]){
 						}
 					}
 				// }	
-
+				// regitramso un nuevo trabajador
 				if (empty($idtrabajador)){
-					$rspta=$trabajador->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen);
+
+					$rspta=$trabajador->insertar($idproyecto,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen);
+					
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
-				}
-				else {
+
+				}else {
+					// editamos un trabajador existente
 					$rspta=$trabajador->editar($idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen);
+					
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
@@ -139,27 +143,31 @@ switch ($_GET["op"]){
 	break;
 
 	case 'listar':
-		if (!isset($_SESSION["nombre"]))
-		{
+		if (!isset($_SESSION["nombre"])){
+
 		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
+
+		}else{
+
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['trabajador']==1)
-			{
-				$rspta=$trabajador->listar();
+			if ($_SESSION['trabajador']==1)	{
+
+				$nube_idproyecto = $_GET["nube_idproyecto"];
+
+				$rspta=$trabajador->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
+
 				$imagen_error = "this.src='../dist/svg/user_default.svg'";
+				
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
-							' <button class="btn btn-success" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
+							' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
 							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
-							' <button class="btn btn-success" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
+							' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
 						"1"=>'<div class="user-block">
 							 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
 							 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>

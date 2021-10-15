@@ -110,6 +110,9 @@
                                     <form id="form-trabajador" name="form-trabajador" method="POST">
                                         <div class="card-body">
                                             <div class="row" id="cargando-1-fomulario">
+                                                <!-- id PROYECTO -->
+                                                <input type="hidden" name="idproyecto" id="idproyecto" />
+
                                                 <!-- id trabajador -->
                                                 <input type="hidden" name="idtrabajador" id="idtrabajador" />
 

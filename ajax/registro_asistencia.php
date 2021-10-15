@@ -8,7 +8,7 @@ require_once "../modelos/registro_asistencia.php";
 $asist_trabajador=new Asistencia_trabajador();
 
 //$idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
-
+$idproyecto		= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
 $idasistencia_trabajador		= isset($_POST["idasistencia"])? limpiarCadena($_POST["idasistencia"]):"";
 $trabajador 		    = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
 $horas_trabajo_dia	    = isset($_POST["horas_tabajo"])? limpiarCadena($_POST["horas_tabajo"]):"";   
@@ -34,8 +34,8 @@ switch ($_GET["op"]){
 				$horas_desglose = substr($horas_trabajo_dia, 0, 2).'.'.(floatval(substr($horas_trabajo_dia, 3, 5))*100)/60;
 
 
-				$sueldoxhora_trab=$asist_trabajador->sueldoxhora($trabajador);
-				$datos=$asist_trabajador->horas_acumulada($trabajador);
+				$sueldoxhora_trab=$asist_trabajador->sueldoxhora($trabajador,$idproyecto);
+				$datos=$asist_trabajador->horas_acumulada($trabajador,$idproyecto);
 
 				if ($datos==NULL) {
 					if (floatval($horas_desglose)>8) {
@@ -93,7 +93,7 @@ switch ($_GET["op"]){
 					$rspta=$asist_trabajador->editar($idasistencia_trabajador,$trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
-				echo "hora acumulada: $horas_acumuladas, sabatical: $sabatical, divicion: $caculamos "." bd_sabatico".$datos['sabatical'];
+				// echo "hora acumulada: $horas_acumuladas, sabatical: $sabatical, divicion: $caculamos "." bd_sabatico".$datos['sabatical'];
 				$horas_acumuladas='';
 				$horas_trabajo='';
 				$sabatical='';
@@ -183,7 +183,8 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['asistencia_trabajador']==1)
 			{
-				$rspta=$asist_trabajador->listar();
+				$nube_idproyecto = $_GET["nube_idproyecto"];
+				$rspta=$asist_trabajador->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
@@ -251,13 +252,14 @@ switch ($_GET["op"]){
 	break;
 
 	case 'select2Trabajador': 
+		$nube_idproyecto = $_GET["nube_idproyecto"];
 
-		$rspta = $asist_trabajador->select2_trabajador();
+		$rspta = $asist_trabajador->select2_trabajador($nube_idproyecto);
 
-			while ($reg = $rspta->fetch_object())
-				{
-				echo '<option value=' . $reg->id . '>'.$reg->cargo .' - '. $reg->nombre .' - '. $reg->numero_documento . '</option>';
-				}
+		while ($reg = $rspta->fetch_object()){
+
+			echo '<option value=' . $reg->id . '>'.$reg->cargo .' - '. $reg->nombre .' - '. $reg->numero_documento . '</option>';
+		}
 	break;
 
 	case 'salir':

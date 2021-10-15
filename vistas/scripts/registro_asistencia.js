@@ -2,11 +2,13 @@ var tabla;
 
 //Función que se ejecuta al inicio
 function init() {
-  
-  listar();
+
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  listar(localStorage.getItem('nube_idproyecto'));
 
   //Mostramos los trabajadores
-  $.post("../ajax/registro_asistencia.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
+  $.post("../ajax/registro_asistencia.php?op=select2Trabajador&nube_idproyecto="+localStorage.getItem('nube_idproyecto'), function (r) { $("#trabajador").html(r); });
 
   // $("#bloc_Accesos").addClass("menu-open");
 
@@ -79,7 +81,7 @@ function limpiar() {
 }
 
 //Función Listar
-function listar() {
+function listar(nube_idproyecto) {
 
   tabla=$('#tabla-asistencia').dataTable({
     "responsive": true,
@@ -89,7 +91,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/registro_asistencia.php?op=listar',
+        url: '../ajax/registro_asistencia.php?op=listar&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){

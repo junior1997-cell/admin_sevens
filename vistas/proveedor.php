@@ -110,6 +110,8 @@
                                     <form id="form-proveedor" name="form-proveedor" method="POST">
                                         <div class="card-body">
                                             <div class="row" id="cargando-1-fomulario">
+                                                <!-- id proyecto -->
+                                                <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id proveedores -->
                                                 <input type="hidden" name="idproveedor" id="idproveedor" />
 

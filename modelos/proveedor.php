@@ -11,10 +11,10 @@ Class Proveedor
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta)
+	public function insertar($idproyecto,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta)
 	{
-		$sql="INSERT INTO proveedor (idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta)
-		VALUES ('$banco','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$c_bancaria','$c_detracciones','$titular_cuenta')";
+		$sql="INSERT INTO proveedor (idproyecto,idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta)
+		VALUES ('$idproyecto','$banco','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$c_bancaria','$c_detracciones','$titular_cuenta')";
 		
 		return ejecutarConsulta($sql);
 			
@@ -62,9 +62,9 @@ Class Proveedor
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT * FROM proveedor";
+		$sql="SELECT * FROM proveedor WHERE idproyecto = '$nube_idproyecto';  ";
 		return ejecutarConsulta($sql);		
 	}
 
