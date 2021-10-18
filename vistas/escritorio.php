@@ -151,7 +151,8 @@
                               <th>Nombre de proyecto</th>
                               <th>Ubicación</th>
                               <th>Costo</th>
-                              <th>Docs</th>
+                              <th>contractual</th>
+                              <th>valorizaciones</th>
                               <th>Estado</th>
                             </tr>
                           </thead>
@@ -165,7 +166,8 @@
                               <th>Nombre de proyecto</th>
                               <th>Ubicación</th>
                               <th>Costo</th>
-                              <th>Docs</th>
+                              <th>contractual</th>
+                              <th>valorizaciones</th>
                               <th>Estado</th>
                             </tr>
                           </tfoot>

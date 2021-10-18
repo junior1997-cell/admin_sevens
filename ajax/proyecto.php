@@ -412,7 +412,12 @@
                         <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
                       </a>
                     </center>',
-                  "6"=> $estado.''.$toltip
+                  "6"=>'<center>
+                    <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                      <img src="../dist/svg/logo-excel.svg" class="card-img-top" height="35" width="30" >
+                    </a>
+                  </center>',
+                  "7"=> $estado.''.$toltip
                 );
             }
             $results = array(
