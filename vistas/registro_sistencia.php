@@ -7,334 +7,372 @@
     header("Location: login.html");
   }else{
     ?>
+    <style>
+      /*.styletabla td, .styletabla th {
+          padding: 0.15rem 0rem 0rem 0rem !important; 
+      }*/
+      .styletabla thead th {
+           border-bottom: 1px solid #000000 !important; 
+           border-top: 1px solid #000000 !important; 
+      }
+      table th {
+        vertical-align: top !important;
+      }
+     .stile {
+        padding-top: 40px !important;
+        text-align: center !important;
+        border: black 1px solid;
+     }
+     .tcuerpo tr td{
+      text-align: center !important;
+      padding-top: 18px !important;
+      border: black 1px solid;
+      padding: 0.45rem 0.20rem 0.25rem 0.20rem !important; 
+     }
+    .dias th{
+      padding: 0.15rem 0rem 0rem 0rem !important; 
+      border: black 1px solid;
+      text-align: center !important;
+    }
+
+    </style>
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | asistencia</title>
-        <?php
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Sevens | asistencia</title>
+    <?php
         require 'head.php';
         ?>
-    </head>
-    <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
-        <!-- Content Wrapper. Contains page content -->
-        <div class="wrapper">
-            <?php
+  </head>
+  <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="wrapper">
+      <?php
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['asistencia_trabajador']==1){
           ?>
 
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1>Asistencia</h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">asistencia</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.container-fluid -->
-                </section>
-
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card card-primary card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title" id="card-titulo-registrar">
-                                            <button type="button"  class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
-                                            Admnistra de manera eficiente a tus asistencia.
-                                        </h3>
-                                        <h3 class="card-title" id="card-titulo" style="display: none;">
-                                            <button type="button" class="btn bg-gradient-warning" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                                            Hola mi nombre es Junior.
-                                        </h3>
-                                    </div>
-                                    
-                                    <!-- /.card-header -->
-                                    <div class="card-body">
-                                        <div id="tabla-asistencia-trab">
-                                            <table id="tabla-asistencia" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="">Aciones</th>
-                                                        <th>Nombre</th>
-                                                        <th>total Horas</th>
-                                                        <th>Pago / hora </th>
-                                                        <th>Pago acumulado</th>
-                                                        <th>Sueldo mensual</th>
-                                                        <th>Jonal diario</th>
-                                                        <th>Sabatical</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th>Aciones</th>
-                                                        <th>Nombre</th>
-                                                        <th>total Horas</th>
-                                                        <th>Pago / hora </th>
-                                                        <th>Pago acumulado</th>
-                                                        <th>Sueldo mensual</th>
-                                                        <th>Jonal diario</th>
-                                                        <th>Sabatical</th>
-
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                        <div id="ver_asistencia" style="display: none;">
-                                        <div class="table-responsive">
-                                            <div class="table-responsive-lg" style="overflow-x:scroll;">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col">First</th>
-                                                        <th scope="col">Last</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">Handle</th>
-                                                        <th scope="col">H/N</th>
-                                                        <th scope="col">H/E</th>
-                                                        <th scope="col">Sabatical</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                        <th scope="row">H/N</th>
-                                                        <td>Mark</td>
-                                                        <td>Otto</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        </tr>
-                                                        <tr>
-                                                        <tr>
-                                                        <th scope="row">H/E</th>
-                                                        <td>Mark</td>
-                                                        <td>Otto</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        <td>@mdo</td>
-                                                        </tr>
-                                                        <tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                    <!-- /.container-fluid -->
-
-                    <!-- Modal agregar asistencia -->
-                    <div class="modal fade" id="modal-agregar-asistencia">
-                        <div class="modal-dialog /*modal-dialog-scrollable*/ modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Agregar asistencia</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span class="text-danger" aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <!-- form start -->
-                                    <form id="form-asistencia" name="form-asistencia" method="POST">
-                                        <div class="card-body">
-                                            <div class="row" id="cargando-1-fomulario">
-                                                <!-- id proyecto -->
-                                                <input type="hidden" name="idproyecto" id="idproyecto" />
-                                                
-                                                <!-- id asistencia -->
-                                                <input type="hidden" name="idasistencia" id="idasistencia" />
-
-                                                
-                                                <!-- Trabajador -->
-                                                <div class="col-lg-7">
-                                                <div class="form-group">
-                                                    <label for="trabajador" id="trabajador_c">Trabajador</label>                               
-                                                    <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="seleccion();" >
-                                                    
-                                                    </select>
-                                                    <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>  
-                                                </div>                                                        
-                                                </div>
-                                                <!-- Horas de trabajo -->
-                                                <div class="col-lg-5">
-                                                    <div class="form-group">
-                                                        <label for="horas_tabajo">Horas de trabajo</label>
-                                                        <!-- <input type="time" name="horas_tabajo" class="form-control" id="horas_tabajo" placeholder="Ingrese las horas de trabajo" /> -->
-                                                    
-
-                                                        <div class="input-group date" id="timepicker" data-target-input="nearest">
-                                                            <input id="horas_tabajo" name="horas_tabajo" placeholder="Ingrese las horas de trabajo" type="text" class="form-control datetimepicker-input" data-target="#timepicker" data-inputmask='"mask": "99:99"' data-mask/>
-                                                            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                                <div class="col-lg-12 text-center">
-                                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                                    <br />
-                                                    <h4>Cargando...</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- /.card-body -->
-                                        <button type="submit" style="display: none;" id="submit-form-asistencia">Submit</button>
-                                    </form>
-                                </div>
-                                <div class="modal-footer justify-content-between">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--Modal ver asistencia-->
-                    <div class="modal fade" id="modal-ver-asistencia">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Datos asistencia</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span class="text-danger" aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <div id="datosasistencia" class="class-style">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <!-- /.content -->
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>Asistencia</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active">asistencia</li>
+                </ol>
+              </div>
             </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
 
-            <?php
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title" id="card-titulo-registrar">
+                      <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                      Admnistra de manera eficiente a tus asistencia.
+                    </h3>
+                    <h3 class="card-title" id="card-titulo" style="display: none;">
+                      <button type="button" class="btn bg-gradient-warning" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                      Hola mi nombre es Junior.
+                    </h3>
+                  </div>
+
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <div id="tabla-asistencia-trab">
+                      <table id="tabla-asistencia" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <thead>
+                          <tr>
+                            <th class="">Aciones</th>
+                            <th>Nombre</th>
+                            <th>total Horas</th>
+                            <th>Pago / hora</th>
+                            <th>Pago acumulado</th>
+                            <th>Sueldo mensual</th>
+                            <th>Jonal diario</th>
+                            <th>Sabatical</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                          <tr>
+                            <th>Aciones</th>
+                            <th>Nombre</th>
+                            <th>total Horas</th>
+                            <th>Pago / hora</th>
+                            <th>Pago acumulado</th>
+                            <th>Sueldo mensual</th>
+                            <th>Jonal diario</th>
+                            <th>Sabatical</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    <div id="ver_asistencia" style="display: none;">
+                      <div class="table-responsive">
+                        <div class="table-responsive-lg" style="overflow-x: scroll;">
+                           <table class="table styletabla" style="border: black 1px solid;">
+                              <thead>
+                                  <tr>
+                                      <th rowspan="4" class="stile">#</th>
+                                      <th rowspan="4" class="stile">Cargo</th>
+                                      <th colspan="7" style="text-align: center !important;  border: black 1px solid;">Horas de trabajo por día</th>
+                                      <th rowspan="3" class="stile">Horas normal/ extras</th>
+                                      <th rowspan="3" class="stile">Sueldo Mensual</th>
+                                      <th rowspan="3" class="stile">Jornal</th>
+                                      <th rowspan="3" class="stile">Sueldo hora</th>
+                                      <th rowspan="3" class="stile">Sabatical</th>
+                                      <th rowspan="3" class="stile">Adicional</th>
+                                      <th rowspan="3" class="stile">Pago quincenal</th>
+                                  </tr>
+                                  <tr class="dias">
+                                      <th>L</th>
+                                      <th>M</th>
+                                      <th>M</th>
+                                      <th>J</th>
+                                      <th>V</th>
+                                      <th>S</th>
+                                      <th>D</th>
+                                  </tr>
+                                  <tr class="dias">
+                                      <th>1</th>
+                                      <th>2</th>
+                                      <th>3</th>
+                                      <th>4</th>
+                                      <th>5</th>
+                                      <th>6</th>
+                                      <th>7</th>
+                                  </tr>
+                              </thead>
+                              <tbody class="tcuerpo">
+                                  <tr>
+                                      <td>H/N</td>
+                                      <td>Maestro de obra</td>
+                                      <td>8</td>
+                                      <td>8</td>
+                                      <td>8</td>
+                                      <td>8</td>
+                                      <td>8</td>
+                                      <td>0</td>
+                                      <td>4</td>
+                                      <td>48</td>
+                                      <td>3000</td>
+                                      <td>107</td>
+                                      <td>13.39</td>
+                                      <td>1</td>
+                                      <td>1</td>
+                                      <td>750.00</td>
+
+                                  </tr>
+                                  <tr>
+                                      <td>H/E</td>
+                                      <td>Maestro de obra</td>
+                                      <td>0</td>
+                                      <td>2</td>
+                                      <td>1</td>
+                                      <td>0</td>
+                                      <td>0</td>
+                                      <td>0</td>
+                                      <td>1</td>
+                                      <td>4</td>
+                                      <td>300</td>
+                                      <td>107.00</td>
+                                      <td>13.39</td>
+                                      <td>0</td>
+                                      <td>0</td>
+                                      <td>53.56</td>
+
+                                  </tr>
+                                  <tr>
+                                      <td colspan="14"></td>
+                                      <td ><b>TOTAL</b></td>
+                                      <td>803.56</td>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+          </div>
+          <!-- Modal agregar asistencia -->
+          <div class="modal fade" id="modal-agregar-asistencia">
+            <div class="modal-dialog /*modal-dialog-scrollable*/ modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Agregar asistencia</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-danger" aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <div class="modal-body">
+                  <!-- form start -->
+                  <form id="form-asistencia" name="form-asistencia" method="POST">
+                    <div class="card-body">
+                      <div class="row" id="cargando-1-fomulario">
+                        <!-- id proyecto -->
+                        <input type="hidden" name="idproyecto" id="idproyecto" />
+
+                        <!-- id asistencia -->
+                        <input type="hidden" name="idasistencia" id="idasistencia" />
+
+                        <!-- Trabajador -->
+                        <div class="col-lg-7">
+                          <div class="form-group">
+                            <label for="trabajador" id="trabajador_c">Trabajador</label>
+                            <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="seleccion();"> </select>
+                            <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>
+                          </div>
+                        </div>
+                        <!-- Horas de trabajo -->
+                        <div class="col-lg-5">
+                          <div class="form-group">
+                            <label for="horas_tabajo">Horas de trabajo</label>
+                            <!-- <input type="time" name="horas_tabajo" class="form-control" id="horas_tabajo" placeholder="Ingrese las horas de trabajo" /> -->
+
+                            <div class="input-group date" id="timepicker" data-target-input="nearest">
+                              <input
+                                id="horas_tabajo"
+                                name="horas_tabajo"
+                                placeholder="Ingrese las horas de trabajo"
+                                type="text"
+                                class="form-control datetimepicker-input"
+                                data-target="#timepicker"
+                                data-inputmask='"mask": "99:99"'
+                                data-mask
+                              />
+                              <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row" id="cargando-2-fomulario" style="display: none;">
+                        <div class="col-lg-12 text-center">
+                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                          <br />
+                          <h4>Cargando...</h4>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <button type="submit" style="display: none;" id="submit-form-asistencia">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Modal ver asistencia-->
+          <div class="modal fade" id="modal-ver-asistencia">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Datos asistencia</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-danger" aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <div class="modal-body">
+                  <div id="datosasistencia" class="class-style"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+
+      <?php
           }else{
             require 'noacceso.php';
           }
           require 'footer.php';
           ?>
-        </div>
-        <!-- /.content-wrapper -->
-        <?php
+    </div>
+    <!-- /.content-wrapper -->
+    <?php
         
         require 'script.php';
         ?>
-        <style>
-            .class-style label{
-                font-size: 14px;
-            }
-            .class-style small {
-                background-color: #f4f7ee;
-                border: solid 1px #ce542a21;
-                margin-left: 3px;
-                padding: 5px;
-                border-radius: 6px;
-            }
-        </style>
-        <!-- Bootstrap 4 -->
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- jquery-validation -->
-        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- InputMask -->
-        <script src="../plugins/moment/moment.min.js"></script>
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
-        <!-- sweetalert2 -->
-        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    <style>
+      .class-style label {
+        font-size: 14px;
+      }
+      .class-style small {
+        background-color: #f4f7ee;
+        border: solid 1px #ce542a21;
+        margin-left: 3px;
+        padding: 5px;
+        border-radius: 6px;
+      }
+    </style>
+    <!-- Bootstrap 4 -->
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- jquery-validation -->
+    <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- InputMask -->
+    <script src="../plugins/moment/moment.min.js"></script>
+    <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
+    <!-- sweetalert2 -->
+    <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-        <script type="text/javascript" src="scripts/registro_asistencia.js"></script>
+    <script type="text/javascript" src="scripts/registro_asistencia.js"></script>
 
-        <script>
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
-        </script>
-        <script>
-          if ( localStorage.getItem('nube_idproyecto') ) {
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+    <script>
+      if (localStorage.getItem("nube_idproyecto")) {
+        console.log("icon_folder_" + localStorage.getItem("nube_idproyecto"));
 
-            console.log("icon_folder_"+localStorage.getItem('nube_idproyecto'));
+        $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' + localStorage.getItem("nube_nombre_proyecto"));
 
-            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' +  localStorage.getItem('nube_nombre_proyecto'));
+        $("#ver-otros-modulos-1").show();
 
-            $("#ver-otros-modulos-1").show();
+        // $('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
+      } else {
+        $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
 
-            // $('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
-
-          }else{
-            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
-
-            $("#ver-otros-modulos-1").hide();
-          }
-          
-        </script>
-    </body>
+        $("#ver-otros-modulos-1").hide();
+      }
+    </script>
+  </body>
 </html>
 
 <?php  

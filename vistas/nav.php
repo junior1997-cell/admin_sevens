@@ -12,7 +12,11 @@
       <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> Contacto</a>
     </li>
 
-    <li class="nav-item d-none d-sm-inline-block">
+    <li class="nav-item d-none d-sm-inline-block" style="
+    background-color: #8eff27;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;">
       <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </a>
     </li>
   </ul>
