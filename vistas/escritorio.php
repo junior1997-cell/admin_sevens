@@ -381,6 +381,32 @@
                               </div>
                               <div class="text-center" id="doc3_nombre"><!-- aqui va el nombre del pdf --></div>
                             </div>
+
+                            <!-- Pdf 4 -->
+                            <div class="col-md-4" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="inicio-de-obra" class="control-label" > Acta de inicio de obra</label>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block" id="doc4_i">
+                                    <i class="fas fa-file-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_4" name="doc_old_4" />
+                                  <input style="display: none;" id="doc4" type="file" name="doc4" accept="application/pdf" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                    <i class="fa fa-eye"></i> PDF.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc4_ver" class="text-center mt-4">
+                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc4_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+                            
                             <!-- barprogress -->
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
                               <div class="progress" id="div_barra_progress">

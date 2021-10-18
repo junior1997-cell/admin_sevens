@@ -251,11 +251,11 @@ $(function () {
       cancelLabel: 'Clear'
     }
   });
-  $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+  $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
     $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
   });
 
-  $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+  $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
   });
   
