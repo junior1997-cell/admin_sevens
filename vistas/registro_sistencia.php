@@ -8,9 +8,6 @@
   }else{
     ?>
     <style>
-      /*.styletabla td, .styletabla th {
-          padding: 0.15rem 0rem 0rem 0rem !important; 
-      }*/
       .styletabla thead th {
            border-bottom: 1px solid #000000 !important; 
            border-top: 1px solid #000000 !important; 
@@ -22,18 +19,24 @@
         padding-top: 40px !important;
         text-align: center !important;
         border: black 1px solid;
-     }
+      }
      .tcuerpo tr td{
-      text-align: center !important;
-      padding-top: 18px !important;
-      border: black 1px solid;
-      padding: 0.45rem 0.20rem 0.25rem 0.20rem !important; 
+        text-align: center !important;
+        padding-top: 18px !important;
+        border: black 1px solid;
+        padding: 0.45rem 0.20rem 0.25rem 0.20rem !important; 
      }
-    .dias th{
-      padding: 0.15rem 0rem 0rem 0rem !important; 
-      border: black 1px solid;
-      text-align: center !important;
-    }
+     .dias th{
+        padding: 0.15rem 0rem 0rem 0rem !important; 
+        border: black 1px solid;
+        text-align: center !important;
+     }
+     .row-horizon {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        margin: 0 2px;
+      }
 
     </style>
 <!DOCTYPE html>
@@ -83,10 +86,13 @@
                 <div class="card card-primary card-outline">
                   <div class="card-header">
                     <h3 class="card-title" id="card-titulo-registrar">
-                      <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
-                      Admnistra de manera eficiente a tus asistencia.
+                      <button type="button" class="btn bg-gradient-success" style="margin-right: 10px;" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                     </h3>
-                    <h3 class="card-title" id="card-titulo" style="display: none;">
+                      <div id="Lista_quincenas" class="row-horizon" >
+                        <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
+                        <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
+                     </div>
+                    <h3 class="card-title" id="card-titulo" style="display: none;" style="padding-left: 10px;">
                       <button type="button" class="btn bg-gradient-warning" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
                       Hola mi nombre es Junior.
                     </h3>
@@ -123,6 +129,7 @@
                         </tfoot>
                       </table>
                     </div>
+                    <!--registro-asistencia-->
                     <div id="ver_asistencia" style="display: none;">
                       <div class="table-responsive">
                         <div class="table-responsive-lg" style="overflow-x: scroll;">
@@ -131,7 +138,10 @@
                                   <tr>
                                       <th rowspan="4" class="stile">#</th>
                                       <th rowspan="4" class="stile">Cargo</th>
-                                      <th colspan="7" style="text-align: center !important;  border: black 1px solid;">Horas de trabajo por día</th>
+                                      <th colspan="7" style="
+                                      text-align: center !important;
+                                      border: black 1px solid; 
+                                      padding: 0.5rem;">Horas de trabajo por día</th>
                                       <th rowspan="3" class="stile">Horas normal/ extras</th>
                                       <th rowspan="3" class="stile">Sueldo Mensual</th>
                                       <th rowspan="3" class="stile">Jornal</th>

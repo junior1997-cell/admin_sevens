@@ -79,6 +79,25 @@ function limpiar() {
   $("#trabajador").val("null").trigger("change");
   $("#horas_tabajo").val("");
 }
+// Función que suma o resta días a la fecha indicada
+
+sumaFecha = function(d, fecha)
+{
+ var Fecha = new Date();
+ var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+ var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+ var aFecha = sFecha.split(sep);
+ var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+ fecha= new Date(fecha);
+ fecha.setDate(fecha.getDate()+parseInt(d));
+ var anno=fecha.getFullYear();
+ var mes= fecha.getMonth()+1;
+ var dia= fecha.getDate();
+ mes = (mes < 10) ? ("0" + mes) : mes;
+ dia = (dia < 10) ? ("0" + dia) : dia;
+ var fechaFinal = dia+sep+mes+sep+anno;
+ return (fechaFinal);
+ }
 
 //Función Listar
 function listar(nube_idproyecto) {
@@ -112,6 +131,53 @@ function listar(nube_idproyecto) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+  //Listar quincenas(botones)
+
+
+  $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+
+    
+    data =JSON.parse(data);
+    console.log(data);
+   
+    var fecha = data.fecha_inicio;
+    console.log(fecha);
+    var fecha_i = sumaFecha(0,fecha);
+    var cal_quincena  =data.plazo/15;
+    var i=0;
+    var cont=0
+    $('#Lista_quincenas').html('');
+
+    while (i <= cal_quincena) {
+      cont=cont+1;
+      var fecha_inicio = fecha_i;
+      
+      fecha=sumaFecha(14,fecha_inicio);
+
+      console.log(fecha_inicio+'-'+fecha);
+      ver_asistencia="'"+fecha_inicio+"',"+"'"+fecha+"'";
+      $('#Lista_quincenas').append(' <button type="button" class="btn bg-gradient-info text-center" onclick="datos_quincena('+ver_asistencia+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+'-'+fecha+'</button>')
+      fecha_i =sumaFecha(1,fecha);
+      i++;
+    }
+    //console.log(fecha);
+
+
+  });
+}
+function datos_quincena(f1,f2) {
+  console.log('----------'+f1,f2);
+      
+  $("#cargando-1-fomulario").hide();
+  $("#tabla-asistencia-trab").hide();
+  $("#card-titulo-registrar").hide();
+  $("#cargando-2-fomulario").show();
+  $("#ver_asistencia").show();
+  $("#card-titulo").show();
+
+  $("#cargando-1-fomulario").show();
+  $("#cargando-2-fomulario").hide();
+  
 }
 //Función para guardar o editar
 

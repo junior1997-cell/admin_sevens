@@ -84,6 +84,11 @@ Class Asistencia_trabajador
 		atr.idtrabajador='$id_trabajador' AND atr.idtrabajador=t.idtrabajador AND t.idproyecto=1 AND t.idproyecto=p.idproyecto";
 		return ejecutarConsultaSimpleFila($sql);
 	}
+	//listarquincenas_b
+	public function listarquincenas_b($nube_idproyecto){
+		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
 	//=========================
 		//visualizar Horas y sueldo
 	public function horas_acumulada($trabajador,$idproyecto){
