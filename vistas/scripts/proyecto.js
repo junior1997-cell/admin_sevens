@@ -252,7 +252,7 @@ $(function () {
     }
   });
   $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
   });
 
   $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
