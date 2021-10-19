@@ -11,23 +11,23 @@ Class Trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen)
+	public function insertar($idproyecto, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $tipo_trabajador, $desempenio, $c_bancaria, $email, $cargo, $banco, $tutular_cuenta, $sueldo_diario, $sueldo_mensual, $sueldo_hora, $imagen)
 	{
-		$sql="INSERT INTO trabajador (idproyecto,idbancos,nombres,tipo_documento,numero_documento,fecha_nacimiento,desempeno,cargo,tipo_trabajador,cuenta_bancaria,titular_cuenta,sueldo_mensual,sueldo_diario,sueldo_hora,direccion,telefono,email,imagen)
-		VALUES ('$idproyecto','$banco','$nombre','$tipo_documento','$num_documento','$nacimiento','$desempenio','$cargo','$tipo_trabajador','$c_bancaria','$tutular_cuenta','$sueldo_mensual','$sueldo_diario','$sueldo_hora','$direccion','$telefono','$email','$imagen')";
+		$sql="INSERT INTO trabajador (idproyecto, idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, desempeno, cargo, tipo_trabajador, cuenta_bancaria, titular_cuenta, sueldo_mensual, sueldo_diario, sueldo_hora, direccion, telefono, email, imagen)
+		VALUES ('$idproyecto', '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$desempenio', '$cargo', '$tipo_trabajador', '$c_bancaria', '$tutular_cuenta', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$direccion', '$telefono', '$email', '$imagen')";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen)
+	public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $tipo_trabajador, $desempenio, $c_bancaria, $email, $cargo, $banco, $tutular_cuenta, $sueldo_diario, $sueldo_mensual, $sueldo_hora, $imagen)
 	{
-		$sql="UPDATE trabajador SET idbancos='$banco',nombres='$nombre',tipo_documento='$tipo_documento'
-		,numero_documento='$num_documento',fecha_nacimiento='$nacimiento',
-		desempeno='$desempenio',cargo='$cargo',tipo_trabajador='$tipo_trabajador',
-		cuenta_bancaria='$c_bancaria',titular_cuenta='$tutular_cuenta',sueldo_mensual='$sueldo_mensual',sueldo_diario='$sueldo_diario',
-		sueldo_hora='$sueldo_hora',direccion='$direccion',telefono='$telefono',email='$email',imagen='$imagen' WHERE idtrabajador='$idtrabajador'";	
+		$sql="UPDATE trabajador SET idbancos='$banco', nombres='$nombre', tipo_documento='$tipo_documento', 
+		numero_documento='$num_documento', fecha_nacimiento='$nacimiento',
+		desempeno='$desempenio', cargo='$cargo', tipo_trabajador='$tipo_trabajador',
+		cuenta_bancaria='$c_bancaria', titular_cuenta='$tutular_cuenta', sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario',
+		sueldo_hora='$sueldo_hora', direccion='$direccion', telefono='$telefono', email='$email', imagen='$imagen' WHERE idtrabajador='$idtrabajador'";	
 		
 			return ejecutarConsulta($sql);
 		

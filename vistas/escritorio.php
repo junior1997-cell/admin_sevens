@@ -308,7 +308,7 @@
                             </div>
                             
                             <!-- Pdf 1 -->
-                            <div class="col-md-4" >                               
+                            <div class="col-md-6 col-lg-4" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label" > Acta de contrato de obra </label>
@@ -333,7 +333,7 @@
                             </div> 
 
                             <!-- Pdf 2 -->
-                            <div class="col-md-4" >                               
+                            <div class="col-md-6 col-lg-4" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label" > Acta de entrega de terreno</label>
@@ -358,7 +358,7 @@
                             </div>
                             
                             <!-- Pdf 3 -->
-                            <div class="col-md-4" >                               
+                            <div class="col-md-6 col-lg-4" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label" > Acta de inicio de obra</label>
@@ -382,11 +382,14 @@
                               <div class="text-center" id="doc3_nombre"><!-- aqui va el nombre del pdf --></div>
                             </div>
 
+                            <div class="col-lg-12 borde-arriba-naranja">
+                            </div>
+
                             <!-- Pdf 4 -->
-                            <div class="col-md-4" >                               
+                            <div class="col-md-6 col-lg-4" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                  <label for="inicio-de-obra" class="control-label" > Acta de inicio de obra</label>
+                                  <label for="Presupuesto" class="control-label" >Presupuesto</label>
                                 </div>
                                 <div class="col-md-6 text-center">
                                   <button type="button" class="btn btn-success btn-block" id="doc4_i">
@@ -407,6 +410,56 @@
                               <div class="text-center" id="doc4_nombre"><!-- aqui va el nombre del pdf --></div>
                             </div>
                             
+                            <!-- Pdf 5 -->
+                            <div class="col-md-6 col-lg-4" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="analisis-de-costos-unitarios" class="control-label" > Analisis de costos unitarios</label>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block" id="doc5_i">
+                                    <i class="fas fa-file-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_5" name="doc_old_5" />
+                                  <input style="display: none;" id="doc5" type="file" name="doc5" accept="application/pdf" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                    <i class="fa fa-eye"></i> PDF.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc5_ver" class="text-center mt-4">
+                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc5_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
+                            <!-- Pdf 6 -->
+                            <div class="col-md-6 col-lg-4" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="inicio-de-obra" class="control-label" > Insumos</label>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block" id="doc6_i">
+                                    <i class="fas fa-file-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_6" name="doc_old_6" />
+                                  <input style="display: none;" id="doc6" type="file" name="doc6" accept="application/pdf" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                    <i class="fa fa-eye"></i> PDF.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc6_ver" class="text-center mt-4">
+                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc6_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
                             <!-- barprogress -->
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
                               <div class="progress" id="div_barra_progress">

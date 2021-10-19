@@ -11,11 +11,11 @@ Class Proyecto
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3)
+	public function insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6,$excel_valorizaciones)
 	{
 		// insertamos al usuario
-		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa,nombre_proyecto, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio, fecha_fin, plazo, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra) 
-		VALUES ('$tipo_documento','$numero_documento','$empresa','$nombre_proyecto','$ubicacion','$actividad_trabajo','$empresa_acargo','$costo','$fecha_inicio','$fecha_fin','$plazo','$doc1','$doc2','$doc3');";
+		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa,nombre_proyecto, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio, fecha_fin, plazo, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos,excel_valorizaciones) 
+		VALUES ('$tipo_documento','$numero_documento','$empresa','$nombre_proyecto','$ubicacion','$actividad_trabajo','$empresa_acargo','$costo','$fecha_inicio','$fecha_fin','$plazo','$doc1','$doc2','$doc3','$doc4','$doc5','$doc6','$excel_valorizaciones');";
 		return ejecutarConsulta($sql);
 		// $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
 		 
@@ -24,14 +24,15 @@ Class Proyecto
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3)
+	public function editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6)
 	{
 		 
 		$sql="UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', 
 			empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', ubicacion = '$ubicacion',
 			actividad_trabajo = '$actividad_trabajo', empresa_acargo = '$empresa_acargo', 
 			costo = '$costo', fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', 
-			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3'
+			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',
+			doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', doc6_insumos = '$doc6'
 		 WHERE idproyecto='$idproyecto'";
 			
 		return ejecutarConsulta($sql);
@@ -76,9 +77,10 @@ Class Proyecto
 		return ejecutarConsulta($sql);		
 	}
 	// obtebnemos el documento numero 1 para eliminar
-	public function obtenerDoc1($idproyecto) {
+	public function obtenerDocs($idproyecto) {
 
-        $sql = "SELECT doc1_contrato_obra FROM proyecto WHERE idproyecto='$idproyecto'";
+        $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno ,doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos,
+		 FROM proyecto WHERE idproyecto='$idproyecto'";
 
         return ejecutarConsulta($sql);
     }

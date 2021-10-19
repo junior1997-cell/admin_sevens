@@ -493,6 +493,16 @@ $("#doc2").change(function(e) {  addDocs(e,$("#doc2").attr("id")) });
 $("#doc3_i").click(function() {  $('#doc3').trigger('click'); });
 $("#doc3").change(function(e) {  addDocs(e,$("#doc3").attr("id")) });
 
+$("#doc4_i").click(function() {  $('#doc4').trigger('click'); });
+$("#doc4").change(function(e) {  addDocs(e,$("#doc4").attr("id")) });
+
+$("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
+$("#doc5").change(function(e) {  addDocs(e,$("#doc5").attr("id")) });
+
+$("#doc6_i").click(function() {  $('#doc6').trigger('click'); });
+$("#doc6").change(function(e) {  addDocs(e,$("#doc6").attr("id")) });
+
+
 /* PREVISUALIZAR LOS DOCUMENTOS */
 function addDocs(e,id) {
   $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
@@ -587,7 +597,7 @@ function addDocs(e,id) {
 		$("#"+id+"_nombre").html("");
 	}	
 }
-// Eliminamos el doc
+// Eliminamos el doc 1
 function doc1_eliminar() {
 
 	$("#doc1").val("");
@@ -597,7 +607,7 @@ function doc1_eliminar() {
 	$("#doc1_nombre").html("");
 }
 
-// Eliminamos el doc
+// Eliminamos el doc 2
 function doc2_eliminar() {
 
 	$("#doc2").val("");
@@ -607,7 +617,7 @@ function doc2_eliminar() {
 	$("#doc2_nombre").html("");
 }
 
-// Eliminamos el doc
+// Eliminamos el doc 3
 function doc3_eliminar() {
 
 	$("#doc3").val("");
@@ -617,10 +627,40 @@ function doc3_eliminar() {
 	$("#doc3_nombre").html("");
 }
 
+// Eliminamos el doc 4
+function doc4_eliminar() {
+
+	$("#doc4").val("");
+
+	$("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc4_nombre").html("");
+}
+
+// Eliminamos el doc 5
+function doc5_eliminar() {
+
+	$("#doc5").val("");
+
+	$("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc5_nombre").html("");
+}
+
+// Eliminamos el doc 3
+function doc6_eliminar() {
+
+	$("#doc6").val("");
+
+	$("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc6_nombre").html("");
+}
+
  
 
-function ver_modal_docs(verdoc1, verdoc2, verdoc3) {
-  console.log(verdoc1, verdoc2, verdoc3);
+function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
+  console.log(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6);
   $('#modal-ver-docs').modal("show");
 
   if (verdoc1 == "") {
