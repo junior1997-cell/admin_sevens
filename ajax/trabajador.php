@@ -141,6 +141,28 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+	
+	case 'verdatos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['trabajador']==1)
+			{
+				$rspta=$trabajador->verdatos($idtrabajador);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
 
 	case 'listar':
 		if (!isset($_SESSION["nombre"])){

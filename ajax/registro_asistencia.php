@@ -172,6 +172,95 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+	case 'ver_datos_quincena':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['asistencia_trabajador']==1)
+			{
+				//$f1 = $_POST["f1"];
+				/*$f1 = $_POST["f1"];
+				$f2 = $_POST["f2"];
+				$nube_idproyect = $_POST["nube_idproyect"];*/
+				$f1 = '01/10/2021';
+				$f2 = '15/10/2021';
+				$nube_idproyect = '1';
+
+				$rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
+				//Vamos a declarar un array
+				$data= Array();
+				//$idtrabajador_d=2;
+				while ($reg=$rspta->fetch_object()){
+
+		 			$data[]=array(
+		 				"idtrabajador"=>$reg->idtrabajador,
+		 				"nombres"=>$reg->nombres,
+		 				"tipo_doc"=>$reg->tipo_doc,
+		 				"num_doc"=>$reg->num_doc,
+		 				"cargo"=>$reg->cargo,
+		 				"sueldo_mensual"=>$reg->sueldo_mensual,
+		 				"sueldo_diario"=>$reg->sueldo_diario,
+		 				"sueldo_hora"=>$reg->total_horas,
+		 				"total_sabatical"=>$reg->total_sabatical
+
+		 				);
+						// $idtrabajador_d++;
+		 		}
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($data);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+	case 'ver_datos_quincena_xdia':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['asistencia_trabajador']==1)
+			{
+				//$f1 = $_POST["f1"];
+				$f1 = $_POST["f1"];
+				$f2 = $_POST["f2"];
+				$nube_idproyect = $_POST["nube_idproyect"];
+				$idtrabajador = $_POST["idtrabajador"];
+				/*$f1 = '01/10/2021';
+				$f2 = '15/10/2021';
+				$nube_idproyect = '1';
+				$idtrabajador = '1';*/
+				$data= Array();
+				$rspta=$asist_trabajador->ver_detalle_quincena_dias($f1,$f2,$nube_idproyect,$idtrabajador);
+				while ($reg=$rspta->fetch_object()){
+						$data[]=array(
+							"idasistencia_trabajador"=>$reg->idasistencia_trabajador,
+							"idtrabajador"=>$reg->idtrabajador,
+							"horas_trabajador"=>$reg->horas_trabajador,
+							"horas_extras_dia"=>$reg->horas_extras_dia,
+							"fecha_asistencia"=>$reg->fecha_asistencia
+							);
+				}
+		 		
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($data);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
 	case 'listarquincenas':
 		if (!isset($_SESSION["nombre"]))
 		{

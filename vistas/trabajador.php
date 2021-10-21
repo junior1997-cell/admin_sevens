@@ -315,6 +315,81 @@
 
                                 <div class="modal-body">
                                     <div id="datostrabajador" class="class-style">
+                                        
+                                       <!-- <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body  ">
+                                                    <table class="table table-hover table-bordered">          
+                                                        <tbody>
+                                                            <tr  data-widget="expandable-table" aria-expanded="false">
+                                                                <th rowspan="2">                                                                   
+                                                                <img src="../dist/svg/user_default.svg" alt="">
+                                                                </th>
+                                                                <td>
+                                                                    David Melvin
+                                                                </td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <td>hola'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td> 
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td> 
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td> 
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td> 
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td> 
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td> 
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                <th>Empresa</th>
+                                                                <td>'+data.empresa+'</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                        <!---->
                                     </div>
                                 </div>
                             </div>

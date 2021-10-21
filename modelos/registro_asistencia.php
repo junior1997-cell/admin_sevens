@@ -89,6 +89,29 @@ Class Asistencia_trabajador
 		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
+	//ver detalle quincena 
+	public function ver_detalle_quincena($f1,$f2,$nube_idproyect){
+
+		$sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombres, t.tipo_documento as tipo_doc, 
+		t.numero_documento as num_doc, t.cargo as cargo , t.imagen as imagen, t.sueldo_hora as sueldo_hora, t.sueldo_diario as sueldo_diario,
+		t.sueldo_mensual as sueldo_mensual, SUM(atr.horas_trabajador) as total_horas, SUM(atr.horas_extras_dia) as horas_extras, 
+		SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect 
+		FROM asistencia_trabajador as atr, trabajador as t, proyecto as p 
+		WHERE atr.idtrabajador=t.idtrabajador AND t.estado=1 AND t.idproyecto='$nube_idproyect' AND t.idproyecto=p.idproyecto AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2' GROUP BY atr.idtrabajador";
+		return ejecutarConsulta($sql);
+	}
+	//ver detalle quincena por trabador y por dìa
+	public function ver_detalle_quincena_dias($f1,$f2,$nube_idproyect,$idtrabajador){
+
+		$sql="SELECT atr.idasistencia_trabajador as idasistencia_trabajador, 
+		atr.idtrabajador as idtrabajador, 
+		atr.horas_trabajador as horas_trabajador,
+		atr.horas_extras_dia as horas_extras_dia,
+		atr.fecha_asistencia as fecha_asistencia
+		FROM asistencia_trabajador as atr, trabajador as t
+		WHERE atr.idtrabajador= t.idtrabajador AND t.idtrabajador='$idtrabajador' AND t.idproyecto='$nube_idproyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2'";
+		return ejecutarConsulta($sql);
+	}
 	//=========================
 		//visualizar Horas y sueldo
 	public function horas_acumulada($trabajador,$idproyecto){

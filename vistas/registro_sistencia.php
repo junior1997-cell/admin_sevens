@@ -94,7 +94,6 @@
                      </div>
                     <h3 class="card-title" id="card-titulo" style="display: none;" style="padding-left: 10px;">
                       <button type="button" class="btn bg-gradient-warning" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                      Hola mi nombre es Junior.
                     </h3>
                   </div>
 
@@ -137,8 +136,9 @@
                               <thead>
                                   <tr>
                                       <th rowspan="4" class="stile">#</th>
+                                      <th rowspan="4" class="stile">Nombre</th>
                                       <th rowspan="4" class="stile">Cargo</th>
-                                      <th colspan="7" style="
+                                      <th colspan="15" style="
                                       text-align: center !important;
                                       border: black 1px solid; 
                                       padding: 0.5rem;">Horas de trabajo por día</th>
@@ -158,6 +158,14 @@
                                       <th>V</th>
                                       <th>S</th>
                                       <th>D</th>
+                                      <th>L</th>
+                                      <th>M</th>
+                                      <th>M</th>
+                                      <th>J</th>
+                                      <th>V</th>
+                                      <th>S</th>
+                                      <th>D</th>
+                                      <th>L</th>
                                   </tr>
                                   <tr class="dias">
                                       <th>1</th>
@@ -167,10 +175,18 @@
                                       <th>5</th>
                                       <th>6</th>
                                       <th>7</th>
+                                      <th>8</th>
+                                      <th>9</th>
+                                      <th>10</th>
+                                      <th>11</th>
+                                      <th>12</th>
+                                      <th>13</th>
+                                      <th>14</th>
+                                      <th>15</th>
                                   </tr>
                               </thead>
-                              <tbody class="tcuerpo">
-                                  <tr>
+                              <tbody class="tcuerpo nameappend">
+                                  <!--<tr>
                                       <td>H/N</td>
                                       <td>Maestro de obra</td>
                                       <td>8</td>
@@ -213,7 +229,7 @@
                                       <td ><b>TOTAL</b></td>
                                       <td>803.56</td>
 
-                                  </tr>
+                                  </tr>-->
                               </tbody>
                           </table>
                         </div>

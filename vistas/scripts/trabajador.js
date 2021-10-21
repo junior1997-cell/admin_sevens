@@ -243,98 +243,84 @@ function verdatos(idtrabajador){
 
   $("#modal-ver-trabajador").modal("show")
 
-  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
+  $.post("../ajax/trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (data, status) {
 
     data = JSON.parse(data);  //console.log(data); 
-    
-    //$("#foto2_ver").attr("src", "../dist/img/usuarios/" + data.imagen);
-     
-    var img_error = "'../dist/svg/user_default.svg'";
 
-    verdatos=''+
-    '<div class="card-body" style="background-color: #d3a49430;border-radius: 9px;">'+
-      '<div class="row" id="cargando-1-fomulario">'+
-          '<div class="col-lg-4">'+
-          '<img src="../dist/img/usuarios/'+data.imagen+'" class="img-thumbnail" style="cursor: pointer !important; border-radius: 50%; width: 150px; height: 129px;" onerror="this.src='+img_error+';"/>'+
-          '</div>'+                                                
-          '<div class="col-lg-8">'+
-              '<div class="row">'+
-                  '<div class="col-12">'+
-                      '<label for="nombre">Nombre y Apellidos/Razon Social</label><br>'+
-                      '<small>'+data.nombres+'</small>'+
-                  '</div>'+
-                  '<div class="col-12">'+
-                          '<label for="num_documento">N° de documento</label><br>'+
-                          '<small>'+data.numero_documento+'</small>'+
-                  '</div>'+
-              '</div>'+
-          '</div>'+                                                
-          '<div class="col-lg-6">'+
-              '<div class="row">'+
-                  '<div class="col-12">'+
-                      '<label for="nombre">Dirección</label><br>'+
-                      '<small>'+data.direccion+'</small>'+
-                  '</div>'+
-                  '<div class="col-12">'+
-                        '<label for="email">Correo electrónico</label><br>'+
-                        '<small>'+data.email+'</small>'+
-                  '</div>'+
-              '</div>'+
-          '</div>'+                                               
-          '<div class="col-lg-6">'+
-              '<div class="row">'+
-                  '<div class="col-12" style="margin: 0px !important;">'+
-                      '<label for="nombre">Teléfono</label><br>'+
-                      '<small>'+data.telefono+'</small>'+
-                  '</div>'+
-                  '<div class="col-12" style="margin-bottom: 10px;">'+
-                      '<label for="email">Fecha Nacimiento</label><br>'+
-                      '<small>'+data.fecha_nacimiento+'</small>'+
-                  '</div>'+
-              '</div>'+
-          '</div>'+                                                
-          '<div class="col-lg-4">'+
-                  '<label for="tipo_trabajador">Tipo trabajador</label>'+
-                  '<small>'+data.tipo_trabajador+'</small>'+
-          '</div>'+                                               
-          '<div class="col-lg-4">'+
-                  '<label for="cargo">Cargo</label> <br>'+
-                  '<small>'+data.cargo+'</small>'+
-          '</div>'+                                                
-          '<div class="col-lg-4">'+
-                  '<label for="desempeño">Desempeño</label> <br>'+
-                  '<small>'+data.desempeno+'</small>'+
-           '</div>'+
-          '<div class="col-lg-4">'+
-                  '<label for="c_bancaria">Cuenta Bancaria</label>'+
-                  '<small>'+data.cuenta_bancaria+'</small>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-                  '<label for="banco">Banco</label> <br>'+
-                  '<small>'+data.idbancos+'</small>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-                  '<label for="tutular_cuenta">Titular-cuenta</label> <br>'+
-                  '<small>'+data.titular_cuenta+'</small>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-                  '<label for="sueldo_mensual">Sueldo(Mensual)</label> <br>'+
-                  '<small>'+data.sueldo_mensual+'</small>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-                  '<label for="sueldo_diario">Sueldo( 24 Diario)</label> <br>'+
-                  '<small>'+data.sueldo_diario+'</small>'+
-          '</div>'+
-          '<div class="col-lg-4">'+
-              '<div class="form-group">'+
-                  '<label for="sueldo_hora">Sueldo(8 Hora)</label><br>'+
-                  '<small>'+data.sueldo_hora+'</small>'+
-              '</div>'+
+    var img =data.imagen=!''?'<img src="../dist/img/usuarios/'+data.imagen+'" alt="" style="width: 90px;border-radius: 10px;">':'<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
+     verdatos=''+                                                                            
+    '<div class="col-12">'+
+      '<div class="card">'+
+          '<div class="card-body ">'+
+              '<table class="table table-hover table-bordered">'+          
+                  '<tbody>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th rowspan="2">'+img+'</th>'+
+                          '<td>'+data.nombres+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<td>'+data.numero_documento+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Dirección</th>'+
+                          '<td>'+data.direccion+'</td>'+ 
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Correo</th>'+
+                          '<td>'+data.email+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Teléfono</th>'+
+                          '<td>'+data.telefono+'</td>'+ 
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Fecha nacimiento</th>'+
+                          '<td>'+data.fecha_nacimiento+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Tipo trabajador</th>'+
+                          '<td>'+data.tipo_trabajador+'</td>'+ 
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Cargo</th>'+
+                          '<td>'+data.cargo+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Desempeño</th>'+
+                          '<td>'+data.desempeno+'</td>'+ 
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Cuenta bancaria</th>'+
+                          '<td>'+data.cuenta_bancaria+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Banco</th>'+
+                          '<td>'+data.banco+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Titular cuenta </th>'+
+                          '<td>'+data.titular_cuenta+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Sueldo por mes</th>'+
+                          '<td>'+data.sueldo_mensual+'</td>'+ 
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Sueldo por día</th>'+
+                          '<td>'+data.sueldo_diario+'</td>'+
+                      '</tr>'+
+                      '<tr data-widget="expandable-table" aria-expanded="false">'+
+                          '<th>Sueldo por hora</th>'+
+                          '<td>'+data.sueldo_hora+'</td>'+
+                      '</tr>'+
+                  '</tbody>'+
+              '</table>'+
           '</div>'+
       '</div>'+
-    '</div>'
+    '</div>';
   
   $("#datostrabajador").append(verdatos);
+
 });
 
 }

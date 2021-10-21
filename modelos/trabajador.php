@@ -54,6 +54,33 @@ Class Trabajador
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
+		//Implementar un método para mostrar los datos de un registro a modificar
+		public function verdatos($idtrabajador)
+		{
+			$sql="SELECT 
+			t.idbancos as idbancos, 
+			t.nombres as nombres, 
+			t.tipo_documento as tipo_documento, 
+			t.numero_documento as numero_documento,
+			t.fecha_nacimiento as fecha_nacimiento,
+			t.desempeno as desempeno,
+			t.cargo as cargo,
+			t.tipo_trabajador as tipo_trabajador ,
+			t.cuenta_bancaria as cuenta_bancaria,
+			t.titular_cuenta as titular_cuenta,
+			t.sueldo_mensual as sueldo_mensual,
+			t.sueldo_diario as sueldo_diario,
+			t.sueldo_hora as sueldo_hora,
+			t.direccion as direccion,
+			t.telefono as telefono,
+			t.email as email,
+			t.imagen as imagen,
+			b.nombre as banco 
+			FROM trabajador t, bancos b 
+			WHERE t.idtrabajador='$idtrabajador' AND t.idbancos =b.idbancos";
+
+			return ejecutarConsultaSimpleFila($sql);
+		}
 	//Implementar un método para listar los registros
 	public function listar($nube_idproyecto)
 	{

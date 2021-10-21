@@ -166,7 +166,8 @@ function listar(nube_idproyecto) {
   });
 }
 function datos_quincena(f1,f2) {
-  console.log('----------'+f1,f2);
+  var nube_idproyect =localStorage.getItem('nube_idproyecto');
+  console.log('----------'+f1,f2,nube_idproyect);
       
   $("#cargando-1-fomulario").hide();
   $("#tabla-asistencia-trab").hide();
@@ -174,6 +175,166 @@ function datos_quincena(f1,f2) {
   $("#cargando-2-fomulario").show();
   $("#ver_asistencia").show();
   $("#card-titulo").show();
+  $.post("../ajax/registro_asistencia.php?op=ver_datos_quincena", {f1:f1,f2:f2,nube_idproyect:nube_idproyect}, function (data, status) {
+        
+    data =JSON.parse(data);
+    //console.log(data);
+    var rowtrabajador='';
+    var rowtrabajadores='';
+    var horas = '<td>N</td>';
+    var celda = document.createElement("td");
+    var textoCelda='';
+    $(".nameappend").html('');
+
+    $.each(data, function (index, value) {      
+
+
+      $.post("../ajax/registro_asistencia.php?op=ver_datos_quincena_xdia", {f1:f1,f2:f2,nube_idproyect:nube_idproyect,idtrabajador:value.idtrabajador}, function (data, status) {
+                
+          data =JSON.parse(data);
+         // console.log(data);
+          var fecha = f1;
+          var i; //defines i
+          for (i = 1; i <=15; i++) { //starts loop
+            // console.log("The Number Is: " + i); //What ever you want
+            console.log(value.nombres);
+            console.log('f.'+i+'-'+fecha);
+            for (let i = 0; i < data.length; i++) { 
+              //console.log(data[i]['fecha_asistencia']);
+
+              if (fecha==data[i]['fecha_asistencia']) {
+                console.log(data[i]['horas_trabajador']);
+                horas = '<td>'+data[i]['horas_trabajador']+'</td>';
+                textoCelda = document.createTextNode("celda en la hilera "+i+", columna ");
+                
+              }
+            }
+            
+           //console.log(celda.appendChild(textoCelda));
+            var fecha = sumaFecha(1,fecha);
+            // console.log(fecha);
+          };
+
+      });
+      rowtrabajador= '<tr>'+
+          '<td>H/N</td>'+
+          '<td>'+index +'</td>'+
+          '<td>'+value.cargo +'</td>'+
+          celda.appendChild(horas);
+          '<td>0</td>'+
+          '<td>2</td>'+
+          '<td>1</td>'+
+          '<td>0</td>'+
+          '<td>0</td>'+
+          '<td>0</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>4</td>'+
+          '<td>'+value.horas_trabajador +'</td>'+
+          '<td>'+value.sueldo_mensual +'</td>'+
+          '<td>'+value.sueldo_diario +'</td>'+
+          '<td>'+value.sueldo_hora +'</td>'+
+          '<td>'+value.sabatical +'</td>'+
+          '<td>1</td>'+
+          '<td>750.00</td>'+
+
+      '</tr>'+
+      '<tr>'+
+          '<td>H/E</td>'+
+          '<td>'+value.nombres +'</td>'+
+          '<td>'+value.cargo +'</td>'+
+          '<td>2</td>'+
+          '<td>1</td>'+
+          '<td>0</td>'+
+          '<td>0</td>'+
+          '<td>0</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>1</td>'+
+          '<td>4</td>'+
+          '<td>4</td>'+
+          '<td>300</td>'+
+          '<td>107.00</td>'+
+          '<td>13.39</td>'+
+          '<td>0</td>'+
+          '<td>0</td>'+
+          '<td>53.56</td>'+
+
+      '</tr>';
+       $('.nameappend').append(rowtrabajador);
+
+
+    });
+    $('.nameappend').append('<tr>'+
+    '<td colspan="23"></td>'+
+    '<td ><b>TOTAL</b></td>'+
+    '<td>803.56</td>'+
+    '</tr>'
+    );
+
+    var tabla = '<div class="table-responsive">'+
+      '<div class="table-responsive-lg"  style="overflow-x: scroll;">'+
+         '<table class="table styletabla" style="border: black 1px solid;">'+
+            '<thead>'+
+                '<tr>'+
+                    '<th rowspan="4" class="stile">#</th>'+
+                    '<th rowspan="4" class="stile">Nombre</th>'+
+                    '<th rowspan="4" class="stile">Cargo</th>'+
+                    '<th colspan="7" style="text-align: center !important;border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>'+
+                    '<th rowspan="3" class="stile">Horas normal/ extras</th>'+
+                    '<th rowspan="3" class="stile">Sueldo Mensual</th>'+
+                    '<th rowspan="3" class="stile">Jornal</th>'+
+                    '<th rowspan="3" class="stile">Sueldo hora</th>'+
+                    '<th rowspan="3" class="stile">Sabatical</th>'+
+                    '<th rowspan="3" class="stile">Adicional</th>'+
+                    '<th rowspan="3" class="stile">Pago quincenal</th>'+
+                '</tr>'+
+                '<tr class="dias">'+
+                    '<th>L</th>'+
+                    '<th>M</th>'+
+                    '<th>M</th>'+
+                    '<th>J</th>'+
+                    '<th>V</th>'+
+                    '<th>S</th>'+
+                    '<th>D</th>'+
+                '</tr>'+
+                '<tr class="dias">'+
+                    '<th>1</th>'+
+                    '<th>2</th>'+
+                    '<th>3</th>'+
+                    '<th>4</th>'+
+                    '<th>5</th>'+
+                    '<th>6</th>'+
+                    '<th>7</th>'+
+                '</tr>'+
+            '</thead>'+
+            '<tbody class="tcuerpo nameappend">'+
+                  rowtrabajadores +
+                '<tr>'+
+                    '<td colspan="14"></td>'+
+                    '<td ><b>TOTAL</b></td>'+
+                    '<td>803.56</td>'+
+               '</tr>'+
+            '</tbody>'+
+        '</table>'+
+      '</div>'+
+    '</div>'
+
+
+   // $("#ver_asistencia").html(tabla);
+
+  });
 
   $("#cargando-1-fomulario").show();
   $("#cargando-2-fomulario").hide();
@@ -261,9 +422,8 @@ function ver_asistencias(idtrabajador,fecha_inicio_proyect) {
   });
 
  // $("#modal-ver-asistencia").modal("show")
-
- 
 }
+
 function regresar_principal(){
   $("#cargando-1-fomulario").show();
   $("#tabla-asistencia-trab").show();
