@@ -91,14 +91,14 @@
             <ul class="nav nav-treeview ">
               <!-- Usuarios del sistema -->
               <li class="nav-item ">
-                <a href="permiso.php" class="nav-link" id="lAllTrabajador">
+                <a href="all_trabajador.php" class="nav-link" id="lAllTrabajador">
                   <i class="nav-icon fas fa-users"></i>
                   <p>All-Trabajador</p>
                 </a>
               </li>
               <!-- Permisos de los usuarios del sistema -->
               <li class="nav-item ">
-                <a href="permiso.php" class="nav-link" id="lAllProveedor">
+                <a href="all_proveedor.php" class="nav-link" id="lAllProveedor">
                   <i class="nav-icon fas fa-truck"></i>
                   <p>All-Proveedor</p>
                 </a>
