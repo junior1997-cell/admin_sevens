@@ -38,6 +38,8 @@
     $doc3_inicio_obra		  = isset($_POST["doc3"])? limpiarCadena($_POST["doc3"]):"";
     $doc_old_2		        = isset($_POST["doc_old_3"])? limpiarCadena($_POST["doc_old_3"]):"";
 
+    $excel_valorizaciones = "";
+
     // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,
     // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
     switch ($_GET["op"]){
@@ -115,9 +117,72 @@
               }
             }	
 
+            //*DOC 4*//
+            if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
+
+              $flat_doc4 = false;
+
+              $doc4      = $_POST["doc_old_4"];
+
+            } else {
+
+              $flat_doc4 = true;
+
+              $ext_doc4     = explode(".", $_FILES["doc4"]["name"]);
+
+              if ( $_FILES['doc4']['type'] == "application/pdf" ) {
+                
+                $doc4 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
+
+                move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/pdf/" . $doc4);
+              }
+            }	
+
+            //*DOC 5*//
+            if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
+
+              $flat_doc5 = false;
+
+              $doc5      = $_POST["doc_old_5"];
+
+            } else {
+
+              $flat_doc5 = true;
+
+              $ext_doc5     = explode(".", $_FILES["doc5"]["name"]);
+
+              if ( $_FILES['doc5']['type'] == "application/pdf" ) {
+                
+                $doc5 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
+
+                move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/pdf/" . $doc5);
+              }
+            }	
+
+            //*DOC 6*//
+            if (!file_exists($_FILES['doc6']['tmp_name']) || !is_uploaded_file($_FILES['doc6']['tmp_name'])) {
+
+              $flat_doc6 = false;
+
+              $doc6      = $_POST["doc_old_6"];
+
+            } else {
+
+              $flat_doc6 = true;
+
+              $ext_doc6     = explode(".", $_FILES["doc6"]["name"]);
+
+              if ( $_FILES['doc6']['type'] == "application/pdf" ) {
+                
+                $doc6 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
+
+                move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/pdf/" . $doc6);
+              }
+            }
+
             if (empty($idproyecto)){
               // insertamos en la bd
-              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3);
+              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6,$excel_valorizaciones);
               // echo $rspta ;
               echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
@@ -125,7 +190,7 @@
               // validamos si existe el doc para eliminarlo
               if ($flat_doc1 == true) {
 
-                $datos_f1 = $proyecto->obtenerDoc1($idproyecto);
+                $datos_f1 = $proyecto->obtenerDocs($idproyecto);
 
                 $doc1_ant = $datos_f1->fetch_object()->doc1_contrato_obra;
 
@@ -137,7 +202,7 @@
 
               if ($flat_doc2 == true) {
 
-                $datos_f2 = $proyecto->obtenerDoc2($idproyecto);
+                $datos_f2 = $proyecto->obtenerDocs($idproyecto);
 
                 $doc2_ant = $datos_f2->fetch_object()->doc2_entrega_terreno;
 
@@ -149,7 +214,7 @@
 
               if ($flat_doc3 == true) {
 
-                $datos_f3 = $proyecto->obtenerDoc3($idproyecto);
+                $datos_f3 = $proyecto->obtenerDocs($idproyecto);
 
                 $doc3_ant = $datos_f3->fetch_object()->doc3_inicio_obra;
 
@@ -159,7 +224,43 @@
                 }
               }
 
-              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3);
+              if ($flat_doc4 == true) {
+
+                $datos_f4 = $proyecto->obtenerDocs($idproyecto);
+
+                $doc4_ant = $datos_f4->fetch_object()->doc4_presupuesto;
+
+                if ($doc4_ant != "") {
+
+                  unlink("../dist/pdf/" . $doc4_ant);
+                }
+              }
+
+              if ($flat_doc5 == true) {
+
+                $datos_f5 = $proyecto->obtenerDocs($idproyecto);
+
+                $doc5_ant = $datos_f5->fetch_object()->doc5_analisis_costos_unitarios;
+
+                if ($doc5_ant != "") {
+
+                  unlink("../dist/pdf/" . $doc5_ant);
+                }
+              }
+
+              if ($flat_doc6 == true) {
+
+                $datos_f6 = $proyecto->obtenerDocs($idproyecto);
+
+                $doc6_ant = $datos_f6->fetch_object()->doc6_insumos;
+
+                if ($doc6_ant != "") {
+
+                  unlink("../dist/pdf/" . $doc6_ant);
+                }
+              }
+
+              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
               
               echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
             }
@@ -384,7 +485,7 @@
                 
                 $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_proyecto'";
 
-                $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra'";
+                $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
 
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 

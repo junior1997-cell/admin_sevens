@@ -11,17 +11,17 @@ Class Proveedor
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta)
+	public function insertar($idproyecto, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $c_detracciones, $banco, $titular_cuenta)
 	{
-		$sql="INSERT INTO proveedor (idproyecto,idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta)
-		VALUES ('$idproyecto','$banco','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$c_bancaria','$c_detracciones','$titular_cuenta')";
+		$sql="INSERT INTO proveedor (idproyecto, idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cuenta_detracciones, titular_cuenta)
+		VALUES ('$idproyecto', '$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$c_detracciones', '$titular_cuenta')";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta)
+	public function editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $c_detracciones, $banco, $titular_cuenta)
 	{
 		//var_dump($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 		
@@ -36,7 +36,7 @@ Class Proveedor
 		titular_cuenta='$titular_cuenta' 
 		WHERE idproveedor='$idproveedor'";	
 		
-			return ejecutarConsulta($sql);
+		return ejecutarConsulta($sql);
 		
 	}
 

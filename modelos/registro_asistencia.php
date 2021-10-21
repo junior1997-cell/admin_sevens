@@ -11,17 +11,17 @@ Class Asistencia_trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical)
+	public function insertar($trabajador, $horas_trabajo, $pago_dia, $horas_extras, $pago_horas_extras, $sabatical)
 	{
-		$sql="INSERT INTO asistencia_trabajador (idtrabajador,horas_trabajador,pago_dia,horas_extras_dia,pago_horas_extras,sabatical)
-		VALUES ('$trabajador','$horas_trabajo','$pago_dia','$horas_extras','$pago_horas_extras','$sabatical')";
+		$sql="INSERT INTO asistencia_trabajador (idtrabajador, horas_trabajador, pago_dia, horas_extras_dia, pago_horas_extras, sabatical)
+		VALUES ('$trabajador', '$horas_trabajo', '$pago_dia', '$horas_extras', '$pago_horas_extras', '$sabatical')";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idasistencia_trabajador,$trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical)
+	public function editar($idasistencia_trabajador, $trabajador, $horas_trabajo, $pago_dia, $horas_extras, $pago_horas_extras, $sabatical)
 	{
 		//var_dump($idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 		
@@ -34,7 +34,7 @@ Class Asistencia_trabajador
 		sabatical='$sabatical'
 		WHERE idasistencia_trabajador='$idasistencia_trabajador'";	
 		
-			return ejecutarConsulta($sql);
+		return ejecutarConsulta($sql);
 		
 	}
 
@@ -72,7 +72,7 @@ Class Asistencia_trabajador
 	}
 	
 	//traemos el sueldo po hora del trabajador
-	public function sueldoxhora($idtrabajador,$idproyecto){
+	public function sueldoxhora($idtrabajador, $idproyecto){
 		$sql="SELECT t.sueldo_hora AS sueldo_hora FROM trabajador as t WHERE t.idtrabajador='$idtrabajador' AND t.idproyecto='$idproyecto';";
 		return ejecutarConsultaSimpleFila($sql);
 	}

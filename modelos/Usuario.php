@@ -11,10 +11,10 @@ Class Usuario
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($trabajador,$cargo,$login,$clave,$permisos)
+	public function insertar($trabajador, $cargo, $login, $clave, $permisos)
 	{
 		// insertamos al usuario
-		$sql="INSERT INTO usuario ( idtrabajador, cargo, login, password) VALUES ('$trabajador','$cargo','$login','$clave')";
+		$sql="INSERT INTO usuario ( idtrabajador, cargo, login, password) VALUES ('$trabajador', '$cargo', '$login', '$clave')";
 		// marcamos al trabajador como usuario
 		$sql2="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";	
 		ejecutarConsulta($sql2);
@@ -44,11 +44,11 @@ Class Usuario
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idusuario,$trabajador_old,$trabajador,$cargo,$login,$clave,$permisos)
+	public function editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clave, $permisos)
 	{
 		if (!empty($trabajador) ) {
 
-			$sql="UPDATE usuario SET idtrabajador='$trabajador', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
+			$sql="UPDATE usuario SET idtrabajador='$trabajador', cargo='$cargo', login='$login', password='$clave' WHERE idusuario='$idusuario'";
 			
 			// desmarcamos al trabajador old como usuario
 			$sql3="UPDATE trabajador SET estado_usuario='0' WHERE idtrabajador='$trabajador_old';";
@@ -57,7 +57,7 @@ Class Usuario
 			$sql4="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";
 			ejecutarConsulta($sql4);
 		} else {
-			$sql="UPDATE usuario SET idtrabajador='$trabajador_old', cargo='$cargo',login='$login',password='$clave' WHERE idusuario='$idusuario'";
+			$sql="UPDATE usuario SET idtrabajador='$trabajador_old', cargo='$cargo', login='$login', password='$clave' WHERE idusuario='$idusuario'";
 		}
 		
 				 	
@@ -119,8 +119,8 @@ Class Usuario
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT u.idusuario, t.nombres,t.tipo_documento,t.numero_documento,t.telefono,t.email,u.cargo,u.login,t.imagen,t.tipo_documento, u.estado
-		FROM admin_sevens.usuario as u, admin_sevens.trabajador as t
+		$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen, t.tipo_documento, u.estado
+		FROM usuario as u, trabajador as t
 		WHERE  u.idtrabajador = t.idtrabajador;";
 		return ejecutarConsulta($sql);		
 	}
@@ -134,8 +134,8 @@ Class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login,$clave)
     {
-    	$sql="SELECT u.idusuario, t.nombres,t.tipo_documento,t.numero_documento,t.telefono,t.email,u.cargo,u.login,t.imagen,t.tipo_documento
-		FROM admin_sevens.usuario as u, admin_sevens.trabajador as t
+    	$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen, t.tipo_documento
+		FROM usuario as u, trabajador as t
 		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.idtrabajador = t.idtrabajador;"; 
     	return ejecutarConsulta($sql);  
     }

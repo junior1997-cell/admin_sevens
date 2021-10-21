@@ -16,4 +16,10 @@ define("DB_ENCODE","utf8");
 
 //Definimos una constante como nombre del proyecto
 define("PRO_NOMBRE","admin_sevens");
+
+//$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+//$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
+//$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+//$sever = $_SERVER['HTTP_HOST'];
+//var_dump($sever);
 ?>
