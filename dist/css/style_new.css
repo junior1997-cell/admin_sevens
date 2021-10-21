@@ -92,6 +92,10 @@
   color: #007bff !important;
 }
 
+.paint_row_morado{
+  background-color: #88ef8642;
+}
+
 /* min-width = como minimo */
 @media (min-width: 576px) {
    

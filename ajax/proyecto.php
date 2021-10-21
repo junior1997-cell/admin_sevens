@@ -272,6 +272,51 @@
         }		
       break;
 
+      case 'editar_doc_valorizaciones':
+
+        $idproyecto = isset($_POST["idproyect"])? limpiarCadena($_POST["idproyect"]):""; 
+
+        $doc7      = isset($_POST["doc7"])? limpiarCadena($_POST["doc7"]):""; 
+        $doc_old_7 = isset($_POST["doc_old_7"])? limpiarCadena($_POST["doc_old_7"]):"";
+        //*DOC 7 valorizacion*//
+        if (!file_exists($_FILES['doc7']['tmp_name']) || !is_uploaded_file($_FILES['doc7']['tmp_name'])) {
+
+          $flat_doc7 = false;
+
+          $doc7      = $_POST["doc_old_7"];
+
+        } else {
+
+          $flat_doc7 = true;
+
+          $ext_doc7     = explode(".", $_FILES["doc7"]["name"]);
+
+          
+            
+          $doc7 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc7);
+
+          move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/pdf/" . $doc7);
+          
+        }	
+
+        // validamos si existe el doc para eliminarlo
+        if ($flat_doc7 == true) {
+
+          $datos_f7 = $proyecto->obtenerDocs($idproyecto);
+
+          $doc7_ant = $datos_f7->fetch_object()->excel_valorizaciones;
+
+          if ($doc7_ant != "") {
+
+            unlink("../dist/pdf/" . $doc7_ant);
+          }
+        }
+        
+        $rspta=$proyecto->editar_valorizacion($idproyecto, $doc7 ); 
+        echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
+
+      break;
+
       case 'empezar_proyecto':
         if (!isset($_SESSION["nombre"])){
 
@@ -486,39 +531,45 @@
                 $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_proyecto'";
 
                 $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
-
+                $docs2= "'$reg->idproyecto', '$reg->excel_valorizaciones'";
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 
                 $data[]=array(
-                  "0"=>'<button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
-                      <i class="fas fa-folder"></i>
-                    </button> 
-                    <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
-                      <i class="fas fa-pencil-alt"></i> 
-                    </button>
-                    '.$acciones.'
-                    <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
-                      <i class="fas fa-eye"></i>
-                    </button> ',
-                  "1"=>'<div class="user-block">
+                  "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
+                      <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
+                        <i class="fas fa-folder"></i>
+                      </button> 
+                      <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
+                        <i class="fas fa-pencil-alt"></i> 
+                      </button>
+                      '.$acciones.'
+                      <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
+                        <i class="fas fa-eye"></i>
+                      </button> 
+                  </div>',
+                  "1"=>'<div class="user-block asignar_paint_'.$reg->idproyecto.'">
                       <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
                       <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
                       <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                     </div>',
-                  "2"=> '<span class="description" >'.$nombre_proyecto.'</span>' ,
-                  "3"=>$ubicacion,
-                  "4"=>$reg->costo,
-                  "5"=>'<center>
+                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$nombre_proyecto.'</span> </div>' ,
+                  "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
+                  "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
+                  "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
+                    <center>
                       <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
                         <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
                       </a>
-                    </center>',
-                  "6"=>'<center>
-                    <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
-                      <img src="../dist/svg/logo-excel.svg" class="card-img-top" height="35" width="30" >
-                    </a>
-                  </center>',
-                  "7"=> $estado.''.$toltip
+                    </center>
+                  </div>',
+                  "6"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
+                    <center>
+                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs_valorizaciones('.$docs2.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                        <img src="../dist/svg/logo-excel.svg" class="card-img-top" height="35" width="30" >
+                      </a>
+                    </center>
+                  </div>',
+                  "7"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
                 );
             }
             $results = array(
@@ -534,7 +585,107 @@
             require 'noacceso.php';
           }
         }
-      break;	 
+      break;
+      
+      case 'listar-proyectos-terminados':
+        if (!isset($_SESSION["nombre"])){
+
+          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+
+        } else {
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ( $_SESSION['escritorio'] == 1 )	{
+
+            $rspta=$proyecto->listar_proyectos_terminados();
+            //Vamos a declarar un array
+            $data= Array();
+
+            while ($reg=$rspta->fetch_object()){
+
+              $estado = "";
+              $acciones = "";
+
+              if ($reg->estado == '2') {
+
+                $estado = '<span class="text-center badge badge-danger">No empezado</span>';
+                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
+              } else {
+
+                if ($reg->estado == '1') {
+
+                  $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
+                } else {
+
+                  $estado = '<span class="text-center badge badge-success">Terminado</span>';
+                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
+                }                
+              }
+
+              if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
+
+              if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
+
+              if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
+                
+                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_proyecto'";
+
+                $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
+                $docs2= "'$reg->idproyecto', '$reg->excel_valorizaciones'";
+                $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
+
+                $data[]=array(
+                  "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
+                      <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
+                        <i class="fas fa-folder"></i>
+                      </button> 
+                      <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
+                        <i class="fas fa-pencil-alt"></i> 
+                      </button>
+                      '.$acciones.'
+                      <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
+                        <i class="fas fa-eye"></i>
+                      </button> 
+                  </div>',
+                  "1"=>'<div class="user-block asignar_paint_'.$reg->idproyecto.'">
+                      <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
+                      <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
+                      <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+                    </div>',
+                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$nombre_proyecto.'</span> </div>' ,
+                  "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
+                  "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
+                  "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
+                    <center>
+                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                        <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
+                      </a>
+                    </center>
+                  </div>',
+                  "6"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
+                    <center>
+                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs_valorizaciones('.$docs2.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                        <img src="../dist/svg/logo-excel.svg" class="card-img-top" height="35" width="30" >
+                      </a>
+                    </center>
+                  </div>',
+                  "7"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
+                );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data);
+            echo json_encode($results);
+          //Fin de las validaciones de acceso
+          }
+          else
+          {
+            require 'noacceso.php';
+          }
+        }
+      break;
       
     }
   }

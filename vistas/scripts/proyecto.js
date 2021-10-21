@@ -1,12 +1,17 @@
 var tabla;
+var tabla2;
 //Función que se ejecuta al inicio
 function init(){ 
 
   tablero();
 
   listar();
+  listar2();
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });
+
+  $("#guardar_registro_valorizaciones").on("click", function (e) { $("#form-valorizaciones").submit(); });
+  $("#form-valorizaciones").on("submit", function (e) { guardar_editar_valorizacion(e); });
 
   $('#mEscritorio').addClass("active");
 }
@@ -40,9 +45,29 @@ function limpiar() {
   $("#do3_nombre").html('');
   $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >'); 
 
+  $("#doc4").val(""); 
+  $("#doc_old_4").val("");
+  $("#do4_nombre").html('');
+  $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+  $("#doc5").val(""); 
+  $("#doc_old_5").val("");
+  $("#do5_nombre").html('');
+  $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+  $("#doc6").val(""); 
+  $("#doc_old_6").val("");
+  $("#do6_nombre").html('');
+  $("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+  $("#doc7").val(""); 
+  $("#doc_old_7").val("");
+  $("#doc7_nombre").html('');
+  $("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
 }
 
-//Función Listar
+//Función Listar en curso o no empezados
 function listar() {
 
   tabla=$('#tabla-proyectos').dataTable({
@@ -54,6 +79,43 @@ function listar() {
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
         url: '../ajax/proyecto.php?op=listar',
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+
+   
+  
+}
+
+//Función Listar todos lo proyectos terminados
+function listar2() {
+
+  tabla2=$('#tabla-proyectos-terminados').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/proyecto.php?op=listar-proyectos-terminados',
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -134,11 +196,69 @@ function guardaryeditar(e) {
   });
 }
 
+//Función para guardar o editar
+function guardar_editar_valorizacion(e) {
+  e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-valorizaciones")[0]);
+
+  $.ajax({
+    url: "../ajax/proyecto.php?op=editar_doc_valorizaciones",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {
+
+        tabla.ajax.reload();	
+
+        Swal.fire("Correcto!", "Documento guardado correctamente", "success");	      
+         
+				limpiar();
+
+        $("#modal-agregar-valorizaciones").modal("hide");        
+
+			}else{
+
+        Swal.fire("Error!", datos, "error");
+				 
+			}
+    },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress2").css({"width": percentComplete+'%'});
+
+          $("#barra_progress2").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            setTimeout(l_m, 600);
+          }
+        }
+      }, false);
+      return xhr;
+    }
+  });
+}
+
 function l_m(){
   
   // limpiar();
   $("#barra_progress").css({"width":'0%'});
   $("#barra_progress").text("0%");
+
+  $("#barra_progress2").css({"width":'0%'});
+  $("#barra_progress2").text("0%");
   
 }
 
@@ -161,6 +281,7 @@ function empezar_proyecto(idproyecto) {
           Swal.fire("En curso!", "Tu proyecto esta en curso.", "success");		 
   
           tabla.ajax.reload();
+          tabla2.ajax.reload();
           
         }else{
   
@@ -195,6 +316,7 @@ function terminar_proyecto(idproyecto) {
           Swal.fire("Terminado!", "Tu Proyecto ha sido terminado.", "success");		 
   
           tabla.ajax.reload();
+          tabla2.ajax.reload();
           
         }else{
   
@@ -229,6 +351,7 @@ function reiniciar_proyecto(idproyecto) {
           Swal.fire("Reactivado!", "Tu Proyecto ha sido Reactivado.", "success");		 
   
           tabla.ajax.reload();
+          tabla2.ajax.reload();
           
         }else{
   
@@ -502,16 +625,18 @@ $("#doc5").change(function(e) {  addDocs(e,$("#doc5").attr("id")) });
 $("#doc6_i").click(function() {  $('#doc6').trigger('click'); });
 $("#doc6").change(function(e) {  addDocs(e,$("#doc6").attr("id")) });
 
+$("#doc7_i").click(function() {  $('#doc7').trigger('click'); });
+$("#doc7").change(function(e) {  addDocs2(e,$("#doc7").attr("id")) });
 
 /* PREVISUALIZAR LOS DOCUMENTOS */
 function addDocs(e,id) {
   $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 	console.log(id);
 
-	var file = e.target.files[0], imageType = /application.pdf/;
+	var file = e.target.files[0], imageType = /application.*/;
 	
 	if (e.target.files[0]) {
-
+    console.log(file.type);
 		var sizeByte = file.size;
 
 		var sizekiloBytes = parseInt(sizeByte / 1024);
@@ -597,6 +722,133 @@ function addDocs(e,id) {
 		$("#"+id+"_nombre").html("");
 	}	
 }
+
+function addDocs2(e,id) {
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+	// console.log(id);
+
+	var file = e.target.files[0], imageType = /application.*/;
+	
+	if (e.target.files[0]) {
+    // console.log(extrae_extencion(file.name));
+		var sizeByte = file.size;
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 10000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(imageType)){
+			// return;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.xlsx',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+
+		}else{
+
+			if (sizekiloBytes <= 40960) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+
+          // cargamos la imagen adecuada par el archivo
+				  if ( extrae_extencion(file.name) == "xls") {
+
+            $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+
+          } else {
+
+            if ( extrae_extencion(file.name) == "xlsx" ) {
+
+              $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+
+            }else{
+
+              if ( extrae_extencion(file.name) == "csv" ) {
+
+                $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+
+              }else{
+
+                if ( extrae_extencion(file.name) == "xlsm" ) {
+
+                  $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+  
+                }else{
+  
+                  $("#"+id+"_ver").html('<img src="../dist/svg/logo-excel.svg" alt="" width="50%" >');
+                }
+              }
+            }
+          }
+          
+
+					$("#"+id+"_nombre").html(''+
+						'<div class="row">'+
+              '<div class="col-md-12">'+
+							  file.name +
+              '</div>'+
+              '<div class="col-md-12">'+
+                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+              '</div>'+
+            '</div>'+
+					'');
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'El documento: '+file.name.toUpperCase()+' es aceptado.',
+            showConfirmButton: false,
+            timer: 1500
+          });
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado. Tamaño máximo 40mb',
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+
+				$("#"+id).val("");
+			}
+		}
+	}else{
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    })
+		 
+    $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+		$("#"+id+"_nombre").html("");
+	}	
+}
+
 // Eliminamos el doc 1
 function doc1_eliminar() {
 
@@ -647,7 +899,7 @@ function doc5_eliminar() {
 	$("#doc5_nombre").html("");
 }
 
-// Eliminamos el doc 3
+// Eliminamos el doc 6
 function doc6_eliminar() {
 
 	$("#doc6").val("");
@@ -657,9 +909,19 @@ function doc6_eliminar() {
 	$("#doc6_nombre").html("");
 }
 
+// Eliminamos el doc 6
+function doc7_eliminar() {
+
+	$("#doc7").val("");
+
+	$("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+	$("#doc7_nombre").html("");
+}
+
  
 
-function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
+function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
   console.log(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6);
   $('#modal-ver-docs').modal("show");
 
@@ -668,7 +930,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
     $('#verdoc1').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
 
     $("#verdoc1_nombre").html("Contratro de obra"+
-      '<div class="col-md-12 row">'+
+      '<div class="col-md-12 row mt-2">'+
         '<div class="col-md-6">'+
           '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
             '<i class="fas fa-download"></i>'+
@@ -687,9 +949,9 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
     $('#verdoc1').html('<embed src="../dist/pdf/'+verdoc1+'" type="application/pdf" width="100%" height="200px" />');
 
     $("#verdoc1_nombre").html("Contratro de obra"+
-      '<div class="col-md-12 row">'+
+      '<div class="col-md-12 row mt-2">'+
           '<div class="col-md-6 ">'+
-            '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'" download="Contratro de obra" style="padding:0px 6px 0px 12px !important;" type="button" >'+
+            '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
               '<i class="fas fa-download"></i>'+
             '</a>'+
           '</div>'+
@@ -707,15 +969,15 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
     $('#verdoc2').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
 
     $("#verdoc2_nombre").html("Entrega de terreno"+
-      '<div class="col-md-12 row">'+
+      '<div class="col-md-12 row mt-2">'+
         '<div class="col-md-6">'+
-          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();" style="padding:0px 12px 0px 12px !important;" type="button" >'+
             '<i class="fas fa-download"></i>'+
           '</a>'+
         '</div>'+
 
         '<div class="col-md-6">'+
-          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();" style="padding:0px 12px 0px 12px !important;" type="button" >'+
             'Ver completo <i class="fas fa-expand"></i>'+
           '</a>'+
         '</div>'+
@@ -727,9 +989,9 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
     $('#verdoc2').html('<embed src="../dist/pdf/'+verdoc2+'" type="application/pdf" width="100%" height="200px" />');
 
     $("#verdoc2_nombre").html("Entrega de terreno"+
-      '<div class="col-md-12 row">'+
+      '<div class="col-md-12 row mt-2">'+
         '<div class="col-md-6">'+
-          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'" download="Entrega de terreno" style="padding:0px 6px 0px 12px !important;" type="button" >'+
+          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'" download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
             '<i class="fas fa-download"></i>'+
           '</a>'+
         '</div>'+
@@ -748,7 +1010,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
     $('#verdoc3').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
 
     $("#verdoc3_nombre").html("Inicio de obra"+
-      '<div class="col-md-12 row">'+
+      '<div class="col-md-12 row mt-2">'+
         '<div class="col-md-6">'+
           '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
             '<i class="fas fa-download"></i>'+
@@ -768,25 +1030,150 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6) {
     $('#verdoc3').html('<embed src="../dist/pdf/'+verdoc3+'" type="application/pdf" width="100%" height="200px" />');
 
     $("#verdoc3_nombre").html("Inicio de obra"+
-    '<div class="col-md-12 row">'+
-      '<div class="col-md-6">'+
-        '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'" download="Inicio de obra" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-          '<i class="fas fa-download"></i>'+
-        '</a>'+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'" download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+        '</div>'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc3+'" target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
       '</div>'+
-      '<div class="col-md-6">'+
-        '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc3+'" target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-          'Ver completo <i class="fas fa-expand"></i>'+
-        '</a>'+
-      '</div>'+
-    '</div>'+
-  '');
+    '');
   }  
+
+  if (verdoc4 == "") {
+
+    $('#verdoc4').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc4_nombre").html("Presupuesto"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+          '</div>'+
+
+          '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+
+  } else {
+
+    $('#verdoc4').html('<embed src="../dist/pdf/'+verdoc4+'" type="application/pdf" width="100%" height="200px" />');
+
+    $("#verdoc4_nombre").html("Presupuesto"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'" download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+        '</div>'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc4+'" target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+  }
+
+  if (verdoc5 == "") {
+
+    $('#verdoc5').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc5_nombre").html("Analisis de costos unitarios"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+          '</div>'+
+
+          '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+
+  } else {
+
+    $('#verdoc5').html('<embed src="../dist/pdf/'+verdoc5+'" type="application/pdf" width="100%" height="200px" />');
+
+    $("#verdoc5_nombre").html("Analisis de costos unitarios"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'" download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+        '</div>'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc5+'" target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+  }
+
+  if (verdoc6 == "") {
+
+    $('#verdoc6').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc6_nombre").html("Insumos"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+          '</div>'+
+
+          '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+
+  } else {
+
+    $('#verdoc6').html('<embed src="../dist/pdf/'+verdoc6+'" type="application/pdf" width="100%" height="200px" />');
+
+    $("#verdoc6_nombre").html("Insumos"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'" download="Insumos" onclick="dowload_pdf();" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+        '</div>'+
+        '<div class="col-md-6">'+
+          '<a  class="btn btn-info  btn-block" href="../dist/pdf/'+verdoc6+'" target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+  }
+
   $(".tooltip").hide();
 }
 
 function no_pdf() {
-  toastr.error("No hay PDF disponible, suba un PDF en el apartado de editar!!")
+  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
+}
+
+function dowload_pdf() {
+  toastr.success("El documento se descargara en breve!!")
 }
 
 function mostrar(idproyecto) {
@@ -976,6 +1363,15 @@ function tablero() {
 
 function abrir_proyecto(idproyecto,nombre_proyecto) {
 
+  if ($( "#foo" ).hasClass('className')) {
+
+    $( "#foo" ).removeClass( 'className');
+
+  } else {
+    
+    $( "#foo" ).addClass( 'className');
+  }
+
   if ( localStorage.getItem('nube_idproyecto') ) {
 
     $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>')
@@ -1015,4 +1411,87 @@ function abrir_proyecto(idproyecto,nombre_proyecto) {
   $(".tooltip").hide();
 }
 
+function ver_modal_docs_valorizaciones(idproyecto, documento) {
+
+  console.log(idproyecto, extrae_extencion( documento));
+
+  $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
+
+  $('#idproyect').val(idproyecto);
+
+  $('#doc_old_7').val(documento);
+
+  $('#modal-agregar-valorizaciones').modal("show");
+
+  if (documento == "") {
+
+    $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
+
+    $("#verdoc7_nombre").html("valorizaciones"+
+      '<div class="col-md-12 row mt-2">'+
+        '<div class="col-md-6">'+
+          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<i class="fas fa-download"></i>'+
+          '</a>'+
+          '</div>'+
+
+          '<div class="col-md-6">'+
+          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            'Ver completo <i class="fas fa-expand"></i>'+
+          '</a>'+
+        '</div>'+
+      '</div>'+
+    '');
+  } else {
+    var nombredocs = "";
+    
+    if (extrae_extencion( documento) == "xls") {
+
+      nombredocs = "valorizaciones.xls";     $('#verdoc7').html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+
+    } else {
+
+      if (extrae_extencion( documento) == "xlsx") {
+
+        nombredocs = "valorizaciones.xlsx";  $('#verdoc7').html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+
+      } else {
+
+        if (extrae_extencion( documento) == "xlsx") {
+
+          nombredocs = "valorizaciones.xlsx";  $('#verdoc7').html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+  
+        } else {
+
+          if (extrae_extencion( documento) == "xlsm") {
+
+            nombredocs = "valorizaciones.xlsm";  $('#verdoc7').html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+    
+          } else {
+            nombredocs = "valorizaciones";  $('#verdoc7').html('<img src="../dist/svg/logo-excel.svg" alt="" width="50%" >');
+          }
+        }
+      }      
+    }       
+
+    $("#verdoc7_nombre").html(nombredocs +
+      '<div class="col-md-12 row mt-2">'+
+          '<div class="col-md-6 ">'+
+            '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+documento+'"  download="Valorizaciones" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
+              '<i class="fas fa-download"></i>'+
+            '</a>'+
+          '</div>'+
+          '<div class="col-md-6 ">'+
+            '<button  class="btn btn-info  btn-block " href="../dist/pdf/'+documento+'" disabled  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+              'Ver completo <i class="fas fa-expand"></i>'+
+            '</button>'+
+          '</div>'+
+      '</div>'+
+    '');
+  }
+}
+
+function extrae_extencion(filename) {
+  return filename.split('.').pop();
+}
   

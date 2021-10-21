@@ -38,7 +38,16 @@ Class Proyecto
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para desactivar categorías
+	//Implementamos un método para editar EDITAR EL DOC VALORIZACIONES
+	public function editar_valorizacion($idproyecto, $doc7)
+	{
+		 
+		$sql="UPDATE proyecto SET excel_valorizaciones = '$doc7' WHERE idproyecto = '$idproyecto'";
+			
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para empezar proyecto
 	public function empezar_proyecto($idproyecto)
 	{
 		$sql="UPDATE proyecto SET estado='1' WHERE idproyecto='$idproyecto'";
@@ -46,7 +55,7 @@ Class Proyecto
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para activar categorías
+	//Implementamos un método para terminar proyecto
 	public function terminar_proyecto($idproyecto)
 	{
 		$sql="UPDATE proyecto SET estado='0' WHERE idproyecto='$idproyecto'";
@@ -54,7 +63,7 @@ Class Proyecto
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para activar categorías
+	//Implementamos un método para reniciar proyecto
 	public function reiniciar_proyecto($idproyecto)
 	{
 		$sql="UPDATE proyecto SET estado='2' WHERE idproyecto='$idproyecto'";
@@ -73,29 +82,21 @@ Class Proyecto
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT *	FROM admin_sevens.proyecto;";
+		$sql="SELECT * FROM proyecto as p WHERE p.estado = 1 OR p.estado = 2;";
 		return ejecutarConsulta($sql);		
 	}
-	// obtebnemos el documento numero 1 para eliminar
+
+	//Implementar un método para listar los registros de proyectos terminados
+	public function listar_proyectos_terminados()
+	{
+		$sql="SELECT * FROM proyecto as p WHERE p.estado = 0;";
+		return ejecutarConsulta($sql);		
+	}
+	// obtebnemos los DOCS para eliminar
 	public function obtenerDocs($idproyecto) {
 
-        $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno ,doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos,
-		 FROM proyecto WHERE idproyecto='$idproyecto'";
+        $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, excel_valorizaciones FROM proyecto WHERE idproyecto='$idproyecto'";
 
-        return ejecutarConsulta($sql);
-    }
-	// obtebnemos el documento numero 2 para eliminar
-	public function obtenerDoc2($idproyecto) {
-
-        $sql = "SELECT doc2_entrega_terreno FROM proyecto WHERE idproyecto='$idproyecto'";
-		
-        return ejecutarConsulta($sql);
-    }
-	// obtebnemos el documento numero 3 para eliminar
-	public function obtenerDoc3($idproyecto) {
-
-        $sql = "SELECT doc3_inicio_obra FROM proyecto WHERE idproyecto='$idproyecto'";
-		
         return ejecutarConsulta($sql);
     }
 

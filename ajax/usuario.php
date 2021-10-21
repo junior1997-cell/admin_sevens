@@ -242,6 +242,7 @@ switch ($_GET["op"]){
 			in_array(6,$valores)?$_SESSION['proveedor']=1:$_SESSION['proveedor']=0;
 			in_array(7,$valores)?$_SESSION['compra']=1:$_SESSION['compra']=0;
 			in_array(8,$valores)?$_SESSION['servicio']=1:$_SESSION['servicio']=0;
+			in_array(9,$valores)?$_SESSION['recurso']=1:$_SESSION['recurso']=0;
 	    }
 	    echo json_encode($fetch);
 	break;

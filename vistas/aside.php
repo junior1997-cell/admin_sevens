@@ -55,22 +55,54 @@
               <p>
                 Accesos
                 <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">6</span>
+                <span class="badge badge-info right">2</span>
               </p>
             </a>
             <ul class="nav nav-treeview ">
+              <!-- Usuarios del sistema -->
               <li class="nav-item ">
                 <a href="usuario.php" class="nav-link " id="lUsuario">
-                  <i class="nav-icon fas fa-user-tie"></i>
+                  <i class="nav-icon fas fa-users-cog"></i>
                   <p>Usuarios</p>
                 </a>
               </li>
+              <!-- Permisos de los usuarios del sistema -->
               <li class="nav-item ">
                 <a href="permiso.php" class="nav-link" id="lPermiso">
                   <i class="nav-icon fas fa-lock"></i>
                   <p>Permisos</p>
                 </a>
-              </li>            
+              </li>      
+            </ul>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['recurso']==1) {  ?>
+          <!-- Recursos -->
+          <li class="nav-item" id="bloc_Recurso">
+            <a href="#" class="nav-link" id="mRecurso">
+              <i class="nav-icon fas fa-project-diagram"></i>
+              <p>
+                Recursos
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">2</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview ">
+              <!-- Usuarios del sistema -->
+              <li class="nav-item ">
+                <a href="permiso.php" class="nav-link" id="lAllTrabajador">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>All-Trabajador</p>
+                </a>
+              </li>
+              <!-- Permisos de los usuarios del sistema -->
+              <li class="nav-item ">
+                <a href="permiso.php" class="nav-link" id="lAllProveedor">
+                  <i class="nav-icon fas fa-truck"></i>
+                  <p>All-Proveedor</p>
+                </a>
+              </li>  
             </ul>
           </li>
         <?php  }  ?>
