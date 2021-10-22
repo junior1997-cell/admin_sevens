@@ -7,19 +7,9 @@ require_once "../modelos/proveedor.php";
 
 $proveedor=new Proveedor();
 
-//$idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
-$idproyecto		= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-$idproveedor		= isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";
-$nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
-$tipo_documento	    = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-$num_documento	    = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
-$direccion		    = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
-$telefono		    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
-$c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
-$c_detracciones		= isset($_POST["c_detracciones"])? limpiarCadena($_POST["c_detracciones"]):"";
-$banco			    = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
-$titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
-
+$idproveedor_proyecto = isset($_POST["idproveedor_proyecto"])? limpiarCadena($_POST["idproveedor_proyecto"]):"";	
+$idproyecto			  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
+$idproveedor		  = isset($_POST["proveedor"])? limpiarCadena($_POST["proveedor"]):"";
 
 
 switch ($_GET["op"]){
@@ -35,12 +25,14 @@ switch ($_GET["op"]){
 				$clavehash="";
 
 
-				if (empty($idproveedor)){
-					$rspta=$proveedor->insertar($idproyecto	,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
+				if (empty($idproveedor_proyecto)){
+					//var_dump($idproyecto,$idproveedor);
+					$rspta=$proveedor->insertar($idproyecto,$idproveedor);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
-					$rspta=$proveedor->editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);
+					$rspta=$proveedor->editar($idproveedor_proyecto,$idproveedor);
+					//var_dump($idproveedor_proyecto,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
@@ -61,7 +53,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['proveedor']==1)
 			{
-				$rspta=$proveedor->desactivar($idproveedor);
+				$rspta=$proveedor->desactivar($idproveedor_proyecto);
  				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
 			//Fin de las validaciones de acceso
 			}
@@ -82,7 +74,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['proveedor']==1)
 			{
-				$rspta=$proveedor->activar($idproveedor);
+				$rspta=$proveedor->activar($idproveedor_proyecto);
  				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 			//Fin de las validaciones de acceso
 			}
@@ -103,7 +95,8 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['proveedor']==1)
 			{
-				$rspta=$proveedor->mostrar($idproveedor);
+				//$idproveedor_proyectoo='1';
+				$rspta=$proveedor->mostrar($idproveedor_proyecto);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -130,21 +123,25 @@ switch ($_GET["op"]){
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
-
+				//$parametros = '';
 		 		while ($reg=$rspta->fetch_object()){
+					//$parametros="'$reg->idproveedor_proyecto','$reg->idproyecto'";
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idproveedor.')"><i class="far fa-trash-alt  "></i></button>':
-							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idproveedor.')"><i class="fa fa-check"></i></button>',
+		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor_proyecto .')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idproveedor_proyecto .')"><i class="far fa-trash-alt  "></i></button>'.
+							 ' <button class="btn btn-info" onclick="ver_datos('.$reg->idproveedor_proyecto.')"><i class="far fa-eye"></i></button>':
+							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idproveedor_proyecto .')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary" onclick="activar('.$reg->idproveedor_proyecto .')"><i class="fa fa-check"></i></button>'.
+							 ' <button class="btn btn-info" onclick="ver_datos('.$reg->idproveedor_proyecto.','.$reg->idproyecto.')"><i class="far fa-eye"></i></button>',
 						"1"=>'<div class="user-block">
 							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
 							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_documento .': '. $reg->ruc .' </span>
 							</div>',
 		 				"2"=>$reg->direccion,
-		 				"3"=>$reg->cuenta_bancaria.' / '.$reg->cuenta_detracciones,
-		 				"4"=>$reg->titular_cuenta,
-		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+		 				"3"=>$reg->nombre_banco,
+		 				"4"=>$reg->cuenta_bancaria.' / '.$reg->cuenta_detracciones,
+		 				"5"=>$reg->titular_cuenta,
+		 				"6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}
@@ -162,6 +159,42 @@ switch ($_GET["op"]){
 			}
 		}
 	break;
+		
+	case 'ver_datos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['trabajador']==1)
+			{
+				$idproveedor_proyecto='1';
+				/*$idproyecto='1';*/
+				$rspta=$proveedor->ver_datos($idproveedor_proyecto);
+		 		//Codificar el resultado utilizando json
+
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'select2_proveedor': 
+
+		$rspta=$proveedor->select2_proveedor();
+
+		while ($reg = $rspta->fetch_object())
+				{
+				echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social .' - '. $reg->ruc . '</option>';
+				}
+	break;
+
 
 	case 'salir':
 		//Limpiamos las variables de sesión   

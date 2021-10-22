@@ -55,7 +55,7 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proveedor" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
-                                            Admnistra de manera eficiente a tus proveedores.
+                                            Admnistra de manera eficiente a tus proveedores a tu proyecto.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
@@ -66,6 +66,7 @@
                                                     <th class="">Aciones</th>
                                                     <th>Proveedor</th>
                                                     <th>Dirección</th>
+                                                    <th>Banco</th>
                                                     <th>C. bancaria / C. detracciones </th>
                                                     <th>Titular cuenta</th>
                                                     <th>Estado</th>
@@ -77,6 +78,7 @@
                                                     <th>Aciones</th>
                                                     <th>Proveedor</th>
                                                     <th>Dirección</th>
+                                                    <th>Banco</th>
                                                     <th>C. bancaria / C. detracciones</th>
                                                     <th>Titular cuenta</th>
                                                     <th>Estado</th>
@@ -96,7 +98,7 @@
 
                     <!-- Modal agregar proveedores -->
                     <div class="modal fade" id="modal-agregar-proveedor">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title">Agregar proveedores</h4>
@@ -113,87 +115,15 @@
                                                 <!-- id proyecto -->
                                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id proveedores -->
-                                                <input type="hidden" name="idproveedor" id="idproveedor" />
+                                                <input type="hidden" name="idproveedor_proyecto" id="idproveedor_proyecto" />
 
                                                 <!-- Tipo de documento -->
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label for="tipo_documento">Tipo de documento</label>
-                                                        <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
-                                                            <option value="RUC">RUC</option>
-                                                            <option selected value="DNI">DNI</option>
+                                                        <label for="proveedor">Seleccionar Proveedor</label>
+                                                        <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;" onchange="seleccion();" >
                                                         </select>
-                                                    </div>
-                                                </div>
-                                                <!-- N° de documento -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="num_documento">N° RUC / DNI</label>
-                                                        <div class="input-group">
-                                                            <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
-                                                            <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
-                                                                <span class="input-group-text" style="cursor: pointer;">
-                                                                    <i class="fas fa-search text-primary" id="search"></i>
-                                                                    <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Nombre -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="nombre">Razón Social / Nombre y Apellidos</label>
-                                                        <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Razón Social o  Nombre" />
-                                                    </div>
-                                                </div>
-                                                <!-- Direccion -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="direccion">Dirección</label>
-                                                        <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
-                                                    </div>
-                                                </div>
-                                                <!-- Telefono -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="telefono">Teléfono</label>
-                                                        <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
-                                                    </div>
-                                                </div>
-                                                <!-- Cuenta bancaria -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="c_bancaria">Cuenta Bancaria</label>
-                                                        <input type="number" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
-                                                    </div>
-                                                </div>
-                                                <!-- fecha de nacimiento -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="fecha_nacimiento">Cuenta Detracciones</label>
-                                                        <input type="number" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Bancaria" />
-                                                    </div>
-                                                </div>
-                                                <!-- banco -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="banco">Banco</label>
-                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
-                                                            <option value="1">BCP</option>
-                                                            <option value="2">BBVA</option>
-                                                            <option value="3">SCOTIA BANK</option>
-                                                            <option value="4">INTERBANK</option>
-                                                            <option value="5">NACIÓN</option>
-                                                        </select>
-                                                        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
-                                                    </div>
-                                                </div>
-                                                <!-- Titular de la cuenta -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="titular_cuenta">Titular de la cuenta</label>
-                                                        <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
+                                                        <input type="hidden" name="proveedor_old" id="proveedor_old" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,6 +161,7 @@
 
                                 <div class="modal-body">
                                     <div id="datosproveedores" class="class-style">
+                                      
                                     </div>
                                 </div>
                             </div>

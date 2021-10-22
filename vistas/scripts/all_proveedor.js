@@ -2,43 +2,44 @@ var tabla;
 
 //Función que se ejecuta al inicio
 function init() {
-  
   listar();
 
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
 
-  $("#lAllProveedor").addClass("active");
+   $("#lAllTrabajador").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
+  $("#guardar_registro").on("click", function (e) {
+
+    $("#submit-form-proveedor").submit();
+  });
+
+  // Formato para telefono
+  $("[data-mask]").inputmask();
 
 }
- 
-
-
 
 //Función limpiar
 function limpiar() {
-  //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) {   $("#trabajador").html(r);  });
-
-  $("#idusuario").val("");
-  $("#trabajador_c").html("Trabajador");
-  $("#trabajador").val("null").trigger("change"); 
-  $("#trabajador_old").val(""); 
-  $("#cargo").val("Administrador").trigger("change"); 
-  $("#login").val("");
-  $("#password").val("");
-  $("#password-old").val("");   
+  $("#idproveedor").val(""); 
+  $("#tipo_documento option[value='RUC']").attr("selected", true);
+  $("#nombre").val(""); 
+  $("#num_documento").val(""); 
+  $("#direccion").val(""); 
+  $("#telefono").val("");  
+  $("#c_bancaria").val("");  
+  $("#c_detracciones").val("");  
+  //$("#banco").val("");
+  $("#banco option[value='BCP']").attr("selected", true);  
+  $("#titular_cuenta").val("");   
   
-
 }
 
 //Función Listar
 function listar() {
 
-  tabla=$('#tabla-usuarios').dataTable({
+  tabla=$('#tabla-proveedores').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -46,7 +47,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/usuario.php?op=listar',
+        url: '../ajax/all_proveedor.php?op=listar',
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -68,14 +69,14 @@ function listar() {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
-
 //Función para guardar o editar
+
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-usuario")[0]);
+  var formData = new FormData($("#form-proveedor")[0]);
 
   $.ajax({
-    url: "../ajax/usuario.php?op=guardaryeditar",
+    url: "../ajax/all_proveedor.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -85,13 +86,13 @@ function guardaryeditar(e) {
              
       if (datos == 'ok') {
 
-				toastr.success('Usuario registrado correctamente')				 
+				toastr.success('proveedor registrado correctamente')				 
 
 	      tabla.ajax.reload();
          
 				limpiar();
 
-        $("#modal-agregar-usuario").modal("hide");
+        $("#modal-agregar-proveedor").modal("hide");
 
 			}else{
 
@@ -101,43 +102,39 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idusuario) {
-  $("#trabajador").val("").trigger("change"); 
-  $("#trabajador_c").html("(Nuevo) Trabajador");
+function mostrar(idproveedor) {
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-usuario").modal("show")
+  $("#modal-agregar-proveedor").modal("show")
 
-  $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
+  $.post("../ajax/all_proveedor.php?op=mostrar", { idproveedor: idproveedor }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
+    data = JSON.parse(data);  console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-    
-    $("#trabajador_old").val(data.idtrabajador); 
-    $("#cargo").val(data.cargo).trigger("change"); 
-    $("#login").val(data.login);
-    $("#password-old").val(data.password);
-    $("#idusuario").val(data.idusuario);
 
-    if (data.imagen != "") {
+     $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
+     $("#nombre").val(data.razon_social);
+     $("#num_documento").val(data.ruc);
+     $("#direccion").val(data.direccion);
+     $("#telefono").val(data.telefono);
+     $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
+     $("#c_bancaria").val(data.cuenta_bancaria);
+     $("#c_detracciones").val(data.cuenta_detracciones);
+     $("#titular_cuenta").val(data.titular_cuenta);
+     $("#idproveedor").val(data.idproveedor);
 
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
-
-			$("#foto2_actual").val(data.imagen);
-		}
   });
-
-  
 }
 
 //Función para desactivar registros
-function desactivar(idusuario) {
+function desactivar(idproveedor) {
   Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el Usuario?",
-    text: "Este usuario no podrá ingresar al sistema!",
+    title: "¿Está Seguro de  Desactivar  el proveedor?",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -145,52 +142,35 @@ function desactivar(idusuario) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
-        if (e == 'ok') {
+      $.post("../ajax/all_proveedor.php?op=desactivar", { idproveedor: idproveedor }, function (e) {
 
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
-        }
+        Swal.fire("Desactivado!", "Tu proveedor ha sido desactivado.", "success");
+    
+        tabla.ajax.reload();
       });      
     }
   });   
 }
 
 //Función para activar registros
-function activar(idusuario) {
-
+function activar(idproveedor) {
   Swal.fire({
-
-    title: "¿Está Seguro de  Activar  el Usuario?",
-    text: "Este usuario tendra acceso al sistema",
+    title: "¿Está Seguro de  Activar  el proveedor?",
+    text: "Este proveedor tendra acceso al sistema",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, activar!",
-
   }).then((result) => {
-
     if (result.isConfirmed) {
+      $.post("../ajax/all_proveedor.php?op=activar", { idproveedor: idproveedor }, function (e) {
 
-      $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
+        Swal.fire("Activado!", "Tu proveedor ha sido activado.", "success");
 
-        if (e == 'ok') {
-
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
-        }
-      });      
+        tabla.ajax.reload();
+      });
+      
     }
   });      
 }
@@ -201,39 +181,61 @@ $(function () {
 
   $.validator.setDefaults({
 
-    submitHandler: function (e) {
-
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-        
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
+   submitHandler: function (e) {
 
         guardaryeditar(e);
-      }
+
     },
   });
 
-  $("#form-usuario").validate({
+  $("#form-proveedor").validate({
     rules: {
-      login: { required: true, minlength: 3, maxlength: 20 },
-      password: {minlength: 4, maxlength: 20 },
+      tipo_documento: { required: true },
+      num_documento: { required: true, minlength: 6, maxlength: 20 },
+      nombre: { required: true, minlength: 6, maxlength: 100 },
+      direccion: { minlength: 5, maxlength: 70 },
+      telefono: { minlength: 8 },
+      c_detracciones: { minlength: 14, maxlength: 14},
+      c_bancaria: { minlength: 14, maxlength: 14},
+      banco: { required: true},
+      titular_cuenta: { minlength: 4},
+
+
       // terms: { required: true },
     },
     messages: {
-      login: {
-        required: "Por favor ingrese un login.",
-        minlength: "El login debe tener MÍNIMO 4 caracteres.",
-        maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
+      tipo_documento: {
+        required: "Por favor selecione un tipo de documento", 
       },
-      password: {
-        minlength: "La contraseña debe tener MÍNIMO 4 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 20 caracteres.",
+      num_documento: {
+        required: "Ingrese un número de documento",
+        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
+        maxlength: "El número documento debe tener como MÁXIMO 20 caracteres.",
       },
+      nombre: {
+        required: "Por favor ingrese los nombres y apellidos",
+        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
+        maxlength: "El número documento debe tener como MÁXIMO 100 caracteres.",
+      },
+      direccion: {
+        minlength: "La dirección debe tener MÍNIMO 5 caracteres.",
+        maxlength: "La dirección debe tener como MÁXIMO 70 caracteres.",
+      },
+      telefono: {
+        minlength: "El teléfono debe tener  9 caracteres.",
+      },
+      c_detracciones: {
+        minlength: "El número documento debe tener 14 caracteres.",
+      },
+      c_bancaria: {
+        minlength: "El número documento debe tener 14 caracteres.",
+      },
+      banco: {
+        required: "Por favor  seleccione un banco",
+      },
+
     },
-    
+        
     errorElement: "span",
 
     errorPlacement: function (error, element) {
@@ -248,21 +250,20 @@ $(function () {
       $(element).addClass("is-invalid");
     },
 
-    unhighlight: function (element, errorClass, validClass) {
+   unhighlight: function (element, errorClass, validClass) {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-      }       
     },
+
+
+
   });
 });
+
+
+
+
 
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec() {

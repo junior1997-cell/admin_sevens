@@ -162,9 +162,6 @@
                                 <input type="text" name="descripcion" id="descripcion" class="form-control"  placeholder="descripcion">  
                               </div>                                                        
                             </div>
-
-                                   
-
                           </div>  
 
                           <div class="row" id="cargando-2-fomulario" style="display: none;">
