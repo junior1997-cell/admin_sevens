@@ -33,6 +33,7 @@ function init() {
     placeholder: "Selecione cargo",
     allowClear: true,
   });
+  
   $("#trabajador").val("null").trigger("change");
   $("#cargo").val("Administrador").trigger("change");
 
@@ -120,8 +121,8 @@ function guardaryeditar(e) {
     success: function (datos) {
              
       if (datos == 'ok') {
-
-				toastr.success('Usuario registrado correctamente')				 
+				 
+        Swal.fire("Correcto!", "Usuario registrado correctamente", "success");
 
 	      tabla.ajax.reload();
          
@@ -131,7 +132,7 @@ function guardaryeditar(e) {
 
 			}else{
 
-				toastr.error(datos)
+				Swal.fire("Error!", datos, "error");
 			}
     },
   });
@@ -147,7 +148,7 @@ function mostrar(idusuario) {
 
   $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
+    data = JSON.parse(data);  console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
@@ -157,13 +158,7 @@ function mostrar(idusuario) {
     $("#login").val(data.login);
     $("#password-old").val(data.password);
     $("#idusuario").val(data.idusuario);
-
-    if (data.imagen != "") {
-
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
-
-			$("#foto2_actual").val(data.imagen);
-		}
+    
   });
 
   $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {

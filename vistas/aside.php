@@ -103,6 +103,13 @@
                   <p>All-Proveedor</p>
                 </a>
               </li>  
+              <!-- Permisos de los usuarios del sistema -->
+              <li class="nav-item ">
+                <a href="all_maquinas.php" class="nav-link" id="lAllMaquinas">
+                  <i class="nav-icon fas fa-truck"></i>
+                  <p>All-Maquinarias</p>
+                </a>
+              </li>
             </ul>
           </li>
         <?php  }  ?>

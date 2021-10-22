@@ -119,7 +119,7 @@ Class Usuario
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen, t.tipo_documento, u.estado
+		$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
 		FROM usuario as u, trabajador as t
 		WHERE  u.idtrabajador = t.idtrabajador;";
 		return ejecutarConsulta($sql);		
@@ -134,7 +134,7 @@ Class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login,$clave)
     {
-    	$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen, t.tipo_documento
+    	$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento
 		FROM usuario as u, trabajador as t
 		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.idtrabajador = t.idtrabajador;"; 
     	return ejecutarConsulta($sql);  
@@ -143,7 +143,7 @@ Class Usuario
 	//Seleccionar Trabajador Select2
 	public function select2_trabajador()
 	{
-		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1' and estado_usuario='0';";
+		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1' ;";
 		return ejecutarConsulta($sql);		
 	}
 }

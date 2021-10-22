@@ -57,15 +57,11 @@
             //*DOC 1*//
             if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
-              $flat_doc1 = false;
-
-              $doc1      = $_POST["doc_old_1"];
+              $flat_doc1 = false;  $doc1 = $_POST["doc_old_1"];
 
             } else {
 
-              $flat_doc1 = true;
-
-              $ext_doc1     = explode(".", $_FILES["doc1"]["name"]);
+              $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);
 
               if ( $_FILES['doc1']['type'] == "application/pdf" ) {
                 

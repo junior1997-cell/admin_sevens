@@ -11,25 +11,23 @@ Class Trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $tipo_trabajador, $desempenio, $c_bancaria, $email, $cargo, $banco, $tutular_cuenta, $sueldo_diario, $sueldo_mensual, $sueldo_hora, $imagen)
+	public function insertar($idproyecto, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora)
 	{
-		$sql="INSERT INTO trabajador (idproyecto, idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, desempeno, cargo, tipo_trabajador, cuenta_bancaria, titular_cuenta, sueldo_mensual, sueldo_diario, sueldo_hora, direccion, telefono, email, imagen)
-		VALUES ('$idproyecto', '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$desempenio', '$cargo', '$tipo_trabajador', '$c_bancaria', '$tutular_cuenta', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$direccion', '$telefono', '$email', '$imagen')";
+		$sql="INSERT INTO trabajador_por_proyecto (idproyecto, tipo_trabajador, cargo, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora)
+		VALUES ('$idproyecto', '$tipo_trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora')";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $tipo_trabajador, $desempenio, $c_bancaria, $email, $cargo, $banco, $tutular_cuenta, $sueldo_diario, $sueldo_mensual, $sueldo_hora, $imagen)
+	public function editar( $idtrabajador_por_proyecto, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora )
 	{
-		$sql="UPDATE trabajador SET idbancos='$banco', nombres='$nombre', tipo_documento='$tipo_documento', 
-		numero_documento='$num_documento', fecha_nacimiento='$nacimiento',
-		desempeno='$desempenio', cargo='$cargo', tipo_trabajador='$tipo_trabajador',
-		cuenta_bancaria='$c_bancaria', titular_cuenta='$tutular_cuenta', sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario',
-		sueldo_hora='$sueldo_hora', direccion='$direccion', telefono='$telefono', email='$email', imagen='$imagen' WHERE idtrabajador='$idtrabajador'";	
+		$sql="UPDATE trabajador_por_proyecto SET idtrabajador_por_proyecto='$idtrabajador_por_proyecto', tipo_trabajador='$tipo_trabajador', 
+		cargo='$cargo', desempenio='$desempenio', sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario',
+		sueldo_hora='$sueldo_hora' WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";	
 		
-			return ejecutarConsulta($sql);
+		return ejecutarConsulta($sql);
 		
 	}
 
@@ -54,37 +52,46 @@ Class Trabajador
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-		//Implementar un método para mostrar los datos de un registro a modificar
-		public function verdatos($idtrabajador)
-		{
-			$sql="SELECT 
-			t.idbancos as idbancos, 
-			t.nombres as nombres, 
-			t.tipo_documento as tipo_documento, 
-			t.numero_documento as numero_documento,
-			t.fecha_nacimiento as fecha_nacimiento,
-			t.desempeno as desempeno,
-			t.cargo as cargo,
-			t.tipo_trabajador as tipo_trabajador ,
-			t.cuenta_bancaria as cuenta_bancaria,
-			t.titular_cuenta as titular_cuenta,
-			t.sueldo_mensual as sueldo_mensual,
-			t.sueldo_diario as sueldo_diario,
-			t.sueldo_hora as sueldo_hora,
-			t.direccion as direccion,
-			t.telefono as telefono,
-			t.email as email,
-			t.imagen as imagen,
-			b.nombre as banco 
-			FROM trabajador t, bancos b 
-			WHERE t.idtrabajador='$idtrabajador' AND t.idbancos =b.idbancos";
+  //Implementar un método para mostrar los datos de un registro a modificar
+  public function verdatos($idtrabajador)
+  {
+    $sql="SELECT 
+    t.idbancos as idbancos, 
+    t.nombres as nombres, 
+    t.tipo_documento as tipo_documento, 
+    t.numero_documento as numero_documento,
+    t.fecha_nacimiento as fecha_nacimiento,
+    tp.desempenio as desempeno,
+    tp.cargo as cargo,
+    tp.tipo_trabajador as tipo_trabajador ,
+    t.cuenta_bancaria as cuenta_bancaria,
+    t.titular_cuenta as titular_cuenta,
+    tp.sueldo_mensual as sueldo_mensual,
+    tp.sueldo_diario as sueldo_diario,
+    tp.sueldo_hora as sueldo_hora,
+    t.direccion as direccion,
+    t.telefono as telefono,
+    t.email as email,
+    t.imagen_perfil as imagen,
+    b.nombre as banco 
+    FROM trabajador AS t, bancos AS b,  trabajador_por_proyecto AS tp
+    WHERE tp.idtrabajador = t.idtrabajador AND tp.idtrabajador_por_proyecto = '$idtrabajador' AND t.idbancos =b.idbancos;";
 
-			return ejecutarConsultaSimpleFila($sql);
-		}
+    return ejecutarConsultaSimpleFila($sql);
+  }
 	//Implementar un método para listar los registros
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT * FROM trabajador WHERE idproyecto = '$nube_idproyecto'; ";
+		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria, t.imagen_perfil as imagen, tp.tipo_trabajador, tp.cargo, tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.estado, tp.idtrabajador_por_proyecto
+    FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p
+    WHERE tp.idproyecto = p.idproyecto AND tp.idproyecto = '11'   AND tp.idtrabajador = t.idtrabajador;";
+		return ejecutarConsulta($sql);		
+	}
+
+  //Seleccionar Trabajador Select2
+	public function select2_trabajador()
+	{
+		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1' and estado_usuario='0';";
 		return ejecutarConsulta($sql);		
 	}
 

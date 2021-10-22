@@ -7,128 +7,210 @@
     session_start(); //Validamos si existe o no la sesión
   }
 
-  if (!isset($_SESSION["recurso"])) {
+  if (!isset($_SESSION["nombre"])) {
 
     header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
-    if ($_SESSION['almacen'] == 1) {
+    if ($_SESSION['recurso'] == 1) {
 
       require_once "../modelos/AllTrabajador.php";
 
-      $articulo = new AllTrabajador();
+      $trabajador = new AllTrabajador();
 
-      $idarticulo = isset($_POST["idarticulo"]) ? limpiarCadena($_POST["idarticulo"]) : "";
-      $idcategoria = isset($_POST["idcategoria"]) ? limpiarCadena($_POST["idcategoria"]) : "";
-      $codigo = isset($_POST["codigo"]) ? limpiarCadena($_POST["codigo"]) : "";
-      $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
-      $stock = isset($_POST["stock"]) ? limpiarCadena($_POST["stock"]) : "";
-      $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
-      $imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
+      //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
+      $idtrabajador		= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
+      $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
+      $tipo_documento	= isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
+      $num_documento	= isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
+      $direccion		  = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
+      $telefono		    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
+      $nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
+      $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";
+      $c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
+      $email			      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
+      $banco			      = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
+      $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
+
+      $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
+      $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+      $imagen3			    = isset($_POST["foto3"])? limpiarCadena($_POST["foto3"]):"";
 
       switch ($_GET["op"]) {
 
         case 'guardaryeditar':
 
-          if (!file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+          // imgen de perfil
+          if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
 
-            $imagen = $_POST["imagenactual"];
+						$imagen1=$_POST["foto1_actual"]; $flat_img1 = false;
 
-          } else {
+					} else {
 
-            $ext = explode(".", $_FILES["imagen"]["name"]);
+						$ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;						
 
-            if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
-              
-              $imagen = round(microtime(true)) . '.' . end($ext);
+            $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-              move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/articulos/" . $imagen);
+            move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/img/usuarios/" . $imagen1);
+						
+					}
+
+          // imgen DNI ANVERSO
+          if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
+
+						$imagen2=$_POST["foto2_actual"]; $flat_img2 = false;
+
+					} else {
+
+						$ext2 = explode(".", $_FILES["foto2"]["name"]); $flat_img2 = true;
+
+            $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext2);
+
+            move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/usuarios/" . $imagen2);
+						
+					}
+
+          // imgen DNI REVERSO
+          if (!file_exists($_FILES['foto3']['tmp_name']) || !is_uploaded_file($_FILES['foto3']['tmp_name'])) {
+
+						$imagen3=$_POST["foto3_actual"]; $flat_img3 = false;
+
+					} else {
+
+						$ext3 = explode(".", $_FILES["foto3"]["name"]); $flat_img3 = true;
+            
+            $imagen3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
+
+            move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/img/usuarios/" . $imagen3);
+						
+					}
+
+          if (empty($idtrabajador)){
+
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3);
+            
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
+  
+          }else {
+
+            // validamos si existe LA IMG para eliminarlo
+            if ($flat_img1 == true) {
+
+              $datos_f1 = $trabajador->obtenerImg($idtrabajador);
+
+              $img1_ant = $datos_f1->fetch_object()->imagen_perfil;
+
+              if ($img1_ant != "") {
+
+                unlink("../dist/img/usuarios/" . $img1_ant);
+              }
             }
-          }
 
-          if (empty($idarticulo)) {
+            if ($flat_img2 == true) {
 
-            $rspta = $articulo->insertar($idcategoria, $codigo, $nombre, $stock, $descripcion, $imagen);
+              $datos_f2 = $trabajador->obtenerImg($idtrabajador);
 
-            echo $rspta ? "Artículo registrado" : "Artículo no se pudo registrar";
+              $img2_ant = $datos_f2->fetch_object()->imagen_dni_anverso;
 
-          } else {
+              if ($img2_ant != "") {
 
-            $rspta = $articulo->editar($idarticulo, $idcategoria, $codigo, $nombre, $stock, $descripcion, $imagen);
+                unlink("../dist/img/usuarios/" . $img2_ant);
+              }
+            }
 
-            echo $rspta ? "Artículo actualizado" : "Artículo no se pudo actualizar";
-          }
+            if ($flat_img3 == true) {
+
+              $datos_f3 = $trabajador->obtenerImg($idtrabajador);
+
+              $img3_ant = $datos_f3->fetch_object()->imagen_dni_reverso;
+
+              if ($img3_ant != "") {
+
+                unlink("../dist/img/usuarios/" . $img3_ant);
+              }
+            }
+
+            // editamos un trabajador existente
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3);
+            
+            echo $rspta ? "ok" : "Trabajador no se pudo actualizar";
+          }            
 
         break;
 
         case 'desactivar':
 
-          $rspta = $articulo->desactivar($idarticulo);
+          $rspta=$trabajador->desactivar($idtrabajador);
 
-          echo $rspta ? "Artículo Desactivado" : "Artículo no se puede desactivar";
+ 				  echo $rspta ? "Usuario Desactivado" : "Trabajador no se puede desactivar";
 
         break;
 
         case 'activar':
 
-          $rspta = $articulo->activar($idarticulo);
+          $rspta=$trabajador->activar($idtrabajador);
 
-          echo $rspta ? "Artículo activado" : "Artículo no se puede activar";
+ 				  echo $rspta ? "Usuario activado" : "Trabajador no se puede activar";
 
         break;
 
         case 'mostrar':
 
-          $rspta = $articulo->mostrar($idarticulo);
-
+          $rspta=$trabajador->mostrar($idtrabajador);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
         break;
 
-        case 'listar':
+        case 'listar':          
 
-          $rspta = $articulo->listar();
+          $rspta=$trabajador->listar();
           //Vamos a declarar un array
-          $data = [];
+          $data= Array();
 
-          while ($reg = $rspta->fetch_object()) {
-
-            $data[] = [
-              "0" => $reg->condicion
-                ? '<button class="btn btn-warning" onclick="mostrar(' .
-                  $reg->idarticulo .
-                  ')"><i class="fa fa-pencil"></i></button>' .
-                  ' <button class="btn btn-danger" onclick="desactivar(' .
-                  $reg->idarticulo .
-                  ')"><i class="fa fa-close"></i></button>'
-                : '<button class="btn btn-warning" onclick="mostrar(' .
-                  $reg->idarticulo .
-                  ')"><i class="fa fa-pencil"></i></button>' .
-                  ' <button class="btn btn-primary" onclick="activar(' .
-                  $reg->idarticulo .
-                  ')"><i class="fa fa-check"></i></button>',
-              "1" => $reg->nombre,
-              "2" => $reg->categoria,
-              "3" => $reg->codigo,
-              "4" => $reg->stock,
-              "5" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
-              "6" => $reg->condicion ? '<span class="label bg-green">Activado</span>' : '<span class="label bg-red">Desactivado</span>',
-            ];
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
+          while ($reg=$rspta->fetch_object()){
+            $data[]=array(
+              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
+                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
+              "1"=>'<div class="user-block">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
+                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+                </div>',
+              "2"=>$reg->cuenta_bancaria,
+              "3"=>$reg->telefono,
+              "4"=>$reg->fecha_nacimiento.' : '.$reg->edad,
+              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              '<span class="text-center badge badge-danger">Desactivado</span>'
+              );
           }
-
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "aaData" => $data,
-          ];
-
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
           echo json_encode($results);
 
-        break;      
+        break;  
+        
+        case 'verdatos':
+           
+          //Validamos el acceso solo al usuario logueado y autorizado.
+          if ($_SESSION['trabajador']==1) {
+
+            $rspta=$trabajador->verdatos($idtrabajador);
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta);
+          }
+        break;
       }
 
       //Fin de las validaciones de acceso

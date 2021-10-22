@@ -12,7 +12,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Sevens | trabajadores</title>
+    <title>Admin Sevens | All Trabajadores</title>
     <?php
     require 'head.php';
     ?>
@@ -23,7 +23,7 @@
       <?php
       require 'nav.php';
       require 'aside.php';
-      if ($_SESSION['trabajador']==1){
+      if ($_SESSION['recurso']==1){
       ?>
 
         <!-- Content Wrapper. Contains page content -->
@@ -33,12 +33,12 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Trabajador</h1>
+                  <h1>All Trabajadores</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Trabajador</li>
+                    <li class="breadcrumb-item"><a href="all_trabajador.php">Home</a></li>
+                    <li class="breadcrumb-item active">Trabajadores</li>
                   </ol>
                 </div>
               </div>
@@ -60,38 +60,30 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <!-- Lista de trabajdores -->
-                      <div>
-                        <table id="tabla-trabajadors" class="table table-bordered table-striped display" style="width: 100% !important;">
-                          <thead>
-                            <tr>
-                              <th class="">Aciones</th>
-                              <th>Nombres</th>
-                              <th>Cuenta bancaria</th>
-                              <th>Sueldo mensual</th>
-                              <th>Tipo / cargo</th>
-                              <th>Estado</th>
-                            </tr>
-                          </thead>
-                          <tbody></tbody>
-                          <tfoot>
-                            <tr>
-                              <th>Aciones</th>
-                              <th>Nombres</th>
-                              <th>Cuenta bancaria</th>
-                              <th>Sueldo mensual</th>
-                              <th>Tipo / cargo</th>
-                              <th>Estado</th>
-                            </tr>
-                          </tfoot>
-                        </table>
-                      </div>
-                      <!-- agregar trabajador al sistema -->
-                      <div>
-                        <form id="form-trabajador-proyecto" name="form-trabajador-proyecto" method="post">
-
-                        </form>
-                      </div>
+                      <!-- Lista de trabajdores -->                      
+                      <table id="tabla-trabajador" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <thead>
+                          <tr>
+                            <th class="">Aciones</th>
+                            <th>Nombres</th>
+                            <th>Cuenta bancaria</th>
+                            <th>Telefono</th>
+                            <th>Fecha Nac. / Edad</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                          <tr>
+                            <th>Aciones</th>
+                            <th>Nombres</th>
+                            <th>Cuenta bancaria</th>
+                            <th>Telefono</th>
+                            <th>Fecha Nac. / Edad</th>
+                            <th>Estado</th>
+                          </tr>
+                        </tfoot>
+                      </table>                      
                     </div>
                     <!-- /.card-body -->
                   </div>
@@ -119,11 +111,9 @@
                     <form id="form-trabajador" name="form-trabajador" method="POST">
                       <div class="card-body">
                         <div class="row" id="cargando-1-fomulario">
-                          <!-- id PROYECTO -->
-                          <input type="hidden" name="idproyecto" id="idproyecto" />
 
                           <!-- id trabajador -->
-                          <input type="hidden" name="idtrabajador" id="idtrabajador" />
+                          <input type="hidden" name="idtrabajador" id="idtrabajador" />                          
 
                           <!-- Tipo de documento -->
                           <div class="col-lg-4">
@@ -185,6 +175,7 @@
                             <div class="form-group">
                               <label for="fecha_nacimiento">Fecha Nacimiento</label>
                               <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="edades();" onchange="edades();" />
+                              <input type="hidden" name="edad" id="edad">
                             </div>
                           </div>
                           <!-- edad -->
@@ -193,38 +184,7 @@
                               <label for="edad">Edad</label>
                               <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
                             </div>
-                          </div>
-                          <!-- Tipo trabajador -->
-                          <div class="col-lg-2">
-                            <div class="form-group">
-                              <label for="tipo_trabajador">Tipo trabajador</label>
-                              <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;">
-                                <option value="Técnico">Técnico</option>
-                                <option value="Obrero">Obrero</option>
-                              </select>
-                              <small id="tipo_trab_validar" class="text-danger" style="display: none;">Por favor selecione un tipo trabajador </small>
-                            </div>
-                          </div>
-                          <!-- cargo -->
-                          <div class="col-lg-2">
-                            <div class="form-group">
-                              <label for="cargo">Cargo</label>
-                              <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;">
-                                <option value="Maestro">Maestro</option>
-                                <option value="Operario">Operario</option>
-                                <option value="Oficial">Oficial</option>
-                                <option value="Peón">Peón</option>
-                              </select>
-                              <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
-                            </div>
-                          </div>
-                          <!-- Desempeño -->
-                          <div class="col-lg-4">
-                            <div class="form-group">
-                              <label for="desempeño">Desempeño</label>
-                              <input type="text" name="desempenio" class="form-control" id="desempenio" placeholder="Desempeño" />
-                            </div>
-                          </div>
+                          </div>                          
                           <!-- Cuenta bancaria -->
                           <div class="col-lg-4">
                             <div class="form-group">
@@ -249,39 +209,43 @@
                           <!-- Titular de la cuenta -->
                           <div class="col-lg-4">
                             <div class="form-group">
-                              <label for="tutular_cuenta">Titular de la cuenta</label>
-                              <input type="text" name="tutular_cuenta" class="form-control" id="tutular_cuenta" placeholder="Titular de la cuenta" />
+                              <label for="titular_cuenta">Titular de la cuenta</label>
+                              <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
                             </div>
                           </div>
-                          <!-- Sueldo(Mensual) -->
-                          <div class="col-lg-4">
-                            <div class="form-group">
-                              <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                              <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
-                            </div>
+                          
+                          <div class="col-lg-8"></div>
+
+                          <!-- imagen perfil -->
+                          <div class="col-md-6 col-lg-4">
+                            <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                            <label for="foto1">Foto de perfil</label> <br>
+                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
+                            <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
+                            <input type="hidden" name="foto1_actual" id="foto1_actual" />
+                            <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
                           </div>
-                          <!-- Sueldo(Diario) -->
-                          <div class="col-lg-4">
-                            <div class="form-group">
-                              <label for="sueldo_diario">Sueldo( 24 Diario)</label>
-                              <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
-                            </div>
-                          </div>
-                          <!-- Sueldo(Hora) -->
-                          <div class="col-lg-4">
-                            <div class="form-group">
-                              <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                              <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
-                            </div>
-                          </div>
-                          <!-- imagen -->
-                          <div class="col-lg-3">
-                            <label for="foto2">Foto del trabajador</label>
-                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
+
+                          <!-- imagen dni anverso -->
+                          <div class="col-md-6 col-lg-4">
+                            <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                            <label for="foto2">DNI anverso</label> <br>
+                            <img onerror="this.src='../dist/img/default/dni_anverso.webp';" src="../dist/img/default/dni_anverso.webp" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
                             <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
                             <input type="hidden" name="foto2_actual" id="foto2_actual" />
                             <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
                           </div>
+
+                          <!-- imagen dni reverso -->
+                          <div class="col-md-6 col-lg-4">
+                            <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                            <label for="foto3">DNI reverso</label> <br>
+                            <img onerror="this.src='../dist/img/default/dni_reverso.webp';" src="../dist/img/default/dni_reverso.webp" class="img-thumbnail" id="foto3_i" style="cursor: pointer !important;" width="auto" />
+                            <input style="display: none;" type="file" name="foto3" id="foto3" accept="image/*" />
+                            <input type="hidden" name="foto3_actual" id="foto3_actual" />
+                            <div class="text-center" id="foto3_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                          </div>
+
                         </div>
 
                         <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -323,7 +287,7 @@
                 </div>
               </div>
             </div>
-            
+
           </section>
           <!-- /.content -->
         </div>
@@ -363,7 +327,7 @@
     <!-- sweetalert2 -->
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-    <script type="text/javascript" src="scripts/trabajador.js"></script>
+    <script type="text/javascript" src="scripts/all_trabajador.js"></script>
 
     <script>
         $(function () {
