@@ -1,77 +1,108 @@
 var tabla;
+var tabla2;
 
 //Función que se ejecuta al inicio
 function init() {
   
-  listar();
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+ //var idproyecto =localStorage.getItem('nube_idproyecto');
 
-  //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
+ listar(localStorage.getItem('nube_idproyecto'));
 
   // $("#bloc_Accesos").addClass("menu-open");
+    //Mostramos los maquinariaes
+    $.post("../ajax/servicio.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
 
-  $("#mServicio").addClass("active");
+  $("#mProveedor").addClass("active");
 
-  // $("#lUsuario").addClass("active");
+  // $("#lproveedor").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
+  $("#guardar_registro").on("click", function (e) {
+    
+    console.log('holaaaaaa');
+    $("#submit-form-servicios").submit();
+  });
+
+  // Formato para telefono
+  $("[data-mask]").inputmask();
 
   //Initialize Select2 Elements
-  $("#trabajador").select2({
+  $("#maquinaria").select2({
     theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
+    placeholder: "Selecione maquinaria",
     allowClear: true,
   });
   
+  $("#maquinaria").val("null").trigger("change");
 
-  //Initialize Select2 Elements
-  $("#cargo").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione cargo",
-    allowClear: true,
-  });
-  $("#trabajador").val("null").trigger("change");
-  $("#cargo").val("Administrador").trigger("change");
-
-  // Formato para telefono
-  $("[data-mask]").inputmask();   
 }
- 
 
 function seleccion() {
 
-  if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == null) {
+  if ($("#maquinaria").select2("val") == null) {
 
-    $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
+    $("#maquinaria_validar").show(); //console.log($("#maquinaria").select2("val") + ", "+ $("#maquinaria_old").val());
 
   } else {
 
-    $("#trabajador_validar").hide();
+    $("#maquinaria_validar").hide();
   }
 }
 
+function horometro(){
+
+  var horometro_inicial = $('#horometro_inicial').val();
+  var horometro_final = $('#horometro_final').val();
+  var costo_unitario = $('#costo_unitario').val();
+
+  //console.log(horometro_inicial,horometro_final);
+
+  var horas=(horometro_final-horometro_inicial).toFixed(1);
+  var costo_parcial=(horas*costo_unitario).toFixed(1);
+  //console.log(horas);
+
+  $("#horas").val(horas);
+  $("#costo_parcial").val(costo_parcial);
+}
+
+/*idservicio
+maquinaria
+fecha_inicio
+fecha_fin
+horometro_inicial
+horometro_final
+horas
+costo_unitario
+costo_parcial*/
+
 //Función limpiar
 function limpiar() {
-  //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) {   $("#trabajador").html(r);  });
+  //Mostramos los proveedores
+  $.post("../ajax/servicio.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
 
-  $("#idusuario").val("");
-  $("#trabajador_c").html("Trabajador");
-  $("#trabajador").val("null").trigger("change"); 
-  $("#trabajador_old").val(""); 
-  $("#cargo").val("Administrador").trigger("change"); 
-  $("#login").val("");
-  $("#password").val("");
-  $("#password-old").val("");   
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+  $("#idservicio").val(""); 
+  $("#maquinaria").val("null").trigger("change"); 
+  $("#fecha_inicio").val("");
+  $("#fecha_fin").val("");
+  $("#horometro_inicial").val("");
+  $("#horometro_final").val("");
+  $("#horas").val("");
+  $("#costo_unitario").val("");
+  $("#costo_parcial").val("");
+  $("#costo_unitario").attr('readonly',false);
+  $("#sssss").val("");
+  $("#nomb_maq").val("");
+  $("#sssss").show();
+  $("#nomb_maq").hide();
+
   
-  //Mostramos los permisos
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
 }
 
 //Función Listar
-function listar() {
+function listar( nube_idproyecto ) {
 
-  tabla=$('#tabla-usuarios').dataTable({
+  tabla=$('#tabla-servicio').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -79,7 +110,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/usuario.php?op=listar',
+        url: '../ajax/servicio.php?op=listar&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -102,13 +133,74 @@ function listar() {
   }).DataTable();
 }
 
+//Función detalles po maquina
+function listar_detalle(idmaquinaria,idproyecto) {
+  console.log(idproyecto,idmaquinaria);
+  $("#tabla_principal").hide();
+  $("#tabla_detalles").show();
+  $("#btn-agregar").hide();
+  $("#btn-regresar").show();
+
+  tabla2=$('#tabla-detalle-m').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/servicio.php?op=ver_detalle_maquina&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+  suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+  
+}
+//regresar_principal
+function regresar_principal(){
+  $("#tabla_principal").show();
+  $("#btn-agregar").show();
+  $("#tabla_detalles").hide();
+  $("#btn-regresar").hide();
+}
 //Función para guardar o editar
+function suma_horas_costoparcial(idmaquinaria,idproyecto){
+  console.log('...'+idmaquinaria,idproyecto);
+    //suma
+    $.post("../ajax/servicio.php?op=suma_horas_costoparcial", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+      $("#horas-total").html(""); 
+      $("#costo-parcial").html("");
+      data = JSON.parse(data); 
+      console.log(data);
+     // tabla.ajax.reload();
+      $("#horas-total").html(data.horas); 
+      $("#costo-parcial").html(data.costo_parcial);
+  
+    });
+}
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-usuario")[0]);
-
+  var formData = new FormData($("#form-servicios")[0]);
+ 
   $.ajax({
-    url: "../ajax/usuario.php?op=guardaryeditar",
+    url: "../ajax/servicio.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -118,13 +210,14 @@ function guardaryeditar(e) {
              
       if (datos == 'ok') {
 
-				toastr.success('Usuario registrado correctamente')				 
+				toastr.success('servicio registrado correctamente')				 
 
 	      tabla.ajax.reload();
+	      tabla2.ajax.reload();
          
 				limpiar();
 
-        $("#modal-agregar-usuario").modal("hide");
+        $("#modal-agregar-servicio").modal("hide");
 
 			}else{
 
@@ -134,46 +227,42 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idusuario) {
-  $("#trabajador").val("").trigger("change"); 
-  $("#trabajador_c").html("(Nuevo) Trabajador");
+function mostrar(idservicio) {
+  console.log(idservicio);
+  
+  $("#maquinaria").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-usuario").modal("show")
+  $("#modal-agregar-servicio").modal("show");
+  $("#sssss").hide();
+  $("#nomb_maq").show();
+  $("#costo_unitario").attr('readonly',true);
+  $.post("../ajax/servicio.php?op=mostrar", { idservicio: idservicio }, function (data, status) {
 
-  $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
-
-    data = JSON.parse(data);  //console.log(data);   
+    data = JSON.parse(data);  console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-    
-    $("#trabajador_old").val(data.idtrabajador); 
-    $("#cargo").val(data.cargo).trigger("change"); 
-    $("#login").val(data.login);
-    $("#password-old").val(data.password);
-    $("#idusuario").val(data.idusuario);
+    $("#nomb_maq").val(data.nombre+'-'+data.codigo_maquina);
+    $("#idservicio").val(data.idservicio); 
+    $("#maquinaria").val(data.idmaquinaria).trigger("change"); 
+    $("#fecha_inicio").val(data.fecha_entrega); 
+    $("#fecha_fin").val(data.fecha_recojo); 
+    $("#horometro_inicial").val(data.horometro_inicial); 
+    $("#horometro_final").val(data.horometro_final); 
+    $("#horas").val(data.horas); 
+    $("#costo_unitario").val(data.costo_unitario); 
+    $("#costo_parcial").val(data.costo_parcial); 
 
-    if (data.imagen != "") {
-
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
-
-			$("#foto2_actual").val(data.imagen);
-		}
-  });
-
-  $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-
-    $("#permisos").html(r);
   });
 }
 
 //Función para desactivar registros
-function desactivar(idusuario) {
+function desactivar(idservicio,idmaquinaria) {
   Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el Usuario?",
-    text: "Este usuario no podrá ingresar al sistema!",
+    title: "¿Está Seguro de  Desactivar  el servicio?",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -181,95 +270,99 @@ function desactivar(idusuario) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
-        if (e == 'ok') {
+      $.post("../ajax/servicio.php?op=desactivar", { idservicio: idservicio }, function (e) {
 
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
-        }
+        Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
+        suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        tabla.ajax.reload();
+        tabla2.ajax.reload();
       });      
     }
   });   
 }
 
 //Función para activar registros
-function activar(idusuario) {
-
+function activar(idservicio,idmaquinaria) {
   Swal.fire({
-
-    title: "¿Está Seguro de  Activar  el Usuario?",
-    text: "Este usuario tendra acceso al sistema",
+    title: "¿Está Seguro de  Activar  Servicio?",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, activar!",
-
   }).then((result) => {
-
     if (result.isConfirmed) {
+      $.post("../ajax/servicio.php?op=activar", { idservicio: idservicio }, function (e) {
 
-      $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
-
-        if (e == 'ok') {
-
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
-        }
-      });      
+        Swal.fire("Activado!", "Servicio ha sido activado.", "success");
+        suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        tabla.ajax.reload();
+        tabla2.ajax.reload();
+      });
+      
     }
   });      
 }
+
 
 init();
 
 $(function () {
 
+  
   $.validator.setDefaults({
 
     submitHandler: function (e) {
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
+      if ($("#maquinaria").select2("val") == null) {
         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
+        $("#maquinaria_validar").show(); //console.log($("#proveedor").select2("val") + ", "+ $("#proveedor_old").val());
+        console.log('holaaa""2222');
       } else {
 
-        $("#trabajador_validar").hide();
+        $("#maquinaria_validar").hide();
+       
 
         guardaryeditar(e);
       }
     },
   });
 
-  $("#form-usuario").validate({
+  $("#form-servicios").validate({
     rules: {
-      login: { required: true, minlength: 3, maxlength: 20 },
-      password: {minlength: 4, maxlength: 20 },
+      maquinaria: { required: true },
+      fecha_inicio:{ required: true },
+      fecha_fin:{ required: true },
+      horometro_inicial:{ required: true, minlength: 1},
+      horometro_final:{ required: true, minlength: 1},
+      costo_unitario:{ required: true, minlength: 1}
+
+
       // terms: { required: true },
     },
     messages: {
-      login: {
-        required: "Por favor ingrese un login.",
-        minlength: "El login debe tener MÍNIMO 4 caracteres.",
-        maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
+      maquinaria: {
+        required: "Por favor selecione una maquina", 
       },
-      password: {
-        minlength: "La contraseña debe tener MÍNIMO 4 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 20 caracteres.",
+      fecha_inicio: {
+        required: "Por favor ingrese fecha inicial", 
       },
+      fecha_fin: {
+        required: "Por favor ingrese fecha final", 
+      },
+      horometro_inicial: {
+        required: "Por favor ingrese horometro inicial", 
+      },
+      horometro_final: {
+        required: "Por favor ingrese horometro final", 
+      },
+      costo_unitario: {
+        required: "Por favor ingrese costo unitario", 
+      },
+
     },
-    
+        
     errorElement: "span",
 
     errorPlacement: function (error, element) {
@@ -288,15 +381,147 @@ $(function () {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
+      if ($("#maquinaria").select2("val")== null) {
          
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
+        $("#maquinaria_validar").show(); //console.log($("#maquinaria").select2("val") + ", "+ $("#maquinaria_old").val());
 
       } else {
 
-        $("#trabajador_validar").hide();
+        $("#maquinaria_validar").hide();
       }       
     },
+
+
   });
 });
 
+
+
+
+
+// Buscar Reniec SUNAT
+function buscar_sunat_reniec() {
+  $("#search").hide();
+
+  $("#charge").show();
+
+  let tipo_doc = $("#tipo_documento").val();
+
+  let dni_ruc = $("#num_documento").val(); 
+   
+  if (tipo_doc == "DNI") {
+
+    if (dni_ruc.length == "8") {
+
+      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+
+        data = JSON.parse(data);
+
+        console.log(data);
+
+        if (data.success == false) {
+
+          $("#search").show();
+
+          $("#charge").hide();
+
+          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+
+        } else {
+
+          $("#search").show();
+
+          $("#charge").hide();
+
+          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+          toastr.success("Cliente encontrado!!!!");
+        }
+      });
+    } else {
+
+      $("#search").show();
+
+      $("#charge").hide();
+
+      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
+    }
+  } else {
+    if (tipo_doc == "RUC") {
+
+      if (dni_ruc.length == "11") {
+        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+
+          data = JSON.parse(data);
+
+          console.log(data);
+          if (data.success == false) {
+
+            $("#search").show();
+
+            $("#charge").hide();
+
+            toastr.error("Datos no encontrados en la SUNAT!!!");
+            
+          } else {
+
+            if (data.estado == "ACTIVO") {
+
+              $("#search").show();
+
+              $("#charge").hide();
+
+              $("#nombre").val(data.razonSocial);
+
+              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+              
+              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+              // $("#direccion").val(data.direccion);
+              toastr.success("Cliente encontrado");
+            } else {
+
+              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+
+              $("#search").show();
+
+              $("#charge").hide();
+
+              $("#nombre").val(data.razonSocial);
+
+              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+              
+              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+
+              // $("#direccion").val(data.direccion);
+            }
+          }
+        });
+      } else {
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
+      }
+    } else {
+      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
+
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.info("No necesita hacer consulta");
+
+      } else {
+
+        $("#tipo_doc").addClass("is-invalid");
+
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.error("Selecione un tipo de documento");
+      }
+    }
+  }
+}

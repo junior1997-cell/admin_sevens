@@ -33,12 +33,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Proveedores</h1>
+                                <h1>Máquinaria</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">proveedores</li>
+                                    <li class="breadcrumb-item active">Máquinaria</li>
                                 </ol>
                             </div>
                         </div>
@@ -54,20 +54,18 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
                                         <h3 class="card-title">
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proveedor" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
-                                            Admnistra de manera eficiente a tus proveedores.
+                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-maquinaria" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                                            Admnistra tus máquinarias.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <table id="tabla-proveedores" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                        <table id="tabla-maquinaria" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
                                                     <th class="">Aciones</th>
-                                                    <th>Proveedor</th>
-                                                    <th>Dirección</th>
-                                                    <th>C. bancaria / C. detracciones </th>
-                                                    <th>Titular cuenta</th>
+                                                    <th>Nombre</th>
+                                                    <th>Código</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -75,10 +73,8 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Aciones</th>
-                                                    <th>Proveedor</th>
-                                                    <th>Dirección</th>
-                                                    <th>C. bancaria / C. detracciones</th>
-                                                    <th>Titular cuenta</th>
+                                                    <th>Nombre</th>
+                                                    <th>Código</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -95,11 +91,11 @@
                     <!-- /.container-fluid -->
 
                     <!-- Modal agregar proveedores -->
-                    <div class="modal fade" id="modal-agregar-proveedor">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal fade" id="modal-agregar-maquinaria">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Agregar proveedores</h4>
+                                    <h4 class="modal-title">Agregar Máquinaria</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -107,93 +103,24 @@
 
                                 <div class="modal-body">
                                     <!-- form start -->
-                                    <form id="form-proveedor" name="form-proveedor" method="POST">
+                                    <form id="form-maquinaria" name="form-maquinaria" method="POST">
                                         <div class="card-body">
                                             <div class="row" id="cargando-1-fomulario">
-                                                <!-- id proyecto -->
-                                                <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id proveedores -->
-                                                <input type="hidden" name="idproveedor" id="idproveedor" />
+                                                <input type="hidden" name="idmaquinaria" id="idmaquinaria" />
 
-                                                <!-- Tipo de documento -->
-                                                <div class="col-lg-4">
+                                                <!-- Nombre Máquina -->
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="tipo_documento">Tipo de documento</label>
-                                                        <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
-                                                            <option value="RUC">RUC</option>
-                                                            <option selected value="DNI">DNI</option>
-                                                        </select>
+                                                        <label for="nombre_maquina">Nombre Máquina</label>
+                                                        <input type="text" name="nombre_maquina" class="form-control" id="nombre_maquina" placeholder="Ingrese nombre de una máquina" />
                                                     </div>
                                                 </div>
-                                                <!-- N° de documento -->
-                                                <div class="col-lg-4">
+                                                <!-- Codigo de la máquina -->
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="num_documento">N° RUC / DNI</label>
-                                                        <div class="input-group">
-                                                            <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
-                                                            <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
-                                                                <span class="input-group-text" style="cursor: pointer;">
-                                                                    <i class="fas fa-search text-primary" id="search"></i>
-                                                                    <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Nombre -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="nombre">Razón Social / Nombre y Apellidos</label>
-                                                        <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Razón Social o  Nombre" />
-                                                    </div>
-                                                </div>
-                                                <!-- Direccion -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="direccion">Dirección</label>
-                                                        <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
-                                                    </div>
-                                                </div>
-                                                <!-- Telefono -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="telefono">Teléfono</label>
-                                                        <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
-                                                    </div>
-                                                </div>
-                                                <!-- Cuenta bancaria -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="c_bancaria">Cuenta Bancaria</label>
-                                                        <input type="number" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
-                                                    </div>
-                                                </div>
-                                                <!-- fecha de nacimiento -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="fecha_nacimiento">Cuenta Detracciones</label>
-                                                        <input type="number" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Bancaria" />
-                                                    </div>
-                                                </div>
-                                                <!-- banco -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="banco">Banco</label>
-                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
-                                                            <option value="1">BCP</option>
-                                                            <option value="2">BBVA</option>
-                                                            <option value="3">SCOTIA BANK</option>
-                                                            <option value="4">INTERBANK</option>
-                                                            <option value="5">NACIÓN</option>
-                                                        </select>
-                                                        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
-                                                    </div>
-                                                </div>
-                                                <!-- Titular de la cuenta -->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="titular_cuenta">Titular de la cuenta</label>
-                                                        <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
+                                                        <label for="codigo_m">Código de la máquina</label>
+                                                        <input type="text" name="codigo_m" class="form-control" id="codigo_m" placeholder="Dirección" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,31 +134,12 @@
                                             </div>
                                         </div>
                                         <!-- /.card-body -->
-                                        <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
+                                        <button type="submit" style="display: none;" id="submit-form-maquinaria">Submit</button>
                                     </form>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--Modal ver proveedores-->
-                    <div class="modal fade" id="modal-ver-proveedores">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Datos proveedores</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span class="text-danger" aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <div id="datosproveedores" class="class-style">
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -275,7 +183,7 @@
         <!-- sweetalert2 -->
         <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-        <script type="text/javascript" src="scripts/all_proveedor.js"></script>
+        <script type="text/javascript" src="scripts/all_maquinaria.js"></script>
 
         <script>
             $(function () {
