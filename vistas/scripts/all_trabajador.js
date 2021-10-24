@@ -5,6 +5,9 @@ function init() {
 
   listar( );
 
+  //Mostramos los BANCOS
+  $.post("../ajax/trabajador.php?op=select2Banco", function (r) { $("#trabajador").html(r); });
+
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
@@ -24,6 +27,13 @@ function init() {
 
   $("#foto3_i").click(function() { $('#foto3').trigger('click'); });
   $("#foto3").change(function(e) { addImage(e,$("#foto3").attr("id")) });
+
+  //Initialize Select2 Elements
+  $("#banco").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione banco",
+    allowClear: true,
+  });
 }
 
 /* PREVISUALIZAR LAS IMAGENES */
@@ -169,7 +179,7 @@ function limpiar() {
   $("#nacimiento").val("");
   $("#edad").val("0");  $("#p_edad").html("0");    
   $("#c_bancaria").val("");  
-  $("#banco").val("");  
+  $("#banco").val("").trigger("change");
   $("#titular_cuenta").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -367,7 +377,7 @@ function mostrar(idtrabajador) {
     $("#email").val(data.email);
     $("#nacimiento").val(data.fecha_nacimiento);
     $("#c_bancaria").val(data.cuenta_bancaria);
-    $("#banco").val(data.idbancos);
+    $("#banco").val(data.idbancos).trigger("change");
     $("#titular_cuenta").val(data.titular_cuenta);
     $("#idtrabajador").val(data.idtrabajador);
 
@@ -465,10 +475,7 @@ $(function () {
       tipo_trabajador: { required: true},
       cargo: { required: true},
       c_bancaria: { minlength: 14, maxlength: 14},
-      sueldo_mensual: { required: true, minlength: 1},
-      sueldo_diario: { required: true, minlength: 1},
-      sueldo_hora: { required: true, minlength: 1}
-
+      banco: { required: true},
 
       // terms: { required: true },
     },
@@ -509,16 +516,9 @@ $(function () {
         minlength: "El número documento debe tener 14 caracteres.",
         maxlength: "El número documento debe tener maximo 14 caracteres.",
       },
-      sueldo_mensual: {
-        required: "Por favor  ingrese sueldo por mes.",
+      banco: {
+        required: "Este campo es requerido",
       },
-      sueldo_diario: {
-        required: "Por favor  ingrese sueldo por día.",
-      },
-      sueldo_hora: {
-        required: "Por favor ingrese sueldo por hora.",
-      },
-
     },
 
         

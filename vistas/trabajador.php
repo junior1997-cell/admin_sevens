@@ -96,15 +96,16 @@
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id PROYECTO -->
                               <input type="hidden" name="idproyecto" id="idproyecto" />
+                              <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />
 
                               <!-- Trabajador -->
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="trabajador" id="trabajador_c">Trabajador</label>                               
-                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="seleccion();" >                                    
+                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;"   >                                    
                                   </select>
                                   <input type="hidden" name="trabajador_old" id="trabajador_old" />
-                                  <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>  
+                                  <!-- <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>   -->
                                 </div>                                                        
                               </div>
 
@@ -116,7 +117,7 @@
                                     <option value="Técnico">Técnico</option>
                                     <option value="Obrero">Obrero</option>
                                   </select>
-                                  <small id="tipo_trab_validar" class="text-danger" style="display: none;">Por favor selecione un tipo trabajador </small>
+                                  <!-- <small id="tipo_trab_validar" class="text-danger" style="display: none;">Por favor selecione un tipo trabajador </small> -->
                                 </div>
                               </div>
 
@@ -124,19 +125,18 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="cargo">Cargo</label>
-                                  <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  >
-                                    <option id="select" >Seleccione</option>
+                                  <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  >                                    
                                     <!-- <option value="Maestro">Maestro</option> -->
-                                    <option  value="Ingeniero Residente">Ingeniero Residente</option>
+                                    <option value="Ingeniero Residente">Ingeniero Residente</option>
                                     <option value="Asitente Técnico">Asitente Técnico</option>
                                     <option value="Asistente Administrativo">Asistente Administrativo</option>
-                                    <option id="almacenero" value="Almacenero">Almacenero</option>
+                                    <option value="Almacenero">Almacenero</option>
 
                                     <option value="Operario" >Operario</option>
-                                    <option  value="Oficial" >Oficial</option>
+                                    <option value="Oficial" >Oficial</option>
                                     <option value="Peón" >Peón</option>
                                   </select>
-                                  <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+                                  <!-- <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
                                 </div>
                               </div>
                               <!-- Desempeño -->

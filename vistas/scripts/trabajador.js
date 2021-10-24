@@ -71,60 +71,49 @@ function show_hide_form(flag) {
 	}
 }
 
-function seleccion() {
-
-  if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == null) {
-
-    $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-  } else {
-
-    $("#trabajador_validar").hide();
-  }
-}
-
 function disable_cargo() {
+  $('#cargo option[value="Operario"]').prop('disabled',true);
+  $('#cargo option[value="Oficial"]').prop('disabled',true);
+  $('#cargo option[value="Peón"]').prop('disabled',true);
 
   $('#cargo option[value="Ingeniero Residente"]').prop('disabled',true);
-   
-}
+  $('#cargo option[value="Asitente Técnico"]').prop('disabled',true);
+  $('#cargo option[value="Asistente Administrativo"]').prop('disabled',true);
+  $('#cargo option[value="Almacenero"]').prop('disabled',true);
 
-// verificamos la opcion del TIPO TRABAJADR
-$(document).on('change', '#tipo_trabajador', function(event) {
-  
-  if ($("#tipo_trabajador option:selected").text() == "Obrero") {
+  if ($("#tipo_trabajador").select2("val") == "Técnico") {    
+    $('#cargo option[value="Operario"]').prop('disabled',true);
+    $('#cargo option[value="Oficial"]').prop('disabled',true);
+    $('#cargo option[value="Peón"]').prop('disabled',true);
 
-    $("#operario").show();
-    $("#oficial").show();
-    $("#peon").show();
-
-    $("#ing_residente").hide();
-    $("#asis_tenico").hide();
-    $("#asis_admin").hide();
-    $("#almacenero").hide();
+    $('#cargo option[value="Ingeniero Residente"]').prop('disabled',false);
+    $('#cargo option[value="Asitente Técnico"]').prop('disabled',false);
+    $('#cargo option[value="Asistente Administrativo"]').prop('disabled',false);
+    $('#cargo option[value="Almacenero"]').prop('disabled',false);      
 
   } else {
 
-    $("#ing_residente").show();
-    $("#asis_tenico").show();
-    $("#asis_admin").show();
-    $("#almacenero").show(); 
+    if ($("#tipo_trabajador").select2("val") == "Obrero") {      
 
-    $("#operario").hide();
-    $("#oficial").hide();
-    $("#peon").hide();
-  }
-});
+      $('#cargo option[value="Operario"]').prop('disabled',false);
+      $('#cargo option[value="Oficial"]').prop('disabled',false);
+      $('#cargo option[value="Peón"]').prop('disabled',false);
 
+      $('#cargo option[value="Ingeniero Residente"]').prop('disabled',true);
+      $('#cargo option[value="Asitente Técnico"]').prop('disabled',true);
+      $('#cargo option[value="Asistente Administrativo"]').prop('disabled',true);
+      $('#cargo option[value="Almacenero"]').prop('disabled',true);
+    }
+  }   
+}
 
 //Función limpiar
 function limpiar() {  
 
   $("#trabajador").val("").trigger("change");
 
-  $("#tipo_trabajador option[id='select']").attr("selected", true);
-  $("#cargo option[id='select']").attr("selected", true);
-
+  $("#tipo_trabajador").val("").trigger("change");
+  $("#cargo").val("").trigger("change");
   $("#desempenio").val("");
 
   $("#sueldo_mensual").val("");   
@@ -186,9 +175,7 @@ function guardaryeditar(e) {
 
 	      tabla.ajax.reload();
          
-				limpiar();
-
-        $("#modal-agregar-trabajador").modal("hide");
+				show_hide_form(false)
 
 			}else{
 
@@ -211,7 +198,7 @@ function verdatos(idtrabajador){
 
   $("#modal-ver-trabajador").modal("show")
 
-  $.post("../ajax/trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (data, status) {
+  $.post("../ajax/trabajador.php?op=verdatos", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data); 
 
@@ -298,41 +285,25 @@ function mostrar(idtrabajador) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-trabajador").modal("show")
+  show_hide_form(true);
 
-  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
+  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
+    $("#idtrabajador_por_proyecto").val(data.idtrabajador_por_proyecto);
+    $("#trabajador").val(data.idtrabajador).trigger("change");
 
-     $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
-     $("#nombre").val(data.nombres);
-     $("#num_documento").val(data.numero_documento);
-     $("#direccion").val(data.direccion);
-     $("#telefono").val(data.telefono);
-     $("#email").val(data.email);
-     $("#nacimiento").val(data.fecha_nacimiento);
-     $("#tipo_trabajador option[value='"+data.tipo_trabajador+"']").attr("selected", true);
-     $("#cargo option[value='"+data.cargo+"']").attr("selected", true);
-     $("#desempenio").val(data.desempeno);
-     $("#c_bancaria").val(data.cuenta_bancaria);
-     $("#banco").val(data.idbancos);
-     $("#tutular_cuenta").val(data.titular_cuenta);
-     $("#sueldo_mensual").val(data.sueldo_mensual);
-     $("#sueldo_diario").val(data.sueldo_diario);
-     $("#sueldo_hora").val(data.sueldo_hora);
-     $("#idtrabajador").val(data.idtrabajador);
-
-    if (data.imagen != "") {
-
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
-
-			$("#foto2_actual").val(data.imagen);
-		}
-    edades();
+    $("#tipo_trabajador").val(data.tipo_trabajador).trigger("change");
+    $("#cargo").val(data.cargo).trigger("change");
+    $("#desempenio").val(data.desempenio);
+  
+    $("#sueldo_mensual").val(data.sueldo_mensual);   
+    $("#sueldo_diario").val(data.sueldo_diario);   
+    $("#sueldo_hora").val(data.sueldo_hora);
   });
 }
 
@@ -348,7 +319,7 @@ function desactivar(idtrabajador) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=desactivar", { idtrabajador: idtrabajador }, function (e) {
+      $.post("../ajax/trabajador.php?op=desactivar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
 
         Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
     
@@ -370,7 +341,7 @@ function activar(idtrabajador) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=activar", { idtrabajador: idtrabajador }, function (e) {
+      $.post("../ajax/trabajador.php?op=activar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
 
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
 
@@ -389,33 +360,30 @@ $(function () {
 
     submitHandler: function (e) {
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-          
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-
-        guardaryeditar(e);
-      }
+       
+      guardaryeditar(e);
+      
 
     },
   });
 
   $("#form-trabajador-proyecto").validate({
     rules: {
+      trabajador: { required: true},
       tipo_trabajador: { required: true},
       cargo: { required: true},
       desempenio: { minlength: 4, maxlength: 100},
       sueldo_mensual: { required: true, minlength: 1},
       sueldo_diario: { required: true, minlength: 1},
-      sueldo_hora: { required: true, minlength: 1}
-
+      sueldo_hora: { required: true, minlength: 1},
+      
       // terms: { required: true },
     },
     messages: {
-      
+      trabajador: {
+        required: "Por favor  seleccione un trabajador.",
+      },
+
       tipo_trabajador: {
         required: "Por favor  seleccione un tipo trabajador.",
       },
@@ -435,7 +403,6 @@ $(function () {
       sueldo_hora: {
         required: "Por favor ingrese sueldo por hora.",
       },
-
     },
         
     errorElement: "span",
@@ -468,21 +435,4 @@ $(function () {
     },
   });
 });
-
-
-
-
-function validacion_form() {
-  if ($('#nombre').val() == '' || $('#tipo_documento').val() == '' ) {
-    $('.validar_nombre').addClass('has-error');
-    console.log("vacio");
-    return false;
-  }else{
-    $('.validar_nombre').removeClass('has-error');
-    console.log("no vacio");
-    return true;
-  }
-
-}
-
 

@@ -185,7 +185,7 @@
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=>$reg->cuenta_bancaria,
+              "2"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
               "3"=>$reg->telefono,
               "4"=>$reg->fecha_nacimiento.' : '.$reg->edad,
               "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
@@ -210,6 +210,17 @@
             //Codificar el resultado utilizando json
             echo json_encode($rspta);
           }
+        break;
+
+        case 'select2Banco': 
+
+          $rspta = $trabajador->select2_banco();
+      
+          while ($reg = $rspta->fetch_object())  {
+
+            echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+          }
+
         break;
       }
 

@@ -1,4 +1,4 @@
-var tabla;
+var tabla; var tabla2;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -6,9 +6,7 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
   listar(localStorage.getItem('nube_idproyecto'));
-
-  //Mostramos los trabajadores
-  $.post("../ajax/registro_asistencia.php?op=select2Trabajador&nube_idproyecto="+localStorage.getItem('nube_idproyecto'), function (r) { $("#trabajador").html(r); });
+  
 
   // $("#bloc_Accesos").addClass("menu-open");
 
@@ -16,33 +14,13 @@ function init() {
 
   // $("#lasistencia").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) {
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-asistencia").submit(); });
+  // $("#modal-agregar-asistencia").on("submit",function(e) { guardaryeditar(e);	})
 
-    $("#submit-form-asistencia").submit();
-  });
-
-    //Initialize Select2 Elements
-    $("#trabajador").select2({
-      theme: "bootstrap4",
-      placeholder: "Selecione trabajador",
-      allowClear: true,
-    });
-    $("#trabajador").val("null").trigger("change");
-
+  
   // Formato para telefono
   $("[data-mask]").inputmask();
 
-  // $('.timepicker').datetimepicker({
-  //   timeFormat: 'h:mm p',
-  //   interval: 60,
-  //   minTime: '10',
-  //   maxTime: '6:00pm',
-  //   defaultTime: '11',
-  //   startTime: '10:00',
-  //   dynamic: false,
-  //   dropdown: true,
-  //   scrollbar: true
-  // });
   //Timepicker
   $('#timepicker').datetimepicker({
     // format: 'LT',
@@ -50,54 +28,73 @@ function init() {
     lang:'ru'
   })
 
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {  dd = '0' + dd; }
+
+  if (mm < 10) {  mm = '0' + mm;  }
+
+  today = yyyy + '-' + mm + '-' + dd;
+  $("#fecha").val(today);
+
+  
 }
-function seleccion() {
 
-  if ($("#trabajador").select2("val") == null) {
+function mostrar_form_table(estados) {
 
-    $("#trabajador_validar").show();
-    console.log($("#trabajador").select2("val"));
-
+  if (estados == 1 ) {
+    $("#card-registrar").show();
+    $("#tabla-asistencia-trab").show();
+    $("#ver_asistencia").hide();
+    $("#detalle_asistencia").hide();    
+    $("#card-regresar").hide();
   } else {
-
-    $("#trabajador_validar").hide();
-    console.log($("#trabajador").select2("val"));
+    if (estados == 2) {
+      $("#card-registrar").hide();
+      $("#tabla-asistencia-trab").hide();
+      $("#ver_asistencia").show();
+      $("#detalle_asistencia").hide();
+      $("#card-regresar").show();
+    } else {
+      $("#card-registrar").hide();
+      $("#tabla-asistencia-trab").hide();
+      $("#ver_asistencia").hide();
+      $("#detalle_asistencia").show();
+      $("#card-regresar").show();
+    }
   }
 }
 
-
-/**
- idasistencia
- trabajador
- horas_tabajo
- */
-
-
 //Función limpiar
 function limpiar() {
-  $("#idasistencia").val(""); 
-  $("#trabajador").val("null").trigger("change");
-  $("#horas_tabajo").val("");
+  $("#idasistencia_trabajador").val(""); 
+  $("#trabajador").val("");
+  $("#horas_trabajo").val("");
+  
+  lista_trabajadores(localStorage.getItem('nube_idproyecto'));
 }
 // Función que suma o resta días a la fecha indicada
 
 sumaFecha = function(d, fecha)
 {
- var Fecha = new Date();
- var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
- var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
- var aFecha = sFecha.split(sep);
- var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
- fecha= new Date(fecha);
- fecha.setDate(fecha.getDate()+parseInt(d));
- var anno=fecha.getFullYear();
- var mes= fecha.getMonth()+1;
- var dia= fecha.getDate();
- mes = (mes < 10) ? ("0" + mes) : mes;
- dia = (dia < 10) ? ("0" + dia) : dia;
- var fechaFinal = dia+sep+mes+sep+anno;
- return (fechaFinal);
- }
+  var Fecha = new Date();
+  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+  var aFecha = sFecha.split(sep);
+  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+  fecha= new Date(fecha);
+  fecha.setDate(fecha.getDate()+parseInt(d));
+  var anno=fecha.getFullYear();
+  var mes= fecha.getMonth()+1;
+  var dia= fecha.getDate();
+  mes = (mes < 10) ? ("0" + mes) : mes;
+  dia = (dia < 10) ? ("0" + dia) : dia;
+  var fechaFinal = dia+sep+mes+sep+anno;
+  return (fechaFinal);
+}
 
 //Función Listar
 function listar(nube_idproyecto) {
@@ -136,12 +133,10 @@ function listar(nube_idproyecto) {
 
   $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-    
-    data =JSON.parse(data);
-    console.log(data);
+    data =JSON.parse(data); //console.log(data);
    
     var fecha = data.fecha_inicio;
-    console.log(fecha);
+    // console.log(fecha);
     var fecha_i = sumaFecha(0,fecha);
     var cal_quincena  =data.plazo/15;
     var i=0;
@@ -154,7 +149,7 @@ function listar(nube_idproyecto) {
       
       fecha=sumaFecha(14,fecha_inicio);
 
-      console.log(fecha_inicio+'-'+fecha);
+      // console.log(fecha_inicio+'-'+fecha);
       ver_asistencia="'"+fecha_inicio+"',"+"'"+fecha+"'";
       $('#Lista_quincenas').append(' <button type="button" class="btn bg-gradient-info text-center" onclick="datos_quincena('+ver_asistencia+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+'-'+fecha+'</button>')
       fecha_i =sumaFecha(1,fecha);
@@ -165,16 +160,61 @@ function listar(nube_idproyecto) {
 
   });
 }
+
+// listamos los trabajadores para tomar la asistencia
+function lista_trabajadores(nube_idproyecto) {
+
+  $("#lista-de-trabajadores").html(
+    '<div class="col-lg-12 text-center">'+  
+      '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />'+
+      '<br />'+
+      '<h4>Cargando...</h4>'+
+    '</div>'
+  );
+
+  $.post("../ajax/registro_asistencia.php?op=lista_trabajador", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data); 
+
+    $("#lista-de-trabajadores").html("");
+
+    $.each(data, function (index, value) {
+      // console.log(value.idtrabajador_por_proyecto);
+      var img =value.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+value.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
+      
+      $("#lista-de-trabajadores").append(
+        '<!-- Trabajador -->'+                         
+        '<div class="col-lg-6">'+
+          '<div class="user-block">'+
+            img+
+            '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+value.nombres+'</p></span>'+
+            '<span class="description">'+value.documento+': '+value.numero_documento+'</span>'+
+          '</div>'+                         
+          '<input type="hidden" name="trabajador[]" value="'+value.idtrabajador_por_proyecto+'" />'+
+        '</div>'+
+
+        '<!-- Horas de trabajo -->'+
+        '<div class="col-lg-6 mt-2">'+
+          '<div class="form-group">'+
+            '<input id="horas_trabajo" name="horas_trabajo[]" type="time"   class="form-control" value="00:00" />'+             
+          '</div>'+
+        '</div> '+
+        '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+      );
+    });
+  });
+}
+
+function agregar_hora_all() {
+  var hora_all = $("#hora_all").val();
+  $('input[type=time][name="horas_trabajo[]"]').val(hora_all);
+}
+
 function datos_quincena(f1,f2) {
   var nube_idproyect =localStorage.getItem('nube_idproyecto');
   console.log('----------'+f1,f2,nube_idproyect);
       
-  $("#cargando-1-fomulario").hide();
-  $("#tabla-asistencia-trab").hide();
-  $("#card-titulo-registrar").hide();
-  $("#cargando-2-fomulario").show();
-  $("#ver_asistencia").show();
-  $("#card-titulo").show();
+  mostrar_form_table(2)
   $.post("../ajax/registro_asistencia.php?op=ver_datos_quincena", {f1:f1,f2:f2,nube_idproyect:nube_idproyect}, function (data, status) {
         
     data =JSON.parse(data);
@@ -276,6 +316,7 @@ function datos_quincena(f1,f2) {
 
 
     });
+
     $('.nameappend').append('<tr>'+
     '<td colspan="23"></td>'+
     '<td ><b>TOTAL</b></td>'+
@@ -356,8 +397,8 @@ function guardaryeditar(e) {
     success: function (datos) {
              
       if (datos == 'ok') {
-
-				toastr.success('asistencia registrado correctamente')				 
+			 
+        Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
 
 	      tabla.ajax.reload();
          
@@ -367,21 +408,50 @@ function guardaryeditar(e) {
 
 			}else{
 
-				toastr.error(datos)
+				Swal.fire("Error!", datos, "error");
 			}
     },
   });
 }
 
-function mostrar(idasistencia) {
+function mostrar(idasistencia_trabajador) {
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-asistencia").modal("show")
+  $.post("../ajax/registro_asistencia.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
 
-  $.post("../ajax/asistencia.php?op=mostrar", { idasistencia: idasistencia }, function (data, status) {
+    data = JSON.parse(data);  //console.log(data);
+    
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
 
+    $("#lista-de-trabajadores2").html("");
+
+    $.each(data, function (index, value) {
+      // console.log(value.idtrabajador_por_proyecto);
+      var img =value.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+value.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
+      
+      $("#lista-de-trabajadores2").append(
+        '<!-- Trabajador -->'+                         
+        '<div class="col-lg-6">'+
+          '<div class="user-block">'+
+            img+
+            '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+value.nombres+'</p></span>'+
+            '<span class="description">'+value.documento+': '+value.numero_documento+'</span>'+
+          '</div>'+                         
+          '<input type="hidden" name="trabajador2[]" value="'+value.idtrabajador_por_proyecto+'" />'+
+        '</div>'+
+
+        '<!-- Horas de trabajo -->'+
+        '<div class="col-lg-6 mt-2">'+
+          '<div class="form-group">'+
+            '<input id="horas_trabajo" name="horas_trabajo2[]" type="time"   class="form-control" value="00:00" />'+             
+          '</div>'+
+        '</div> '+
+        '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+      );
+    });
   });
 }
 
@@ -390,47 +460,43 @@ function justificar(idasistencia) {
   console.log('holaaaaa');
  
 }
+
 // ver_asistencias
-function ver_asistencias(idtrabajador,fecha_inicio_proyect) {
-  console.log(idtrabajador,fecha_inicio_proyect);
+function ver_asistencias_individual(idtrabajadorproyecto,fecha_inicio_proyect) {
+
+  console.log(idtrabajadorproyecto,fecha_inicio_proyect);
   
-  $("#cargando-1-fomulario").hide();
-  $("#tabla-asistencia-trab").hide();
-  $("#card-titulo-registrar").hide();
-  $("#cargando-2-fomulario").show();
-  $("#ver_asistencia").show();
-  $("#card-titulo").show();
+  mostrar_form_table(3);
 
-  $.post("../ajax/registro_asistencia.php?op=ver_asistencia_trab", { idtrabajador: idtrabajador,fecha_inicio_proyect:fecha_inicio_proyect  }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);   
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-     $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
-     $("#nombre").val(data.razon_social);
-     $("#num_documento").val(data.ruc);
-     $("#direccion").val(data.direccion);
-     $("#telefono").val(data.telefono);
-     $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
-     $("#c_bancaria").val(data.cuenta_bancaria);
-     $("#c_detracciones").val(data.cuenta_detracciones);
-     $("#titular_cuenta").val(data.titular_cuenta);
-     $("#idproveedor").val(data.idproveedor);
-
-  });
-
- // $("#modal-ver-asistencia").modal("show")
-}
-
-function regresar_principal(){
-  $("#cargando-1-fomulario").show();
-  $("#tabla-asistencia-trab").show();
-  $("#card-titulo-registrar").show();
-  $("#cargando-2-fomulario").hide();
-  $("#ver_asistencia").hide();
-  $("#card-titulo").hide();
+  tabla2=$('#tabla-detalle-asistencia-individual').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajadorproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();   
 }
 
 init();
@@ -439,35 +505,39 @@ $(function () {
 
   $.validator.setDefaults({
 
-    submitHandler: function (e) {
+    submitHandler: function (e) {  
 
-      if ($("#trabajador").select2("val") == null) {
-        
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
+      Swal.fire({
+        title: "¿Está seguro de guardar estos registros?",
+        text: "",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, guardar!",
+      }).then((result) => {
 
-      } else {
+        if (result.isConfirmed) {
 
-        $("#trabajador_validar").hide();
-
-        guardaryeditar(e);
-      }
+          guardaryeditar(e);
+          
+        }
+      });
     },
-  });
+  });  
 
-  $("#form-asistencia").validate({
-    rules: {
+  $("#form-asistencia").validate({    
+    
 
-      horas_tabajo: { required: true},
-
-
-      // terms: { required: true },
+    rules: {      
+      idproyecto: { required: true},
     },
+
     messages: {
-      horas_tabajo: {
-        required: "Por favor  seleccione la hora",
+      idproyecto: {
+        required: "Por favor  seleccione proyecto",
       },
-
-    },
+    },  
         
     errorElement: "span",
 
@@ -483,30 +553,12 @@ $(function () {
       $(element).addClass("is-invalid");
     },
 
-   unhighlight: function (element, errorClass, validClass) {
+    unhighlight: function (element, errorClass, validClass) {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
-
-      
-      if ($("#trabajador").select2("val") == null) {
-         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-      }  
-
     },
-
-
-
   });
 });
-
-
-
-
 
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec() {

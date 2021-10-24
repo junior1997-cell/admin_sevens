@@ -1,387 +1,266 @@
 <?php
 ob_start();
-if (strlen(session_id()) < 1){
-	session_start();//Validamos si existe o no la sesión
-}
-require_once "../modelos/registro_asistencia.php";
 
-$asist_trabajador=new Asistencia_trabajador();
+	if (strlen(session_id()) < 1){
+		session_start();//Validamos si existe o no la sesión
+	}
+  if (!isset($_SESSION["nombre"])) {
 
-//$idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
-$idproyecto		= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-$idasistencia_trabajador		= isset($_POST["idasistencia"])? limpiarCadena($_POST["idasistencia"]):"";
-$trabajador 		    = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
-$horas_trabajo_dia	    = isset($_POST["horas_tabajo"])? limpiarCadena($_POST["horas_tabajo"]):"";   
+    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 
+  } else {
+    //Validamos el acceso solo al usuario logueado y autorizado.
+    if ($_SESSION['asistencia_trabajador'] == 1) {
 
+      require_once "../modelos/registro_asistencia.php";
 
-switch ($_GET["op"]){
-	case 'guardaryeditar':
-		if (!isset($_SESSION["nombre"])) {
+      $asist_trabajador=new Asistencia_trabajador();
 
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+      //$idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
+      $idproyecto		          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
+      $idasistencia_trabajador= isset($_POST["idasistencia_trabajador"])? limpiarCadena($_POST["idasistencia_trabajador"]):"";
+      
+      $fecha	                = isset($_POST["fecha"])? limpiarCadena($_POST["fecha"]):"";
 
-		} else {
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$horas_acumuladas='';
-				$horas_trabajo='';
-				$sabatical='';
-				$pago_dia='';
-				$horas_extras='';
-				$pago_horas_extras='';
-				$horas_desglose = substr($horas_trabajo_dia, 0, 2).'.'.(floatval(substr($horas_trabajo_dia, 3, 5))*100)/60;
+      switch ($_GET["op"]){
 
+        case 'guardaryeditar':
+         
+          $rspta=$asist_trabajador->insertar($idproyecto, $_POST["trabajador"], $_POST["horas_trabajo"], $fecha);
 
-				$sueldoxhora_trab=$asist_trabajador->sueldoxhora($trabajador,$idproyecto);
-				$datos=$asist_trabajador->horas_acumulada($trabajador,$idproyecto);
+          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";        
+          
+          
 
-				if ($datos==NULL) {
-					if (floatval($horas_desglose)>8) {
-						$horas_extras=floatval($horas_desglose)-8;
-						$pago_horas_extras=$horas_extras*$sueldoxhora_trab['sueldo_hora'];
-						$horas_trabajo=8;
-					}else{
-						$horas_extras=0;
-						$pago_horas_extras=0;
-						$horas_trabajo=floatval($horas_desglose);
-					}
-					$sabatical=0;
-					$pago_dia=floatval($horas_trabajo)*$sueldoxhora_trab['sueldo_hora'];
+        break;
 
-				}else{
-					$horas_acumuladas=floatval($horas_desglose)+$datos['horas_trabajo'];
+        case 'desactivar':
 
-					$caculamos = floatval( substr($horas_acumuladas/44, 0, 1));
+          $rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
 
-					if ( $caculamos == $datos['sabatical'] && $horas_acumuladas < 44) {
+          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
 
-						$sabatical=0;
+        break;
 
-					}else {
+        case 'activar':
 
-						if ( $caculamos == $datos['sabatical'] && $horas_acumuladas >= 44) {
+          $rspta=$asist_trabajador->activar($idasistencia_trabajador);
 
-							$sabatical=0;
+          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 
-						}else {
+        break;
 
-							$sabatical=1;
-						}						 
-					}
+        case 'mostrar_editar':
 
-					if (floatval($horas_desglose)>8) {
-						$horas_extras=floatval($horas_desglose)-8;
-						$pago_horas_extras=$horas_extras*$sueldoxhora_trab['sueldo_hora'];
-						$horas_trabajo=8;
-					}else{
-						$horas_extras=0;
-						$pago_horas_extras=0;
-						$horas_trabajo=floatval($horas_desglose);
-					}
-					$pago_dia=floatval($horas_desglose)*$sueldoxhora_trab['sueldo_hora'];
-				}
+          $rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
 
-				// var_dump($sabatical,substr($horas_acumuladas/44, 0, 1));die;
+        break;
 
-				if (empty($idasistencia_trabajador)){
-					$rspta=$asist_trabajador->insertar($trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical);
-					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
-				}
-				else {
-					$rspta=$asist_trabajador->editar($idasistencia_trabajador,$trabajador,$horas_trabajo,$pago_dia,$horas_extras,$pago_horas_extras,$sabatical);
-					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
-				}
-				// echo "hora acumulada: $horas_acumuladas, sabatical: $sabatical, divicion: $caculamos "." bd_sabatico".$datos['sabatical'];
-				$horas_acumuladas='';
-				$horas_trabajo='';
-				$sabatical='';
-				$pago_dia='';
-				$horas_extras='';
-				$pago_horas_extras='';
-				$horas_desglose ='';
-				//Fin de las validaciones de acceso
-			} else {
+        case 'ver_datos_quincena':
+          //$f1 = $_POST["f1"];
+          /*$f1 = $_POST["f1"];
+          $f2 = $_POST["f2"];
+          $nube_idproyect = $_POST["nube_idproyect"];*/
+          $f1 = '01/10/2021';
+          $f2 = '15/10/2021';
+          $nube_idproyect = '1';
 
-		  		require 'noacceso.php';
-			}
-		}		
-	break;
+          $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
+          //Vamos a declarar un array
+          $data= Array();
+          //$idtrabajador_d=2;
+          while ($reg=$rspta->fetch_object()){
 
-	case 'desactivar':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
- 				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
+            $data[]=array(
+              "idtrabajador"=>$reg->idtrabajador,
+              "nombres"=>$reg->nombres,
+              "tipo_doc"=>$reg->tipo_doc,
+              "num_doc"=>$reg->num_doc,
+              "cargo"=>$reg->cargo,
+              "sueldo_mensual"=>$reg->sueldo_mensual,
+              "sueldo_diario"=>$reg->sueldo_diario,
+              "sueldo_hora"=>$reg->total_horas,
+              "total_sabatical"=>$reg->total_sabatical
 
-	case 'activar':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$rspta=$asist_trabajador->activar($idasistencia_trabajador);
- 				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
+              );
+              // $idtrabajador_d++;
+          }
+          //Codificar el resultado utilizando json
+          echo json_encode($data);		
+        break;
 
-	case 'mostrar':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
-		 		//Codificar el resultado utilizando json
-		 		echo json_encode($rspta);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
-	case 'ver_datos_quincena':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				//$f1 = $_POST["f1"];
-				/*$f1 = $_POST["f1"];
-				$f2 = $_POST["f2"];
-				$nube_idproyect = $_POST["nube_idproyect"];*/
-				$f1 = '01/10/2021';
-				$f2 = '15/10/2021';
-				$nube_idproyect = '1';
+        case 'ver_datos_quincena_xdia':
+          //$f1 = $_POST["f1"];
+          $f1 = $_POST["f1"];
+          $f2 = $_POST["f2"];
+          $nube_idproyect = $_POST["nube_idproyect"];
+          $idtrabajador = $_POST["idtrabajador"];
+          /*$f1 = '01/10/2021';
+          $f2 = '15/10/2021';
+          $nube_idproyect = '1';
+          $idtrabajador = '1';*/
+          $data= Array();
 
-				$rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
-				//Vamos a declarar un array
-				$data= Array();
-				//$idtrabajador_d=2;
-				while ($reg=$rspta->fetch_object()){
+          $rspta=$asist_trabajador->ver_detalle_quincena_dias($f1,$f2,$nube_idproyect,$idtrabajador);
 
-		 			$data[]=array(
-		 				"idtrabajador"=>$reg->idtrabajador,
-		 				"nombres"=>$reg->nombres,
-		 				"tipo_doc"=>$reg->tipo_doc,
-		 				"num_doc"=>$reg->num_doc,
-		 				"cargo"=>$reg->cargo,
-		 				"sueldo_mensual"=>$reg->sueldo_mensual,
-		 				"sueldo_diario"=>$reg->sueldo_diario,
-		 				"sueldo_hora"=>$reg->total_horas,
-		 				"total_sabatical"=>$reg->total_sabatical
+          while ($reg=$rspta->fetch_object()){
 
-		 				);
-						// $idtrabajador_d++;
-		 		}
-		 		//Codificar el resultado utilizando json
-		 		echo json_encode($data);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
-	case 'ver_datos_quincena_xdia':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				//$f1 = $_POST["f1"];
-				$f1 = $_POST["f1"];
-				$f2 = $_POST["f2"];
-				$nube_idproyect = $_POST["nube_idproyect"];
-				$idtrabajador = $_POST["idtrabajador"];
-				/*$f1 = '01/10/2021';
-				$f2 = '15/10/2021';
-				$nube_idproyect = '1';
-				$idtrabajador = '1';*/
-				$data= Array();
-				$rspta=$asist_trabajador->ver_detalle_quincena_dias($f1,$f2,$nube_idproyect,$idtrabajador);
-				while ($reg=$rspta->fetch_object()){
-						$data[]=array(
-							"idasistencia_trabajador"=>$reg->idasistencia_trabajador,
-							"idtrabajador"=>$reg->idtrabajador,
-							"horas_trabajador"=>$reg->horas_trabajador,
-							"horas_extras_dia"=>$reg->horas_extras_dia,
-							"fecha_asistencia"=>$reg->fecha_asistencia
-							);
-				}
-		 		
-		 		//Codificar el resultado utilizando json
-		 		echo json_encode($data);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
-	case 'listarquincenas':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$nube_idproyecto = $_POST["nube_idproyecto"];
-				$rspta=$asist_trabajador->listarquincenas_b($nube_idproyecto);
-		 		//Codificar el resultado utilizando json
-		 		echo json_encode($rspta);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
+            $data[]=array(
+              "idasistencia_trabajador"=>$reg->idasistencia_trabajador,
+              "idtrabajador"=>$reg->idtrabajador,
+              "horas_trabajador"=>$reg->horas_trabajador,
+              "horas_extras_dia"=>$reg->horas_extras_dia,
+              "fecha_asistencia"=>$reg->fecha_asistencia
+            );
+          }
+          
+          //Codificar el resultado utilizando json
+          echo json_encode($data);		
+        break;
 
-	case 'listar':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$nube_idproyecto = $_GET["nube_idproyecto"];
-				$rspta=$asist_trabajador->listar($nube_idproyecto);
-		 		//Vamos a declarar un array
-		 		$data= Array();
-				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
-					$jonal_diario = '';
-					$sueldo_acumudado='';
-		 		while ($reg=$rspta->fetch_object()){
-					//$jonal_diario=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
-					$jonal_diario=$reg->sueldo_hora*8;
-					$sueldo_acumudado=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
-					$ver_asistencia="'$reg->idtrabajador','$reg->fecha_inicio_proyect'";
-		 			$data[]=array(
-		 				"0"=>'<button class="btn btn-info" onclick="ver_asistencias('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
-						"1"=>'<div class="user-block">
-							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
-							style="color: #000000 !important;">'. $reg->cargo .' : </b> '. $reg->nombre .'</p></span>
-							<span class="description" style="margin-left: 0px !important;">'. $reg->tipo_doc .': '. $reg->num_doc .' </span>
-							</div>',
-		 				"2"=>$reg->total_horas+$reg->horas_extras,
-		 				"3"=>$reg->sueldo_hora,
-		 				"4"=>round($sueldo_acumudado, 2),
-		 				"5"=>$reg->sueldo_mensual,
-		 				"6"=>$jonal_diario,
-		 				"7"=>$reg->total_sabatical
-		 				);
+        case 'listarquincenas':
 
-						 $jonal_diario=0;
-						 $sueldo_acumudado=0;
-		 		}
-		 		$results = array(
-		 			"sEcho"=>1, //Información para el datatables
-		 			"iTotalRecords"=>count($data), //enviamos el total registros al datatable
-		 			"iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-		 			"data"=>$data);
-		 		echo json_encode($results);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}
-	break;
-	
-	case 'ver_asistencia_trab':
-		if (!isset($_SESSION["nombre"]))
-		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		}
-		else
-		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['asistencia_trabajador']==1)
-			{
-				$idtrabajador= '1';
-				$rspta=$asist_trabajador->registro_asist_trab($idtrabajador);
-		 		//Codificar el resultado utilizando json
-		 		echo json_encode($rspta);
-			//Fin de las validaciones de acceso
-			}
-			else
-			{
-		  	require 'noacceso.php';
-			}
-		}		
-	break;
+          $nube_idproyecto = $_POST["nube_idproyecto"];
 
-	case 'select2Trabajador': 
-		$nube_idproyecto = $_GET["nube_idproyecto"];
+          $rspta=$asist_trabajador->listarquincenas_b($nube_idproyecto);
 
-		$rspta = $asist_trabajador->select2_trabajador($nube_idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);	
 
-		while ($reg = $rspta->fetch_object()){
+        break;
 
-			echo '<option value=' . $reg->id . '>'.$reg->cargo .' - '. $reg->nombre .' - '. $reg->numero_documento . '</option>';
-		}
-	break;
+        case 'listar':
 
-	case 'salir':
-		//Limpiamos las variables de sesión   
-        session_unset();
-        //Destruìmos la sesión
-        session_destroy();
-        //Redireccionamos al login
-        header("Location: ../index.php");
+          $nube_idproyecto = $_GET["nube_idproyecto"];
+          
+          $rspta=$asist_trabajador->listar($nube_idproyecto);
+          //Vamos a declarar un array
+          $data= Array();
 
-	break;
-}
-ob_end_flush();
+          $jornal_diario = '';
+
+          $sueldo_acumudado='';
+
+          while ($reg=$rspta->fetch_object()){
+            //$jonal_diario=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
+            $jornal_diario=$reg->sueldo_hora*8;
+
+            $sueldo_acumudado=$reg->sueldo_hora*($reg->total_horas_normal+$reg->total_horas_extras);
+
+            $ver_asistencia="'$reg->idtrabajador','$reg->fecha_inicio_proyect'";
+
+            $data[]=array(
+              "0"=>'<button class="btn btn-info" onclick="ver_asistencias_individual('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
+              "1"=>'<div class="user-block">
+                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
+                style="color: #000000 !important;">'. $reg->cargo .' : </b> <br> '. $reg->nombre .'</p></span>
+                <span class="description" style="margin-left: 0px !important;">'. $reg->tipo_doc .': '. $reg->num_doc .' </span>
+                </div>',
+              "2"=> round(($reg->total_horas_normal+$reg->total_horas_extras)/8, 1),
+              "3"=> round($reg->total_horas_normal+$reg->total_horas_extras, 1),
+              "4"=> $reg->sueldo_hora,
+              "5"=> round($sueldo_acumudado, 1),
+              "6"=> $reg->sueldo_mensual,
+              "7"=> $jornal_diario,
+              "8"=> $reg->total_sabatical
+            );
+
+            $jornal_diario=0;
+
+            $sueldo_acumudado=0;
+          }
+
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data
+          );
+
+          echo json_encode($results);
+
+        break;
+        
+        case 'listar_asis_individual':
+
+          $idtrabajador_proyecto = $_GET["idtrabajadorproyecto"];
+          
+          $rspta=$asist_trabajador->listar_asis_individual($idtrabajador_proyecto);
+          //Vamos a declarar un array
+          $data= Array();
+          
+          while ($reg=$rspta->fetch_object()){
+            $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+            $data[]=array(
+              "0"=> ($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Editar" ><i class="fas fa-pencil-alt"></i></button>'.
+              ' <button class="btn btn-danger" onclick="desactivar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Desactivar"><i class="far fa-trash-alt  "></i></button>'.
+              ' <button class="btn btn-info" onclick="verdatos('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>':
+              '<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>'.
+              ' <button class="btn btn-primary" onclick="activar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Activar"><i class="fa fa-check"></i></button>'.
+              ' <button class="btn btn-info" onclick="verdatos('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
+              "1"=> $reg->trabajador,
+              "2"=> $reg->horas_normal_dia,
+              "3"=> $reg->pago_normal_dia,
+              "4"=> $reg->horas_extras_dia,
+              "5"=> $reg->pago_horas_extras,
+              "6"=> $reg->fecha_asistencia,
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
+            );
+          }
+
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data
+          );
+
+          echo json_encode($results);
+        break;
+        
+        case 'ver_asistencia_trab':
+
+          $idtrabajador= '1';
+
+          $rspta=$asist_trabajador->registro_asist_trab($idtrabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);		
+
+        break;
+
+        case 'lista_trabajador': 
+
+          // $nube_idproyecto = 1;
+          $nube_idproyecto = $_POST["nube_idproyecto"]; 
+
+          $rspta = $asist_trabajador->lista_trabajador($nube_idproyecto);
+
+          $datos = Array();
+
+          while ($reg = $rspta->fetch_object()){
+
+            $datos[]=array(
+              "idtrabajador_por_proyecto"=>$reg->idtrabajador_por_proyecto,
+              "imagen_perfil"=>$reg->imagen_perfil,
+              "nombres"=>$reg->nombres,
+              "documento"=>$reg->documento,
+              "numero_documento"=>$reg->numero_documento,
+              "cargo"=>$reg->cargo
+            );
+          }
+          // enviamos los datos codificado
+          echo json_encode($datos);
+
+        break;
+      } // end switch
+
+    } else {
+
+      require 'noacceso.php';
+    }
+  }
+	ob_end_flush();
+
 ?>

@@ -109,6 +109,9 @@
   .borde-arriba-naranja{
     border-top: 3px solid #fd4604;
   }
+  .borde-arriba-negro{
+    border-top: 3px solid #1a221c;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -129,7 +132,9 @@
 }
 
 @media (max-width: 991.98px) {
-
+  .borde-arriba-verde{
+    border-top: 3px solid #109e38;
+  }
 }
 
 @media (max-width: 1199.98px) {

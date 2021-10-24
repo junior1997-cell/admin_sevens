@@ -82,7 +82,9 @@
     //Implementar un método para listar los registros
     public function listar()
     {
-      $sql="SELECT * FROM trabajador ; ";
+      $sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.cuenta_bancaria, t.telefono, t.imagen_perfil, t.estado, b.nombre AS banco 
+      FROM trabajador AS t, bancos AS b
+      WHERE t.idbancos = b.idbancos; ";
 
       return ejecutarConsulta($sql);		
     }
@@ -93,6 +95,12 @@
       $sql = "SELECT imagen_perfil, imagen_dni_anverso, imagen_dni_reverso FROM trabajador WHERE idtrabajador='$idtrabajador'";
 
       return ejecutarConsulta($sql);
+    }
+
+    public function select2_banco()
+    {
+      $sql="SELECT idbancos as id, nombres as nombre FROM bancos WHERE estado='1';";
+      return ejecutarConsulta($sql);		
     }
 
   }

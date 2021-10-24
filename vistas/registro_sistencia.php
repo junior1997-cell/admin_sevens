@@ -85,15 +85,15 @@
               <div class="col-12">
                 <div class="card card-primary card-outline">
                   <div class="card-header">
-                    <h3 class="card-title" id="card-titulo-registrar">
-                      <button type="button" class="btn bg-gradient-success" style="margin-right: 10px;" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
+                    <h3 class="card-title" id="card-registrar">
+                      <button type="button" class="btn bg-gradient-success" style="margin-right: 10px; height: 61px;" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                     </h3>
                       <div id="Lista_quincenas" class="row-horizon" >
                         <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                         <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                      </div>
-                    <h3 class="card-title" id="card-titulo" style="display: none;" style="padding-left: 10px;">
-                      <button type="button" class="btn bg-gradient-warning" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                    <h3 class="card-title" id="card-regresar" style="display: none;" style="padding-left: 10px;">
+                      <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
                     </h3>
                   </div>
 
@@ -105,11 +105,12 @@
                           <tr>
                             <th class="">Aciones</th>
                             <th>Nombre</th>
+                            <th>total Días</th>
                             <th>total Horas</th>
                             <th>Pago / hora</th>
                             <th>Pago acumulado</th>
                             <th>Sueldo mensual</th>
-                            <th>Jonal diario</th>
+                            <th>Sueldo diario</th>
                             <th>Sabatical</th>
                           </tr>
                         </thead>
@@ -118,11 +119,12 @@
                           <tr>
                             <th>Aciones</th>
                             <th>Nombre</th>
+                            <th>total Días</th>
                             <th>total Horas</th>
                             <th>Pago / hora</th>
                             <th>Pago acumulado</th>
                             <th>Sueldo mensual</th>
-                            <th>Jonal diario</th>
+                            <th>Sueldo diario</th>
                             <th>Sabatical</th>
                           </tr>
                         </tfoot>
@@ -235,6 +237,36 @@
                         </div>
                       </div>
                     </div>
+
+                    <div id="detalle_asistencia" style="display: none;">
+                      <table id="tabla-detalle-asistencia-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <thead>
+                          <tr>
+                            <th class="">Aciones</th>
+                            <th>Nombre</th>
+                            <th>Horas Normal</th>
+                            <th>Pago Horas Normal</th>
+                            <th>Hora Extras</th>
+                            <th>Pago Hora Extras</th>
+                            <th>Fecha Asistencia</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                          <tr>
+                            <th class="">Aciones</th>
+                            <th>Nombre</th>
+                            <th>Horas Normal</th>
+                            <th>Pago Horas Normal</th>
+                            <th>Hora Extras</th>
+                            <th>Pago Hora Extras</th>
+                            <th>Fecha Asistencia</th>
+                            <th>Estado</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
                     <!-- /.card-body -->
                   </div>
                   <!-- /.card -->
@@ -247,7 +279,7 @@
           </div>
           <!-- Modal agregar asistencia -->
           <div class="modal fade" id="modal-agregar-asistencia">
-            <div class="modal-dialog /*modal-dialog-scrollable*/ modal-lg">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 class="modal-title">Agregar asistencia</h4>
@@ -258,56 +290,48 @@
 
                 <div class="modal-body">
                   <!-- form start -->
-                  <form id="form-asistencia" name="form-asistencia" method="POST">
-                    <div class="card-body">
-                      <div class="row" id="cargando-1-fomulario">
-                        <!-- id proyecto -->
-                        <input type="hidden" name="idproyecto" id="idproyecto" />
+                  <form id="form-asistencia" name="form-asistencia" method="POST">                    
+                    <div class="row" >
+                      <!-- id proyecto -->
+                      <input type="hidden" name="idproyecto" id="idproyecto" required />
 
-                        <!-- id asistencia -->
-                        <input type="hidden" name="idasistencia" id="idasistencia" />
+                      <!-- id asistencia -->
+                      <input type="hidden" name="idasistencia_trabajador" id="idasistencia_trabajador" />
 
-                        <!-- Trabajador -->
-                        <div class="col-lg-7">
-                          <div class="form-group">
-                            <label for="trabajador" id="trabajador_c">Trabajador</label>
-                            <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="seleccion();"> </select>
-                            <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>
-                          </div>
+                      <!-- fecha del registro de la asistencia -->
+                      <div class="col-lg-4 text-center mb-2">
+                        <div class="form-group">
+                          <label for="fecha">Fecha de asistencia</label>
+                          <input type="date" class="form-control" name="fecha" id="fecha"  />                            
                         </div>
-                        <!-- Horas de trabajo -->
-                        <div class="col-lg-5">
-                          <div class="form-group">
-                            <label for="horas_tabajo">Horas de trabajo</label>
-                            <!-- <input type="time" name="horas_tabajo" class="form-control" id="horas_tabajo" placeholder="Ingrese las horas de trabajo" /> -->
+                      </div>
 
+                      <!-- Seleccionar una fecha para todos -->
+                      <div class="col-lg-4 mb-2">
+                        <div class="bootstrap-timepicker">
+                          <div class="form-group">
+                            <label>Hora para todos:</label>
                             <div class="input-group date" id="timepicker" data-target-input="nearest">
-                              <input
-                                id="horas_tabajo"
-                                name="horas_tabajo"
-                                placeholder="Ingrese las horas de trabajo"
-                                type="text"
-                                class="form-control datetimepicker-input"
-                                data-target="#timepicker"
-                                data-inputmask='"mask": "99:99"'
-                                data-mask
-                              />
+                              <input type="text" id="hora_all" class="form-control datetimepicker-input" data-target="#timepicker" onchange="agregar_hora_all();" onkeyup="agregar_hora_all();" oninput="agregar_hora_all()" />
                               <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="far fa-clock"></i></div>
                               </div>
-                            </div>
+                              </div>
+                            <!-- /.input group -->
                           </div>
+                          <!-- /.form group -->
                         </div>
                       </div>
 
-                      <div class="row" id="cargando-2-fomulario" style="display: none;">
-                        <div class="col-lg-12 text-center">
-                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                          <br />
-                          <h4>Cargando...</h4>
-                        </div>
-                      </div>
-                    </div>
+                      <div class="col-lg-4"></div>
+                      
+                      <div class="col-lg-12">
+                        <div class="row" id="lista-de-trabajadores">
+                          <!-- Lista de todos lo trabajadores -->
+                        </div>                                                  
+                      </div> 
+                    </div>                   
+                    
                     <!-- /.card-body -->
                     <button type="submit" style="display: none;" id="submit-form-asistencia">Submit</button>
                   </form>
@@ -315,6 +339,63 @@
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal editar asistencia -->
+          <div class="modal fade" id="modal-editar-asistencia">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Editar asistencia</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-danger" aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <div class="modal-body">
+                  <!-- form start -->
+                  <form id="form-editar-asistencia" name="form-editar-asistencia" method="POST">
+                    <div class="row" id="cargando-1-fomulario">
+                      <!-- id proyecto -->
+                      <input type="hidden" name="idproyecto2" id="idproyecto2" required />
+
+                      <!-- id asistencia -->
+                      <input type="hidden" name="idasistencia_trabajador2" id="idasistencia_trabajador2" />
+
+                      <div class="col-lg-4"></div>
+                      <!-- fecha del registro de la asistencia -->
+                      <div class="col-lg-4 text-center mb-2">
+                        <div class="form-group">
+                          <label for="fecha">Fecha de asistencia</label>
+                          <input type="date" class="form-control" name="fecha2" id="fecha2"  />                            
+                        </div>
+                      </div>
+                      <div class="col-lg-4"></div>
+                      
+                      <div class="col-lg-12">
+                        <div class="row" id="lista-de-trabajadores2">
+                          <!-- Lista de todos lo trabajadores -->
+                        </div>                                                  
+                      </div>
+                    </div>
+
+                    <div class="row" id="cargando-2-fomulario" style="display: none;">
+                      <div class="col-lg-12 text-center">
+                        <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                        <br />
+                        <h4>Cargando...</h4>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <button type="submit" style="display: none;" id="submit-form-asistencia2">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success" id="guardar_registro2">Guardar Cambios</button>
                 </div>
               </div>
             </div>
