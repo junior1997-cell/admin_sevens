@@ -13,8 +13,6 @@ Class Asistencia_trabajador
 	//Implementamos un método para insertar registros
 	public function insertar($idproyecto, $trabajador, $horas_trabajo_dia, $fecha)
 	{
-		
-
 		$num_elementos=0;
 		$sw=true;		
 
@@ -26,7 +24,11 @@ Class Asistencia_trabajador
 			$pago_dia='';
 			$horas_extras='';
 			$pago_horas_extras='';
-			$horas_desglose = substr($horas_trabajo_dia[$num_elementos], 0, 2).'.'.(floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60;
+			$numero_validado = "";		 
+			
+			(floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60 >= 10 ? $numero_validado = (floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60 : $numero_validado = '0'.(floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60 ;
+			
+			$horas_desglose = substr($horas_trabajo_dia[$num_elementos], 0, 2).'.'.$numero_validado;
 
 			$sql1="SELECT tp.sueldo_hora AS sueldo_hora FROM trabajador_por_proyecto AS tp WHERE tp.idtrabajador_por_proyecto = '$trabajador[$num_elementos]' AND tp.idproyecto = '$idproyecto';";
 			$sueldoxhora_trab = ejecutarConsultaSimpleFila($sql1);
@@ -38,16 +40,16 @@ Class Asistencia_trabajador
 
 			if ($datos==NULL) {
 				if (floatval($horas_desglose)>8) {
-				$horas_extras=floatval($horas_desglose)-8;
-				$pago_horas_extras=$horas_extras*$sueldoxhora_trab['sueldo_hora'];
-				$horas_trabajo=8;
+					$horas_extras = floatval($horas_desglose)-8;
+					$pago_horas_extras = round($horas_extras*$sueldoxhora_trab['sueldo_hora'],1);
+					$horas_trabajo=8;
 				}else{
-				$horas_extras=0;
-				$pago_horas_extras=0;
-				$horas_trabajo=floatval($horas_desglose);
+					$horas_extras=0;
+					$pago_horas_extras=0;
+					$horas_trabajo=floatval($horas_desglose);
 				}
 				$sabatical=0;
-				$pago_dia=floatval($horas_trabajo)*$sueldoxhora_trab['sueldo_hora'];
+				$pago_dia = round( floatval($horas_trabajo)*$sueldoxhora_trab['sueldo_hora'], 1);
 
 			}else{
 				$horas_acumuladas=floatval($horas_desglose)+$datos['horas_trabajo'];
@@ -56,31 +58,34 @@ Class Asistencia_trabajador
 
 				if ( $caculamos == $datos['sabatical'] && $horas_acumuladas < 44) {
 
-				$sabatical=0;
-
-				}else {
-
-				if ( $caculamos == $datos['sabatical'] && $horas_acumuladas >= 44) {
-
 					$sabatical=0;
 
 				}else {
 
-					$sabatical=1;
-				}						 
+					if ( $caculamos == $datos['sabatical'] && $horas_acumuladas >= 44) {
+
+						$sabatical=0;
+
+					}else {
+
+						$sabatical=1;
+					}						 
 				}
 
 				if (floatval($horas_desglose)>8) {
-				$horas_extras=floatval($horas_desglose)-8;
-				$pago_horas_extras=$horas_extras*$sueldoxhora_trab['sueldo_hora'];
-				$horas_trabajo=8;
+
+					$horas_extras = floatval($horas_desglose)-8;
+					$pago_horas_extras = round( $horas_extras*$sueldoxhora_trab['sueldo_hora'], 1);
+					$horas_trabajo = 8;
+
 				}else{
-				$horas_extras=0;
-				$pago_horas_extras=0;
-				$horas_trabajo=floatval($horas_desglose);
+
+					$horas_extras=0;
+					$pago_horas_extras=0;
+					$horas_trabajo=floatval($horas_desglose);
 				}
 
-				$pago_dia=floatval($horas_desglose)*$sueldoxhora_trab['sueldo_hora'];
+				$pago_dia = round( floatval($horas_trabajo)*$sueldoxhora_trab['sueldo_hora'], 1);
 			}
 
 			 
@@ -132,28 +137,30 @@ Class Asistencia_trabajador
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idasistencia_trabajador)
 	{
-		$sql="SELECT * FROM asistencia_trabajador WHERE idasistencia_trabajador='$idasistencia_trabajador'";
+		$sql="SELECT tp.idtrabajador_por_proyecto, t.nombres , t.tipo_documento as documento, t.numero_documento, tp.cargo, t.imagen_perfil, atr.fecha_asistencia, atr.horas_normal_dia, atr.horas_extras_dia 
+		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS atr 
+		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto AND atr.idasistencia_trabajador = '$idasistencia_trabajador';";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar asistencia
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,  t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
+		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,  t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
 		SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
 		SUM(at.sabatical) AS total_sabatical, at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.cargo
 		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS at,  proyecto AS p
-		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND t.estado=1 AND tp.idproyecto = '$nube_idproyecto'
+		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto'
 		GROUP BY tp.idtrabajador;";
 		return ejecutarConsulta($sql);		
 	}
 
 	//Implementar un método para listar asistencia
-	public function listar_asis_individual($trabajadorproyecto)
+	public function listar_asis_individual($idasistencia_trabajador)
 	{
 		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador, atra.sabatical, atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, atra.pago_horas_extras, atra.fecha_asistencia, atra.estado, t.nombres as trabajador
 		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t 
-		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$trabajadorproyecto';";
+		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$idasistencia_trabajador' ORDER BY  atra.estado DESC; ";
 		return ejecutarConsulta($sql);		
 	}
 	

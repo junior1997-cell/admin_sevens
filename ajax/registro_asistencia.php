@@ -28,9 +28,7 @@ ob_start();
          
           $rspta=$asist_trabajador->insertar($idproyecto, $_POST["trabajador"], $_POST["horas_trabajo"], $fecha);
 
-          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";        
-          
-          
+          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
 
         break;
 
@@ -130,7 +128,7 @@ ob_start();
           echo json_encode($rspta);	
 
         break;
-
+        // lista la tabla principal 
         case 'listar':
 
           $nube_idproyecto = $_GET["nube_idproyecto"];
@@ -149,7 +147,7 @@ ob_start();
 
             $sueldo_acumudado=$reg->sueldo_hora*($reg->total_horas_normal+$reg->total_horas_extras);
 
-            $ver_asistencia="'$reg->idtrabajador','$reg->fecha_inicio_proyect'";
+            $ver_asistencia="'$reg->idtrabajador_por_proyecto','$reg->fecha_inicio_proyect'";
 
             $data[]=array(
               "0"=>'<button class="btn btn-info" onclick="ver_asistencias_individual('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
@@ -182,7 +180,7 @@ ob_start();
           echo json_encode($results);
 
         break;
-        
+        // lista la tabla individual por trabajador
         case 'listar_asis_individual':
 
           $idtrabajador_proyecto = $_GET["idtrabajadorproyecto"];
@@ -192,14 +190,18 @@ ob_start();
           $data= Array();
           
           while ($reg=$rspta->fetch_object()){
+
             $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+
+            $justificacion = "$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
+
             $data[]=array(
               "0"=> ($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Editar" ><i class="fas fa-pencil-alt"></i></button>'.
               ' <button class="btn btn-danger" onclick="desactivar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Desactivar"><i class="far fa-trash-alt  "></i></button>'.
-              ' <button class="btn btn-info" onclick="verdatos('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>':
+              ' <button class="btn btn-info" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>':
               '<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>'.
               ' <button class="btn btn-primary" onclick="activar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Activar"><i class="fa fa-check"></i></button>'.
-              ' <button class="btn btn-info" onclick="verdatos('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
+              ' <button class="btn btn-info" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
               "1"=> $reg->trabajador,
               "2"=> $reg->horas_normal_dia,
               "3"=> $reg->pago_normal_dia,
@@ -229,7 +231,7 @@ ob_start();
           echo json_encode($rspta);		
 
         break;
-
+        // listamos para registrar asistencia
         case 'lista_trabajador': 
 
           // $nube_idproyecto = 1;

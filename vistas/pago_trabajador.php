@@ -71,33 +71,72 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
-                          <thead>
-                            <tr>
-                              <th class="">Aciones</th>
-                              <th>Empresa</th>
-                              <th>Nombre de proyecto</th>
-                              <th>Ubicación</th>
-                              <th>Costo</th>
-                              <th>Docs</th>
-                              <th>Estado</th>
-                            </tr>
-                          </thead>
-                          <tbody>                         
-                            
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <th class="">Aciones</th>
-                              <th>Empresa</th>
-                              <th>Nombre de proyecto</th>
-                              <th>Ubicación</th>
-                              <th>Costo</th>
-                              <th>Docs</th>
-                              <th>Estado</th>
-                            </tr>
-                          </tfoot>
-                        </table>
+                        <div class="table-responsive">
+                          <div class="table-responsive-lg" style="overflow-x: scroll;">
+                            <table class="table styletabla" style="border: black 1px solid;">
+                                <thead>                                  
+                                  <tr>
+                                    <th rowspan="2" class="stile">Tipo</th>
+                                    <th rowspan="2" class="stile">Nombres</th>
+                                    <th rowspan="2" class="stile">Cargo</th>
+                                    <th colspan="3" class="stile text-center">Quincena 1</th>
+                                    <th colspan="3" class="stile text-center">Quincena 2</th>
+                                    <th rowspan="2" class="stile">Total</th>
+                                    <th rowspan="2" class="stile">Pagado</th>
+                                    <th rowspan="2" class="stile">Saldo</th>
+                                  </tr>
+
+                                  <tr>                                    
+                                    <th colspan="3" class="stile text-center">
+                                      <button class="btn btn-info btn-block" onclick="ver_detalle_pago(1);"  style="padding:0px 12px 0px 12px !important;">Detalle</button>
+                                    </th>
+                                    <th colspan="3" class="stile text-center">
+                                      <button class="btn btn-info btn-block" onclick="ver_detalle_pago(1);" style="padding:0px 12px 0px 12px !important;">Detalle</button>
+                                    </th>                                    
+                                  </tr>   
+                                     
+                                </thead>
+                                <tbody class="tcuerpo nameappend">
+                                  <tr>
+                                    <td>Técnico</td>
+                                    <td>Pool Briones </td>
+                                    <td>Ing. residente</td>
+                                    <td>44 h</td>
+                                    <td>1 sabatical / 1 dominical</td>
+                                    <td> S/. 440.00</td>
+                                    <td>44 h</td>
+                                    <td>1 sabatical / 1 dominical</td>
+                                    <td> S/. 440.00</td>
+                                    <td>880</td>
+                                    <td>400</td>
+                                    <td>480</td>
+                                    <td>
+                                      <button class="btn btn-info" onclick="ver_detalle_pago(1);">Detalle</button>
+                                    </td>                                   
+
+                                  </tr>
+                                  <tr>
+                                    <td>Técnico</td>
+                                    <td>Pedro Carrasco </td>
+                                    <td>Asistente Admin.</td>
+                                    <td>44 h</td>
+                                    <td>1 sabatical / 1 dominical</td>
+                                    <td> S/. 440.00</td>
+                                    <td>44 h</td>
+                                    <td>1 sabatical / 1 dominical</td>
+                                    <td> S/. 440.00</td>
+                                    <td>880</td>
+                                    <td>400</td>
+                                    <td>480</td>
+                                    <td>
+                                      <button class="btn btn-info" onclick="ver_detalle_pago(1);">Detalle</button>
+                                    </td>                                   
+
+                                  </tr>                                 
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>                        
                       </div>
                       <!-- /.card-body -->
                     </div>

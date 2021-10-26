@@ -17,7 +17,7 @@
 
       require_once "../modelos/trabajador.php";
 
-      $trabajadorproyecto=new Trabajador();
+      $pagotrabajador = new PagoTrabajador();
 
       //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
@@ -39,13 +39,13 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$pagotrabajador->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$pagotrabajador->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
             
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
@@ -54,7 +54,7 @@
 
         case 'desactivar':
 
-          $rspta=$trabajadorproyecto->desactivar($idtrabajador_por_proyecto);
+          $rspta=$pagotrabajador->desactivar($idtrabajador_por_proyecto);
 
           echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
 
@@ -62,7 +62,7 @@
 
         case 'activar':
 
-          $rspta=$trabajadorproyecto->activar($idtrabajador_por_proyecto);
+          $rspta=$pagotrabajador->activar($idtrabajador_por_proyecto);
 
           echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 
@@ -70,7 +70,7 @@
 
         case 'mostrar':
 
-          $rspta=$trabajadorproyecto->mostrar($idtrabajador_por_proyecto);
+          $rspta=$pagotrabajador->mostrar($idtrabajador_por_proyecto);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -78,7 +78,7 @@
         
         case 'verdatos':
 
-          $rspta=$trabajadorproyecto->verdatos($idtrabajador_por_proyecto);
+          $rspta=$pagotrabajador->verdatos($idtrabajador_por_proyecto);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -87,7 +87,7 @@
         case 'listar':
           $nube_idproyecto = $_GET["nube_idproyecto"];
 
-          $rspta=$trabajadorproyecto->listar($nube_idproyecto);
+          $rspta=$pagotrabajador->listar($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array();
 
@@ -123,7 +123,7 @@
 
         case 'select2Trabajador': 
 
-          $rspta = $trabajadorproyecto->select2_trabajador();
+          $rspta = $pagotrabajador->select2_trabajador();
       
           while ($reg = $rspta->fetch_object())  {
 

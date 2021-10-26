@@ -106,7 +106,7 @@
               <!-- Permisos de los usuarios del sistema -->
               <li class="nav-item ">
                 <a href="all_maquinas.php" class="nav-link" id="lAllMaquinas">
-                  <i class="nav-icon fas fa-truck"></i>
+                  <i class="nav-icon fas fa-tractor"></i>
                   <p>All-Maquinarias</p>
                 </a>
               </li>
@@ -131,6 +131,19 @@
       <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-1" >
         <!-- OTROS -->
         <li class="nav-header">Modulos</li>
+
+        <?php if ($_SESSION['valorizacion']==1) {  ?>
+          <!-- VALORIZACIONES -->
+          <li class="nav-item">
+            <a href="valorizacion.php" class="nav-link" id="mValorizacion">
+              <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
+              <i class="nav-icon far fa-file-alt"></i>
+              <p>
+                Valorizaciones
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
 
         <?php if ($_SESSION['trabajador']==1) {  ?>
           <!-- TRABAJADORES -->
@@ -169,17 +182,17 @@
           </li>
         <?php  }  ?>       
 
-        <?php if ($_SESSION['proveedor']==1) {  ?>
+        <?php //if ($_SESSION['proveedor']==1) {  ?>
           <!-- PROVEEDORES -->
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="proveedor.php" class="nav-link" id="mProveedor">
               <i class="fas fa-users nav-icon"></i>
               <p>
                 Proveedores
               </p>
             </a>
-          </li>
-        <?php  }  ?>        
+          </li> -->
+        <?php  //}  ?>  
 
         <?php if ($_SESSION['compra']==1) {  ?>   
           <!-- COMPRAS -->      
@@ -194,13 +207,26 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['servicio']==1) {  ?>  
+        <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
           <!-- SERVICIO -->       
           <li class="nav-item">
             <a href="servicio.php" class="nav-link" id="mServicio">
-              <i class="nav-icon far fa-handshake"></i>
+              <i class="nav-icon fas fa-tractor"></i>
               <p>
-                Servicios
+                Servicio - Maquina
+                <span class="badge badge-info right">2</span>
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['servicio_equipo']==1) {  ?>  
+          <!-- EQUIPOS -->       
+          <li class="nav-item">
+            <a href="equipo.php" class="nav-link" id="mEquipo">
+              <i class="nav-icon fas fa-tractor"></i>
+              <p>
+                Servicio - Equipos
                 <span class="badge badge-info right">2</span>
               </p>
             </a>

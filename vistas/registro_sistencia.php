@@ -86,7 +86,7 @@
                 <div class="card card-primary card-outline">
                   <div class="card-header">
                     <h3 class="card-title" id="card-registrar">
-                      <button type="button" class="btn bg-gradient-success" style="margin-right: 10px; height: 61px;" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
+                      <button type="button" class="btn bg-gradient-success"  data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();" style="margin-right: 10px; height: 61px;"><i class="fas fa-user-plus"></i> Agregar </button>
                     </h3>
                       <div id="Lista_quincenas" class="row-horizon" >
                         <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
@@ -299,7 +299,7 @@
                       <input type="hidden" name="idasistencia_trabajador" id="idasistencia_trabajador" />
 
                       <!-- fecha del registro de la asistencia -->
-                      <div class="col-lg-4 text-center mb-2">
+                      <div class="col-lg-4  mb-2">
                         <div class="form-group">
                           <label for="fecha">Fecha de asistencia</label>
                           <input type="date" class="form-control" name="fecha" id="fecha"  />                            
@@ -346,7 +346,7 @@
 
           <!-- Modal editar asistencia -->
           <div class="modal fade" id="modal-editar-asistencia">
-            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-dialog modal-dialog-scrollable modal-md">
               <div class="modal-content">
                 <div class="modal-header">
                   <h4 class="modal-title">Editar asistencia</h4>
@@ -365,15 +365,13 @@
                       <!-- id asistencia -->
                       <input type="hidden" name="idasistencia_trabajador2" id="idasistencia_trabajador2" />
 
-                      <div class="col-lg-4"></div>
                       <!-- fecha del registro de la asistencia -->
-                      <div class="col-lg-4 text-center mb-2">
+                      <div class="col-lg-12 mb-2">
                         <div class="form-group">
                           <label for="fecha">Fecha de asistencia</label>
                           <input type="date" class="form-control" name="fecha2" id="fecha2"  />                            
                         </div>
-                      </div>
-                      <div class="col-lg-4"></div>
+                      </div>                      
                       
                       <div class="col-lg-12">
                         <div class="row" id="lista-de-trabajadores2">
@@ -401,23 +399,84 @@
             </div>
           </div>
 
-          <!--Modal ver asistencia-->
-          <div class="modal fade" id="modal-ver-asistencia">
-            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+          <!-- Modal editar asistencia -->
+          <div class="modal fade" id="modal-justificar-asistencia">
+            <div class="modal-dialog modal-dialog-scrollable modal-md">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h4 class="modal-title">Datos asistencia</h4>
+                  <h4 class="modal-title">Justificación</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span class="text-danger" aria-hidden="true">&times;</span>
                   </button>
                 </div>
 
                 <div class="modal-body">
-                  <div id="datosasistencia" class="class-style"></div>
+                  <!-- form start -->
+                  <form id="form-justificar-asistencia" name="form-justificar-asistencia" method="POST">
+                    <div class="row" id="cargando-3-fomulario">
+                      
+                      <!-- id asistencia -->
+                      <input type="hidden" name="idasistencia_trabajador3" id="idasistencia_trabajador3" />                                         
+                      
+                      <!-- Descripcion -->
+                      <div class="col-md-12 col-lg-12">
+                        <div class="form-group">
+                          <label for="nombre">Descripción</label>
+                          <textarea name="detalle" id="detalle" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
+                        </div>
+                      </div>
+
+                      <!-- Documento -->
+                      <div class="col-md-12 col-lg-12" >                               
+                        <div class="row text-center">
+                          <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                            <label for="cip" class="control-label" > Evidencia </label>
+                          </div>
+                          <div class="col-md-6 text-center">
+                            <button type="button" class="btn btn-success btn-block" id="doc1_i">
+                              <i class="fas fa-file-upload"></i> Subir.
+                            </button>
+                            <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                            <input style="display: none;" id="doc1" type="file" name="doc1" accept=".pdf" class="docpdf" /> 
+                          </div>
+                          <div class="col-md-6 text-center">
+                            <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                              <i class="fa fa-eye"></i> PDF.
+                            </button>
+                          </div>
+                        </div>                              
+                        <div id="doc1_ver" class="text-center mt-4">
+                          <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                        </div>
+                        <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+
+                        <!-- linea divisoria -->
+                        <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
+                      </div> 
+
+                    </div>
+
+                    <div class="row" id="cargando-4-fomulario" style="display: none;">
+                      <div class="col-lg-12 text-center">
+                        <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                        <br />
+                        <h4>Cargando...</h4>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <button type="submit" style="display: none;" id="submit-form-asistencia2">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-success" id="guardar_registro2">Guardar Cambios</button>
                 </div>
               </div>
             </div>
           </div>
+
+          
+
         </section>
         <!-- /.content -->
       </div>

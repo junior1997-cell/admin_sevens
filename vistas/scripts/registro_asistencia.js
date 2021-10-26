@@ -415,56 +415,73 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idasistencia_trabajador) {
-
+  $('#modal-editar-asistencia').modal('show')
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
-
+  
   $.post("../ajax/registro_asistencia.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);
+    data = JSON.parse(data);  console.log(data);
     
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
-    $("#lista-de-trabajadores2").html("");
+    $("#fecha2").val(data.fecha_asistencia);      
+    var suma = (parseFloat(data.horas_normal_dia) + parseFloat(data.horas_extras_dia)).toFixed(2).toString();
+    var hr_total_c =  convertir_a_hora(suma);
 
-    $.each(data, function (index, value) {
-      // console.log(value.idtrabajador_por_proyecto);
-      var img =value.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+value.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
-      
-      $("#lista-de-trabajadores2").append(
-        '<!-- Trabajador -->'+                         
-        '<div class="col-lg-6">'+
-          '<div class="user-block">'+
-            img+
-            '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+value.nombres+'</p></span>'+
-            '<span class="description">'+value.documento+': '+value.numero_documento+'</span>'+
-          '</div>'+                         
-          '<input type="hidden" name="trabajador2[]" value="'+value.idtrabajador_por_proyecto+'" />'+
+    console.log(hr_total_c);
+
+    var img =data.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
+    
+    $("#lista-de-trabajadores2").html(
+      '<!-- Trabajador -->'+                         
+      '<div class="col-lg-12">'+
+        '<label >Trabajador</label> <br>'+
+        '<div class="user-block">'+
+          img+
+          '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+data.nombres+'</p></span>'+
+          '<span class="description">'+data.documento+': '+data.numero_documento+'</span>'+
+        '</div>'+                         
+        '<input type="hidden" name="trabajador2[]" value="'+data.idtrabajador_por_proyecto+'" />'+
+      '</div>'+
+
+      '<!-- Horas de trabajo -->'+
+      '<div class="col-lg-12 mt-3">'+
+        '<label for="fecha">Horas</label>'+
+        '<div class="form-group">'+
+          '<input id="horas_trabajo" name="horas_trabajo2[]" type="time"   class="form-control" value="'+hr_total_c+'" />'+             
         '</div>'+
+      '</div> '+
+      '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+    );
 
-        '<!-- Horas de trabajo -->'+
-        '<div class="col-lg-6 mt-2">'+
-          '<div class="form-group">'+
-            '<input id="horas_trabajo" name="horas_trabajo2[]" type="time"   class="form-control" value="00:00" />'+             
-          '</div>'+
-        '</div> '+
-        '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
-      );
-    });
   });
 }
 
 //Función para desactivar registros
-function justificar(idasistencia) {
-  console.log('holaaaaa');
- 
+function justificar(idasistencia,horas, estado) {
+
+  if (estado == "0") {
+
+    Swal.fire("Activa este registro!", "Para usar esta opcion, active este registro.", "info");
+
+  } else {
+
+    if (horas >= 8) {
+
+      Swal.fire("No puedes Justificar!", "Este trabajador tiene 8 horas completas, las justificación es para compensar horas perdidas.", "info");
+    
+    } else {
+      $("#modal-justificar-asistencia").modal("show")
+    }
+  } 
 }
 
 // ver_asistencias
-function ver_asistencias_individual(idtrabajadorproyecto,fecha_inicio_proyect) {
+function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proyect) {
 
-  console.log(idtrabajadorproyecto,fecha_inicio_proyect);
+  console.log(idtrabajador_por_proyecto,fecha_inicio_proyect);
   
   mostrar_form_table(3);
 
@@ -476,7 +493,7 @@ function ver_asistencias_individual(idtrabajadorproyecto,fecha_inicio_proyect) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajadorproyecto,
+        url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -685,4 +702,82 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+
+function convertir_a_hora(hora_n) {
+
+  var convertido; var suma; var min; var hora; console.log('h:' + hora_n );
+      
+  var recortado_suma = hora_n.split('.').pop();
+
+  min = Math.round((parseFloat(recortado_suma)*60)/100);
+  
+  if (hora_n >=10) {
+
+    hora = hora_n.substr(0,2)
+
+  } else {
+
+    hora = '0'+hora_n.substr(0,1)
+
+  }
+
+  if (min >= 10) {
+
+    convertido = hora + ':' + min;
+
+  } else {
+
+    convertido = hora + ':0' + min;
+
+  }    
+  
+  return convertido;
+}
+
+//Función para desactivar registros
+function desactivar(idasistencia_trabajador) {
+  $(".tooltip").hide();
+  Swal.fire({
+    title: "¿Está Seguro de  Desactivar la Asistencia?",
+    text: "Al desactivar, las horas de este registro no seran contado.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=desactivar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+
+        Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
+    
+        tabla.ajax.reload(); tabla2.ajax.reload();
+      });      
+    }
+  });   
+}
+
+//Función para activar registros
+function activar(idasistencia_trabajador) {
+  $(".tooltip").hide();
+  Swal.fire({
+    title: "¿Está Seguro de  Activar  la Asistencia?",
+    text: "Al activar, las horas de este registro seran contados",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=activar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+
+        Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
+
+        tabla.ajax.reload(); tabla2.ajax.reload();
+      });
+      
+    }
+  });      
 }
