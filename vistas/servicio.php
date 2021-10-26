@@ -23,7 +23,7 @@
             <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['proveedor']==1){
+          if ($_SESSION['servicio_maquina']==1){
           ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -123,6 +123,37 @@
                                         </table>
                                       </div>
                                     <!-- /.detalle por maquina -->
+                                      <!-- /.Pagar -->
+                                        <div class="card-body" id="tabla_pagos" style="display: none;">
+                                            <table id="tabla-pagos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                              <thead>
+                                                  <tr>
+                                                      <th>Aciones</th>
+                                                      <th>Fecha</th>
+                                                      <th>Horometro Inicial</th>
+                                                      <th>Horometro Final</th>
+                                                      <th>Horas</th>
+                                                      <th>Costo Unitario</th>
+                                                      <th>Costo Parcial</th>
+                                                      <th>Estado</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody></tbody>
+                                              <tfoot>
+                                                  <tr>
+                                                      <th>Aciones</th>
+                                                      <th>Fecha</th>
+                                                      <th>Horometro Inicial</th>
+                                                      <th>Horometro Final</th>
+                                                      <th id="horas-total" style="color: #ff0000;background-color: #fedaff;"></th>
+                                                      <th>Costo Unitario</th>
+                                                      <th id="costo-parcial" style="color: #ff0000;background-color: #fedaff;"></th>
+                                                      <th>Estado</th>
+                                                  </tr>
+                                              </tfoot>
+                                            </table>
+                                       </div>
+                                    <!-- /.Pagar -->
                                 </div>
                                 <!-- /.card -->
                             </div>

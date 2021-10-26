@@ -20,7 +20,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$clavehash="";
 
@@ -49,7 +49,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$all_maquinaria->desactivar($idmaquinaria);
  				echo $rspta ? "Máquina Desactivada" : "Máquina no se puede desactivar";
@@ -70,7 +70,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$all_maquinaria->activar($idmaquinaria);
  				echo $rspta ? "Máquina activada" : "Máquina no se puede activar";
@@ -91,7 +91,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$all_maquinaria->mostrar($idmaquinaria);
 		 		//Codificar el resultado utilizando json
@@ -113,7 +113,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				//$nube_idproyecto = $_GET["nube_idproyecto"];
 				$rspta=$all_maquinaria->listar();

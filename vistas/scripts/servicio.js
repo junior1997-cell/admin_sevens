@@ -8,7 +8,7 @@ function init() {
  //var idproyecto =localStorage.getItem('nube_idproyecto');
 
  listar(localStorage.getItem('nube_idproyecto'));
-
+ 
   // $("#bloc_Accesos").addClass("menu-open");
     //Mostramos los maquinariaes
     $.post("../ajax/servicio.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
@@ -173,6 +173,14 @@ function listar_detalle(idmaquinaria,idproyecto) {
   suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
   
 }
+//funcion añadir pago
+function aniadir_pago(idmaquinaria,idproyecto) {
+  console.log('::::'+idmaquinaria,idproyecto);
+  $("#tabla_principal").hide();
+  $("#tabla_pagos").show();
+  $("#btn-agregar").hide();
+  $("#btn-regresar").show();
+}
 //regresar_principal
 function regresar_principal(){
   $("#tabla_principal").show();
@@ -212,13 +220,18 @@ function guardaryeditar(e) {
 
 				toastr.success('servicio registrado correctamente')				 
 
+        
 	      tabla.ajax.reload();
-	      tabla2.ajax.reload();
-         
-				limpiar();
+        
 
         $("#modal-agregar-servicio").modal("hide");
-
+       // console.log(tabla2);
+        tabla2.ajax.reload();
+        var idmaquinaria =$("#maquinaria").val();
+        if (idmaquinaria!='') {
+          suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        }
+        limpiar();
 			}else{
 
 				toastr.error(datos)

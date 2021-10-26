@@ -27,7 +27,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				$clavehash="";
 
@@ -59,7 +59,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				$rspta=$servicios->desactivar($idservicio);
  				echo $rspta ? "Servicio Anulado" : "Servicio no se puede Anular";
@@ -80,7 +80,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				$rspta=$servicios->activar($idservicio);
  				echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
@@ -101,7 +101,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idservicioo='1';
 				$rspta=$servicios->mostrar($idservicio);
@@ -124,17 +124,53 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				$nube_idproyecto = $_GET["nube_idproyecto"];
 				$rspta=$servicios->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
 		 		$datos= Array();
+				$monto = 0;
+				$c="";
+				$nombre="";
+				$icon="";
 		 		while ($reg=$rspta->fetch_object()){
 					//$parametros="'$reg->idservicio','$reg->idproyecto'";
 					$rspta2=$servicios->pago_servicio($reg->idmaquinaria);
+
 					empty($rspta2)?$saldo=0:$saldo = $reg->costo_parcial-$rspta2['monto'];
+					empty($rspta2['monto'])?$monto="0.00":$monto = $rspta2['monto'];
+					//empty($rspta2['monto']?($monto="0.00"?$clase="dangar":$clase="warning"): ($monto = $rspta2['monto'] ? 'verdadero2' : 'falso');
+					if ($saldo == $reg->costo_parcial) {
+
+						$estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
+						$c="danger";
+						$nombre="Pagar";
+						$icon="dollar-sign";
+
+					  } else {
+		
+						if ($saldo<$reg->costo_parcial && $saldo!="0" ) {
+		
+						  $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+						  $c="warning";
+						  $nombre="Pagar";
+						  $icon="dollar-sign";
+						} else {
+							if ($saldo=="0") {
+								$estado = '<span class="text-center badge badge-success">Pagado</span>';
+								$c="info";
+								$nombre="Ver";
+								$info="info";
+								$icon="eye";
+							}else{
+								$estado = '<span class="text-center badge badge-success">Error</span>';
+							}
+							//$estado = '<span class="text-center badge badge-success">Terminado</span>';
+						}                
+					  }
+		
 		 			$data[]=array(
 		 				"0"=>' <button class="btn btn-info" onclick="listar_detalle('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="far fa-eye"></i></button>',
 		 				"1"=>'<div class="user-block">
@@ -145,11 +181,12 @@ switch ($_GET["op"]){
 		 				"3"=>$reg->Total_horas,
 		 				"4"=>$reg->costo_unitario,
 		 				"5"=>$reg->costo_parcial,
-		 				"6"=>' <button class="btn btn-info" onclick="ver_datos('.$reg->idmaquinaria.')"><i class="far fa-eye"></i></button>',
+		 				"6"=>' <button class="btn btn-'.$c.'" onclick="aniadir_pago('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
+						 <button class="btn btn-'.$c.'">'.$monto.'</button> ',
 		 				"7"=>$saldo,
-		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-		 				'<span class="text-center badge badge-danger">Desactivado</span>'
+		 				"8"=>$estado
 		 				);
+
 		 		}
 		 		$results = array(
 		 			"sEcho"=>1, //Información para el datatables

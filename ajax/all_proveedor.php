@@ -30,7 +30,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$clavehash="";
 
@@ -80,7 +80,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$proveedor->activar($idproveedor);
  				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
@@ -101,7 +101,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$proveedor->mostrar($idproveedor);
 		 		//Codificar el resultado utilizando json
@@ -123,7 +123,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['proveedor']==1)
+			if ($_SESSION['recurso']==1)
 			{
 				//$nube_idproyecto = $_GET["nube_idproyecto"];
 				$rspta=$proveedor->listar();
