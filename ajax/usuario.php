@@ -242,8 +242,8 @@ switch ($_GET["op"]){
 			in_array(6,$valores)?$_SESSION['asistencia_trabajador']=1:$_SESSION['asistencia_trabajador']=0;
 			in_array(7,$valores)?$_SESSION['pago_trabajador']=1:$_SESSION['pago_trabajador']=0;
 			in_array(8,$valores)?$_SESSION['compra']=1:$_SESSION['compra']=0;
-			in_array(9,$valores)?$_SESSION['servicio_maquina']=1:$_SESSION['servicio']=0;			
-			in_array(10,$valores)?$_SESSION['servicio_equipo']=1:$_SESSION['equipo']=0;
+			in_array(9,$valores)?$_SESSION['servicio_maquina']=1:$_SESSION['servicio_maquina']=0;			
+			in_array(10,$valores)?$_SESSION['servicio_equipo']=1:$_SESSION['servicio_equipo']=0;
 	    }
 	    echo json_encode($fetch);
 	break;
