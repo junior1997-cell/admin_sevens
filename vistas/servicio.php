@@ -165,7 +165,7 @@
 
                     <!-- Modal agregar servicios -->
                     <div class="modal fade" id="modal-agregar-servicio">
-                        <div class="modal-dialog modal-dialog-scrollable modal-md">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title">Agregar servicios</h4>
@@ -222,6 +222,18 @@
                                                     <label for="horometro_final">Horometro Final </label>                               
                                                     <input type="number" step="0.01" name="horometro_final" id="horometro_final" class="form-control" placeholder="Horometro Final" onclick="horometro();" onkeyup="horometro();" > 
                                                   </div>                                                        
+                                                </div>
+                                                <!-- cargo -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                    <label for="unidad_m">Unidad de medidda</label>
+                                                    <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;"  >                                    
+                                                        <option value="Hora">Hora</option>
+                                                        <option value="Dia">Dia</option>
+                                                        <option value="Mes">Mes</option>
+                                                    </select>
+                                                    <!-- <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
+                                                    </div>
                                                 </div>
                                                 <!-- Horas-->
                                                 <div class="col-lg-6">

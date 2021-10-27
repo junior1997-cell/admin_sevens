@@ -32,8 +32,15 @@ function init() {
     placeholder: "Selecione maquinaria",
     allowClear: true,
   });
+   //Initialize Select2 Elements
+   $("#unidad_m").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione una unidad de medida",
+    allowClear: true,
+  });
   
   $("#maquinaria").val("null").trigger("change");
+  $("#unidad_m").val("null").trigger("change");
 
 }
 
@@ -56,9 +63,15 @@ function horometro(){
   var costo_unitario = $('#costo_unitario').val();
 
   //console.log(horometro_inicial,horometro_final);
+  if (horometro_final!=0) {
+    var horas=(horometro_final-horometro_inicial).toFixed(1);
+    var costo_parcial=(horas*costo_unitario).toFixed(1);
+  }else{
+    var horas=(horometro_inicial-horometro_inicial).toFixed(1);
+    var costo_parcial=costo_unitario
+  }
 
-  var horas=(horometro_final-horometro_inicial).toFixed(1);
-  var costo_parcial=(horas*costo_unitario).toFixed(1);
+
   //console.log(horas);
 
   $("#horas").val(horas);
@@ -83,6 +96,7 @@ function limpiar() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
   $("#idservicio").val(""); 
   $("#maquinaria").val("null").trigger("change"); 
+  $("#unidad_m").val("null").trigger("change"); 
   $("#fecha_inicio").val("");
   $("#fecha_fin").val("");
   $("#horometro_inicial").val("");
@@ -244,6 +258,7 @@ function mostrar(idservicio) {
   console.log(idservicio);
   
   $("#maquinaria").val("").trigger("change"); 
+  $("#unidad_m").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
@@ -257,9 +272,10 @@ function mostrar(idservicio) {
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-    $("#nomb_maq").val(data.nombre+'-'+data.codigo_maquina);
+    $("#nomb_maq").val(data.nombre_maquina+' - '+data.codigo_maquina+' --> '+data.razon_social);
     $("#idservicio").val(data.idservicio); 
     $("#maquinaria").val(data.idmaquinaria).trigger("change"); 
+    $("#unidad_m").val(data.unidad_medida).trigger("change"); 
     $("#fecha_inicio").val(data.fecha_entrega); 
     $("#fecha_fin").val(data.fecha_recojo); 
     $("#horometro_inicial").val(data.horometro_inicial); 
@@ -346,10 +362,11 @@ $(function () {
     rules: {
       maquinaria: { required: true },
       fecha_inicio:{ required: true },
-      fecha_fin:{ required: true },
+      fecha_fin:{minlength: 1},
       horometro_inicial:{ required: true, minlength: 1},
-      horometro_final:{ required: true, minlength: 1},
-      costo_unitario:{ required: true, minlength: 1}
+      horometro_final:{minlength: 1},
+      costo_unitario:{ required: true, minlength: 1},
+      unidad_m:{ required: true}
 
 
       // terms: { required: true },
@@ -358,20 +375,18 @@ $(function () {
       maquinaria: {
         required: "Por favor selecione una maquina", 
       },
+
       fecha_inicio: {
         required: "Por favor ingrese fecha inicial", 
-      },
-      fecha_fin: {
-        required: "Por favor ingrese fecha final", 
       },
       horometro_inicial: {
         required: "Por favor ingrese horometro inicial", 
       },
-      horometro_final: {
-        required: "Por favor ingrese horometro final", 
-      },
       costo_unitario: {
         required: "Por favor ingrese costo unitario", 
+      },
+      unidad_m: {
+        required: "Por favor seleccione un tipo de unidad", 
       },
 
     },

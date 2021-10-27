@@ -17,6 +17,7 @@ $horometro_final 	= isset($_POST["horometro_final"])? limpiarCadena($_POST["horo
 $horas				= isset($_POST["horas"])? limpiarCadena($_POST["horas"]):"";
 $costo_unitario 	= isset($_POST["costo_unitario"])? limpiarCadena($_POST["costo_unitario"]):"";
 $costo_parcial 		= isset($_POST["costo_parcial"])? limpiarCadena($_POST["costo_parcial"]):"";
+$unidad_m 		= isset($_POST["unidad_m"])? limpiarCadena($_POST["unidad_m"]):"";
 
 
 switch ($_GET["op"]){
@@ -34,12 +35,12 @@ switch ($_GET["op"]){
 
 				if (empty($idservicio)){
 					
-					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial);
+					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					
-					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial);
+					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -274,7 +275,7 @@ switch ($_GET["op"]){
 
 		while ($reg = $rspta->fetch_object())
 			{
-			echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre .' - '. $reg->codigo_maquina . '</option>';
+			echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre .' : '. $reg->codigo_maquina .' ---> ' .$reg->nombre_proveedor.'</option>';
 			}
 	break;
 

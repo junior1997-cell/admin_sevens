@@ -1,8 +1,13 @@
 var tabla;
+var tabla2;
 
 //Función que se ejecuta al inicio
 function init() {
   listar();
+  listar2();
+
+    //Mostramos los proveedores
+    $.post("../ajax/all_maquinaria.php?op=select2_proveedor", function (r) { $("#proveedor").html(r); });
 
   $("#bloc_Recurso").addClass("menu-open");
 
@@ -17,21 +22,37 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
+  
+  //Initialize Select2 Elements
+  $("#proveedor").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione proveedor",
+    allowClear: true,
+  });
+  $("#tipo").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione tipo",
+    allowClear: true,
+  });
+
+  $("#proveedor").val("null").trigger("change");
+  $("#tipo").val("null").trigger("change");
 
 }
-
 //Función limpiar
 function limpiar() {
   $("#idmaquinaria").val("");
   $("#nombre_maquina").val(""); 
   $("#codigo_m").val(""); 
+  $("#proveedor").val("null").trigger("change");
+  $("#tipo").val("null").trigger("change");
   
 }
 
 //Función Listar
 function listar() {
 
-  tabla=$('#tabla-maquinaria').dataTable({
+  tabla=$('#tabla-maquinas').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -39,7 +60,40 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/all_maquinaria.php?op=listar',
+        url: '../ajax/all_maquinaria.php?op=listar_maquinas',
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+}
+//Función Listar22222
+function listar2() {
+
+  tabla2=$('#tabla-equipos').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/all_maquinaria.php?op=listar_equipos',
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -78,9 +132,10 @@ function guardaryeditar(e) {
              
       if (datos == 'ok') {
 
-				toastr.success('proveedor registrado correctamente')				 
+				toastr.success('Registrado correctamente')				 
 
 	      tabla.ajax.reload();
+	      tabla2.ajax.reload();
          
 				limpiar();
 
@@ -96,8 +151,8 @@ function guardaryeditar(e) {
 
 function mostrar(idmaquinaria) {
 
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
+  $("#proveedor").val("").trigger("change"); 
+  $("#tipo").val("").trigger("change"); 
 
   $("#modal-agregar-maquinaria").modal("show")
 
@@ -105,12 +160,11 @@ function mostrar(idmaquinaria) {
 
     data = JSON.parse(data);  console.log(data);   
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
+    $("#proveedor").val(data.idproveedor).trigger("change"); 
+    $("#tipo").val(data.tipo).trigger("change"); 
     $("#idmaquinaria").val(data.idmaquinaria);
     $("#nombre_maquina").val(data.nombre); 
-    $("#codigo_m").val(data.codigo_maquina);
+    $("#codigo_m").val(data.modelo);
 
   });
 }
@@ -118,7 +172,7 @@ function mostrar(idmaquinaria) {
 //Función para desactivar registros
 function desactivar(idmaquinaria) {
   Swal.fire({
-    title: "¿Está Seguro de  Desactivar la Máquina?",
+    title: "¿Está Seguro de  Desactivar Máquina o Equipo?",
     text: "",
     icon: "warning",
     showCancelButton: true,
@@ -129,9 +183,10 @@ function desactivar(idmaquinaria) {
     if (result.isConfirmed) {
       $.post("../ajax/all_maquinaria.php?op=desactivar", { idmaquinaria: idmaquinaria }, function (e) {
 
-        Swal.fire("Desactivado!", "Tu máquina ha sido desactivada.", "success");
+        Swal.fire("Desactivado!", "Tu máquinas o equipo ha sido desactivada.", "success");
     
         tabla.ajax.reload();
+	      tabla2.ajax.reload();
       });      
     }
   });   
@@ -140,7 +195,7 @@ function desactivar(idmaquinaria) {
 //Función para activar registros
 function activar(idmaquinaria) {
   Swal.fire({
-    title: "¿Está Seguro de  Activar  la Máquina?",
+    title: "¿Está Seguro de  Activar Máquina o Equipo?",
     text: "",
     icon: "warning",
     showCancelButton: true,
@@ -151,9 +206,10 @@ function activar(idmaquinaria) {
     if (result.isConfirmed) {
       $.post("../ajax/all_maquinaria.php?op=activar", { idmaquinaria: idmaquinaria }, function (e) {
 
-        Swal.fire("Activado!", "Tu máquina ha sido activada.", "success");
+        Swal.fire("Activado!", "Tu máquinas o equipo ha sido activada.", "success");
 
         tabla.ajax.reload();
+	      tabla2.ajax.reload();
       });
       
     }
@@ -166,21 +222,28 @@ $(function () {
 
   $.validator.setDefaults({
 
-   submitHandler: function (e) {
+    submitHandler: function (e) {
 
         guardaryeditar(e);
-
-    },
+    }
   });
 
   $("#form-maquinaria").validate({
     rules: {
       nombre_maquina: { required: true },
+      proveedor: { required: true },
+      tipo: { required: true }
       // terms: { required: true },
     },
     messages: {
       nombre_maquina: {
-        required: "Por favor ingrese una máquina", 
+        required: "Por favor ingrese un nombre", 
+      },
+      proveedor: {
+        required: "Por favor selecione un proveedor", 
+      },
+      tipo: {
+        required: "Por favor selecione máquina o equipo", 
       },
     },
         
@@ -201,7 +264,6 @@ $(function () {
    unhighlight: function (element, errorClass, validClass) {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
-
     },
 
 

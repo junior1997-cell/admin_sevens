@@ -33,12 +33,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Máquinaria</h1>
+                                <h1>Máquinaria y Equipos</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Máquinaria</li>
+                                    <li class="breadcrumb-item active">Máquinarias y Equipos</li>
                                 </ol>
                             </div>
                         </div>
@@ -55,17 +55,19 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-maquinaria" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
-                                            Admnistra tus máquinarias.
+                                            Admnistra tus máquinarias y/o equipos.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <table id="tabla-maquinaria" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                        <h1 style="text-align: center;background-color: aliceblue;">Máquinas</h1>
+                                        <table id="tabla-maquinas" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
                                                     <th class="">Aciones</th>
-                                                    <th>Nombre</th>
-                                                    <th>Código</th>
+                                                    <th>Proveedor</th>
+                                                    <th>Nombre máquina</th>
+                                                    <th>Modelo</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -73,14 +75,41 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>Aciones</th>
-                                                    <th>Nombre</th>
-                                                    <th>Código</th>
+                                                    <th>Proveedor</th>
+                                                    <th>Nombre máquina</th>
+                                                    <th>Modelo</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                     <!-- /.card-body -->
+                                    <!-- /.card-equipos -->
+                                    <div class="card-body">
+                                        <h1 style="text-align: center;background-color: aliceblue;">Equipos</h1>
+                                        <table id="tabla-equipos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">Aciones</th>
+                                                    <th>Proveedor</th>
+                                                    <th>Nombre equipo</th>
+                                                    <th>Modelo</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Aciones</th>
+                                                    <th>Proveedor</th>
+                                                    <th>Nombre equipo</th>
+                                                    <th>Modelo</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-equipos -->
                                 </div>
                                 <!-- /.card -->
                             </div>
@@ -95,7 +124,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Agregar Máquinaria</h4>
+                                    <h4 class="modal-title">Agregar Máquina y/o Equipo</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -109,18 +138,38 @@
                                                 <!-- id proveedores -->
                                                 <input type="hidden" name="idmaquinaria" id="idmaquinaria" />
 
+                                                <!-- cargo -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                    <label for="tipo">Tipo</label>
+                                                    <select name="tipo" id="tipo" class="form-control select2" style="width: 100%;"  >                                    
+                                                        <option value="1">Maquina</option>
+                                                        <option value="2">Equipo</option>
+                                                    </select>
+                                                    <!-- <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
+                                                    </div>
+                                                </div>
                                                 <!-- Nombre Máquina -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="nombre_maquina">Nombre Máquina</label>
+                                                        <label for="nombre_maquina">Nombre Máquina / Equipo</label>
                                                         <input type="text" name="nombre_maquina" class="form-control" id="nombre_maquina" placeholder="Ingrese nombre de una máquina" />
                                                     </div>
                                                 </div>
                                                 <!-- Codigo de la máquina -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="codigo_m">Código de la máquina</label>
+                                                        <label for="codigo_m">Modelo</label>
                                                         <input type="text" name="codigo_m" class="form-control" id="codigo_m" placeholder="Dirección" />
+                                                    </div>
+                                                </div>
+                                                <!-- Codigo de la máquina -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="proveedor">Seleccionar Proveedor</label>
+                                                        <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;">
+                                                        </select>
+                                                        <input type="hidden" name="proveedor_old" id="proveedor_old" />
                                                     </div>
                                                 </div>
                                             </div>

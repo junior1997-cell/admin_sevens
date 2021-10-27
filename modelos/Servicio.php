@@ -11,11 +11,11 @@ Class Servicios
 	}
 	//$idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial)
+	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m)
 	{
 		//var_dump($idproyecto,$idproveedor);die();
-		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo ) 
-		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin')";
+		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida ) 
+		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m')";
 		return ejecutarConsulta($sql);
 			
 	}
@@ -71,7 +71,7 @@ Class Servicios
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial)
+	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m)
 	{
 		//var_dump($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial);die();
 		///var_dump($idservicio ,$idproveedor);die();
@@ -84,7 +84,8 @@ Class Servicios
 		costo_parcial='$costo_parcial',
 		costo_unitario='$costo_unitario',
 		fecha_entrega='$fecha_inicio',
-		fecha_recojo='$fecha_fin'
+		fecha_recojo='$fecha_fin',
+		unidad_medida='$unidad_m'
 		 WHERE idservicio ='$idservicio'";	
 		return ejecutarConsulta($sql);	
 	}
@@ -104,9 +105,25 @@ Class Servicios
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idservicio )
+	public function mostrar($idservicio)
 	{
-		$sql="SELECT * FROM servicio as s, maquinaria as m  WHERE s.idservicio ='$idservicio' AND s.idmaquinaria = m.idmaquinaria";
+		$sql="SELECT
+		s.idservicio as idservicio,
+		s.idproyecto as idproyecto,
+		s.idmaquinaria as idmaquinaria,
+		s.horometro_inicial as horometro_inicial,
+		s.horometro_final as horometro_final,
+		s.horas as horas,
+		s.costo_parcial as costo_parcial,
+		s.costo_unitario as costo_unitario,
+		s.fecha_entrega as fecha_entrega,
+		s.fecha_recojo as fecha_recojo,
+		s.unidad_medida as unidad_medida,
+		m.nombre as nombre_maquina,
+		m.codigo_maquina as codigo_maquina,
+		p.razon_social as razon_social
+		FROM servicio as s, maquinaria as m, proveedor as p 
+		WHERE s.idservicio ='$idservicio' AND s.idmaquinaria = m.idmaquinaria AND m.idproveedor=p.idproveedor";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -114,7 +131,14 @@ Class Servicios
 	//Seleccionar Trabajador Select2
 	public function select2_servicio()
 	{
-		$sql="SELECT*FROM maquinaria WHERE estado='1'";
+		$sql="SELECT 
+		mq.idmaquinaria as idmaquinaria, 
+		mq.nombre as nombre, 
+		mq.codigo_maquina as codigo_maquina, 
+		p.razon_social as nombre_proveedor, 
+		mq.idproveedor as idproveedor
+		FROM maquinaria as mq, proveedor as p 
+		WHERE mq.idproveedor=p.idproveedor AND mq.estado='1' AND mq.tipo=1";
 		return ejecutarConsulta($sql);		
 	}
 
