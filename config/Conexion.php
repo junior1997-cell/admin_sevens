@@ -29,6 +29,19 @@ if (!function_exists('ejecutarConsulta'))
 		return $row;
 	}
 
+	function ejecutarConsultaArray($sql)
+	{
+		global $conexion;
+
+		//$data= Array();	$i = 0;
+
+		$query = $conexion->query($sql);
+
+		for ($data = array (); $row = $query->fetch_assoc(); $data[] = $row);
+		return $data;
+	}
+	
+
 	function ejecutarConsulta_retornarID($sql)
 	{
 		global $conexion;

@@ -347,14 +347,14 @@
                                   <label for="cip" class="control-label" > Acta de contrato de obra </label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc1_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                   <input style="display: none;" id="doc1" type="file" name="doc1" accept=".pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -375,14 +375,14 @@
                                   <label for="cip" class="control-label" > Acta de entrega de terreno</label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc2_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_2" name="doc_old_2" />
                                   <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -403,14 +403,14 @@
                                   <label for="cip" class="control-label" > Acta de inicio de obra</label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc3_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc3_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_3" name="doc_old_3" />
                                   <input style="display: none;" id="doc3" type="file" name="doc3" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -432,14 +432,14 @@
                                   <label for="Presupuesto" class="control-label" >Presupuesto</label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc4_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_4" name="doc_old_4" />
                                   <input style="display: none;" id="doc4" type="file" name="doc4" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -460,14 +460,14 @@
                                   <label for="analisis-de-costos-unitarios" class="control-label" > Analisis de costos unitarios</label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc5_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_5" name="doc_old_5" />
                                   <input style="display: none;" id="doc5" type="file" name="doc5" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -488,14 +488,14 @@
                                   <label for="inicio-de-obra" class="control-label" > Insumos</label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc6_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc6_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_6" name="doc_old_6" />
                                   <input style="display: none;" id="doc6" type="file" name="doc6" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>

@@ -7,38 +7,7 @@
     header("Location: login.html");
   }else{
     ?>
-    <style>
-      .styletabla thead th {
-           border-bottom: 1px solid #000000 !important; 
-           border-top: 1px solid #000000 !important; 
-      }
-      table th {
-        vertical-align: top !important;
-      }
-     .stile {
-        padding-top: 40px !important;
-        text-align: center !important;
-        border: black 1px solid;
-      }
-     .tcuerpo tr td{
-        text-align: center !important;
-        padding-top: 18px !important;
-        border: black 1px solid;
-        padding: 0.45rem 0.20rem 0.25rem 0.20rem !important; 
-     }
-     .dias th{
-        padding: 0.15rem 0rem 0rem 0rem !important; 
-        border: black 1px solid;
-        text-align: center !important;
-     }
-     .row-horizon {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-        margin: 0 2px;
-      }
-
-    </style>
+     
 <!DOCTYPE html>
 <html lang="es">
   <head>

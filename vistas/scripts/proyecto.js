@@ -673,7 +673,7 @@ function addDocs(e,id) {
 					$("#"+id+"_nombre").html(''+
 						'<div class="row">'+
               '<div class="col-md-12">'+
-							  file.name +
+              '<i>' + file.name + '</i>' +
               '</div>'+
               '<div class="col-md-12">'+
                 '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
