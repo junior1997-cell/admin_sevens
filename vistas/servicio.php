@@ -66,9 +66,9 @@
                                                 <tr>
                                                     <th>Aciones</th>
                                                     <th>Nombre Máquina</th>
+                                                    <th>Proveedor</th>
                                                     <th>Cantidad(veces)</th>
-                                                    <th>Total Horas</th>
-                                                    <th>Costo Unitario</th>
+                                                    <th>Horas Horometro</th>
                                                     <th>Costo Parcial</th>
                                                     <th>Añadir pago</th>
                                                     <th>Saldo</th>
@@ -80,9 +80,9 @@
                                                 <tr>
                                                     <th>Aciones</th>
                                                     <th>Nombre Máquina</th>
+                                                    <th>Proveedor</th>
                                                     <th>Cantidad(veces)</th>
-                                                    <th>Total Horas</th>
-                                                    <th>Costo Unitario</th>
+                                                    <th>Horas Horometro</th>
                                                     <th>Costo Parcial</th>
                                                     <th>Añadir pago</th>
                                                     <th>Saldo</th>
@@ -101,8 +101,9 @@
                                                     <th>Fecha</th>
                                                     <th>Horometro Inicial</th>
                                                     <th>Horometro Final</th>
-                                                    <th>Horas</th>
+                                                    <th>Dif. Horas Horometro</th>
                                                     <th>Costo Unitario</th>
+                                                    <th>Unidad M.</th>
                                                     <th>Costo Parcial</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -114,8 +115,9 @@
                                                     <th>Fecha</th>
                                                     <th>Horometro Inicial</th>
                                                     <th>Horometro Final</th>
-                                                    <th id="horas-total" style="color: #ff0000;background-color: #fedaff;"></th>
+                                                    <th id="horas-total">Dif. Horas Horometro</th>
                                                     <th>Costo Unitario</th>
+                                                    <th>Unidad M.</th>
                                                     <th id="costo-parcial" style="color: #ff0000;background-color: #fedaff;"></th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -213,21 +215,21 @@
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
                                                     <label for="horometro_inicial">Horometro Inicial </label>                               
-                                                    <input type="number" step="0.01" name="horometro_inicial" id="horometro_inicial" class="form-control" placeholder="Horometro Inicial" onclick="horometro();" onkeyup="horometro();" > 
+                                                    <input type="number" step="0.01" name="horometro_inicial" id="horometro_inicial" class="form-control" placeholder="Horometro Inicial" onclick="capture_unidad();" onkeyup="capture_unidad();" > 
                                                   </div>                                                        
                                                 </div> 
                                                 <!-- Horometro final-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
                                                     <label for="horometro_final">Horometro Final </label>                               
-                                                    <input type="number" step="0.01" name="horometro_final" id="horometro_final" class="form-control" placeholder="Horometro Final" onclick="horometro();" onkeyup="horometro();" > 
+                                                    <input type="number" step="0.01" name="horometro_final" id="horometro_final" class="form-control" placeholder="Horometro Final" onclick="capture_unidad();" onkeyup="capture_unidad();" > 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- cargo -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
                                                     <label for="unidad_m">Unidad de medidda</label>
-                                                    <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;"  >                                    
+                                                    <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;" onchange="capture_unidad();"  >                                    
                                                         <option value="Hora">Hora</option>
                                                         <option value="Dia">Dia</option>
                                                         <option value="Mes">Mes</option>
@@ -236,17 +238,31 @@
                                                     </div>
                                                 </div>
                                                 <!-- Horas-->
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-3" id="horas_head">
                                                   <div class="form-group">
-                                                    <label for="horas">Horas </label>                               
-                                                    <input type="number" step="0.01" name="horas" id="horas" class="form-control"  placeholder="Horas" onclick="horometro();" onkeyup="horometro();" readonly> 
+                                                    <label for="horas">Dif. Horometro </label>                               
+                                                    <input type="number" step="0.01" name="horas" id="horas" class="form-control"  placeholder="Horas" onclick="capture_unidad();" onkeyup="capture_unidad();" readonly> 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Dias-->
+                                                <div class="col-lg-3" id="dias_head">
+                                                  <div class="form-group">
+                                                    <label for="dias">Días </label>                               
+                                                    <input type="number" step="0.01" name="dias" id="dias" class="form-control"  placeholder="Días" onclick="capture_unidad();" onkeyup="capture_unidad();"> 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Meses-->
+                                                <div class="col-lg-3" style="display: none;" id="meses_head" >
+                                                  <div class="form-group">
+                                                    <label for="mes">Meses </label>                               
+                                                    <input type="number" step="0.01" name="mes" id="mes" class="form-control"  placeholder="Mes" onclick="capture_unidad();" onkeyup="capture_unidad();"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Costo unitario-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
                                                     <label for="costo_unitario">Costo unitario </label>                               
-                                                    <input type="number" step="0.01" name="costo_unitario" id="costo_unitario" class="form-control"  placeholder="Costo unitario" onclick="horometro();" onkeyup="horometro();"> 
+                                                    <input type="number" step="0.01" name="costo_unitario" id="costo_unitario" class="form-control"  placeholder="Costo unitario" onclick="capture_unidad();" onkeyup="capture_unidad();"> 
                                                   </div>                                                        
                                                 </div> 
                                                 <!-- Costo Parcial-->

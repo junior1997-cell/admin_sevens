@@ -17,7 +17,9 @@ $horometro_final 	= isset($_POST["horometro_final"])? limpiarCadena($_POST["horo
 $horas				= isset($_POST["horas"])? limpiarCadena($_POST["horas"]):"";
 $costo_unitario 	= isset($_POST["costo_unitario"])? limpiarCadena($_POST["costo_unitario"]):"";
 $costo_parcial 		= isset($_POST["costo_parcial"])? limpiarCadena($_POST["costo_parcial"]):"";
-$unidad_m 		= isset($_POST["unidad_m"])? limpiarCadena($_POST["unidad_m"]):"";
+$unidad_m 		    = isset($_POST["unidad_m"])? limpiarCadena($_POST["unidad_m"]):"";
+$dias 		        = isset($_POST["dias"])? limpiarCadena($_POST["dias"]):"";
+$mes 		        = isset($_POST["mes"])? limpiarCadena($_POST["mes"]):"";
 
 
 switch ($_GET["op"]){
@@ -35,12 +37,12 @@ switch ($_GET["op"]){
 
 				if (empty($idservicio)){
 					
-					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m);
+					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					
-					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m);
+					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -126,8 +128,9 @@ switch ($_GET["op"]){
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['servicio_maquina']==1)
-			{
-				$nube_idproyecto = $_GET["nube_idproyecto"];
+			{	
+				//$_GET["nube_idproyecto"]
+				$nube_idproyecto =$_GET["nube_idproyecto"];
 				$rspta=$servicios->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
@@ -178,9 +181,9 @@ switch ($_GET["op"]){
 						 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->maquina .'</p></span>
 						 <span class="description" style="margin-left: 0px !important;">'. $reg->codigo_maquina .' </span>
 						 </div>',
-		 				"2"=>$reg->cantidad_veces,
-		 				"3"=>$reg->Total_horas,
-		 				"4"=>$reg->costo_unitario,
+		 				"2"=>$reg->razon_social,		 				
+		 				"3"=>$reg->cantidad_veces,		 				
+		 				"4"=>$reg->horas,		 				
 		 				"5"=>$reg->costo_parcial,
 		 				"6"=>' <button class="btn btn-'.$c.'" onclick="aniadir_pago('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
 						 <button class="btn btn-'.$c.'">'.$monto.'</button> ',
@@ -219,11 +222,21 @@ switch ($_GET["op"]){
 				/*$idmaquinaria='1';
 				$idproyecto='1';*/
 				$rspta=$servicios->ver_detalle_m($idmaquinaria,$idproyecto);
-				
+				$totalxum=0;
 				//Vamos a declarar un array
 					$data= Array();
 					while ($reg=$rspta->fetch_object()){
-				
+
+						if ($reg->unidad_medida=='Hora') {
+							$totalxum=$reg->horas;
+						}elseif($reg->unidad_medida=='Dia'){
+							
+							$totalxum=$reg->dias_uso;
+							//$totalxum=intval($reg->dias_uso);
+							//$rest = substr("abcdef", 0, -1);  // devuelve "abcde"
+						}else{
+							$totalxum==$reg->meses_uso;
+						}
 						$data[]=array(
 							"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idservicio.','.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
 							' <button class="btn btn-danger" onclick="desactivar('.$reg->idservicio .','.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
@@ -234,8 +247,9 @@ switch ($_GET["op"]){
 							"3"=>$reg->horometro_final,
 							"4"=>$reg->horas,
 							"5"=>$reg->costo_unitario,
-							"6"=>$reg->costo_parcial,
-							"7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+							"6"=>$reg->unidad_medida.' - '.$totalxum,
+							"7"=>$reg->costo_parcial,
+							"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 							'<span class="text-center badge badge-danger">Desactivado</span>'
 							);
 					}

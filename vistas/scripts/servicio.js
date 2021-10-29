@@ -36,11 +36,11 @@ function init() {
    $("#unidad_m").select2({
     theme: "bootstrap4",
     placeholder: "Selecione una unidad de medida",
-    allowClear: true,
+    allowClear: false,
   });
   
   $("#maquinaria").val("null").trigger("change");
-  $("#unidad_m").val("null").trigger("change");
+  $("#unidad_m").val("Hora").trigger("change");
 
 }
 
@@ -56,7 +56,82 @@ function seleccion() {
   }
 }
 
-function horometro(){
+
+
+
+function capture_unidad() {
+
+  if ($("#unidad_m").select2("val") =="Hora") {
+    $("#horas_head").removeClass("col-lg-3").addClass("col-lg-6");
+    $("#dias_head").hide();
+    $("#meses_head").hide();
+    
+    var horometro_inicial = $('#horometro_inicial').val();
+    var horometro_final = $('#horometro_final').val();
+    var costo_unitario = $('#costo_unitario').val();
+    $("#dias").val("");
+    $("#mes").val("");
+    //console.log(horometro_inicial,horometro_final);
+    if (horometro_final!=0) {
+      var horas=(horometro_final-horometro_inicial).toFixed(1);
+      var costo_parcial=(horas*costo_unitario).toFixed(1);
+    }else{
+      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
+      var costo_parcial=costo_unitario
+    }
+    
+    $("#horas").val(horas);
+    $("#costo_parcial").val(costo_parcial);
+
+  } else if($("#unidad_m").select2("val")=="Dia"){
+    $("#horas_head").removeClass("col-lg-6").addClass("col-lg-3");
+    $("#dias_head").show();
+    $("#meses_head").hide();
+    
+    var horometro_inicial = $('#horometro_inicial').val();
+    var horometro_final = $('#horometro_final').val();
+    var costo_unitario = $('#costo_unitario').val();
+    var dias = $('#dias').val();
+    $("#mes").val("");
+    //console.log(horometro_inicial,horometro_final);
+    if (horometro_final!=0) {
+      var horas=(horometro_final-horometro_inicial).toFixed(1);
+      var costo_parcial=(dias*costo_unitario).toFixed(1);
+    }else{
+      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
+      var costo_parcial=costo_unitario*dias;
+    }
+
+    $("#horas").val(horas);
+    $("#costo_parcial").val(costo_parcial);
+    
+  }else if($("#unidad_m").select2("val")=="Mes"){
+    $("#horas_head").removeClass("col-lg-6").addClass("col-lg-3");
+    $("#dias_head").hide();
+    $("#meses_head").show();
+    $("#dias").val("");
+    var horometro_inicial = $('#horometro_inicial').val();
+    var horometro_final = $('#horometro_final').val();
+    var costo_unitario = $('#costo_unitario').val();
+    var mes = $('#mes').val();
+
+    //console.log(horometro_inicial,horometro_final);
+    if (horometro_final!=0) {
+      var horas=(horometro_final-horometro_inicial).toFixed(1);
+      var costo_parcial=(mes*costo_unitario).toFixed(1);
+    }else{
+      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
+      var costo_parcial=costo_unitario*mes;
+    }
+
+    $("#horas").val(horas);
+    $("#costo_parcial").val(costo_parcial);
+
+  }
+
+}
+
+/*function horometro(){
 
   var horometro_inicial = $('#horometro_inicial').val();
   var horometro_final = $('#horometro_final').val();
@@ -76,7 +151,7 @@ function horometro(){
 
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
-}
+}*/
 
 /*idservicio
 maquinaria
@@ -96,12 +171,14 @@ function limpiar() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
   $("#idservicio").val(""); 
   $("#maquinaria").val("null").trigger("change"); 
-  $("#unidad_m").val("null").trigger("change"); 
+  $("#unidad_m").val("Hora").trigger("change"); 
   $("#fecha_inicio").val("");
   $("#fecha_fin").val("");
   $("#horometro_inicial").val("");
   $("#horometro_final").val("");
   $("#horas").val("");
+  $("#dias").val(""); 
+  $("#mes").val(""); 
   $("#costo_unitario").val("");
   $("#costo_parcial").val("");
   $("#costo_unitario").attr('readonly',false);
@@ -201,18 +278,19 @@ function regresar_principal(){
   $("#btn-agregar").show();
   $("#tabla_detalles").hide();
   $("#btn-regresar").hide();
+  $("#tabla_pagos").hide();
 }
 //Función para guardar o editar
 function suma_horas_costoparcial(idmaquinaria,idproyecto){
   console.log('...'+idmaquinaria,idproyecto);
     //suma
     $.post("../ajax/servicio.php?op=suma_horas_costoparcial", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-      $("#horas-total").html(""); 
+     // $("#horas-total").html(""); 
       $("#costo-parcial").html("");
       data = JSON.parse(data); 
       console.log(data);
      // tabla.ajax.reload();
-      $("#horas-total").html(data.horas); 
+     // $("#horas-total").html(data.horas); 
       $("#costo-parcial").html(data.costo_parcial);
   
     });
@@ -281,6 +359,8 @@ function mostrar(idservicio) {
     $("#horometro_inicial").val(data.horometro_inicial); 
     $("#horometro_final").val(data.horometro_final); 
     $("#horas").val(data.horas); 
+    $("#dias").val(data.dias_uso); 
+    $("#mes").val(data.meses_uso); 
     $("#costo_unitario").val(data.costo_unitario); 
     $("#costo_parcial").val(data.costo_parcial); 
 
