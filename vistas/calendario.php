@@ -85,20 +85,20 @@
                                   </div>
                                   <div class="card-body">
                                     <!-- the events -->
-                                    <div /*id="external-events"*/ >
-                                      <div class="external-event bg-success">Lunch</div>
-                                      <div class="external-event bg-warning">Go home</div>
-                                      <div class="external-event bg-info">Do homework</div>
-                                      <div class="external-event bg-primary">Work on UI design</div>
-                                      <div class="external-event bg-danger">Sleep tight</div>
-                                      <div class="external-event bg-success">Lunch</div>
-                                      <div class="external-event bg-warning">Go home</div>
-                                      <div class="external-event bg-info">Do homework</div>
-                                      <div class="external-event bg-primary">Work on UI design</div>
-                                      <div class="external-event bg-danger">Sleep tight</div>                                      
+                                    <div id="external-events" >                                     
+                                                                     
                                     </div>
                                   </div>
                                   <!-- /.card-body -->
+                                </div>
+
+                                <div class="card card-danger">
+                                  <div class="card-header">
+                                    <h3 class="card-title">Feriados eliminados</h3>
+                                  </div>
+                                  <div class="card-body" id="external-events-eliminados">
+                                    
+                                  </div>
                                 </div>
                                 
                               </div>
@@ -133,7 +133,7 @@
 
             <!-- Modal agregar trabajador -->
             <div class="modal fade" id="modal-agregar-calendario">
-              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+              <div class="modal-dialog modal-dialog-scrollable modal-md">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title">Agregar Feriado</h4>
@@ -145,15 +145,24 @@
                   <div class="modal-body">
                     <!-- form start -->
                     <form id="form-calendario" name="form-calendario" method="POST">
-                      <div class="card-body">
+                      <div class="card-body" style="padding-top: 0px !important;">
                         <div class="row" id="cargando-1-fomulario">
 
-                          <!-- id trabajador -->
+                          <!-- id calendario -->
                           <input type="hidden" name="idcalendario" id="idcalendario" />
+                          <!-- id proyecto -->
+                          <input type="hidden" name="idproyecto" id="idproyecto" />          
                           <!-- fecha -->
                           <input type="hidden" name="fecha_feriado"  id="fecha_feriado" />
                           <!-- text color -->
                           <input type="hidden" name="text_color" id="text_color" value="#ffffff" />
+
+                          <!-- fecha seleccionada  -->
+                          <div class="col-lg-12 text-center mb-3">
+                            <div class="external-event bg-warning">
+                              <h4 id="fecha_select" style="margin-bottom: 0 !important;">2021/10/23</h4>
+                            </div>                            
+                          </div>
 
                           <!-- Titulo -->
                           <div class="col-lg-6">
@@ -194,7 +203,7 @@
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" id="eliminar_registro">Eliminar</button>
                     <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
                   </div>
                 </div>

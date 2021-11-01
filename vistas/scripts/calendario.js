@@ -1,4 +1,4 @@
-var tabla;
+var  calendar;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -13,6 +13,8 @@ function init() {
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-calendario").submit(); });
 
+  $("#eliminar_registro").on("click", function (e) { desactivar()  });
+
 }
 
 function contraste() {
@@ -20,40 +22,186 @@ function contraste() {
   let color = $('#background_color').val();
 
   let color_contrst = invertColor(color, true)
-  
+
   $('#text_color').val(color_contrst);
 }
 
 //Función limpiar
 function limpiar() {
-  $("#idtrabajador").val("");
-  $("#nombre").val(""); 
-  $("#num_documento").val(""); 
-  $("#direccion").val(""); 
-  $("#telefono").val(""); 
-  $("#email").val(""); 
-  $("#nacimiento").val("");
-  $("#edad").val("0");     
-  $("#c_bancaria").val("");  
-  $("#banco").val("").trigger("change");
-  $("#titular_cuenta").val("");
-
-  
+  $('#idcalendario').val("");
+  $('#fecha_feriado').val("");
+  $('#text_color').val('#ffffff');
+  $('#fecha_select').html("Selecione una fecha");
+  $('#titulo').val('Feriado');
+  $('#background_color').val("#dc3545");
+  $('#descripcion').val('');
+  $('#eliminar_registro').hide();  
 }
 
 //Función Listar
 function listar() {
+  $("#external-events").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
 
-  
+  $.post("../ajax/calendario.php?op=listar-calendario",  function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+
+    $("#external-events").html('');
+
+    if (data.length != 0) {
+
+      $.each(data, function (index, value) {
+             
+        $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+'</div>');
+      });
+
+    } else {
+
+      $("#external-events").html('<div class="external-event bg-info">No hay fechas disponibles</div>');
+    }
+      
+    
+    //initialize the calendar
+    var date = new Date()
+
+    var d    = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+
+    var Calendar = FullCalendar.Calendar;
+
+    var Draggable = FullCalendar.Draggable;        
+    
+    var calendarEl = document.getElementById('calendar');
+
+    // initialize the external events     
+
+    calendar = new Calendar(calendarEl, {
+
+      timeZone: 'local',
+        
+      headerToolbar: {  left: 'prev,next today', center: 'title', right: 'listYear,dayGridMonth' },
+
+      themeSystem: 'bootstrap',
+
+      events: data,
+
+      // Se ejecuta cuando no hay eventos
+      dateClick: function(info) {
+        
+        $('#idcalendario').val("");
+
+        $('#fecha_feriado').val(info.dateStr);
+
+        $('#text_color').val('#ffffff');
+
+        $('#fecha_select').html(info.dateStr);
+
+        $('#titulo').val('Feriado');
+
+        $('#background_color').val("#dc3545");
+
+        $('#descripcion').val('');
+
+        $('#eliminar_registro').hide();
+
+        $('#modal-agregar-calendario').modal('show');
+      },
+
+      // Se ejecuta cuando hay un evento
+      eventClick: function(info) {
+
+        date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
+
+        if (dt < 10) { dt = '0' + dt; }
+
+        if (month < 10) { month = '0' + month; }
+        
+        $('#eliminar_registro').show();
+
+        $('#idcalendario').val(info.event.id);
+
+        $('#fecha_feriado').val(year+'-' + month + '-'+dt);
+
+        $('#text_color').val(info.event.textColor);
+
+        $('#fecha_select').html(year+'-' + month + '-'+dt);
+
+        $('#titulo').val(info.event.title);
+
+        $('#background_color').val(info.event.backgroundColor);
+
+        $('#descripcion').val(info.event.extendedProps.descripcion);
+
+        $('#modal-agregar-calendario').modal('show');
+      },       
+          
+      hiddenDays:[6],       
+      
+      editable  : true,
+
+      droppable : true, // this allows things to be dropped onto the calendar !!!
+
+      drop      : function(info) {
+        // is the "remove after drop" checkbox checked?
+        if (checkbox.checked) {
+          // if so, remove the element from the "Draggable Events" list
+          info.draggedEl.parentNode.removeChild(info.draggedEl);
+        }
+      }
+    });
+
+    calendar.setOption('locale', 'es');
+
+    calendar.render(); 
+  });
+
+  // fechas eliminadas
+  $("#external-events-eliminados").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
+
+  $.post("../ajax/calendario.php?op=listar-calendario-e",  function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+
+    $("#external-events-eliminados").html('');
+
+    if (data.length != 0) {
+
+      $.each(data, function (index, value) {
+              
+        $("#external-events-eliminados").append(
+        '<div class="info-box shadow-lg" style="min-height: 10px !important; background-color: '+value.backgroundColor+' !important;">'+
+          '<div class="info-box-content">  '   +                                    
+            '<span class="info-box-number" style="color: '+value.textColor+' !important;">Feriado </span>'+
+          '</div>'+
+          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important;" onclick="activar('+value.id+')">'+
+            '<i class="fas fa-check"></i>'+
+          '</span>'+
+        '</div>'
+        );
+      });
+      
+    } else {
+
+      $("#external-events-eliminados").html(
+        '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
+          '<div class="info-box-content">  '   +                                    
+            '<span class="info-box-number">No hay fechas eliminadas </span>'+
+          '</div>'+
+          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
+            '<i class="far fa-grin-alt"></i>'+
+          '</span>'+
+        '</div>'
+      );
+    }
+  });
 }
-//Función para guardar o editar
 
+//Función para guardar o editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-calendario")[0]);
 
   $.ajax({
-    url: "../ajax/all_trabajador.php?op=guardaryeditar",
+    url: "../ajax/calendario.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -63,13 +211,9 @@ function guardaryeditar(e) {
              
       if (datos == 'ok') {	
 
-        Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
+        Swal.fire("Correcto!", "Fecha guardado correctamente", "success");			 
 
-	      tabla.ajax.reload();
-         
-				limpiar();
-
-        $("#modal-agregar-trabajador").modal("hide");
+	      listar();  $("#modal-agregar-calendario").modal("hide"); limpiar();        
 
 			}else{
 
@@ -78,6 +222,56 @@ function guardaryeditar(e) {
 			}
     },
   });
+}
+
+//Función para desactivar registros
+function desactivar() {
+
+  let idcalendario = $('#idcalendario').val();
+
+  Swal.fire({
+    title: "¿Está Seguro de Eliminar esta fecha?",
+    text: "Al eliminar no podra recuperarlo",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      $.post("../ajax/calendario.php?op=desactivar", { idcalendario: idcalendario }, function (e) {
+
+        Swal.fire("Eliminado!", "Tu fecha a sido eliminado.", "success");
+    
+        listar(); $("#modal-agregar-calendario").modal("hide"); limpiar();    
+      });      
+    }
+  });   
+}
+
+//Función para activar registros
+function activar(idcalendario) {
+  Swal.fire({
+    title: "¿Está Seguro de  Activar esta fecha?",
+    text: "Esta fecha se podra vizualizar.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/calendario.php?op=activar", { idcalendario: idcalendario }, function (e) {
+
+        Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
+
+        listar(); 
+      });
+      
+    }
+  });      
 }
 
 // mostramos los datos para editar
@@ -108,34 +302,13 @@ function mostrar(idtrabajador) {
     $("#titular_cuenta").val(data.titular_cuenta);
     $("#idtrabajador").val(data.idtrabajador);
 
-    if (data.imagen_perfil != "") {
+     
 
-			$("#foto1_i").attr("src", "../dist/img/usuarios/" + data.imagen_perfil);
-
-			$("#foto1_actual").val(data.imagen_perfil);
-		}
-
-    if (data.imagen_dni_anverso != "") {
-
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen_dni_anverso);
-
-			$("#foto2_actual").val(data.imagen_dni_anverso);
-		}
-
-    if (data.imagen_dni_reverso != "") {
-
-			$("#foto3_i").attr("src", "../dist/img/usuarios/" + data.imagen_dni_reverso);
-
-			$("#foto3_actual").val(data.imagen_dni_reverso);
-		}
-
-    edades();
+ 
   });
 }
 
-
-init();
-
+// Validacion FORM
 $(function () {
 
   $.validator.setDefaults({
@@ -193,90 +366,26 @@ $(function () {
   });
 });
 
-// Full Calendar
-$(function () {       
-
-  /* initialize the calendar
-  -----------------------------------------------------------------*/
-  //Date for the calendar events (dummy data)
-  var date = new Date()
-  var d    = date.getDate(), m = date.getMonth(), y = date.getFullYear();
-
-  var Calendar = FullCalendar.Calendar;
-  var Draggable = FullCalendar.Draggable;        
-  
-  var calendarEl = document.getElementById('calendar');
-
-  // initialize the external events
-  // -----------------------------------------------------------------        
-
-  var calendar = new Calendar(calendarEl, {
-    headerToolbar: {
-      left  : 'prev,next today',
-      center: 'title',
-      right : 'listYear,dayGridMonth'
-    },
-    themeSystem: 'bootstrap',
-
-    //Random default events
-    events: [
-      {
-        title           : 'All Day Event',
-        description     : 'dsdsdsddd',
-        start           : new Date(y, m, 1),
-        backgroundColor : '#fff', //red
-        borderColor     : '#fff', //red
-        textColor       : '#212529',
-        allDay          : true
-      },
-
-      
-    ],
-    dateClick: function(info) {
-      // alert('Clicked on: ' + info.dateStr);
-      // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-      // alert('Current view: ' + info.view.type);
-      // change the day's background color just for fun
-      // info.dayEl.style.backgroundColor = 'red';
-      $('#modal-agregar-calendario').modal('show');
-    },
-     
-    editable  : true,
-    droppable : true, // this allows things to be dropped onto the calendar !!!
-    drop      : function(info) {
-      // is the "remove after drop" checkbox checked?
-      if (checkbox.checked) {
-        // if so, remove the element from the "Draggable Events" list
-        info.draggedEl.parentNode.removeChild(info.draggedEl);
-      }
-    }
-  });
-  calendar.setOption('locale', 'es');
-  calendar.render();
-  // $('#calendar').fullCalendar()       
-   
-})
-
-
 function invertColor(hex, bw) {
+
   if (hex.indexOf('#') === 0) {
-      hex = hex.slice(1);
+    hex = hex.slice(1);
   }
+
   // convert 3-digit hex to 6-digits.
   if (hex.length === 3) {
-      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
+
   if (hex.length !== 6) {
-      throw new Error('Invalid HEX color.');
+    throw new Error('Invalid HEX color.');
   }
-  var r = parseInt(hex.slice(0, 2), 16),
-      g = parseInt(hex.slice(2, 4), 16),
-      b = parseInt(hex.slice(4, 6), 16);
+
+  var r = parseInt(hex.slice(0, 2), 16),  g = parseInt(hex.slice(2, 4), 16),  b = parseInt(hex.slice(4, 6), 16);
+
   if (bw) {
-      // http://stackoverflow.com/a/3943023/112731
-      return (r * 0.299 + g * 0.587 + b * 0.114) > 186
-          ? '#000000'
-          : '#FFFFFF';
+    // http://stackoverflow.com/a/3943023/112731
+    return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
   }
   // invert color components
   r = (255 - r).toString(16);
@@ -285,6 +394,8 @@ function invertColor(hex, bw) {
   // pad each with zeros and return
   return "#" + padZero(r) + padZero(g) + padZero(b);
 }
+
+init();
 
 
 
