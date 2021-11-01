@@ -85,7 +85,7 @@ Class Valorizacion
 
 		$sql="SELECT v.idvalorizacion, v.idproyecto, v.nombre, v.doc_valorizacion, v.fecha_quincena, v.estado
 		FROM valorizacion as v
-		WHERE v.idproyecto = '$nube_idproyect' BETWEEN '$f1' AND '$f2';";
+		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_quincena BETWEEN '$f1' AND '$f2';";
 		$data1 = ejecutarConsultaArray($sql);
 
 		$sql2 = "SELECT p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra FROM proyecto as p WHERE p.idproyecto = '$nube_idproyect';";

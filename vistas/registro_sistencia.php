@@ -368,7 +368,7 @@
             </div>
           </div>
 
-          <!-- Modal editar asistencia -->
+          <!-- Modal justificar asistencia -->
           <div class="modal fade" id="modal-justificar-asistencia">
             <div class="modal-dialog modal-dialog-scrollable modal-md">
               <div class="modal-content">

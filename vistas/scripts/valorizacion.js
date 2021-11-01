@@ -24,18 +24,22 @@ function init() {
 // ver las echas de quincenas
 function ver_quincenas(nube_idproyecto) {
 
-  $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>'); console.log(nube_idproyecto);
+  $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>'); //console.log(nube_idproyecto);
 
   $.post("../ajax/valorizacion.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); console.log(data);    
+    data =JSON.parse(data); //console.log(data);    
 
     $('#lista_quincenas').html('');
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
     if (data) {
 
-      var fecha = data.fecha_inicio;    var fecha_i = sumaFecha(0,fecha);
+      let aFecha = data.fecha_inicio.split('-'); 
+
+      var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];    console.log(aFecha);
+      
+      var fecha_i = sumaFecha(0,fecha);
 
       var cal_quincena  =data.plazo/15; var i=0;  var cont=0;
 
@@ -48,6 +52,7 @@ function ver_quincenas(nube_idproyecto) {
         fecha = sumaFecha(14,fecha_inicio);
   
         // console.log(fecha_inicio+'-'+fecha);
+        let fecha_i = ; let fecha_f = ;
         ver_fechas_init_end = "'"+fecha_inicio+"',"+"'"+fecha+"',"+"'"+i+"'";
   
         $('#lista_quincenas').append(' <button id="boton-'+ i +'" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('+ver_fechas_init_end+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' - '+fecha+'</button>')
@@ -76,6 +81,7 @@ sumaFecha = function(d, fecha)
 {
   var Fecha = new Date();
   var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+  // console.log(sFecha);
   var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
   var aFecha = sFecha.split(sep);
   var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
@@ -638,6 +644,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
   $("#fecha_quincena").val(fecha_i);  console.log(fecha_i, fecha_f, i);
 
+  // validamos el id para puntar el boton
   if (localStorage.getItem('boton_id')) {
 
     let id = localStorage.getItem('boton_id'); console.log('id-nube-boton'+id); 
@@ -657,26 +664,29 @@ function fecha_quincena(fecha_i, fecha_f, i) {
   // traemos loa documentos por fechas de la quincena
   $.post("../ajax/valorizacion.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_i, fecha_f: fecha_f }, function (data, status) {
 
-    data =JSON.parse(data); console.log(data);    
+    data =JSON.parse(data); console.log(data);
 
-    // $('#lista_quincenas').html('');
-
-    // VALIDAMOS LAS FECHAS DE QUINCENA
+    // validamos la data total
     if (data) {
 
-      var i=0;  
-
-      while (i <= cal_quincena) {
-
-        i++;
+      // validamos la data1
+      if (data.data1.length === 0) {
+        console.log('data no existe');
+      } else {
+        console.log('data existe');
       }
-      
-    } else {
 
-      // $('#lista_quincenas').html('');
+      // validamos la data2
+      if (data.data2.length === 0) {
+        console.log('data no existe');
+      } else {
+        console.log('data existe');
+      }
+    } else {
+      
     }
-    
-    //console.log(fecha);
+    // $('#lista_quincenas').html('');
+
   });
 }
 

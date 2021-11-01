@@ -233,6 +233,19 @@
           </li>
         <?php  }  ?>
 
+        <?php if ($_SESSION['calendario']==1) {  ?>  
+          <!-- CALENDARIO -->       
+          <li class="nav-item">
+            <a href="calendario.php" class="nav-link" id="mCalendario">
+              <i class="nav-icon far fa-calendar-alt"></i>
+              <p>
+                Calendario
+                <span class="badge badge-info right">2</span>
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
       </ul>
 
      

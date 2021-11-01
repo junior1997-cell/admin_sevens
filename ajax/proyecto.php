@@ -21,6 +21,7 @@
     $numero_documento		  = isset($_POST["numero_documento"])? limpiarCadena($_POST["numero_documento"]):"";
     $empresa				      = isset($_POST["empresa"])? limpiarCadena($_POST["empresa"]):"";
     $nombre_proyecto		  = isset($_POST["nombre_proyecto"])? limpiarCadena($_POST["nombre_proyecto"]):"";
+    $nombre_codigo		    = isset($_POST["nombre_codigo"])? limpiarCadena($_POST["nombre_codigo"]):"";
     $ubicacion				    = isset($_POST["ubicacion"])? limpiarCadena($_POST["ubicacion"]):"";
     $actividad_trabajo		= isset($_POST["actividad_trabajo"])? limpiarCadena($_POST["actividad_trabajo"]):"";
     $empresa_acargo 		  = isset($_POST['empresa_acargo'])? limpiarCadena($_POST['empresa_acargo']):"";
@@ -36,9 +37,7 @@
     $doc_old_2	          = isset($_POST["doc_old_2"])? limpiarCadena($_POST["doc_old_2"]):"";
 
     $doc3_inicio_obra		  = isset($_POST["doc3"])? limpiarCadena($_POST["doc3"]):"";
-    $doc_old_2		        = isset($_POST["doc_old_3"])? limpiarCadena($_POST["doc_old_3"]):"";
-
-    $excel_valorizaciones = "";
+    $doc_old_2		        = isset($_POST["doc_old_3"])? limpiarCadena($_POST["doc_old_3"]):"";    
 
     // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,
     // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
@@ -178,7 +177,7 @@
 
             if (empty($idproyecto)){
               // insertamos en la bd
-              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6,$excel_valorizaciones);
+              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
               // echo $rspta ;
               echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
@@ -256,7 +255,7 @@
                 }
               }
 
-              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
+              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
               
               echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
             }
@@ -524,10 +523,10 @@
 
               if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
                 
-                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_proyecto'";
+                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
 
                 $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
-                $docs2= "'$reg->idproyecto', '$reg->excel_valorizaciones'";
+                
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 
                 $data[]=array(
@@ -548,7 +547,7 @@
                       <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
                       <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                     </div>',
-                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$nombre_proyecto.'</span> </div>' ,
+                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
                   "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
                   "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
                   "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
@@ -557,15 +556,8 @@
                         <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
                       </a>
                     </center>
-                  </div>',
-                  "6"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
-                    <center>
-                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs_valorizaciones('.$docs2.')"data-toggle="tooltip" data-original-title="Ver documentos" >
-                        <img src="../dist/svg/logo-excel.svg" class="card-img-top" height="35" width="30" >
-                      </a>
-                    </center>
-                  </div>',
-                  "7"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
+                  </div>',                  
+                  "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
                 );
             }
             $results = array(
@@ -624,10 +616,10 @@
 
               if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
                 
-                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_proyecto'";
+                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
 
                 $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
-                $docs2= "'$reg->idproyecto', '$reg->excel_valorizaciones'";
+                
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 
                 $data[]=array(
@@ -648,7 +640,7 @@
                       <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
                       <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                     </div>',
-                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$nombre_proyecto.'</span> </div>' ,
+                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
                   "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
                   "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
                   "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
@@ -658,14 +650,7 @@
                       </a>
                     </center>
                   </div>',
-                  "6"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
-                    <center>
-                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs_valorizaciones('.$docs2.')"data-toggle="tooltip" data-original-title="Ver documentos" >
-                        <img src="../dist/svg/logo-excel.svg" class="card-img-top" height="35" width="30" >
-                      </a>
-                    </center>
-                  </div>',
-                  "7"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
+                  "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
                 );
             }
             $results = array(

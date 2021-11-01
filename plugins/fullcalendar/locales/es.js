@@ -14,7 +14,7 @@ FullCalendar.globalLocales.push(function () {
       month: 'Mes',
       week: 'Semana',
       day: 'Día',
-      list: 'Agenda',
+      list: 'Lista',
     },
     weekText: 'Sm',
     allDayText: 'Todo el día',

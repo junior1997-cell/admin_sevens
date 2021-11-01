@@ -22,7 +22,7 @@ function limpiar() {
   $("#tipo_documento option[value='RUC']").attr("selected", true);
   $("#numero_documento").val(""); 
   $("#empresa").val(""); 
-  $("#nombre_proyecto").val("");
+  $("#nombre_proyecto").val(""); $("#nombre_codigo").val("");
   $("#ubicacion").val(""); 
   $("#actividad_trabajo").val("");  
   $("#fecha_inicio_fin").val("");    
@@ -375,7 +375,7 @@ $(function () {
     }
   });
   $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+    $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
   });
 
   $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
@@ -398,7 +398,8 @@ $(function () {
       tipo_documento: { maxlength: 45 },
       numero_documento: { required: true, minlength: 6, maxlength: 20 },
       empresa: { required: true, minlength: 6, maxlength: 200 },
-      nombre_proyecto: { required: true, minlength: 6, maxlength: 200},
+      nombre_proyecto: { required: true, minlength: 6 },
+      nombre_codigo: {minlength: 4 },
       ubicacion: {minlength: 6, maxlength: 300},
       actividad_trabajo: {minlength: 6},
       empresa_acargo: {minlength: 6, maxlength: 200},
@@ -420,6 +421,9 @@ $(function () {
         required: "Este campo es requerido.",
         minlength: "El nombre de proyecto debe tener MÍNIMO 6 caracteres.",
         maxlength: "La nombre de proyecto debe tener como MÁXIMO 200 caracteres.",
+      },
+      nombre_codigo: {
+        minlength: "El nombre de proyecto debe tener MÍNIMO 4 caracteres.",
       },
       ubicacion: {
         minlength: "La ubicación debe tener MÍNIMO 6 caracteres.",
@@ -1195,7 +1199,7 @@ function mostrar(idproyecto) {
     $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
     $("#numero_documento").val(data.numero_documento); 
     $("#empresa").val(data.empresa); 
-    $("#nombre_proyecto").val(data.nombre_proyecto);
+    $("#nombre_proyecto").val(data.nombre_proyecto); $("#nombre_codigo").val(data.nombre_codigo);
     $("#ubicacion").val(data.ubicacion); 
     $("#actividad_trabajo").val(data.actividad_trabajo);  
        

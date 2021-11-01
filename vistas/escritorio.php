@@ -70,7 +70,7 @@
                         <p>Total de Proyectos</p>
                       </div>
                       <div class="icon">
-                        <i class="ion ion-bag"></i>
+                        <i class="fas fa-th"></i>
                       </div>
                       <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -84,7 +84,7 @@
                         <p>Total de Proveedores activos</p>
                       </div>
                       <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
+                        <i class="fas fa-truck"></i>
                       </div>
                       <a href="proveedor.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -99,7 +99,7 @@
                         <p>Total de Trabajadores activos</p>
                       </div>
                       <div class="icon">
-                        <i class="ion ion-person-add"></i>
+                        <i class="fas fa-users"></i>
                       </div>
                       <a href="trabajador.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -114,7 +114,7 @@
                         <p>Total de Servicio</p>
                       </div>
                       <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                        <i class="fas fa-tractor"></i>
                       </div>
                       <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -143,16 +143,16 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
+                        <h1 style="text-align: center;background-color: aliceblue;">Proyectos en Proceso o no Empezado</h1>
                         <table id="tabla-proyectos" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
                               <th class="">Aciones</th>
                               <th>Empresa</th>
-                              <th>Nombre de proyecto</th>
+                              <th>Código proyecto</th>
                               <th>Ubicación</th>
                               <th>Costo</th>
                               <th>contractual</th>
-                              <th>valorizaciones</th>
                               <th>Estado</th>
                             </tr>
                           </thead>
@@ -163,28 +163,26 @@
                             <tr>
                               <th class="">Aciones</th>
                               <th>Empresa</th>
-                              <th>Nombre de proyecto</th>
+                              <th>Código proyecto</th>
                               <th>Ubicación</th>
                               <th>Costo</th>
                               <th>contractual</th>
-                              <th>valorizaciones</th>
                               <th>Estado</th>
                             </tr>
                           </tfoot>
                         </table>
 
                         <div class="mt-4 card-danger card-outline ">
-                          <h3 class="mb-4">Proyectos terminados</h3>
+                          <h1 style="text-align: center;background-color: aliceblue;">Proyectos Terminados</h1>
                           <table id="tabla-proyectos-terminados" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
                                 <th class="">Aciones</th>
                                 <th>Empresa</th>
-                                <th>Nombre de proyecto</th>
+                                <th>Código proyecto</th>
                                 <th>Ubicación</th>
                                 <th>Costo</th>
                                 <th>contractual</th>
-                                <th>valorizaciones</th>
                                 <th>Estado</th>
                               </tr>
                             </thead>
@@ -195,11 +193,10 @@
                               <tr>
                                 <th class="">Aciones</th>
                                 <th>Empresa</th>
-                                <th>Nombre de proyecto</th>
+                                <th>Código proyecto</th>
                                 <th>Ubicación</th>
                                 <th>Costo</th>
                                 <th>contractual</th>
-                                <th>valorizaciones</th>
                                 <th>Estado</th>
                               </tr>
                             </tfoot>
@@ -216,7 +213,7 @@
               </div>
               <!-- /.container-fluid -->
 
-              <!-- Modal agregar prouyecto -->
+              <!-- Modal agregar proyecto -->
               <div class="modal fade" id="modal-agregar-proyecto">
                 <div class="modal-dialog /*modal-dialog-scrollable*/ modal-xl">
                   <div class="modal-content">
@@ -273,10 +270,19 @@
                             </div>
 
                             <!-- Nombre del proyecto -->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label for="nombre_proyecto">Nombre del proyecto</label>
+                                <textarea name="nombre_proyecto" id="nombre_proyecto" class="form-control" rows="3" placeholder="Ingresa nombre">
+                                </textarea>
+                              </div>                                                        
+                            </div>
+
+                            <!-- Nombre del proyecto -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label for="nombre_proyecto">Nombre del proyecto</label>                               
-                                <input type="text" name="nombre_proyecto" id="nombre_proyecto" class="form-control"  placeholder="Nombre">  
+                                <label for="nombre_codigo">Código del proyecto</label>
+                                <input type="text" name="nombre_codigo" id="nombre_codigo" class="form-control"  placeholder="Codigo proyecto">
                               </div>                                                        
                             </div>
 
@@ -666,7 +672,87 @@
                           <h4>Cargando...</h4>
                         </div>
                       </div>
-                      <!-- /.card-body -->
+                      
+                      <div class="mailbox-attachments  clearfix text-center row">
+                        <div class="col-lg-4" >     
+                          <li>                    
+                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                            <div class="mailbox-attachment-info">
+                              <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra.pdf</a>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                </span>
+                            </div>
+                          </li>
+                        </div>
+
+                        <div class="col-lg-4" >  
+                          <li>                       
+                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                            <div class="mailbox-attachment-info">
+                              <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-entrega-de-terreno.pdf</a>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                </span>
+                            </div>
+                          </li>
+                        </div>
+
+                        <div class="col-lg-4" >  
+                          <li>                       
+                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                            <div class="mailbox-attachment-info">
+                              <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-inicio-de-obra.pdf</a>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                </span>
+                            </div>
+                          </li>
+                        </div>
+
+                        <div class="col-lg-4" >     
+                          <li>                    
+                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                            <div class="mailbox-attachment-info">
+                              <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Presupuesto.pdf</a>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                </span>
+                            </div>
+                          </li>
+                        </div>
+
+                        <div class="col-lg-4" >  
+                          <li>                       
+                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                            <div class="mailbox-attachment-info">
+                              <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Analisis-de-costos-unitarios.pdf</a>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                </span>
+                            </div>
+                          </li>
+                        </div>
+
+                        <div class="col-lg-4" >  
+                          <li>                       
+                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                            <div class="mailbox-attachment-info">
+                              <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Insumos.pdf</a>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                </span>
+                            </div>
+                          </li>
+                        </div>
+                      </div>
+
                     </div>
                                        
                   </div>
