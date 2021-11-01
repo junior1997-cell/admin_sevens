@@ -4,9 +4,11 @@ if (strlen(session_id()) < 1){
 	session_start();//Validamos si existe o no la sesión
 }
 require_once "../modelos/Servicio.php";
+require_once "../modelos/Fechas.php";
 
 $servicios=new Servicios();
 
+//SERVICIOS...
 $idservicio 		= isset($_POST["idservicio"])? limpiarCadena($_POST["idservicio"]):"";	
 $idproyecto			= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
 $maquinaria 		= isset($_POST["maquinaria"])? limpiarCadena($_POST["maquinaria"]):"";
@@ -20,9 +22,16 @@ $costo_parcial 		= isset($_POST["costo_parcial"])? limpiarCadena($_POST["costo_p
 $unidad_m 		    = isset($_POST["unidad_m"])? limpiarCadena($_POST["unidad_m"]):"";
 $dias 		        = isset($_POST["dias"])? limpiarCadena($_POST["dias"]):"";
 $mes 		        = isset($_POST["mes"])? limpiarCadena($_POST["mes"]):"";
+$descripcion 	    = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
+//PAGOS...
 
 
 switch ($_GET["op"]){
+	/*=======================
+	=========================
+	//SECCION DE SERVICIOS
+	=========================
+	=========================*/
 	case 'guardaryeditar':
 		if (!isset($_SESSION["nombre"])) {
 
@@ -37,12 +46,12 @@ switch ($_GET["op"]){
 
 				if (empty($idservicio)){
 					
-					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes);
+					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					
-					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes);
+					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -141,7 +150,7 @@ switch ($_GET["op"]){
 				$icon="";
 		 		while ($reg=$rspta->fetch_object()){
 					//$parametros="'$reg->idservicio','$reg->idproyecto'";
-					$rspta2=$servicios->pago_servicio($reg->idmaquinaria);
+					$rspta2=$servicios->pago_servicio($reg->idmaquinaria,$reg->idproyecto);
 
 					empty($rspta2)?$saldo=0:$saldo = $reg->costo_parcial-$rspta2['monto'];
 					empty($rspta2['monto'])?$monto="0.00":$monto = $rspta2['monto'];
@@ -182,10 +191,10 @@ switch ($_GET["op"]){
 						 <span class="description" style="margin-left: 0px !important;">'. $reg->codigo_maquina .' </span>
 						 </div>',
 		 				"2"=>$reg->razon_social,		 				
-		 				"3"=>$reg->cantidad_veces,		 				
-		 				"4"=>$reg->horas,		 				
+		 				"3"=>$reg->unidad_medida,		 				
+		 				"4"=>$reg->cantidad_veces,		 				
 		 				"5"=>$reg->costo_parcial,
-		 				"6"=>' <button class="btn btn-'.$c.'" onclick="aniadir_pago('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
+		 				"6"=>' <button class="btn btn-'.$c.'" onclick="listar_pagos('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
 						 <button class="btn btn-'.$c.'">'.$monto.'</button> ',
 		 				"7"=>$saldo,
 		 				"8"=>$estado
@@ -222,34 +231,55 @@ switch ($_GET["op"]){
 				/*$idmaquinaria='1';
 				$idproyecto='1';*/
 				$rspta=$servicios->ver_detalle_m($idmaquinaria,$idproyecto);
-				$totalxum=0;
+				$fecha_entreg='';
+				$fecha_recoj='';
+				$fecha='';
 				//Vamos a declarar un array
 					$data= Array();
+					
 					while ($reg=$rspta->fetch_object()){
-
-						if ($reg->unidad_medida=='Hora') {
-							$totalxum=$reg->horas;
-						}elseif($reg->unidad_medida=='Dia'){
-							
-							$totalxum=$reg->dias_uso;
-							//$totalxum=intval($reg->dias_uso);
-							//$rest = substr("abcdef", 0, -1);  // devuelve "abcde"
+						//empty($fecha_recojo)?setlocale(LC_ALL,"es_ES").''.date('l d-m-Y', strtotime($reg->fecha_entrega)):$reg->fecha_entrega.'/'.$reg->fecha_recojo,
+						if (empty($reg->fecha_recojo) || $reg->fecha_recojo=='0000-00-00') {
+							$fechas=new FechaEs($reg->fecha_entrega);
+							$dia=$fechas->getDDDD().PHP_EOL;
+							$mun_dia=$fechas->getdd().PHP_EOL;
+							$mes=$fechas->getMMMM().PHP_EOL;
+							$anio=$fechas->getYYYY().PHP_EOL;
+							$fecha_entreg="$dia, $mun_dia de $mes del $anio";
+							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg</b>";
 						}else{
-							$totalxum==$reg->meses_uso;
+							$fechas=new FechaEs($reg->fecha_entrega);
+							//----------
+							$dia=$fechas->getDDDD().PHP_EOL;
+							$mun_dia=$fechas->getdd().PHP_EOL;
+							$mes=$fechas->getMMMM().PHP_EOL;
+							$anio=$fechas->getYYYY().PHP_EOL;
+							$fecha_entreg="$dia, $mun_dia de $mes del $anio";
+							//----------
+							$fechas=new FechaEs($reg->fecha_recojo);
+							$dia2=$fechas->getDDDD().PHP_EOL;
+							$mun_dia2=$fechas->getdd().PHP_EOL;
+							$mes2=$fechas->getMMMM().PHP_EOL;
+							$anio2=$fechas->getYYYY().PHP_EOL;
+							$fecha_recoj="$dia2, $mun_dia2 de $mes2 del $anio2";
+							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg </b> / <br> <b  style=".'color:#ff0000;'.">$fecha_recoj<b>";
+
 						}
+						
 						$data[]=array(
 							"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idservicio.','.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
 							' <button class="btn btn-danger" onclick="desactivar('.$reg->idservicio .','.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
 							'<button class="btn btn-warning" onclick="mostrar('.$reg->idservicio.','.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 							' <button class="btn btn-primary" onclick="activar('.$reg->idservicio.','.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
-							"1"=>$reg->fecha_entrega.'/'.$reg->fecha_recojo,
-							"2"=>$reg->horometro_inicial,
-							"3"=>$reg->horometro_final,
-							"4"=>$reg->horas,
-							"5"=>$reg->costo_unitario,
-							"6"=>$reg->unidad_medida.' - '.$totalxum,
-							"7"=>$reg->costo_parcial,
-							"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+							"1"=>$fecha,
+							"2"=>empty($reg->horometro_inicial) || $reg->horometro_inicial=='0.00'?'-':$reg->horometro_inicial,
+							"3"=>empty($reg->horometro_final) || $reg->horometro_final=='0.00'?'-':$reg->horometro_final,
+							"4"=>empty($reg->horas)|| $reg->horas=='0.00'?'-':$reg->horas,
+							"5"=>empty($reg->costo_unitario) || $reg->costo_unitario=='0.00'?'-':$reg->costo_unitario,
+							"6"=>empty($reg->unidad_medida)?'-':$reg->unidad_medida,
+							"7"=>empty($reg->costo_parcial)?'-':$reg->costo_parcial,
+							"8"=>empty($reg->descripcion)?'-':$reg->descripcion,
+							"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 							'<span class="text-center badge badge-danger">Desactivado</span>'
 							);
 					}
@@ -292,6 +322,36 @@ switch ($_GET["op"]){
 			echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre .' : '. $reg->codigo_maquina .' ---> ' .$reg->nombre_proveedor.'</option>';
 			}
 	break;
+
+	/**
+	 * ====================================
+	 *SECCION PAGO MAQUINARIA
+	 * ====================================
+	 */
+	case 'mostrar_datos_para_reg_p':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['servicio_maquina']==1)
+			{
+				//$idservicioo='1';
+				$rspta=$servicios->mostrar_datos_pago($idservicio);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
 
 	case 'salir':
 		//Limpiamos las variables de sesión   

@@ -1,5 +1,6 @@
 var tabla;
 var tabla2;
+var tabla3;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -10,8 +11,8 @@ function init() {
  listar(localStorage.getItem('nube_idproyecto'));
  
   // $("#bloc_Accesos").addClass("menu-open");
-    //Mostramos los maquinariaes
-    $.post("../ajax/servicio.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
+  //Mostramos los maquinariaes
+  $.post("../ajax/servicio.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
 
   $("#mProveedor").addClass("active");
 
@@ -19,7 +20,7 @@ function init() {
 
   $("#guardar_registro").on("click", function (e) {
     
-    console.log('holaaaaaa');
+    //console.log('holaaaaaa');
     $("#submit-form-servicios").submit();
   });
 
@@ -56,88 +57,89 @@ function seleccion() {
   }
 }
 
-
-
-
 function capture_unidad() {
-
+    //Hora
   if ($("#unidad_m").select2("val") =="Hora") {
-    $("#horas_head").removeClass("col-lg-3").addClass("col-lg-6");
+
     $("#dias_head").hide();
     $("#meses_head").hide();
-    
-    var horometro_inicial = $('#horometro_inicial').val();
-    var horometro_final = $('#horometro_final').val();
-    var costo_unitario = $('#costo_unitario').val();
+    $("#fecha_i").show();
+    $("#fecha_f").hide();
+    $("#horometro_i").show();
+    $("#horometro_f").show();
+    $("#costo_unit").show();
+    $("#horas_head").show();
+
     $("#dias").val("");
     $("#mes").val("");
-    //console.log(horometro_inicial,horometro_final);
-    if (horometro_final!=0) {
-      var horas=(horometro_final-horometro_inicial).toFixed(1);
-      var costo_parcial=(horas*costo_unitario).toFixed(1);
-    }else{
-      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
-      var costo_parcial=costo_unitario
-    }
-    
-    $("#horas").val(horas);
-    $("#costo_parcial").val(costo_parcial);
+    $("#fecha_fin").val("");
+    $("#fecha_inicio").val("");
+    $("#fecha-i-tutulo").html("Fecha :");
+   // $("#fecha_inicio").val("");
 
+    //Dia
   } else if($("#unidad_m").select2("val")=="Dia"){
-    $("#horas_head").removeClass("col-lg-6").addClass("col-lg-3");
-    $("#dias_head").show();
-    $("#meses_head").hide();
-    
-    var horometro_inicial = $('#horometro_inicial').val();
-    var horometro_final = $('#horometro_final').val();
-    var costo_unitario = $('#costo_unitario').val();
-    var dias = $('#dias').val();
-    $("#mes").val("");
-    //console.log(horometro_inicial,horometro_final);
-    if (horometro_final!=0) {
-      var horas=(horometro_final-horometro_inicial).toFixed(1);
-      var costo_parcial=(dias*costo_unitario).toFixed(1);
-    }else{
-      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
-      var costo_parcial=costo_unitario*dias;
-    }
 
-    $("#horas").val(horas);
-    $("#costo_parcial").val(costo_parcial);
-    
-  }else if($("#unidad_m").select2("val")=="Mes"){
-    $("#horas_head").removeClass("col-lg-6").addClass("col-lg-3");
+    $("#horas_head").hide();
     $("#dias_head").hide();
-    $("#meses_head").show();
+    $("#meses_head").hide();
+    $("#fecha_i").show();
+    $("#fecha_f").hide();
+    $("#horometro_i").hide();
+    $("#horometro_f").hide();
+    $("#costo_unit").hide();
+    $("#dias").hide();
+    $("#costo_parcial").removeAttr("readonly");
+    /**======= */
+   // $("#fecha_inicio").val("");
+    $("#fecha_fi").html("");
+    $("#mes").val("");
     $("#dias").val("");
-    var horometro_inicial = $('#horometro_inicial').val();
-    var horometro_final = $('#horometro_final').val();
-    var costo_unitario = $('#costo_unitario').val();
-    var mes = $('#mes').val();
+    $("#horas").val("");
+    $("#fecha_fin").val("");
+    $("#fecha_inicio").val("");
+    $("#horometro_inicial").val("");
+    $("#horometro_final").val("");
+    $("#costo_unitario").val("");
+    $("#costo_parcial").val("");
+    $("#fecha-i-tutulo").val("");
 
-    //console.log(horometro_inicial,horometro_final);
-    if (horometro_final!=0) {
-      var horas=(horometro_final-horometro_inicial).toFixed(1);
-      var costo_parcial=(mes*costo_unitario).toFixed(1);
-    }else{
-      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
-      var costo_parcial=costo_unitario*mes;
-    }
+    //Mes
+  }else if($("#unidad_m").select2("val")=="Mes"){
 
-    $("#horas").val(horas);
-    $("#costo_parcial").val(costo_parcial);
-
+    $("#horas_head").hide();
+    $("#dias_head").hide();
+    $("#meses_head").hide();
+    $("#costo_unit").hide();
+    $("#horometro_i").hide();
+    $("#horometro_f").hide();
+    $("#fecha_i").show();
+    $("#fecha_f").show();
+    $("#costo_parcial").removeAttr("readonly").focus().val();
+    $("#fecha_fin").attr('readonly',true);
+    /**======= */
+    $("#fecha_fi").html("Fecha Fin :");
+    $("#fecha_inicio").val("");
+    $("#fecha_fin").val("");
+    $("#dias").val("");
+    $("#horas").val("");
+    $("#mes").val("");
+    $("#horometro_inicial").val("");
+    $("#horometro_final").val("");
+    $("#costo_unitario").val("");
+    $("#horas").val("");
+    $("#fecha-i-tutulo").val("");
   }
-
 }
 
-/*function horometro(){
-
+//Calculamos costo parcial.
+function costo_partcial() {
+  
   var horometro_inicial = $('#horometro_inicial').val();
   var horometro_final = $('#horometro_final').val();
   var costo_unitario = $('#costo_unitario').val();
 
-  //console.log(horometro_inicial,horometro_final);
+
   if (horometro_final!=0) {
     var horas=(horometro_final-horometro_inicial).toFixed(1);
     var costo_parcial=(horas*costo_unitario).toFixed(1);
@@ -145,14 +147,47 @@ function capture_unidad() {
     var horas=(horometro_inicial-horometro_inicial).toFixed(1);
     var costo_parcial=costo_unitario
   }
-
-
-  //console.log(horas);
-
+  
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
-}*/
+}
+function calculardia() {
+   
+  let dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado","Domingo"];
+  let meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+  
+  
+  console.log(x);
+  if($("#fecha_inicio").val().length > 0){ 
+    var x = $("#fecha_inicio").val(); // día lunes
+    var y = $("#fecha_inicio").val(); // día lunes
+    //var x = document.getElementById("fecha");
+    let date = new Date(x.replace(/-+/g, '/'));
+    let date2 = new Date(y.replace(/-+/g, '/'));
+  
+    let options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+    console.log(date.toLocaleDateString('es-MX', options));
+   //-----------
+    date2.setMonth(date2.getMonth()+1);
+    var fecha2=date2.getDate();
+    var mes2= date2.getMonth()+1;
 
+
+    
+      
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
+
+    $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+date2.toLocaleDateString('es-MX', options)+'</b>');
+    $("#fecha_fin").val(fecha2+ "/" +mes2+ "/" +date2.getFullYear()); 
+  }else{
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+  }
+}
 /*idservicio
 maquinaria
 fecha_inicio
@@ -184,6 +219,7 @@ function limpiar() {
   $("#costo_unitario").attr('readonly',false);
   $("#sssss").val("");
   $("#nomb_maq").val("");
+  $("#descripcion").val("");
   $("#sssss").show();
   $("#nomb_maq").hide();
 
@@ -231,6 +267,7 @@ function listar_detalle(idmaquinaria,idproyecto) {
   $("#tabla_detalles").show();
   $("#btn-agregar").hide();
   $("#btn-regresar").show();
+  $("#btn-pagar").hide();
 
   tabla2=$('#tabla-detalle-m').dataTable({
     "responsive": true,
@@ -265,12 +302,54 @@ function listar_detalle(idmaquinaria,idproyecto) {
   
 }
 //funcion añadir pago
-function aniadir_pago(idmaquinaria,idproyecto) {
+function listar_pagos(idmaquinaria,idproyecto) {
   console.log('::::'+idmaquinaria,idproyecto);
   $("#tabla_principal").hide();
   $("#tabla_pagos").show();
   $("#btn-agregar").hide();
   $("#btn-regresar").show();
+  $("#btn-pagar").show();
+
+  tabla3=$('#tabla-pagos').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/servicio.php?op=ver_detalle_maquina&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+  suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+  mostrar_datos(idmaquinaria,idproyecto);
+}
+//Mostrar datos
+function mostrar_datos_pago(idmaquinaria,idproyecto){
+  console.log('qqqqqq  '+idmaquinaria,idproyecto);
+  $.post("../ajax/servicio.php?op=mostrar", { idmaquinaria: idmaquinaria }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);   
+
+  });
 }
 //regresar_principal
 function regresar_principal(){
@@ -279,6 +358,7 @@ function regresar_principal(){
   $("#tabla_detalles").hide();
   $("#btn-regresar").hide();
   $("#tabla_pagos").hide();
+  $("#btn-pagar").hide();
 }
 //Función para guardar o editar
 function suma_horas_costoparcial(idmaquinaria,idproyecto){
@@ -295,6 +375,7 @@ function suma_horas_costoparcial(idmaquinaria,idproyecto){
   
     });
 }
+
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-servicios")[0]);
@@ -445,8 +526,9 @@ $(function () {
       fecha_fin:{minlength: 1},
       horometro_inicial:{ required: true, minlength: 1},
       horometro_final:{minlength: 1},
-      costo_unitario:{ required: true, minlength: 1},
-      unidad_m:{ required: true}
+      costo_unitario:{minlength: 1},
+      unidad_m:{ required: true},
+      descripcion:{ minlength: 1}
 
 
       // terms: { required: true },
@@ -461,9 +543,6 @@ $(function () {
       },
       horometro_inicial: {
         required: "Por favor ingrese horometro inicial", 
-      },
-      costo_unitario: {
-        required: "Por favor ingrese costo unitario", 
       },
       unidad_m: {
         required: "Por favor seleccione un tipo de unidad", 

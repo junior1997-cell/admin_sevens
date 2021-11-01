@@ -58,6 +58,7 @@
                                             Admnistra de manera eficiente a tus servicios.
                                         </h3>
                                         <button id="btn-regresar" type="button" class="btn bg-gradient-warning"  style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                                        <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar();"><i class="fas fa-dollar-sign"></i> Agregar Pago</button>
                                     </div>
                                     <!-- /.card-header -->
                                       <div class="card-body display" id="tabla_principal" >
@@ -67,8 +68,8 @@
                                                     <th>Aciones</th>
                                                     <th>Nombre Máquina</th>
                                                     <th>Proveedor</th>
+                                                    <th>Unidad Medida</th>
                                                     <th>Cantidad(veces)</th>
-                                                    <th>Horas Horometro</th>
                                                     <th>Costo Parcial</th>
                                                     <th>Añadir pago</th>
                                                     <th>Saldo</th>
@@ -81,8 +82,8 @@
                                                     <th>Aciones</th>
                                                     <th>Nombre Máquina</th>
                                                     <th>Proveedor</th>
+                                                    <th>Unidad Medida</th>
                                                     <th>Cantidad(veces)</th>
-                                                    <th>Horas Horometro</th>
                                                     <th>Costo Parcial</th>
                                                     <th>Añadir pago</th>
                                                     <th>Saldo</th>
@@ -101,10 +102,11 @@
                                                     <th>Fecha</th>
                                                     <th>Horometro Inicial</th>
                                                     <th>Horometro Final</th>
-                                                    <th>Dif. Horas Horometro</th>
+                                                    <th>Total Horas </th>
                                                     <th>Costo Unitario</th>
                                                     <th>Unidad M.</th>
                                                     <th>Costo Parcial</th>
+                                                    <th>Descripción</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -115,10 +117,11 @@
                                                     <th>Fecha</th>
                                                     <th>Horometro Inicial</th>
                                                     <th>Horometro Final</th>
-                                                    <th id="horas-total">Dif. Horas Horometro</th>
+                                                    <th id="horas-total">Total Horas </th>
                                                     <th>Costo Unitario</th>
                                                     <th>Unidad M.</th>
                                                     <th id="costo-parcial" style="color: #ff0000;background-color: #fedaff;"></th>
+                                                    <th>Descripción</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -197,81 +200,224 @@
                                                         <input class="form-control" style="display: none;" id="nomb_maq" disabled/>
                                                     </div>
                                                 </div>
-                                                <!-- Fecha Inicio-->
-                                                <div class="col-lg-6">
-                                                  <div class="form-group">
-                                                    <label for="fecha_inicio">Fecha Inicio </label>                               
-                                                    <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control"  placeholder="monto"> 
-                                                  </div>                                                        
-                                                </div> 
-                                                <!-- Fecha fin-->
-                                                <div class="col-lg-6">
-                                                  <div class="form-group">
-                                                    <label for="fecha_fin">Fecha Fin </label>                               
-                                                    <input type="date" name="fecha_fin" id="fecha_fin" class="form-control"  placeholder="monto"> 
-                                                  </div>                                                        
-                                                </div> 
-                                                <!-- Horometro inicial-->
-                                                <div class="col-lg-6">
-                                                  <div class="form-group">
-                                                    <label for="horometro_inicial">Horometro Inicial </label>                               
-                                                    <input type="number" step="0.01" name="horometro_inicial" id="horometro_inicial" class="form-control" placeholder="Horometro Inicial" onclick="capture_unidad();" onkeyup="capture_unidad();" > 
-                                                  </div>                                                        
-                                                </div> 
-                                                <!-- Horometro final-->
-                                                <div class="col-lg-6">
-                                                  <div class="form-group">
-                                                    <label for="horometro_final">Horometro Final </label>                               
-                                                    <input type="number" step="0.01" name="horometro_final" id="horometro_final" class="form-control" placeholder="Horometro Final" onclick="capture_unidad();" onkeyup="capture_unidad();" > 
-                                                  </div>                                                        
-                                                </div>
                                                 <!-- cargo -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                    <label for="unidad_m">Unidad de medidda</label>
+                                                    <label for="unidad_m">Unidad de medida</label>
                                                     <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;" onchange="capture_unidad();"  >                                    
                                                         <option value="Hora">Hora</option>
                                                         <option value="Dia">Dia</option>
                                                         <option value="Mes">Mes</option>
                                                     </select>
-                                                    <!-- <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
                                                     </div>
                                                 </div>
-                                                <!-- Horas-->
-                                                <div class="col-lg-3" id="horas_head">
+                                                <!-- Fecha Inicio-->
+                                                <div class="col-lg-6" id="fecha_i">
                                                   <div class="form-group">
-                                                    <label for="horas">Dif. Horometro </label>                               
-                                                    <input type="number" step="0.01" name="horas" id="horas" class="form-control"  placeholder="Horas" onclick="capture_unidad();" onkeyup="capture_unidad();" readonly> 
+                                                    <label for="fecha_inicio" id="fecha-i-tutulo">Fecha Inicio </label>                               
+                                                    <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" onchange="calculardia();"> 
+                                                  </div>                                                        
+                                                </div> 
+                                                <!-- Fecha fin-->
+                                                <div class="col-lg-6" id="fecha_f">
+                                                  <div class="form-group">
+                                                    <label for="fecha_fin" id="fecha_fi">Fecha Fin </label>                               
+                                                    <input type="text" name="fecha_fin" id="fecha_fin" class="form-control" > 
+                                                  </div>                                                        
+                                                </div> 
+                                                <!-- Horometro inicial-->
+                                                <div class="col-lg-6" id="horometro_i">
+                                                  <div class="form-group">
+                                                    <label for="horometro_inicial">Horometro Inicial </label>                               
+                                                    <input type="number" step="0.01" name="horometro_inicial" id="horometro_inicial" class="form-control" placeholder="Horometro Inicial" onclick="costo_partcial();" onkeyup="costo_partcial();" > 
+                                                  </div>                                                        
+                                                </div> 
+                                                <!-- Horometro final-->
+                                                <div class="col-lg-6" id="horometro_f">
+                                                  <div class="form-group">
+                                                    <label for="horometro_final">Horometro Final </label>                               
+                                                    <input type="number" step="0.01" name="horometro_final" id="horometro_final" class="form-control" placeholder="Horometro Final" onclick="costo_partcial();" onkeyup="costo_partcial();" > 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Horas-->
+                                                <div class="col-lg-6" id="horas_head">
+                                                  <div class="form-group">
+                                                    <label for="horas">Total Horas </label>                               
+                                                    <input type="number" step="0.01" name="horas" id="horas" class="form-control"  placeholder="Horas" onclick="costo_partcial();" onkeyup="costo_partcial();" readonly> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Dias-->
-                                                <div class="col-lg-3" id="dias_head">
+                                                <div class="col-lg-6" id="dias_head">
                                                   <div class="form-group">
                                                     <label for="dias">Días </label>                               
-                                                    <input type="number" step="0.01" name="dias" id="dias" class="form-control"  placeholder="Días" onclick="capture_unidad();" onkeyup="capture_unidad();"> 
+                                                    <input type="number" step="0.01" name="dias" id="dias" class="form-control"  placeholder="Días"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Meses-->
-                                                <div class="col-lg-3" style="display: none;" id="meses_head" >
+                                                <div class="col-lg-6" style="display: none;" id="meses_head" >
                                                   <div class="form-group">
                                                     <label for="mes">Meses </label>                               
                                                     <input type="number" step="0.01" name="mes" id="mes" class="form-control"  placeholder="Mes" onclick="capture_unidad();" onkeyup="capture_unidad();"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Costo unitario-->
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6" id="costo_unit">
                                                   <div class="form-group">
                                                     <label for="costo_unitario">Costo unitario </label>                               
-                                                    <input type="number" step="0.01" name="costo_unitario" id="costo_unitario" class="form-control"  placeholder="Costo unitario" onclick="capture_unidad();" onkeyup="capture_unidad();"> 
+                                                    <input type="number" step="0.01" name="costo_unitario" id="costo_unitario" class="form-control"  placeholder="Costo unitario" onclick="costo_partcial();" onkeyup="costo_partcial();"> 
                                                   </div>                                                        
                                                 </div> 
                                                 <!-- Costo Parcial-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
                                                     <label for="costo_parcial">Costo Parcial </label>                               
-                                                    <input type="number" step="0.01" name="costo_parcial" id="costo_parcial" class="form-control"  placeholder="Costo Parcial" readonly>  
+                                                    <input type="number" step="0.01" name="costo_parcial" id="costo_parcial" class="form-control"  placeholder="Costo Parcial"  readonly>  
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Descripcion-->
+                                                <div class="col-lg-12">
+                                                  <div class="form-group">
+                                                    <label for="descripcion">Descripción </label> <br>
+                                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                                  </div>                                                        
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                                <div class="col-lg-12 text-center">
+                                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                                    <br />
+                                                    <h4>Cargando...</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <button type="submit" style="display: none;" id="submit-form-servicios">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                                    <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                      <!-- Modal agregar Pagos -->
+                      <div class="modal fade" id="modal-agregar-pago">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Agregar servicios</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span class="text-danger" aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <!-- form start -->
+                                    <form id="form-servicios" name="form-servicios" method="POST">
+                                        <div class="card-body">
+                                            <div class="row" id="cargando-1-fomulario">
+                                                <!-- id proyecto -->
+                                                <input type="hidden" name="idproyecto" id="idproyecto" />
+                                                <!-- id servicios -->
+                                                <input type="hidden" name="idservicio" id="idservicio" />
+
+                                                <!-- Maquina-->
+                                                <div class="col-lg-12">
+                                                  <div class="form-group">
+                                                    <label for="maquinaria">Maquinaria </label>                               
+                                                    <input type="text" name="maquinaria" id="maquinaria" class="form-control"  placeholder="maquinaria"> 
                                                   </div>                                                        
                                                 </div> 
+
+                                                <!-- Beneficiario -->
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label for="beneficiario">Beneficiario</label>
+                                                        <input class="form-control" id="beneficiario" name="beneficiario" value="SEVEN´S INGENIEROS S.A.C." disabled/>
+                                                    </div>
+                                                </div>
+                                                <!--Forma de pago -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                    <label for="forma_pago">Forma Pago</label>
+                                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="capture_unidad();"  >                                    
+                                                        <option value="Transferencia">Transferencia</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Crédito">Crédito</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                                <!--tipo de pago -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                    <label for="forma_pago">Tipo  Pago</label>
+                                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="capture_unidad();"  >                                    
+                                                        <option value="Detracción">Detracción</option>
+                                                        <option value="Usuario">Usuario</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Cuenta de destino-->
+                                                <div class="col-lg-6">
+                                                  <div class="form-group">
+                                                    <label for="cuenta_destino">Cuenta destino </label>                               
+                                                    <input type="number" name="cuenta_destino" id="cuenta_destino" class="form-control"  placeholder="Cuenta destino"> 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- banco -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="banco">Banco</label>
+                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
+                                                            <option value="1">BCP</option>
+                                                            <option value="2">BBVA</option>
+                                                            <option value="3">SCOTIA BANK</option>
+                                                            <option value="4">INTERBANK</option>
+                                                            <option value="5">NACIÓN</option>
+                                                        </select>
+                                                        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+                                                    </div>
+                                                </div>
+                                                <!-- Titular Cuenta-->
+                                                <div class="col-lg-6">
+                                                  <div class="form-group">
+                                                    <label for="titular_cuenta">Titular Cuenta </label>                               
+                                                    <input type="text" name="titular_cuenta" id="titular_cuenta" class="form-control"  placeholder="Titular Cuenta"> 
+                                                  </div>                                                        
+                                                </div>
+
+                                                <!-- Fecha Inicio-->
+                                                <div class="col-lg-6">
+                                                  <div class="form-group">
+                                                    <label for="fecha">Fecha Pago </label>                               
+                                                    <input type="date" name="fecha" id="fecha" class="form-control"  placeholder="monto"> 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Monto-->
+                                                <div class="col-lg-6">
+                                                  <div class="form-group">
+                                                    <label for="monto">Monto </label>                               
+                                                    <input type="number" name="monto" id="monto" class="form-control"  placeholder="number"> 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Número de Operación-->
+                                                <div class="col-lg-6">
+                                                  <div class="form-group">
+                                                    <label for="numero_op">Número de operación </label>                               
+                                                    <input type="number" name="numero_op" id="numero_op" class="form-control"  placeholder="Número de operación"> 
+                                                  </div>                                                        
+                                                </div>
+                                                <!-- Descripcion-->
+                                                <div class="col-lg-12">
+                                                  <div class="form-group">
+                                                    <label for="descripcion">Descripción </label> <br>
+                                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                                  </div>                                                        
+                                                </div>
+
                                             </div>
 
                                             <div class="row" id="cargando-2-fomulario" style="display: none;">

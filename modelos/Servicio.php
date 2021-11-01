@@ -11,11 +11,13 @@ Class Servicios
 	}
 	//$idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes)
+	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion)
 	{
-		//var_dump($idproyecto,$idproveedor);die();
-		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso) 
-		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m','$dias','$mes')";
+		/*var_dump('descripcion.'.$descripcion,'idproyecto '.$idproyecto,'maquinaria '.$maquinaria,'fecha_inicio '.$fecha_inicio,'fecha_din '.$fecha_fin,
+		'horometro_inicial '.$horometro_inicial,'horometro_final '.$horometro_final,'horas '.$horas,
+		'costo_unitario '.$costo_unitario,'costo_parcial '.$costo_parcial,'unidad_m '.$unidad_m,'dias '.$dias,'mes '.$mes);die();*/
+		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion) 
+		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m','$dias','$mes','$descripcion')";
 		return ejecutarConsulta($sql);
 			
 	}
@@ -26,6 +28,7 @@ Class Servicios
 		$sql="SELECT 
 		s.idmaquinaria as idmaquinaria,
 		s.idproyecto as idproyecto,
+		s.unidad_medida as unidad_medida,
 		m.nombre as maquina,
         p.razon_social as razon_social,
 		m.codigo_maquina as codigo_maquina,
@@ -44,9 +47,9 @@ Class Servicios
 		return ejecutarConsulta($sql);		
 	}
 	//pago servicio
-	public function pago_servicio($idmaquinaria){
+	public function pago_servicio($idmaquinaria,$nube_idproyecto){
 		$sql="SELECT SUM(ps.monto) as monto FROM pago_servicio as ps 
-		WHERE ps.id_maquinaria ='$idmaquinaria'";
+		WHERE ps.id_maquinaria ='$idmaquinaria' AND ps.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -74,7 +77,7 @@ Class Servicios
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes)
+	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion)
 	{
 		/*var_dump('idservicio.'.$idservicio,'idproyecto '.$idproyecto,'maquinaria '.$maquinaria,'fecha_inicio '.$fecha_inicio,'fecha_din '.$fecha_fin,
 		'horometro_inicial '.$horometro_inicial,'horometro_final '.$horometro_final,'horas '.$horas,
@@ -92,7 +95,8 @@ Class Servicios
 		fecha_recojo='$fecha_fin',
 		unidad_medida='$unidad_m',
 		dias_uso='$dias',
-		meses_uso='$mes'
+		meses_uso='$mes',
+		descripcion='$descripcion',
 		 WHERE idservicio ='$idservicio'";	
 		return ejecutarConsulta($sql);	
 	}
@@ -149,6 +153,16 @@ Class Servicios
 		FROM maquinaria as mq, proveedor as p 
 		WHERE mq.idproveedor=p.idproveedor AND mq.estado='1' AND mq.tipo=1";
 		return ejecutarConsulta($sql);		
+	}
+
+	/**
+	 * ====================================
+	 *SECCION PAGO MAQUINARIA
+	 * ====================================
+	 */
+	public function mostrar_datos_pago(){
+		$sql = "SELECT * FROM maquinaria as m, proveedor as p  WHERE m.idproveedor=p.idproveedor AND m.idmaquinaria=1";
+		return ejecutarConsultaSimpleFila($sql);
 	}
 
 }
