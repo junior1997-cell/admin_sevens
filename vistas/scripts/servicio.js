@@ -74,10 +74,10 @@ function capture_unidad() {
     $("#mes").val("");
     $("#fecha_fin").val("");
     $("#fecha_inicio").val("");
-    $("#fecha-i-tutulo").html("Fecha :");
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
    // $("#fecha_inicio").val("");
 
-    //Dia
+   //Dia
   } else if($("#unidad_m").select2("val")=="Dia"){
 
     $("#horas_head").hide();
@@ -90,9 +90,10 @@ function capture_unidad() {
     $("#costo_unit").hide();
     $("#dias").hide();
     $("#costo_parcial").removeAttr("readonly");
+    $("#fecha_fin").attr('readonly',true);
     /**======= */
-   // $("#fecha_inicio").val("");
-    $("#fecha_fi").html("");
+
+    $("#fecha_fi").html("Fecha Fin :");
     $("#mes").val("");
     $("#dias").val("");
     $("#horas").val("");
@@ -102,7 +103,8 @@ function capture_unidad() {
     $("#horometro_final").val("");
     $("#costo_unitario").val("");
     $("#costo_parcial").val("");
-    $("#fecha-i-tutulo").val("");
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+    //costo_partcial();
 
     //Mes
   }else if($("#unidad_m").select2("val")=="Mes"){
@@ -119,8 +121,7 @@ function capture_unidad() {
     $("#fecha_fin").attr('readonly',true);
     /**======= */
     $("#fecha_fi").html("Fecha Fin :");
-    $("#fecha_inicio").val("");
-    $("#fecha_fin").val("");
+
     $("#dias").val("");
     $("#horas").val("");
     $("#mes").val("");
@@ -128,8 +129,13 @@ function capture_unidad() {
     $("#horometro_final").val("");
     $("#costo_unitario").val("");
     $("#horas").val("");
-    $("#fecha-i-tutulo").val("");
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+   // costo_partcial();
+    $("#fecha_inicio").val("");
+    $("#fecha_fin").val("");
+   
   }
+
 }
 
 //Calculamos costo parcial.
@@ -152,39 +158,52 @@ function costo_partcial() {
   $("#costo_parcial").val(costo_parcial);
 }
 function calculardia() {
-   
-  let dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado","Domingo"];
-  let meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-  
-  
-  console.log(x);
+
   if($("#fecha_inicio").val().length > 0){ 
-    var x = $("#fecha_inicio").val(); // día lunes
-    var y = $("#fecha_inicio").val(); // día lunes
-    //var x = document.getElementById("fecha");
-    let date = new Date(x.replace(/-+/g, '/'));
-    let date2 = new Date(y.replace(/-+/g, '/'));
-  
-    let options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    };
-    console.log(date.toLocaleDateString('es-MX', options));
-   //-----------
-    date2.setMonth(date2.getMonth()+1);
-    var fecha2=date2.getDate();
-    var mes2= date2.getMonth()+1;
 
+    if ($("#unidad_m").select2("val") =="Hora" || $("#unidad_m").select2("val")=="Dia") {
 
+      $("#fecha_fin").val("");
+      $("#fecha_fi").html("Fecha final")
+      var x = $("#fecha_inicio").val(); // día lunes
+      //var x = document.getElementById("fecha");
+      let date = new Date(x.replace(/-+/g, '/'));
     
-      
-    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
+      let options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
 
-    $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+date2.toLocaleDateString('es-MX', options)+'</b>');
-    $("#fecha_fin").val(date2.getFullYear()+"-"+mes2+"-"+fecha2); 
-    console.log(fecha2+"-"+mes2+"-"+date2.getFullYear());
+    } else {
+
+      var x = $("#fecha_inicio").val(); // día lunes
+      var y = $("#fecha_inicio").val(); // día lunes
+      //var x = document.getElementById("fecha");
+      let date = new Date(x.replace(/-+/g, '/'));
+      let date2 = new Date(y.replace(/-+/g, '/'));
+    
+      let options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      console.log(date.toLocaleDateString('es-MX', options));
+      //-----------
+      date2.setMonth(date2.getMonth()+1);
+      var fecha2=date2.getDate();
+      var mes2= date2.getMonth()+1;
+
+      $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
+
+      $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+date2.toLocaleDateString('es-MX', options)+'</b>');
+      
+      $("#fecha_fin").val(date2.getFullYear()+"-"+mes2+"-"+fecha2); 
+      //console.log(fecha2+"-"+mes2+"-"+date2.getFullYear());
+    }
   }else{
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
   }
@@ -390,6 +409,7 @@ function regresar_principal(){
   $("#btn-regresar").hide();
   $("#tabla_pagos").hide();
   $("#btn-pagar").hide();
+  limpiar();
 }
 //Función para guardar o editar
 function suma_horas_costoparcial(idmaquinaria,idproyecto){
@@ -455,7 +475,7 @@ function mostrar(idservicio) {
   $("#modal-agregar-servicio").modal("show");
   $("#sssss").hide();
   $("#nomb_maq").show();
-  $("#costo_unitario").attr('readonly',true);
+  $("#costo_unitario").attr('readonly',false);
   $.post("../ajax/servicio.php?op=mostrar", { idservicio: idservicio }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
