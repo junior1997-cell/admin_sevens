@@ -183,7 +183,8 @@ function calculardia() {
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
 
     $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+date2.toLocaleDateString('es-MX', options)+'</b>');
-    $("#fecha_fin").val(fecha2+ "/" +mes2+ "/" +date2.getFullYear()); 
+    $("#fecha_fin").val(date2.getFullYear()+"-"+mes2+"-"+fecha2); 
+    console.log(fecha2+"-"+mes2+"-"+date2.getFullYear());
   }else{
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
   }
@@ -261,14 +262,43 @@ function listar( nube_idproyecto ) {
 }
 
 //Función detalles po maquina
-function listar_detalle(idmaquinaria,idproyecto) {
-  console.log(idproyecto,idmaquinaria);
+function listar_detalle(idmaquinaria,idproyecto,unidad_medida) {
+  var hideen_colums;
+  console.log('lis_deta '+idproyecto,idmaquinaria,unidad_medida);
   $("#tabla_principal").hide();
   $("#tabla_detalles").show();
   $("#btn-agregar").hide();
   $("#btn-regresar").show();
   $("#btn-pagar").hide();
+  if (unidad_medida=='Hora') {
+    hideen_colums=[];
+    
+  }else{
+    hideen_colums=[
+      {
+          "targets": [ 2 ],
+          "visible": false,
+          "searchable": false
+      },
+      {
+          "targets": [ 3 ],
+          "visible": false,
+          "searchable": false
+      },
+      {
+          "targets": [ 4 ],
+          "visible": false,
+          "searchable": false
+      },
+      {
+          "targets": [ 5 ],
+          "visible": false,
+          "searchable": false
+      }
+  ]
 
+  }
+console.log(hideen_colums);
   tabla2=$('#tabla-detalle-m').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
@@ -296,7 +326,8 @@ function listar_detalle(idmaquinaria,idproyecto) {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
+    "columnDefs": hideen_colums
   }).DataTable();
   suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
   
@@ -440,6 +471,7 @@ function mostrar(idservicio) {
     $("#horometro_inicial").val(data.horometro_inicial); 
     $("#horometro_final").val(data.horometro_final); 
     $("#horas").val(data.horas); 
+    $("#descripcion").val(data.descripcion); 
     $("#dias").val(data.dias_uso); 
     $("#mes").val(data.meses_uso); 
     $("#costo_unitario").val(data.costo_unitario); 

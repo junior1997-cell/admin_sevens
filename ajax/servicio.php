@@ -183,9 +183,9 @@ switch ($_GET["op"]){
 							//$estado = '<span class="text-center badge badge-success">Terminado</span>';
 						}                
 					  }
-		
+					  $unidad_medida="'$reg->idmaquinaria','$reg->idproyecto','$reg->unidad_medida'";
 		 			$data[]=array(
-		 				"0"=>' <button class="btn btn-info" onclick="listar_detalle('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="far fa-eye"></i></button>',
+		 				"0"=>' <button class="btn btn-info" onclick="listar_detalle('.$unidad_medida.')"><i class="far fa-eye"></i></button>',
 		 				"1"=>'<div class="user-block">
 						 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->maquina .'</p></span>
 						 <span class="description" style="margin-left: 0px !important;">'. $reg->codigo_maquina .' </span>
@@ -265,6 +265,9 @@ switch ($_GET["op"]){
 							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg </b> / <br> <b  style=".'color:#ff0000;'.">$fecha_recoj<b>";
 
 						}
+						if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+						
+						$tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 						
 						$data[]=array(
 							"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idservicio.','.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
@@ -278,9 +281,9 @@ switch ($_GET["op"]){
 							"5"=>empty($reg->costo_unitario) || $reg->costo_unitario=='0.00'?'-':$reg->costo_unitario,
 							"6"=>empty($reg->unidad_medida)?'-':$reg->unidad_medida,
 							"7"=>empty($reg->costo_parcial)?'-':$reg->costo_parcial,
-							"8"=>empty($reg->descripcion)?'-':$reg->descripcion,
-							"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-							'<span class="text-center badge badge-danger">Desactivado</span>'
+							"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+							"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+							'<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 							);
 					}
 					$results = array(

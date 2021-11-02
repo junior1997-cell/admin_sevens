@@ -96,7 +96,7 @@ Class Servicios
 		unidad_medida='$unidad_m',
 		dias_uso='$dias',
 		meses_uso='$mes',
-		descripcion='$descripcion',
+		descripcion='$descripcion'
 		 WHERE idservicio ='$idservicio'";	
 		return ejecutarConsulta($sql);	
 	}
@@ -132,6 +132,7 @@ Class Servicios
 		s.unidad_medida as unidad_medida,
 		s.dias_uso as dias_uso,
 		s.meses_uso as meses_uso,
+		s.descripcion as descripcion,
 		m.nombre as nombre_maquina,
 		m.codigo_maquina as codigo_maquina,
 		p.razon_social as razon_social

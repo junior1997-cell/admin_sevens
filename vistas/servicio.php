@@ -222,7 +222,7 @@
                                                 <div class="col-lg-6" id="fecha_f">
                                                   <div class="form-group">
                                                     <label for="fecha_fin" id="fecha_fi">Fecha Fin </label>                               
-                                                    <input type="text" name="fecha_fin" id="fecha_fin" class="form-control" > 
+                                                    <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" > 
                                                   </div>                                                        
                                                 </div> 
                                                 <!-- Horometro inicial-->
