@@ -3,12 +3,12 @@ ob_start();
 if (strlen(session_id()) < 1){
 	session_start();//Validamos si existe o no la sesión
 }
-require_once "../modelos/Servicio.php";
+require_once "../modelos/Servicio_maquina.php";
 require_once "../modelos/Fechas.php";
 
-$servicios=new Servicios();
+$serviciomaquina=new ServicioMaquina();
 
-//SERVICIOS...
+//============SERVICIOS========================
 $idservicio 		= isset($_POST["idservicio"])? limpiarCadena($_POST["idservicio"]):"";	
 $idproyecto			= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
 $maquinaria 		= isset($_POST["maquinaria"])? limpiarCadena($_POST["maquinaria"]):"";
@@ -23,15 +23,26 @@ $unidad_m 		    = isset($_POST["unidad_m"])? limpiarCadena($_POST["unidad_m"]):"
 $dias 		        = isset($_POST["dias"])? limpiarCadena($_POST["dias"]):"";
 $mes 		        = isset($_POST["mes"])? limpiarCadena($_POST["mes"]):"";
 $descripcion 	    = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
-//PAGOS...
+//============PAGOS========================
+$beneficiario_pago   = isset($_POST["beneficiario_pago"])? limpiarCadena($_POST["beneficiario_pago"]):"";
+$forma_pago          = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
+$tipo_pago           = isset($_POST["tipo_pago"])? limpiarCadena($_POST["tipo_pago"]):"";
+$cuenta_destino_pago = isset($_POST["cuenta_destino_pago"])? limpiarCadena($_POST["cuenta_destino_pago"]):"";
+$banco_pago          = isset($_POST["banco_pago"])? limpiarCadena($_POST["banco_pago"]):"";
+$titular_cuenta_pago = isset($_POST["titular_cuenta_pago"])? limpiarCadena($_POST["titular_cuenta_pago"]):"";
+$fecha_pago          = isset($_POST["fecha_pago"])? limpiarCadena($_POST["fecha_pago"]):"";
+$monto_pago          = isset($_POST["monto_pago"])? limpiarCadena($_POST["monto_pago"]):"";
+$numero_op_pago      = isset($_POST["numero_op_pago"])? limpiarCadena($_POST["numero_op_pago"]):"";
+$descripcion_pago    = isset($_POST["descripcion_pago"])? limpiarCadena($_POST["descripcion_pago"]):"";
+$id_maquinaria_pago  = isset($_POST["id_maquinaria_pago"])? limpiarCadena($_POST["id_maquinaria_pago"]):"";
+$idpago_servicio   = isset($_POST["idpago_servicio"])? limpiarCadena($_POST["idpago_servicio"]):"";
+$idproyecto_pago   = isset($_POST["idproyecto_pago"])? limpiarCadena($_POST["idproyecto_pago"]):"";
+
+//$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago 
 
 
 switch ($_GET["op"]){
-	/*=======================
-	=========================
-	//SECCION DE SERVICIOS
-	=========================
-	=========================*/
+	/*=====ECCION DE SERVICIOS=========*/
 	case 'guardaryeditar':
 		if (!isset($_SESSION["nombre"])) {
 
@@ -46,12 +57,12 @@ switch ($_GET["op"]){
 
 				if (empty($idservicio)){
 					
-					$rspta=$servicios->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion);
+					$rspta=$serviciomaquina->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					
-					$rspta=$servicios->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion);
+					$rspta=$serviciomaquina->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -73,7 +84,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicios->desactivar($idservicio);
+				$rspta=$serviciomaquina->desactivar($idservicio);
  				echo $rspta ? "Servicio Anulado" : "Servicio no se puede Anular";
 			//Fin de las validaciones de acceso
 			}
@@ -94,7 +105,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicios->activar($idservicio);
+				$rspta=$serviciomaquina->activar($idservicio);
  				echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
 			//Fin de las validaciones de acceso
 			}
@@ -116,7 +127,7 @@ switch ($_GET["op"]){
 			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idservicioo='1';
-				$rspta=$servicios->mostrar($idservicio);
+				$rspta=$serviciomaquina->mostrar($idservicio);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -140,7 +151,7 @@ switch ($_GET["op"]){
 			{	
 				//$_GET["nube_idproyecto"]
 				$nube_idproyecto =$_GET["nube_idproyecto"];
-				$rspta=$servicios->listar($nube_idproyecto);
+				$rspta=$serviciomaquina->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
 		 		$datos= Array();
@@ -150,7 +161,7 @@ switch ($_GET["op"]){
 				$icon="";
 		 		while ($reg=$rspta->fetch_object()){
 					//$parametros="'$reg->idservicio','$reg->idproyecto'";
-					$rspta2=$servicios->pago_servicio($reg->idmaquinaria,$reg->idproyecto);
+					$rspta2=$serviciomaquina->pago_servicio($reg->idmaquinaria,$reg->idproyecto);
 
 					empty($rspta2)?$saldo=0:$saldo = $reg->costo_parcial-$rspta2['monto'];
 					empty($rspta2['monto'])?$monto="0.00":$monto = $rspta2['monto'];
@@ -164,14 +175,14 @@ switch ($_GET["op"]){
 
 					  } else {
 		
-						if ($saldo<$reg->costo_parcial && $saldo!="0" ) {
+						if ($saldo<$reg->costo_parcial && $saldo>"0" ) {
 		
 						  $estado = '<span class="text-center badge badge-warning">En proceso</span>';
 						  $c="warning";
 						  $nombre="Pagar";
 						  $icon="dollar-sign";
 						} else {
-							if ($saldo=="0") {
+							if ($saldo<="0") {
 								$estado = '<span class="text-center badge badge-success">Pagado</span>';
 								$c="info";
 								$nombre="Ver";
@@ -194,8 +205,8 @@ switch ($_GET["op"]){
 		 				"3"=>$reg->unidad_medida,		 				
 		 				"4"=>$reg->cantidad_veces,		 				
 		 				"5"=>$reg->costo_parcial,
-		 				"6"=>' <button class="btn btn-'.$c.'" onclick="listar_pagos('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
-						 <button class="btn btn-'.$c.'">'.$monto.'</button> ',
+		 				"6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$reg->idmaquinaria.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
+						 <button class="btn btn-'.$c.' btn-xs">'.$monto.'</button> </div>',
 		 				"7"=>$saldo,
 		 				"8"=>$estado
 		 				);
@@ -230,7 +241,7 @@ switch ($_GET["op"]){
 				$idproyecto=$_GET["idproyecto"];
 				/*$idmaquinaria='1';
 				$idproyecto='1';*/
-				$rspta=$servicios->ver_detalle_m($idmaquinaria,$idproyecto);
+				$rspta=$serviciomaquina->ver_detalle_m($idmaquinaria,$idproyecto);
 				$fecha_entreg='';
 				$fecha_recoj='';
 				$fecha='';
@@ -308,7 +319,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='1';
 
-		$rspta=$servicios->suma_horas_costoparcial($idmaquinaria,$idproyecto);
+		$rspta=$serviciomaquina->suma_horas_costoparcial($idmaquinaria,$idproyecto);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
@@ -318,7 +329,7 @@ switch ($_GET["op"]){
 
 	case 'select2_servicio': 
 
-		$rspta=$servicios->select2_servicio();
+		$rspta=$serviciomaquina->select2_servicio();
 
 		while ($reg = $rspta->fetch_object())
 			{
@@ -327,11 +338,9 @@ switch ($_GET["op"]){
 	break;
 
 	/**
-	 * ====================================
-	 *SECCION PAGO MAQUINARIA
-	 * ====================================
+	 * ========SECCION PAGOS===================
 	 */
-	case 'mostrar_datos_para_reg_p':
+	case 'most_datos_prov_pago':
 
 		if (!isset($_SESSION["nombre"]))
 		{
@@ -343,7 +352,176 @@ switch ($_GET["op"]){
 			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idservicioo='1';
-				$rspta=$servicios->mostrar_datos_pago($idservicio);
+				$idmaquinaria=$_POST["idmaquinaria"];
+				$rspta=$serviciomaquina->most_datos_prov_pago($idmaquinaria);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+				//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'guardaryeditar_pago':
+		if (!isset($_SESSION["nombre"])) {
+
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+
+		} else {
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['servicio_maquina']==1)
+			{
+				$clavehash="";
+
+
+				if (empty($idpago_servicio)){
+					
+					$rspta=$serviciomaquina->insertar_pago($idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago);
+					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
+				}
+				else {
+					
+					$rspta=$serviciomaquina->editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago);
+					
+					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
+				}
+				//Fin de las validaciones de acceso
+			} else {
+
+		  		require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'desactivar_pagos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['servicio_maquina']==1)
+			{
+				$rspta=$serviciomaquina->desactivar_pagos($idpago_servicio);
+ 				echo $rspta ? "Servicio Anulado" : "Servicio no se puede Anular";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'activar_pagos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['servicio_maquina']==1)
+			{
+				$rspta=$serviciomaquina->activar_pagos($idpago_servicio);
+ 				echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'listar_pagos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['servicio_maquina']==1)
+			{	
+				//$_GET["nube_idproyecto"]
+				$idmaquinaria =$_GET["idmaquinaria"];
+				$idproyecto =$_GET["idproyecto"];
+				//$idmaquinaria ='3';
+				//$idproyecto ='2';
+				$rspta=$serviciomaquina->listar_pagos($idmaquinaria,$idproyecto);
+		 		//Vamos a declarar un array
+				 //$banco='';
+		 		$data= Array();
+				$suma=0;
+		 		while ($reg=$rspta->fetch_object()){
+					$suma=$suma+$reg->monto;
+		 			$data[]=array(
+		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
+						 ' <button class="btn btn-danger" onclick="desactivar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="far fa-trash-alt"></i></button>':
+						 '<button class="btn btn-warning" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
+						 ' <button class="btn btn-primary" onclick="activar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-check"></i></button>',
+		 				"1"=>"$reg->forma_pago / <br> $reg->tipo_pago",	 				
+		 				"2"=>$reg->beneficiario,		 				
+		 				"3"=>$reg->cuenta_destino,		 				
+		 				"4"=>$reg->banco,
+		 				"5"=>$reg->titular_cuenta,
+		 				"6"=>$reg->fecha_pago,
+		 				"7"=>$reg->descripcion,
+		 				"8"=>$reg->numero_operacion,
+		 				"9"=>$reg->monto,
+		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+						 '<span class="text-center badge badge-danger">Desactivado</span>'
+		 				);
+
+		 		}
+				//$suma=array_sum($rspta->fetch_object()->monto);
+		 		$results = array(
+		 			"sEcho"=>1, //Información para el datatables
+		 			"iTotalRecords"=>count($data), //enviamos el total registros al datatable
+		 			"iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+		 			"data"=>$data,
+					"suma"=>$suma);
+		 		echo json_encode($results);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}
+	break;
+	case 'suma_total_pagos':
+
+		$idmaquinaria=$_POST["idmaquinaria"];
+		$idproyecto=$_POST["idproyecto"];
+		//$idmaquinaria='1';
+		//$idproyecto='1';
+
+		$rspta=$serviciomaquina->suma_total_pagos($idmaquinaria,$idproyecto);
+		//Codificar el resultado utilizando json
+		echo json_encode($rspta);
+		//Fin de las validaciones de acceso
+
+
+	break;
+	
+	case 'mostrar_pagos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['servicio_maquina']==1)
+			{
+				//$idpago_servicio='1';
+				$rspta=$serviciomaquina->mostrar_pagos($idpago_servicio);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -354,6 +532,7 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+
 
 
 	case 'salir':

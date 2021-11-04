@@ -58,7 +58,7 @@
                                             Admnistra de manera eficiente a tus servicios.
                                         </h3>
                                         <button id="btn-regresar" type="button" class="btn bg-gradient-warning"  style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                                        <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar();"><i class="fas fa-dollar-sign"></i> Agregar Pago</button>
+                                        <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();"><i class="fas fa-dollar-sign"></i> Agregar Pago</button>
                                     </div>
                                     <!-- /.card-header -->
                                       <div class="card-body display" id="tabla_principal" >
@@ -134,12 +134,15 @@
                                               <thead>
                                                   <tr>
                                                       <th>Aciones</th>
-                                                      <th>Fecha</th>
-                                                      <th>Horometro Inicial</th>
-                                                      <th>Horometro Final</th>
-                                                      <th>Horas</th>
-                                                      <th>Costo Unitario</th>
-                                                      <th>Costo Parcial</th>
+                                                      <th>Forma pago / Tipo pago</th>
+                                                      <th>Beneficiario</th>
+                                                      <th>C. Destino</th>
+                                                      <th>Banco</th>
+                                                      <th>Titular C.</th>
+                                                      <th>Fecha P.</th>
+                                                      <th>Descripción</th>
+                                                      <th>Número Op.</th>
+                                                      <th>Monto</th>
                                                       <th>Estado</th>
                                                   </tr>
                                               </thead>
@@ -147,12 +150,15 @@
                                               <tfoot>
                                                   <tr>
                                                       <th>Aciones</th>
-                                                      <th>Fecha</th>
-                                                      <th>Horometro Inicial</th>
-                                                      <th>Horometro Final</th>
-                                                      <th id="horas-total" style="color: #ff0000;background-color: #fedaff;"></th>
-                                                      <th>Costo Unitario</th>
-                                                      <th id="costo-parcial" style="color: #ff0000;background-color: #fedaff;"></th>
+                                                      <th>Forma pago / Tipo pago</th>
+                                                      <th>Beneficiario</th>
+                                                      <th>C. Destino</th>
+                                                      <th>Banco</th>
+                                                      <th>Titular C.</th>
+                                                      <th>Fecha P.</th>
+                                                      <th>Descripción</th>
+                                                      <th>Número Op.</th>
+                                                      <th id="monto_total" ></th>
                                                       <th>Estado</th>
                                                   </tr>
                                               </tfoot>
@@ -302,13 +308,18 @@
                             </div>
                         </div>
                     </div>
-
+                    
+                    <!--
+                      ===========================================
+                              SECCION MODAL AGREGAR PAGO
+                      ===========================================
+                      -->
                       <!-- Modal agregar Pagos -->
                       <div class="modal fade" id="modal-agregar-pago">
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Agregar servicios</h4>
+                                    <h4 class="modal-title">Agregar Pago</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -316,28 +327,30 @@
 
                                 <div class="modal-body">
                                     <!-- form start -->
-                                    <form id="form-servicios" name="form-servicios" method="POST">
+                                    <form id="form-servicios-pago" name="form-servicios-pago" method="POST">
                                         <div class="card-body">
                                             <div class="row" id="cargando-1-fomulario">
                                                 <!-- id proyecto -->
-                                                <input type="hidden" name="idproyecto" id="idproyecto" />
+                                                <input type="hidden" name="idproyecto_pago" id="idproyecto_pago" />
                                                 <!-- id servicios -->
-                                                <input type="hidden" name="idservicio" id="idservicio" />
+                                                <input type="hidden" name="idpago_servicio" id="idpago_servicio" />
 
                                                 <!-- Maquina-->
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-6">
                                                   <div class="form-group">
-                                                    <label for="maquinaria">Maquinaria </label>                               
-                                                    <input type="text" name="maquinaria" id="maquinaria" class="form-control"  placeholder="maquinaria"> 
+                                                    <label for="id_maquinaria_pago">Maquinaria </label>                               
+                                                    <input type="hidden"  name="id_maquinaria_pago" id="id_maquinaria_pago" class="form-control"  placeholder="maquinaria"> 
+                                                    <br> <b id="maquinaria_pago" style="font-size:16px;color:red;"></b>
                                                   </div>                                                        
                                                 </div> 
 
                                                 <!-- Beneficiario -->
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="beneficiario">Beneficiario</label>
-                                                        <input class="form-control" id="beneficiario" name="beneficiario" value="SEVEN´S INGENIEROS S.A.C." disabled/>
-                                                    </div>
+                                                        <label for="beneficiario_pago">Beneficiario</label>
+                                                        <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago"/>
+                                                        <br> <b id="h4_mostrar_beneficiario" style="font-size:16px;color:red;"></b>
+                                                      </div>
                                                 </div>
                                                 <!--Forma de pago -->
                                                 <div class="col-lg-6">
@@ -353,8 +366,8 @@
                                                 <!--tipo de pago -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                    <label for="forma_pago">Tipo  Pago</label>
-                                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="capture_unidad();"  >                                    
+                                                    <label for="tipo_pago">Tipo  Pago</label>
+                                                    <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="capture_unidad();"  >                                    
                                                         <option value="Detracción">Detracción</option>
                                                         <option value="Usuario">Usuario</option>
                                                     </select>
@@ -363,58 +376,58 @@
                                                 <!-- Cuenta de destino-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
-                                                    <label for="cuenta_destino">Cuenta destino </label>                               
-                                                    <input type="number" name="cuenta_destino" id="cuenta_destino" class="form-control"  placeholder="Cuenta destino"> 
+                                                    <label for="cuenta_destino_pago">Cuenta destino </label>                               
+                                                    <input type="number" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control"  placeholder="Cuenta destino"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- banco -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="banco">Banco</label>
-                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
+                                                        <label for="banco_pago">Banco</label>
+                                                        <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
                                                             <option value="1">BCP</option>
                                                             <option value="2">BBVA</option>
                                                             <option value="3">SCOTIA BANK</option>
                                                             <option value="4">INTERBANK</option>
                                                             <option value="5">NACIÓN</option>
                                                         </select>
-                                                        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+                                                       <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>-->
                                                     </div>
                                                 </div>
                                                 <!-- Titular Cuenta-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
-                                                    <label for="titular_cuenta">Titular Cuenta </label>                               
-                                                    <input type="text" name="titular_cuenta" id="titular_cuenta" class="form-control"  placeholder="Titular Cuenta"> 
+                                                    <label for="titular_cuenta_pago">Titular Cuenta </label>                               
+                                                    <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control"  placeholder="Titular Cuenta"> 
                                                   </div>                                                        
                                                 </div>
 
                                                 <!-- Fecha Inicio-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
-                                                    <label for="fecha">Fecha Pago </label>                               
-                                                    <input type="date" name="fecha" id="fecha" class="form-control"  placeholder="monto"> 
+                                                    <label for="fecha_pago">Fecha Pago </label>                               
+                                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Monto-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
-                                                    <label for="monto">Monto </label>                               
-                                                    <input type="number" name="monto" id="monto" class="form-control"  placeholder="number"> 
+                                                    <label for="monto_pago">Monto </label>                               
+                                                    <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control"  placeholder="Ingrese monto"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Número de Operación-->
                                                 <div class="col-lg-6">
                                                   <div class="form-group">
-                                                    <label for="numero_op">Número de operación </label>                               
-                                                    <input type="number" name="numero_op" id="numero_op" class="form-control"  placeholder="Número de operación"> 
+                                                    <label for="numero_op_pago">Número de operación </label>                               
+                                                    <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control"  placeholder="Número de operación"> 
                                                   </div>                                                        
                                                 </div>
                                                 <!-- Descripcion-->
                                                 <div class="col-lg-12">
                                                   <div class="form-group">
-                                                    <label for="descripcion">Descripción </label> <br>
-                                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                                    <label for="descripcion_pago">Descripción </label> <br>
+                                                    <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
                                                   </div>                                                        
                                                 </div>
 
@@ -429,12 +442,12 @@
                                             </div>
                                         </div>
                                         <!-- /.card-body -->
-                                        <button type="submit" style="display: none;" id="submit-form-servicios">Submit</button>
+                                        <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
                                     </form>
                                 </div>
                                 <div class="modal-footer justify-content-between">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
-                                    <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_c_pagos();">Close</button>
+                                    <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
                                 </div>
                             </div>
                         </div>
@@ -498,7 +511,7 @@
         <!-- sweetalert2 -->
         <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-        <script type="text/javascript" src="scripts/servicio.js"></script>
+        <script type="text/javascript" src="scripts/servicio_maquina.js"></script>
 
         <script>
             $(function () {
