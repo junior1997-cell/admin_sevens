@@ -210,7 +210,7 @@
         <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
           <!-- SERVICIO -->       
           <li class="nav-item">
-            <a href="servicio.php" class="nav-link" id="mServicio">
+            <a href="servicio_maquina.php" class="nav-link" id="mServicio">
               <i class="nav-icon fas fa-tractor"></i>
               <p>
                 Servicio - Maquina

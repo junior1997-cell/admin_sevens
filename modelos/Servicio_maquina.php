@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-Class Servicios
+Class ServicioMaquina
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -49,7 +49,7 @@ Class Servicios
 	//pago servicio
 	public function pago_servicio($idmaquinaria,$nube_idproyecto){
 		$sql="SELECT SUM(ps.monto) as monto FROM pago_servicio as ps 
-		WHERE ps.id_maquinaria ='$idmaquinaria' AND ps.idproyecto='$nube_idproyecto'";
+		WHERE ps.estado=1 AND  ps.id_maquinaria ='$idmaquinaria' AND ps.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -78,11 +78,7 @@ Class Servicios
 	
 	//Implementamos un método para editar registros
 	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion)
-	{
-		/*var_dump('idservicio.'.$idservicio,'idproyecto '.$idproyecto,'maquinaria '.$maquinaria,'fecha_inicio '.$fecha_inicio,'fecha_din '.$fecha_fin,
-		'horometro_inicial '.$horometro_inicial,'horometro_final '.$horometro_final,'horas '.$horas,
-		'costo_unitario '.$costo_unitario,'costo_parcial '.$costo_parcial,'unidad_m '.$unidad_m,'dias '.$dias,'mes '.$mes);die();*/
-		///var_dump($idservicio ,$idproveedor);die();
+		{
 		$sql="UPDATE servicio SET 
 		idproyecto='$idproyecto',
 		idmaquinaria='$maquinaria',
@@ -102,22 +98,18 @@ Class Servicios
 	}
 
 	//Implementamos un método para desactivar categorías
-	public function desactivar($idservicio)
-	{
+	public function desactivar($idservicio){
 		$sql="UPDATE servicio SET estado='0' WHERE idservicio ='$idservicio '";
 		return ejecutarConsulta($sql);
 	}
-
 	//Implementamos un método para activar categorías
-	public function activar($idservicio )
-	{
+	public function activar($idservicio ){
 		$sql="UPDATE servicio SET estado='1' WHERE idservicio='$idservicio '";
 		return ejecutarConsulta($sql);
 	}
-
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idservicio)
-	{
+		{
 		$sql="SELECT
 		s.idservicio as idservicio,
 		s.idproyecto as idproyecto,
@@ -140,11 +132,9 @@ Class Servicios
 		WHERE s.idservicio ='$idservicio' AND s.idmaquinaria = m.idmaquinaria AND m.idproveedor=p.idproveedor";
 		return ejecutarConsultaSimpleFila($sql);
 	}
-
-
 	//Seleccionar Trabajador Select2
 	public function select2_servicio()
-	{
+		{
 		$sql="SELECT 
 		mq.idmaquinaria as idmaquinaria, 
 		mq.nombre as nombre, 
@@ -161,8 +151,109 @@ Class Servicios
 	 *SECCION PAGO MAQUINARIA
 	 * ====================================
 	 */
-	public function mostrar_datos_pago(){
-		$sql = "SELECT * FROM maquinaria as m, proveedor as p  WHERE m.idproveedor=p.idproveedor AND m.idmaquinaria=1";
+	public function insertar_pago($idproyecto_pago,$beneficiario_pago,
+	                       		  $forma_pago,$tipo_pago,$cuenta_destino_pago,
+								  $banco_pago,$titular_cuenta_pago,$fecha_pago,
+								  $monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago)
+	 {
+
+		$sql="INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria) 
+		VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago')";
+		return ejecutarConsulta($sql);
+			
+	}
+	//Implementamos un método para editar registros
+	public function editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,
+								$forma_pago,$tipo_pago,$cuenta_destino_pago,
+								$banco_pago,$titular_cuenta_pago,$fecha_pago,
+								$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago){
+		$sql="UPDATE pago_servicio SET
+		idproyecto='$idproyecto_pago',
+		beneficiario='$beneficiario_pago',
+		forma_pago='$forma_pago',
+		tipo_pago='$tipo_pago',
+		cuenta_destino='$cuenta_destino_pago',
+		id_banco='$banco_pago',
+		titular_cuenta='$titular_cuenta_pago',
+		fecha_pago='$fecha_pago',
+		monto='$monto_pago',
+		numero_operacion='$numero_op_pago',
+		descripcion='$descripcion_pago',
+		id_maquinaria='$id_maquinaria_pago'
+		WHERE idpago_servicio='$idpago_servicio'";	
+		return ejecutarConsulta($sql);	
+	}
+	//Listar pagos
+	public function listar_pagos($idmaquinaria,$idproyecto){
+		//var_dump($idproyecto,$idmaquinaria);die();
+		$sql ="SELECT
+		ps.idpago_servicio as idpago_servicio,
+		ps.idproyecto as idproyecto,
+		ps.id_maquinaria as id_maquinaria,
+		ps.forma_pago as forma_pago,
+		ps.tipo_pago as tipo_pago,
+		ps.beneficiario as beneficiario,
+		ps.cuenta_destino as cuenta_destino,
+		ps.titular_cuenta as titular_cuenta,
+		ps.fecha_pago as fecha_pago,
+		ps.descripcion as descripcion,
+		ps.id_banco as id_banco,
+		bn.nombre as banco,
+		ps.numero_operacion as numero_operacion,
+		ps.monto as monto,
+		ps.imagen as imagen,
+		ps.estado as estado
+		FROM pago_servicio ps, bancos as bn 
+		WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND bn.idbancos=ps.id_banco";
+		return ejecutarConsulta($sql);
+	}
+	//Implementamos un método para desactivar categorías
+	public function desactivar_pagos($idpago_servicio){
+		//var_dump($idpago_servicio);die();
+		$sql="UPDATE pago_servicio SET estado='0' WHERE idpago_servicio ='$idpago_servicio'";
+		return ejecutarConsulta($sql);
+	}
+	//Implementamos un método para activar categorías
+	public function activar_pagos($idpago_servicio){
+		$sql="UPDATE pago_servicio SET estado='1' WHERE idpago_servicio ='$idpago_servicio'";
+		return ejecutarConsulta($sql);
+	}
+	//Mostrar datos para editar Pago servicio.
+	public function mostrar_pagos($idpago_servicio){
+		$sql = "SELECT
+		ps.idpago_servicio as idpago_servicio,
+		ps.idproyecto as idproyecto,
+		ps.id_maquinaria as id_maquinaria,
+        mq.nombre as nombre_maquina,
+		ps.forma_pago as forma_pago,
+		ps.tipo_pago as tipo_pago,
+		ps.beneficiario as beneficiario,
+		ps.cuenta_destino as cuenta_destino,
+		ps.titular_cuenta as titular_cuenta,
+		ps.fecha_pago as fecha_pago,
+		ps.descripcion as descripcion,
+		ps.id_banco as id_banco,
+		bn.nombre as banco,
+		ps.numero_operacion as numero_operacion,
+		ps.monto as monto,
+		ps.imagen as imagen,
+		ps.estado as estado
+		FROM pago_servicio ps, bancos as bn, maquinaria as mq
+		WHERE idpago_servicio='$idpago_servicio' AND ps.id_banco = bn.idbancos AND mq.idmaquinaria=ps.id_maquinaria";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function suma_total_pagos($idmaquinaria,$idproyecto){
+		$sql="SELECT SUM(ps.monto) as total_monto
+		FROM pago_servicio as ps
+		WHERE ps.idproyecto ='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1'";
+		return ejecutarConsultaSimpleFila($sql);
+
+	}
+
+	//mostrar datos del proveedor y maquina en form
+	public function most_datos_prov_pago($idmaquinaria){
+		$sql = "SELECT * FROM maquinaria as m, proveedor as p  WHERE m.idproveedor=p.idproveedor AND m.idmaquinaria='$idmaquinaria'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
