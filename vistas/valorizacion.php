@@ -77,9 +77,9 @@
                             <a class="nav-link" id="tabs-2-tab" data-toggle="pill" href="#tabs-2" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc2');">2. Informe tecnico</a>
                             <span class="ml-3 nav-titulo" id="tabs-3-tab" data-toggle="pill" role="tab" aria-controls="tabs-3" aria-selected="false">3. Ejecución de obra</span>
                             <a class="nav-link ml-4" id="tabs-3-1-tab" data-toggle="pill" href="#tabs-3-1" role="tab" aria-controls="tabs-3-1" aria-selected="false" onclick="add_data_form('doc3.1');">3.1 Planilla de metrados</a>
-                            <a class="nav-link ml-4" id="tabs-3-2-tab" data-toggle="pill" href="#tabs-3-2" role="tab" aria-controls="tabs-3-2" aria-selected="false" onclick="add_data_form('doc3.2');">3.2 Copia del contrato</a>
-                            <a class="nav-link ml-4" id="tabs-3-3-tab" data-toggle="pill" href="#tabs-3-3" role="tab" aria-controls="tabs-3-3" aria-selected="false" onclick="add_data_form('doc3.3');">3.3 Informe tecnico</a>
-                            <a class="nav-link ml-4" id="tabs-3-4-tab" data-toggle="pill" href="#tabs-3-4" role="tab" aria-controls="tabs-3-4" aria-selected="false" onclick="add_data_form('doc3.4');">3.4 Ejecución de obra</a>
+                            <a class="nav-link ml-4" id="tabs-3-2-tab" data-toggle="pill" href="#tabs-3-2" role="tab" aria-controls="tabs-3-2" aria-selected="false" onclick="add_data_form('doc3.2');">3.2 Valorizacion</a>
+                            <a class="nav-link ml-4" id="tabs-3-3-tab" data-toggle="pill" href="#tabs-3-3" role="tab" aria-controls="tabs-3-3" aria-selected="false" onclick="add_data_form('doc3.3');">3.3 Resumen de Valorizacion</a>
+                            <a class="nav-link ml-4" id="tabs-3-4-tab" data-toggle="pill" href="#tabs-3-4" role="tab" aria-controls="tabs-3-4" aria-selected="false" onclick="add_data_form('doc3.4');">3.4 Curva "S"</a>
                             <a class="nav-link" id="tabs-4-tab" data-toggle="pill" href="#tabs-4" role="tab" aria-controls="tabs-4" aria-selected="false" onclick="add_data_form('doc4');">4. Cronograma de obra valorizado</a>
                             <a class="ml-3 nav-titulo" id="tabs-5-tab" data-toggle="pill" role="tab" aria-controls="tabs-1" aria-selected="false" >5. Protocolo de calidad</a>
                             <a class="nav-link ml-4" id="tabs-5-1-tab" data-toggle="pill" href="#tabs-5-1" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc5.1');">5.1 Ensayo de consistencia del concreto</a>
@@ -120,58 +120,56 @@
 
                             <!-- 1. Copia del contrato -->
                             <div class="tab-pane text-left fade" id="tabs-1" role="tabpanel" aria-labelledby="tabs-1-tab">
-                              <div class="row">
-                                <div class="col-lg-4">
-                                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc();">
-                                    <i class="fas fa-file-upload"></i> Subir
-                                  </a>
-                                </div>
-                                <div class="col-lg-4">
-                                  <a  class="btn btn-warning  btn-block btn-xs" type="button" >
-                                    <i class="fas fa-download"></i> Descargar
-                                  </a>
-                                </div>
-                                <div class="col-lg-4 mb-4">
-                                  <a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >
-                                    <i class="fas fa-expand"></i> Ver completo
-                                  </a>
-                                </div>
-                                <div class="col-lg-12 ">
-                                  <div class='embed-responsive disenio-scroll' style='padding-bottom:90%'>
-                                    <embed class="disenio-scroll" src="../dist/pdf/9163465089428.pdf" type="application/pdf" width="100%" height="100%" />
-                                  </div>
-                                </div>
+                              <div class="row" id="documento1">
+                                <!-- Aqui va - Copia del contrato -->                                
                               </div>
                             </div>
 
                             <!-- 2. Informe tecnico -->
                             <div class="tab-pane fade" id="tabs-2" role="tabpanel" aria-labelledby="tabs-2-tab">
-                              Doc 2
+                              <div class="row" id="documento2">
+                                <!-- Aqui va - Copia del contrato -->                                
+                              </div>
                             </div>
 
                             <!-- 3. Ejecución de obra -->
                             <div class="tab-pane fade" id="tabs-3" role="tabpanel" aria-labelledby="tabs-3-tab">
-                              Doc 3
+                              
                             </div>
 
                             <!-- 3.1 Planilla de metrados -->
                             <div class="tab-pane fade" id="tabs-3-1" role="tabpanel" aria-labelledby="tabs-3-1-tab">
-                              Doc 3.1
+                              <div class="row" id="documento3-1">
+                                <!-- Aqui va - Planilla de metrados -->                                
+                              </div>
                             </div>
 
-                            <!-- 3.2 Copia del contrato  -->
+                            <!-- 3.2 Valorizaciones  -->
                             <div class="tab-pane fade" id="tabs-3-2" role="tabpanel" aria-labelledby="tabs-3-2-tab">
-                              Doc 3.2
+                              <div class="row" id="documento3-2">
+                                <!-- Aqui va - Valorizaciones -->                                
+                              </div>
                             </div>
 
-                            <!-- 3.3 Informe tecnico -->
+                            <!-- 3.3 Resumen de valorizacion -->
                             <div class="tab-pane fade" id="tabs-3-3" role="tabpanel" aria-labelledby="tabs-3-3-tab">
-                              Doc 3.3
+                              <div class="row" id="documento3-3">
+                                <!-- Aqui va - Resumen de valorizacion -->                                
+                              </div>
                             </div>
 
-                            <!-- 3.4 Ejecución de obra -->
+                            <!-- 3.4 Curva S -->
+                            <div class="tab-pane fade" id="tabs-3-4" role="tabpanel" aria-labelledby="tabs-3-4-tab">
+                              <div class="row" id="documento3-4">
+                                <!-- Aqui va - Curva S -->                                
+                              </div>
+                            </div>
+
+                            <!-- 4 Cronograma de obra valorizado -->
                             <div class="tab-pane fade" id="tabs-4" role="tabpanel" aria-labelledby="tabs-4-tab">
-                              Doc 4
+                              <div class="row" id="documento4">
+                                <!-- Aqui va - Cronograma de obra valorizado -->                                
+                              </div>
                             </div>
 
                             <!-- 5. Protocolo de calidad -->
@@ -181,61 +179,84 @@
 
                             <!-- 5.1 Ensayo de consistencia del concreto -->
                             <div class="tab-pane fade" id="tabs-5-1" role="tabpanel" aria-labelledby="tabs-5-2-tab">
-                              Doc 5.1
+                              <div class="row" id="documento5-1">
+                                <!-- Aqui va - Ensayo de consistencia del concreto -->                                
+                              </div>
                             </div>
 
                             <!-- 5.2 Ensayo de compresión -->
                             <div class="tab-pane fade" id="tabs-5-2" role="tabpanel" aria-labelledby="tabs-5-2-tab">
-                              Doc 5.2
+                              <div class="row" id="documento5-2">
+                                <!-- Aqui va - Ensayo de compresión -->                                
+                              </div>
                             </div>
 
                             <!-- 6. Plan de seguridad y salud en el trabajo -->
                             <div class="tab-pane fade" id="tabs-6" role="tabpanel" aria-labelledby="tabs-6-tab">
-                              Doc 6
+                              <div class="row" id="documento6">
+                                <!-- Aqui va - Plan de seguridad y salud en el trabajo -->                                
+                              </div>
                             </div>
 
                             <!-- 7. Plan de bioseguridad COVID19 -->
                             <div class="tab-pane fade" id="tabs-7" role="tabpanel" aria-labelledby="tabs-7-tab">
-                              Doc 7
+                              <div class="row" id="documento7">
+                                <!-- Aqui va - Plan de bioseguridad COVID19 -->                                
+                              </div>
                             </div>
 
                             <!-- 8. Anexos -->
                             <div class="tab-pane fade" id="tabs-8" role="tabpanel" aria-labelledby="tabs-8-tab">
                               Doc 8
                             </div>
+
                             <!-- 8.1 Acta de entrega de terreno -->                            
                             <div class="tab-pane fade" id="tabs-8-1" role="tabpanel" aria-labelledby="tabs-8-1-tab">
-                              Doc 8.1
+                              <div class="row" id="documento8-1">
+                                <!-- Aqui va - Acta de entrega de terreno -->                                
+                              </div>
                             </div>
 
                             <!-- 8.2 Acta de inicio de obra -->                            
                             <div class="tab-pane fade" id="tabs-8-2" role="tabpanel" aria-labelledby="tabs-8-2-tab">
-                              Doc 8.2
+                              <div class="row" id="documento8-2">
+                                <!-- Aqui va - Acta de inicio de obra -->                                
+                              </div>
                             </div>
 
                             <!-- 8.3 Certificado de habilidad del ingeniero residente -->                            
                             <div class="tab-pane fade" id="tabs-8-3" role="tabpanel" aria-labelledby="tabs-8-3-tab">
-                              Doc 8.3
+                              <div class="row" id="documento8-3">
+                                <!-- Aqui va - Certificado de habilidad del ingeniero residente  -->                                
+                              </div>
                             </div>
 
                             <!-- 8.4 Planilla del personal obrero -->                            
                             <div class="tab-pane fade" id="tabs-8-4" role="tabpanel" aria-labelledby="tabs-8-4-tab">
-                              Doc 8.4
+                              <div class="row" id="documento8-4">
+                                <!-- Aqui va - Planilla del personal obrero -->                                
+                              </div>
                             </div>
 
                             <!-- 8.5 Copia del seguro complementario contra todo riesgo -->                            
                             <div class="tab-pane fade" id="tabs-8-5" role="tabpanel" aria-labelledby="tabs-8-5-tab">
-                              Doc 8.5
+                              <div class="row" id="documento8-5">
+                                <!-- Aqui va - Copia del seguro complementario contra todo riesgo -->                                
+                              </div>
                             </div>
 
                             <!-- 8.6 Panel fotográfico -->                            
                             <div class="tab-pane fade" id="tabs-8-6" role="tabpanel" aria-labelledby="tabs-8-6-tab">
-                              Doc 8.6
+                              <div class="row" id="documento8-6">
+                                <!-- Aqui va - Panel fotográfico -->                                
+                              </div>
                             </div>
 
                             <!-- 8.7 Copia del cuaderno de obra -->
                             <div class="tab-pane fade" id="tabs-8-7" role="tabpanel" aria-labelledby="tabs-8-7-tab">
-                              Doc 8.7
+                              <div class="row" id="documento8-7">
+                                <!-- Aqui va - Copia del cuaderno de obra -->                                
+                              </div>
                             </div>
                           </div>
                         </div>

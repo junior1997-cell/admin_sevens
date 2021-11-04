@@ -366,13 +366,23 @@ init();
 
 
 $(function () {
+  
 
   //Date range picker
   $('#fecha_inicio_fin').daterangepicker({
+    dateFormat: 'YYYY/MM/DD',
     autoUpdateInput: false,
+    inline: true,
     locale: {
       cancelLabel: 'Clear'
-    }
+    },
+    isInvalidDate: function(date) {
+      if (date.day() == 0 || date.day() == 1 || date.day() == 2 || date.day() == 3 || date.day() == 4 || date.day() == 5)
+        return false;
+      return true;
+    },
+
+    
   });
   $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
     $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));

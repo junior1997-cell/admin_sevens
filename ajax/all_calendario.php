@@ -16,9 +16,9 @@
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['calendario'] == 1) {
 
-      require_once "../modelos/Calendario.php";
+      require_once "../modelos/AllCalendario.php";
 
-      $calendario = new Calendario();
+      $calendario = new AllCalendario();
 
       $idcalendario		  = isset($_POST["idcalendario"])? limpiarCadena($_POST["idcalendario"]):"";
       $idproyecto 		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
@@ -35,14 +35,14 @@
 
           if (empty($idcalendario)){
 
-            $rspta=$calendario->insertar($idproyecto, $titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
+            $rspta=$calendario->insertar($titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
   
           }else {
 
             // editamos un trabajador existente
-            $rspta=$calendario->editar($idcalendario, $idproyecto, $titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
+            $rspta=$calendario->editar($idcalendario, $titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
             
             echo $rspta ? "ok" : "Fecha no se pudo actualizar";
           }            
@@ -67,14 +67,14 @@
 
         case 'listar-calendario':          
 
-          $rspta=$calendario->listar($idproyecto);
+          $rspta=$calendario->listar();
           //Codificar el resultado utilizando json
           echo json_encode($rspta);         
 
         break;
         case 'listar-calendario-e':          
 
-          $rspta=$calendario->listar_e($idproyecto);
+          $rspta=$calendario->listar_e();
           //Codificar el resultado utilizando json
           echo json_encode($rspta);         
 

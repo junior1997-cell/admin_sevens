@@ -88,7 +88,9 @@ Class Valorizacion
 		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_quincena BETWEEN '$f1' AND '$f2';";
 		$data1 = ejecutarConsultaArray($sql);
 
-		$sql2 = "SELECT p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra FROM proyecto as p WHERE p.idproyecto = '$nube_idproyect';";
+		$sql2 = "SELECT p.idproyecto, p.doc1_contrato_obra AS doc1, p.doc2_entrega_terreno AS doc81, p.doc3_inicio_obra AS doc82, p.doc7_cronograma_obra_valorizad AS doc4, p.doc8_certificado_habilidad_ing_residnt AS doc83 
+		FROM proyecto as p 
+		WHERE p.idproyecto = '$nube_idproyect';";
 		$data2 = ejecutarConsultaSimpleFila($sql2);
 
 		$results = array(

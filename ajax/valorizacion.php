@@ -167,7 +167,7 @@
         case 'mostrar-docs-quincena':
 
           $nube_idproyecto = $_POST["nube_idproyecto"]; $fecha_i = $_POST["fecha_i"]; $fecha_f = $_POST["fecha_f"];
-          // $nube_idproyecto = 1; $fecha_i = '01/10/2021'; $fecha_f = '20/11/2021';
+          // $nube_idproyecto = 1; $fecha_i = '2021-10-22'; $fecha_f = '2021-11-19';
 
           $rspta = $valorizacion->ver_detalle_quincena($fecha_i, $fecha_f, $nube_idproyecto );
           //Codificar el resultado utilizando json

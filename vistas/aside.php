@@ -96,18 +96,25 @@
                   <p>All-Trabajador</p>
                 </a>
               </li>
-              <!-- Permisos de los usuarios del sistema -->
+              <!-- Proveedores de la empresa -->
               <li class="nav-item ">
                 <a href="all_proveedor.php" class="nav-link" id="lAllProveedor">
                   <i class="nav-icon fas fa-truck"></i>
                   <p>All-Proveedor</p>
                 </a>
               </li>  
-              <!-- Permisos de los usuarios del sistema -->
+              <!-- Maquinas de la empresa -->
               <li class="nav-item ">
                 <a href="all_maquinas.php" class="nav-link" id="lAllMaquinas">
                   <i class="nav-icon fas fa-tractor"></i>
                   <p>All-Maquinarias</p>
+                </a>
+              </li>
+              <!-- Calendario de la empresa -->
+              <li class="nav-item ">
+                <a href="all_calendario.php" class="nav-link" id="lAllCalendario">
+                <i class="nav-icon far fa-calendar-alt"></i>
+                  <p>All-Calendario</p>
                 </a>
               </li>
             </ul>
@@ -233,14 +240,25 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['calendario']==1) {  ?>  
+        <?php if ($_SESSION['calendario']==1) {  ?>
           <!-- CALENDARIO -->       
           <li class="nav-item">
             <a href="calendario.php" class="nav-link" id="mCalendario">
               <i class="nav-icon far fa-calendar-alt"></i>
               <p>
-                Calendario
-                <span class="badge badge-info right">2</span>
+                Calendario                 
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['plano_otro']==1) {  ?>
+          <!-- CALENDARIO -->       
+          <li class="nav-item">
+            <a href="plano_otro.php" class="nav-link" id="mPlanoOtro">
+              <i class="nav-icon fas fa-map-marked-alt"></i>
+              <p>
+                Planos y otros                 
               </p>
             </a>
           </li>

@@ -3,13 +3,13 @@ var  calendar;
 //Función que se ejecuta al inicio
 function init() {
 
-  listar(localStorage.getItem('nube_idproyecto') );   
+  listar( );   
 
-  // $("#bloc_Calendario").addClass("menu-open");
+  $("#bloc_Recurso").addClass("menu-open");
 
-  $("#mCalendario").addClass("active");
+  $("#mRecurso").addClass("active");
 
-  // $("#lCalendario").addClass("active");
+  $("#lAllCalendario").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-calendario").submit(); });
 
@@ -39,18 +39,18 @@ function limpiar() {
 }
 
 //Función Listar
-function listar(idproyecto) {
+function listar() {
   $("#external-events").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
 
-  $.post("../ajax/calendario.php?op=listar-calendario", { idproyecto: idproyecto },  function (data, status) {
+  $.post("../ajax/all_calendario.php?op=listar-calendario",  function (data, status) {
 
     data = JSON.parse(data);  console.log(data); 
 
     $("#external-events").html('');
 
-    if (data.data1.length != 0) {
+    if (data.length != 0) {
 
-      $.each(data.data1, function (index, value) {
+      $.each(data, function (index, value) {
              
         $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+'</div>');
       });
@@ -82,15 +82,12 @@ function listar(idproyecto) {
 
       themeSystem: 'bootstrap',
 
-      events: data.data1,
-       
+      events: data,
 
       // Se ejecuta cuando no hay eventos
       dateClick: function(info) {
         
         $('#idcalendario').val("");
-
-        $('#idproyecto').val(localStorage.getItem('nube_idproyecto'));
 
         $('#fecha_feriado').val(info.dateStr);
 
@@ -104,10 +101,9 @@ function listar(idproyecto) {
 
         $('#descripcion').val('');
 
-        $('#eliminar_registro').hide(); $('#guardar_registro').show();
+        $('#eliminar_registro').hide();
 
         $('#modal-agregar-calendario').modal('show');
-        
       },
 
       // Se ejecuta cuando hay un evento
@@ -119,21 +115,9 @@ function listar(idproyecto) {
 
         if (month < 10) { month = '0' + month; }
         
-         console.log(info.event);
+        $('#eliminar_registro').show();
 
         $('#idcalendario').val(info.event.id);
-
-        if (info.event.extendedProps.idproyecto) {
-
-          $('#idproyecto').val(info.event.extendedProps.idproyecto);
-
-          $('#eliminar_registro').show(); $('#guardar_registro').show();
-
-        } else {
-
-          $('#eliminar_registro').hide(); $('#guardar_registro').hide();
-        }
-        
 
         $('#fecha_feriado').val(year+'-' + month + '-'+dt);
 
@@ -180,29 +164,8 @@ function listar(idproyecto) {
 
         $('#descripcion').val(info.event.extendedProps.descripcion);
 
-        if (info.event.extendedProps.idproyecto) {
-
-          $('#idproyecto').val(info.event.extendedProps.idproyecto);
-
-          $("#submit-form-calendario").submit();
-
-        } else {
-
-          Swal.fire("Usted no puede mover!", 'Para editar esta fecha, usted nesecita ir a Fechas Globales', "error");
-          
-          info.revert();
-        }
-        
-      },
-
-      // eventResize: function(info) {
-      //   alert(info.event.title + " end is now " + info.event.end.toISOString());
-    
-      //   if (!confirm("is this okay?")) {
-      //     info.revert();
-      //   }
-      // }
-      
+        $("#submit-form-calendario").submit();
+      }
     });
 
     calendar.setOption('locale', 'es');
@@ -213,9 +176,9 @@ function listar(idproyecto) {
   // fechas eliminadas
   $("#external-events-eliminados").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
 
-  $.post("../ajax/calendario.php?op=listar-calendario-e", { idproyecto: idproyecto },  function (data, status) {
+  $.post("../ajax/all_calendario.php?op=listar-calendario-e",  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data);  //console.log(data); 
 
     $("#external-events-eliminados").html('');
 
@@ -259,7 +222,7 @@ function guardaryeditar(e) {
   var formData = new FormData($("#form-calendario")[0]);
 
   $.ajax({
-    url: "../ajax/calendario.php?op=guardaryeditar",
+    url: "../ajax/all_calendario.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -269,9 +232,9 @@ function guardaryeditar(e) {
              
       if (datos == 'ok') {	
 
-        Swal.fire("Correcto!", "Fecha guardado correctamente", "success");			 
+        Swal.fire("Correcto!", "Fecha guardada correctamente", "success");			 
 
-	      listar(localStorage.getItem('nube_idproyecto'));  $("#modal-agregar-calendario").modal("hide"); limpiar();        
+	      listar();  $("#modal-agregar-calendario").modal("hide"); limpiar();        
 
 			}else{
 
@@ -299,11 +262,11 @@ function desactivar() {
 
     if (result.isConfirmed) {
 
-      $.post("../ajax/calendario.php?op=desactivar", { idcalendario: idcalendario }, function (e) {
+      $.post("../ajax/all_calendario.php?op=desactivar", { idcalendario: idcalendario }, function (e) {
 
         Swal.fire("Eliminado!", "Tu fecha a sido eliminado.", "success");
     
-        listar(localStorage.getItem('nube_idproyecto')); $("#modal-agregar-calendario").modal("hide"); limpiar();    
+        listar(); $("#modal-agregar-calendario").modal("hide"); limpiar();    
       });      
     }
   });   
@@ -321,16 +284,17 @@ function activar(idcalendario) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/calendario.php?op=activar", { idcalendario: idcalendario }, function (e) {
+      $.post("../ajax/all_calendario.php?op=activar", { idcalendario: idcalendario }, function (e) {
 
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
 
-        listar(localStorage.getItem('nube_idproyecto')); 
+        listar(); 
       });
       
     }
   });      
 }
+
 
 // Validacion FORM
 $(function () {

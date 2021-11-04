@@ -523,42 +523,42 @@
 
               if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
                 
-                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
+              $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
 
-                $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
-                
-                $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
+              $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
+              
+              $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 
-                $data[]=array(
-                  "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
-                      <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
-                        <i class="fas fa-folder"></i>
-                      </button> 
-                      <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
-                        <i class="fas fa-pencil-alt"></i> 
-                      </button>
-                      '.$acciones.'
-                      <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
-                        <i class="fas fa-eye"></i>
-                      </button> 
+              $data[]=array(
+                "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
+                    <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
+                      <i class="fas fa-folder"></i>
+                    </button> 
+                    <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
+                      <i class="fas fa-pencil-alt"></i> 
+                    </button>
+                    '.$acciones.'
+                    <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
+                      <i class="fas fa-eye"></i>
+                    </button> 
+                </div>',
+                "1"=>'<div class="user-block asignar_paint_'.$reg->idproyecto.'">
+                    <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
+                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
+                    <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                   </div>',
-                  "1"=>'<div class="user-block asignar_paint_'.$reg->idproyecto.'">
-                      <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
-                      <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
-                      <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                    </div>',
-                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
-                  "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
-                  "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
-                  "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
-                    <center>
-                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
-                        <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
-                      </a>
-                    </center>
-                  </div>',                  
-                  "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
-                );
+                "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
+                "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
+                "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
+                "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
+                  <center>
+                    <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                      <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
+                    </a>
+                  </center>
+                </div>',                  
+                "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
+              );
             }
             $results = array(
               "sEcho"=>1, //Información para el datatables

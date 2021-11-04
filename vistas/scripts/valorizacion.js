@@ -3,6 +3,8 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
 
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
   ver_quincenas(localStorage.getItem('nube_idproyecto'));
 
   // $("#bloc_Recurso").addClass("menu-open");
@@ -37,7 +39,7 @@ function ver_quincenas(nube_idproyecto) {
 
       let aFecha = data.fecha_inicio.split('-'); 
 
-      var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];    console.log(aFecha);
+      var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];    //console.log(aFecha);
       
       var fecha_i = sumaFecha(0,fecha);
 
@@ -52,8 +54,11 @@ function ver_quincenas(nube_idproyecto) {
         fecha = sumaFecha(14,fecha_inicio);
   
         // console.log(fecha_inicio+'-'+fecha);
-        let fecha_i = ; let fecha_f = ;
-        ver_fechas_init_end = "'"+fecha_inicio+"',"+"'"+fecha+"',"+"'"+i+"'";
+        let fecha_bd_i = fecha_inicio.split('/');  let fecha_bd_f = fecha.split('/'); 
+
+        let fecha_ii = fecha_bd_i[2]+'-'+fecha_bd_i[1]+'-'+fecha_bd_i[0]; let fecha_ff = fecha_bd_f[2]+'-'+fecha_bd_f[1]+'-'+fecha_bd_f[0];
+
+        ver_fechas_init_end = "'"+fecha_ii+"',"+"'"+fecha_ff+"',"+"'"+i+"'";
   
         $('#lista_quincenas').append(' <button id="boton-'+ i +'" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('+ver_fechas_init_end+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' - '+fecha+'</button>')
         
@@ -297,93 +302,6 @@ function guardaryeditar(e) {
   });
 }
 
-// ver detallles del registro
-function verdatos(idtrabajador){
-
-  console.log('id_verdatos'+idtrabajador);  
-  
-  $('#datostrabajador').html(''+
-  '<div class="row" >'+
-    '<div class="col-lg-12 text-center">'+
-      '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />'+
-      '<br />'+
-      '<h4>Cargando...</h4>'+
-    '</div>'+
-  '</div>');
-
-  var verdatos=''; var imagenver='';
-
-  $("#modal-ver-trabajador").modal("show")
-
-  $.post("../ajax/all_trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data); 
-
-    var imagen_perfil =data.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-    var imagen_dni_anverso =data.imagen_dni_anverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_anverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
-    var imagen_dni_reverso =data.imagen_dni_reverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_reverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
-    
-    verdatos=''+                                                                            
-    '<div class="col-12">'+
-      '<div class="card">'+
-          '<div class="card-body ">'+
-              '<table class="table table-hover table-bordered">'+          
-                  '<tbody>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th rowspan="2">'+imagen_perfil+'</th>'+
-                          '<td> <b>Nombre: </b> '+data.nombres+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<td> <b>DNI: </b>  '+data.numero_documento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Dirección</th>'+
-                          '<td>'+data.direccion+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Correo</th>'+
-                          '<td>'+data.email+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Teléfono</th>'+
-                          '<td>'+data.telefono+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Fecha nacimiento</th>'+
-                          '<td>'+data.fecha_nacimiento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cuenta bancaria</th>'+
-                          '<td>'+data.cuenta_bancaria+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Banco</th>'+
-                          '<td>'+data.banco+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Titular cuenta </th>'+
-                          '<td>'+data.titular_cuenta+'</td>'+
-                      '</tr>'+
-
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>DNI anverso</th>'+
-                          '<td> '+imagen_dni_anverso+' </td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>DNI reverso</th>'+
-                          '<td> '+imagen_dni_reverso+' </td>'+
-                      '</tr>'+
-                  '</tbody>'+
-              '</table>'+
-          '</div>'+
-      '</div>'+
-    '</div>';
-  
-    $("#datostrabajador").html(verdatos);
-
-  });
-}
-
 // mostramos los datos para editar
 function mostrar(idtrabajador) {
 
@@ -538,11 +456,6 @@ function extrae_extencion(filename) {
   return filename.split('.').pop();
 }
 
-//Función para desactivar registros
-function subir_doc(idtrabajador) {
-  $("#modal-agregar-valorizacion").modal('show'); 
-}
-
 // recargar un doc para ver
 function re_visualizacion() {
 
@@ -637,7 +550,7 @@ function re_visualizacion() {
 
 // captura las fechas de quincenas y trae los datos
 function fecha_quincena(fecha_i, fecha_f, i) {
-
+  // console.log(fecha_i, fecha_f,);
   let nube_idproyecto = localStorage.getItem('nube_idproyecto');
 
   $('#tab-seleccione').show(); $('#tab-contenido').show(); $('#tab-info').hide();
@@ -647,7 +560,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
   // validamos el id para puntar el boton
   if (localStorage.getItem('boton_id')) {
 
-    let id = localStorage.getItem('boton_id'); console.log('id-nube-boton'+id); 
+    let id = localStorage.getItem('boton_id'); //console.log('id-nube-boton'+id); 
     
     $("#boton-" + id).removeClass('click-boton');
 
@@ -669,19 +582,327 @@ function fecha_quincena(fecha_i, fecha_f, i) {
     // validamos la data total
     if (data) {
 
+      // exraemos la fecha de HOY
+      var tiempoTranscurrido = Date.now();
+      var hoy = new Date(tiempoTranscurrido);
+      var format = hoy.toLocaleDateString(); console.log('Fecha hoy: '+format);
+      
       // validamos la data1
       if (data.data1.length === 0) {
         console.log('data no existe');
       } else {
-        console.log('data existe');
+
+        $.each(data.data1, function (index, value) {
+
+          if (value.nombre == "doc2") {
+
+            if ($("#tabs-2-tab").hasClass("no-doc")) { $("#tabs-2-tab").removeClass('no-doc'); }          
+  
+            $('#documento2').html(
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                  '<i class="fas fa-file-upload"></i> Subir'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<i class="fas fa-download"></i> Descargar'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                  '<embed class="disenio-scroll" src="../dist/pdf/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+                '</div>'+
+              '</div>'
+            );
+          
+          }
+          
+        });
       }
 
       // validamos la data2
       if (data.data2.length === 0) {
         console.log('data no existe');
       } else {
-        console.log('data existe');
+
+        if (data.data2.doc1 != "") {
+
+          if ($("#tabs-1-tab").hasClass("no-doc")) { $("#tabs-1-tab").removeClass('no-doc'); }          
+
+          $('#documento1').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="Copia del contrato -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+data.data2.doc1+'"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                '<embed class="disenio-scroll" src="../dist/pdf/'+data.data2.doc1+'" type="application/pdf" width="100%" height="100%" />'+
+              '</div>'+
+            '</div>'
+          );
+        
+        } else {
+
+          if ($("#tabs-1-tab").hasClass("no-doc") == false) { $("#tabs-1-tab").addClass('no-doc'); }
+
+          $('#documento1').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                'No hay documento para mostrar'+
+              '</div>'+
+            '</div>'
+          );
+        }
+
+        if (data.data2.doc4 != "") {
+
+          if ($("#tabs-4-tab").hasClass("no-doc")) { $("#tabs-4-tab").removeClass('no-doc'); }  
+
+          $('#documento4').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="Cronograma de obra valorizado -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+data.data2.doc4+'"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                '<embed class="disenio-scroll" src="../dist/pdf/'+data.data2.doc4+'" type="application/pdf" width="100%" height="100%" />'+
+              '</div>'+
+            '</div>'
+          );
+        } else {
+
+          if ($("#tabs-4-tab").hasClass("no-doc") == false) { $("#tabs-4-tab").addClass('no-doc'); }
+
+          $('#documento4').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                'No hay documento para mostrar'+
+              '</div>'+
+            '</div>'
+          );
+        }
+
+        if (data.data2.doc81 != "") {
+
+          if ($("#tabs-8-1-tab").hasClass("no-doc")) { $("#tabs-8-1-tab").removeClass('no-doc'); }  
+
+          $('#documento8-1').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="Acta de entrega de terreno -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+data.data2.doc81+'"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                '<embed class="disenio-scroll" src="../dist/pdf/'+data.data2.doc81+'" type="application/pdf" width="100%" height="100%" />'+
+              '</div>'+
+            '</div>'
+          );
+        } else {
+
+          if ($("#tabs-8-1-tab").hasClass("no-doc") == false) { $("#tabs-8-1-tab").addClass('no-doc'); }
+
+          $('#documento8-1').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                'No hay documento para mostrar'+
+              '</div>'+
+            '</div>'
+          );
+        }
+
+        if (data.data2.doc82 != "") {
+
+          if ($("#tabs-8-2-tab").hasClass("no-doc")) { $("#tabs-8-2-tab").removeClass('no-doc'); }  
+
+          $('#documento8-2').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="Acta de inicio de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+data.data2.doc82+'"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                '<embed class="disenio-scroll" src="../dist/pdf/'+data.data2.doc82+'" type="application/pdf" width="100%" height="100%" />'+
+              '</div>'+
+            '</div>'
+          );
+        } else {
+
+          if ($("#tabs-8-2-tab").hasClass("no-doc") == false) { $("#tabs-8-2-tab").addClass('no-doc'); }
+
+          $('#documento8-2').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                'No hay documento para mostrar'+
+              '</div>'+
+            '</div>'
+          );
+        }
+
+        if (data.data2.doc83 != "") {
+
+          if ($("#tabs-8-3-tab").hasClass("no-doc")) { $("#tabs-8-3-tab").removeClass('no-doc'); }  
+
+          $('#documento8-3').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="Certificado de habilidad del ingeniero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+data.data2.doc83+'"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                '<embed class="disenio-scroll" src="../dist/pdf/'+data.data2.doc83+'" type="application/pdf" width="100%" height="100%" />'+
+              '</div>'+
+            '</div>'
+          );
+        } else {
+
+          if ($("#tabs-8-3-tab").hasClass("no-doc") == false) { $("#tabs-8-3-tab").addClass('no-doc'); }
+
+          $('#documento8-3').html(
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                '<i class="fas fa-file-upload"></i> Subir'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4">'+
+              '<a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-4 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                'No hay documento para mostrar'+
+              '</div>'+
+            '</div>'
+          );
+        }
       }
+
     } else {
       
     }
@@ -692,7 +913,11 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
 function add_data_form(nombredoc) {
   $("#nombre").val(nombredoc);
-  console.log(nombredoc);
+  console.log(nombredoc);  
+}
 
-  
+//Función para desactivar registros
+function subir_doc(idvalorizacion) {
+  $("#idvalorizacion").val(idvalorizacion);
+  $("#modal-agregar-valorizacion").modal('show'); 
 }

@@ -233,7 +233,7 @@
                             <input type="hidden" name="idproyecto" id="idproyecto" />
 
                             <!-- Tipo de documento -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                               <div class="form-group">
                                 <label for="tipo_documento">Tipo de documento</label>
                                 <select name="tipo_documento" id="tipo_documento" class="form-control"  placeholder="Tipo de documento">
@@ -262,15 +262,15 @@
                             </div>
 
                             <!-- Empresa -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-5">
                               <div class="form-group">
-                                <label for="empresa">Empresa <small>(para quien va la obra)</small> </label>                               
+                                <label for="empresa">Empresa <small class="text-orange">(para quien va la obra)</small> </label>                               
                                 <input type="text" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
                               </div>                                                        
                             </div>
 
                             <!-- Nombre del proyecto -->
-                            <div class="col-lg-12">
+                            <div class="col-lg-9">
                               <div class="form-group">
                                 <label for="nombre_proyecto">Nombre del proyecto</label>
                                 <textarea name="nombre_proyecto" id="nombre_proyecto" class="form-control" rows="3" placeholder="Ingresa nombre">
@@ -278,27 +278,37 @@
                               </div>                                                        
                             </div>
 
-                            <!-- Nombre del proyecto -->
+                            <!-- Ubicación (de la obra) -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="ubicacion">Ubicación <small class="text-orange"> (de la obra) </small> </label>                               
+                                <!-- <input type="text" name="ubicacion" id="ubicacion" class="form-control"  placeholder="Ubicación">  -->
+                                <textarea name="ubicacion" id="ubicacion" class="form-control" rows="3" placeholder="Ubicación">
+                                </textarea>
+                              </div>                                                        
+                            </div>
+
+                            <!-- Codigo del proyecto -->
                             <div class="col-lg-4">
                               <div class="form-group">
                                 <label for="nombre_codigo">Código del proyecto</label>
                                 <input type="text" name="nombre_codigo" id="nombre_codigo" class="form-control"  placeholder="Codigo proyecto">
                               </div>                                                        
-                            </div>
-
-                            <!-- Ubicación (de la obra) -->
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label for="ubicacion">Ubicación <small> (de la obra) </small> </label>                               
-                                <input type="text" name="ubicacion" id="ubicacion" class="form-control"  placeholder="Ubicación"> 
-                              </div>                                                        
-                            </div>
+                            </div>                           
 
                             <!-- Actividad del trabajo -->
                             <div class="col-lg-4">
                               <div class="form-group">
                                 <label for="actividad_trabajo">Actividad del trabajo </label>
                                 <input type="text" name="actividad_trabajo" id="actividad_trabajo" class="form-control" placeholder="Actividad del trabajo">
+                              </div>
+                            </div>
+
+                            <!-- Empresa a cargo -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="empresa_acargo">Empresa a cargo <small class="text-orange">("Seven's Ingenieros")</small></label>
+                                <input type="text" name="empresa_acargo" id="empresa_acargo" class="form-control"  placeholder="Empresa a cargo" value="Seven's Ingenieros SAC">
                               </div>
                             </div>
 
@@ -312,7 +322,7 @@
                                       <i class="far fa-calendar-alt"></i>
                                     </span>
                                   </div>
-                                  <input type="text" class="form-control float-right" name="fecha_inicio_fin" id="fecha_inicio_fin" onclick="calcular_palzo();" onchange="calcular_palzo();">
+                                  <input type="text" class="form-control float-right" name="fecha_inicio_fin" id="fecha_inicio_fin" onclick="calcular_palzo();" onchange="calcular_palzo();" autocomplete="off">
                                 </div>
                               </div>
                             </div>
@@ -320,15 +330,23 @@
                             <!-- Plazo -->
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label for="plazo">Plazo <small>(días calendario)</small></label>
+                                <label for="plazo">Plazo <small class="text-orange">(días calendario)</small></label>
                                 <input type="text" name="plazo" id="plazo" class="form-control" placeholder="Plazo" readonly>
+                              </div>
+                            </div>
+
+                            <!-- Dias habiles -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="actividad_trabajo">Plazo <small class="text-orange">(días hábiles)</small> </label>
+                                <input type="text" name="dias_habiles" id="dias_habiles" class="form-control" placeholder="Días habiles" readonly>
                               </div>
                             </div>
 
                             <!-- Costo total del proyecto -->
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label for="costo">Costo <small>("costo total del proyecto")</small></label>
+                                <label for="costo">Costo <small class="text-orange">("costo total del proyecto")</small></label>
                                 <div class="input-group mb-3">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text">S/. </span>
@@ -336,15 +354,7 @@
                                   <input type="number"  name="costo" id="costo" class="form-control"  placeholder="Costo" min="1" >
                                 </div>
                               </div>
-                            </div>
-
-                            <!-- Empresa a cargo -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="empresa_acargo">Empresa a cargo <small>("Seven's Ingenieros")</small></label>
-                                <input type="text" name="empresa_acargo" id="empresa_acargo" class="form-control"  placeholder="Empresa a cargo" value="Seven's Ingenieros SAC">
-                              </div>
-                            </div>
+                            </div>                            
                             
                             <!-- Pdf 1 -->
                             <div class="col-md-6 col-lg-4" >                               

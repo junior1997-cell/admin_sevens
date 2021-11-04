@@ -12,7 +12,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Sevens | Calendario</title>
+    <title>Admin Sevens | Calendario Global</title>
 
     <!-- Icono Sevens-Ingenieros-SAC -->
     <link rel="apple-touch-icon" href="../dist/svg/logo-icono.svg">
@@ -44,11 +44,11 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Calendario Personalizado</h1>
+                  <h1>Calendario Global</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="calendario.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="all_calendario.php">Home</a></li>
                     <li class="breadcrumb-item active">Calendario</li>
                   </ol>
                 </div>
@@ -232,7 +232,7 @@
     <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
 
-    <script type="text/javascript" src="scripts/calendario.js"></script>
+    <script type="text/javascript" src="scripts/all_calendario.js"></script>
 
     <script>
         $(function () {
