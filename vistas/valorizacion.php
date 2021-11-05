@@ -73,27 +73,27 @@
                         <div class="col-lg-3 col-xl-4" id="tab-seleccione" style="display: none;">
                           <div class="nav flex-column nav-tabs h-100" id="tabs-tab" role="tablist" aria-orientation="vertical">
 
-                            <a class="nav-link" id="tabs-1-tab" data-toggle="pill" href="#tabs-1" role="tab" aria-controls="tabs-1" aria-selected="false" onclick="add_data_form('doc1');">1. Copia del contrato</a>
-                            <a class="nav-link" id="tabs-2-tab" data-toggle="pill" href="#tabs-2" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc2');">2. Informe tecnico</a>
+                            <a class="nav-link" id="tabs-1-tab" data-toggle="pill" href="#tabs-1" role="tab" aria-controls="tabs-1" aria-selected="false" onclick="add_data_form('doc1','Copia del contrato');">1. Copia del contrato</a>
+                            <a class="nav-link" id="tabs-2-tab" data-toggle="pill" href="#tabs-2" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc2','Informe técnico');">2. Informe técnico</a>
                             <span class="ml-3 nav-titulo" id="tabs-3-tab" data-toggle="pill" role="tab" aria-controls="tabs-3" aria-selected="false">3. Ejecución de obra</span>
-                            <a class="nav-link ml-4" id="tabs-3-1-tab" data-toggle="pill" href="#tabs-3-1" role="tab" aria-controls="tabs-3-1" aria-selected="false" onclick="add_data_form('doc3.1');">3.1 Planilla de metrados</a>
-                            <a class="nav-link ml-4" id="tabs-3-2-tab" data-toggle="pill" href="#tabs-3-2" role="tab" aria-controls="tabs-3-2" aria-selected="false" onclick="add_data_form('doc3.2');">3.2 Valorizacion</a>
-                            <a class="nav-link ml-4" id="tabs-3-3-tab" data-toggle="pill" href="#tabs-3-3" role="tab" aria-controls="tabs-3-3" aria-selected="false" onclick="add_data_form('doc3.3');">3.3 Resumen de Valorizacion</a>
-                            <a class="nav-link ml-4" id="tabs-3-4-tab" data-toggle="pill" href="#tabs-3-4" role="tab" aria-controls="tabs-3-4" aria-selected="false" onclick="add_data_form('doc3.4');">3.4 Curva "S"</a>
-                            <a class="nav-link" id="tabs-4-tab" data-toggle="pill" href="#tabs-4" role="tab" aria-controls="tabs-4" aria-selected="false" onclick="add_data_form('doc4');">4. Cronograma de obra valorizado</a>
+                            <a class="nav-link ml-4" id="tabs-3-1-tab" data-toggle="pill" href="#tabs-3-1" role="tab" aria-controls="tabs-3-1" aria-selected="false" onclick="add_data_form('doc3.1', 'Planilla de metrados');">3.1 Planilla de metrados</a>
+                            <a class="nav-link ml-4" id="tabs-3-2-tab" data-toggle="pill" href="#tabs-3-2" role="tab" aria-controls="tabs-3-2" aria-selected="false" onclick="add_data_form('doc3.2', 'Valorización');">3.2 Valorización</a>
+                            <a class="nav-link ml-4" id="tabs-3-3-tab" data-toggle="pill" href="#tabs-3-3" role="tab" aria-controls="tabs-3-3" aria-selected="false" onclick="add_data_form('doc3.3', 'Resumen de Valorización');">3.3 Resumen de Valorización</a>
+                            <a class="nav-link ml-4" id="tabs-3-4-tab" data-toggle="pill" href="#tabs-3-4" role="tab" aria-controls="tabs-3-4" aria-selected="false" onclick="add_data_form('doc3.4', 'Curva S');">3.4 Curva "S"</a>
+                            <a class="nav-link" id="tabs-4-tab" data-toggle="pill" href="#tabs-4" role="tab" aria-controls="tabs-4" aria-selected="false" onclick="add_data_form('doc4', 'Cronograma de obra valorizado');">4. Cronograma de obra valorizado</a>
                             <a class="ml-3 nav-titulo" id="tabs-5-tab" data-toggle="pill" role="tab" aria-controls="tabs-1" aria-selected="false" >5. Protocolo de calidad</a>
-                            <a class="nav-link ml-4" id="tabs-5-1-tab" data-toggle="pill" href="#tabs-5-1" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc5.1');">5.1 Ensayo de consistencia del concreto</a>
-                            <a class="nav-link ml-4" id="tabs-5-2-tab" data-toggle="pill" href="#tabs-5-2" role="tab" aria-controls="tabs-3" aria-selected="false" onclick="add_data_form('doc5.2');">5.2 Ensayo de compresión</a>
-                            <a class="nav-link" id="tabs-6-tab" data-toggle="pill" href="#tabs-6" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc6');">6. Plan de seguridad y salud en el trabajo</a>
-                            <a class="nav-link" id="tabs-7-tab" data-toggle="pill" href="#tabs-7" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc7');">7. Plan de bioseguridad COVID19</a>
+                            <a class="nav-link ml-4" id="tabs-5-1-tab" data-toggle="pill" href="#tabs-5-1" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc5.1', 'Ensayo de consistencia del concreto');">5.1 Ensayo de consistencia del concreto</a>
+                            <a class="nav-link ml-4" id="tabs-5-2-tab" data-toggle="pill" href="#tabs-5-2" role="tab" aria-controls="tabs-3" aria-selected="false" onclick="add_data_form('doc5.2', 'Ensayo de compresión');">5.2 Ensayo de compresión</a>
+                            <a class="nav-link" id="tabs-6-tab" data-toggle="pill" href="#tabs-6" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc6', 'Plan de seguridad y salud en el trabajo');">6. Plan de seguridad y salud en el trabajo</a>
+                            <a class="nav-link" id="tabs-7-tab" data-toggle="pill" href="#tabs-7" role="tab" aria-controls="tabs-2" aria-selected="false" onclick="add_data_form('doc7', 'Plan de bioseguridad COVID19');">7. Plan de bioseguridad COVID19</a>
                             <a class="ml-3 nav-titulo" id="tabs-8-tab" data-toggle="pill" role="tab" aria-controls="tabs-2" aria-selected="false">8. Anexos</a>
-                            <a class="nav-link ml-4" id="tabs-8-1-tab" data-toggle="pill" href="#tabs-8-1" role="tab" aria-controls="tabs-8-1" aria-selected="false" onclick="add_data_form('doc8.1');">8.1 Acta de entrega de terreno</a>
-                            <a class="nav-link ml-4" id="tabs-8-2-tab" data-toggle="pill" href="#tabs-8-2" role="tab" aria-controls="tabs-8-2" aria-selected="false" onclick="add_data_form('doc8.2');">8.2 Acta de inicio de obra</a>
-                            <a class="nav-link ml-4" id="tabs-8-3-tab" data-toggle="pill" href="#tabs-8-3" role="tab" aria-controls="tabs-8-3" aria-selected="false" onclick="add_data_form('doc8.3');">8.3 Certificado de habilidad del ingeniero residente</a>
-                            <a class="nav-link ml-4" id="tabs-8-4-tab" data-toggle="pill" href="#tabs-8-4" role="tab" aria-controls="tabs-8-4" aria-selected="false" onclick="add_data_form('doc8.4');">8.4 Planilla del personal obrero</a>
-                            <a class="nav-link ml-4" id="tabs-8-5-tab" data-toggle="pill" href="#tabs-8-5" role="tab" aria-controls="tabs-8-5" aria-selected="false" onclick="add_data_form('doc8.5');">8.5 Copia del seguro complementario contra todo riesgo</a>
-                            <a class="nav-link ml-4" id="tabs-8-6-tab" data-toggle="pill" href="#tabs-8-6" role="tab" aria-controls="tabs-8-6" aria-selected="false" onclick="add_data_form('doc8.6');">8.6 Panel fotográfico</a>
-                            <a class="nav-link ml-4" id="tabs-8-7-tab" data-toggle="pill" href="#tabs-8-7" role="tab" aria-controls="tabs-8-7" aria-selected="false" onclick="add_data_form('doc8.7');">8.7 Copia del cuaderno de obra</a>
+                            <a class="nav-link ml-4" id="tabs-8-1-tab" data-toggle="pill" href="#tabs-8-1" role="tab" aria-controls="tabs-8-1" aria-selected="false" onclick="add_data_form('doc8.1', 'Acta de entrega de terreno');">8.1 Acta de entrega de terreno</a>
+                            <a class="nav-link ml-4" id="tabs-8-2-tab" data-toggle="pill" href="#tabs-8-2" role="tab" aria-controls="tabs-8-2" aria-selected="false" onclick="add_data_form('doc8.2', 'Acta de inicio de obra');">8.2 Acta de inicio de obra</a>
+                            <a class="nav-link ml-4" id="tabs-8-3-tab" data-toggle="pill" href="#tabs-8-3" role="tab" aria-controls="tabs-8-3" aria-selected="false" onclick="add_data_form('doc8.3', 'Certificado de habilidad del ingeniero residente');">8.3 Certificado de habilidad del ingeniero residente</a>
+                            <a class="nav-link ml-4" id="tabs-8-4-tab" data-toggle="pill" href="#tabs-8-4" role="tab" aria-controls="tabs-8-4" aria-selected="false" onclick="add_data_form('doc8.4', 'Planilla del personal obrero');">8.4 Planilla del personal obrero</a>
+                            <a class="nav-link ml-4" id="tabs-8-5-tab" data-toggle="pill" href="#tabs-8-5" role="tab" aria-controls="tabs-8-5" aria-selected="false" onclick="add_data_form('doc8.5', 'Copia del seguro complementario contra todo riesgo');">8.5 Copia del seguro complementario contra todo riesgo</a>
+                            <a class="nav-link ml-4" id="tabs-8-6-tab" data-toggle="pill" href="#tabs-8-6" role="tab" aria-controls="tabs-8-6" aria-selected="false" onclick="add_data_form('doc8.6', 'Panel fotográfico');">8.6 Panel fotográfico</a>
+                            <a class="nav-link ml-4" id="tabs-8-7-tab" data-toggle="pill" href="#tabs-8-7" role="tab" aria-controls="tabs-8-7" aria-selected="false" onclick="add_data_form('doc8.7', 'Copia del cuaderno de obra');">8.7 Copia del cuaderno de obra</a>
                           </div>
                         </div>
                         <!-- Tab contenido -->
@@ -285,7 +285,7 @@
               <div class="modal-dialog modal-dialog-scrollable modal-md">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Agregar Valorizacion</h4>
+                    <h4 class="modal-title" id="title-modal-1">Agregar Valorizacion</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
@@ -298,19 +298,19 @@
                       <div class="row" id="cargando-1-fomulario">
 
                         <!-- id proyecto -->
-                        <input type="text" name="idproyecto" id="idproyecto" />
+                        <input type="hidden" name="idproyecto" id="idproyecto" />
                         <!-- id valorizacion -->
-                        <input type="text" name="idvalorizacion" id="idvalorizacion" />
+                        <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
                         <!-- nombre -->
-                        <input type="text" name="nombre" id="nombre" />
+                        <input type="hidden" name="nombre" id="nombre" />
                         <!-- fecha quincena -->
-                        <input type="text" name="fecha_quincena" id="fecha_quincena" />                          
+                        <input type="hidden" name="fecha_quincena" id="fecha_quincena" />                          
 
                         <!-- Doc Valorizaciones -->
                         <div class="col-md-12 col-lg-12" >                               
                           <div class="row text-center">
                             <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                              <label for="cip" class="control-label" >Valorizaciones </label>
+                              <label for="cip" class="control-label" >Documento </label>
                             </div>
                             <div class="col-md-6 text-center">
                               <button type="button" class="btn btn-success btn-block btn-xs" id="doc7_i">
@@ -329,6 +329,15 @@
                             <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
                           </div>
                           <div class="text-center" id="doc7_nombre"><!-- aqui va el nombre del pdf --></div>
+                        </div>
+
+                        <!-- barprogress -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                          <div class="progress" id="div_barra_progress">
+                            <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              0%
+                            </div>
+                          </div>
                         </div>
                         
                       </div>
