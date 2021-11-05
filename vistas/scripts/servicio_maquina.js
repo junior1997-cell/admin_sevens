@@ -854,9 +854,9 @@ function activar_pagos(idpago_servicio,idmaquinaria) {
 }
 
 function ver_modal_vaucher(imagen){
-  console.log('Imagen->'+imagen);
+  $('#img-vaucher').attr("src", "");
   $('#modal-ver-vaucher').modal("show");
-  
+  $('#img-vaucher').attr("src", "../dist/img/vauchers_pagos/" +imagen);
 
   
  // $(".tooltip").hide();

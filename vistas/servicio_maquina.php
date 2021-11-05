@@ -33,12 +33,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>servicios</h1>
+                                <h1>Servicios - Maquinarias</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">servicios</li>
+                                    <li class="breadcrumb-item active">Servicio-Maquina</li>
                                 </ol>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
                                         <h3 class="card-title display" id="btn-agregar" >
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
                                             Admnistra de manera eficiente a tus servicios.
                                         </h3>
                                         <button id="btn-regresar" type="button" class="btn bg-gradient-warning"  style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -468,22 +468,17 @@
                     <div class="modal fade" id="modal-ver-vaucher">
                         <div class="modal-dialog modal-dialog-scrollable modal-xm">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Vaucher</h4>
+                                <div class="modal-header" style="background-color: #ce834926;" >
+                                    <h4 class="modal-title">voucher</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-
                                 <div class="modal-body">
-                                    <div id="datosservicios" class="class-style">
-                                    <div class="alert alert-danger d-flex align-items-center" role="alert">
-                                       <i class="fas fa-exclamation-triangle"> </i> 
-                                      <div> 
-                                        -An example danger alert with an icon
-                                      </div>
-                                    </div>
-                                      
+                                    <div id="datosservicios" class="class-style" style="text-align: center;"> 
+                                      <br>
+                                      <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
+                  
                                     </div>
                                 </div>
                             </div>

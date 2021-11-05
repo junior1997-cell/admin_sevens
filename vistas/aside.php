@@ -230,7 +230,7 @@
         <?php if ($_SESSION['servicio_equipo']==1) {  ?>  
           <!-- EQUIPOS -->       
           <li class="nav-item">
-            <a href="equipo.php" class="nav-link" id="mEquipo">
+            <a href="servicio_equipos.php" class="nav-link" id="mEquipo">
               <i class="nav-icon fas fa-tractor"></i>
               <p>
                 Servicio - Equipos

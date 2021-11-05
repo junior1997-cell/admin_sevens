@@ -40,7 +40,8 @@ Class ServicioMaquina
 		s.estado as estado
 		FROM servicio as s, maquinaria as m, proveedor as p
 		WHERE s.estado = 1 
-		AND s.idproyecto='$nube_idproyecto' 
+		AND s.idproyecto='$nube_idproyecto'
+		AND m.tipo = 1
 		AND s.idmaquinaria=m.idmaquinaria
         AND m.idproveedor=p.idproveedor
 		GROUP BY s.idmaquinaria";
