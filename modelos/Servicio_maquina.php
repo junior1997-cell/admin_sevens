@@ -154,11 +154,12 @@ Class ServicioMaquina
 	public function insertar_pago($idproyecto_pago,$beneficiario_pago,
 	                       		  $forma_pago,$tipo_pago,$cuenta_destino_pago,
 								  $banco_pago,$titular_cuenta_pago,$fecha_pago,
-								  $monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago)
+								  $monto_pago,$numero_op_pago,$descripcion_pago,
+								  $id_maquinaria_pago,$imagen1)
 	 {
 
-		$sql="INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria) 
-		VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago')";
+		$sql="INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria,imagen) 
+		VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago','$imagen1')";
 		return ejecutarConsulta($sql);
 			
 	}
@@ -166,7 +167,7 @@ Class ServicioMaquina
 	public function editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,
 								$forma_pago,$tipo_pago,$cuenta_destino_pago,
 								$banco_pago,$titular_cuenta_pago,$fecha_pago,
-								$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago){
+								$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1){
 		$sql="UPDATE pago_servicio SET
 		idproyecto='$idproyecto_pago',
 		beneficiario='$beneficiario_pago',
@@ -179,6 +180,7 @@ Class ServicioMaquina
 		monto='$monto_pago',
 		numero_operacion='$numero_op_pago',
 		descripcion='$descripcion_pago',
+		imagen='$imagen1',
 		id_maquinaria='$id_maquinaria_pago'
 		WHERE idpago_servicio='$idpago_servicio'";	
 		return ejecutarConsulta($sql);	
@@ -249,6 +251,15 @@ Class ServicioMaquina
 		WHERE ps.idproyecto ='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1'";
 		return ejecutarConsultaSimpleFila($sql);
 
+	}
+
+	
+    // obtebnemos los DOCS para eliminar
+    public function obtenerImg($idpago_servicio) {
+
+		$sql = "SELECT imagen FROM pago_servicio WHERE idpago_servicio='$idpago_servicio'";
+  
+		return ejecutarConsulta($sql);
 	}
 
 	//mostrar datos del proveedor y maquina en form

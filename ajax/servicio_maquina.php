@@ -35,9 +35,10 @@ $monto_pago          = isset($_POST["monto_pago"])? limpiarCadena($_POST["monto_
 $numero_op_pago      = isset($_POST["numero_op_pago"])? limpiarCadena($_POST["numero_op_pago"]):"";
 $descripcion_pago    = isset($_POST["descripcion_pago"])? limpiarCadena($_POST["descripcion_pago"]):"";
 $id_maquinaria_pago  = isset($_POST["id_maquinaria_pago"])? limpiarCadena($_POST["id_maquinaria_pago"]):"";
-$idpago_servicio   = isset($_POST["idpago_servicio"])? limpiarCadena($_POST["idpago_servicio"]):"";
-$idproyecto_pago   = isset($_POST["idproyecto_pago"])? limpiarCadena($_POST["idproyecto_pago"]):"";
+$idpago_servicio     = isset($_POST["idpago_servicio"])? limpiarCadena($_POST["idpago_servicio"]):"";
+$idproyecto_pago     = isset($_POST["idproyecto_pago"])? limpiarCadena($_POST["idproyecto_pago"]):"";
 
+$imagen1			 = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
 //$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago 
 
 
@@ -374,17 +375,42 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['servicio_maquina']==1)
 			{
-				$clavehash="";
+					// imgen de perfil
+				if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
+
+						$imagen1=$_POST["foto1_actual"]; $flat_img1 = false;
+
+					} else {
+
+						$ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;						
+
+						$imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+						move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/img/vauchers_pagos/" . $imagen1);
+					
+				}
 
 
 				if (empty($idpago_servicio)){
 					
-					$rspta=$serviciomaquina->insertar_pago($idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago);
+					$rspta=$serviciomaquina->insertar_pago($idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
+					// validamos si existe LA IMG para eliminarlo
+					if ($flat_img1 == true) {
+
+						$datos_f1 = $serviciomaquina->obtenerImg($idpago_servicio);
+			
+						$img1_ant = $datos_f1->fetch_object()->imagen;
+			
+						if ($img1_ant != "") {
+			
+							unlink("../dist/img/vauchers_pagos/" . $img1_ant);
+						}
+						}
 					
-					$rspta=$serviciomaquina->editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago);
+					$rspta=$serviciomaquina->editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -458,24 +484,30 @@ switch ($_GET["op"]){
 				 //$banco='';
 		 		$data= Array();
 				$suma=0;
+				$imagen='';
 		 		while ($reg=$rspta->fetch_object()){
 					$suma=$suma+$reg->monto;
+					if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+					if (strlen($reg->titular_cuenta) >= 20 ) { $titular_cuenta = substr($reg->titular_cuenta, 0, 20).'...';  } else {$titular_cuenta = $reg->titular_cuenta; }
+					empty($reg->imagen)?$imagen='<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>':$imagen='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher('."'".$reg->imagen."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
+					$tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
-						 ' <button class="btn btn-danger" onclick="desactivar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="far fa-trash-alt"></i></button>':
-						 '<button class="btn btn-warning" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
-						 ' <button class="btn btn-primary" onclick="activar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"1"=>"$reg->forma_pago / <br> $reg->tipo_pago",	 				
+		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
+						 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="far fa-trash-alt"></i></button>':
+						 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
+						 ' <button class="btn btn-primary btn-sm" onclick="activar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-check"></i></button>',
+		 				"1"=>"$reg->forma_pago / $reg->tipo_pago",	 				
 		 				"2"=>$reg->beneficiario,		 				
 		 				"3"=>$reg->cuenta_destino,		 				
 		 				"4"=>$reg->banco,
-		 				"5"=>$reg->titular_cuenta,
+		 				"5"=>'<div data-toggle="tooltip" data-original-title="'.$reg->titular_cuenta.'">'.$titular_cuenta.'</div>',
 		 				"6"=>$reg->fecha_pago,
-		 				"7"=>$reg->descripcion,
+		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
 		 				"8"=>$reg->numero_operacion,
 		 				"9"=>$reg->monto,
-		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-						 '<span class="text-center badge badge-danger">Desactivado</span>'
+						"10"=>$imagen,
+					   	"11"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 
 		 		}

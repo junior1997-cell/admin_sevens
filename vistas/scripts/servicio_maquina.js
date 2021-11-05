@@ -31,6 +31,9 @@ function init() {
     $("#submit-form-pago").submit();
   });
 
+  $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
+  $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
+
   // Formato para telefono
   $("[data-mask]").inputmask();
   //============SERVICIO================
@@ -75,6 +78,91 @@ function init() {
   $("#banco_pago").val("null").trigger("change");
 
 }
+
+/* PREVISUALIZAR LAS IMAGENES */
+function addImage(e,id) {
+  // colocamos cargando hasta que se vizualice
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+
+	console.log(id);
+
+	var file = e.target.files[0], imageType = /image.*/;
+	
+	if (e.target.files[0]) {
+
+		var sizeByte = file.size;
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(imageType)){
+			// return;
+			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>');
+
+        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+
+		}else{
+
+			if (sizekiloBytes <= 10240) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+
+					$("#"+id+"_i").attr("src", result);
+
+					$("#"+id+"_nombre").html(''+
+						'<div class="row">'+
+              '<div class="col-md-12">'+
+              file.name +
+              '</div>'+
+              '<div class="col-md-12">'+
+              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+              '</div>'+
+            '</div>'+
+					'');
+
+					toastr.success('Imagen aceptada.')
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+
+				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
+
+				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+
+				$("#"+id).val("");
+			}
+		}
+
+	}else{
+
+		toastr.error('Seleccione una Imagen');
+
+
+      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+   
+		$("#"+id+"_nombre").html("");
+	}
+}
+
+function foto1_eliminar() {
+
+	$("#foto1").val("");
+
+	$("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
+
+	$("#foto1_nombre").html("");
+}
+
 
 function seleccion() {
 
@@ -263,28 +351,20 @@ function limpiar() {
   $("#sssss").show();
   $("#nomb_maq").hide();
 
-
-
-  
 }
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
-  //$("#maquinaria_pago").val("");
-  //$("#beneficiario_pago").val("");
   $("#forma_pago").val("");
   $("#tipo_pago").val("");
-  //$("#cuenta_destino_pago").val("");
-  //$("#banco_pago").val("");
-  //$("#titular_cuenta_pago").val("");
-  //$("#fecha_pago").val("");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
   $("#descripcion_pago").val("");
-  //$("#id_maquinaria_pago").val("");
   $("#idpago_servicio").val("");
-  //$("#idproyecto_pago").val("");
-
+  $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
+	$("#foto1").val("");
+	$("#foto1_actual").val("");  
+  $("#foto1_nombre").html(""); 
 
 }
 //regresar_principal
@@ -408,7 +488,7 @@ function listar_detalle(idmaquinaria,idproyecto,unidad_medida) {
 }
 //Mostrar datos
 function mostrar_datos_pago(idmaquinaria,idproyecto){
-  console.log('qqqqqq  '+idmaquinaria,idproyecto);
+ // console.log('qqqqqq  '+idmaquinaria,idproyecto);
   $.post("../ajax/servicio_maquina.php?op=mostrar", { idmaquinaria: idmaquinaria }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
@@ -712,6 +792,13 @@ function mostrar_pagos(idpago_servicio,id_maquinaria) {
     $("#descripcion_pago").val(data.descripcion);
     $("#idpago_servicio").val(data.idpago_servicio);
 
+    if (data.imagen_perfil != "") {
+
+			$("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
+
+			$("#foto1_actual").val(data.imagen);
+		}
+
   });
 }
 //Función para desactivar registros
@@ -764,6 +851,15 @@ function activar_pagos(idpago_servicio,idmaquinaria) {
     }
   }); 
  
+}
+
+function ver_modal_vaucher(imagen){
+  console.log('Imagen->'+imagen);
+  $('#modal-ver-vaucher').modal("show");
+  
+
+  
+ // $(".tooltip").hide();
 }
 
 

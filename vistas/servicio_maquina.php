@@ -143,6 +143,7 @@
                                                       <th>Descripción</th>
                                                       <th>Número Op.</th>
                                                       <th>Monto</th>
+                                                      <th>Vaucher</th>
                                                       <th>Estado</th>
                                                   </tr>
                                               </thead>
@@ -159,6 +160,7 @@
                                                       <th>Descripción</th>
                                                       <th>Número Op.</th>
                                                       <th id="monto_total" ></th>
+                                                      <th>Vaucher</th>
                                                       <th>Estado</th>
                                                   </tr>
                                               </tfoot>
@@ -430,6 +432,15 @@
                                                     <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
                                                   </div>                                                        
                                                 </div>
+                                                <!--vaucher-->
+                                                <div class="col-md-6 col-lg-4">
+                                                  <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                                                  <label for="foto1">Vaucher</label> <br>
+                                                  <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
+                                                  <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
+                                                  <input type="hidden" name="foto1_actual" id="foto1_actual" />
+                                                  <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                                </div>
 
                                             </div>
 
@@ -454,11 +465,11 @@
                     </div>
 
                     <!--Modal ver servicios-->
-                    <div class="modal fade" id="modal-ver-servicios">
+                    <div class="modal fade" id="modal-ver-vaucher">
                         <div class="modal-dialog modal-dialog-scrollable modal-xm">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Datos servicios</h4>
+                                    <h4 class="modal-title">Vaucher</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -466,6 +477,12 @@
 
                                 <div class="modal-body">
                                     <div id="datosservicios" class="class-style">
+                                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                       <i class="fas fa-exclamation-triangle"> </i> 
+                                      <div> 
+                                        -An example danger alert with an icon
+                                      </div>
+                                    </div>
                                       
                                     </div>
                                 </div>
