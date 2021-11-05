@@ -589,14 +589,28 @@ function fecha_quincena(fecha_i, fecha_f, i) {
       
       // validamos la data1
       if (data.data1.length === 0) {
-        console.log('data no existe');
+        console.log('data 1 no existe');
+        // pintamos rojos los que no tienen docs
+        if ($("#tabs-2-tab").hasClass("si-doc") == false || $("#tabs-2-tab").hasClass("si-doc") == true) { $("#tabs-2-tab").addClass('no-doc'); }   
+        if ($("#tabs-3-1-tab").hasClass("si-doc") == false || $("#tabs-3-1-tab").hasClass("si-doc") == true ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-3-2-tab").hasClass("si-doc") == false || $("#tabs-3-2-tab").hasClass("si-doc") == true ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-3-3-tab").hasClass("si-doc") == false || $("#tabs-3-3-tab").hasClass("si-doc") == true ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-3-4-tab").hasClass("si-doc") == false || $("#tabs-3-4-tab").hasClass("si-doc") == true ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-5-1-tab").hasClass("si-doc") == false || $("#tabs-5-1-tab").hasClass("si-doc") == true ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-5-2-tab").hasClass("si-doc") == false || $("#tabs-5-2-tab").hasClass("si-doc") == true ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-6-tab").hasClass("si-doc") == false || $("#tabs-6-tab").hasClass("si-doc") == true ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-7-tab").hasClass("si-doc") == false || $("#tabs-7-tab").hasClass("si-doc") == true ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-4-tab").hasClass("si-doc") == false || $("#tabs-8-4-tab").hasClass("si-doc") == true ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-5-tab").hasClass("si-doc") == false || $("#tabs-8-5-tab").hasClass("si-doc") == true ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-6-tab").hasClass("si-doc") == false || $("#tabs-8-6-tab").hasClass("si-doc") == true ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-7-tab").hasClass("si-doc") == false || $("#tabs-8-7-tab").hasClass("si-doc") == true ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); }
       } else {
 
         $.each(data.data1, function (index, value) {
 
           if (value.nombre == "doc2") {
-
-            if ($("#tabs-2-tab").hasClass("no-doc")) { $("#tabs-2-tab").removeClass('no-doc'); }          
+            // pintamos rojos los que no tienen docs
+            if ($("#tabs-2-tab").hasClass("no-doc") == false || $("#tabs-2-tab").hasClass("no-doc") == true) { $("#tabs-2-tab").removeClass('no-doc').addClass("si-doc"); }          
   
             $('#documento2').html(
               '<div class="col-lg-4">'+
@@ -619,16 +633,142 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '<embed class="disenio-scroll" src="../dist/pdf/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
                 '</div>'+
               '</div>'
-            );
-          
+            );          
+          }
+
+          if (value.nombre == "doc3.1") {
+            // pintamos rojos los que no tienen docs
+            if ($("#tabs-3-1-tab").hasClass("no-doc") == false || $("#tabs-3-1-tab").hasClass("no-doc") == true) { $("#tabs-3-1-tab").removeClass('no-doc').addClass("si-doc"); }          
+  
+            $('#documento3-1').html(
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                  '<i class="fas fa-file-upload"></i> Subir'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<i class="fas fa-download"></i> Descargar'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                  '<embed class="disenio-scroll" src="../dist/pdf/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+                '</div>'+
+              '</div>'
+            );          
+          }
+
+          if (value.nombre == "doc3.2") {
+            // pintamos rojos los que no tienen docs
+            if ($("#tabs-3-2-tab").hasClass("no-doc") == false || $("#tabs-3-2-tab").hasClass("no-doc") == true) { $("#tabs-3-2-tab").removeClass('no-doc').addClass("si-doc"); }          
+  
+            $('#documento3-2').html(
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                  '<i class="fas fa-file-upload"></i> Subir'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<i class="fas fa-download"></i> Descargar'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                  '<embed class="disenio-scroll" src="../dist/pdf/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+                '</div>'+
+              '</div>'
+            );          
+          }
+
+          if (value.nombre == "doc3.3") {
+            // pintamos rojos los que no tienen docs
+            if ($("#tabs-3-3-tab").hasClass("no-doc") == false || $("#tabs-3-3-tab").hasClass("no-doc") == true) { $("#tabs-3-3-tab").removeClass('no-doc').addClass("si-doc"); }          
+  
+            $('#documento3-3').html(
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                  '<i class="fas fa-file-upload"></i> Subir'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<i class="fas fa-download"></i> Descargar'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                  '<embed class="disenio-scroll" src="../dist/pdf/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+                '</div>'+
+              '</div>'
+            );          
+          }
+
+          if (value.nombre == "doc3.4") {
+            // pintamos rojos los que no tienen docs
+            if ($("#tabs-3-4-tab").hasClass("no-doc") == false || $("#tabs-3-4-tab").hasClass("no-doc") == true) { $("#tabs-3-4-tab").removeClass('no-doc').addClass("si-doc"); }          
+  
+            $('#documento3-4').html(
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                  '<i class="fas fa-file-upload"></i> Subir'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4">'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<i class="fas fa-download"></i> Descargar'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-4 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs" href="../dist/pdf/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+              '</div>'+
+              '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                  '<embed class="disenio-scroll" src="../dist/pdf/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+                '</div>'+
+              '</div>'
+            );          
           }
           
         });
+
+        // pintamos rojos los que no tienen docs
+        if ($("#tabs-2-tab").hasClass("si-doc") == false) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); }   
+        if ($("#tabs-3-1-tab").hasClass("si-doc") == false ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-3-2-tab").hasClass("si-doc") == false ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-3-3-tab").hasClass("si-doc") == false ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-3-4-tab").hasClass("si-doc") == false ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-5-1-tab").hasClass("si-doc") == false ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-5-2-tab").hasClass("si-doc") == false ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-6-tab").hasClass("si-doc") == false ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-7-tab").hasClass("si-doc") == false ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-4-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-5-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-6-tab").hasClass("si-doc") == false ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); }
+        if ($("#tabs-8-7-tab").hasClass("si-doc") == false ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); }
       }
 
       // validamos la data2
       if (data.data2.length === 0) {
-        console.log('data no existe');
+        console.log('data 2 no existe');
       } else {
 
         if (data.data2.doc1 != "") {
