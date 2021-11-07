@@ -120,6 +120,7 @@
 
                             <!-- 1. Copia del contrato -->
                             <div class="tab-pane text-left fade" id="tabs-1" role="tabpanel" aria-labelledby="tabs-1-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Copia del contrato</h3></div> </div>
                               <div class="row" id="documento1">
                                 <!-- Aqui va - Copia del contrato -->                                
                               </div>
@@ -127,6 +128,7 @@
 
                             <!-- 2. Informe tecnico -->
                             <div class="tab-pane fade" id="tabs-2" role="tabpanel" aria-labelledby="tabs-2-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Informe técnico</h3></div> </div>
                               <div class="row" id="documento2">
                                 <!-- Aqui va - Copia del contrato -->                                
                               </div>
@@ -139,6 +141,7 @@
 
                             <!-- 3.1 Planilla de metrados -->
                             <div class="tab-pane fade" id="tabs-3-1" role="tabpanel" aria-labelledby="tabs-3-1-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Planilla de metrados</h3></div> </div>
                               <div class="row" id="documento3-1">
                                 <!-- Aqui va - Planilla de metrados -->                                
                               </div>
@@ -146,6 +149,7 @@
 
                             <!-- 3.2 Valorizaciones  -->
                             <div class="tab-pane fade" id="tabs-3-2" role="tabpanel" aria-labelledby="tabs-3-2-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Valorizaciones</h3></div> </div>
                               <div class="row" id="documento3-2">
                                 <!-- Aqui va - Valorizaciones -->                                
                               </div>
@@ -153,6 +157,7 @@
 
                             <!-- 3.3 Resumen de valorizacion -->
                             <div class="tab-pane fade" id="tabs-3-3" role="tabpanel" aria-labelledby="tabs-3-3-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Resumen de valorizacion</h3></div> </div>
                               <div class="row" id="documento3-3">
                                 <!-- Aqui va - Resumen de valorizacion -->                                
                               </div>
@@ -160,6 +165,7 @@
 
                             <!-- 3.4 Curva S -->
                             <div class="tab-pane fade" id="tabs-3-4" role="tabpanel" aria-labelledby="tabs-3-4-tab">
+                              <div class="row "> <div class="col-lg-12"> <h3>Curva "S"</h3></div> </div>
                               <div class="row" id="documento3-4">
                                 <!-- Aqui va - Curva S -->                                
                               </div>
@@ -167,6 +173,7 @@
 
                             <!-- 4 Cronograma de obra valorizado -->
                             <div class="tab-pane fade" id="tabs-4" role="tabpanel" aria-labelledby="tabs-4-tab">
+                              <div class="row "> <div class="col-lg-12"> <h3>Cronograma de obra valorizado</h3></div> </div>
                               <div class="row" id="documento4">
                                 <!-- Aqui va - Cronograma de obra valorizado -->                                
                               </div>
@@ -179,6 +186,7 @@
 
                             <!-- 5.1 Ensayo de consistencia del concreto -->
                             <div class="tab-pane fade" id="tabs-5-1" role="tabpanel" aria-labelledby="tabs-5-2-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Ensayo de consistencia del concreto</h3></div> </div>
                               <div class="row" id="documento5-1">
                                 <!-- Aqui va - Ensayo de consistencia del concreto -->                                
                               </div>
@@ -186,13 +194,19 @@
 
                             <!-- 5.2 Ensayo de compresión -->
                             <div class="tab-pane fade" id="tabs-5-2" role="tabpanel" aria-labelledby="tabs-5-2-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Ensayo de Compresión</h3></div> </div>
                               <div class="row" id="documento5-2">
+                                <!-- Aqui va - Ensayo de compresión -->                                
+                              </div>
+                              <div class="row mt-4"> <div class="col-lg-12"> <h3>Respuesta de Ensayo de Compresión</h3></div> </div>
+                              <div class="row mt-3" id="documento5-2-1">
                                 <!-- Aqui va - Ensayo de compresión -->                                
                               </div>
                             </div>
 
                             <!-- 6. Plan de seguridad y salud en el trabajo -->
                             <div class="tab-pane fade" id="tabs-6" role="tabpanel" aria-labelledby="tabs-6-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Plan de seguridad y salud en el trabajo</h3></div> </div>
                               <div class="row" id="documento6">
                                 <!-- Aqui va - Plan de seguridad y salud en el trabajo -->                                
                               </div>
@@ -200,6 +214,7 @@
 
                             <!-- 7. Plan de bioseguridad COVID19 -->
                             <div class="tab-pane fade" id="tabs-7" role="tabpanel" aria-labelledby="tabs-7-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Plan de bioseguridad COVID19</h3></div> </div>
                               <div class="row" id="documento7">
                                 <!-- Aqui va - Plan de bioseguridad COVID19 -->                                
                               </div>
@@ -212,6 +227,7 @@
 
                             <!-- 8.1 Acta de entrega de terreno -->                            
                             <div class="tab-pane fade" id="tabs-8-1" role="tabpanel" aria-labelledby="tabs-8-1-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Acta de entrega de terreno</h3></div> </div>
                               <div class="row" id="documento8-1">
                                 <!-- Aqui va - Acta de entrega de terreno -->                                
                               </div>
@@ -219,6 +235,7 @@
 
                             <!-- 8.2 Acta de inicio de obra -->                            
                             <div class="tab-pane fade" id="tabs-8-2" role="tabpanel" aria-labelledby="tabs-8-2-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Acta de inicio de obra</h3></div> </div>
                               <div class="row" id="documento8-2">
                                 <!-- Aqui va - Acta de inicio de obra -->                                
                               </div>
@@ -226,6 +243,7 @@
 
                             <!-- 8.3 Certificado de habilidad del ingeniero residente -->                            
                             <div class="tab-pane fade" id="tabs-8-3" role="tabpanel" aria-labelledby="tabs-8-3-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Certificado de habilidad del ingeniero residente</h3></div> </div>
                               <div class="row" id="documento8-3">
                                 <!-- Aqui va - Certificado de habilidad del ingeniero residente  -->                                
                               </div>
@@ -233,6 +251,7 @@
 
                             <!-- 8.4 Planilla del personal obrero -->                            
                             <div class="tab-pane fade" id="tabs-8-4" role="tabpanel" aria-labelledby="tabs-8-4-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Planilla del personal obrero</h3></div> </div>
                               <div class="row" id="documento8-4">
                                 <!-- Aqui va - Planilla del personal obrero -->                                
                               </div>
@@ -240,6 +259,7 @@
 
                             <!-- 8.5 Copia del seguro complementario contra todo riesgo -->                            
                             <div class="tab-pane fade" id="tabs-8-5" role="tabpanel" aria-labelledby="tabs-8-5-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Copia del seguro complementario contra todo riesgo</h3></div> </div>
                               <div class="row" id="documento8-5">
                                 <!-- Aqui va - Copia del seguro complementario contra todo riesgo -->                                
                               </div>
@@ -247,6 +267,7 @@
 
                             <!-- 8.6 Panel fotográfico -->                            
                             <div class="tab-pane fade" id="tabs-8-6" role="tabpanel" aria-labelledby="tabs-8-6-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Panel fotográfico</h3></div> </div>
                               <div class="row" id="documento8-6">
                                 <!-- Aqui va - Panel fotográfico -->                                
                               </div>
@@ -254,6 +275,7 @@
 
                             <!-- 8.7 Copia del cuaderno de obra -->
                             <div class="tab-pane fade" id="tabs-8-7" role="tabpanel" aria-labelledby="tabs-8-7-tab">
+                              <div class="row"> <div class="col-lg-12"> <h3>Copia del cuaderno de obra</h3></div> </div>
                               <div class="row" id="documento8-7">
                                 <!-- Aqui va - Copia del cuaderno de obra -->                                
                               </div>

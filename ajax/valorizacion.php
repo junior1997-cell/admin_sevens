@@ -161,7 +161,7 @@
   
                 $datos_f1 = $valorizacion->obtenerDocV($idvalorizacion);
   
-                $doc1_ant = $datos_f1->fetch_object()->imagen_perfil;
+                $doc1_ant = $datos_f1->fetch_object()->doc_valorizacion;
   
                 if ($doc1_ant != "") {
   

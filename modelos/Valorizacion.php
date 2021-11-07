@@ -76,9 +76,9 @@ Class Valorizacion
 	}
 
 	// obtebnemos los DOCS para eliminar
-    public function obtenerDocV($idplano_otro) {
+    public function obtenerDocV($idvalorizacion) {
 
-		$sql = "SELECT doc FROM plano_otro WHERE idplano_otro='$idplano_otro'";
+		$sql = "SELECT doc_valorizacion FROM valorizacion WHERE idvalorizacion='$idvalorizacion'";
   
 		return ejecutarConsulta($sql);
 	}

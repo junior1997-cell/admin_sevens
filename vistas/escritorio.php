@@ -86,7 +86,7 @@
                       <div class="icon">
                         <i class="fas fa-truck"></i>
                       </div>
-                      <a href="proveedor.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                      <a href="all_proveedor.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                   </div>
 
@@ -101,7 +101,7 @@
                       <div class="icon">
                         <i class="fas fa-users"></i>
                       </div>
-                      <a href="trabajador.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                      <a href="all_trabajador.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                   </div>
 
