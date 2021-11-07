@@ -197,16 +197,21 @@ function mostrar(idproducto) {
 
   $.post("../ajax/materiales.php?op=mostrar", { idproducto: idproducto }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
-    
-    $("#proveedor").val(data.idproveedor).trigger("change"); 
+    data = JSON.parse(data);  console.log(data);  
+
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
-    $("#proveedor_old").val(data.idproveedor); 
-    $("#idproducto").val(data.idproducto); 
-    console.log(data.idproveedor);
+  $("#idproducto").val(data.idproducto);
+  $("#nombre").val(data.nombre); 
+  $("#descripcion").val(data.descripcion);
 
+  if (data.imagen != "") {
+
+    $("#foto1_i").attr("src", "../dist/img/materiales/" + data.imagen);
+
+    $("#foto1_actual").val(data.imagen);
+  }
   });
 }
 

@@ -116,7 +116,7 @@
                                                 <!-- id proyecto -->
                                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id proveedores -->
-                                                <input type="hidden" name="idproducto" id="idproducto" />
+                                                <input type="text" name="idproducto" id="idproducto" />
                                                 <!-- Nombre -->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">

@@ -22,8 +22,8 @@ Class Materiales
 	//Implementamos un método para editar registros
 	public function editar($idproducto,$nombre,$descripcion,$foto1)
 	{
-		///var_dump($idproducto ,$idproveedor);die();
-		$sql="UPDATE producto SET nombre='$nombre', descripcion='$descripcion', foto1='$foto1' WHERE idproducto='$idproducto'";	
+		//var_dump($idproducto,$nombre,$descripcion,$foto1);die();
+		$sql="UPDATE producto SET nombre='$nombre', descripcion='$descripcion', imagen='$foto1' WHERE idproducto='$idproducto'";	
 		return ejecutarConsulta($sql);	
 	}
 

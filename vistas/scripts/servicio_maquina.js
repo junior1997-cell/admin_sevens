@@ -792,7 +792,7 @@ function mostrar_pagos(idpago_servicio,id_maquinaria) {
     $("#descripcion_pago").val(data.descripcion);
     $("#idpago_servicio").val(data.idpago_servicio);
 
-    if (data.imagen_perfil != "") {
+    if (data.imagen != "") {
 
 			$("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
 

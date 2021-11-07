@@ -121,7 +121,7 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al usuario logueado y autorizado.
 			if ($_SESSION['recurso']==1)
 			{
-				//$idproductoo='1';
+				//$idproducto='1';
 				$rspta=$materiales->mostrar($idproducto);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
