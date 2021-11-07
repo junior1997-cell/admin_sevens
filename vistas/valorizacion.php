@@ -243,7 +243,7 @@
 
                             <!-- 8.3 Certificado de habilidad del ingeniero residente -->                            
                             <div class="tab-pane fade" id="tabs-8-3" role="tabpanel" aria-labelledby="tabs-8-3-tab">
-                              <div class="row"> <div class="col-lg-12"> <h3>Certificado de habilidad del ingeniero residente</h3></div> </div>
+                              <div class="row"> <div class="col-lg-12"> <h3>Certificado de habilidad del ingeniero residente </h3></div> </div>
                               <div class="row" id="documento8-3">
                                 <!-- Aqui va - Certificado de habilidad del ingeniero residente  -->                                
                               </div>
