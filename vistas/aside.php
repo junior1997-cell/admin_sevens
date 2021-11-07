@@ -110,6 +110,13 @@
                   <p>All-Maquinarias</p>
                 </a>
               </li>
+              <!-- Materiales para la empresa -->
+              <li class="nav-item ">
+                <a href="materiales.php" class="nav-link" id="lAllMateriales">
+                <i class="nav-icon fas fa-bars"></i>
+                  <p>Materiales</p>
+                </a>
+              </li>
               <!-- Calendario de la empresa -->
               <li class="nav-item ">
                 <a href="all_calendario.php" class="nav-link" id="lAllCalendario">

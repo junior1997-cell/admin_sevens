@@ -435,7 +435,7 @@
                                                 <!--vaucher-->
                                                 <div class="col-md-6 col-lg-4">
                                                   <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
-                                                  <label for="foto1">Vaucher</label> <br>
+                                                  <label for="foto1">Voucher</label> <br>
                                                   <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
                                                   <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
                                                   <input type="hidden" name="foto1_actual" id="foto1_actual" />

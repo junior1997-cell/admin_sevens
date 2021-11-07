@@ -408,7 +408,7 @@ switch ($_GET["op"]){
 			
 							unlink("../dist/img/vauchers_pagos/" . $img1_ant);
 						}
-						}
+					}
 					
 					$rspta=$serviciomaquina->editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
 					
