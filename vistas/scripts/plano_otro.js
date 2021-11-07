@@ -53,7 +53,7 @@ function addDocs(e,id) {
 
 		}else{
 
-			if (sizekiloBytes <= 40960) {
+			if (sizekiloBytes <= 262144) {
 
 				var reader = new FileReader();
 
@@ -159,7 +159,7 @@ function addDocs(e,id) {
         Swal.fire({
           position: 'top-end',
           icon: 'warning',
-          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado. Tamaño máximo 40mb',
+          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado. Tamaño máximo 150mb',
           showConfirmButton: false,
           timer: 1500
         })
@@ -271,7 +271,37 @@ function guardaryeditar(e) {
 
 			}
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            l_m();
+          }
+        }
+      }, false);
+      return xhr;
+    }
   });
+}
+
+function l_m(){
+  
+  // limpiar();
+  $("#barra_progress").css({"width":'0%'});
+
+  $("#barra_progress").text("0%");  
 }
 
 // ver detallles del registro
@@ -518,23 +548,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
 
     $('#verdoc1').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
 
-    $("#verdoc1_nombre").html(
-      '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-      '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-      '<div class="col-md-12 row mt-2">'+
-        '<div class="col-md-6">'+
-          '<a class="btn btn-warning  btn-block disabled" href="#"   onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
-            '<i class="fas fa-download"></i>'+
-          '</a>'+
-          '</div>'+
-
-          '<div class="col-md-6">'+
-          '<a class="btn btn-info  btn-block disabled" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
-            'Ver completo <i class="fas fa-expand"></i>'+
-          '</a>'+
-        '</div>'+
-      '</div>'+
-    '');
+    $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="col-md-12 row mt-2"> <div class="col-md-6"> <a class="btn btn-warning  btn-block disabled" href="#"   onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6"> <a class="btn btn-info  btn-block disabled" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>');
 
   } else {
 
@@ -542,179 +556,64 @@ function ver_modal_docs(nombre, descripcion, doc) {
     if ( extrae_extencion(doc) == "xls") {
 
       $("#verdoc1").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-      $("#verdoc1_nombre").html(
-        '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-        '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-        '<div class="borde-arriba-naranja mb-2" > </div>'+
-        '<div class="col-md-12 row mt-2">'+
-            '<div class="col-md-6 ">'+
-              '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                '<i class="fas fa-download"></i>'+
-              '</a>'+
-            '</div>'+
-            '<div class="col-md-6 ">'+
-              '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                'Ver completo <i class="fas fa-expand"></i>'+
-              '</a>'+
-            '</div>'+
-        '</div>'+
-      '');
+      
+      $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.xls</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+    
     } else {
 
       if ( extrae_extencion(doc) == "xlsx" ) {
 
         $("#verdoc1").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-        $("#verdoc1_nombre").html(
-          '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-          '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-          '<div class="borde-arriba-naranja mb-2" > </div>'+
-          '<div class="col-md-12 row mt-2">'+
-              '<div class="col-md-6 ">'+
-                '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                  '<i class="fas fa-download"></i>'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-md-6 ">'+
-                '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                  'Ver completo <i class="fas fa-expand"></i>'+
-                '</a>'+
-              '</div>'+
-          '</div>'+
-        '');
+        
+        $("#verdoc1_nombre").html('<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.xlsx</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      
       }else{
 
         if ( extrae_extencion(doc) == "csv" ) {
 
           $("#verdoc1").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-          $("#verdoc1_nombre").html(
-            '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-            '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-            '<div class="borde-arriba-naranja mb-2" > </div>'+
-            '<div class="col-md-12 row mt-2">'+
-                '<div class="col-md-6 ">'+
-                  '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                    '<i class="fas fa-download"></i>'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-md-6 ">'+
-                  '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                    'Ver completo <i class="fas fa-expand"></i>'+
-                  '</a>'+
-                '</div>'+
-            '</div>'+
-          '');
+
+          $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.csv</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> ');
+        
         }else{
 
           if ( extrae_extencion(doc) == "xlsm" ) {
 
             $("#verdoc1").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-            $("#verdoc1_nombre").html(
-              '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-              '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-              '<div class="borde-arriba-naranja mb-2" > </div>'+
-              '<div class="col-md-12 row mt-2">'+
-                  '<div class="col-md-6 ">'+
-                    '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                      '<i class="fas fa-download"></i>'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-md-6 ">'+
-                    '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                      'Ver completo <i class="fas fa-expand"></i>'+
-                    '</a>'+
-                  '</div>'+
-              '</div>'+
-            '');
+
+            $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.xlsm</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> ');
+          
           }else{
 
             if ( extrae_extencion(doc) == "pdf" ) {
 
               $("#verdoc1").html('<iframe src="../dist/otros_docs/'+doc+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-              $("#verdoc1_nombre").html(
-                '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-                '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-                '<div class="borde-arriba-naranja mb-2" > </div>'+
-                '<div class="col-md-12 row mt-2">'+
-                    '<div class="col-md-6 ">'+
-                      '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                        '<i class="fas fa-download"></i>'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-md-6 ">'+
-                      '<a  class="btn btn-info  btn-block" href="../dist/otros_docs/'+doc+'"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                        'Ver completo <i class="fas fa-expand"></i>'+
-                      '</a>'+
-                    '</div>'+
-                '</div>'+
-              '');
+              
+              $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.pdf</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block" href="../dist/otros_docs/'+doc+'"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>');
+            
             }else{
 
               if ( extrae_extencion(doc) == "dwg" ) {
 
                 $("#verdoc1").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-                $("#verdoc1_nombre").html(
-                  '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-                  '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-                  '<div class="borde-arriba-naranja mb-2" > </div>'+
-                  '<div class="col-md-12 row mt-2">'+
-                      '<div class="col-md-6 ">'+
-                        '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                          '<i class="fas fa-download"></i>'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-md-6 ">'+
-                        '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                          'Ver completo <i class="fas fa-expand"></i>'+
-                        '</a>'+
-                      '</div>'+
-                  '</div>'+
-                '');
+
+                $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.dwg</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> ');
   
               }else{
   
                 if ( extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso" ) {
 
                   $("#verdoc1").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                  $("#verdoc1_nombre").html(
-                    '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-                    '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-                    '<div class="borde-arriba-naranja mb-2" > </div>'+
-                    '<div class="col-md-12 row mt-2">'+
-                        '<div class="col-md-6 ">'+
-                          '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                            '<i class="fas fa-download"></i>'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-md-6 ">'+
-                          '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                            'Ver completo <i class="fas fa-expand"></i>'+
-                          '</a>'+
-                        '</div>'+
-                    '</div>'+
-                  '');
+
+                  $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.' + extrae_extencion(doc) + '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> ');
     
                 }else{
     
                   if ( extrae_extencion(doc) == "jpeg" || extrae_extencion(doc) == "jpg" || extrae_extencion(doc) == "jpe" || extrae_extencion(doc) == "jfif" || extrae_extencion(doc) == "gif" || extrae_extencion(doc) == "png" || extrae_extencion(doc) == "tiff" || extrae_extencion(doc) == "tif" || extrae_extencion(doc) == "webp" || extrae_extencion(doc) == "bmp" ) {
 
                     $("#verdoc1").html('<img src="../dist/otros_docs/'+doc+'" alt="" width="50%" >');
-                    $("#verdoc1_nombre").html(
-                      '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-                      '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-                      '<div class="borde-arriba-naranja mb-2" > </div>'+
-                      '<div class="col-md-12 row mt-2">'+
-                          '<div class="col-md-6 ">'+
-                            '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                              '<i class="fas fa-download"></i>'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-md-6 ">'+
-                            '<a  class="btn btn-info  btn-block" href="../dist/otros_docs/'+doc+'"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                              'Ver completo <i class="fas fa-expand"></i>'+
-                            '</a>'+
-                          '</div>'+
-                      '</div>'+
-                    '');
+
+                    $("#verdoc1_nombre").html( '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block" href="../dist/otros_docs/'+doc+'"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> ');
       
                   }else{
       
@@ -722,30 +621,14 @@ function ver_modal_docs(nombre, descripcion, doc) {
 
                       $("#verdoc1").html( '<img src="../dist/svg/docx.svg" alt="" width="50%" >');
 
-                      $("#verdoc1_nombre").html(
-                        '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
-                        '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
-                        '<div class="borde-arriba-naranja mb-2" > </div>'+
-                        '<div class="col-md-12 row mt-2">'+
-                            '<div class="col-md-6 ">'+
-                              '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-                                '<i class="fas fa-download"></i>'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-md-6 ">'+
-                              '<a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-                                'Ver completo <i class="fas fa-expand"></i>'+
-                              '</a>'+
-                            '</div>'+
-                        '</div>'+
-                      '');
+                      $("#verdoc1_nombre").html('<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.' + extrae_extencion(doc) +  '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/'+doc+'"  download="'+nombre+'" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" href="#"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> ');
         
                     }else{
         
                       $("#verdoc1").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
                       
                       $("#verdoc1_nombre").html(
-                        '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '</div>'+
+                        '<div class="col-md-12 text-left"><b>Nombre: <br> </b>'+ nombre + '.' + extrae_extencion(doc) +  '</div>'+
                         '<div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>'+ descripcion + '</div>'+
                         '<div class="borde-arriba-naranja mb-2" > </div>'+
                         '<div class="col-md-12 row mt-2">'+
@@ -759,8 +642,8 @@ function ver_modal_docs(nombre, descripcion, doc) {
                                 'Ver completo <i class="fas fa-expand"></i>'+
                               '</a>'+
                             '</div>'+
-                        '</div>'+
-                      '');
+                        '</div>' 
+                      );
                     }
                   }
                 }
@@ -1043,4 +926,8 @@ function re_visualizacion() {
     console.log(pdffile);
 
   }
+}
+
+function dowload_pdf() {
+  toastr.success("El documento se descargara en breve!!")
 }

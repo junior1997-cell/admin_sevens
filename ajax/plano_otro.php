@@ -134,7 +134,7 @@
                         $img = '<img src="../dist/svg/dwg.svg" height="auto" width="60" >';
                       }else{
                         if ( $exten2 == "zip" || $exten2 == "rar" || $exten2 == "iso" ) {
-                          $$img ='<img src="../dist/img/default/zip.png" height="auto" width="60" >';
+                          $img ='<img src="../dist/img/default/zip.png" height="auto" width="60" >';
                         }else{
                           if ( $exten2 == "jpeg" || $exten2 == "jpg" || $exten2 == "jpe" || $exten2 == "jfif" || $exten2 == "gif" || $exten2 == "png" || $exten2 == "tiff" || $exten2 == "tif" || $exten2 == "webp" || $exten2 == "bmp" ) { 
                             $img = '<img src="../dist/otros_docs/'.$reg->doc.'" height="auto" width="60" >';
@@ -157,18 +157,14 @@
               }
             }
 
-            if (strlen($reg->descripcion) >= 55 ) { 
-              $descripcion = substr($reg->descripcion, 0, 55).'...';  
-            } else { 
-              $descripcion = $reg->descripcion; 
-            }
+            if (strlen($reg->descripcion) >= 55 ) { $descripcion = substr($reg->descripcion, 0, 55).'...'; } else { $descripcion = $reg->descripcion; }
             // echo $descripcion;
 
             $data[]=array(
               "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger" onclick="desactivar('.$reg->idplano_otro.')"><i class="far fa-trash-alt  "></i></button>'.
                 ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-warning" onclick="mostrar('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary" onclick="activar('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
               "1"=>$reg->nombre,
@@ -180,9 +176,8 @@
                   </a>
                 </center>
               </div>',                      
-              "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
-              );
+              "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+            );
           }
           $results = array(
             "sEcho"=>1, //Información para el datatables

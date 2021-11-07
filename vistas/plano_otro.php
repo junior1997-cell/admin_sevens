@@ -156,6 +156,15 @@
                             <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
                           </div>
 
+                          <!-- barprogress -->
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                            <div class="progress" id="div_barra_progress">
+                              <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                0%
+                              </div>
+                            </div>
+                          </div>
+
                         </div>
 
                         <div class="row" id="cargando-2-fomulario" style="display: none;">
