@@ -16,7 +16,7 @@ Class Proyecto
 		$doc7 = ""; $doc8 = "";
 		// insertamos al usuario
 		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio, fecha_fin, plazo, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt) 
-		VALUES ('$tipo_documento','$numero_documento','$empresa','$nombre_proyecto','$nombre_codigo','$ubicacion','$actividad_trabajo','$empresa_acargo','$costo','$fecha_inicio','$fecha_fin','$plazo','$doc1','$doc2','$doc3','$doc4','$doc5','$doc6','$doc7','$doc8');";
+		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$fecha_inicio', '$fecha_fin', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8');";
 		return ejecutarConsulta($sql);
 		// $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
 		 
@@ -96,7 +96,7 @@ Class Proyecto
 	// obtebnemos los DOCS para eliminar
 	public function obtenerDocs($idproyecto) {
 
-        $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, excel_valorizaciones FROM proyecto WHERE idproyecto='$idproyecto'";
+        $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos FROM proyecto WHERE idproyecto='$idproyecto'";
 
         return ejecutarConsulta($sql);
     }

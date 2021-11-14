@@ -21,8 +21,13 @@
       $plano_otro = new PlanoOtro();
 
       //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
+      $idproyecto		        = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
+      $idcarpeta		        = isset($_POST["idcarpeta"])? limpiarCadena($_POST["idcarpeta"]):"";
+      $nombre_carpeta       = isset($_POST["nombre_carpeta"])? limpiarCadena($_POST["nombre_carpeta"]):"";
+      $descripcion_carpeta  = isset($_POST["descripcion_carpeta"])? limpiarCadena($_POST["descripcion_carpeta"]):"";
+
       $idplano_otro		= isset($_POST["idplano_otro"])? limpiarCadena($_POST["idplano_otro"]):"";
-      $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
+      $id_carpeta		  = isset($_POST["id_carpeta"])? limpiarCadena($_POST["id_carpeta"]):"";
       $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
       $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";  
       $doc1	          = isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";      
@@ -30,7 +35,25 @@
 
       switch ($_GET["op"]) {
 
-        case 'guardaryeditar':
+        case 'guardaryeditar_carpeta':
+
+          if (empty($idcarpeta)){
+
+            $rspta=$plano_otro->insertar_carpeta($idproyecto, $nombre_carpeta, $descripcion_carpeta);
+            
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la carpeta";
+  
+          }else {
+
+            // editamos un documento existente
+            $rspta=$plano_otro->editar_carpeta( $idcarpeta, $idproyecto, $nombre_carpeta, $descripcion_carpeta);
+            
+            echo $rspta ? "ok" : "Carpeta no se pudo actualizar";
+          }            
+
+        break;
+
+        case 'guardaryeditar_plano':
 
           // imgen de perfil
           if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
@@ -49,9 +72,9 @@
 
           if (empty($idplano_otro)){
 
-            $rspta=$plano_otro->insertar($idproyecto, $nombre, $descripcion, $imagen1);
+            $rspta=$plano_otro->insertar_plano($idproyecto, $nombre, $descripcion, $imagen1);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos del documento";
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del documento";
   
           }else {
 
@@ -68,42 +91,99 @@
             }
 
             // editamos un documento existente
-            $rspta=$plano_otro->editar( $idplano_otro, $idproyecto, $nombre, $descripcion, $imagen1);
+            $rspta=$plano_otro->editar_plano( $idplano_otro, $idproyecto, $nombre, $descripcion, $imagen1);
             
             echo $rspta ? "ok" : "Documento no se pudo actualizar";
           }            
 
         break;
 
-        case 'desactivar':
+        case 'desactivar_carpeta':
 
-          $rspta=$plano_otro->desactivar($idplano_otro);
+          $rspta = $plano_otro->desactivar_carpeta($idplano_otro);
+
+ 				  echo $rspta ? "Carpeta Desactivada" : "Carpeta no se puede desactivar";
+
+        break;
+
+        case 'activar_carpeta':
+
+          $rspta = $plano_otro->activar_carpeta($idplano_otro);
+
+ 				  echo $rspta ? "Carpeta activada" : "Carpeta no se puede activar";
+
+        break;
+
+        case 'desactivar_plano':
+
+          $rspta = $plano_otro->desactivar_plano($idplano_otro);
 
  				  echo $rspta ? "Documento Desactivado" : "Documento no se puede desactivar";
 
         break;
 
-        case 'activar':
+        case 'activar_plano':
 
-          $rspta=$plano_otro->activar($idplano_otro);
+          $rspta = $plano_otro->activar_plano($idplano_otro);
 
  				  echo $rspta ? "Documento activado" : "Documento no se puede activar";
 
         break;
 
-        case 'mostrar':
+        case 'mostrar_carpeta':
 
-          $rspta=$plano_otro->mostrar($idplano_otro);
+          $rspta=$plano_otro->mostrar_carpeta($idplano_otro);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
         break;
 
-        case 'listar':          
+        case 'mostrar_plano':
+
+          $rspta=$plano_otro->mostrar_plano($idplano_otro);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
+        break;
+
+        case 'listar_carpeta':          
 
           $nube_proyecto = $_GET["nube_idproyecto"];
 
-          $rspta=$plano_otro->listar($nube_proyecto);
+          $rspta=$plano_otro->listar_carpeta($nube_proyecto);
+          //Vamos a declarar un array
+          $data= Array();         
+          
+          while ($reg=$rspta->fetch_object()){           
+            
+            $docs= "'$reg->nombre', '$reg->idcarpeta'";
+
+            $data[]=array(
+              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger" onclick="desactivar_carpeta('.$reg->idcarpeta.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>':
+                ' <button class="btn btn-warning" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary" onclick="activar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>',
+              "1"=>$reg->nombre,
+              "2"=> "<span >".$reg->descripcion." </span>",
+              "3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+            );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);
+
+        break;
+
+        case 'listar_plano':
+          
+          $id_carpeta = $_GET["id_carpeta"];
+
+          $rspta=$plano_otro->listar_plano($id_carpeta);
           //Vamos a declarar un array
           $data= Array();
 
@@ -161,11 +241,11 @@
             // echo $descripcion;
 
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idplano_otro.')"><i class="far fa-trash-alt  "></i></button>'.
+              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger" onclick="desactivar_plano('.$reg->idplano_otro.')"><i class="far fa-trash-alt  "></i></button>'.
                 ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>':
-                ' <button class="btn btn-warning" onclick="mostrar('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-warning" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary" onclick="activar_plano('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
               "1"=>$reg->nombre,
               "2"=> "<span >".$descripcion." </span>",   

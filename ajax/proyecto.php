@@ -5,524 +5,414 @@
 
     session_start();//Validamos si existe o no la sesión
   }
+
   if (!isset($_SESSION["nombre"])) {    
      
 		header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
 		die();
 
 	} else {
-    
-    require_once "../modelos/Proyecto.php";
-
-    $proyecto = new Proyecto();
-
-    $idproyecto				    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):""; 
-    $tipo_documento			  = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-    $numero_documento		  = isset($_POST["numero_documento"])? limpiarCadena($_POST["numero_documento"]):"";
-    $empresa				      = isset($_POST["empresa"])? limpiarCadena($_POST["empresa"]):"";
-    $nombre_proyecto		  = isset($_POST["nombre_proyecto"])? limpiarCadena($_POST["nombre_proyecto"]):"";
-    $nombre_codigo		    = isset($_POST["nombre_codigo"])? limpiarCadena($_POST["nombre_codigo"]):"";
-    $ubicacion				    = isset($_POST["ubicacion"])? limpiarCadena($_POST["ubicacion"]):"";
-    $actividad_trabajo		= isset($_POST["actividad_trabajo"])? limpiarCadena($_POST["actividad_trabajo"]):"";
-    $empresa_acargo 		  = isset($_POST['empresa_acargo'])? limpiarCadena($_POST['empresa_acargo']):"";
-    $costo					      = isset($_POST["costo"])? limpiarCadena($_POST["costo"]):"";
-    $fecha_inicio			    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 0, 10);
-    $fecha_fin				    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 13, 22);
-    $plazo		            = isset($_POST["plazo"])? limpiarCadena($_POST["plazo"]):"";
-
-    $doc1_contrato_obra		= isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
-    $doc_old_1		        = isset($_POST["doc_old_1"])? limpiarCadena($_POST["doc_old_1"]):"";
-
-    $doc2_entrega_terreno	= isset($_POST["doc2"])? limpiarCadena($_POST["doc2"]):"";
-    $doc_old_2	          = isset($_POST["doc_old_2"])? limpiarCadena($_POST["doc_old_2"]):"";
-
-    $doc3_inicio_obra		  = isset($_POST["doc3"])? limpiarCadena($_POST["doc3"]):"";
-    $doc_old_2		        = isset($_POST["doc_old_3"])? limpiarCadena($_POST["doc_old_3"]):"";    
-
-    // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,
-    // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
-    switch ($_GET["op"]){
-
-      case 'guardaryeditar':
-
-        if (!isset($_SESSION["nombre"])) {
-
-          header("Location: login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-
-        } else {
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
-
-            //*DOC 1*//
-            if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
-
-              $flat_doc1 = false;  $doc1 = $_POST["doc_old_1"];
-
-            } else {
-
-              $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);
-
-              if ( $_FILES['doc1']['type'] == "application/pdf" ) {
-                
-                $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
-
-                move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pdf/" . $doc1);
-              }
-            }	
-
-            //*DOC 2*//
-            if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
-
-              $flat_doc2 = false;
-
-              $doc2      = $_POST["doc_old_2"];
-
-            } else {
-
-              $flat_doc2 = true;
-
-              $ext_doc2     = explode(".", $_FILES["doc2"]["name"]);
-
-              if ( $_FILES['doc2']['type'] == "application/pdf" ) {
-                
-                $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
-
-                move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pdf/" . $doc2);
-              }
-            }	
-
-            //*DOC 3*//
-            if (!file_exists($_FILES['doc3']['tmp_name']) || !is_uploaded_file($_FILES['doc3']['tmp_name'])) {
-
-              $flat_doc3 = false;
-
-              $doc3      = $_POST["doc_old_3"];
-
-            } else {
-
-              $flat_doc3 = true;
-
-              $ext_doc3     = explode(".", $_FILES["doc3"]["name"]);
-
-              if ( $_FILES['doc3']['type'] == "application/pdf" ) {
-                
-                $doc3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
-
-                move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/pdf/" . $doc3);
-              }
-            }	
-
-            //*DOC 4*//
-            if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
-
-              $flat_doc4 = false;
-
-              $doc4      = $_POST["doc_old_4"];
-
-            } else {
-
-              $flat_doc4 = true;
-
-              $ext_doc4     = explode(".", $_FILES["doc4"]["name"]);
-
-              if ( $_FILES['doc4']['type'] == "application/pdf" ) {
-                
-                $doc4 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
-
-                move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/pdf/" . $doc4);
-              }
-            }	
-
-            //*DOC 5*//
-            if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
-
-              $flat_doc5 = false;
-
-              $doc5      = $_POST["doc_old_5"];
-
-            } else {
-
-              $flat_doc5 = true;
-
-              $ext_doc5     = explode(".", $_FILES["doc5"]["name"]);
-
-              if ( $_FILES['doc5']['type'] == "application/pdf" ) {
-                
-                $doc5 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
-
-                move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/pdf/" . $doc5);
-              }
-            }	
-
-            //*DOC 6*//
-            if (!file_exists($_FILES['doc6']['tmp_name']) || !is_uploaded_file($_FILES['doc6']['tmp_name'])) {
-
-              $flat_doc6 = false;
-
-              $doc6      = $_POST["doc_old_6"];
-
-            } else {
-
-              $flat_doc6 = true;
-
-              $ext_doc6     = explode(".", $_FILES["doc6"]["name"]);
-
-              if ( $_FILES['doc6']['type'] == "application/pdf" ) {
-                
-                $doc6 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
-
-                move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/pdf/" . $doc6);
-              }
-            }
-
-            if (empty($idproyecto)){
-              // insertamos en la bd
-              $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
-              // echo $rspta ;
-              echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
-
-            } else {
-              // validamos si existe el doc para eliminarlo
-              if ($flat_doc1 == true) {
-
-                $datos_f1 = $proyecto->obtenerDocs($idproyecto);
-
-                $doc1_ant = $datos_f1->fetch_object()->doc1_contrato_obra;
-
-                if ($doc1_ant != "") {
-
-                  unlink("../dist/pdf/" . $doc1_ant);
-                }
-              }
-
-              if ($flat_doc2 == true) {
-
-                $datos_f2 = $proyecto->obtenerDocs($idproyecto);
-
-                $doc2_ant = $datos_f2->fetch_object()->doc2_entrega_terreno;
-
-                if ($doc2_ant != "") {
-
-                  unlink("../dist/pdf/" . $doc2_ant);
-                }
-              }
-
-              if ($flat_doc3 == true) {
-
-                $datos_f3 = $proyecto->obtenerDocs($idproyecto);
-
-                $doc3_ant = $datos_f3->fetch_object()->doc3_inicio_obra;
-
-                if ($doc3_ant != "") {
-
-                  unlink("../dist/pdf/" . $doc3_ant);
-                }
-              }
-
-              if ($flat_doc4 == true) {
-
-                $datos_f4 = $proyecto->obtenerDocs($idproyecto);
-
-                $doc4_ant = $datos_f4->fetch_object()->doc4_presupuesto;
-
-                if ($doc4_ant != "") {
-
-                  unlink("../dist/pdf/" . $doc4_ant);
-                }
-              }
-
-              if ($flat_doc5 == true) {
-
-                $datos_f5 = $proyecto->obtenerDocs($idproyecto);
-
-                $doc5_ant = $datos_f5->fetch_object()->doc5_analisis_costos_unitarios;
-
-                if ($doc5_ant != "") {
-
-                  unlink("../dist/pdf/" . $doc5_ant);
-                }
-              }
-
-              if ($flat_doc6 == true) {
-
-                $datos_f6 = $proyecto->obtenerDocs($idproyecto);
-
-                $doc6_ant = $datos_f6->fetch_object()->doc6_insumos;
-
-                if ($doc6_ant != "") {
-
-                  unlink("../dist/pdf/" . $doc6_ant);
-                }
-              }
-
-              $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
+    //Validamos el acceso solo al usuario logueado y autorizado.
+    if ($_SESSION['escritorio'] == 1) {
+
+      require_once "../modelos/Proyecto.php";
+
+      $proyecto = new Proyecto();
+
+      $idproyecto				    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):""; 
+      $tipo_documento			  = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
+      $numero_documento		  = isset($_POST["numero_documento"])? limpiarCadena($_POST["numero_documento"]):"";
+      $empresa				      = isset($_POST["empresa"])? limpiarCadena($_POST["empresa"]):"";
+      $nombre_proyecto		  = isset($_POST["nombre_proyecto"])? limpiarCadena($_POST["nombre_proyecto"]):"";
+      $nombre_codigo		    = isset($_POST["nombre_codigo"])? limpiarCadena($_POST["nombre_codigo"]):"";
+      $ubicacion				    = isset($_POST["ubicacion"])? limpiarCadena($_POST["ubicacion"]):"";
+      $actividad_trabajo		= isset($_POST["actividad_trabajo"])? limpiarCadena($_POST["actividad_trabajo"]):"";
+      $empresa_acargo 		  = isset($_POST['empresa_acargo'])? limpiarCadena($_POST['empresa_acargo']):"";
+      $costo					      = isset($_POST["costo"])? limpiarCadena($_POST["costo"]):"";
+      $fecha_inicio			    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 0, 10);
+      $fecha_fin				    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 13, 22);
+      $plazo		            = isset($_POST["plazo"])? limpiarCadena($_POST["plazo"]):"";
+      $doc1; $doc2; $doc3; $doc4; $doc5; $doc6;
+      // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,
+      // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
+      switch ($_GET["op"]){
+
+        case 'guardaryeditar':
+
+          //*DOC 1*//
+          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
+
+            $flat_doc1 = false;  $doc1 = $_POST["doc_old_1"];
+
+          } else {
+
+            $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);            
               
-              echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
-            }
-            //Fin de las validaciones de acceso
-          } else {
+            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
-            require 'noacceso.php';
-          }
-        }		
-      break;
-
-      case 'editar_doc_valorizaciones':
-
-        $idproyecto = isset($_POST["idproyect"])? limpiarCadena($_POST["idproyect"]):""; 
-
-        $doc7      = isset($_POST["doc7"])? limpiarCadena($_POST["doc7"]):""; 
-        $doc_old_7 = isset($_POST["doc_old_7"])? limpiarCadena($_POST["doc_old_7"]):"";
-        //*DOC 7 valorizacion*//
-        if (!file_exists($_FILES['doc7']['tmp_name']) || !is_uploaded_file($_FILES['doc7']['tmp_name'])) {
-
-          $flat_doc7 = false;
-
-          $doc7      = $_POST["doc_old_7"];
-
-        } else {
-
-          $flat_doc7 = true;
-
-          $ext_doc7     = explode(".", $_FILES["doc7"]["name"]);
-
-          
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pdf/" . $doc1);
             
-          $doc7 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc7);
+          }	
 
-          move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/pdf/" . $doc7);
-          
-        }	
+          //*DOC 2*//
+          if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
 
-        // validamos si existe el doc para eliminarlo
-        if ($flat_doc7 == true) {
+            $flat_doc2 = false;
 
-          $datos_f7 = $proyecto->obtenerDocs($idproyecto);
+            $doc2      = $_POST["doc_old_2"];
 
-          $doc7_ant = $datos_f7->fetch_object()->excel_valorizaciones;
-
-          if ($doc7_ant != "") {
-
-            unlink("../dist/pdf/" . $doc7_ant);
-          }
-        }
-        
-        $rspta=$proyecto->editar_valorizacion($idproyecto, $doc7 ); 
-        echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
-
-      break;
-
-      case 'empezar_proyecto':
-        if (!isset($_SESSION["nombre"])){
-
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-          die();
-
-        }	else {
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1) {
-
-            $rspta=$proyecto->empezar_proyecto($idproyecto);
-
-            echo $rspta ? "ok" : "No se logro empezar el proyecto";
-            //Fin de las validaciones de acceso
           } else {
 
-            require 'noacceso.php';
+            $flat_doc2 = true;
+
+            $ext_doc2     = explode(".", $_FILES["doc2"]["name"]);
+              
+            $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
+
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pdf/" . $doc2);
+            
+          }	
+
+          //*DOC 3*//
+          if (!file_exists($_FILES['doc3']['tmp_name']) || !is_uploaded_file($_FILES['doc3']['tmp_name'])) {
+
+            $flat_doc3 = false;
+
+            $doc3      = $_POST["doc_old_3"];
+
+          } else {
+
+            $flat_doc3 = true;
+
+            $ext_doc3     = explode(".", $_FILES["doc3"]["name"]);
+              
+            $doc3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
+
+            move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/pdf/" . $doc3);
+            
+          }	
+
+          //*DOC 4*//
+          if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
+
+            $flat_doc4 = false;
+
+            $doc4      = $_POST["doc_old_4"];
+
+          } else {
+
+            $flat_doc4 = true;
+
+            $ext_doc4     = explode(".", $_FILES["doc4"]["name"]);
+              
+            $doc4 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
+
+            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/pdf/" . $doc4);
+            
+          }	
+
+          //*DOC 5*//
+          if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
+
+            $flat_doc5 = false;
+
+            $doc5      = $_POST["doc_old_5"];
+
+          } else {
+
+            $flat_doc5 = true;
+
+            $ext_doc5     = explode(".", $_FILES["doc5"]["name"]);
+              
+            $doc5 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
+
+            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/pdf/" . $doc5);
+            
+          }	
+
+          //*DOC 6*//
+          if (!file_exists($_FILES['doc6']['tmp_name']) || !is_uploaded_file($_FILES['doc6']['tmp_name'])) {
+
+            $flat_doc6 = false;
+
+            $doc6      = $_POST["doc_old_6"];
+
+          } else {
+
+            $flat_doc6 = true;
+
+            $ext_doc6     = explode(".", $_FILES["doc6"]["name"]);
+            
+            // echo json_encode($_FILES['doc6']); 
+            $doc6 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
+
+            move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/pdf/" . $doc6);
+            
           }
-        }		
-      break;
 
-      case 'terminar_proyecto':
-        if (!isset($_SESSION["nombre"]))
-        {
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-          die();
-        }	else {
+          if (empty($idproyecto)){
+            // insertamos en la bd
+            $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
+            // echo $rspta ;
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
+          } else {
+            // validamos si existe el doc para eliminarlo
+            if ($flat_doc1 == true) {
 
-            $rspta=$proyecto->terminar_proyecto($idproyecto);
+              $datos_f1 = $proyecto->obtenerDocs($idproyecto);
 
-            echo $rspta ? "ok" : "No se logro terminar el proyecto";
-            //Fin de las validaciones de acceso
-          }	else {
+              $doc1_ant = $datos_f1->fetch_object()->doc1_contrato_obra;
 
-            require 'noacceso.php';
+              if ($doc1_ant != "") {
+
+                unlink("../dist/pdf/" . $doc1_ant);
+              }
+            }
+
+            if ($flat_doc2 == true) {
+
+              $datos_f2 = $proyecto->obtenerDocs($idproyecto);
+
+              $doc2_ant = $datos_f2->fetch_object()->doc2_entrega_terreno;
+
+              if ($doc2_ant != "") {
+
+                unlink("../dist/pdf/" . $doc2_ant);
+              }
+            }
+
+            if ($flat_doc3 == true) {
+
+              $datos_f3 = $proyecto->obtenerDocs($idproyecto);
+
+              $doc3_ant = $datos_f3->fetch_object()->doc3_inicio_obra;
+
+              if ($doc3_ant != "") {
+
+                unlink("../dist/pdf/" . $doc3_ant);
+              }
+            }
+
+            if ($flat_doc4 == true) {
+
+              $datos_f4 = $proyecto->obtenerDocs($idproyecto);
+
+              $doc4_ant = $datos_f4->fetch_object()->doc4_presupuesto;
+
+              if ($doc4_ant != "") {
+
+                unlink("../dist/pdf/" . $doc4_ant);
+              }
+            }
+
+            if ($flat_doc5 == true) {
+
+              $datos_f5 = $proyecto->obtenerDocs($idproyecto);
+
+              $doc5_ant = $datos_f5->fetch_object()->doc5_analisis_costos_unitarios;
+
+              if ($doc5_ant != "") {
+
+                unlink("../dist/pdf/" . $doc5_ant);
+              }
+            }
+
+            if ($flat_doc6 == true) {
+
+              $datos_f6 = $proyecto->obtenerDocs($idproyecto);
+
+              $doc6_ant = $datos_f6->fetch_object()->doc6_insumos;
+
+              if ($doc6_ant != "") {
+
+                unlink("../dist/pdf/" . $doc6_ant);
+              }
+            }
+
+            $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
+            
+            echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
           }
-        }		
-      break;
+            
+        break;
+      
+        case 'empezar_proyecto':
 
-      case 'reiniciar_proyecto':
-        if (!isset($_SESSION["nombre"]))
-        {
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-          die();
-        }	else {
+          $rspta=$proyecto->empezar_proyecto($idproyecto);
 
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
+          echo $rspta ? "ok" : "No se logro empezar el proyecto";	
 
-            $rspta=$proyecto->reiniciar_proyecto($idproyecto);
+        break;
 
-            echo $rspta ? "ok" : "No se logro reiniciar el proyecto";
-            //Fin de las validaciones de acceso
-          }	else {
+        case 'terminar_proyecto':
 
-            require 'noacceso.php';
-          }
-        }		
-      break;
+          $rspta=$proyecto->terminar_proyecto($idproyecto);
 
-      case 'mostrar':
+          echo $rspta ? "ok" : "No se logro terminar el proyecto";
 
-        if (!isset($_SESSION["nombre"])){
+        break;
 
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+        case 'reiniciar_proyecto':
 
-        }else{
+          $rspta=$proyecto->reiniciar_proyecto($idproyecto);
 
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
+          echo $rspta ? "ok" : "No se logro reiniciar el proyecto";	
 
-            $rspta=$proyecto->mostrar($idproyecto);
-            //Codificar el resultado utilizando json
-            echo json_encode($rspta);
-            //Fin de las validaciones de acceso
-          }else{
+        break;
 
-            require 'noacceso.php';
-          }
-        }		
-      break;
+        case 'mostrar':
 
-      case 'tablero-proyectos':
+          $rspta=$proyecto->mostrar($idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);	
 
-        if (!isset($_SESSION["nombre"])){
+        break;
 
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+        case 'tablero-proyectos':
+          $rspta=$proyecto->tablero_proyectos();
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+        break;
 
-        }else{
+        case 'tablero-proveedores':
 
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
+          $rspta=$proyecto->tablero_proveedores();
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
 
-            $rspta=$proyecto->tablero_proyectos();
-            //Codificar el resultado utilizando json
-            echo json_encode($rspta);
-            //Fin de las validaciones de acceso
-          }else{
+        break;
 
-            require 'noacceso.php';
-          }
-        }		
-      break;
-      case 'tablero-proveedores':
+        case 'tablero-trabjadores':       
 
-        if (!isset($_SESSION["nombre"])){
+          $rspta=$proyecto->tablero_trabajadores();
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+              
+        break;
 
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+        case 'tablero-servicio':
 
-        }else{
+          $rspta=$proyecto->tablero_servicio();
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);          
+            
+        break;
 
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
+        case 'listar':
 
-            $rspta=$proyecto->tablero_proveedores();
-            //Codificar el resultado utilizando json
-            echo json_encode($rspta);
-            //Fin de las validaciones de acceso
-          }else{
+          $rspta=$proyecto->listar();
+          //Vamos a declarar un array
+          $data= Array();
 
-            require 'noacceso.php';
-          }
-        }		
-      break;
-      case 'tablero-trabjadores':
+          while ($reg=$rspta->fetch_object()){
 
-        if (!isset($_SESSION["nombre"])){
+            $estado = "";
+            $acciones = "";
 
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+            if ($reg->estado == '2') {
 
-        }else{
+              $estado = '<span class="text-center badge badge-danger">No empezado</span>';
+              $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
+            } else {
 
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
+              if ($reg->estado == '1') {
 
-            $rspta=$proyecto->tablero_trabajadores();
-            //Codificar el resultado utilizando json
-            echo json_encode($rspta);
-            //Fin de las validaciones de acceso
-          }else{
-
-            require 'noacceso.php';
-          }
-        }		
-      break;
-      case 'tablero-servicio':
-
-        if (!isset($_SESSION["nombre"])){
-
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-
-        }else{
-
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['escritorio']==1)	{
-
-            $rspta=$proyecto->tablero_servicio();
-            //Codificar el resultado utilizando json
-            echo json_encode($rspta);
-            //Fin de las validaciones de acceso
-          }else{
-
-            require 'noacceso.php';
-          }
-        }		
-      break;
-
-      case 'listar':
-        if (!isset($_SESSION["nombre"])){
-
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-
-        } else {
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ( $_SESSION['escritorio'] == 1 )	{
-
-            $rspta=$proyecto->listar();
-            //Vamos a declarar un array
-            $data= Array();
-
-            while ($reg=$rspta->fetch_object()){
-
-              $estado = "";
-              $acciones = "";
-
-              if ($reg->estado == '2') {
-
-                $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
+                $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+                $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
               } else {
 
-                if ($reg->estado == '1') {
+                $estado = '<span class="text-center badge badge-success">Terminado</span>';
+                $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
+              }                
+            }
 
-                  $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
-                } else {
+            if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
 
-                  $estado = '<span class="text-center badge badge-success">Terminado</span>';
-                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
-                }                
-              }
+            if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
 
-              if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
+            if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
+              
+            $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
 
-              if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
+            $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
+            
+            $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
 
-              if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
-                
+            $data[]=array(
+              "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
+                  <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
+                    <i class="fas fa-folder"></i>
+                  </button> 
+                  <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
+                    <i class="fas fa-pencil-alt"></i> 
+                  </button>
+                  '.$acciones.'
+                  <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
+                    <i class="fas fa-eye"></i>
+                  </button> 
+              </div>',
+              "1"=>'<div class="user-block asignar_paint_'.$reg->idproyecto.'">
+                  <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
+                  <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
+                  <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+                </div>',
+              "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
+              "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
+              "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
+              "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
+                <center>
+                  <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
+                    <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
+                  </a>
+                </center>
+              </div>',                  
+              "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
+            );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);          
+          
+        break;
+        
+        case 'listar-proyectos-terminados':
+
+          $rspta=$proyecto->listar_proyectos_terminados();
+          //Vamos a declarar un array
+          $data= Array();
+
+          while ($reg=$rspta->fetch_object()){
+
+            $estado = "";
+            $acciones = "";
+
+            if ($reg->estado == '2') {
+
+              $estado = '<span class="text-center badge badge-danger">No empezado</span>';
+              $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
+            } else {
+
+              if ($reg->estado == '1') {
+
+                $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+                $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
+              } else {
+
+                $estado = '<span class="text-center badge badge-success">Terminado</span>';
+                $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
+              }                
+            }
+
+            if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
+
+            if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
+
+            if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
+              
               $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
 
               $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
@@ -556,118 +446,23 @@
                       <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
                     </a>
                   </center>
-                </div>',                  
+                </div>',
                 "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
               );
-            }
-            $results = array(
-              "sEcho"=>1, //Información para el datatables
-              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-              "data"=>$data);
-            echo json_encode($results);
-          //Fin de las validaciones de acceso
           }
-          else
-          {
-            require 'noacceso.php';
-          }
-        }
-      break;
-      
-      case 'listar-proyectos-terminados':
-        if (!isset($_SESSION["nombre"])){
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);          
+          
+        break;
+        
+      }
 
-          header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-
-        } else {
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ( $_SESSION['escritorio'] == 1 )	{
-
-            $rspta=$proyecto->listar_proyectos_terminados();
-            //Vamos a declarar un array
-            $data= Array();
-
-            while ($reg=$rspta->fetch_object()){
-
-              $estado = "";
-              $acciones = "";
-
-              if ($reg->estado == '2') {
-
-                $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-                $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
-              } else {
-
-                if ($reg->estado == '1') {
-
-                  $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                  $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
-                } else {
-
-                  $estado = '<span class="text-center badge badge-success">Terminado</span>';
-                  $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
-                }                
-              }
-
-              if (strlen($reg->empresa) >= 20 ) { $empresa = substr($reg->empresa, 0, 20).'...';  } else { $empresa = $reg->empresa; }
-
-              if (strlen($reg->ubicacion) >= 20 ) { $ubicacion = substr($reg->ubicacion, 0, 20).'...';  } else { $ubicacion = $reg->ubicacion; }
-
-              if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
-                
-                $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
-
-                $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
-                
-                $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";                
-
-                $data[]=array(
-                  "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
-                      <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
-                        <i class="fas fa-folder"></i>
-                      </button> 
-                      <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
-                        <i class="fas fa-pencil-alt"></i> 
-                      </button>
-                      '.$acciones.'
-                      <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
-                        <i class="fas fa-eye"></i>
-                      </button> 
-                  </div>',
-                  "1"=>'<div class="user-block asignar_paint_'.$reg->idproyecto.'">
-                      <img class="img-circle" src="../dist/svg/empresa-logo.svg" alt="User Image">
-                      <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $empresa .'</p></span>
-                      <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                    </div>',
-                  "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
-                  "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
-                  "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
-                  "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
-                    <center>
-                      <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
-                        <img src="../dist/svg/pdf.svg" class="card-img-top" height="35" width="30" >
-                      </a>
-                    </center>
-                  </div>',
-                  "6"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $estado.'</div>'.$toltip
-                );
-            }
-            $results = array(
-              "sEcho"=>1, //Información para el datatables
-              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-              "data"=>$data);
-            echo json_encode($results);
-          //Fin de las validaciones de acceso
-          }
-          else
-          {
-            require 'noacceso.php';
-          }
-        }
-      break;
-      
+    }else {
+      require 'noacceso.php';
     }
   }
   ob_end_flush();

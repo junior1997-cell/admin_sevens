@@ -10,16 +10,35 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar($idproyecto, $nombre, $descripcion, $doc1){    
+    public function insertar_carpeta($idproyecto, $nombre, $descripcion){    
        
-      $sql="INSERT INTO plano_otro ( idproyecto, nombre, descripcion, doc) VALUES ( '$idproyecto', '$nombre', '$descripcion','$doc1')";
+      $sql="INSERT INTO carpeta_plano_otro ( idproyecto, nombre, descripcion) VALUES ( '$idproyecto', '$nombre', '$descripcion')";
       
       return ejecutarConsulta($sql);
         
     }
 
       //Implementamos un método para editar registros
-    public function editar($idplano_otro, $idproyecto, $nombre, $descripcion, $doc1)
+    public function editar_carpeta($idcarpeta , $idproyecto, $nombre, $descripcion)
+    {
+      $sql="UPDATE carpeta_plano_otro SET idproyecto = '$idproyecto', nombre = '$nombre', descripcion = '$descripcion'
+      WHERE idcarpeta = '$idcarpeta '";	
+      
+      return ejecutarConsulta($sql);
+      
+    }
+
+    //Implementamos un método para insertar registros
+    public function insertar_plano($idproyecto, $nombre, $descripcion, $imagen1){    
+       
+      $sql="INSERT INTO plano_otro ( idproyecto, nombre, descripcion, doc) VALUES ( '$idproyecto', '$nombre', '$descripcion', '$imagen1')";
+      
+      return ejecutarConsulta($sql);
+        
+    }
+
+      //Implementamos un método para editar registros
+    public function editar_plano($idplano_otro, $idproyecto, $nombre, $descripcion, $doc1)
     {
       $sql="UPDATE plano_otro SET idproyecto = '$idproyecto', nombre = '$nombre', descripcion = '$descripcion', doc = '$doc1'
       WHERE idplano_otro='$idplano_otro'";	
@@ -29,7 +48,23 @@
     }
 
     //Implementamos un método para desactivar categorías
-    public function desactivar($idplano_otro)
+    public function desactivar_carpeta($idcarpeta)
+    {
+      $sql="UPDATE carpeta_plano_otro SET estado='0' WHERE idcarpeta = '$idcarpeta'";
+
+      return ejecutarConsulta($sql);
+    }
+
+    //Implementamos un método para activar categorías
+    public function activar_carpeta($idcarpeta)
+    {
+      $sql="UPDATE carpeta_plano_otro SET estado='1' WHERE idcarpeta = '$idcarpeta'";
+
+      return ejecutarConsulta($sql);
+    }
+
+    //Implementamos un método para desactivar categorías
+    public function desactivar_plano($idplano_otro)
     {
       $sql="UPDATE plano_otro SET estado='0' WHERE idplano_otro='$idplano_otro'";
 
@@ -37,7 +72,7 @@
     }
 
     //Implementamos un método para activar categorías
-    public function activar($idplano_otro)
+    public function activar_plano($idplano_otro)
     {
       $sql="UPDATE plano_otro SET estado='1' WHERE idplano_otro='$idplano_otro'";
 
@@ -45,7 +80,15 @@
     }
 
     //Implementar un método para mostrar los datos de un registro a modificar
-    public function mostrar($idplano_otro)
+    public function mostrar_carpeta($idcarpeta)
+    {
+      $sql="SELECT * FROM carpeta_plano_otro WHERE idcarpeta='$idcarpeta'";
+
+      return ejecutarConsultaSimpleFila($sql);
+    }
+
+    //Implementar un método para mostrar los datos de un registro a modificar
+    public function mostrar_plano($idplano_otro)
     {
       $sql="SELECT * FROM plano_otro WHERE idplano_otro='$idplano_otro'";
 
@@ -77,9 +120,17 @@
     }
 
     //Implementar un método para listar los registros
-    public function listar($nube_proyecto)
+    public function listar_carpeta($nube_proyecto)
     {
-      $sql="SELECT * FROM plano_otro AS po WHERE po.idproyecto = '$nube_proyecto'";
+      $sql="SELECT * FROM carpeta_plano_otro AS cpo WHERE cpo.idproyecto = '$nube_proyecto'";
+
+      return ejecutarConsulta($sql);		
+    }
+
+    //Implementar un método para listar los registros
+    public function listar_plano($id_carpeta)
+    {
+      $sql="SELECT * FROM plano_otro AS po WHERE po.id_carpeta = '$id_carpeta'";
 
       return ejecutarConsulta($sql);		
     }

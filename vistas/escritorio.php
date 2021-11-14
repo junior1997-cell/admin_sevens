@@ -367,10 +367,10 @@
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept=".pdf" class="docpdf" /> 
+                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1);">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -395,10 +395,10 @@
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_2" name="doc_old_2" />
-                                  <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf" class="docpdf" /> 
+                                  <input style="display: none;" id="doc2" type="file" name="doc2" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2);">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -423,10 +423,10 @@
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_3" name="doc_old_3" />
-                                  <input style="display: none;" id="doc3" type="file" name="doc3" accept="application/pdf" class="docpdf" /> 
+                                  <input style="display: none;" id="doc3" type="file" name="doc3" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(3);">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -438,8 +438,7 @@
 
                               <!-- linea divisoria -->
                               <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
-                            </div>
-                            
+                            </div>                            
 
                             <!-- Pdf 4 -->
                             <div class="col-md-6 col-lg-4" >                               
@@ -452,10 +451,10 @@
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_4" name="doc_old_4" />
-                                  <input style="display: none;" id="doc4" type="file" name="doc4" accept="application/pdf" class="docpdf" /> 
+                                  <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4);">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -480,10 +479,10 @@
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_5" name="doc_old_5" />
-                                  <input style="display: none;" id="doc5" type="file" name="doc5" accept="application/pdf" class="docpdf" /> 
+                                  <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5);">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -508,10 +507,10 @@
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_6" name="doc_old_6" />
-                                  <input style="display: none;" id="doc6" type="file" name="doc6" accept="application/pdf" class="docpdf" /> 
+                                  <input style="display: none;" id="doc6" type="file" name="doc6" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(6);">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -876,45 +875,8 @@
         ?>
          
 
-        <script type="text/javascript" src="scripts/proyecto.js"></script>
+        <script type="text/javascript" src="scripts/proyecto.js"></script>        
         
-        <!-- previzualizamos el pdf cargado -->
-        <script type="text/javascript">
-          function PreviewImage() {
-
-            // pdffile=document.getElementById("doc").files[0];
-
-            // antiguopdf=$("#docActual").val();
-
-            // if(pdffile === undefined){
-
-            //   var dr = antiguopdf;
-
-            //   if (dr == "") {
-
-            //     $("#ver_pdf").html(''+
-            //       '<div class="alert alert-danger alert-dismissible">'+
-            //           '<button style="color: white !important;" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
-            //           '<h4><i class="icon fa fa-warning"></i> Alerta!</h4>'+
-            //           'Seleciona un documento y luego PULSE el boton AMARILLO.'+
-            //       '</div>'
-            //     );
-
-            //   } else {
-
-            //     $("#ver_pdf").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-            //   }
-            //   // console.log('hola'+dr);
-            // }else{
-
-            //   pdffile_url=URL.createObjectURL(pdffile);
-
-            //   $("#ver_pdf").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-            //   console.log('hola');
-            // }
-          }
-        </script>
         <script>
           if ( localStorage.getItem('nube_idproyecto') ) {
 
@@ -932,6 +894,10 @@
             $("#ver-otros-modulos-1").hide();
           }
           
+        </script>
+
+        <script>
+          $(function () { $('[data-toggle="tooltip"]').tooltip(); });
         </script>
         
       </body>

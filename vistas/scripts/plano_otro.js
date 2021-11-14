@@ -1,11 +1,11 @@
-var tabla;
+var tabla_carpeta; var tabla_plano;
 
 //Función que se ejecuta al inicio
 function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar(localStorage.getItem('nube_idproyecto'));
+  listar_carpeta(localStorage.getItem('nube_idproyecto'));
 
   // $("#bloc_Recurso").addClass("menu-open");
 
@@ -13,7 +13,8 @@ function init() {
 
   // $("#lAllTrabajador").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) {  $("#submit-form-planootro").submit(); });
+  $("#guardar_registro").on("click", function (e) {  $("#submit-form-carpeta").submit(); });
+  $("#guardar_registro2").on("click", function (e) {  $("#submit-form-planootro").submit(); });
 
   $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
   $("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
@@ -119,7 +120,7 @@ function addDocs(e,id) {
               
                           }else{
               
-                            $("#"+id+"_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
+                            $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
     
                           }
   
@@ -208,9 +209,9 @@ function limpiar() {
 }
 
 //Función Listar
-function listar(nube_idproyecto) {
+function listar_carpeta(nube_idproyecto) {
 
-  tabla=$('#tabla-planos-otros').dataTable({
+  tabla_carpeta=$('#tabla-carpeta').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -218,7 +219,44 @@ function listar(nube_idproyecto) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/plano_otro.php?op=listar&nube_idproyecto='+nube_idproyecto,
+        url: '../ajax/plano_otro.php?op=listar_carpeta&nube_idproyecto='+nube_idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+}
+
+//Función Listar
+function listar_plano(nombre, id_carpeta) {
+
+  $("#ver-tabla-carpeta").hide(); $("#ver-tabla-plano").show(); console.log(nombre, id_carpeta);
+  $("#title-1").hide(); $("#title-2").show();
+
+  tabla_plano=$('#tabla-planos-otros').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/plano_otro.php?op=listar_plano&id_carpeta='+id_carpeta,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -242,12 +280,66 @@ function listar(nube_idproyecto) {
 }
 //Función para guardar o editar
 
-function guardaryeditar(e) {
+function guardaryeditar_carpeta(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-carpeta")[0]);
+
+  $.ajax({
+    url: "../ajax/plano_otro.php?op=guardaryeditar_carpeta",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {	
+
+        Swal.fire("Correcto!", "Carpeta guardado correctamente", "success");			 
+
+	      tabla.ajax.reload();
+         
+				limpiar();
+
+        $("#modal-agregar-carpeta").modal("hide");
+
+			}else{
+
+        Swal.fire("Error!", datos, "error");
+
+			}
+    },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            l_m();
+          }
+        }
+      }, false);
+      return xhr;
+    }
+  });
+}
+
+function guardaryeditar_plano(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-plano-otro")[0]);
 
   $.ajax({
-    url: "../ajax/plano_otro.php?op=guardaryeditar",
+    url: "../ajax/plano_otro.php?op=guardaryeditar_plano",
     type: "POST",
     data: formData,
     contentType: false,
@@ -281,9 +373,9 @@ function guardaryeditar(e) {
 
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress").css({"width": percentComplete+'%'});
+          $("#barra_progress2").css({"width": percentComplete+'%'});
 
-          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+          $("#barra_progress2").text(percentComplete.toFixed(2)+" %");
 
           if (percentComplete === 100) {
 
@@ -302,6 +394,10 @@ function l_m(){
   $("#barra_progress").css({"width":'0%'});
 
   $("#barra_progress").text("0%");  
+
+  $("#barra_progress2").css({"width":'0%'});
+
+  $("#barra_progress2").text("0%");  
 }
 
 // ver detallles del registro
@@ -392,14 +488,37 @@ function verdatos(idplano_otro){
 }
 
 // mostramos los datos para editar
-function mostrar(idplano_otro) {
+function mostrar_carpeta(idplano_otro) {
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-planootros").modal("show")
 
-  $.post("../ajax/plano_otro.php?op=mostrar", { idplano_otro: idplano_otro }, function (data, status) {
+  $.post("../ajax/plano_otro.php?op=mostrar_carpeta", { idplano_otro: idplano_otro }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);   
+
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+    
+    $("#nombre").val(data.nombre);
+    $("#descripcion").val(data.descripcion);
+    $("#idproyecto").val(data.idproyecto);
+    $("#idplano_otro").val(data.idplano_otro);    
+
+  });
+}
+
+// mostramos los datos para editar
+function mostrar_plano(idplano_otro) {
+
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+
+  $("#modal-agregar-planootros").modal("show")
+
+  $.post("../ajax/plano_otro.php?op=mostrar_plano", { idplano_otro: idplano_otro }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
 
@@ -496,7 +615,52 @@ function mostrar(idplano_otro) {
 }
 
 //Función para desactivar registros
-function desactivar(idplano_otro) {
+function desactivar_carpeta(idplano_otro) {
+  Swal.fire({
+    title: "¿Está Seguro de  Desactivar  esta carpeta?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/plano_otro.php?op=desactivar_carpeta", { idplano_otro: idplano_otro }, function (e) {
+
+        Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
+    
+        tabla_carpeta.ajax.reload();
+      });      
+    }
+  });   
+}
+
+//Función para activar registros
+function activar_carpeta(idplano_otro) {
+  Swal.fire({
+    title: "¿Está Seguro de  Activar esta carpeta?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/plano_otro.php?op=activar_carpeta", { idplano_otro: idplano_otro }, function (e) {
+
+        Swal.fire("Activado!", "Tu Documento ha sido activado.", "success");
+
+        tabla_carpeta.ajax.reload();
+      });
+      
+    }
+  });      
+}
+
+//Función para desactivar registros
+function desactivar_plano(idplano_otro) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar  este Documento?",
     text: "",
@@ -511,14 +675,14 @@ function desactivar(idplano_otro) {
 
         Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla_plano.ajax.reload();
       });      
     }
   });   
 }
 
 //Función para activar registros
-function activar(idplano_otro) {
+function activar_plano(idplano_otro) {
   Swal.fire({
     title: "¿Está Seguro de  Activar este Documento?",
     text: "",
@@ -533,7 +697,7 @@ function activar(idplano_otro) {
 
         Swal.fire("Activado!", "Tu Documento ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla_plano.ajax.reload();
       });
       
     }
@@ -663,13 +827,62 @@ function ver_modal_docs(nombre, descripcion, doc) {
 
 init();
 
+// validacion fomr 2
 $(function () {
 
   $.validator.setDefaults({
 
     submitHandler: function (e) {
 
-      guardaryeditar(e);
+      guardaryeditar_carpeta(e);
+
+    },
+  });
+
+  $("#form-carpeta").validate({
+    rules: {
+
+      nombre_carpeta: { required: true }
+    },
+
+    messages: {
+
+      nombre_carpeta: {
+
+        required: "Este campo es requerido", 
+      },        
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+
+      $(element).removeClass("is-invalid").addClass("is-valid");
+
+    }
+  });
+});
+
+// validacion form
+$(function () {
+
+  $.validator.setDefaults({
+
+    submitHandler: function (e) {
+
+      guardaryeditar_plano(e);
 
     },
   });
@@ -818,7 +1031,7 @@ function re_visualizacion() {
           
                       }else{
           
-                        $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
+                        $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
           
                         toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
                       }
@@ -930,4 +1143,11 @@ function re_visualizacion() {
 
 function dowload_pdf() {
   toastr.success("El documento se descargara en breve!!")
+}
+
+function regresar() {
+
+  $("#ver-tabla-carpeta").show(); $("#ver-tabla-plano").hide();
+
+  $("#title-1").show(); $("#title-2").hide();
 }

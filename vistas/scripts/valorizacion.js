@@ -145,37 +145,29 @@ function addDocs2(e,id) {
 
           // cargamos la imagen adecuada par el archivo
 				  if ( extrae_extencion(file.name) == "xls") {
-
             $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
           } else {
-
             if ( extrae_extencion(file.name) == "xlsx" ) {
-
               $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
             }else{
-
               if ( extrae_extencion(file.name) == "csv" ) {
-
                 $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
               }else{
-
                 if ( extrae_extencion(file.name) == "xlsm" ) {
-
-                  $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-  
-                }else{
-  
+                  $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');  
+                }else{  
                   if ( extrae_extencion(file.name) == "pdf" ) {
-
-                    // $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-    
-                  }else{
-    
-                    $("#"+id+"_ver").html('<img src="../dist/svg/logo-excel.svg" alt="" width="50%" >');
+                    $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');    
+                  }else{    
+                    if ( extrae_extencion(file.name) == "doc" ) {
+                      $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+                    } else {
+                      if ( extrae_extencion(file.name) == "docx" ) {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+                      } else {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                      }
+                    }
                   }
                 }
               }
@@ -529,7 +521,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
   $("#fecha_quincena").val(fecha_i);  console.log(fecha_i, fecha_f, i);
 
-  // validamos el id para puntar el boton
+  // validamos el id para pintar el boton
   if (localStorage.getItem('boton_id')) {
 
     let id = localStorage.getItem('boton_id'); //console.log('id-nube-boton'+id); 
@@ -634,7 +626,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                     '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
                   '</div>'+
                 '</div>'
@@ -661,7 +653,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                       '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
                     '</div>'+
                   '</div>'
@@ -688,7 +680,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                         '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
                       '</div>'+
                     '</div>'
@@ -715,7 +707,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                           '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                       '</div>'
@@ -747,6 +739,81 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</div>'+
                         '</div>'
                       );      
+                    }else{
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento2').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento2').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento2').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -779,7 +846,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                     '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
                   '</div>'+
                 '</div>'
@@ -806,7 +873,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                       '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
                     '</div>'+
                   '</div>'
@@ -833,7 +900,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                         '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
                       '</div>'+
                     '</div>'
@@ -860,7 +927,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                           '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                       '</div>'
@@ -892,6 +959,81 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</div>'+
                         '</div>'
                       );      
+                    }else{
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento3-1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Planilla de metrados -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento3-1').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Planilla de metrados -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento3-1').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Planilla de metrados -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -923,7 +1065,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                     '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
                   '</div>'+
                 '</div>'
@@ -950,7 +1092,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                       '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
                     '</div>'+
                   '</div>'
@@ -977,7 +1119,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                         '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
                       '</div>'+
                     '</div>'
@@ -1004,7 +1146,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                           '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                       '</div>'
@@ -1037,7 +1179,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento3-2').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Valorizaciones -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento3-2').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Valorizaciones -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento3-2').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Valorizaciones -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -1069,7 +1284,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                     '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
                   '</div>'+
                 '</div>'
@@ -1096,7 +1311,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                       '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
                     '</div>'+
                   '</div>'
@@ -1123,7 +1338,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                         '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
                       '</div>'+
                     '</div>'
@@ -1150,7 +1365,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                           '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                       '</div>'
@@ -1183,7 +1398,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento3-3').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Resumen de valorizacion -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento3-3').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Resumen de valorizacion -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento3-3').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Resumen de valorizacion -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -1215,7 +1503,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                     '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
                   '</div>'+
                 '</div>'
@@ -1242,7 +1530,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                       '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
                     '</div>'+
                   '</div>'
@@ -1269,7 +1557,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                         '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
                       '</div>'+
                     '</div>'
@@ -1296,7 +1584,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                           '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                       '</div>'
@@ -1329,7 +1617,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento3-4').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Curva S -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento3-4').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Curva S -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento3-4').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Curva S -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -1361,7 +1722,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                     '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
                   '</div>'+
                 '</div>'
@@ -1388,7 +1749,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                       '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
                     '</div>'+
                   '</div>'
@@ -1415,7 +1776,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                         '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
                       '</div>'+
                     '</div>'
@@ -1442,7 +1803,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
                           '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                       '</div>'
@@ -1475,7 +1836,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento5-1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Ensayo de consistencia del concreto -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento5-1').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Ensayo de consistencia del concreto -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento5-1').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Ensayo de consistencia del concreto -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -1492,7 +1926,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
               
               $('#documento5-2').html(
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
                     '<i class="fas fa-file-upload"></i> Subir'+
                   '</a>'+
                 '</div>'+
@@ -1519,7 +1953,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 
                 $('#documento5-2').html(
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
                       '<i class="fas fa-file-upload"></i> Subir'+
                     '</a>'+
                   '</div>'+
@@ -1546,7 +1980,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   
                   $('#documento5-2').html(
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
                         '<i class="fas fa-file-upload"></i> Subir'+
                       '</a>'+
                     '</div>'+
@@ -1573,7 +2007,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     
                     $('#documento5-2').html(
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
                           '<i class="fas fa-file-upload"></i> Subir'+
                         '</a>'+
                       '</div>'+
@@ -1600,7 +2034,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                       $('#documento5-2').html(
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
                             '<i class="fas fa-file-upload"></i> Subir'+
                           '</a>'+
                         '</div>'+
@@ -1621,7 +2055,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento5-2').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento5-2').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento5-2').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -1635,7 +2142,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
               
               $('#documento5-2-1').html(
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2.1' + "'" + ');">'+
                     '<i class="fas fa-file-upload"></i> Subir'+
                   '</a>'+
                 '</div>'+
@@ -1662,7 +2169,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 
                 $('#documento5-2-1').html(
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2.1' + "'" + ');">'+
                       '<i class="fas fa-file-upload"></i> Subir'+
                     '</a>'+
                   '</div>'+
@@ -1689,7 +2196,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   
                   $('#documento5-2-1').html(
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2.1' + "'" + ');">'+
                         '<i class="fas fa-file-upload"></i> Subir'+
                       '</a>'+
                     '</div>'+
@@ -1716,7 +2223,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     
                     $('#documento5-2-1').html(
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
                           '<i class="fas fa-file-upload"></i> Subir'+
                         '</a>'+
                       '</div>'+
@@ -1743,7 +2250,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                       $('#documento5-2-1').html(
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + ','+ "'" + 'doc5.2.1' + "'" + ');">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
                             '<i class="fas fa-file-upload"></i> Subir'+
                           '</a>'+
                         '</div>'+
@@ -1764,7 +2271,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento5-2-1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Respuesta de ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento5-2-1').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Respuesta de ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento5-2-1').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Respuesta de ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -1912,7 +2492,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento6').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Plan de seguridad y salud en el trabajo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento6').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Plan de seguridad y salud en el trabajo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento6').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Plan de seguridad y salud en el trabajo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -2058,7 +2711,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento7').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Plan de bioseguridad COVID19 -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento7').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Plan de bioseguridad COVID19 -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento7').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Plan de bioseguridad COVID19 -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -2204,7 +2930,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento8-4').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Planilla del personal obrero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento8-4').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Planilla del personal obrero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento8-4').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Planilla del personal obrero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -2350,7 +3149,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento8-5').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Copia del seguro complementario contra todo riesgo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento8-5').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Copia del seguro complementario contra todo riesgo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento8-5').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Copia del seguro complementario contra todo riesgo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -2496,7 +3368,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento8-6').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Panel fotográfico  -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento8-6').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Panel fotográfico  -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento8-6').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Panel fotográfico  -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -2642,7 +3587,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</div>'
                       );      
                     }else{
-                      console.log("dsdsd");
+                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
+
+                        $('#documento8-7').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Copia del cuaderno de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );     
+                      }else{
+                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
+
+                          $('#documento8-7').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Copia del cuaderno de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );     
+                        }else{
+                          $('#documento8-7').html(
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
+                                '<i class="fas fa-file-upload"></i> Subir'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4">'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="Copia del cuaderno de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                                '<i class="fas fa-download"></i> Descargar'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-4 mb-4">'+
+                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                                '<i class="fas fa-expand"></i> Ver completo'+
+                              '</a>'+
+                            '</div>'+
+                            '<div class="col-lg-12 ">'+
+                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                              '</div>'+
+                            '</div>'
+                          );
+                        }
+                      }
                     }
                   }
                 }
@@ -2812,7 +3830,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</div>'
                     );      
                   }else{
-                    console.log("dsdsd");
+                    if ( extrae_extencion(data.data2.doc1) == "doc" ) {
+
+                      $('#documento1').html(
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                            '<i class="fas fa-file-upload"></i> Subir'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<i class="fas fa-download"></i> Descargar'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4 mb-4">'+
+                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                            '<i class="fas fa-expand"></i> Ver completo'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-12 ">'+
+                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                          '</div>'+
+                        '</div>'
+                      );      
+                    }else{
+                      if ( extrae_extencion(data.data2.doc1) == "docx" ) {
+
+                        $('#documento1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );      
+                      }else{
+                        $('#documento1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        ); 
+                      }
+                    }
                   }
                 }
               }
@@ -2964,7 +4055,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</div>'
                     );      
                   }else{
-                    console.log("dsdsd");
+                    if ( extrae_extencion(data.data2.doc4) == "doc" ) {
+
+                      $('#documento4').html(
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                            '<i class="fas fa-file-upload"></i> Subir'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<i class="fas fa-download"></i> Descargar'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4 mb-4">'+
+                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                            '<i class="fas fa-expand"></i> Ver completo'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-12 ">'+
+                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                          '</div>'+
+                        '</div>'
+                      );      
+                    }else{
+                      if ( extrae_extencion(data.data2.doc4) == "docx" ) {
+
+                        $('#documento4').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );      
+                      }else{
+                        $('#documento4').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        ); 
+                      }
+                    }
                   }
                 }
               }
@@ -3115,7 +4279,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</div>'
                     );      
                   }else{
-                    console.log("dsdsd");
+                    if ( extrae_extencion(data.data2.doc81) == "doc" ) {
+
+                      $('#documento8-1').html(
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                            '<i class="fas fa-file-upload"></i> Subir'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<i class="fas fa-download"></i> Descargar'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4 mb-4">'+
+                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                            '<i class="fas fa-expand"></i> Ver completo'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-12 ">'+
+                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                          '</div>'+
+                        '</div>'
+                      );      
+                    }else{
+                      if ( extrae_extencion(data.data2.doc81) == "docx" ) {
+
+                        $('#documento8-1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );      
+                      }else{
+                        $('#documento8-1').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        ); 
+                      }
+                    }
                   }
                 }
               }
@@ -3266,7 +4503,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</div>'
                     );      
                   }else{
-                    console.log("dsdsd");
+                    if ( extrae_extencion(data.data2.doc82) == "doc" ) {
+
+                      $('#documento8-2').html(
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                            '<i class="fas fa-file-upload"></i> Subir'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<i class="fas fa-download"></i> Descargar'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4 mb-4">'+
+                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                            '<i class="fas fa-expand"></i> Ver completo'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-12 ">'+
+                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                          '</div>'+
+                        '</div>'
+                      );      
+                    }else{
+                      if ( extrae_extencion(data.data2.doc82) == "docx" ) {
+
+                        $('#documento8-2').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );      
+                      }else{
+                        $('#documento8-2').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        ); 
+                      }
+                    }
                   }
                 }
               }
@@ -3417,7 +4727,80 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</div>'
                     );      
                   }else{
-                    console.log("dsdsd");
+                    if ( extrae_extencion(data.data2.doc83) == "doc" ) {
+
+                      $('#documento8-3').html(
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                            '<i class="fas fa-file-upload"></i> Subir'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4">'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<i class="fas fa-download"></i> Descargar'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-4 mb-4">'+
+                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                            '<i class="fas fa-expand"></i> Ver completo'+
+                          '</a>'+
+                        '</div>'+
+                        '<div class="col-lg-12 ">'+
+                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                          '</div>'+
+                        '</div>'
+                      );      
+                    }else{
+                      if ( extrae_extencion(data.data2.doc83) == "docx" ) {
+
+                        $('#documento8-3').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        );      
+                      }else{
+                        $('#documento8-3').html(
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+data.data2.idproyecto+');">'+
+                              '<i class="fas fa-file-upload"></i> Subir'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4">'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<i class="fas fa-download"></i> Descargar'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-4 mb-4">'+
+                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                              '<i class="fas fa-expand"></i> Ver completo'+
+                            '</a>'+
+                          '</div>'+
+                          '<div class="col-lg-12 ">'+
+                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
+                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                            '</div>'+
+                          '</div>'
+                        ); 
+                      }
+                    }
                   }
                 }
               }
