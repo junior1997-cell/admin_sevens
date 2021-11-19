@@ -107,7 +107,7 @@
               <li class="nav-item ">
                 <a href="all_maquinas.php" class="nav-link" id="lAllMaquinas">
                   <i class="nav-icon fas fa-tractor"></i>
-                  <p>All-Maquinarias</p>
+                  <p>Máquinas-Equipos</p>
                 </a>
               </li>
               <!-- Materiales para la empresa -->

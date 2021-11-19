@@ -61,7 +61,7 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
                                         <h3 class="card-title">
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-material" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-material" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
                                             Admnistra de manera eficiente de tus materiles.
                                         </h3>
                                     </div>
@@ -116,7 +116,7 @@
                                                 <!-- id proyecto -->
                                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id proveedores -->
-                                                <input type="text" name="idproducto" id="idproducto" />
+                                                <input type="hidden" name="idproducto" id="idproducto" />
                                                 <!-- Nombre -->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
@@ -134,7 +134,7 @@
                                                 <div class="col-md-6 col-lg-6">
                                                   <label for="foto1">Imagen</label> <br>
                                                   <div style="text-align: center;" >
-                                                  <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="210" />
+                                                  <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="210" />
                                                   <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
                                                   <input type="hidden" name="foto1_actual" id="foto1_actual" />
                                                   <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>

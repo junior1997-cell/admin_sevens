@@ -9,22 +9,16 @@ Class ServicioMaquina
 	{
 
 	}
-	//$idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial
-	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion)
+	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad )
 	{
-		/*var_dump('descripcion.'.$descripcion,'idproyecto '.$idproyecto,'maquinaria '.$maquinaria,'fecha_inicio '.$fecha_inicio,'fecha_din '.$fecha_fin,
-		'horometro_inicial '.$horometro_inicial,'horometro_final '.$horometro_final,'horas '.$horas,
-		'costo_unitario '.$costo_unitario,'costo_parcial '.$costo_parcial,'unidad_m '.$unidad_m,'dias '.$dias,'mes '.$mes);die();*/
-		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion) 
-		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m','$dias','$mes','$descripcion')";
+		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion,cantidad ) 
+		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m','$dias','$mes','$descripcion','$cantidad ')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementar un método para listar los registros AGRUPADOS
-	public function listar($nube_idproyecto)
-	{
+	public function listar($nube_idproyecto){
 		$sql="SELECT 
 		s.idmaquinaria as idmaquinaria,
 		s.idproyecto as idproyecto,
@@ -73,12 +67,12 @@ Class ServicioMaquina
 		SUM(s.costo_parcial) as costo_parcial  
 		FROM servicio as s 
 		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1'";
-
-		return ejecutarConsultaSimpleFila($sql);	
+	
+		return 	ejecutarConsultaSimpleFila($sql);
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion)
+	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad)
 		{
 		$sql="UPDATE servicio SET 
 		idproyecto='$idproyecto',
@@ -88,6 +82,7 @@ Class ServicioMaquina
 		horas='$horas',
 		costo_parcial='$costo_parcial',
 		costo_unitario='$costo_unitario',
+		cantidad='$cantidad',
 		fecha_entrega='$fecha_inicio',
 		fecha_recojo='$fecha_fin',
 		unidad_medida='$unidad_m',
@@ -109,8 +104,7 @@ Class ServicioMaquina
 		return ejecutarConsulta($sql);
 	}
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idservicio)
-		{
+	public function mostrar($idservicio){
 		$sql="SELECT
 		s.idservicio as idservicio,
 		s.idproyecto as idproyecto,
@@ -119,6 +113,7 @@ Class ServicioMaquina
 		s.horometro_final as horometro_final,
 		s.horas as horas,
 		s.costo_parcial as costo_parcial,
+		s.cantidad as cantidad,
 		s.costo_unitario as costo_unitario,
 		s.fecha_entrega as fecha_entrega,
 		s.fecha_recojo as fecha_recojo,
@@ -187,7 +182,7 @@ Class ServicioMaquina
 		return ejecutarConsulta($sql);	
 	}
 	//Listar pagos
-	public function listar_pagos($idmaquinaria,$idproyecto){
+	public function listar_pagos($idmaquinaria,$idproyecto,$tipopago){
 		//var_dump($idproyecto,$idmaquinaria);die();
 		$sql ="SELECT
 		ps.idpago_servicio as idpago_servicio,
@@ -207,7 +202,7 @@ Class ServicioMaquina
 		ps.imagen as imagen,
 		ps.estado as estado
 		FROM pago_servicio ps, bancos as bn 
-		WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND bn.idbancos=ps.id_banco";
+		WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND bn.idbancos=ps.id_banco AND ps.tipo_pago='$tipopago'";
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para desactivar categorías
@@ -246,15 +241,21 @@ Class ServicioMaquina
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function suma_total_pagos($idmaquinaria,$idproyecto){
+	public function suma_total_pagos($idmaquinaria,$idproyecto,$tipopago){
 		$sql="SELECT SUM(ps.monto) as total_monto
 		FROM pago_servicio as ps
-		WHERE ps.idproyecto ='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1'";
+		WHERE ps.idproyecto ='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1' AND ps.tipo_pago='$tipopago'";
 		return ejecutarConsultaSimpleFila($sql);
 
 	}
+	public function total_costo_parcial_pago($idmaquinaria,$idproyecto){
+		$sql="SELECT
+		SUM(s.costo_parcial) as costo_parcial  
+		FROM servicio as s 
+		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1'";
 
-	
+		return ejecutarConsultaSimpleFila($sql);	
+	}
     // obtebnemos los DOCS para eliminar
     public function obtenerImg($idpago_servicio) {
 
@@ -262,11 +263,83 @@ Class ServicioMaquina
   
 		return ejecutarConsulta($sql);
 	}
-
 	//mostrar datos del proveedor y maquina en form
 	public function most_datos_prov_pago($idmaquinaria){
 		$sql = "SELECT * FROM maquinaria as m, proveedor as p  WHERE m.idproveedor=p.idproveedor AND m.idmaquinaria='$idmaquinaria'";
 		return ejecutarConsultaSimpleFila($sql);
+	}
+	/**
+	 * ==========SECCION FACTURAS=============
+	 */
+	public function insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2){
+		$sql="INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen) 
+		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2')";
+		return ejecutarConsulta($sql);
+	}
+	// obtebnemos los DOCS para eliminar
+	public function obtenerDoc($idfactura) {
+
+		$sql = "SELECT imagen FROM factura WHERE idfactura ='$idfactura'";
+	
+		return ejecutarConsulta($sql);
+	}
+	//Implementamos un método para editar registros
+	public function editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2){
+		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
+		$sql="UPDATE factura SET
+		idproyecto='$idproyectof',
+		idmaquinaria='$idmaquina',
+		codigo='$codigo',
+		monto='$monto',
+		fecha_emision='$fecha_emision',
+		descripcion='$descripcion_f',
+		imagen='$imagen2'
+		WHERE idfactura ='$idfactura'";	
+		return ejecutarConsulta($sql);	
+		//return $vaa;
+	}
+	
+	//Listar 
+	public function listar_facturas($idmaquinaria,$idproyecto){
+		//var_dump($idproyecto,$idmaquinaria);die();
+		$sql ="SELECT *
+		FROM factura
+		WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria'";
+		return ejecutarConsulta($sql);
+	}
+	//mostrar_factura
+	public function mostrar_factura($idfactura){
+		$sql="SELECT * FROM factura WHERE idfactura='$idfactura'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+	//Implementamos un método para activar categorías
+	public function desactivar_factura($idfactura){
+		//var_dump($idfactura);die();
+		$sql="UPDATE factura SET estado='0' WHERE idfactura='$idfactura'";
+		return ejecutarConsulta($sql);
+	}
+	//Implementamos un método para desactivar categorías
+	public function activar_factura($idfactura){
+		//var_dump($idpago_servicio);die();
+		$sql="UPDATE factura SET estado='1' WHERE idfactura='$idfactura'";
+		return ejecutarConsulta($sql);
+	}
+	
+	public function total_monto_f($idmaquinaria,$idproyecto){
+		$sql="SELECT SUM(fs.monto) as total_mont_f
+		FROM factura as fs
+		WHERE fs.idproyecto ='$idproyecto' AND fs.idmaquinaria='$idmaquinaria' AND fs.estado='1'";
+		return ejecutarConsultaSimpleFila($sql);
+
+	}
+
+	public function total_costo_parcial($idmaquinaria,$idproyecto){
+		$sql="SELECT
+		SUM(s.costo_parcial) as costo_parcial  
+		FROM servicio as s 
+		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1'";
+
+		return ejecutarConsultaSimpleFila($sql);	
 	}
 
 }

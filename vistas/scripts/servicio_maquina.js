@@ -1,6 +1,8 @@
 var tabla;
 var tabla2;
 var tabla3;
+var tabla4;
+var tabladetrecc;
 var idmaquina;
 
 //Función que se ejecuta al inicio
@@ -20,19 +22,22 @@ function init() {
   // $("#lproveedor").addClass("active");
  //=====Guardar Servicio=============
   $("#guardar_registro").on("click", function (e) {
-    
-    //console.log('holaaaaaa');
     $("#submit-form-servicios").submit();
   });
   //=====Guardar pago=============
   $("#guardar_registro_pago").on("click", function (e) {
-    
-    console.log('holaaaaaa baby');
     $("#submit-form-pago").submit();
   });
-
+  //=====Guardar factura=============
+  $("#guardar_registro_factura").on("click", function (e) {
+    $("#submit-form-factura").submit();
+     });
+  //vaucher
   $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
   $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
+  //Factura
+  $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
+  $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -86,7 +91,7 @@ function addImage(e,id) {
 
 	console.log(id);
 
-	var file = e.target.files[0], imageType = /image.*/;
+	var file = e.target.files[0], imageType = /application.*/;
 	
 	if (e.target.files[0]) {
 
@@ -97,14 +102,8 @@ function addImage(e,id) {
 		var sizemegaBytes = (sizeByte / 1000000);
 		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
 
-		if (!file.type.match(imageType)){
-			// return;
-			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>');
-
-        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		}else{
-
+		if (extrae_extencion(file.name)=='pdf' || extrae_extencion(file.name)=='jpeg'|| extrae_extencion(file.name)=='jpg'|| extrae_extencion(file.name)=='png'|| extrae_extencion(file.name)=='webp'){
+      
 			if (sizekiloBytes <= 10240) {
 
 				var reader = new FileReader();
@@ -114,8 +113,13 @@ function addImage(e,id) {
 				function fileOnload(e) {
 
 					var result = e.target.result;
-
+          if (extrae_extencion(file.name) =='pdf') {
+            $('#foto2_i').hide();
+           $('#ver_pdf').html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          }else{
 					$("#"+id+"_i").attr("src", result);
+          $('#foto2_i').show();
+          }
 
 					$("#"+id+"_nombre").html(''+
 						'<div class="row">'+
@@ -127,8 +131,9 @@ function addImage(e,id) {
               '</div>'+
             '</div>'+
 					'');
-
+          
 					toastr.success('Imagen aceptada.')
+        
 				}
 
 				reader.readAsDataURL(file);
@@ -141,6 +146,13 @@ function addImage(e,id) {
 
 				$("#"+id).val("");
 			}
+
+		}else{
+      // return;
+			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>');
+
+      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+
 		}
 
 	}else{
@@ -148,12 +160,11 @@ function addImage(e,id) {
 		toastr.error('Seleccione una Imagen');
 
 
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto2.png");
    
 		$("#"+id+"_nombre").html("");
 	}
 }
-
 function foto1_eliminar() {
 
 	$("#foto1").val("");
@@ -162,8 +173,16 @@ function foto1_eliminar() {
 
 	$("#foto1_nombre").html("");
 }
+function foto2_eliminar() {
 
+	$("#foto2").val("");
+	$("#ver_pdf").html("");
 
+	$("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
+
+	$("#foto2_nombre").html("");
+  $('#foto2_i').show();
+}
 function seleccion() {
 
   if ($("#maquinaria").select2("val") == null) {
@@ -175,7 +194,6 @@ function seleccion() {
     $("#maquinaria_validar").hide();
   }
 }
-
 function capture_unidad() {
     //Hora
   if ($("#unidad_m").select2("val") =="Hora") {
@@ -184,16 +202,19 @@ function capture_unidad() {
     $("#meses_head").hide();
     $("#fecha_i").show();
     $("#fecha_f").hide();
+    $("#cantidad_ii").hide();
     $("#horometro_i").show();
     $("#horometro_f").show();
     $("#costo_unit").show();
     $("#horas_head").show();
+    $("#unidad").addClass("col-lg-6")
 
     $("#dias").val("");
     $("#mes").val("");
     $("#fecha_fin").val("");
     $("#fecha_inicio").val("");
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+    $("#cantidad").val("0");
    // $("#fecha_inicio").val("");
 
    //Dia
@@ -203,12 +224,14 @@ function capture_unidad() {
     $("#dias_head").hide();
     $("#meses_head").hide();
     $("#fecha_i").show();
+    $("#unidad").removeClass("col-lg-6").addClass("col-lg-3")
+    $("#cantidad_ii").show();
     $("#fecha_f").hide();
     $("#horometro_i").hide();
     $("#horometro_f").hide();
-    $("#costo_unit").hide();
+    $("#costo_unit").show();
     $("#dias").hide();
-    $("#costo_parcial").removeAttr("readonly");
+    //$("#costo_parcial").removeAttr("readonly");
     $("#fecha_fin").attr('readonly',true);
     /**======= */
 
@@ -223,7 +246,8 @@ function capture_unidad() {
     $("#costo_unitario").val("");
     $("#costo_parcial").val("");
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
-    //costo_partcial();
+    $("#cantidad").val("1");
+    $("#costo_partcial").val("");
 
     //Mes
   }else if($("#unidad_m").select2("val")=="Mes"){
@@ -231,12 +255,14 @@ function capture_unidad() {
     $("#horas_head").hide();
     $("#dias_head").hide();
     $("#meses_head").hide();
-    $("#costo_unit").hide();
+    $("#costo_unit").show();
     $("#horometro_i").hide();
     $("#horometro_f").hide();
+    $("#unidad").removeClass("col-lg-6").addClass("col-lg-3")
+    $("#cantidad_ii").show();
     $("#fecha_i").show();
     $("#fecha_f").show();
-    $("#costo_parcial").removeAttr("readonly").focus().val();
+   // $("#costo_parcial").removeAttr("readonly").focus().val();
     $("#fecha_fin").attr('readonly',true);
     /**======= */
     $("#fecha_fi").html("Fecha Fin :");
@@ -248,8 +274,9 @@ function capture_unidad() {
     $("#horometro_final").val("");
     $("#costo_unitario").val("");
     $("#horas").val("");
-    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
-   // costo_partcial();
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>');
+    $("#cantidad").val("1"); 
+    $("#costo_partcial").val("");
     $("#fecha_inicio").val("");
     $("#fecha_fin").val("");
    
@@ -262,6 +289,7 @@ function costo_partcial() {
   var horometro_inicial = $('#horometro_inicial').val();
   var horometro_final = $('#horometro_final').val();
   var costo_unitario = $('#costo_unitario').val();
+  var cantidad = $('#cantidad').val();
 
 
   if (horometro_final!=0) {
@@ -269,6 +297,11 @@ function costo_partcial() {
     var costo_parcial=(horas*costo_unitario).toFixed(1);
   }else{
     var horas=(horometro_inicial-horometro_inicial).toFixed(1);
+    var costo_parcial=costo_unitario
+  }
+  if (cantidad!=0) {
+    var costo_parcial=(cantidad*costo_unitario).toFixed(1);
+  }else{
     var costo_parcial=costo_unitario
   }
   
@@ -350,6 +383,7 @@ function limpiar() {
   $("#descripcion").val("");
   $("#sssss").show();
   $("#nomb_maq").hide();
+  $("#cantidad").val("");
 
 }
 //Función limpiar
@@ -359,23 +393,36 @@ function limpiar_c_pagos() {
   $("#tipo_pago").val("");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
+  $("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_servicio").val("");
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
 	$("#foto1").val("");
 	$("#foto1_actual").val("");  
   $("#foto1_nombre").html(""); 
+ // $("#total_costo_secc_pagos").html("");
 
 }
 //regresar_principal
 function regresar_principal(){
   $("#tabla_principal").show();
   $("#btn-agregar").show();
+
   $("#tabla_detalles").hide();
   $("#btn-regresar").hide();
+
   $("#tabla_pagos").hide();
   $("#btn-pagar").hide();
+
+  $("#tabla_facturas_h").hide();
+  $("#btn-factura").hide();
   limpiar();
+  limpiar_c_pagos();
+  $("#t_proveedor").html("");
+  $("#t_provee_porc").html("");
+  //-------------
+  $("#t_detaccion").html("");
+  $("#t_detacc_porc").html("");
 }
 /**
  * ================================================
@@ -400,6 +447,25 @@ function listar( nube_idproyecto ) {
           console.log(e.responseText);	
         }
       },
+    "createdRow":function(row,data,ixdex) {
+      //console.log(data);
+      if (data[7]<0) {
+        $('td', row).eq(7).css({
+          'background-color':'#ff5252',
+          'color':'white',
+        });  
+      }else if(data[7]==0){
+        $('td', row).eq(7).css({
+          'background-color':'rgb(19 132 150 / 67%)',
+          'color':'white',
+        });
+      }else{
+        $('td', row).eq(7).css({
+          'background-color':'#ffc107',
+          'color':'black',
+        });
+      }
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -443,12 +509,12 @@ function listar_detalle(idmaquinaria,idproyecto,unidad_medida) {
           "targets": [ 4 ],
           "visible": false,
           "searchable": false
-      },
-      {
+      }
+      /*{
           "targets": [ 5 ],
           "visible": false,
           "searchable": false
-      }
+      }*/
   ]
 
   }
@@ -503,10 +569,26 @@ function suma_horas_costoparcial(idmaquinaria,idproyecto){
      // $("#horas-total").html(""); 
       $("#costo-parcial").html("");
       data = JSON.parse(data); 
-      console.log(data);
+      //console.log(data);
      // tabla.ajax.reload();
      // $("#horas-total").html(data.horas); 
-      $("#costo-parcial").html(data.costo_parcial);
+      num= data.costo_parcial;
+      if (!num || num == 'NaN') return '-';
+      if (num == 'Infinity') return '&#x221e;';
+      num = num.toString().replace(/\$|\,/g, '');
+      if (isNaN(num))
+          num = "0";
+      sign = (num == (num = Math.abs(num)));
+      num = Math.floor(num * 100 + 0.50000000001);
+      cents = num % 100;
+      num = Math.floor(num / 100).toString();
+      if (cents < 10)
+          cents = "0" + cents;
+      for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+          num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+          costo_parcial= (((sign) ? '' : '-') + num + '.' + cents);
+        $("#costo-parcial").html(costo_parcial);
+       
   
     });
 }
@@ -555,14 +637,14 @@ function mostrar(idservicio) {
   $("#unidad_m").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
-
+  $("#cantidad").val("");
   $("#modal-agregar-servicio").modal("show");
   $("#sssss").hide();
   $("#nomb_maq").show();
   $("#costo_unitario").attr('readonly',false);
   $.post("../ajax/servicio_maquina.php?op=mostrar", { idservicio: idservicio }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
@@ -575,6 +657,7 @@ function mostrar(idservicio) {
     $("#horometro_inicial").val(data.horometro_inicial); 
     $("#horometro_final").val(data.horometro_final); 
     $("#horas").val(data.horas); 
+    $("#cantidad").val(data.cantidad);
     $("#descripcion").val(data.descripcion); 
     $("#dias").val(data.dias_uso); 
     $("#mes").val(data.meses_uso); 
@@ -659,8 +742,10 @@ function guardaryeditar_pago(e) {
        // console.log(tabla2);
         //tabla2.ajax.reload();
         tabla3.ajax.reload();
+        tabladetrecc.ajax.reload();
         /**================================================== */
         total_pagos(localStorage.getItem('nubeidmaquinaria'),localStorage.getItem('nube_idproyecto'));
+        total_costo_secc_pagoss(localStorage.getItem('nubeidmaquinaria'),localStorage.getItem('nube_idproyecto'));
         limpiar_c_pagos();
 			}else{
 
@@ -670,16 +755,22 @@ function guardaryeditar_pago(e) {
   });
 }
 //Listar pagos.
-function listar_pagos(idmaquinaria,idproyecto) {
+function listar_pagos(idmaquinaria,idproyecto,costo_parcial,monto) {
+
+  //console.log(idmaquinaria,idproyecto,costo_parcial);
+  localStorage.setItem('monto_total_p',costo_parcial);
+  localStorage.setItem('monto_total_dep',monto);
   //console.log('::::->'+idmaquinaria,idproyecto);
   //most_datos_prov_pago(idmaquinaria);
+  var proveedor ="Proveedor";
+  var detraccion ="Detraccion";
   $("#tabla_principal").hide();
   $("#tabla_pagos").show();
   $("#btn-agregar").hide();
   $("#btn-regresar").show();
   $("#btn-pagar").show();
 
-  tabla3=$('#tabla-pagos').dataTable({
+  tabla3=$('#tabla-pagos-proveedor').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -687,7 +778,40 @@ function listar_pagos(idmaquinaria,idproyecto) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/servicio_maquina.php?op=listar_pagos&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
+        url: '../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+       /* success:function(data){
+          console.log(data);	
+        },*/
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+
+  tabladetrecc=$('#tabla-pagos-detrecciones').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -714,21 +838,77 @@ function listar_pagos(idmaquinaria,idproyecto) {
 
   total_pagos(idmaquinaria,idproyecto);
   most_datos_prov_pago(idmaquinaria,idproyecto);
+  total_costo_secc_pagoss(idmaquinaria,idproyecto);
+}
+//total_costo_secc_pagoss
+function total_costo_secc_pagoss(idmaquinaria,idproyecto) {
+
+  $("#total_costo_secc_pagos").html("");
+  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial_pago", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+
+     data = JSON.parse(data);  //console.log(data);
+     num= data.costo_parcial;
+     if (!num || num == 'NaN') return '-';
+     if (num == 'Infinity') return '&#x221e;';
+     num = num.toString().replace(/\$|\,/g, '');
+     if (isNaN(num))
+         num = "0";
+     sign = (num == (num = Math.abs(num)));
+     num = Math.floor(num * 100 + 0.50000000001);
+     cents = num % 100;
+     num = Math.floor(num / 100).toString();
+     if (cents < 10)
+         cents = "0" + cents;
+     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+         num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+         costo_parcial= (((sign) ? '' : '-') + num + '.' + cents);
+       $("#total_costo_secc_pagos").html(costo_parcial);
+      
+   });
+  // monto_total_p=1000;
 }
 //-total Pagos
 function total_pagos(idmaquinaria,idproyecto) {
-  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    $("#monto_total").html("00.0");
-    data = JSON.parse(data); 
-    console.log(data);
-    $("#monto_total").html(data.total_monto);
 
+ var totattotal = localStorage.getItem('monto_total_p');
+  console.log(typeof totattotal);
+  console.log(totattotal);
+
+  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_proveedor", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+    var t_provee_porc=0;
+    $("#monto_total_prob").html("");
+    $("#t_proveedor").html("");
+    $("#t_provee_porc").html("");
+
+    data = JSON.parse(data); 
+    //console.log(data);
+    $("#monto_total_prob").html(data.total_monto);
+    t_provee_porc = (data.total_monto/totattotal)*100;
+    $("#t_proveedor").html(data.total_monto);
+    $("#t_provee_porc").html(t_provee_porc.toFixed(2));
+    t_provee_porc=0;
   });
+ // console.log('idmaquinaria: '+idmaquinaria,'idproyecto '+idproyecto);
+  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_detracc", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+    var t_detacc_porc=0;
+    $("#t_detaccion").html("");
+    $("#t_detacc_porc").html("");
+    $("#monto_total_detracc").html(""); 
+
+    data = JSON.parse(data); 
+    //console.log(data);
+    $("#monto_total_detracc").html(data.total_monto);
+    t_detacc_porc = (data.total_monto*100)/totattotal;
+    $("#t_detaccion").html(data.total_monto);
+    $("#t_detacc_porc").html(t_detacc_porc.toFixed(2));
+    t_detacc_porc=0;
+  });
+//totattotal=0;
 }
 //mostrar datos proveedor pago
 function most_datos_prov_pago(idmaquinaria,idproyecto) {
- // console.log(idmaquinaria,idproyecto);
-  localStorage.setItem('nubeidmaquinaria',idmaquinaria );
+
+  localStorage.setItem('nubeidmaquinaria',idmaquinaria);
 
   $("#h4_mostrar_beneficiario").html("");
   $("#id_maquinaria_pago").html("");
@@ -744,21 +924,45 @@ function most_datos_prov_pago(idmaquinaria,idproyecto) {
     $("#maquinaria_pago").html(data.nombre);
     $("#beneficiario_pago").val(data.razon_social);
     $("#h4_mostrar_beneficiario").html(data.razon_social);
-    $("#cuenta_destino_pago").val(data.cuenta_bancaria);
     $("#banco_pago").val(data.idbancos).trigger("change"); 
     $("#titular_cuenta_pago").val(data.titular_cuenta);
-
-    
-    /*
-    $("#forma_pago").val(data.nombre);
-    $("#tipo_pago").val(data.nombre);
-    $("#fecha_pago").val(data.nombre);
-    $("#monto_pago").val(data.nombre);
-    $("#numero_op_pago").val(data.nombre);
-    $("#descripcion_pago").val(data.nombre);*/
-
+    localStorage.setItem('nube_c_b',data.cuenta_bancaria);
+    localStorage.setItem('nube_c_d',data.cuenta_detracciones);
   });
-  
+}
+//captura_opicion tipopago
+function  captura_op() {
+
+  cuenta_bancaria= localStorage.getItem('nube_c_b');
+  cuenta_detracciones=localStorage.getItem('nube_c_d');
+  //console.log(cuenta_bancaria,cuenta_detracciones);
+  $("#cuenta_destino_pago").val("");
+
+  if ($("#tipo_pago").select2("val") =="Proveedor") {
+    $("#cuenta_destino_pago").val("");
+    $("#cuenta_destino_pago").val(cuenta_bancaria);
+  }
+
+  if ($("#tipo_pago").select2("val") =="Detraccion") {
+    $("#cuenta_destino_pago").val("");
+    $("#cuenta_destino_pago").val(cuenta_detracciones);
+  }
+
+}
+//validando excedentes
+function validando_excedentes() {
+  var totattotal = localStorage.getItem('monto_total_p');
+  var monto_total_dep = localStorage.getItem('monto_total_dep');
+  var monto_entrada = $("#monto_pago").val();
+  var total_suma=parseFloat(monto_total_dep)+parseFloat(monto_entrada);
+  var debe =totattotal-monto_total_dep
+console.log(typeof total_suma);
+  if (total_suma>totattotal) {
+    toastr.error('ERROR monto excedido al total del monto a pagar!');
+  }else{
+    toastr.success('Monto Aceptado.'); 
+  }
+
 
 }
 //mostrar
@@ -821,12 +1025,12 @@ function desactivar_pagos(idpago_servicio,idmaquinaria) {
         total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));   
         tabla.ajax.reload();
         tabla3.ajax.reload();
+        tabladetrecc.ajax.reload();
       });      
     }
   });  
 
 }
-
 function activar_pagos(idpago_servicio,idmaquinaria) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Servicio?",
@@ -846,6 +1050,223 @@ function activar_pagos(idpago_servicio,idmaquinaria) {
         total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto')); 
         tabla.ajax.reload();
         tabla3.ajax.reload();
+        tabladetrecc.ajax.reload();
+      });
+      
+    }
+  }); 
+ 
+}
+function ver_modal_vaucher(imagen){
+  $('#img-vaucher').attr("src", "");
+  $('#modal-ver-vaucher').modal("show");
+  $('#img-vaucher').attr("src", "../dist/img/vauchers_pagos/" +imagen);
+  $("#descargar").attr("href","../dist/img/vauchers_pagos/" +imagen);
+  
+ // $(".tooltip").hide();
+}
+
+ /**
+ * =================================
+ *         SECCIÒN FACTURAS
+ * ================================
+ */
+//Guardar y editar
+function guardaryeditar_factura(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-agregar-factura")[0]);
+ 
+  $.ajax({
+    url: "../ajax/servicio_maquina.php?op=guardaryeditar_factura",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {
+
+				toastr.success('servicio registrado correctamente')				 
+
+        
+        tabla4.ajax.reload();
+
+        $("#modal-agregar-factura").modal("hide");
+        total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
+        limpiar_factura();
+			}else{
+
+				toastr.error(datos)
+			}
+    },
+  });
+}
+function listar_facturas(idmaquinaria,idproyecto) {
+  localStorage.setItem('nubeidmaquif',idmaquinaria);
+  localStorage.setItem('nubeidproyectf',idproyecto);
+$("#tabla_principal").hide();
+$("#tabla_pagos").hide();
+$("#tabla_facturas_h").show();
+$("#btn-agregar").hide();
+$("#btn-regresar").show();
+$("#btn-pagar").hide();
+$("#btn-factura").show();
+
+tabla4=$('#tabla_facturas').dataTable({
+  "responsive": true,
+  "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+  "aProcessing": true,//Activamos el procesamiento del datatables
+  "aServerSide": true,//Paginación y filtrado realizados por el servidor
+  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+  buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+  "ajax":{
+      url: '../ajax/servicio_maquina.php?op=listar_facturas&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+  "language": {
+    "lengthMenu": "Mostrar : _MENU_ registros",
+    "buttons": {
+      "copyTitle": "Tabla Copiada",
+      "copySuccess": {
+        _: '%d líneas copiadas',
+        1: '1 línea copiada'
+      }
+    }
+  },
+  "bDestroy": true,
+  "iDisplayLength": 5,//Paginación
+  "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+}).DataTable();
+$("#idmaquina").val(idmaquinaria);
+$("#idproyectof").val(idproyecto);
+total_monto_f(idmaquinaria,idproyecto);
+total_costo_parcial(idmaquinaria,idproyecto);
+
+}
+//Función limpiar
+function limpiar_factura() {
+  $("#codigo").val("");
+  $("#monto").val("");
+  $("#idfactura").val("");
+  $("#fecha_emision").val("");
+  $("#descripcion_f").val("");
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
+  $('#foto2_i').show();
+  $('#ver_pdf').html('');
+	$("#foto2").val("");
+	$("#foto2_actual").val("");  
+  $("#foto2_nombre").html(""); 
+
+}
+//mostrar
+function mostrar_factura(idfactura) {
+
+  $("#modal-agregar-factura").modal("show");
+
+
+  $.post("../ajax/servicio_maquina.php?op=mostrar_factura", { idfactura: idfactura }, function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data);   
+      
+    $("#idfactura").val(data.idfactura);
+    $("#codigo").val(data.codigo);
+    $("#monto").val(data.monto);
+    $("#fecha_emision").val(data.fecha_emision);
+    $("#descripcion_f").val(data.descripcion);
+
+    if (data.imagen != "") {
+      var img = data.imagen;
+
+			$("#foto2_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
+
+      var extencion = img.substr(img.length - 3); // => "1"
+      console.log(extencion);
+        $('#ver_pdf').html('');
+        $('#foto2_i').attr("src", "");
+
+        if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+          $('#ver_pdf').hide();
+          $('#foto2_i').show();
+          $('#foto2_i').attr("src", "../dist/img/facturas/" +img);
+
+          $("#foto2_nombre").html(''+
+          '<div class="row">'+
+            '<div class="col-md-12">Factura</div>'+
+            '<div class="col-md-12">'+
+            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+            '</div>'+
+          '</div>'+
+        '');
+
+        }else{
+          $('#foto2_i').hide();
+          $('#ver_pdf').show();
+          $('#ver_pdf').html('<iframe src="../dist/img/facturas/'+img+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          
+          $("#foto2_nombre").html(''+
+          '<div class="row">'+
+            '<div class="col-md-12">Factura</div>'+
+            '<div class="col-md-12">'+
+            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+            '</div>'+
+          '</div>'+
+        '');
+
+        }
+
+			$("#foto2_actual").val(data.imagen);
+		}
+
+  });
+}
+//Función para desactivar registros
+function desactivar_factura(idfactura) {
+  console.log(idfactura);
+  Swal.fire({
+    title: "¿Está Seguro de  Desactivar  el servicio?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/servicio_maquina.php?op=desactivar_factura", { idfactura: idfactura }, function (e) {
+
+        Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
+       // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));   
+       total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
+        tabla4.ajax.reload();
+      });      
+    }
+  });  
+
+}
+
+function activar_factura(idfactura) {
+  Swal.fire({
+    title: "¿Está Seguro de  Activar  Servicio?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/servicio_maquina.php?op=activar_factura", { idfactura: idfactura }, function (e) {
+
+        Swal.fire("Activado!", "Servicio ha sido activado.", "success");
+
+        //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto')); 
+        total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
+        tabla4.ajax.reload();
       });
       
     }
@@ -853,16 +1274,85 @@ function activar_pagos(idpago_servicio,idmaquinaria) {
  
 }
 
-function ver_modal_vaucher(imagen){
-  $('#img-vaucher').attr("src", "");
-  $('#modal-ver-vaucher').modal("show");
-  $('#img-vaucher').attr("src", "../dist/img/vauchers_pagos/" +imagen);
+function ver_modal_factura(imagen){
+  var img = imagen;
+var extencion = img.substr(img.length - 3); // => "1"
+//console.log(extencion);
+  $('#ver_fact_pdf').html('');
+  $('#img-factura').attr("src", "");
+  $('#modal-ver-factura').modal("show");
+
+  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+    $('#ver_fact_pdf').hide();
+    $('#img-factura').show();
+    $('#img-factura').attr("src", "../dist/img/facturas/" +img);
+
+    $("#iddescargar").attr("href","../dist/img/facturas/" +img);
+
+  }else{
+    $('#img-factura').hide();
+    $('#ver_fact_pdf').show();
+    $('#ver_fact_pdf').html('<iframe src="../dist/img/facturas/'+img+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href","../dist/img/facturas/" +img);
+  }
+
 
   
  // $(".tooltip").hide();
 }
+//-total Pagos
+function total_monto_f(idmaquinaria,idproyecto) {
+  $.post("../ajax/servicio_maquina.php?op=total_monto_f", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+    $("#monto_total_f").html("00.0");
+    data = JSON.parse(data); 
+   // console.log(data);
+   num= data.total_mont_f;
+    if (!num || num == 'NaN') return '-';
+    if (num == 'Infinity') return '&#x221e;';
+    num = num.toString().replace(/\$|\,/g, '');
+    if (isNaN(num))
+        num = "0";
+    sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num * 100 + 0.50000000001);
+    cents = num % 100;
+    num = Math.floor(num / 100).toString();
+    if (cents < 10)
+        cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+        num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+        total_mont_f= (((sign) ? '' : '-') + num + '.' + cents);
 
+    $("#monto_total_f").html(total_mont_f);
 
+  });
+}
+//-Mostral total monto
+function total_costo_parcial(idmaquinaria,idproyecto) {
+  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+    $("#total_costo").html("00.0");
+    data = JSON.parse(data); 
+    num= data.costo_parcial;
+    
+    if (!num || num == 'NaN') return '-';
+    if (num == 'Infinity') return '&#x221e;';
+    num = num.toString().replace(/\$|\,/g, '');
+    if (isNaN(num))
+        num = "0";
+    sign = (num == (num = Math.abs(num)));
+    num = Math.floor(num * 100 + 0.50000000001);
+    cents = num % 100;
+    num = Math.floor(num / 100).toString();
+    if (cents < 10)
+        cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+        num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+    total_parcial= (((sign) ? '' : '-') + num + '.' + cents);
+
+    $("#total_costo").html(total_parcial);
+
+  });
+}
+//========FIN=================
 init();
 
 $(function () {
@@ -1011,7 +1501,65 @@ $(function () {
     },
 
 
-  });});
+  });
+    /**=======Factura */
+    $.validator.setDefaults({
+
+      submitHandler: function (e) {
+  
+        guardaryeditar_factura(e);
+        //console.log('factura 22222');
+  
+      },
+    });
+  
+    $("#form-agregar-factura").validate({
+      rules: {
+        codigo:{required: true},
+        monto:{required: true},
+        fecha_emision:{required: true},
+        descripcion_f:{minlength: 1},
+        foto2_i:{required: true}
+    
+        // terms: { required: true },
+      },
+      messages: {
+        //====================
+        forma_pago: {
+          codigo: "Por favor ingresar el código", 
+        },
+        monto: {
+          required: "Por favor ingresar el monto", 
+        },
+        fecha_emision: {
+          required: "Por favor ingresar la fecha de emisión", 
+        }
+  
+      },
+          
+      errorElement: "span",
+  
+      errorPlacement: function (error, element) {
+  
+        error.addClass("invalid-feedback");
+  
+        element.closest(".form-group").append(error);
+      },
+  
+      highlight: function (element, errorClass, validClass) {
+  
+        $(element).addClass("is-invalid");
+      },
+  
+      unhighlight: function (element, errorClass, validClass) {
+  
+        $(element).removeClass("is-invalid").addClass("is-valid");
+       
+      },
+  
+  
+    });
+});
 
 
 
@@ -1140,4 +1688,7 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+function extrae_extencion(filename) {
+  return filename.split('.').pop();
 }
