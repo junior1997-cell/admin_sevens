@@ -29,9 +29,9 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar_plano($idproyecto, $nombre, $descripcion, $imagen1){    
+    public function insertar_plano($id_carpeta, $nombre, $descripcion, $imagen1){    
        
-      $sql="INSERT INTO plano_otro ( idproyecto, nombre, descripcion, doc) VALUES ( '$idproyecto', '$nombre', '$descripcion', '$imagen1')";
+      $sql="INSERT INTO plano_otro ( id_carpeta, nombre, descripcion, doc) VALUES ( '$id_carpeta', '$nombre', '$descripcion', '$imagen1')";
       
       return ejecutarConsulta($sql);
         

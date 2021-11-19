@@ -14,7 +14,7 @@ function init() {
   // $("#lAllTrabajador").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-carpeta").submit(); });
-  $("#guardar_registro2").on("click", function (e) {  $("#submit-form-planootro").submit(); });
+  $("#guardar_registro_2").on("click", function (e) {  $("#submit-form-planootro").submit(); });
 
   $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
   $("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
@@ -245,6 +245,8 @@ function listar_carpeta(nube_idproyecto) {
 //Función Listar
 function listar_plano(nombre, id_carpeta) {
 
+  $("#id_carpeta").val(id_carpeta);
+
   $("#ver-tabla-carpeta").hide(); $("#ver-tabla-plano").show(); console.log(nombre, id_carpeta);
   $("#title-1").hide(); $("#title-2").show();
 
@@ -297,7 +299,7 @@ function guardaryeditar_carpeta(e) {
 
         Swal.fire("Correcto!", "Carpeta guardado correctamente", "success");			 
 
-	      tabla.ajax.reload();
+	      tabla_carpeta.ajax.reload();
          
 				limpiar();
 
@@ -351,7 +353,7 @@ function guardaryeditar_plano(e) {
 
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");			 
 
-	      tabla.ajax.reload();
+	      tabla_plano.ajax.reload();
          
 				limpiar();
 

@@ -4425,23 +4425,33 @@ var FullCalendar = (function (exports) {
             'fc-day',
             "fc-day-" + DAY_IDS[meta.dow],
         ];
-        if (meta.isDisabled) {
+        // console.log(DAY_IDS[meta.dow]);
+        if ( DAY_IDS[meta.dow] == 'sat' ) {
             classNames.push('fc-day-disabled');
-        }
-        else {
-            if (meta.isToday) {
-                classNames.push('fc-day-today');
-                classNames.push(theme.getClass('today'));
+        }else{
+
+            if ( DAY_IDS[meta.dow] == 'sun' && localStorage.getItem('estado_domingo') == "true") {
+                classNames.push('fc-day-disabled');
+            } else {
+                if (meta.isDisabled) {
+                    classNames.push('fc-day-disabled');
+                } else {
+                    if (meta.isToday) {
+                        classNames.push('fc-day-today');
+                        classNames.push(theme.getClass('today'));
+                    }
+                    if (meta.isPast) {
+                        classNames.push('fc-day-past');
+                    }
+                    if (meta.isFuture) {
+                        classNames.push('fc-day-future');
+                    }
+                    if (meta.isOther) {
+                        classNames.push('fc-day-other');
+                    }
+                } 
             }
-            if (meta.isPast) {
-                classNames.push('fc-day-past');
-            }
-            if (meta.isFuture) {
-                classNames.push('fc-day-future');
-            }
-            if (meta.isOther) {
-                classNames.push('fc-day-other');
-            }
+            
         }
         return classNames;
     }

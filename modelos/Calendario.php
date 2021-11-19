@@ -31,7 +31,7 @@
       
     }
 
-    //Implementamos un método para desactivar categorías
+    //Implementamos un método para desactivar ESTADO
     public function desactivar($idcalendario)
     {
       $sql="UPDATE calendario_por_proyecto SET estado='0' WHERE idcalendario_por_proyecto='$idcalendario'";
@@ -39,13 +39,29 @@
       return ejecutarConsulta($sql);
     }
 
-    //Implementamos un método para activar categorías
+    //Implementamos un método para activar ESTADO
     public function activar($idcalendario)
     {
       $sql="UPDATE calendario_por_proyecto SET estado='1' WHERE idcalendario_por_proyecto='$idcalendario'";
 
       return ejecutarConsulta($sql);
     } 
+
+    //Implementamos un método para desactivar DOMINGO
+    public function desactivar_domingo($idproyecto)
+    {
+      $sql="UPDATE proyecto SET feriado_domingo='false' WHERE idproyecto='$idproyecto'";
+
+      return ejecutarConsulta($sql);
+    }
+
+    //Implementamos un método para activar DOMINGO
+    public function activar_domingo($idproyecto)
+    {
+      $sql="UPDATE proyecto SET feriado_domingo='true' WHERE idproyecto='$idproyecto'";
+
+      return ejecutarConsulta($sql);
+    }
 
     //Implementar un método para listar los registros
     public function listar( $idproyecto)
@@ -73,7 +89,31 @@
       WHERE cp.estado = 0 AND cp.idproyecto = '$idproyecto';";
 
       return ejecutarConsultaArray($sql);		
-    }    
+    }   
+    
+    //Implementamos un método para activar DOMINGO
+    public function estado_domingo($idproyecto)
+    {
+      $sql="SELECT feriado_domingo FROM proyecto WHERE idproyecto='$idproyecto'";
+
+      return ejecutarConsultaSimpleFila($sql);
+    }
+
+    //Implementamos un método para activar DOMINGO
+    public function detalle_dias_proyecto($idproyecto)
+    {
+      $sql="SELECT COUNT(fecha_feriado) FROM calendario_por_proyecto WHERE idproyecto = '$idproyecto';";
+      $data1 = ejecutarConsultaSimpleFila($sql);
+      
+      $sql2="SELECT plazo FROM proyecto WHERE idproyecto = '$idproyecto';";
+      $data2 = ejecutarConsultaSimpleFila($sql2);
+
+      $results = array(
+        "data1" => $data1,
+        "data2" => $data2
+      );
+      return $results;
+    }
 
   }
 

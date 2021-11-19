@@ -24,8 +24,13 @@
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
     <!-- fullCalendar -->
     <link rel="stylesheet" href="../plugins/fullcalendar/main.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+
+    <link rel="stylesheet" href="../dist/css/switch_domingo.css">
 
   </head>
   <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
@@ -68,28 +73,81 @@
                       <div class="row">
                         <div class="col-md-3">
                           <div class="sticky-top mb-3">
-                            <div class="card">
-                              <div class="card-header">
-                                <h4 class="card-title">Lista de feriados</h4>
+                            <div class="card card-primary card-outline card-outline-tabs" style="height: 500px !important; overflow-y: auto !important;">
+                              <div class="card-header p-0 border-bottom-0">
+                                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Detalle</a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false"><i class="fas fa-calendar-week"></i></a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false"><i class="fas fa-trash-alt"></i></a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false"><i class="fas fa-cogs"></i></a>
+                                  </li>
+                                </ul>
                               </div>
                               <div class="card-body">
-                                <!-- the events -->
-                                <div id="external-events" >                                     
-                                                                  
+                                <div class="tab-content" id="custom-tabs-four-tabContent">
+
+                                  <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                                    <div class="card-body table-responsive p-0">
+                                      <table class="table table-hover text-nowrap">
+                                        <thead>
+                                          <tr>
+                                            <th>Detalle</th>
+                                            <th>Cant. Dias</th>                                            
+                                          </tr>
+                                        </thead>
+                                        <tbody>                                          
+                                          <tr>
+                                            <td>Dias calendario</td>
+                                            <td>34</td>                                            
+                                          </tr>
+                                          <tr>
+                                            <td>Dias laborables</td>
+                                            <td>15</td>                                            
+                                          </tr>                                          
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+
+                                  <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                                    <label for="">Lista de feriados</label> <br>
+                                    <!-- Lista de feriados -->
+                                    <div id="external-events" >  </div>
+                                  </div>
+
+                                  <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                                    <label for="">Feriados eliminados</label> <br>
+                                    <!-- Eliminados -->
+                                    <div class="card-body" id="external-events-eliminados">  </div>
+                                  </div>
+
+                                  <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
+                                    <div id="domingo">                                    
+                                      <label for="">Todos los domingos no laborables</label> <br>
+                                      <!-- <input type="checkbox" name="my-checkbox" id="my-checkbox"   data-bootstrap-switch data-off-color="danger" data-on-color="success" > -->
+                                      <div class="switch-holder">
+                                        <div class="switch-label">
+                                          <i class="fas fa-calendar-day"></i>Domingos</span>
+                                        </div>
+                                        <div class="switch-toggle">
+                                            <input type="checkbox" id="my-domingo" >
+                                            <label for="my-domingo"></label>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <!-- /.card-body -->
+                              <!-- /.card -->
                             </div>
-
-                            <div class="card card-secondary">
-                              <div class="card-header">
-                                <h3 class="card-title">Feriados eliminados</h3>
-                              </div>
-                              <div class="card-body" id="external-events-eliminados">
-                                
-                              </div>
-                            </div>
-                            
                           </div>
                         </div>
                         <!-- /.col -->
@@ -157,12 +215,24 @@
                           </div>                                                    
 
                           <!-- Background Color -->
-                          <div class="col-lg-6">
+                          <!-- <div class="col-lg-6">
                             <div class="form-group">
                               <label for="background_color">Color</label>
                               <input type="color" name="background_color" id="background_color" class="form-control" value="#dc3545" onchange="contraste();" />
                             </div>
-                          </div>                        
+                          </div>        -->
+                          
+                          <!-- Tipo trabajador -->
+                          <div class="col-lg-6">
+                            <div class="form-group">
+                              <label for="background_color">Color</label>                                   
+                              <select name="background_color" id="background_color" class="form-control select2" style="width: 100%;" onchange="contraste();" >
+                                <option value="#FF0000">Feriado Nacional</option>
+                                <option value="#FFF700">Dia no Laborable</option>
+                                <option value="#28A745">Feriado local</option>
+                              </select>
+                            </div>
+                          </div>
 
                           <!-- Descripcion -->
                           <div class="col-lg-12">
@@ -214,26 +284,29 @@
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery UI -->
     <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- jquery-validation -->
+    <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../plugins/jquery-validation/additional-methods.min.js"></script>    
+
     <!-- AdminLTE App -->
     <script src="../dist/js/adminlte.min.js"></script>
     <!-- fullCalendar 2.2.5 -->
     <script src="../plugins/moment/moment.min.js"></script>
     <script src="../plugins/fullcalendar/main.js"></script>
+    <script src="../plugins/fullcalendar/locales/es.js"></script>
+    <!-- <script src="../plugins/fullcalendar/locales-all.js"></script> -->
 
     <!-- sweetalert2 -->
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
-    
-    <script src="../plugins/fullcalendar/locales/es.js"></script>
-    <script src="../plugins/fullcalendar/locales-all.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="../dist/js/demo.js"></script>
 
-    <!-- jquery-validation -->
-    <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-    <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="../plugins/select2/js/select2.full.min.js"></script>    
+
+    <!-- AdminLTE for demo purposes -->
+    <script src="../dist/js/demo.js"></script>  
 
     <script type="text/javascript" src="scripts/calendario.js"></script>
-
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
@@ -257,7 +330,8 @@
         $("#ver-otros-modulos-1").hide();
       }
       
-    </script>     
+    </script>    
+     
   </body>
 </html>
 

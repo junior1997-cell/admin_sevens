@@ -63,7 +63,23 @@
 
  				  echo $rspta ? "Usuario activado" : "calendario no se puede activar";
 
-        break;        
+        break; 
+        
+        case 'desactivar_domingo':
+
+          $rspta=$calendario->desactivar_domingo($idproyecto);
+
+ 				  echo $rspta ? "Domingo Desactivado" : "Domingo no se puede desactivar";
+
+        break;
+
+        case 'activar_domingo':
+
+          $rspta=$calendario->activar_domingo($idproyecto);
+
+ 				  echo $rspta ? "Domingo activado" : "Domingo no se puede activar";
+
+        break;
 
         case 'listar-calendario':          
 
@@ -75,6 +91,22 @@
         case 'listar-calendario-e':          
 
           $rspta=$calendario->listar_e($idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);         
+
+        break;
+
+        case 'estado_domingo':          
+
+          $rspta=$calendario->estado_domingo($idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);         
+
+        break;
+
+        case 'detalle_dias_proyecto':          
+
+          $rspta=$calendario->detalle_dias_proyecto($idproyecto);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);         
 

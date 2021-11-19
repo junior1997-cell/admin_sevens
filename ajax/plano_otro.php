@@ -72,7 +72,7 @@
 
           if (empty($idplano_otro)){
 
-            $rspta=$plano_otro->insertar_plano($idproyecto, $nombre, $descripcion, $imagen1);
+            $rspta=$plano_otro->insertar_plano($id_carpeta, $nombre, $descripcion, $imagen1);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del documento";
   
@@ -91,7 +91,7 @@
             }
 
             // editamos un documento existente
-            $rspta=$plano_otro->editar_plano( $idplano_otro, $idproyecto, $nombre, $descripcion, $imagen1);
+            $rspta=$plano_otro->editar_plano( $idplano_otro, $id_carpeta, $nombre, $descripcion, $imagen1);
             
             echo $rspta ? "ok" : "Documento no se pudo actualizar";
           }            
@@ -249,7 +249,7 @@
                 ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
               "1"=>$reg->nombre,
               "2"=> "<span >".$descripcion." </span>",   
-              "3" => '<div class="asignar_paint_'.$reg->idproyecto.'">
+              "3" => '<div ">
                 <center>
                   <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
                     '.$img.'

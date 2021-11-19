@@ -4,8 +4,8 @@ FullCalendar.globalLocales.push(function () {
   var es = {
     code: 'es',
     week: {
-      dow: 1, // Monday is the first day of the week.
-      doy: 4, // The week that contains Jan 4th is the first week of the year.
+      dow: 0, // El lunes es el primer día de la semana.
+      doy: 4, // La semana que contiene el 4 de enero es la primera semana del año.
     },
     buttonText: {
       prev: 'Ant',
@@ -14,7 +14,7 @@ FullCalendar.globalLocales.push(function () {
       month: 'Mes',
       week: 'Semana',
       day: 'Día',
-      list: 'Lista',
+      list: 'Lista - Anual',
     },
     weekText: 'Sm',
     allDayText: 'Todo el día',

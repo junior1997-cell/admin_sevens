@@ -15,11 +15,19 @@ function init() {
 
   $("#eliminar_registro").on("click", function (e) { desactivar()  });
 
+   //Initialize Select2 Elements
+  $("#background_color").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione color",
+    allowClear: true,
+  });
+
+  $("#background_color").val("").trigger("change");
 }
 
 function contraste() {
 
-  let color = $('#background_color').val();
+  let color = $('#background_color').select2('val'); //console.log(color);
 
   let color_contrst = invertColor(color, true)
 
@@ -33,18 +41,61 @@ function limpiar() {
   $('#text_color').val('#ffffff');
   $('#fecha_select').html("Selecione una fecha");
   $('#titulo').val('Feriado');
-  $('#background_color').val("#dc3545");
+  $("#background_color").val("").trigger("change");
   $('#descripcion').val('');
   $('#eliminar_registro').hide();  
 }
 
 //Función Listar
 function listar(idproyecto) {
+
   $("#external-events").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
+
+  $("#custom-tabs-four-home").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
+
+  // Detalle de dias Proyecto
+  $.post("../ajax/calendario.php?op=detalle_dias_proyecto", { idproyecto: idproyecto },  function (data, status) {
+
+    data = JSON.parse(data); console.log(data);     
+
+    if (data) {
+
+      $(".fc-day-sun").addClass("fc-day-disabled") 
+
+      $("#my-domingo").prop("checked", true);
+      
+    } else {
+
+      $("#custom-tabs-four-home").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
+    }    
+     
+  });
+
+  // Domingo no laborable
+  $.post("../ajax/calendario.php?op=estado_domingo", { idproyecto: idproyecto },  function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data);
+
+    localStorage.setItem('estado_domingo', data.feriado_domingo);
+
+    if (data.feriado_domingo == "true") {
+
+      $(".fc-day-sun").addClass("fc-day-disabled") 
+
+      $("#my-domingo").prop("checked", true);
+      
+    } else {
+
+      $("#my-domingo").prop("checked", false);
+
+      $(".fc-day-sun").removeClass("fc-day-disabled")
+    }    
+     
+  });   
 
   $.post("../ajax/calendario.php?op=listar-calendario", { idproyecto: idproyecto },  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data);  //console.log(data); 
 
     $("#external-events").html('');
 
@@ -58,8 +109,7 @@ function listar(idproyecto) {
     } else {
 
       $("#external-events").html('<div class="external-event bg-info">No hay fechas disponibles</div>');
-    }
-      
+    }      
     
     //initialize the calendar
     var date = new Date()
@@ -81,10 +131,9 @@ function listar(idproyecto) {
       headerToolbar: {  left: 'prev,next today', center: 'title', right: 'listYear,dayGridMonth' },
 
       themeSystem: 'bootstrap',
-
+      
       events: data.data1,
        
-
       // Se ejecuta cuando no hay eventos
       dateClick: function(info) {
         
@@ -119,7 +168,7 @@ function listar(idproyecto) {
 
         if (month < 10) { month = '0' + month; }
         
-         console.log(info.event);
+         //console.log(info.event);
 
         $('#idcalendario').val(info.event.id);
 
@@ -150,10 +199,11 @@ function listar(idproyecto) {
         $('#modal-agregar-calendario').modal('show');
       },       
           
-      hiddenDays:[6],       
+    //hiddenDays:[6],       
       
       editable  : true,
 
+      //validRange: { start: '2021-11-16', },
       //droppable : true, // this allows things to be dropped onto the calendar !!!
 
       eventDrop : function(info) {
@@ -208,6 +258,7 @@ function listar(idproyecto) {
     calendar.setOption('locale', 'es');
 
     calendar.render(); 
+     
   });
 
   // fechas eliminadas
@@ -215,7 +266,7 @@ function listar(idproyecto) {
 
   $.post("../ajax/calendario.php?op=listar-calendario-e", { idproyecto: idproyecto },  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data);  //console.log(data); 
 
     $("#external-events-eliminados").html('');
 
@@ -224,12 +275,12 @@ function listar(idproyecto) {
       $.each(data, function (index, value) {
               
         $("#external-events-eliminados").append(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important; background-color: '+value.backgroundColor+' !important;">'+
+        '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
           '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number" style="color: '+value.textColor+' !important;">Feriado </span>'+
+            '<span class="info-box-number" >Feriado </span>'+
           '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important;" onclick="activar('+value.id+')">'+
-            '<i class="fas fa-check"></i>'+
+          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
+            '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+
           '</span>'+
         '</div>'
         );
@@ -249,9 +300,10 @@ function listar(idproyecto) {
       );
     }
   });
+
+  
+  
 }
-
-
 
 //Función para guardar o editar
 function guardaryeditar(e) {
@@ -301,7 +353,7 @@ function desactivar() {
 
       $.post("../ajax/calendario.php?op=desactivar", { idcalendario: idcalendario }, function (e) {
 
-        Swal.fire("Eliminado!", "Tu fecha a sido eliminado.", "success");
+        Swal.fire("Eliminado!", "Tu Fecha a sido eliminado.", "success");
     
         listar(localStorage.getItem('nube_idproyecto')); $("#modal-agregar-calendario").modal("hide"); limpiar();    
       });      
@@ -323,7 +375,7 @@ function activar(idcalendario) {
     if (result.isConfirmed) {
       $.post("../ajax/calendario.php?op=activar", { idcalendario: idcalendario }, function (e) {
 
-        Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
+        Swal.fire("Activado!", "Tu Fecha ha sido activado.", "success");
 
         listar(localStorage.getItem('nube_idproyecto')); 
       });
@@ -333,7 +385,9 @@ function activar(idcalendario) {
 }
 
 // Validacion FORM
-$(function () {
+$(function () {  
+  
+  
 
   $.validator.setDefaults({
 
@@ -347,19 +401,19 @@ $(function () {
   $("#form-calendario").validate({
     rules: {
       titulo: { required: true, minlength: 3, maxlength: 20 },
-      color: { required: true,  },
+      background_color: { required: true,  },
       descripcion: { minlength: 6 },
     },
     messages: {
 
       titulo: {
-        required: "Por favor selecione un tipo de documento",
-        minlength: "El color debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El color debe tener como MÁXIMO 20 caracteres.", 
+        required: "Este campo es requerido",
+        minlength: "El titulo debe tener MÍNIMO 6 caracteres.",
+        maxlength: "El titulo debe tener como MÁXIMO 20 caracteres.", 
       },
 
-      color: {
-        required: "Ingrese un número de documento",        
+      background_color: {
+        required: "Este campo es requerido",        
       },
 
       descripcion: {
@@ -391,7 +445,7 @@ $(function () {
 });
 
 function invertColor(hex, bw) {
-
+  //console.log(hex.indexOf('#'));
   if (hex.indexOf('#') === 0) {
     hex = hex.slice(1);
   }
@@ -417,9 +471,41 @@ function invertColor(hex, bw) {
   b = (255 - b).toString(16);
   // pad each with zeros and return
   return "#" + padZero(r) + padZero(g) + padZero(b);
-}
+} 
+
+$("#my-domingo").on('click ', function(e){
+  
+  if( $('#my-domingo').is(':checked') ) {    
+    
+    $(".fc-day-sun").addClass("fc-day-disabled")  
+
+    $.post("../ajax/calendario.php?op=activar_domingo", { idproyecto: localStorage.getItem('nube_idproyecto') }, function (e) {      
+
+      Swal.fire("Activado!", "Tu DOMINGO no es laborable.", "success");      
+
+      listar(localStorage.getItem('nube_idproyecto')); 
+    });
+    
+  }else{
+
+    $(".fc-day-sun").removeClass("fc-day-disabled") 
+
+    $.post("../ajax/calendario.php?op=desactivar_domingo", { idproyecto: localStorage.getItem('nube_idproyecto') }, function (e) {
+      
+      Swal.fire("Desactivado!", "Tu DOMINGO es laborable", "success");
+
+      listar(localStorage.getItem('nube_idproyecto')); 
+    });    
+  }
+});
 
 init();
+
+
+
+ 
+
+
 
 
 
