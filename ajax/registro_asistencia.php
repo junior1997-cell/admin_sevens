@@ -61,32 +61,18 @@ ob_start();
           /*$f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
           $nube_idproyect = $_POST["nube_idproyect"];*/
-          $f1 = '01/10/2021';
-          $f2 = '15/10/2021';
+          $f1 = '2021-07-09';
+          $f2 = '2021-07-23';
           $nube_idproyect = '1';
 
           $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
+
           //Vamos a declarar un array
-          $data= Array();
-          //$idtrabajador_d=2;
-          while ($reg=$rspta->fetch_object()){
+          // $data= Array();           
+          // while ($reg=$rspta->fetch_object()){  $data[]=array( "idtrabajador"=>$reg->idtrabajador); }
 
-            $data[]=array(
-              "idtrabajador"=>$reg->idtrabajador,
-              "nombres"=>$reg->nombres,
-              "tipo_doc"=>$reg->tipo_doc,
-              "num_doc"=>$reg->num_doc,
-              "cargo"=>$reg->cargo,
-              "sueldo_mensual"=>$reg->sueldo_mensual,
-              "sueldo_diario"=>$reg->sueldo_diario,
-              "sueldo_hora"=>$reg->total_horas,
-              "total_sabatical"=>$reg->total_sabatical
-
-              );
-              // $idtrabajador_d++;
-          }
           //Codificar el resultado utilizando json
-          echo json_encode($data);		
+          echo json_encode($rspta);		
         break;
 
         case 'ver_datos_quincena_xdia':

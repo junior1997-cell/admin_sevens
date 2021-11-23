@@ -75,9 +75,12 @@
             cp.background_color AS backgroundColor, cp.background_color AS borderColor, cp.text_color AS textColor, cp.all_day AS allDay
       FROM calendario_por_proyecto AS cp
       WHERE cp.estado = 1 AND cp.idproyecto = '$idproyecto';";
-      $a = ejecutarConsultaArray($sql); $b = ejecutarConsultaArray($sql2);
 
-      $data = array( 'data1' => array_merge($a,$b) );
+      $sql3="SELECT plazo, fecha_inicio, fecha_fin FROM proyecto WHERE idproyecto = '$idproyecto';";
+      
+      $a = ejecutarConsultaArray($sql); $b = ejecutarConsultaArray($sql2); $c = ejecutarConsultaSimpleFila($sql3);
+
+      $data = array( 'data1' => array_merge($a,$b), 'data2' => $c );
       return $data;
     }    
 
@@ -102,14 +105,17 @@
     //Implementamos un método para activar DOMINGO
     public function detalle_dias_proyecto($idproyecto)
     {
-      $sql="SELECT COUNT(fecha_feriado) FROM calendario_por_proyecto WHERE idproyecto = '$idproyecto';";
-      $data1 = ejecutarConsultaSimpleFila($sql);
+      $sql="SELECT fecha_feriado  FROM calendario  WHERE estado = 1;";
+      $a = ejecutarConsultaArray($sql);
+
+      $sql2="SELECT fecha_feriado  FROM calendario_por_proyecto WHERE idproyecto = '$idproyecto' AND estado = 1;";
+      $b = ejecutarConsultaArray($sql2);
       
-      $sql2="SELECT plazo FROM proyecto WHERE idproyecto = '$idproyecto';";
-      $data2 = ejecutarConsultaSimpleFila($sql2);
+      $sql3="SELECT plazo, fecha_inicio, fecha_fin FROM proyecto WHERE idproyecto = '$idproyecto';";
+      $data2 = ejecutarConsultaSimpleFila($sql3);
 
       $results = array(
-        "data1" => $data1,
+        "data1" => array_merge($a,$b),
         "data2" => $data2
       );
       return $results;

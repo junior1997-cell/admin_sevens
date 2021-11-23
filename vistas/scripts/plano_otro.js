@@ -495,19 +495,19 @@ function mostrar_carpeta(idplano_otro) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-planootros").modal("show")
+  $("#modal-agregar-carpeta").modal("show")
 
   $.post("../ajax/plano_otro.php?op=mostrar_carpeta", { idplano_otro: idplano_otro }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
     
-    $("#nombre").val(data.nombre);
-    $("#descripcion").val(data.descripcion);
+    $("#nombre_carpeta").val(data.nombre);
+    $("#descripcion_carpeta").val(data.descripcion);
     $("#idproyecto").val(data.idproyecto);
-    $("#idplano_otro").val(data.idplano_otro);    
+    $("#idcarpeta").val(data.idcarpeta);    
 
   });
 }
@@ -522,7 +522,7 @@ function mostrar_plano(idplano_otro) {
 
   $.post("../ajax/plano_otro.php?op=mostrar_plano", { idplano_otro: idplano_otro }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();

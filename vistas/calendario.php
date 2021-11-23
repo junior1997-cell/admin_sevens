@@ -92,42 +92,23 @@
                               </div>
                               <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-four-tabContent">
-
+                                  <!-- Lista de detalle de proyecto -->
                                   <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-                                    <div class="card-body table-responsive p-0">
-                                      <table class="table table-hover text-nowrap">
-                                        <thead>
-                                          <tr>
-                                            <th>Detalle</th>
-                                            <th>Cant. Dias</th>                                            
-                                          </tr>
-                                        </thead>
-                                        <tbody>                                          
-                                          <tr>
-                                            <td>Dias calendario</td>
-                                            <td>34</td>                                            
-                                          </tr>
-                                          <tr>
-                                            <td>Dias laborables</td>
-                                            <td>15</td>                                            
-                                          </tr>                                          
-                                        </tbody>
-                                      </table>
-                                    </div>
+                                    
                                   </div>
-
+                                  <!-- Lista de feriados -->
                                   <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-                                    <label for="">Lista de feriados</label> <br>
-                                    <!-- Lista de feriados -->
+                                    <label for="">Lista de feriados</label> <br>                                    
                                     <div id="external-events" >  </div>
                                   </div>
 
+                                  <!-- Eliminados -->
                                   <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
-                                    <label for="">Feriados eliminados</label> <br>
-                                    <!-- Eliminados -->
+                                    <label for="">Feriados eliminados</label> <br>                                    
                                     <div class="card-body" id="external-events-eliminados">  </div>
                                   </div>
 
+                                  <!-- Activar o Desactivar - Domingo no laborables -->
                                   <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
                                     <div id="domingo">                                    
                                       <label for="">Todos los domingos no laborables</label> <br>
@@ -222,10 +203,10 @@
                             </div>
                           </div>        -->
                           
-                          <!-- Tipo trabajador -->
+                          <!-- Tipo feriado -->
                           <div class="col-lg-6">
                             <div class="form-group">
-                              <label for="background_color">Color</label>                                   
+                              <label for="background_color">Tipo feriado</label>                                   
                               <select name="background_color" id="background_color" class="form-control select2" style="width: 100%;" onchange="contraste();" >
                                 <option value="#FF0000">Feriado Nacional</option>
                                 <option value="#FFF700">Dia no Laborable</option>

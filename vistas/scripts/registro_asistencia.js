@@ -5,8 +5,7 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar(localStorage.getItem('nube_idproyecto'));
-  
+  listar(localStorage.getItem('nube_idproyecto'));  
 
   // $("#bloc_Accesos").addClass("menu-open");
 
@@ -16,7 +15,6 @@ function init() {
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-asistencia").submit(); });
   // $("#modal-agregar-asistencia").on("submit",function(e) { guardaryeditar(e);	})
-
   
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -78,8 +76,7 @@ function limpiar() {
 }
 // Función que suma o resta días a la fecha indicada
 
-sumaFecha = function(d, fecha)
-{
+sumaFecha = function(d, fecha){
   var Fecha = new Date();
   var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
   var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
@@ -98,6 +95,8 @@ sumaFecha = function(d, fecha)
 
 //Función Listar
 function listar(nube_idproyecto) {
+
+  $('#Lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
 
   tabla=$('#tabla-asistencia').dataTable({
     "responsive": true,
@@ -128,9 +127,8 @@ function listar(nube_idproyecto) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+
   //Listar quincenas(botones)
-
-
   $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
@@ -138,26 +136,29 @@ function listar(nube_idproyecto) {
     var fecha = data.fecha_inicio;
     // console.log(fecha);
     var fecha_i = sumaFecha(0,fecha);
-    var cal_quincena  =data.plazo/15;
+    var cal_quincena  = data.plazo/15;
     var i=0;
     var cont=0
     $('#Lista_quincenas').html('');
 
     while (i <= cal_quincena) {
+
       cont=cont+1;
+
       var fecha_inicio = fecha_i;
       
       fecha=sumaFecha(14,fecha_inicio);
 
       // console.log(fecha_inicio+'-'+fecha);
       ver_asistencia="'"+fecha_inicio+"',"+"'"+fecha+"'";
-      $('#Lista_quincenas').append(' <button type="button" class="btn bg-gradient-info text-center" onclick="datos_quincena('+ver_asistencia+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+'-'+fecha+'</button>')
+
+      $('#Lista_quincenas').append(' <button type="button" class=" mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('+ver_asistencia+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' // '+fecha+'</button>')
+      
       fecha_i =sumaFecha(1,fecha);
+
       i++;
     }
     //console.log(fecha);
-
-
   });
 }
 
@@ -210,117 +211,122 @@ function agregar_hora_all() {
   $('input[type=time][name="horas_trabajo[]"]').val(hora_all);
 }
 
+// listamos la data de una quincena
 function datos_quincena(f1,f2) {
-  var nube_idproyect =localStorage.getItem('nube_idproyecto');
-  console.log('----------'+f1,f2,nube_idproyect);
+
+  var nube_idproyect =localStorage.getItem('nube_idproyecto');  console.log('----------'+f1,f2,nube_idproyect);
       
   mostrar_form_table(2)
+
   $.post("../ajax/registro_asistencia.php?op=ver_datos_quincena", {f1:f1,f2:f2,nube_idproyect:nube_idproyect}, function (data, status) {
         
-    data =JSON.parse(data);
-    //console.log(data);
+    data =JSON.parse(data); console.log(data);
     var rowtrabajador='';
     var rowtrabajadores='';
-    var horas = '<td>N</td>';
-    var celda = document.createElement("td");
-    var textoCelda='';
+    var horas = '<td>-</td>';     
     $(".nameappend").html('');
+   
 
-    $.each(data, function (index, value) {      
+    $.each(data, function (index, value) {
 
+      var pintar_hora_por_dia = ""; var count_dias_asistidos = 0; var horas_total = 0; var sabatical = 0;
 
-      $.post("../ajax/registro_asistencia.php?op=ver_datos_quincena_xdia", {f1:f1,f2:f2,nube_idproyect:nube_idproyect,idtrabajador:value.idtrabajador}, function (data, status) {
-                
-          data =JSON.parse(data);
-         // console.log(data);
-          var fecha = f1;
-          var i; //defines i
-          for (i = 1; i <=15; i++) { //starts loop
-            // console.log("The Number Is: " + i); //What ever you want
-            console.log(value.nombres);
-            console.log('f.'+i+'-'+fecha);
-            for (let i = 0; i < data.length; i++) { 
-              //console.log(data[i]['fecha_asistencia']);
+      if (value.asistencia.length != 0) {
 
-              if (fecha==data[i]['fecha_asistencia']) {
-                console.log(data[i]['horas_trabajador']);
-                horas = '<td>'+data[i]['horas_trabajador']+'</td>';
-                textoCelda = document.createTextNode("celda en la hilera "+i+", columna ");
-                
-              }
+        var i;  var fecha = f1; console.log("tiene data");
+        
+        for (i = 1; i <=15; i++) {
+
+          console.log('fecha: '+i+' - '+fecha + ' -------------------------');
+
+          for (let i = 0; i < value.asistencia.length; i++) { 
+            //console.log(data[i]['fecha_asistencia']);
+            let split_f = format_d_m_a ( value.asistencia[i]['fecha_asistencia'] ) ; 
+             
+            let fecha_semana = new Date( fecha ); let fecha_asistencia = new Date(split_f);
+
+            if ( fecha_semana.getTime() == fecha_asistencia.getTime() ) {
+
+              //console.log(value.asistencia[i]['horas_normal_dia']);
+              console.log("coincide: "+ split_f + ' - ' + fecha);
+              pintar_hora_por_dia = pintar_hora_por_dia.concat('<td>'+value.asistencia[i]['horas_normal_dia']+'</td>');
+              horas_total = horas_total + parseFloat(value.asistencia[i]['horas_normal_dia']);
+              count_dias_asistidos++;
+              break;
+                          
+            }else{
+              console.log("no coincide: "+ split_f + ' - ' + fecha);
+              //console.log("no coincide: "+ i);
+              //console.log(fecha + ' - '+ value.asistencia[i]['fecha_asistencia']);
+              //console.log(fecha_semana.getTime() + ' - '+ fecha_asistencia.getTime());
             }
-            
-           //console.log(celda.appendChild(textoCelda));
-            var fecha = sumaFecha(1,fecha);
-            // console.log(fecha);
-          };
+          }
+          fecha = sumaFecha(1,fecha);
+        }
 
-      });
+      } else {
+        console.log("no inguna fecha asistida");
+      }
+
+      // validamos el sabatical
+      if (horas_total >= 44 && horas_total < 88) {
+        sabatical = 1;
+      } else {
+        if (horas_total >= 88) {
+          sabatical = 2;
+        }
+      }
+      console.log(pintar_hora_por_dia); 
+      console.log('cant dias sistidos: '+count_dias_asistidos);
       rowtrabajador= '<tr>'+
-          '<td>H/N</td>'+
-          '<td>'+index +'</td>'+
-          '<td>'+value.cargo +'</td>'+
-          celda.appendChild(horas);
-          '<td>0</td>'+
-          '<td>2</td>'+
-          '<td>1</td>'+
-          '<td>0</td>'+
-          '<td>0</td>'+
-          '<td>0</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>4</td>'+
-          '<td>'+value.horas_trabajador +'</td>'+
-          '<td>'+value.sueldo_mensual +'</td>'+
-          '<td>'+value.sueldo_diario +'</td>'+
-          '<td>'+value.sueldo_hora +'</td>'+
-          '<td>'+value.sabatical +'</td>'+
-          '<td>1</td>'+
-          '<td>750.00</td>'+
-
+        '<td>H/N</td>'+
+        '<td>' + value.nombres +'</td>'+
+        '<td>' + value.cargo + '</td>'+
+        pintar_hora_por_dia + horas.repeat(15 - count_dias_asistidos) +
+        '<td>' + horas_total + '</td>'+
+        '<td>' +value.sueldo_mensual + '</td>'+
+        '<td>' +value.sueldo_diario + '</td>'+
+        '<td>' +value.sueldo_hora + '</td>'+
+        '<td>' + sabatical + '</td>'+
+        '<td>1</td>'+
+        '<td>750.00</td>'+
       '</tr>'+
       '<tr>'+
-          '<td>H/E</td>'+
-          '<td>'+value.nombres +'</td>'+
-          '<td>'+value.cargo +'</td>'+
-          '<td>2</td>'+
-          '<td>1</td>'+
-          '<td>0</td>'+
-          '<td>0</td>'+
-          '<td>0</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>1</td>'+
-          '<td>4</td>'+
-          '<td>4</td>'+
-          '<td>300</td>'+
-          '<td>107.00</td>'+
-          '<td>13.39</td>'+
-          '<td>0</td>'+
-          '<td>0</td>'+
-          '<td>53.56</td>'+
-
+        '<td>H/E</td>'+
+        '<td>' + value.nombres + '</td>'+
+        '<td>' + value.cargo + '</td>'+
+        '<td>2</td>'+
+        '<td>1</td>'+
+        '<td>0</td>'+
+        '<td>0</td>'+
+        '<td>0</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>1</td>'+
+        '<td>4</td>'+
+        '<td>4</td>'+
+        '<td>44</td>'+
+        '<td>' + value.sueldo_mensual + '</td>'+
+        '<td>' + value.sueldo_diario + '</td>'+
+        '<td>' + value.sueldo_hora + '</td>'+
+        '<td>0</td>'+
+        '<td>53.56</td>'+
+        '<td>-</td>'+
+        
       '</tr>';
-       $('.nameappend').append(rowtrabajador);
-
-
+      $('.nameappend').append(rowtrabajador);
+       
     });
 
     $('.nameappend').append('<tr>'+
-    '<td colspan="23"></td>'+
-    '<td ><b>TOTAL</b></td>'+
-    '<td>803.56</td>'+
+      '<td colspan="23"></td>'+
+      '<td ><b>TOTAL</b></td>'+
+      '<td>803.56</td>'+
     '</tr>'
     );
 
@@ -381,8 +387,8 @@ function datos_quincena(f1,f2) {
   $("#cargando-2-fomulario").hide();
   
 }
-//Función para guardar o editar
 
+//Función para guardar o editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-asistencia")[0]);
@@ -780,4 +786,11 @@ function activar(idasistencia_trabajador) {
       
     }
   });      
+}
+
+function format_d_m_a(fecha) {
+
+  let splits = fecha.split("-"); 
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
 }

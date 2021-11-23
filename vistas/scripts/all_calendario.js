@@ -15,11 +15,18 @@ function init() {
 
   $("#eliminar_registro").on("click", function (e) { desactivar()  });
 
+  //Initialize Select2 Elements
+  $("#background_color").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione tipo",
+    allowClear: true,
+  });
+  $("#background_color").val("").trigger("change");
 }
 
 function contraste() {
 
-  let color = $('#background_color').val();
+  let color = $('#background_color').select2('val');
 
   let color_contrst = invertColor(color, true)
 
@@ -33,7 +40,7 @@ function limpiar() {
   $('#text_color').val('#ffffff');
   $('#fecha_select').html("Selecione una fecha");
   $('#titulo').val('Feriado');
-  $('#background_color').val("#dc3545");
+  $("#background_color").val("").trigger("change");
   $('#descripcion').val('');
   $('#eliminar_registro').hide();  
 }
@@ -41,10 +48,10 @@ function limpiar() {
 //Función Listar
 function listar() {
   $("#external-events").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
-
+  $("#custom-tabs-four-home").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
   $.post("../ajax/all_calendario.php?op=listar-calendario",  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data);  //console.log(data); 
 
     $("#external-events").html('');
 
@@ -55,8 +62,54 @@ function listar() {
         $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+'</div>');
       });
 
-    } else {
+      $("#custom-tabs-four-home").html(
+        '<div class="card-body table-responsive p-0">'+
+          '<table class="table table-hover text-nowrap">'+
+            '<thead>'+
+              '<tr>'+
+                '<th>Detalle</th>'+
+                '<th>Cant. Dias</th>' +                                      
+              '</tr>'+
+            '</thead>'+
+            '<tbody>'+ 
+              '<tr>'+
+                '<td>Feriados activos</td>'+
+                '<td>'+ data.length +'</td>'+                                            
+              '</tr>'+
+              '<tr>'+
+                '<td>Feriados eliminados</td>'+
+                '<td id="f_delete">0</td>'+                                            
+              '</tr>'+
+              '<tr> <td> </td> <td> </td> </tr>' +                                        
+            '</tbody>'+
+          '</table>'+
+        '</div>'
+      );
 
+    } else {
+      $("#custom-tabs-four-home").html(
+        '<div class="card-body table-responsive p-0">'+
+          '<table class="table table-hover text-nowrap">'+
+            '<thead>'+
+              '<tr>'+
+                '<th>Detalle</th>'+
+                '<th>Cant. Dias</th>' +                                      
+              '</tr>'+
+            '</thead>'+
+            '<tbody>'+ 
+              '<tr>'+
+                '<td>Feriados activos</td>'+
+                '<td>0</td>'+                                            
+              '</tr>'+
+              '<tr>'+
+                '<td>Feriados eliminados</td>'+
+                '<td id="f_delete">0 </td>'+                                            
+              '</tr>'+
+              '<tr> <td> </td> <td> </td> </tr>' +                                        
+            '</tbody>'+
+          '</table>'+
+        '</div>'
+      );
       $("#external-events").html('<div class="external-event bg-info">No hay fechas disponibles</div>');
     }
       
@@ -97,7 +150,7 @@ function listar() {
 
         $('#titulo').val('Feriado');
 
-        $('#background_color').val("#dc3545");
+        // $("#background_color").val("").trigger("change");
 
         $('#descripcion').val('');
 
@@ -108,7 +161,7 @@ function listar() {
 
       // Se ejecuta cuando hay un evento
       eventClick: function(info) {
-
+         
         date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
 
         if (dt < 10) { dt = '0' + dt; }
@@ -127,21 +180,21 @@ function listar() {
 
         $('#titulo').val(info.event.title);
 
-        $('#background_color').val(info.event.backgroundColor);
+        $("#background_color").val(info.event.backgroundColor).trigger("change");         
 
         $('#descripcion').val(info.event.extendedProps.descripcion);
 
         $('#modal-agregar-calendario').modal('show');
       },       
           
-      hiddenDays:[6],       
+      // hiddenDays:[6],       
       
       editable  : true,
 
       //droppable : true, // this allows things to be dropped onto the calendar !!!
 
       eventDrop : function(info) {
-
+        console.log(info);
         date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
 
         if (dt < 10) { dt = '0' + dt; }
@@ -159,8 +212,8 @@ function listar() {
         $('#fecha_select').html(year+'-' + month + '-'+dt);
 
         $('#titulo').val(info.event.title);
-
-        $('#background_color').val(info.event.backgroundColor);
+         
+        $("#background_color").val(info.event.backgroundColor).trigger("change");         
 
         $('#descripcion').val(info.event.extendedProps.descripcion);
 
@@ -184,21 +237,24 @@ function listar() {
 
     if (data.length != 0) {
 
-      $.each(data, function (index, value) {
-              
+      $("#f_delete").html(data.length);
+
+      $.each(data, function (index, value) {              
         $("#external-events-eliminados").append(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important; background-color: '+value.backgroundColor+' !important;">'+
+        '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
           '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number" style="color: '+value.textColor+' !important;">Feriado </span>'+
+            '<span class="info-box-number" > ' + value.title + '</span>'+
           '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important;" onclick="activar('+value.id+')">'+
-            '<i class="fas fa-check"></i>'+
+          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
+            '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+
           '</span>'+
         '</div>'
         );
       });
       
     } else {
+
+      $("#f_delete").html('0');
 
       $("#external-events-eliminados").html(
         '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
@@ -213,8 +269,6 @@ function listar() {
     }
   });
 }
-
-
 
 //Función para guardar o editar
 function guardaryeditar(e) {
@@ -313,17 +367,22 @@ $(function () {
       titulo: { required: true, minlength: 3, maxlength: 20 },
       color: { required: true,  },
       descripcion: { minlength: 6 },
+      background_color: { required: true,  },
     },
     messages: {
 
+      background_color: {
+        required: "Este campo es requerido",        
+      },
+
       titulo: {
-        required: "Por favor selecione un tipo de documento",
+        required: "Este campo es requerido",
         minlength: "El color debe tener MÍNIMO 6 caracteres.",
         maxlength: "El color debe tener como MÁXIMO 20 caracteres.", 
       },
 
       color: {
-        required: "Ingrese un número de documento",        
+        required: "Ingrese un color de texto",        
       },
 
       descripcion: {

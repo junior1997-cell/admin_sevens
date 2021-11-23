@@ -38,9 +38,9 @@
     }
 
       //Implementamos un método para editar registros
-    public function editar_plano($idplano_otro, $idproyecto, $nombre, $descripcion, $doc1)
+    public function editar_plano($idplano_otro, $id_carpeta, $nombre, $descripcion, $imagen1)
     {
-      $sql="UPDATE plano_otro SET idproyecto = '$idproyecto', nombre = '$nombre', descripcion = '$descripcion', doc = '$doc1'
+      $sql="UPDATE plano_otro SET id_carpeta = '$id_carpeta', nombre = '$nombre', descripcion = '$descripcion', doc = '$imagen1'
       WHERE idplano_otro='$idplano_otro'";	
       
       return ejecutarConsulta($sql);

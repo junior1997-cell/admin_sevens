@@ -15,10 +15,10 @@ function init() {
 
   $("#eliminar_registro").on("click", function (e) { desactivar()  });
 
-   //Initialize Select2 Elements
+  //Initialize Select2 Elements
   $("#background_color").select2({
     theme: "bootstrap4",
-    placeholder: "Selecione color",
+    placeholder: "Selecione tipo",
     allowClear: true,
   });
 
@@ -56,19 +56,80 @@ function listar(idproyecto) {
   // Detalle de dias Proyecto
   $.post("../ajax/calendario.php?op=detalle_dias_proyecto", { idproyecto: idproyecto },  function (data, status) {
 
-    data = JSON.parse(data); console.log(data);     
+    data = JSON.parse(data); //console.log(data);  
+
+    var dia_c = ''; var dia_l = ''; var dia_t = ''; var fecha_p = ''; var count = 0;
 
     if (data) {
+      // Validamos data 1
+      if (data.data2.length === 0) { dia_c = 'fechas no definas'; dia_l = 'fechas no definas'; } else {
 
-      $(".fc-day-sun").addClass("fc-day-disabled") 
+        let fecha_inicio = new Date(data.data2.fecha_inicio); let fecha_fin = new Date(data.data2.fecha_fin); 
 
-      $("#my-domingo").prop("checked", true);
+        dia_c = parseInt(data.data2.plazo);  fecha_p = data.data2.fecha_inicio +' - ' +data.data2.fecha_fin;
+
+        // validamos data 2
+        if (data.data1.length === 0) { dia_l = 'sin feriados'; dia_t = 'sin feriados'; } else {
+
+          $.each(data.data1, function (index, value) {
+
+            let fecha_feriado = new Date(value.fecha_feriado);
+
+            if ( fecha_feriado.getTime() >= fecha_inicio.getTime() && fecha_feriado.getTime() <= fecha_fin.getTime()) {
+              count++;
+            } 
+          });
+          // console.log('total: ' + count);
+          dia_l = parseInt(data.data2.plazo) - parseInt(count);
+
+          // var dia_t = parseInt(data.data1.cant_feriados);
+        }
+      }
+
+      $("#custom-tabs-four-home").html(
+        '<div class="card-body table-responsive p-0">'+
+          '<table class="table table-hover text-nowrap">'+
+            '<thead>'+
+              '<tr>'+
+                '<th>Detalle</th>'+
+                '<th>Cant. Dias</th>' +                                      
+              '</tr>'+
+            '</thead>'+
+            '<tbody>'+ 
+              '<tr>'+
+                '<td>Fecha proyecto</td>'+
+                '<td>'+ fecha_p +'</td>'+                                            
+              '</tr>'+                                      
+              '<tr>'+
+                '<td>Dias calendario</td>'+
+                '<td>'+ dia_c +'</td>'+                                            
+              '</tr>'+
+              '<tr>'+
+                '<td>Dias laborables</td>'+
+                '<td>'+ dia_l +'</td>'   +                                         
+              '</tr>' +
+              '<tr>'+
+                '<td>Feriado proyecto</td>'+
+                '<td>'+ count +'</td>'   +                                         
+              '</tr>' +  
+              '<tr> <td> </td> <td> </td> </tr>' +                                        
+            '</tbody>'+
+          '</table>'+
+        '</div>'
+      );
       
     } else {
-
-      $("#custom-tabs-four-home").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
-    }    
-     
+      $("#custom-tabs-four-home").html(
+        '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
+          '<div class="info-box-content">  '   +                                    
+            '<span class="info-box-number">Las fechas de tu proyecto no estan bien definidas</span>'+
+          '</div>'+
+          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
+            '<i class="far fa-grin-alt"></i>'+
+          '</span>'+
+        '</div>'
+      );       
+    }
   });
 
   // Domingo no laborable
@@ -93,6 +154,7 @@ function listar(idproyecto) {
      
   });   
 
+  // calendario
   $.post("../ajax/calendario.php?op=listar-calendario", { idproyecto: idproyecto },  function (data, status) {
 
     data = JSON.parse(data);  //console.log(data); 
@@ -149,7 +211,7 @@ function listar(idproyecto) {
 
         $('#titulo').val('Feriado');
 
-        $('#background_color').val("#dc3545");
+        // $('#background_color').val("#dc3545");
 
         $('#descripcion').val('');
 
@@ -192,7 +254,7 @@ function listar(idproyecto) {
 
         $('#titulo').val(info.event.title);
 
-        $('#background_color').val(info.event.backgroundColor);
+        $("#background_color").val(info.event.backgroundColor).trigger("change");
 
         $('#descripcion').val(info.event.extendedProps.descripcion);
 
@@ -203,7 +265,7 @@ function listar(idproyecto) {
       
       editable  : true,
 
-      //validRange: { start: '2021-11-16', },
+      //validRange: { start: data.data2.fecha_inicio,  end: data.data2.fecha_fin },
       //droppable : true, // this allows things to be dropped onto the calendar !!!
 
       eventDrop : function(info) {
@@ -226,7 +288,7 @@ function listar(idproyecto) {
 
         $('#titulo').val(info.event.title);
 
-        $('#background_color').val(info.event.backgroundColor);
+        $("#background_color").val(info.event.backgroundColor).trigger("change");
 
         $('#descripcion').val(info.event.extendedProps.descripcion);
 
@@ -257,6 +319,10 @@ function listar(idproyecto) {
 
     calendar.setOption('locale', 'es');
 
+    if (data.data2.length != 0) { 
+      calendar.changeView('dayGridMonth', data.data2.fecha_inicio);       
+    } 
+    
     calendar.render(); 
      
   });
@@ -277,7 +343,7 @@ function listar(idproyecto) {
         $("#external-events-eliminados").append(
         '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
           '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number" >Feriado </span>'+
+            '<span class="info-box-number" >' + value.title+ '</span>'+
           '</div>'+
           '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
             '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+

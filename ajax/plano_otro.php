@@ -165,7 +165,11 @@
                 ' <button class="btn btn-warning" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary" onclick="activar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>',
-              "1"=>$reg->nombre,
+              "1"=>'<div class="user-block">
+                <img class="img-circle" src="../dist/svg/carpeta.svg" alt="User Image" ">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
+                <span class="description"><b>Creado el:</b> '. $reg->fecha .' </span>
+              </div>',
               "2"=> "<span >".$reg->descripcion." </span>",
               "3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
             );

@@ -195,14 +195,43 @@ Class Asistencia_trabajador
 
 	//ver detalle quincena 
 	public function ver_detalle_quincena($f1,$f2,$nube_idproyect){
+		// sql por siacaso - luego lo borro si no lo nescito
+		$sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombres, t.tipo_documento as tipo_doc, t.numero_documento as num_doc, tpp.cargo as cargo , t.imagen_perfil as imagen_perfil, tpp.sueldo_hora as sueldo_hora, tpp.sueldo_diario as sueldo_diario, tpp.sueldo_mensual as sueldo_mensual, SUM(atr.horas_normal_dia) as horas_normal_dia, SUM(atr.horas_extras_dia) as horas_extras_dia, SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect FROM asistencia_trabajador as atr, trabajador_por_proyecto AS tpp, trabajador as t, proyecto as p 
+		WHERE atr.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND tpp.estado=1 AND tpp.idproyecto='$nube_idproyect' AND tpp.idproyecto=p.idproyecto 
+		AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2' 
+		GROUP BY atr.idtrabajador_por_proyecto;";
 
-		$sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombres, t.tipo_documento as tipo_doc, 
-		t.numero_documento as num_doc, t.cargo as cargo , t.imagen as imagen, t.sueldo_hora as sueldo_hora, t.sueldo_diario as sueldo_diario,
-		t.sueldo_mensual as sueldo_mensual, SUM(atr.horas_trabajador) as total_horas, SUM(atr.horas_extras_dia) as horas_extras, 
-		SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect 
-		FROM asistencia_trabajador as atr, trabajador as t, proyecto as p 
-		WHERE atr.idtrabajador=t.idtrabajador AND t.estado=1 AND t.idproyecto='$nube_idproyect' AND t.idproyecto=p.idproyecto AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2' GROUP BY atr.idtrabajador";
-		return ejecutarConsulta($sql);
+		// extraemos todos lo trabajadores del proyecto
+		$sql2 = "SELECT tpp.idtrabajador_por_proyecto, tpp.cargo, tpp.tipo_trabajador, t.nombres, t.tipo_documento, t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora
+		FROM trabajador_por_proyecto AS tpp, trabajador AS t
+		WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$nube_idproyect';";
+		$trabajador = ejecutarConsultaArray($sql2);
+
+		$data = array();
+
+		foreach ($trabajador as $indice => $key) {
+
+			$id_trabajador_proyect = $key['idtrabajador_por_proyecto'];
+
+			// extraemos la asistencia por trabajador
+			$sql3 = "SELECT * FROM asistencia_trabajador  AS atr WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
+			$asistencia = ejecutarConsultaArray($sql3);
+
+			$data[]= array(				
+				"idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
+				"cargo"           => $key['cargo'],
+				"tipo_trabajador" => $key['tipo_trabajador'],
+				"nombres"         => $key['nombres'],
+				"tipo_documento"  => $key['tipo_documento'],
+				"numero_documento" => $key['numero_documento'],
+        "sueldo_mensual"  => $key['sueldo_mensual'],
+        "sueldo_diario"   => $key['sueldo_diario'],
+        "sueldo_hora"     => $key['sueldo_hora'],
+				"asistencia"      => $asistencia,
+			);
+		}
+
+		return $data ;
 	}
 
 	//ver detalle quincena por trabador y por dìa
