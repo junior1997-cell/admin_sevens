@@ -48,6 +48,10 @@ $codigo              = isset($_POST["codigo"])? limpiarCadena($_POST["codigo"]):
 $monto               = isset($_POST["monto"])? limpiarCadena($_POST["monto"]):"";
 $fecha_emision       = isset($_POST["fecha_emision"])? limpiarCadena($_POST["fecha_emision"]):"";
 $descripcion_f       = isset($_POST["descripcion_f"])? limpiarCadena($_POST["descripcion_f"]):"";
+$subtotal            = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
+$igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+$nota                = isset($_POST["nota"])? limpiarCadena($_POST["nota"]):"";
+
 
 $imagen2             = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 //$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$foto2
@@ -170,13 +174,21 @@ switch ($_GET["op"]){
 				$c="";
 				$nombre="";
 				$icon="";
+				//----
+				$monto_factura=0;
+				$cc="";
+				$nombree="";
+				$icons="";
 				//$c_parcial = 0;
 		 		while ($reg=$rspta->fetch_object()){
 					//$parametros="'$reg->idservicio','$reg->idproyecto'";
 					$rspta2=$serviciomaquina->pago_servicio($reg->idmaquinaria,$reg->idproyecto);
+					$rspta3=$serviciomaquina->monto_factura($reg->idmaquinaria,$reg->idproyecto);
 
 					empty($rspta2)?$saldo=0:$saldo = $reg->costo_parcial-$rspta2['monto'];
 					empty($rspta2['monto'])?$monto="0.00":$monto = $rspta2['monto'];
+					empty($rspta3)?$saldo_factura=0:$saldo_factura = $reg->costo_parcial-$rspta3['monto_factura'];
+					empty($rspta3['monto_factura'])?$monto_factura="0.00":$monto_factura = $rspta3['monto_factura'];
 					//empty($rspta2['monto']?($monto="0.00"?$clase="dangar":$clase="warning"): ($monto = $rspta2['monto'] ? 'verdadero2' : 'falso');
 					//$c_parcial = number_format($reg->costo_parcial, 2, '.', ',');
 					if ($saldo == $reg->costo_parcial) {
@@ -207,11 +219,27 @@ switch ($_GET["op"]){
 							//$estado = '<span class="text-center badge badge-success">Terminado</span>';
 						}                
 					  }
+
+					  if ($saldo_factura == $reg->costo_parcial) {
+						$cc="danger";
+
+					  } else {
+		
+						if ($saldo_factura<$reg->costo_parcial && $saldo_factura>"0" ) {
+						  $cc="warning";
+						} else {
+							if ($saldo_factura<="0") {
+								$cc="info";
+								$info="info";
+								$icons="eye";
+							}
+						}                
+					  }
 					  $unidad_medida="'$reg->idmaquinaria','$reg->idproyecto','$reg->unidad_medida'";
 					  $verdatos="'$reg->idmaquinaria','$reg->idproyecto','$reg->costo_parcial','$monto'";
 
 		 			$data[]=array(
-		 				"0"=>' <button class="btn btn-info" onclick="listar_detalle('.$unidad_medida.')"><i class="far fa-eye"></i></button>',
+		 				"0"=>' <button class="btn btn-info btn-sm" onclick="listar_detalle('.$unidad_medida.')"><i class="far fa-eye"></i></button>',
 		 				"1"=>'<div class="user-block">
 						 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->maquina .'</p></span>
 						 <span class="description" style="margin-left: 0px !important;">'. $reg->codigo_maquina .' </span>
@@ -221,12 +249,14 @@ switch ($_GET["op"]){
 		 				"4"=>$reg->cantidad_veces,		 				
 		 				"5"=>number_format($reg->costo_parcial, 2, '.', ','),
 		 				"6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$verdatos.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
-						 <button class="btn btn-'.$c.' btn-xs">'.number_format($monto, 2, '.', ',').'</button> </div>',
+						 <button style="font-size: 14px;" class="btn btn-'.$c.' btn-xs">'.number_format($monto, 2, '.', ',').'</button> </div>',
 		 				"7"=>number_format($saldo, 2, '.', ','),
-		 				"8"=>'<center> <button class="btn btn-info" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+		 				"8"=>'<div class="text-center"> <button class="btn btn-'.$cc.' btn-sm" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg btn-'.$cc.' nav-icon"></i></button> '.'
+						 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($monto_factura, 2, '.', ',').'</button> </div>',
+		 				
 		 				"9"=>$estado
 		 				);
-
+						// "8"=>'<center> <button class="btn btn-info" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
 		 		}
 		 		$results = array(
 		 			"sEcho"=>1, //Información para el datatables
@@ -706,7 +736,7 @@ switch ($_GET["op"]){
 
 				if (empty($idfactura)){
 					
-					$rspta=$serviciomaquina->insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);
+					$rspta=$serviciomaquina->insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2,$subtotal,$igv,$nota);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
@@ -723,7 +753,7 @@ switch ($_GET["op"]){
 						}
 					}
 					
-					$rspta=$serviciomaquina->editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);
+					$rspta=$serviciomaquina->editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2,$subtotal,$igv,$nota);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -759,6 +789,7 @@ switch ($_GET["op"]){
 		 		while ($reg=$rspta->fetch_object()){
 					$suma=$suma+$reg->monto;
 					if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+					if (strlen($reg->nota) >= 20 ) { $nota = substr($reg->nota, 0, 20).'...';  } else { $nota = $reg->nota; }
 					empty($reg->imagen)?$imagen='<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>':$imagen='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_factura('."'".$reg->imagen."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
 					$tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 		 			$data[]=array(
@@ -768,10 +799,13 @@ switch ($_GET["op"]){
 						 ' <button class="btn btn-primary btn-sm" onclick="activar_factura('.$reg->idfactura.')"><i class="fa fa-check"></i></button>',
 		 				"1"=>$reg->codigo,	 				
 		 				"2"=>$reg->fecha_emision,		 				
-		 				"3"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
-		 				"4"=>number_format($reg->monto, 2, '.', ','),
-						"5"=>$imagen,
-					   	"6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+		 				"3"=>empty($reg->nota)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->nota.'">'.$nota.'</div>',
+		 				"4"=>number_format($reg->subtotal, 4, '.', ','),
+		 				"5"=>number_format($reg->igv, 4, '.', ','),
+		 				"6"=>number_format($reg->monto, 2, '.', ','),
+		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+						"8"=>$imagen,
+					   	"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
 						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 

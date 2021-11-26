@@ -9,6 +9,7 @@ $materiales=new Materiales();
 
 $idproducto       = isset($_POST["idproducto"])? limpiarCadena($_POST["idproducto"]):"";	
 $nombre			  = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
+$precio_unitario  = isset($_POST["precio_unitario"])? limpiarCadena($_POST["precio_unitario"]):"";
 $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
 $foto1		      = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
 
@@ -41,7 +42,7 @@ switch ($_GET["op"]){
 
 				if (empty($idproducto)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$materiales->insertar($nombre,$descripcion,$imagen1);
+					$rspta=$materiales->insertar($nombre,$precio_unitario,$descripcion,$imagen1);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
@@ -57,7 +58,7 @@ switch ($_GET["op"]){
 							unlink("../dist/img/materiales/" . $img1_ant);
 						}
 					}
-					$rspta=$materiales->editar($idproducto,$nombre,$descripcion,$imagen1);
+					$rspta=$materiales->editar($idproducto,$precio_unitario,$nombre,$descripcion,$imagen1);
 					//var_dump($idproducto,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
@@ -167,7 +168,8 @@ switch ($_GET["op"]){
 								<span class="description">'.substr($reg->descripcion, 0, 30).'...</span>
 							 </div>',
 		 				"2"=>$reg->descripcion,
-		 				"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+		 				"3"=>$reg->precio_unitario,
+		 				"4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}

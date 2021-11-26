@@ -17,13 +17,6 @@
         require 'head.php';
         ?>
     </head>
-    <style>
-        @media screen and (min-device-width: 993px) and (max-device-width: 2048px) { 
-            .class_pading{
-                padding-top:25px;
-            }
-        }
-    </style>
     <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
@@ -70,18 +63,20 @@
                                         <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
-                                                    <th class="">Aciones</th>
+                                                    <th class="">Acciones</th>
                                                     <th>Nombre</th>
                                                     <th>Descripción</th>
+                                                    <th>Precio U.</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
-                                                <th class="">Aciones</th>
+                                                <th class="">Acciones</th>
                                                     <th>Nombre</th>
                                                     <th>Descripción</th>
+                                                    <th>Precio U.</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -127,7 +122,11 @@
                                                     <div class="form-group">
                                                         <label for="descripcion_pago">Descripción </label> <br>
                                                         <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                                                    </div>                                                        
+                                                    </div>  
+                                                    <div class="form-group">
+                                                        <label for="precio_unitario">Precio Unitario</label>
+                                                        <input type="number" step="0.01" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." />
+                                                    </div>                                                      
 
                                                 </div>
                                                 <!--vaucher-->

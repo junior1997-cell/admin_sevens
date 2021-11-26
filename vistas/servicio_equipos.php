@@ -33,12 +33,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Servicios - Maquinarias</h1>
+                                <h1>Servicios - Equipo</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Servicio-Maquina</li>
+                                    <li class="breadcrumb-item active">Servicio-Equipo</li>
                                 </ol>
                             </div>
                         </div>
@@ -558,6 +558,7 @@
                                   </div>
                                   <div class="modal-body">
                                       <div id="datosservicios" class="class-style" style="text-align: center;"> 
+                                      <a class="btn btn-warning  btn-block" href="#" id="descargar" download="Voucher" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
                                         <br>
                                         <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
                     
@@ -577,7 +578,8 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <div  class="class-style" style="text-align: center;"> 
+                                      <div  class="class-style" style="text-align: center;">
+                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="factura" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a> 
                                         <br>
                                         <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
                                           <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>

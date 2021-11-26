@@ -11,19 +11,19 @@ Class Materiales
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre,$descripcion,$foto1)
+	public function insertar($nombre,$precio_unitario,$descripcion,$foto1)
 	{
 		//var_dump($idproducto,$idproveedor);die();
-		$sql="INSERT INTO producto (nombre,descripcion,imagen) VALUES ('$nombre','$descripcion','$foto1')";
+		$sql="INSERT INTO producto (nombre,precio_unitario,descripcion,imagen) VALUES ('$nombre','$precio_unitario','$descripcion','$foto1')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idproducto,$nombre,$descripcion,$foto1)
+	public function editar($idproducto,$precio_unitario,$nombre,$descripcion,$foto1)
 	{
 		//var_dump($idproducto,$nombre,$descripcion,$foto1);die();
-		$sql="UPDATE producto SET nombre='$nombre', descripcion='$descripcion', imagen='$foto1' WHERE idproducto='$idproducto'";	
+		$sql="UPDATE producto SET nombre='$nombre', precio_unitario='$precio_unitario', descripcion='$descripcion', imagen='$foto1' WHERE idproducto='$idproducto'";	
 		return ejecutarConsulta($sql);	
 	}
 

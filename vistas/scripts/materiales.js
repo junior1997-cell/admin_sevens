@@ -44,7 +44,7 @@ function addImage(e,id) {
 			// return;
 			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>');
 
-        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 
 		}else{
 
@@ -91,7 +91,7 @@ function addImage(e,id) {
 		toastr.error('Seleccione una Imagen');
 
 
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
    
 		$("#"+id+"_nombre").html("");
 	}
@@ -101,7 +101,7 @@ function foto1_eliminar() {
 
 	$("#foto1").val("");
 
-	$("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
+	$("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 
 	$("#foto1_nombre").html("");
 }
@@ -113,8 +113,8 @@ function limpiar() {
   $("#idproducto").val("");
   $("#nombre").val(""); 
   $("#descripcion").val("");
-  $("#descripcion").val("");
-  $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
+  $("#precio_unitario").val("");
+  $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 	$("#foto1").val("");
 	$("#foto1_actual").val("");  
   $("#foto1_nombre").html("");
@@ -204,6 +204,7 @@ function mostrar(idproducto) {
 
   $("#idproducto").val(data.idproducto);
   $("#nombre").val(data.nombre); 
+  $("#precio_unitario").val(data.precio_unitario); 
   $("#descripcion").val(data.descripcion);
 
   if (data.imagen != "") {
@@ -275,8 +276,8 @@ $(function () {
 
   $("#form-materiales").validate({
     rules: {
-      nombre: { required: true }
-
+      nombre: { required: true },
+      descripcion:{minlength: 1}
       // terms: { required: true },
     },
     messages: {

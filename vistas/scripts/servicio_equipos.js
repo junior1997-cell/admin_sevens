@@ -1061,7 +1061,8 @@ function ver_modal_vaucher(imagen){
   $('#img-vaucher').attr("src", "");
   $('#modal-ver-vaucher').modal("show");
   $('#img-vaucher').attr("src", "../dist/img/vauchers_pagos/" +imagen);
-
+  $("#descargar").attr("href","../dist/img/vauchers_pagos/" +imagen);
+  
   
  // $(".tooltip").hide();
 }
@@ -1286,12 +1287,12 @@ var extencion = img.substr(img.length - 3); // => "1"
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
     $('#img-factura').attr("src", "../dist/img/facturas/" +img);
-
+    $("#iddescargar").attr("href","../dist/img/facturas/" +img);
   }else{
     $('#img-factura').hide();
     $('#ver_fact_pdf').show();
     $('#ver_fact_pdf').html('<iframe src="../dist/img/facturas/'+img+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-
+    $("#iddescargar").attr("href","../dist/img/facturas/" +img);
   }
 
 
