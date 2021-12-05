@@ -224,9 +224,9 @@ Class Asistencia_trabajador
 				"nombres"         => $key['nombres'],
 				"tipo_documento"  => $key['tipo_documento'],
 				"numero_documento" => $key['numero_documento'],
-        "sueldo_mensual"  => $key['sueldo_mensual'],
-        "sueldo_diario"   => $key['sueldo_diario'],
-        "sueldo_hora"     => $key['sueldo_hora'],
+				"sueldo_mensual"  => $key['sueldo_mensual'],
+				"sueldo_diario"   => $key['sueldo_diario'],
+				"sueldo_hora"     => $key['sueldo_hora'],
 				"asistencia"      => $asistencia,
 			);
 		}

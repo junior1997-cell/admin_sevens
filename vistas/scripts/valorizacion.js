@@ -58,7 +58,7 @@ function ver_quincenas(nube_idproyecto) {
 
         let fecha_ii = fecha_bd_i[2]+'-'+fecha_bd_i[1]+'-'+fecha_bd_i[0]; let fecha_ff = fecha_bd_f[2]+'-'+fecha_bd_f[1]+'-'+fecha_bd_f[0];
 
-        ver_fechas_init_end = "'"+fecha_ii+"',"+"'"+fecha_ff+"',"+"'"+i+"'";
+        ver_fechas_init_end = "'"+fecha_ii+"', '"+fecha_ff+"', '"+i+"'" ;
   
         $('#lista_quincenas').append(' <button id="boton-'+ i +'" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('+ver_fechas_init_end+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' - '+fecha+'</button>')
         
@@ -510,6 +510,9 @@ function re_visualizacion() {
 
 // captura las fechas de quincenas y trae los datos
 function fecha_quincena(fecha_i, fecha_f, i) {
+  var cont_valor = parseInt(i) + 1;
+  //console.log(cont_valor);
+  $("#nombre_titulo").html("Valorización " + cont_valor);
 
   localStorage.setItem('fecha_i', fecha_i);  localStorage.setItem('fecha_f', fecha_f); localStorage.setItem('i', i);
 
@@ -519,7 +522,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
   $('#tab-seleccione').show(); $('#tab-contenido').show(); $('#tab-info').hide();
 
-  $("#fecha_quincena").val(fecha_i);  console.log(fecha_i, fecha_f, i);
+  $("#fecha_quincena").val(fecha_i);  //console.log(fecha_i, fecha_f, i);
 
   // validamos el id para pintar el boton
   if (localStorage.getItem('boton_id')) {
@@ -541,19 +544,45 @@ function fecha_quincena(fecha_i, fecha_f, i) {
   // traemos loa documentos por fechas de la quincena
   $.post("../ajax/valorizacion.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_i, fecha_f: fecha_f }, function (data, status) {
 
-    data =JSON.parse(data); console.log(data);
-    var vacio = "''"; 
+    data =JSON.parse(data); //console.log(data);  
+    
+    var vacio = "''";   var count_data2 = 0;
+
     // validamos la data total
     if (data) {
+      if (data.data2.doc1 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
+      if (data.data2.doc4 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
+      if (data.data2.doc81 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
+      if (data.data2.doc82 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
+      if (data.data2.doc83 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
+      
+      var docs_total = count_data2 + parseInt(data.count_data1);
+      var porcent = (docs_total * 100 ) /18
+      // mostramos el resumen
+      $("#tabs-resumen").html(
+        '<div class="info-box bg-warning">'+
+          '<span class="info-box-icon"><i class="far fa-bookmark"></i></span>'+
+          '<div class="info-box-content">'+
+            '<span class="info-box-text">Documentos Subidos</span>'+
+            '<span class="info-box-number">Total ' + docs_total + '/18</span>'+
+            '<div class="progress" style="height: 10px !important;"> '+
+              '<div class="progress-bar" style="width: '+porcent.toFixed(1)+'%"></div>'+
+            '</div>'+
+            '<span class="progress-description">'+
+              'Tienes un <b> '+porcent.toFixed(1)+'%</b> de documentos subidos!!!'+
+            '</span>'+
+          '</div>'+
+        '</div>'
+      );
 
       // exraemos la fecha de HOY
       var tiempoTranscurrido = Date.now();
       var hoy = new Date(tiempoTranscurrido);
-      var format = hoy.toLocaleDateString(); console.log('Fecha hoy: '+format);
+      var format = hoy.toLocaleDateString().split("/"); //console.log(format);
       
       // validamos la data1
       if (data.data1.length === 0) {
-        console.log('data 1 no existe');
+        //console.log('data 1 no existe');
         // pintamos rojos los que no tienen docs
         if ($("#tabs-2-tab").hasClass("si-doc") == false || $("#tabs-2-tab").hasClass("si-doc") == true) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); }   
         if ($("#tabs-3-1-tab").hasClass("si-doc") == false || $("#tabs-3-1-tab").hasClass("si-doc") == true ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); }
@@ -616,7 +645,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -643,7 +672,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -670,7 +699,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -697,7 +726,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -724,7 +753,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -749,7 +778,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -774,7 +803,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -797,7 +826,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -836,7 +865,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -863,7 +892,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -890,7 +919,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -917,7 +946,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -944,7 +973,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -969,7 +998,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -994,7 +1023,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1017,7 +1046,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1055,7 +1084,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -1082,7 +1111,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -1109,7 +1138,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -1136,7 +1165,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -1163,7 +1192,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -1188,7 +1217,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -1213,7 +1242,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1236,7 +1265,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1274,7 +1303,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -1301,7 +1330,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -1328,7 +1357,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -1355,7 +1384,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -1382,7 +1411,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -1407,7 +1436,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -1432,7 +1461,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1455,7 +1484,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1493,7 +1522,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -1520,7 +1549,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -1547,7 +1576,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -1574,7 +1603,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -1601,7 +1630,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -1626,7 +1655,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -1651,7 +1680,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1674,7 +1703,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1712,7 +1741,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -1739,7 +1768,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -1766,7 +1795,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -1793,7 +1822,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -1820,7 +1849,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -1845,7 +1874,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -1870,7 +1899,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1893,7 +1922,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consistencia del concreto -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -1931,7 +1960,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -1958,7 +1987,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -1985,7 +2014,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -2012,7 +2041,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -2039,7 +2068,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -2064,7 +2093,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -2089,7 +2118,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2112,7 +2141,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2147,7 +2176,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -2174,7 +2203,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -2201,7 +2230,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -2228,7 +2257,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -2255,7 +2284,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -2280,7 +2309,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -2305,7 +2334,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2328,7 +2357,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2368,7 +2397,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -2395,7 +2424,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -2422,7 +2451,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -2449,7 +2478,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -2476,7 +2505,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -2501,7 +2530,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -2526,7 +2555,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2549,7 +2578,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seguridad y salud en el trabajo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2587,7 +2616,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -2614,7 +2643,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -2641,7 +2670,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -2668,7 +2697,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -2695,7 +2724,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -2720,7 +2749,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -2745,7 +2774,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2768,7 +2797,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2806,7 +2835,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -2833,7 +2862,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -2860,7 +2889,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -2887,7 +2916,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -2914,7 +2943,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -2939,7 +2968,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -2964,7 +2993,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -2987,7 +3016,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3025,7 +3054,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -3052,7 +3081,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -3079,7 +3108,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -3106,7 +3135,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -3133,7 +3162,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -3158,7 +3187,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -3183,7 +3212,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3206,7 +3235,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complementario contra todo riesgo -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3244,7 +3273,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -3271,7 +3300,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -3298,7 +3327,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -3325,7 +3354,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -3352,7 +3381,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -3377,7 +3406,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -3402,7 +3431,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3425,7 +3454,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3463,7 +3492,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -3490,7 +3519,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -3517,7 +3546,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -3544,7 +3573,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -3571,7 +3600,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -3596,7 +3625,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -3621,7 +3650,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3644,7 +3673,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                               '</a>'+
                             '</div>'+
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -'+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                                 '<i class="fas fa-download"></i> Descargar'+
                               '</a>'+
                             '</div>'+
@@ -3706,7 +3735,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 '</a>'+
               '</div>'+
               '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                   '<i class="fas fa-download"></i> Descargar'+
                 '</a>'+
               '</div>'+
@@ -3733,7 +3762,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -3760,7 +3789,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -3787,7 +3816,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -3814,7 +3843,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -3839,7 +3868,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -3864,7 +3893,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -3887,7 +3916,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -3931,7 +3960,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 '</a>'+
               '</div>'+
               '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                   '<i class="fas fa-download"></i> Descargar'+
                 '</a>'+
               '</div>'+
@@ -3958,7 +3987,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -3985,7 +4014,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -4012,7 +4041,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -4039,7 +4068,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -4064,7 +4093,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -4089,7 +4118,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4112,7 +4141,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4155,7 +4184,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 '</a>'+
               '</div>'+
               '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                   '<i class="fas fa-download"></i> Descargar'+
                 '</a>'+
               '</div>'+
@@ -4182,7 +4211,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -4209,7 +4238,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -4236,7 +4265,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -4263,7 +4292,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -4288,7 +4317,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -4313,7 +4342,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4336,7 +4365,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4379,7 +4408,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 '</a>'+
               '</div>'+
               '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                   '<i class="fas fa-download"></i> Descargar'+
                 '</a>'+
               '</div>'+
@@ -4406,7 +4435,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -4433,7 +4462,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -4460,7 +4489,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -4487,7 +4516,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -4512,7 +4541,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -4537,7 +4566,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4560,7 +4589,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4603,7 +4632,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 '</a>'+
               '</div>'+
               '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                   '<i class="fas fa-download"></i> Descargar'+
                 '</a>'+
               '</div>'+
@@ -4630,7 +4659,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   '</a>'+
                 '</div>'+
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                   '</a>'+
                 '</div>'+
@@ -4657,7 +4686,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     '</a>'+
                   '</div>'+
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                       '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                   '</div>'+
@@ -4684,7 +4713,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       '</a>'+
                     '</div>'+
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                       '</a>'+
                     '</div>'+
@@ -4711,7 +4740,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         '</a>'+
                       '</div>'+
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                           '<i class="fas fa-download"></i> Descargar'+
                         '</a>'+
                       '</div>'+
@@ -4736,7 +4765,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                           '</a>'+
                         '</div>'+
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                             '<i class="fas fa-download"></i> Descargar'+
                           '</a>'+
                         '</div>'+
@@ -4761,7 +4790,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4784,7 +4813,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                             '</a>'+
                           '</div>'+
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certificado de habilidad del ingeniero residente - '+localStorage.getItem('nube_nombre_proyecto')+'-'+format+'" >'+
+                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/pdf/'+data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                               '<i class="fas fa-download"></i> Descargar'+
                             '</a>'+
                           '</div>'+
@@ -4823,19 +4852,27 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 }
 
 function add_data_form(nombredoc,nom_title) {
+
   $("#nombre").val(nombredoc); $('#title-modal-1').html(nom_title);
-  console.log(nombredoc);  
+
+  //console.log(nombredoc);  
 }
 
 //Función para desactivar registros
 function subir_doc(idvalorizacion) {
-  console.log('idvalorizacion: ' + idvalorizacion);
+
+  //console.log('idvalorizacion: ' + idvalorizacion);
+
   $("#idvalorizacion").val(idvalorizacion);
+
   $("#modal-agregar-valorizacion").modal('show'); 
 }
 
 function subir_doc_respuesta(idvalorizacion, nombre) {
+
   $("#idvalorizacion").val(idvalorizacion);
+
   $("#nombre").val(nombre);
+  
   $("#modal-agregar-valorizacion").modal('show'); 
 }

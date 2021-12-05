@@ -66,10 +66,11 @@ Class Valorizacion
 		FROM proyecto as p 
 		WHERE p.idproyecto = '$nube_idproyect';";
 		$data2 = ejecutarConsultaSimpleFila($sql2);
-
+		
 		$results = array(
 			"data1" => $data1,
-			"data2" => $data2
+			"data2" => $data2,
+			"count_data1" => count( $data1)
 		);
 
 		return $results ;

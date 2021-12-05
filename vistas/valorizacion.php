@@ -67,7 +67,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <h4>Valorización 2</h4>
+                      <h4 id="nombre_titulo">Valorización</h4>
                       <div class="row">
                         <!-- tab seleciones -->
                         <div class="col-lg-3 col-xl-4" id="tab-seleccione" style="display: none;">
@@ -94,28 +94,15 @@
                             <a class="nav-link ml-4" id="tabs-8-5-tab" data-toggle="pill" href="#tabs-8-5" role="tab" aria-controls="tabs-8-5" aria-selected="false" onclick="add_data_form('doc8.5', 'Copia del seguro complementario contra todo riesgo');">8.5 Copia del seguro complementario contra todo riesgo</a>
                             <a class="nav-link ml-4" id="tabs-8-6-tab" data-toggle="pill" href="#tabs-8-6" role="tab" aria-controls="tabs-8-6" aria-selected="false" onclick="add_data_form('doc8.6', 'Panel fotográfico');">8.6 Panel fotográfico</a>
                             <a class="nav-link ml-4" id="tabs-8-7-tab" data-toggle="pill" href="#tabs-8-7" role="tab" aria-controls="tabs-8-7" aria-selected="false" onclick="add_data_form('doc8.7', 'Copia del cuaderno de obra');">8.7 Copia del cuaderno de obra</a>
+                            <a class="nav-link" id="tabs-resumen-tab" data-toggle="pill" href="#tabs-resumen" role="tab" aria-controls="tabs-resumen" aria-selected="false" >RESUMEN</a>
                           </div>
                         </div>
                         <!-- Tab contenido -->
                         <div class="col-lg-9 col-xl-8" id="tab-contenido" style="display: none;">
                           <div class="tab-content" id="tabs-tabContent">
                             <!-- Resumen de documentos subidos -->
-                            <div class="tab-pane fade show active"  role="tabpanel">
-                              <div class="info-box bg-warning">
-                                <span class="info-box-icon"><i class="far fa-bookmark"></i></span>
-
-                                <div class="info-box-content">
-                                  <span class="info-box-text">Documentos Subidos</span>
-                                  <span class="info-box-number">Total 8/18</span>
-
-                                  <div class="progress">
-                                    <div class="progress-bar" style="width: 50%"></div>
-                                  </div>
-                                  <span class="progress-description">
-                                    Estas a un 50% de documentos subidos!!!
-                                  </span>
-                                </div>
-                              </div>
+                            <div class="tab-pane fade show active" id="tabs-resumen"  role="tabpanel" aria-labelledby="tabs-resumen-tab">
+                              <!-- aqui va el resumen -->
                             </div>
 
                             <!-- 1. Copia del contrato -->

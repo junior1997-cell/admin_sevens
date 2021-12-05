@@ -23,6 +23,7 @@
       $idcalendario		  = isset($_POST["idcalendario"])? limpiarCadena($_POST["idcalendario"]):"";
       $idproyecto 		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $fecha_feriado	  = isset($_POST["fecha_feriado"])? limpiarCadena($_POST["fecha_feriado"]):"";
+      $fecha_invertida	  = isset($_POST["fecha_invertida"])? limpiarCadena($_POST["fecha_invertida"]):"";
       $text_color	      = isset($_POST["text_color"])? limpiarCadena($_POST["text_color"]):"";
       $titulo		        = isset($_POST["titulo"])? limpiarCadena($_POST["titulo"]):"";
       $background_color = isset($_POST["background_color"])? limpiarCadena($_POST["background_color"]):"";
@@ -35,14 +36,14 @@
 
           if (empty($idcalendario)){
 
-            $rspta=$calendario->insertar($titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
+            $rspta=$calendario->insertar($titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
   
           }else {
 
             // editamos un trabajador existente
-            $rspta=$calendario->editar($idcalendario, $titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
+            $rspta=$calendario->editar($idcalendario, $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color);
             
             echo $rspta ? "ok" : "Fecha no se pudo actualizar";
           }            

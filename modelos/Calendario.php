@@ -80,7 +80,7 @@
       
       $a = ejecutarConsultaArray($sql); $b = ejecutarConsultaArray($sql2); $c = ejecutarConsultaSimpleFila($sql3);
 
-      $data = array( 'data1' => array_merge($a,$b), 'data2' => $c );
+      $data = array( 'data1' => $b, 'data2' => $c );
       return $data;
     }    
 

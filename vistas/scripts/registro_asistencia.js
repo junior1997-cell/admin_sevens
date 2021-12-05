@@ -226,7 +226,7 @@ function datos_quincena(f1,f2) {
     var horas = '<td>-</td>';     
     $(".nameappend").html('');
    
-
+     
     $.each(data, function (index, value) {
 
       var pintar_hora_por_dia = ""; var count_dias_asistidos = 0; var horas_total = 0; var sabatical = 0;
@@ -278,23 +278,25 @@ function datos_quincena(f1,f2) {
       }
       console.log(pintar_hora_por_dia); 
       console.log('cant dias sistidos: '+count_dias_asistidos);
-      rowtrabajador= '<tr>'+
+      rowtrabajador= '<tr style="border-top: black 2px solid !important;">'+
         '<td>H/N</td>'+
-        '<td>' + value.nombres +'</td>'+
-        '<td>' + value.cargo + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;  ">' + value.nombres +'</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">' + value.cargo + '</td>'+
         pintar_hora_por_dia + horas.repeat(15 - count_dias_asistidos) +
-        '<td>' + horas_total + '</td>'+
-        '<td>' +value.sueldo_mensual + '</td>'+
-        '<td>' +value.sueldo_diario + '</td>'+
-        '<td>' +value.sueldo_hora + '</td>'+
-        '<td>' + sabatical + '</td>'+
-        '<td>1</td>'+
-        '<td>750.00</td>'+
+        '<td >' + horas_total + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">15</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;" >' +value.sueldo_mensual + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;" >' +value.sueldo_diario + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">' +value.sueldo_hora + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">' + sabatical + '</td>'+
+        '<td >500</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">1 <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento(1);"><i class="far fa-eye"></i></span></td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">750.00</td>'+
       '</tr>'+
-      '<tr>'+
+      '<tr style="border-bottom: black 2px solid !important;">'+
         '<td>H/E</td>'+
-        '<td>' + value.nombres + '</td>'+
-        '<td>' + value.cargo + '</td>'+
+        '<td >' + horas_total + '</td>'+  
+                
         '<td>2</td>'+
         '<td>1</td>'+
         '<td>0</td>'+
@@ -310,21 +312,14 @@ function datos_quincena(f1,f2) {
         '<td>1</td>'+
         '<td>4</td>'+
         '<td>4</td>'+
-        '<td>44</td>'+
-        '<td>' + value.sueldo_mensual + '</td>'+
-        '<td>' + value.sueldo_diario + '</td>'+
-        '<td>' + value.sueldo_hora + '</td>'+
-        '<td>0</td>'+
-        '<td>53.56</td>'+
-        '<td>-</td>'+
-        
+        '<td >200</td>'+  
       '</tr>';
       $('.nameappend').append(rowtrabajador);
        
     });
 
     $('.nameappend').append('<tr>'+
-      '<td colspan="23"></td>'+
+      '<td colspan="25"></td>'+
       '<td ><b>TOTAL</b></td>'+
       '<td>803.56</td>'+
     '</tr>'
@@ -385,6 +380,7 @@ function datos_quincena(f1,f2) {
 
   $("#cargando-1-fomulario").show();
   $("#cargando-2-fomulario").hide();
+  $('[data-toggle="tooltip"]').tooltip();
   
 }
 
@@ -793,4 +789,8 @@ function format_d_m_a(fecha) {
   let splits = fecha.split("-"); 
 
   return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+function modal_adicional_descuento() {
+  $("#modal-adicional-descuento").modal("show");
 }

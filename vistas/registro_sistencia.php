@@ -67,13 +67,14 @@
                               <tr>
                                 <th class="">Aciones</th>
                                 <th>Nombre</th>
-                                <th>total Días</th>
                                 <th>total Horas</th>
+                                <th>total Días</th>
+                                
                                 <th>Pago / hora</th>
-                                <th>Pago acumulado</th>
-                                <th>Sueldo mensual</th>
                                 <th>Sueldo diario</th>
+                                <th>Sueldo mensual</th>                                
                                 <th>Sabatical</th>
+                                <th>Pago acumulado</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -81,13 +82,14 @@
                               <tr>
                                 <th>Aciones</th>
                                 <th>Nombre</th>
-                                <th>total Días</th>
                                 <th>total Horas</th>
-                                <th>Pago / hora</th>
-                                <th>Pago acumulado</th>
-                                <th>Sueldo mensual</th>
-                                <th>Sueldo diario</th>
+                                <th>total Días</th>
+                                
+                                <th>Pago / hora</th> 
+                                <th>Sueldo diario</th>                                
+                                <th>Sueldo mensual</th>                                
                                 <th>Sabatical</th>
+                                <th>Pago acumulado</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -104,11 +106,13 @@
                                   <th rowspan="4" class="stile">Cargo</th>
                                   <th colspan="15" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
                                   <th rowspan="3" class="stile">Horas<br>normal/extras</th>
+                                  <th rowspan="3" class="stile">Días<br>asistidos</th>
                                   <th rowspan="3" class="stile">Sueldo Mensual</th>
                                   <th rowspan="3" class="stile">Jornal</th>
                                   <th rowspan="3" class="stile">Sueldo hora</th>
                                   <th rowspan="3" class="stile">Sabatical</th>
-                                  <th rowspan="3" class="stile">Adicional</th>
+                                  <th rowspan="3" class="stile">Pago <br> parcial</th>
+                                  <th rowspan="3" class="stile">Adicional <br> descuento</th>
                                   <th rowspan="3" class="stile">Pago quincenal</th>
                                 </tr>
                                 <tr class="dias">
@@ -146,7 +150,7 @@
                                   <th>15</th>
                                 </tr>
                               </thead>
-                              <tbody class="tcuerpo nameappend">
+                              <tbody class="tcuerpo nameappend" >
                                 <!-- <tr>
                                   <td>H/N</td>
                                   <td>Maestro de obra</td>
@@ -429,7 +433,55 @@
                     </div>
                   </div>
                 </div>
-              </div>         
+              </div> 
+              
+              <!-- Modal adicinoal / descuento -->
+              <div class="modal fade" id="modal-adicional-descuento">
+                <div class="modal-dialog modal-dialog-scrollable modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Adicional / descuento</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-adicional-descuento" name="form-adicional-descuento" method="POST">
+                        <div class="row" id="cargando-5-fomulario">
+                          
+                          <!-- id asistencia -->
+                          <input type="hidden" name="idasistencia_trabajador3" id="idasistencia_trabajador3" />                                         
+                          
+                          <!-- Descripcion -->
+                          <div class="col-md-12 col-lg-12">
+                            <div class="form-group">
+                              <label for="nombre">Descripción</label>
+                              <textarea name="detalle" id="detalle" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
+                            </div>
+                          </div>                        
+
+                        </div>
+
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-adicional-descuento">Submit</button>
+                      </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_adicional_descuento">Guardar Cambios</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             </section>
             <!-- /.content -->
