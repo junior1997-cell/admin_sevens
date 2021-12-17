@@ -57,13 +57,13 @@ ob_start();
         break;
 
         case 'ver_datos_quincena':
-          //$f1 = $_POST["f1"];
-          /*$f1 = $_POST["f1"];
+          
+          $f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
-          $nube_idproyect = $_POST["nube_idproyect"];*/
-          $f1 = '2021-07-09';
-          $f2 = '2021-07-23';
-          $nube_idproyect = '1';
+          $nube_idproyect = $_POST["nube_idproyect"];
+          // $f1 = '2021-07-09';
+          // $f2 = '2021-07-23';
+          // $nube_idproyect = '1';
 
           $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
 

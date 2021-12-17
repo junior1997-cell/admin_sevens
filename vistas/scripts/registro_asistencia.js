@@ -74,8 +74,8 @@ function limpiar() {
   
   lista_trabajadores(localStorage.getItem('nube_idproyecto'));
 }
-// Función que suma o resta días a la fecha indicada
 
+// Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
   var Fecha = new Date();
   var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
@@ -133,12 +133,12 @@ function listar(nube_idproyecto) {
 
     data =JSON.parse(data); //console.log(data);
    
-    var fecha = data.fecha_inicio;
-    // console.log(fecha);
-    var fecha_i = sumaFecha(0,fecha);
-    var cal_quincena  = data.plazo/15;
-    var i=0;
-    var cont=0
+    var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
+
+    var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/15;
+
+    var i=0; var cont=0;  
+    
     $('#Lista_quincenas').html('');
 
     while (i <= cal_quincena) {
@@ -147,9 +147,8 @@ function listar(nube_idproyecto) {
 
       var fecha_inicio = fecha_i;
       
-      fecha=sumaFecha(14,fecha_inicio);
+      fecha=sumaFecha(14,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
 
-      // console.log(fecha_inicio+'-'+fecha);
       ver_asistencia="'"+fecha_inicio+"',"+"'"+fecha+"'";
 
       $('#Lista_quincenas').append(' <button type="button" class=" mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('+ver_asistencia+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' // '+fecha+'</button>')
@@ -223,7 +222,7 @@ function datos_quincena(f1,f2) {
     data =JSON.parse(data); console.log(data);
     var rowtrabajador='';
     var rowtrabajadores='';
-    var horas = '<td>-</td>';     
+    var horas = '<td> <input class="w-px-30" type="text" value="8" /> </td>';     
     $(".nameappend").html('');
    
      
@@ -297,20 +296,20 @@ function datos_quincena(f1,f2) {
         '<td>H/E</td>'+
         '<td >' + horas_total + '</td>'+  
                 
-        '<td>2</td>'+
-        '<td>1</td>'+
-        '<td>0</td>'+
-        '<td>0</td>'+
-        '<td>0</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>4</td>'+
+        '<td><span id="h_exra1" ondblclick="edit(this);"> 8 </span> <input class="w-px-30 hidden" type="text" name="h_exra2" id="h_exra2" value="8" /></td>'+
+        '<td> <input class="w-px-30" type="text" value="4" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="4" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="6" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="3" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="3" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="2" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="2" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
         '<td>4</td>'+
         '<td >200</td>'+  
       '</tr>';
@@ -784,9 +783,18 @@ function activar(idasistencia_trabajador) {
   });      
 }
 
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
-  let splits = fecha.split("-"); 
+  let splits = fecha.split("-"); //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
+function format_a_m_d(fecha) {
+
+  let splits = fecha.split("-"); //console.log(splits);
 
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
@@ -794,3 +802,28 @@ function format_d_m_a(fecha) {
 function modal_adicional_descuento() {
   $("#modal-adicional-descuento").modal("show");
 }
+
+
+function edit(element) {
+  
+  var hora_Acual = $("#id2").text()
+  $("#h_exra2").show();
+  $("#h_exra1").hide();
+   console.log( hora_Acual );
+}
+
+
+
+$(document).click(function(){
+  $("#h_exra2").blur(function(){
+    $(this).css("background-color", "#FFFFCC");
+  });
+  // $("#h_exra2").hide();
+  // $("#h_exra1").show();
+  console.log("click en cual quier parte");
+  // alert("has pulsado en botón");
+
+  // // si lo deseamos podemos eliminar el evento click
+  // // una vez utilizado por primera vez
+  // $(document).unbind("click");
+})

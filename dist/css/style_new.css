@@ -198,6 +198,13 @@ table th {
   width: 35px !important;
 }
 
+.hidden{
+  display: none;
+}
+.w-px-30{
+  width: 30px !important;
+}
+
 #dp .ui-datepicker tbody td.highlight a{background-color: red; border-bottom: 3px blue solid;}
 
 .cursor-pointer{

@@ -460,7 +460,11 @@
                               <label for="nombre">Descripción</label>
                               <textarea name="detalle" id="detalle" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
                             </div>
-                          </div>                        
+                          </div>  
+                          
+                          Nombre: <span id="1" ondblclick="edit(this);"> Zhang San </span> <br/>
+                          Dirección particular: <span id="2" ondblclick="edit(this);"> Zhang San </span> <br/>
+                          
 
                         </div>
 
