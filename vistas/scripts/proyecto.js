@@ -1,12 +1,8 @@
-var tabla;
-var tabla2;
+var tabla; var tabla2; tablero();
 //Función que se ejecuta al inicio
-function init(){ 
+function init(){  
 
-  tablero();
-
-  listar();
-  listar2();
+  listar(); listar2();
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });
 
@@ -14,7 +10,49 @@ function init(){
   $("#form-valorizaciones").on("submit", function (e) { guardar_editar_valorizacion(e); });
 
   $('#mEscritorio').addClass("active");
+
+  // mostramos las fechas feriadas
+  $.post("../ajax/proyecto.php?op=listar_feriados",  function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);
+    var colors = [];
+    $.each(data, function (index, value) { 
+      //console.log(value);
+      colors.push(value.fecha_invertida); 
+    });
+    //console.log(colors);
+
+    $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+    // Inicializar - Date picker  
+    $('#fecha_inicio').datetimepicker({
+      locale: 'es',
+      // format: 'L',
+      format: 'DD-MM-YYYY',
+      daysOfWeekDisabled: [6],     
+      //defaultDate: "",
+      disabledDates: colors
+    });
+
+  });  
+
+  $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_fin').datetimepicker({
+    locale: 'es',
+    // format: 'L',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6],     
+    //defaultDate: "11/1/2013",
+    disabledDates: [
+      // moment("12/25/2013"),      
+      "11-11-2021",
+      "11-10-2021",
+      "11-05-2021"
+    ],     
+  });   
 }
+
+init();
 
 //Función limpiar
 function limpiar() {
@@ -25,8 +63,8 @@ function limpiar() {
   $("#nombre_proyecto").val(""); $("#nombre_codigo").val("");
   $("#ubicacion").val(""); 
   $("#actividad_trabajo").val("");  
-  $("#fecha_inicio_fin").val("");    
-  $("#plazo").val(""); 
+  $("#fecha_inicio").val("");  $("#fecha_fin").val("");   
+  $("#dias_habiles").val(""); $("#plazo").val(""); 
   $("#costo").val(""); 
   $("#empresa_acargo").val("Seven's Ingenieros SAC"); 
 
@@ -357,38 +395,33 @@ function reiniciar_proyecto(idproyecto) {
   });      
 }
 
-init();
 
-
-$(function () {
-  
+$(function () {  
 
   //Date range picker
-  $('#fecha_inicio_fin').daterangepicker({
-    dateFormat: 'YYYY/MM/DD',
-    autoUpdateInput: false,
-    inline: true,
-    locale: {
-      cancelLabel: 'Clear'
-    },
-    isInvalidDate: function(date) {
-      if (date.day() == 0 || date.day() == 1 || date.day() == 2 || date.day() == 3 || date.day() == 4 || date.day() == 5)
-        return false;
-      return true;
-    },
+  // $('#fecha_inicio_fin').daterangepicker({
+  //   dateFormat: 'YYYY/MM/DD',
+  //   autoUpdateInput: false,
+  //   inline: true,
+  //   locale: {
+  //     cancelLabel: 'Clear'
+  //   },
+  //   isInvalidDate: function(date) {
+  //     if (date.day() == 0 || date.day() == 1 || date.day() == 2 || date.day() == 3 || date.day() == 4 || date.day() == 5)
+  //       return false;
+  //     return true;
+  //   },    
+  // });
+  // $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
+  //   $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+  // });
 
-    
-  });
-  $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
-  });
-
-  $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-  });
+  // $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
+  //   $(this).val('');
+  // });
   
 
-  // validamo el formulario
+  // validamos el formulario
   $.validator.setDefaults({
 
     submitHandler: function (e) {
@@ -408,8 +441,11 @@ $(function () {
       ubicacion: {minlength: 6, maxlength: 300},
       actividad_trabajo: {minlength: 6},
       empresa_acargo: {minlength: 6, maxlength: 200},
-      
-      fecha_inicio_fin:{required: true,minlength: 1, maxlength: 25}
+      fecha_inicio: {required: true,minlength: 1, maxlength: 25},
+      fecha_fin:{required: true,minlength: 1, maxlength: 25},
+      dias_habiles: {required: true,minlength: 1, maxlength: 11, digits: true, number: true},
+      plazo: {required: true,minlength: 1, maxlength: 11, number: true},
+      costo: { minlength: 1, maxlength: 20,  },
     },
     messages: {
       numero_documento: {
@@ -441,9 +477,27 @@ $(function () {
         minlength: "La Empresa a cargo debe tener MÍNIMO 6 caracteres.",
         maxlength: "La Empresa a cargo debe tener como MÁXIMO 200 caracteres.",
       },
-     
-      fecha_inicio_fin: {
-        required: "Este campo es requerido.",
+      fecha_inicio:{
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
+      },
+      fecha_fin: {
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
+      },
+      dias_habiles: {
+        required: "Este campo es requerido.", 
+        minlength: "1 dígitos como minimo.",
+        maxlength: "11 dígitos como máximo.",
+        digits: "Solo números positivos"
+      },
+      plazo: {
+        required: "Este campo es requerido.", 
+        minlength: "1 dígitos como minimo.",
+        maxlength: "11 dígitos como máximo.",
+      },
+      costo: {         
+        minlength: "1 dígitos como minimo.",
+        maxlength: "20 dígitos como máximo.",
+        
       },
     },
     
@@ -491,11 +545,9 @@ function buscar_sunat_reniec() {
 
     if (dni_ruc.length == "8") {
 
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+      $.post("../ajax/proyecto.php?op=reniec", { dni: dni_ruc }, function (data, status) {
 
-        data = JSON.parse(data);
-
-        console.log(data);
+        data = JSON.parse(data);  //console.log(data);
 
         if (data.success == false) {
 
@@ -528,11 +580,10 @@ function buscar_sunat_reniec() {
     if (tipo_doc == "RUC") {
 
       if (dni_ruc.length == "11") {
-        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+        $.post("../ajax/proyecto.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
 
-          data = JSON.parse(data);
-
-          console.log(data);
+          data = JSON.parse(data);  //console.log(data);
+          
           if (data.success == false) {
 
             $("#search").show();
@@ -553,7 +604,7 @@ function buscar_sunat_reniec() {
 
               data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
               
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+              data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
               // $("#direccion").val(data.direccion);
               toastr.success("Cliente encontrado");
             } else {
@@ -568,7 +619,7 @@ function buscar_sunat_reniec() {
 
               data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
               
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+              data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
 
               // $("#direccion").val(data.direccion);
             }
@@ -604,7 +655,7 @@ function buscar_sunat_reniec() {
   }
 }
 
-// caculamos el plazo
+// caculamos el plazo CON DATE RANGER
 function calcular_palzo() {
 
   $("#fecha_inicio_fin").on("apply.daterangepicker", function (ev, picker) { 
@@ -933,7 +984,7 @@ function doc6_eliminar() {
 } 
 
 function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
-  console.log(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6);
+  //console.log(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6);
   $('#modal-ver-docs').modal("show");
 
   if (verdoc1 == "") {
@@ -1421,16 +1472,19 @@ function mostrar(idproyecto) {
     $("#ubicacion").val(data.ubicacion); 
     $("#actividad_trabajo").val(data.actividad_trabajo);  
        
+    $("#dias_habiles").val(data.dias_habiles); 
     $("#plazo").val(data.plazo); 
     $("#costo").val(data.costo); 
     $("#empresa_acargo").val(data.empresa_acargo); 
 
-    let fcha_array1 = data.fecha_inicio.split('-');
-    let fcha_array2 = data.fecha_fin.split('-');
-    let fff = fcha_array1['0'] + '/' +fcha_array1['1'] + '/' + fcha_array1['2'] ;
-    let fii = fcha_array2['0'] + '/' +fcha_array2['1'] + '/' + fcha_array2['2'] ;  
+    // let fcha_array1 = data.fecha_inicio.split('-');
+    // let fcha_array2 = data.fecha_fin.split('-');
+    // let fff = fcha_array1['0'] + '/' +fcha_array1['1'] + '/' + fcha_array1['2'] ;
+    // let fii = fcha_array2['0'] + '/' +fcha_array2['1'] + '/' + fcha_array2['2'] ;  
     // console.log(fii ); console.log(fff );
-    $("#fecha_inicio_fin").val(fii + ' - ' + fff);
+    console.log(format_d_m_a(data.fecha_inicio));
+    $("#fecha_inicio").val(format_d_m_a(data.fecha_inicio));
+    $("#fecha_fin").val(format_d_m_a(data.fecha_fin));
     
     //validamoos DOC-1
     if (data.doc1_contrato_obra != ""  ) {
@@ -1876,29 +1930,14 @@ function mostrar_detalle(idproyecto) {
 
 function tablero() {   
 
-  $.post("../ajax/proyecto.php?op=tablero-proyectos",  function (data, status) {
+  $.post("../ajax/proyecto.php?op=tablero",  function (data, status) {
 
     data = JSON.parse(data);  //console.log(data);
-    $("#cantidad_proyectos").html(data.cantidad_proyectos);
+    $("#cantidad_proyectos").html(data.proyecto.cantidad_proyectos);
+    $("#cantidad_proveedores").html(data.proveedor.cantidad_proveedores);
+    $("#cantidad_trabajadores").html(data.trabajador.cantidad_trabajadores);
+    $("#cantidad_servicios").html(data.servicio.cantidad_servicios);
 
-  });  
-
-  $.post("../ajax/proyecto.php?op=tablero-proveedores",  function (data, status) {
-
-    data = JSON.parse(data);  //console.log(data);
-    $("#cantidad_proveedores").html(data.cantidad_proveedores);
-  });
-
-  $.post("../ajax/proyecto.php?op=tablero-trabjadores",  function (data, status) {
-
-    data = JSON.parse(data);  //console.log(data);
-    $("#cantidad_trabajadores").html(data.cantidad_trabajadores);
-  });
-
-  $.post("../ajax/proyecto.php?op=tablero-servicio",  function (data, status) {
-
-    data = JSON.parse(data);  //console.log(data);
-    $("#cantidad_servicios").html(data.cantidad_servicios);
   });
 }
 
@@ -2035,4 +2074,150 @@ function ver_modal_docs_valorizaciones(idproyecto, documento) {
 function extrae_extencion(filename) {
   return filename.split('.').pop();
 }
+
+function calcular_plazo_fechafin() {
   
+  if ($("#dias_habiles").val() == "" && $("#fecha_inicio").val() == "20-02-1112") {  //console.log($("#dias_habiles").val(),$("#fecha_inicio").val());   
+  } else { //console.log($("#dias_habiles").val(),$("#fecha_inicio").val());
+    if ($("#dias_habiles").val() != "") {
+
+      if ($("#fecha_inicio").val() != "") {      
+      
+        if (parseInt( $("#dias_habiles").val() ) > 0) {
+          // sumamos las fechas
+          var fecha_fin = sumaFecha( $("#dias_habiles").val(), $("#fecha_inicio").val()); //console.log(format_a_m_d(fecha_fin));
+
+          $.post("../ajax/proyecto.php?op=mostrar-rango-fechas-feriadas", { fecha_i: format_a_m_d($("#fecha_inicio").val()), fecha_f: format_a_m_d(fecha_fin) }, function (data, status) {
+            
+            data = JSON.parse(data);  //console.log(data);
+            var fecha_fin_es_feriado = true;
+            // sumamos el new plazo            
+            var new_plazo = parseInt($("#dias_habiles").val()) + parseInt( data.count_feriado) ;
+
+            // sumamos las fechas con el nuevo plazo
+            fecha_fin = sumaFecha( new_plazo, $("#fecha_inicio").val());
+
+            var cant_sabados = cuentaSabado( format_a_m_d($("#fecha_inicio").val()), format_a_m_d( fecha_fin ) );
+
+            new_plazo = parseInt($("#dias_habiles").val()) + parseInt( data.count_feriado) + parseInt(cant_sabados);
+
+            // sumamos las fechas con el nuevo plazo
+            fecha_fin = sumaFecha( new_plazo, $("#fecha_inicio").val());
+
+            console.log(cant_sabados);
+            // while (fecha_fin_es_feriado == false) {            
+            //   fecha_fin_es_feriado = false;
+            //   // $.post("../ajax/proyecto.php?op=fecha_fin-es-feriado", { fecha_fin: format_a_m_d(fecha_fin) }, function (data, status) {
+              
+            //   // });
+            // }
+
+            $("#fecha_fin").val(fecha_fin); $("#plazo").val(new_plazo);
+
+            toastr.success('Suma de fecha correctamente. </br> <h6 class="pt-1 mt-1 pb-1 mb-1">→ ' + data.count_feriado + ' feriados encontrados. </h6>  <h6 class="pt-1 mt-1">→ ' + cant_sabados + ' sábados</h6>')
+          });
+          
+        } else {
+
+          toastr.error('Seleccione una plazo positivo')
+        }
+      } else {
+        toastr.error('Seleccione una fecha INICIO')
+      }
+    } else {
+      toastr.error('Agregar un PLAZO válido')
+    } 
+  } 
+}
+
+// funcino para sumar dias
+sumaFecha = function(d, fecha) {
+  var Fecha = new Date();
+  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+  // console.log(sFecha);
+  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+  var aFecha = sFecha.split(sep);
+  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+  fecha= new Date(fecha);
+  fecha.setDate(fecha.getDate()+parseInt(d));
+  var anno=fecha.getFullYear();
+  var mes= fecha.getMonth()+1;
+  var dia= fecha.getDate();
+  mes = (mes < 10) ? ("0" + mes) : mes;
+  dia = (dia < 10) ? ("0" + dia) : dia;
+  var fechaFinal = dia+sep+mes+sep+anno;
+  return (fechaFinal);
+}
+
+// formato año-mes-dia
+function format_a_m_d(fecha) {
+
+  let splits = fecha.split("-");   //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+// formato año-mes-dia
+function format_d_m_a(fecha) {
+
+  let splits = fecha.split("-");   //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+function cuentaSabado(fi, ff){
+  console.log(fi + " / "+ ff);
+  var inicio = new Date(fi); //Fecha inicial
+  var fin = new Date(ff); //Fecha final
+  var timeDiff = Math.abs(fin.getTime() - inicio.getTime());
+  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); //Días entre las dos fechas
+  var cuentaFinde = 0; //Número de Sábados y Domingos
+  var array = new Array(diffDays);
+
+  for (var i=0; i < diffDays; i++) {
+    //0 => Domingo - 6 => Sábado
+    if (inicio.getDay() == 6) {
+      cuentaFinde++;
+    }
+
+    inicio.setDate(inicio.getDate() + 1);
+  }
+
+ return cuentaFinde;
+}
+
+
+// input decimal letra
+$(function() {
+  $("#costo").bind("change keyup input", function() {
+    var position = this.selectionStart - 1;
+    //remove all but number and .
+    var fixed = this.value.replace(/[^0-9\.]/g, "");
+    if (fixed.charAt(0) === ".")
+      //can't start with .
+      fixed = fixed.slice(1);
+
+    var pos = fixed.indexOf(".") + 1;
+    if (pos >= 0)
+      //avoid more than one .
+      fixed = fixed.substr(0, pos) + fixed.slice(pos).replace(".", "");
+
+    if (this.value !== fixed) {
+      this.value = fixed;
+      this.selectionStart = position;
+      this.selectionEnd = position;
+    }
+  });
+
+  $("#dias_habilees").bind("change keyup input", function() {
+    var position = this.selectionStart - 1;
+    //remove all but number and .
+    var fixed = this.value.replace(/[^0-9]/g, "");
+
+    if (this.value !== fixed) {
+      this.value = fixed;
+      this.selectionStart = position;
+      this.selectionEnd = position;
+    }
+  });
+});

@@ -16,7 +16,8 @@
           require 'head.php';
         ?>
         <!-- Theme style -->
-        <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
+        <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->       
+         
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed ">
         
@@ -215,7 +216,7 @@
 
               <!-- Modal agregar proyecto -->
               <div class="modal fade" id="modal-agregar-proyecto">
-                <div class="modal-dialog /*modal-dialog-scrollable*/ modal-xl">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 class="modal-title">Agregar proyecto</h4>
@@ -246,7 +247,7 @@
                             </div>
 
                             <!-- N° de documento -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                               <div class="form-group">
                                 <label for="numero_documento">N° de documento</label>
                                 <div class="input-group">
@@ -262,7 +263,7 @@
                             </div>
 
                             <!-- Empresa -->
-                            <div class="col-lg-5">
+                            <div class="col-lg-6">
                               <div class="form-group">
                                 <label for="empresa">Empresa <small class="text-orange">(para quien va la obra)</small> </label>                               
                                 <input type="text" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
@@ -270,7 +271,7 @@
                             </div>
 
                             <!-- Nombre del proyecto -->
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                               <div class="form-group">
                                 <label for="nombre_proyecto">Nombre del proyecto</label>
                                 <textarea name="nombre_proyecto" id="nombre_proyecto" class="form-control" rows="3" placeholder="Ingresa nombre">
@@ -279,7 +280,7 @@
                             </div>
 
                             <!-- Ubicación (de la obra) -->
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                               <div class="form-group">
                                 <label for="ubicacion">Ubicación <small class="text-orange"> (de la obra) </small> </label>                               
                                 <!-- <input type="text" name="ubicacion" id="ubicacion" class="form-control"  placeholder="Ubicación">  -->
@@ -289,7 +290,7 @@
                             </div>
 
                             <!-- Codigo del proyecto -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                               <div class="form-group">
                                 <label for="nombre_codigo">Código del proyecto</label>
                                 <input type="text" name="nombre_codigo" id="nombre_codigo" class="form-control"  placeholder="Codigo proyecto">
@@ -297,13 +298,68 @@
                             </div>                           
 
                             <!-- Actividad del trabajo -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                               <div class="form-group">
                                 <label for="actividad_trabajo">Actividad del trabajo </label>
                                 <input type="text" name="actividad_trabajo" id="actividad_trabajo" class="form-control" placeholder="Actividad del trabajo">
                               </div>
+                            </div>                            
+                            
+                            <!-- FECHA INICIO -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label>Fecha Inicio:</label>
+                                <div class="input-group date"  data-target-input="nearest">
+                                  <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_fechafin()" />
+                                  <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                </div>                                 
+                              </div>
                             </div>
 
+                            <!-- Dias habiles -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="dias_habiles">Plazo <small class="text-orange">(días hábiles)</small> </label>
+                                <input type="number" name="dias_habiles" id="dias_habiles" class="form-control" min="0"  placeholder="Días habiles" onchange="calcular_plazo_fechafin()" onkeyup="calcular_plazo_fechafin()" >
+                              </div>
+                            </div>
+
+                            <!-- Plazo -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="plazo">Plazo <small class="text-orange">(días calendario)</small></label>
+                                <input type="number" name="plazo" id="plazo" class="form-control" placeholder="Días calendario" readonly >
+                              </div>
+                            </div>
+                             
+                            <!-- FECHA FIN -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label>Fecha fin:</label>
+                                <div class="input-group date"  data-target-input="nearest">
+                                  <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin"  data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask readonly/>
+                                  <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                </div>                                 
+                              </div>
+                            </div>
+
+                            <!-- Costo total del proyecto -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="costo">Costo <small class="text-orange">("costo total del proyecto")</small></label>
+                                <div class="input-group mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text">S/. </span>
+                                  </div>
+                                  <input type="number"  name="costo" id="costo" class="form-control"  placeholder="Costo"  >
+                                </div>
+                              </div>
+                            </div> 
+                            
                             <!-- Empresa a cargo -->
                             <div class="col-lg-4">
                               <div class="form-group">
@@ -311,50 +367,6 @@
                                 <input type="text" name="empresa_acargo" id="empresa_acargo" class="form-control"  placeholder="Empresa a cargo" value="Seven's Ingenieros SAC">
                               </div>
                             </div>
-
-                            <!-- Fecha inicio/fin  -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="costo">Fecha inicio/fin</label>
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                  </div>
-                                  <input type="text" class="form-control float-right" name="fecha_inicio_fin" id="fecha_inicio_fin" onclick="calcular_palzo();" onchange="calcular_palzo();" autocomplete="off">
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Plazo -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="plazo">Plazo <small class="text-orange">(días calendario)</small></label>
-                                <input type="text" name="plazo" id="plazo" class="form-control" placeholder="Plazo" readonly>
-                              </div>
-                            </div>
-
-                            <!-- Dias habiles -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="actividad_trabajo">Plazo <small class="text-orange">(días hábiles)</small> </label>
-                                <input type="text" name="dias_habiles" id="dias_habiles" class="form-control" placeholder="Días habiles" readonly>
-                              </div>
-                            </div>
-
-                            <!-- Costo total del proyecto -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="costo">Costo <small class="text-orange">("costo total del proyecto")</small></label>
-                                <div class="input-group mb-3">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">S/. </span>
-                                  </div>
-                                  <input type="number"  name="costo" id="costo" class="form-control"  placeholder="Costo" min="1" >
-                                </div>
-                              </div>
-                            </div>                            
                             
                             <!-- Pdf 1 -->
                             <div class="col-md-6 col-lg-4" >                               
@@ -873,8 +885,8 @@
         <?php          
           require 'script.php';
         ?>
-         
 
+        <script src="../plugins/moment/locales.js"></script>
         <script type="text/javascript" src="scripts/proyecto.js"></script>        
         
         <script>
@@ -892,8 +904,7 @@
             $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
 
             $("#ver-otros-modulos-1").hide();
-          }
-          
+          }          
         </script>
 
         <script>

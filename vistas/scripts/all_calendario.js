@@ -21,7 +21,7 @@ function init() {
     placeholder: "Selecione tipo",
     allowClear: true,
   });
-  $("#background_color").val("").trigger("change");
+  $("#background_color").val("#FF0000").trigger("change");
 }
 
 function contraste() {
@@ -40,78 +40,71 @@ function limpiar() {
   $('#text_color').val('#ffffff');
   $('#fecha_select').html("Selecione una fecha");
   $('#titulo').val('Feriado');
-  $("#background_color").val("").trigger("change");
+  $("#background_color").val("#FF0000").trigger("change");
   $('#descripcion').val('');
   $('#eliminar_registro').hide();  
 }
 
 //Función Listar
 function listar() {
+
   $("#external-events").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
+
   $("#custom-tabs-four-home").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
+
   $.post("../ajax/all_calendario.php?op=listar-calendario",  function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data); 
+    data = JSON.parse(data);   //console.log(data); 
 
     $("#external-events").html('');
 
-    if (data.length != 0) {
+    if (data.fechas.length != 0) {
 
-      $.each(data, function (index, value) {
+      $.each(data.fechas, function (index, value) {
              
-        $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+'</div>');
-      });
+        $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+' - '+ value.start +' </div>');
+      });     
 
-      $("#custom-tabs-four-home").html(
-        '<div class="card-body table-responsive p-0">'+
-          '<table class="table table-hover text-nowrap">'+
-            '<thead>'+
-              '<tr>'+
-                '<th>Detalle</th>'+
-                '<th>Cant. Dias</th>' +                                      
-              '</tr>'+
-            '</thead>'+
-            '<tbody>'+ 
-              '<tr>'+
-                '<td>Feriados activos</td>'+
-                '<td>'+ data.length +'</td>'+                                            
-              '</tr>'+
-              '<tr>'+
-                '<td>Feriados eliminados</td>'+
-                '<td id="f_delete">0</td>'+                                            
-              '</tr>'+
-              '<tr> <td> </td> <td> </td> </tr>' +                                        
-            '</tbody>'+
-          '</table>'+
-        '</div>'
-      );
-
-    } else {
-      $("#custom-tabs-four-home").html(
-        '<div class="card-body table-responsive p-0">'+
-          '<table class="table table-hover text-nowrap">'+
-            '<thead>'+
-              '<tr>'+
-                '<th>Detalle</th>'+
-                '<th>Cant. Dias</th>' +                                      
-              '</tr>'+
-            '</thead>'+
-            '<tbody>'+ 
-              '<tr>'+
-                '<td>Feriados activos</td>'+
-                '<td>0</td>'+                                            
-              '</tr>'+
-              '<tr>'+
-                '<td>Feriados eliminados</td>'+
-                '<td id="f_delete">0 </td>'+                                            
-              '</tr>'+
-              '<tr> <td> </td> <td> </td> </tr>' +                                        
-            '</tbody>'+
-          '</table>'+
-        '</div>'
-      );
+    } else {       
       $("#external-events").html('<div class="external-event bg-info">No hay fechas disponibles</div>');
     }
+
+    // Colocamos el reporte
+    $("#custom-tabs-four-home").html(
+      '<div class="card-body table-responsive p-0">'+
+        '<table class="table table-hover text-nowrap">'+
+          '<thead>'+
+            '<tr>'+
+              '<th>Detalle</th>'+
+              '<th>Cant. Dias</th>' +                                      
+            '</tr>'+
+          '</thead>'+
+          '<tbody>'+ 
+            '<tr>'+
+              '<td>Feriados activos</td>'+
+              '<td>'+ data.fechas.length +'</td>'+                                            
+            '</tr>'+
+            '<tr>'+
+              '<td>Feriados eliminados</td>'+
+              '<td id="f_delete">0</td>'+                                            
+            '</tr>'+
+            '<tr>'+
+              '<td>Cant. feriados nacional</td>'+
+              '<td>'+ data.count_n +'</td>'+                                            
+            '</tr>'+
+            '<tr>'+
+              '<td>Cant. dia no laborable</td>'+
+              '<td>'+ data.count_la +'</td>'+                                            
+            '</tr>'+
+            '<tr>'+
+              '<td>Cant. feriado local</td>'+
+              '<td>'+ data.count_lo +'</td>'+                                            
+            '</tr>'+
+            '<tr> <td> </td> <td> </td> </tr>' +                                        
+          '</tbody>'+
+        '</table>'+
+      '</div>'
+    );
       
     
     //initialize the calendar
@@ -135,7 +128,7 @@ function listar() {
 
       themeSystem: 'bootstrap',
 
-      events: data,
+      events: data.fechas,
 
       // Se ejecuta cuando no hay eventos
       dateClick: function(info) {
@@ -144,6 +137,7 @@ function listar() {
 
         $('#fecha_feriado').val(info.dateStr);
 
+        $("#fecha_invertida").val(fecha_invertida(info.dateStr));
         $('#text_color').val('#ffffff');
 
         $('#fecha_select').html(info.dateStr);
@@ -178,11 +172,13 @@ function listar() {
 
         $('#fecha_select').html(year+'-' + month + '-'+dt);
 
+        $('#fecha_invertida').val(info.event.extendedProps.fecha_invertida);
+
         $('#titulo').val(info.event.title);
 
         $("#background_color").val(info.event.backgroundColor).trigger("change");         
 
-        $('#descripcion').val(info.event.extendedProps.descripcion);
+        $('#descripcion').val(info.event.extendedProps.descripcion);        
 
         $('#modal-agregar-calendario').modal('show');
       },       
@@ -194,7 +190,7 @@ function listar() {
       //droppable : true, // this allows things to be dropped onto the calendar !!!
 
       eventDrop : function(info) {
-        console.log(info);
+        //console.log(info);
         date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
 
         if (dt < 10) { dt = '0' + dt; }
@@ -210,6 +206,8 @@ function listar() {
         $('#text_color').val(info.event.textColor);
 
         $('#fecha_select').html(year+'-' + month + '-'+dt);
+
+        $('#fecha_invertida').val( month + '-'+ dt + '-' + year);
 
         $('#titulo').val(info.event.title);
          
@@ -364,7 +362,7 @@ $(function () {
 
   $("#form-calendario").validate({
     rules: {
-      titulo: { required: true, minlength: 3, maxlength: 20 },
+      titulo: { required: true, minlength: 3, maxlength: 30 },
       color: { required: true,  },
       descripcion: { minlength: 6 },
       background_color: { required: true,  },
@@ -378,7 +376,7 @@ $(function () {
       titulo: {
         required: "Este campo es requerido",
         minlength: "El color debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El color debe tener como MÁXIMO 20 caracteres.", 
+        maxlength: "El color debe tener como MÁXIMO 30 caracteres.", 
       },
 
       color: {
@@ -414,35 +412,44 @@ $(function () {
 });
 
 function invertColor(hex, bw) {
+  if (hex == "#FF0000" || hex == "#FFF700" || hex == '#28A745' ) {   
+    //console.log(hex);
+    if (hex.indexOf('#') === 0) {
+      hex = hex.slice(1);
+    }
 
-  if (hex.indexOf('#') === 0) {
-    hex = hex.slice(1);
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+
+    if (hex.length !== 6) {
+      throw new Error('Invalid HEX color.');
+    }
+
+    var r = parseInt(hex.slice(0, 2), 16),  g = parseInt(hex.slice(2, 4), 16),  b = parseInt(hex.slice(4, 6), 16);
+
+    if (bw) {
+      // http://stackoverflow.com/a/3943023/112731
+      return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+    }
+    // invert color components
+    r = (255 - r).toString(16);
+    g = (255 - g).toString(16);
+    b = (255 - b).toString(16);
+    // pad each with zeros and return
+    return "#" + padZero(r) + padZero(g) + padZero(b);
+  } else {
+    return "";
   }
-
-  // convert 3-digit hex to 6-digits.
-  if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-  }
-
-  if (hex.length !== 6) {
-    throw new Error('Invalid HEX color.');
-  }
-
-  var r = parseInt(hex.slice(0, 2), 16),  g = parseInt(hex.slice(2, 4), 16),  b = parseInt(hex.slice(4, 6), 16);
-
-  if (bw) {
-    // http://stackoverflow.com/a/3943023/112731
-    return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
-  }
-  // invert color components
-  r = (255 - r).toString(16);
-  g = (255 - g).toString(16);
-  b = (255 - b).toString(16);
-  // pad each with zeros and return
-  return "#" + padZero(r) + padZero(g) + padZero(b);
 }
 
 init();
 
-
+function fecha_invertida(fecha) {
+  
+  var fecha_feriado = fecha.split("-");  var fecha_invertida = fecha_feriado[1] + "-" + fecha_feriado[2] + "-" + fecha_feriado[0]; //console.log(fecha_feriado);
+  
+  return fecha_invertida;
+}
 

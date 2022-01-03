@@ -57,13 +57,13 @@ ob_start();
         break;
 
         case 'ver_datos_quincena':
-          //$f1 = $_POST["f1"];
-          /*$f1 = $_POST["f1"];
+          
+          $f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
-          $nube_idproyect = $_POST["nube_idproyect"];*/
-          $f1 = '2021-07-09';
-          $f2 = '2021-07-23';
-          $nube_idproyect = '1';
+          $nube_idproyect = $_POST["nube_idproyect"];
+          // $f1 = '2021-07-09';
+          // $f2 = '2021-07-23';
+          // $nube_idproyect = '1';
 
           $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
 
@@ -141,14 +141,14 @@ ob_start();
                 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
                 style="color: #000000 !important;">'. $reg->cargo .' : </b> <br> '. $reg->nombre .'</p></span>
                 <span class="description" style="margin-left: 0px !important;">'. $reg->tipo_doc .': '. $reg->num_doc .' </span>
-                </div>',
-              "2"=> round(($reg->total_horas_normal+$reg->total_horas_extras)/8, 1),
-              "3"=> round($reg->total_horas_normal+$reg->total_horas_extras, 1),
+                </div>',              
+              "2"=> round($reg->total_horas_normal+$reg->total_horas_extras, 1),
+              "3"=> round(($reg->total_horas_normal+$reg->total_horas_extras)/8, 1),
               "4"=> $reg->sueldo_hora,
-              "5"=> round($sueldo_acumudado, 1),
-              "6"=> $reg->sueldo_mensual,
-              "7"=> $jornal_diario,
-              "8"=> $reg->total_sabatical
+              "5"=> $jornal_diario,
+              "6"=> $reg->sueldo_mensual,              
+              "7"=> $reg->total_sabatical,
+              "8"=> round($sueldo_acumudado, 1),
             );
 
             $jornal_diario=0;

@@ -22,7 +22,7 @@ function init() {
     allowClear: true,
   });
 
-  $("#background_color").val("").trigger("change");
+  $("#background_color").val("#FF0000").trigger("change");
 }
 
 function contraste() {
@@ -41,7 +41,7 @@ function limpiar() {
   $('#text_color').val('#ffffff');
   $('#fecha_select').html("Selecione una fecha");
   $('#titulo').val('Feriado');
-  $("#background_color").val("").trigger("change");
+  $("#background_color").val("#FF0000").trigger("change");
   $('#descripcion').val('');
   $('#eliminar_registro').hide();  
 }
@@ -66,7 +66,7 @@ function listar(idproyecto) {
 
         let fecha_inicio = new Date(data.data2.fecha_inicio); let fecha_fin = new Date(data.data2.fecha_fin); 
 
-        dia_c = parseInt(data.data2.plazo);  fecha_p = data.data2.fecha_inicio +' - ' +data.data2.fecha_fin;
+        dia_c = parseInt(data.data2.plazo);  fecha_p = format_d_m_a(data.data2.fecha_inicio) +' - ' + format_d_m_a(data.data2.fecha_fin);
 
         // validamos data 2
         if (data.data1.length === 0) { dia_l = 'sin feriados'; dia_t = 'sin feriados'; } else {
@@ -211,7 +211,7 @@ function listar(idproyecto) {
 
         $('#titulo').val('Feriado');
 
-        // $('#background_color').val("#dc3545");
+        $("#background_color").val("#FF0000").trigger("change");
 
         $('#descripcion').val('');
 
@@ -365,10 +365,7 @@ function listar(idproyecto) {
         '</div>'
       );
     }
-  });
-
-  
-  
+  }); 
 }
 
 //Función para guardar o editar
@@ -451,9 +448,7 @@ function activar(idcalendario) {
 }
 
 // Validacion FORM
-$(function () {  
-  
-  
+$(function () {
 
   $.validator.setDefaults({
 
@@ -466,7 +461,7 @@ $(function () {
 
   $("#form-calendario").validate({
     rules: {
-      titulo: { required: true, minlength: 3, maxlength: 20 },
+      titulo: { required: true, minlength: 3, maxlength: 30 },
       background_color: { required: true,  },
       descripcion: { minlength: 6 },
     },
@@ -475,7 +470,7 @@ $(function () {
       titulo: {
         required: "Este campo es requerido",
         minlength: "El titulo debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El titulo debe tener como MÁXIMO 20 caracteres.", 
+        maxlength: "El titulo debe tener como MÁXIMO 30 caracteres.", 
       },
 
       background_color: {
@@ -511,32 +506,38 @@ $(function () {
 });
 
 function invertColor(hex, bw) {
-  //console.log(hex.indexOf('#'));
-  if (hex.indexOf('#') === 0) {
-    hex = hex.slice(1);
-  }
+  if (hex == "#FF0000" || hex == "#FFF700" || hex == '#28A745') {
+    
+  
+    console.log(hex);
+    if (hex.indexOf('#') === 0) {
+      hex = hex.slice(1);
+    }
 
-  // convert 3-digit hex to 6-digits.
-  if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-  }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
 
-  if (hex.length !== 6) {
-    throw new Error('Invalid HEX color.');
-  }
+    if (hex.length !== 6) {
+      throw new Error('Invalid HEX color.');
+    }
 
-  var r = parseInt(hex.slice(0, 2), 16),  g = parseInt(hex.slice(2, 4), 16),  b = parseInt(hex.slice(4, 6), 16);
+    var r = parseInt(hex.slice(0, 2), 16),  g = parseInt(hex.slice(2, 4), 16),  b = parseInt(hex.slice(4, 6), 16);
 
-  if (bw) {
-    // http://stackoverflow.com/a/3943023/112731
-    return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+    if (bw) {
+      // http://stackoverflow.com/a/3943023/112731
+      return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+    }
+    // invert color components
+    r = (255 - r).toString(16);
+    g = (255 - g).toString(16);
+    b = (255 - b).toString(16);
+    // pad each with zeros and return
+    return "#" + padZero(r) + padZero(g) + padZero(b);
+  } else {
+    return "";
   }
-  // invert color components
-  r = (255 - r).toString(16);
-  g = (255 - g).toString(16);
-  b = (255 - b).toString(16);
-  // pad each with zeros and return
-  return "#" + padZero(r) + padZero(g) + padZero(b);
 } 
 
 $("#my-domingo").on('click ', function(e){
@@ -566,6 +567,14 @@ $("#my-domingo").on('click ', function(e){
 });
 
 init();
+
+function format_d_m_a(fecha) {
+
+  let splits = fecha.split("-"); 
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
 
 
 

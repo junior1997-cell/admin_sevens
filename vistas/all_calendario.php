@@ -158,7 +158,8 @@
                           <!-- id proyecto -->
                           <input type="hidden" name="idproyecto" id="idproyecto" />          
                           <!-- fecha -->
-                          <input type="hidden" name="fecha_feriado"  id="fecha_feriado" />
+                          <input type="hidden" name="fecha_feriado"  id="fecha_feriado" onchange="fecha_invertida();" />
+                          <input type="hidden" name="fecha_invertida"  id="fecha_invertida"  />
                           <!-- text color -->
                           <input type="hidden" name="text_color" id="text_color" value="#ffffff" />
 

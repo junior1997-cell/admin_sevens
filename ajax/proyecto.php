@@ -29,9 +29,10 @@
       $actividad_trabajo		= isset($_POST["actividad_trabajo"])? limpiarCadena($_POST["actividad_trabajo"]):"";
       $empresa_acargo 		  = isset($_POST['empresa_acargo'])? limpiarCadena($_POST['empresa_acargo']):"";
       $costo					      = isset($_POST["costo"])? limpiarCadena($_POST["costo"]):"";
-      $fecha_inicio			    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 0, 10);
-      $fecha_fin				    = substr(isset($_POST["fecha_inicio_fin"])? $_POST["fecha_inicio_fin"]:"", 13, 22);
+      $fecha_inicio			    = isset($_POST["fecha_inicio"])? limpiarCadena($_POST["fecha_inicio"]):"";
+      $fecha_fin				    = isset($_POST["fecha_fin"])? limpiarCadena($_POST["fecha_fin"]):"";
       $plazo		            = isset($_POST["plazo"])? limpiarCadena($_POST["plazo"]):"";
+      $dias_habiles		      = isset($_POST["dias_habiles"])? limpiarCadena($_POST["dias_habiles"]):"";
       $doc1; $doc2; $doc3; $doc4; $doc5; $doc6;
       // $idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$ubicacion,$actividad_trabajo,
       // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
@@ -39,6 +40,11 @@
 
         case 'guardaryeditar':
 
+          $fecha_inicio_expl = explode("-", $fecha_inicio);
+          $fecha_inicio =  $fecha_inicio_expl[2]."-".$fecha_inicio_expl[1]."-".$fecha_inicio_expl[0];
+
+          $fecha_fin_expl = explode("-", $fecha_fin);
+          $fecha_fin =  $fecha_fin_expl[2]."-".$fecha_fin_expl[1]."-".$fecha_fin_expl[0];
           //*DOC 1*//
           if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
@@ -152,7 +158,7 @@
 
           if (empty($idproyecto)){
             // insertamos en la bd
-            $rspta=$proyecto->insertar($tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
+            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6);
             // echo $rspta ;
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
@@ -230,7 +236,7 @@
               }
             }
 
-            $rspta=$proyecto->editar($idproyecto,$tipo_documento,$numero_documento,$empresa,$nombre_proyecto,$nombre_codigo,$ubicacion,$actividad_trabajo,$empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$plazo,$doc1,$doc2,$doc3,$doc4,$doc5,$doc6);
+            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6);
             
             echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
           }
@@ -269,34 +275,10 @@
 
         break;
 
-        case 'tablero-proyectos':
-          $rspta=$proyecto->tablero_proyectos();
+        case 'tablero':
+          $rspta=$proyecto->tablero();
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
-        break;
-
-        case 'tablero-proveedores':
-
-          $rspta=$proyecto->tablero_proveedores();
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-
-        break;
-
-        case 'tablero-trabjadores':       
-
-          $rspta=$proyecto->tablero_trabajadores();
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-              
-        break;
-
-        case 'tablero-servicio':
-
-          $rspta=$proyecto->tablero_servicio();
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);          
-            
         break;
 
         case 'listar':
@@ -457,6 +439,51 @@
             "data"=>$data);
           echo json_encode($results);          
           
+        break;
+
+        case 'listar_feriados':
+
+          $rspta=$proyecto->listar_feriados($idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);	
+
+        break;
+
+        case 'mostrar-rango-fechas-feriadas':
+
+          $fecha_i = $_POST["fecha_i"]; $fecha_f = $_POST["fecha_f"];
+
+          $rspta=$proyecto->listar_rango_feriados($fecha_i, $fecha_f);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);	
+
+        break;
+
+        case 'fecha_fin-es-feriado':
+
+          $fecha_f = $_POST["fecha_fin"];
+          
+        break;
+
+        // buscar datos de RENIEC
+        case 'reniec':
+
+          $dni = $_POST["dni"];
+
+          $rspta = $proyecto->datos_reniec($dni);
+
+          echo json_encode($rspta);
+
+        break;
+        // buscar datos de SUNAT
+        case 'sunat':
+
+          $ruc = $_POST["ruc"];
+
+          $rspta = $proyecto->datos_sunat($ruc);
+
+          echo json_encode($rspta);
+
         break;
         
       }

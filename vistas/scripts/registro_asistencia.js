@@ -74,8 +74,8 @@ function limpiar() {
   
   lista_trabajadores(localStorage.getItem('nube_idproyecto'));
 }
-// Función que suma o resta días a la fecha indicada
 
+// Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
   var Fecha = new Date();
   var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
@@ -133,12 +133,12 @@ function listar(nube_idproyecto) {
 
     data =JSON.parse(data); //console.log(data);
    
-    var fecha = data.fecha_inicio;
-    // console.log(fecha);
-    var fecha_i = sumaFecha(0,fecha);
-    var cal_quincena  = data.plazo/15;
-    var i=0;
-    var cont=0
+    var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
+
+    var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/15;
+
+    var i=0; var cont=0;  
+    
     $('#Lista_quincenas').html('');
 
     while (i <= cal_quincena) {
@@ -147,9 +147,8 @@ function listar(nube_idproyecto) {
 
       var fecha_inicio = fecha_i;
       
-      fecha=sumaFecha(14,fecha_inicio);
+      fecha=sumaFecha(14,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
 
-      // console.log(fecha_inicio+'-'+fecha);
       ver_asistencia="'"+fecha_inicio+"',"+"'"+fecha+"'";
 
       $('#Lista_quincenas').append(' <button type="button" class=" mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('+ver_asistencia+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' // '+fecha+'</button>')
@@ -223,10 +222,10 @@ function datos_quincena(f1,f2) {
     data =JSON.parse(data); console.log(data);
     var rowtrabajador='';
     var rowtrabajadores='';
-    var horas = '<td>-</td>';     
+    var horas = '<td> <input class="w-px-30" type="text" value="8" /> </td>';     
     $(".nameappend").html('');
    
-
+     
     $.each(data, function (index, value) {
 
       var pintar_hora_por_dia = ""; var count_dias_asistidos = 0; var horas_total = 0; var sabatical = 0;
@@ -278,53 +277,48 @@ function datos_quincena(f1,f2) {
       }
       console.log(pintar_hora_por_dia); 
       console.log('cant dias sistidos: '+count_dias_asistidos);
-      rowtrabajador= '<tr>'+
+      rowtrabajador= '<tr style="border-top: black 2px solid !important;">'+
         '<td>H/N</td>'+
-        '<td>' + value.nombres +'</td>'+
-        '<td>' + value.cargo + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;  ">' + value.nombres +'</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">' + value.cargo + '</td>'+
         pintar_hora_por_dia + horas.repeat(15 - count_dias_asistidos) +
-        '<td>' + horas_total + '</td>'+
-        '<td>' +value.sueldo_mensual + '</td>'+
-        '<td>' +value.sueldo_diario + '</td>'+
-        '<td>' +value.sueldo_hora + '</td>'+
-        '<td>' + sabatical + '</td>'+
-        '<td>1</td>'+
-        '<td>750.00</td>'+
+        '<td >' + horas_total + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">15</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;" >' +value.sueldo_mensual + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;" >' +value.sueldo_diario + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">' +value.sueldo_hora + '</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">' + sabatical + '</td>'+
+        '<td >500</td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">1 <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento(1);"><i class="far fa-eye"></i></span></td>'+
+        '<td rowspan="2" style="padding-top: 25px !important;">750.00</td>'+
       '</tr>'+
-      '<tr>'+
+      '<tr style="border-bottom: black 2px solid !important;">'+
         '<td>H/E</td>'+
-        '<td>' + value.nombres + '</td>'+
-        '<td>' + value.cargo + '</td>'+
-        '<td>2</td>'+
-        '<td>1</td>'+
-        '<td>0</td>'+
-        '<td>0</td>'+
-        '<td>0</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
-        '<td>1</td>'+
+        '<td >' + horas_total + '</td>'+  
+                
+        '<td><span id="h_exra1" ondblclick="edit(this);"> 8 </span> <input class="w-px-30 hidden" type="text" name="h_exra2" id="h_exra2" value="8" /></td>'+
+        '<td> <input class="w-px-30" type="text" value="4" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="4" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="6" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="3" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="3" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="2" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="2" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
+        '<td> <input class="w-px-30" type="text" value="8" /> </td>'+
         '<td>4</td>'+
-        '<td>4</td>'+
-        '<td>44</td>'+
-        '<td>' + value.sueldo_mensual + '</td>'+
-        '<td>' + value.sueldo_diario + '</td>'+
-        '<td>' + value.sueldo_hora + '</td>'+
-        '<td>0</td>'+
-        '<td>53.56</td>'+
-        '<td>-</td>'+
-        
+        '<td >200</td>'+  
       '</tr>';
       $('.nameappend').append(rowtrabajador);
        
     });
 
     $('.nameappend').append('<tr>'+
-      '<td colspan="23"></td>'+
+      '<td colspan="25"></td>'+
       '<td ><b>TOTAL</b></td>'+
       '<td>803.56</td>'+
     '</tr>'
@@ -385,6 +379,7 @@ function datos_quincena(f1,f2) {
 
   $("#cargando-1-fomulario").show();
   $("#cargando-2-fomulario").hide();
+  $('[data-toggle="tooltip"]').tooltip();
   
 }
 
@@ -788,9 +783,47 @@ function activar(idasistencia_trabajador) {
   });      
 }
 
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
-  let splits = fecha.split("-"); 
+  let splits = fecha.split("-"); //console.log(splits);
 
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
+
+// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
+function format_a_m_d(fecha) {
+
+  let splits = fecha.split("-"); //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+function modal_adicional_descuento() {
+  $("#modal-adicional-descuento").modal("show");
+}
+
+
+function edit(element) {
+  
+  var hora_Acual = $("#id2").text()
+  $("#h_exra2").show();
+  $("#h_exra1").hide();
+   console.log( hora_Acual );
+}
+
+
+
+$(document).click(function(){
+  $("#h_exra2").blur(function(){
+    $(this).css("background-color", "#FFFFCC");
+  });
+  // $("#h_exra2").hide();
+  // $("#h_exra1").show();
+  console.log("click en cual quier parte");
+  // alert("has pulsado en botón");
+
+  // // si lo deseamos podemos eliminar el evento click
+  // // una vez utilizado por primera vez
+  // $(document).unbind("click");
+})
