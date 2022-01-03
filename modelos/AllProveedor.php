@@ -67,6 +67,11 @@ Class Proveedor
 		$sql="SELECT * FROM proveedor";
 		return ejecutarConsulta($sql);		
 	}
+	public function listar_compra()
+	{
+		$sql="SELECT * FROM proveedor where estado=1";
+		return ejecutarConsulta($sql);		
+	}
 
 }
 

@@ -548,7 +548,7 @@ switch ($_GET["op"]){
 		 				"3"=>$reg->cuenta_destino,		 				
 		 				"4"=>$reg->banco,
 		 				"5"=>'<div data-toggle="tooltip" data-original-title="'.$reg->titular_cuenta.'">'.$titular_cuenta.'</div>',
-		 				"6"=>$reg->fecha_pago,
+		 				"6"=>date("d/m/Y", strtotime($reg->fecha_pago)),
 		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
 		 				"8"=>$reg->numero_operacion,
 		 				"9"=>number_format($reg->monto, 2, '.', ','),
@@ -607,12 +607,12 @@ switch ($_GET["op"]){
 						 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="far fa-trash-alt"></i></button>':
 						 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 						 ' <button class="btn btn-primary btn-sm" onclick="activar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"1"=>$reg->forma_pago,	 				
+		 				"1"=>$reg->forma_pago ,	 				
 		 				"2"=>$reg->beneficiario,		 				
 		 				"3"=>$reg->cuenta_destino,		 				
 		 				"4"=>$reg->banco,
 		 				"5"=>'<div data-toggle="tooltip" data-original-title="'.$reg->titular_cuenta.'">'.$titular_cuenta.'</div>',
-		 				"6"=>$reg->fecha_pago,
+		 				"6"=>date("d/m/Y", strtotime($reg->fecha_pago)),
 		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
 		 				"8"=>$reg->numero_operacion,
 		 				"9"=>number_format($reg->monto, 2, '.', ','),
@@ -798,7 +798,7 @@ switch ($_GET["op"]){
 						 '<button class="btn btn-warning btn-sm" onclick="mostrar_factura('.$reg->idfactura.')"><i class="fa fa-pencil-alt"></i></button>'.
 						 ' <button class="btn btn-primary btn-sm" onclick="activar_factura('.$reg->idfactura.')"><i class="fa fa-check"></i></button>',
 		 				"1"=>$reg->codigo,	 				
-		 				"2"=>$reg->fecha_emision,		 				
+		 				"2"=>date("d/m/Y", strtotime($reg->fecha_emision)),		 				
 		 				"3"=>empty($reg->nota)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->nota.'">'.$nota.'</div>',
 		 				"4"=>number_format($reg->subtotal, 4, '.', ','),
 		 				"5"=>number_format($reg->igv, 4, '.', ','),

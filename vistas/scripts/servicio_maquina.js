@@ -891,40 +891,85 @@ function total_pagos(idmaquinaria,idproyecto) {
 
 
   $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_proveedor", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    
+    var porcen_sal=0;
+    var porcen_sal_ocult=0;
+    var saldo=0;
+    var t_proveedor_p=0;
     $("#t_proveedor").html("");
     $("#t_provee_porc").html("");
+
+    $("#porcnt_sald_p").html("");
+    $("#saldo_p").html("");
     
     $("#monto_total_prob").html(""); 
 
     data = JSON.parse(data); 
     //console.log(data);
-    $('#monto_total_prob').html(data.total_monto);
+    $('#monto_total_prob').html( formato_miles(data.total_monto));
     $('#porcnt_prove').html(((data.total_monto*100)/totattotal).toFixed(2)+' %')
 
-    $("#t_proveedor").html((totattotal*90)/100);
+    porcen_sal=(90-((data.total_monto*100)/totattotal)).toFixed(2);
+    porcen_sal_ocult=(90-((data.total_monto*100)/totattotal)).toFixed(4);
+    console.log('porcen_saldoooooooooooooo ' +porcen_sal);
+    console.log('porcen_saldoooooooooooooo ' +porcen_sal_ocult);
+    
+
+    saldo=(data.total_monto*porcen_sal_ocult)/((data.total_monto*100)/totattotal);
+    var saldoxmiles_p=formato_miles(saldo);
+    $("#saldo_p").html(saldoxmiles_p);
+    console.log('saldooooo ' +saldoxmiles_p);
+    //console.log('saldo---'+typeof((data.total_monto*porcen_sal).toFixed(2)/((data.total_monto*100)/totattotal).toFixed(2)));
+    $("#porcnt_sald_p").html(porcen_sal+' %');
+
+     t_proveedor_p=(totattotal*90)/100;
+    var totalxmiles_p=formato_miles(t_proveedor_p);
+    $("#t_proveedor").html(totalxmiles_p);
     $("#t_provee_porc").html('90');
+
+
   });
  // console.log('idmaquinaria: '+idmaquinaria,'idproyecto '+idproyecto);
   $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_detracc", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-
+    var porcen_sal_d=0;
+    var porcen_sal_oclt=0;
+    var saldo_d=0;
+    var t_detaccion_miles=0;
+    t_mont_d=0;
     $("#monto_total_detracc").html(""); 
     $("#porcnt_detrcc").html("");
+
+    $("#porcnt_sald_d").html("");
+    $("#saldo_d").html("");
 
     $("#t_detaccion").html("");
     $("#t_detacc_porc").html("");
 
     data = JSON.parse(data); 
     //console.log(data);
-    $("#monto_total_detracc").html(data.total_monto);
-    $("#porcnt_detrcc").html(((data.total_monto*100)/totattotal).toFixed(2)+' %');
+    t_mont_d=formato_miles(data.total_monto);
+    $("#monto_total_detracc").html(t_mont_d);
+    $("#porcnt_detrcc").html(((data.total_monto*100)/totattotal).toFixed(2)+' %'); 
 
-    $("#t_detaccion").html((totattotal*10)/100);
+    porcen_sal_d=(10-((data.total_monto*100)/totattotal)).toFixed(2);
+    porcen_sal_oclt=(10-((data.total_monto*100)/totattotal)).toFixed(4);
+    //console.log('porcen_sal_oclt '+porcen_sal_oclt);
+    saldo_d=(data.total_monto*porcen_sal_oclt)/((data.total_monto*100)/totattotal);
+    var saldoxmiles=formato_miles(saldo_d);
+    //console.log('saldoxmiles '+saldoxmiles);
+
+    $("#saldo_d").html(saldoxmiles);
+    $("#porcnt_sald_d").html(porcen_sal_d+' %');
+
+    t_detaccion_miles=(totattotal*10)/100;
+    var t_detaccion_t=formato_miles(t_detaccion_miles);
+
+    $("#t_detaccion").html(t_detaccion_t);
     $("#t_detacc_porc").html('10');
 
   });
 //totattotal=0;
 }
+
 //mostrar datos proveedor pago
 function most_datos_prov_pago(idmaquinaria,idproyecto) {
 
@@ -1123,6 +1168,7 @@ function guardaryeditar_factura(e) {
     },
   });
 }
+
 function listar_facturas(idmaquinaria,idproyecto) {
   localStorage.setItem('nubeidmaquif',idmaquinaria);
   localStorage.setItem('nubeidproyectf',idproyecto);
@@ -1183,7 +1229,7 @@ function calcula_igv_subt() {
   $("#igv").val(igv.toFixed(4));
 
 }
-//Función limpiar
+//Función limpiar-factura
 function limpiar_factura() {
   $("#codigo").val("");
   $("#monto").val("");
@@ -1395,6 +1441,23 @@ function total_costo_parcial(idmaquinaria,idproyecto) {
 }
 //========FIN=================
 init();
+
+function formato_miles(num) {
+  if (!num || num == 'NaN') return '-';
+  if (num == 'Infinity') return '&#x221e;';
+  num = num.toString().replace(/\$|\,/g, '');
+  if (isNaN(num))
+      num = "0";
+  sign = (num == (num = Math.abs(num)));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10)
+      cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+      num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+  return (((sign) ? '' : '-') + num + '.' + cents);
+}
 
 $(function () {
 
@@ -1730,6 +1793,7 @@ function buscar_sunat_reniec() {
     }
   }
 }
+
 function extrae_extencion(filename) {
   return filename.split('.').pop();
 }

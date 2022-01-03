@@ -16,6 +16,9 @@ function init() {
 
   $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
   $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
+  //ficha tecnica
+  $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
+  $("#foto2").change(function(e) { addficha(e,$("#foto2").attr("id")) });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -105,6 +108,98 @@ function foto1_eliminar() {
 
 	$("#foto1_nombre").html("");
 }
+/* PREVISUALIZAR LOS PDF */
+function addficha(e,id) {
+  // colocamos cargando hasta que se vizualice
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+
+	console.log(id);
+
+	var file = e.target.files[0], imageType = /application.*/;
+	
+	if (e.target.files[0]) {
+
+		var sizeByte = file.size;
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (extrae_extencion(file.name)=='pdf' || extrae_extencion(file.name)=='jpeg'|| extrae_extencion(file.name)=='jpg'|| extrae_extencion(file.name)=='png'|| extrae_extencion(file.name)=='webp'){
+      
+			if (sizekiloBytes <= 10240) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+          if (extrae_extencion(file.name) =='pdf') {
+            $('#foto2_i').hide();
+           $('#ver_pdf').html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          }else{
+					$("#"+id+"_i").attr("src", result);
+          $('#foto2_i').show();
+          }
+
+					$("#"+id+"_nombre").html(''+
+						'<div class="row">'+
+              '<div class="col-md-12">'+
+              file.name +
+              '</div>'+
+              '<div class="col-md-12">'+
+              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+              '</div>'+
+            '</div>'+
+					'');
+          
+					toastr.success('Imagen aceptada.')
+        
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+
+				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
+
+				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+
+				$("#"+id).val("");
+			}
+
+		}else{
+      // return;
+			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>');
+
+      $("#"+id+"_i").attr("src", "../dist/img/default/pdf.png");
+
+		}
+
+	}else{
+
+		toastr.error('Seleccione una Imagen');
+
+
+      $("#"+id+"_i").attr("src", "../dist/img/default/pdf.png");
+   
+		$("#"+id+"_nombre").html("");
+	}
+}
+
+function foto2_eliminar() {
+
+	$("#foto2").val("");
+	$("#ver_pdf").html("");
+
+	$("#foto2_i").attr("src", "../dist/img/default/pdf.png");
+
+	$("#foto2_nombre").html("");
+  $('#foto2_i').show();
+}
 
 
 //Función limpiar
@@ -112,12 +207,19 @@ function limpiar() {
   //Mostramos los Materiales
   $("#idproducto").val("");
   $("#nombre").val(""); 
+  $("#marca").val(""); 
   $("#descripcion").val("");
   $("#precio_unitario").val("");
+
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 	$("#foto1").val("");
 	$("#foto1_actual").val("");  
   $("#foto1_nombre").html("");
+
+  $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
+  $("#foto2").val("");
+	$("#foto2_actual").val("");  
+  $("#foto2_nombre").html("");
 }
 
 //Función Listar
@@ -152,6 +254,37 @@ function listar() {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+}
+//ver ficha tecnica
+function modal_ficha_tec(ficha_tecnica){
+  var ficha_tec = ficha_tecnica;
+  console.log(ficha_tec);
+var extencion = ficha_tec.substr(ficha_tec.length - 3); // => "1"
+//console.log(extencion);
+  $('#ver_fact_pdf').html('');
+  $('#img-factura').attr("src", "");
+  $('#modal-ver-ficha_tec').modal("show");
+
+  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+    $('#ver_fact_pdf').hide();
+    $('#img-factura').show();
+    $('#img-factura').attr("src", "../dist/ficha_tecnica_materiales/"+ficha_tec);
+
+    $("#iddescargar").attr("href","../dist/ficha_tecnica_materiales/"+ficha_tec);
+
+  }else{
+    $('#img-factura').hide();
+    
+    $('#ver_fact_pdf').show();
+
+    $('#ver_fact_pdf').html('<iframe src="../dist/ficha_tecnica_materiales/'+ficha_tec+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+
+    $("#iddescargar").attr("href","../dist/ficha_tecnica_materiales/"+ficha_tec);
+  }
+
+
+  
+ // $(".tooltip").hide();
 }
 //Función para guardar o editar
 
@@ -204,14 +337,39 @@ function mostrar(idproducto) {
 
   $("#idproducto").val(data.idproducto);
   $("#nombre").val(data.nombre); 
+  $("#marca").val(data.marca); 
   $("#precio_unitario").val(data.precio_unitario); 
   $("#descripcion").val(data.descripcion);
+  console.log('---------- '+data.ficha_tecnica);
 
   if (data.imagen != "") {
 
     $("#foto1_i").attr("src", "../dist/img/materiales/" + data.imagen);
 
     $("#foto1_actual").val(data.imagen);
+  }
+  
+  if (data.ficha_tecnica != "") {
+    $('#ver_pdf').html('');
+    $('#foto2_i').attr("src", "");
+
+    $('#foto2_i').hide();
+    $('#ver_pdf').show();
+    $('#ver_pdf').html('<iframe src="../dist/ficha_tecnica_materiales/'+data.ficha_tecnica+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+    
+    $("#foto2_nombre").html(''+
+    '<div class="row">'+
+      '<div class="col-md-12">.</div>'+
+      '<div class="col-md-12">'+
+      '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+      '</div>'+
+    '</div>'+
+  '');
+  }else{
+    $('#foto2_i').show();
+    $('#ver_pdf').html('');
+    $("#foto2_nombre").html('');
+    $('#ver_pdf').hide();
   }
   });
 }
@@ -440,4 +598,8 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+
+function extrae_extencion(filename) {
+  return filename.split('.').pop();
 }

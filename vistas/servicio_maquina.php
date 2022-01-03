@@ -96,6 +96,7 @@
                                         </table>
                                       </div>
                                     <!--=============== FIN Tabla Principal =======--->
+
                                     <!--===============Tabla detalle por maquina  =======--->
                                       <div class="card-body" id="tabla_detalles" style="display: none;">
                                         <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -133,6 +134,7 @@
                                         </table>
                                       </div>
                                     <!--=============== FIN Tabla detalle por maquina =======--->
+
                                     <!--===============Tabla Pagos =======--->
                                       <div class="card-body" id="tabla_pagos" style="display: none;">
                                           <div style="text-align: center;">
@@ -146,12 +148,12 @@
                                                     <th>Acciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th  data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
+                                                    <th  data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                                     <th>Monto</th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
@@ -160,18 +162,38 @@
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
+                                                    <!--<th  rowspan="2" style="padding: 48px 18px 6px 18px;">Aciones</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Forma pago</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Beneficiario</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Banco</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Descripción</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                    <th  style="color:#ff0000;background-color:#45c920;"><b id="monto_total_prob"></b> <br> <b id="porcnt_prove" style="color: black;"></b> </th>
+
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Vaucher</th>
+                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Estado</th>-->
                                                     <th>Aciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
-                                                    <th style="color:#ff0000;background-color:#f3e700;"> <b id="monto_total_prob"></b> <br> <b id="porcnt_prove" style="color: black;"></b>  </th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                    <th  style="color:#ff0000;background-color:#45c920;"><b id="monto_total_prob"></b> <br> <b id="porcnt_prove" style="color: black;"></b> </th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
+                                                </tr>
+                                                <tr>
+                                                  <td colspan="8"></td>                                   
+                                                  <td style="font-weight: bold;font-size: 20px;text-align: center;">Saldo</td>                                   
+                                                    <th  style="color:#ff0000;background-color:#f3e700;"><b id="saldo_p"></b> <br> <b id="porcnt_sald_p" style="color: black;"></b> </th>
+                                                    <td colspan="2"></td> 
+
                                                 </tr>
                                             </tfoot>
                                           </table>
@@ -186,12 +208,12 @@
                                                     <th>Acciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                                     <th>Monto</th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
@@ -203,24 +225,31 @@
                                                     <th>Aciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
-                                                    <th style="color:#ff0000;background-color:#f3e700;">  <b id="monto_total_detracc"></b> <br> <b id="porcnt_detrcc" style="color: black;"></b>  </th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                    <th style="color:#ff0000;background-color:#45c920;">  <b id="monto_total_detracc"></b> <br> <b id="porcnt_detrcc" style="color: black;"></b>  </th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
+                                                </tr>
+                                                <tr>
+                                                  <td colspan="8"></td>
+                                                  <td style="font-weight: bold;font-size: 20px;text-align: center;">Saldo</td>                                        
+                                                  <th  style="color:#ff0000;background-color:#f3e700;"><b id="saldo_d"></b> <br> <b id="porcnt_sald_d" style="color: black;"></b> </th>
+                                                  <td colspan="2"></td>
                                                 </tr>
                                             </tfoot>
                                           </table>
                                       </div>
                                     <!--===============FIN Tabla Pagos =======--->
+
                                     <!--===============Tabla facturas =======--->
                                       <div class="card-body" id="tabla_facturas_h" style="display: none;">
                                             
-                                            <div style="text-align:center;"> <h4 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;">6000.00 </b> </h5> </div>
+                                            <div style="text-align:center;"> <h4 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;"></b> </h5> </div>
                                             <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                                               <thead>
                                                   <tr>
@@ -405,6 +434,7 @@
                               </div>
                           </div>
                       </div>
+
                      <!--===============Modal agregar Pagos =========-->
                       <div class="modal fade" id="modal-agregar-pago">
                           <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -552,6 +582,7 @@
                               </div>
                           </div>
                       </div>
+
                      <!--===============Modal-ver-vaucher =========-->
                       <div class="modal fade" id="modal-ver-vaucher">
                           <div class="modal-dialog modal-dialog-scrollable modal-xm">
@@ -573,6 +604,7 @@
                               </div>
                           </div>
                       </div>
+
                       <!--===============Modal-ver-factura =========-->
                       <div class="modal fade" id="modal-ver-factura">
                           <div class="modal-dialog modal-dialog-scrollable modal-xm">
@@ -594,7 +626,8 @@
                               </div>
                           </div>
                       </div>
-                    <!--===============Modal agregar Pagos =========-->
+                      
+                    <!--===============Modal agregar factura =========-->
                       <div class="modal fade" id="modal-agregar-factura">
                           <div class="modal-dialog modal-dialog-scrollable modal-lg">
                               <div class="modal-content">

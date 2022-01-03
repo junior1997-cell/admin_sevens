@@ -65,8 +65,10 @@
                                                 <tr>
                                                     <th class="">Acciones</th>
                                                     <th>Nombre</th>
+                                                    <th>Marca</th>
                                                     <th>Descripción</th>
-                                                    <th>Precio U.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio U.</th>
+                                                    <th>Ficha técnica</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -75,8 +77,10 @@
                                                 <tr>
                                                 <th class="">Acciones</th>
                                                     <th>Nombre</th>
+                                                    <th>Marca</th>
                                                     <th>Descripción</th>
-                                                    <th>Precio U.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio U.</th>
+                                                    <th>Ficha técnica</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -118,27 +122,55 @@
                                                         <label for="nombre">Nombre</label>
                                                         <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del material." />
                                                     </div>
-                                                    <!-- Descripcion-->
+
+                                                </div>
+                                                <!--Marca-->
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="descripcion_pago">Descripción </label> <br>
-                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                                                    </div>  
+                                                        <label for="marca">Marca</label>
+                                                        <input type="text" name="marca" class="form-control" id="marca" placeholder="Marca" />
+                                                    </div>                                                  
+
+                                                </div>
+                                                <!--Precio U-->
+                                                <div class="col-lg-3 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_unitario">Precio Unitario</label>
                                                         <input type="number" step="0.01" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." />
                                                     </div>                                                      
 
                                                 </div>
-                                                <!--vaucher-->
+                                                <!--Descripcion-->
+                                                <div class="col-lg-9 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="descripcion_pago">Descripción </label> <br>
+                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
+                                                    </div>                                              
+                                                </div>
+                                                <!--iamgen-material-->
                                                 <div class="col-md-6 col-lg-6">
-                                                  <label for="foto1">Imagen</label> <br>
+                                                  <label for="foto1">Imagen</label> <br> <br>
                                                   <div style="text-align: center;" >
-                                                  <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="210" />
-                                                  <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
-                                                  <input type="hidden" name="foto1_actual" id="foto1_actual" />
-                                                  <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                                    <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" height="100px" />
+                                                    <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
+                                                    <input type="hidden" name="foto1_actual" id="foto1_actual" />
+                                                    <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
                                                   </div>
                                                 </div>
+                                                <!-- Ficha tecnica -->
+                                                <div class="col-md-6 col-lg-6">
+                                                    
+                                                    <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                                                    <label for="foto2">Ficha técnica <b style="color: red;">(Imagen o PDF)</b></label> <br>
+                                                      <div class="text-center">
+                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
+                                                          <div id="ver_pdf"></div>
+                                                      </div>
+                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
+                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+
+                                                </div> 
                                             </div>
 
                                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -180,6 +212,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <!--===============Modal-ver-ficha-tècnica =========-->
+                    <div class="modal fade" id="modal-ver-ficha_tec">
+                          <div class="modal-dialog modal-dialog-scrollable modal-md">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h4 class="modal-title">Ficha Técnica</h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span class="text-danger" aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div  class="class-style" style="text-align: center;"> 
+                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="Ficha Técnica" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
+                                        <br>
+                                        <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
+                                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                    </div>
+
                 </section>
                 <!-- /.content -->
             </div>
