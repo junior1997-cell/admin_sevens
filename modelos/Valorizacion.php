@@ -49,7 +49,9 @@ Class Valorizacion
 	// Data para listar lo bototnes por quincena
 	public function listarquincenas($nube_idproyecto){
 
-		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo FROM proyecto as p WHERE p.idproyecto = '$nube_idproyecto' AND p.fecha_inicio != p.fecha_fin";
+		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion 
+		FROM proyecto as p 
+		WHERE p.idproyecto = '$nube_idproyecto' AND p.fecha_inicio != p.fecha_fin";
         
 		return ejecutarConsultaSimpleFila($sql);
 	}

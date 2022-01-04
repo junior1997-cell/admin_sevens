@@ -57,6 +57,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
 
+<!-- Print PDF -->
+<script src="../plugins/Print.js-1.5.0/print.min.js"></script>
 
 <?php          
     require 'contacto_desarrollador.php';

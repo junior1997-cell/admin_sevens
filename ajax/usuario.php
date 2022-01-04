@@ -193,7 +193,7 @@ switch ($_GET["op"]){
 
 			$sw=in_array($reg->idpermiso,$valores)?'checked':'';
 
-			echo '<li> <input   type="checkbox" '.$sw.'  name="permiso[]" value="'.$reg->idpermiso.'">'.$reg->nombre.' </li>';
+			echo '<li> <input   type="checkbox" '.$sw.'  name="permiso[]" value="'.$reg->idpermiso.'"> '.$reg->nombre.' </li>';
 		}
 	break;
 

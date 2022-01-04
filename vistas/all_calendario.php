@@ -38,7 +38,7 @@
       <?php
       require 'nav.php';
       require 'aside.php';
-      if ($_SESSION['calendario']==1){
+      if ($_SESSION['recurso']==1){
       ?>
 
         <!-- Content Wrapper. Contains page content -->

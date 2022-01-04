@@ -104,6 +104,10 @@
   background: #ff000017 !important;
 }
 
+.bg-color-acc3c7{
+  background-color: #acc3c7;
+}
+
 /* ::::::::::::::::: stylos para tblas::::::::::::::::::: */
 .styletabla thead th {
   border-bottom: 1px solid #000000 !important; 
@@ -123,8 +127,8 @@ table th {
   border: black 1px solid;
   padding: 0.45rem 0.20rem 0.25rem 0.20rem !important; 
 }
-.dias th{
-  padding: 0.15rem 0rem 0rem 0rem !important; 
+.table-dias th{
+  margin: 0.15rem 0rem 0rem 0rem !important; 
   border: black 1px solid;
   text-align: center !important;
 }
@@ -190,8 +194,19 @@ table th {
   }
 /* ::::::::::: END diseño del scroll ::::::::::: */
 
+.p-x-10px{
+  padding: 0px 10px 0px 10px !important;
+}
+.p-0px{
+  padding: 0px !important;
+}
+
 .w-px-300{
   width: 300px !important;
+}
+
+.w-px-600{
+  width: 600px !important;
 }
 
 .w-px-35{
@@ -203,6 +218,14 @@ table th {
 }
 .w-px-30{
   width: 30px !important;
+}
+.w-xy-20{
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.center-vertical{
+  vertical-align: middle !important;
 }
 
 #dp .ui-datepicker tbody td.highlight a{background-color: red; border-bottom: 3px blue solid;}

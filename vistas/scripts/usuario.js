@@ -122,7 +122,7 @@ function guardaryeditar(e) {
              
       if (datos == 'ok') {
 				 
-        Swal.fire("Correcto!", "Usuario registrado correctamente", "success");
+        Swal.fire("Correcto!", "Usuario guardado correctamente", "success");
 
 	      tabla.ajax.reload();
          

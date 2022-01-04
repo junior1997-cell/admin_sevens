@@ -102,6 +102,23 @@ Class Asistencia_trabajador
 			
 	}
 
+	//Implementamos un método para insertar registros
+	public function insertar2($data_asistencia)
+	{
+		$data = json_decode( $data_asistencia, true );
+		$persona = "";
+		foreach ($data as $indice => $key) {
+			$persona = $key['val_input'];
+			$sql_detalle="INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, sabatical, fecha_asistencia)
+			VALUES ('$trabajador[$num_elementos]', '$horas_trabajo', '$pago_dia', '$horas_extras', '$pago_horas_extras', '$sabatical', '$fecha')";
+			ejecutarConsulta($sql_detalle) or $sw = false;
+
+		}
+		
+		return $persona ;
+			
+	}
+
 	//Implementamos un método para editar registros
 	public function editar($idasistencia_trabajador, $trabajador, $horas_trabajo, $pago_dia, $horas_extras, $pago_horas_extras, $sabatical)
 	{
@@ -146,7 +163,8 @@ Class Asistencia_trabajador
 	//Implementar un método para listar asistencia
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,  t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
+		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,
+		 t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
 		SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
 		SUM(at.sabatical) AS total_sabatical, at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.cargo
 		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS at,  proyecto AS p

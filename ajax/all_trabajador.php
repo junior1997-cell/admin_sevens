@@ -202,14 +202,10 @@
         break;  
         
         case 'verdatos':
-           
-          //Validamos el acceso solo al usuario logueado y autorizado.
-          if ($_SESSION['trabajador']==1) {
 
-            $rspta=$trabajador->verdatos($idtrabajador);
-            //Codificar el resultado utilizando json
-            echo json_encode($rspta);
-          }
+          $rspta=$trabajador->verdatos($idtrabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
         break;
 
         case 'select2Banco': 

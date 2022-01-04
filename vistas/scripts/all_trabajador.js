@@ -286,9 +286,9 @@ function verdatos(idtrabajador){
 
   $.post("../ajax/all_trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data);  //console.log(data); 
 
-    var imagen_perfil =data.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
+    var imagen_perfil =data.imagen_perfil != '' || data.imagen_perfil != null ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
     var imagen_dni_anverso =data.imagen_dni_anverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_anverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
     var imagen_dni_reverso =data.imagen_dni_reverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_reverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
     
@@ -363,7 +363,7 @@ function mostrar(idtrabajador) {
 
   $.post("../ajax/all_trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();

@@ -35,6 +35,18 @@ function init(){
 
   });  
 
+  //Initialize Select2 Elements
+  $('#fecha_pago_obrero').select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione",
+    allowClear: true}
+  );
+  $('#fecha_valorizacion').select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione",
+    allowClear: true}
+  );
+
   $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
   // Inicializar - Date picker  
   $('#fecha_fin').datetimepicker({
@@ -67,6 +79,9 @@ function limpiar() {
   $("#dias_habiles").val(""); $("#plazo").val(""); 
   $("#costo").val(""); 
   $("#empresa_acargo").val("Seven's Ingenieros SAC"); 
+
+  $("#fecha_pago_obrero").val("").trigger("change");
+  $("#fecha_valorizacion").val("").trigger("change");
 
   $("#doc1").val(""); 
   $("#doc_old_1").val(""); 
@@ -395,7 +410,6 @@ function reiniciar_proyecto(idproyecto) {
   });      
 }
 
-
 $(function () {  
 
   //Date range picker
@@ -446,6 +460,8 @@ $(function () {
       dias_habiles: {required: true,minlength: 1, maxlength: 11, digits: true, number: true},
       plazo: {required: true,minlength: 1, maxlength: 11, number: true},
       costo: { minlength: 1, maxlength: 20,  },
+      fecha_pago_obrero:{required: true},
+      fecha_valorizacion:{required: true}
     },
     messages: {
       numero_documento: {
@@ -499,6 +515,8 @@ $(function () {
         maxlength: "20 dígitos como máximo.",
         
       },
+      fecha_pago_obrero:{required: "Campo requerido"},
+      fecha_valorizacion:{required: "Campo requerido"}
     },
     
     errorElement: "span",
@@ -1477,11 +1495,9 @@ function mostrar(idproyecto) {
     $("#costo").val(data.costo); 
     $("#empresa_acargo").val(data.empresa_acargo); 
 
-    // let fcha_array1 = data.fecha_inicio.split('-');
-    // let fcha_array2 = data.fecha_fin.split('-');
-    // let fff = fcha_array1['0'] + '/' +fcha_array1['1'] + '/' + fcha_array1['2'] ;
-    // let fii = fcha_array2['0'] + '/' +fcha_array2['1'] + '/' + fcha_array2['2'] ;  
-    // console.log(fii ); console.log(fff );
+    $("#fecha_pago_obrero").val(data.fecha_pago_obrero).trigger("change");
+    $("#fecha_valorizacion").val(data.fecha_valorizacion).trigger("change");
+     
     console.log(format_d_m_a(data.fecha_inicio));
     $("#fecha_inicio").val(format_d_m_a(data.fecha_inicio));
     $("#fecha_fin").val(format_d_m_a(data.fecha_fin));
@@ -2185,7 +2201,6 @@ function cuentaSabado(fi, ff){
 
  return cuentaFinde;
 }
-
 
 // input decimal letra
 $(function() {

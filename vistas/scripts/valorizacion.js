@@ -30,7 +30,7 @@ function ver_quincenas(nube_idproyecto) {
 
   $.post("../ajax/valorizacion.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); //console.log(data);    
+    data =JSON.parse(data); console.log(data);    
 
     $('#lista_quincenas').html('');
 
@@ -44,28 +44,54 @@ function ver_quincenas(nube_idproyecto) {
       var fecha_i = sumaFecha(0,fecha);
 
       var cal_quincena  =data.plazo/15; var i=0;  var cont=0;
-
-      while (i <= cal_quincena) {
-
-        cont = cont+1;
-  
-        var fecha_inicio = fecha_i;
         
-        fecha = sumaFecha(14,fecha_inicio);
-  
-        // console.log(fecha_inicio+'-'+fecha);
-        let fecha_bd_i = fecha_inicio.split('/');  let fecha_bd_f = fecha.split('/'); 
+      if (data.fecha_valorizacion == "quincenal") {
 
-        let fecha_ii = fecha_bd_i[2]+'-'+fecha_bd_i[1]+'-'+fecha_bd_i[0]; let fecha_ff = fecha_bd_f[2]+'-'+fecha_bd_f[1]+'-'+fecha_bd_f[0];
+        while (i <= cal_quincena) {
 
-        ver_fechas_init_end = "'"+fecha_ii+"', '"+fecha_ff+"', '"+i+"'" ;
+          cont = cont+1;
+    
+          var fecha_inicio = fecha_i;
+          
+          fecha = sumaFecha(14,fecha_inicio);
+    
+          // console.log(fecha_inicio+'-'+fecha);
+          let fecha_bd_i = fecha_inicio.split('/');  let fecha_bd_f = fecha.split('/'); 
   
-        $('#lista_quincenas').append(' <button id="boton-'+ i +'" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('+ver_fechas_init_end+');"><i class="far fa-calendar-alt"></i> Quincena '+cont+'<br>'+fecha_inicio+' - '+fecha+'</button>')
-        
-        fecha_i = sumaFecha(1,fecha);
+          let fecha_ii = fecha_bd_i[2]+'-'+fecha_bd_i[1]+'-'+fecha_bd_i[0]; let fecha_ff = fecha_bd_f[2]+'-'+fecha_bd_f[1]+'-'+fecha_bd_f[0];
   
-        i++;
+          ver_fechas_init_end = "'"+fecha_ii+"', '"+fecha_ff+"', '"+i+"'" ;
+    
+          $('#lista_quincenas').append(' <button id="boton-'+ i +'" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('+ver_fechas_init_end+');"><i class="far fa-calendar-alt"></i> Valorización '+cont+'<br>'+fecha_inicio+' - '+fecha+'</button>')
+          
+          fecha_i = sumaFecha(1,fecha);
+    
+          i++;
+        }
+      } else {
+
+        if (data.fecha_valorizacion == "mensual") {
+
+          var mes = sumar_mes(1, data.fecha_inicio);
+
+          // console.log(data.fecha_inicio + ' un mes mas:'+mes);
+
+        } else {
+
+          if (data.fecha_valorizacion == "al finalizar") {
+          
+          } else {
+            $('#lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
+              <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
+              <div class="info-box-content"> 
+                <span class="info-box-text">Alerta</span> 
+                <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
+              </div> 
+            </div>`);
+          }
+        }
       }
+      
 
     } else {
       $('#lista_quincenas').html('<div class="info-box shadow-lg w-px-300">'+
@@ -103,8 +129,8 @@ sumaFecha = function(d, fecha)
 
 /* PREVISUALIZAR LAS IMAGENES */
 function addDocs2(e,id) {
+
   $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-	// console.log(id);
 
 	var file = e.target.files[0], imageType = /application.*/;
 	
@@ -410,7 +436,6 @@ $(function () {
 
   });
 });
-
 
 function extrae_extencion(filename) {
   return filename.split('.').pop();
@@ -4875,4 +4900,38 @@ function subir_doc_respuesta(idvalorizacion, nombre) {
   $("#nombre").val(nombre);
   
   $("#modal-agregar-valorizacion").modal('show'); 
+}
+
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+function format_d_m_a(fecha) {
+
+  let splits = fecha.split("-"); //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
+function format_a_m_d(fecha) {
+
+  let splits = fecha.split("-"); //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+function sumar_mes(cant, fecha) {
+
+  var split_fecha =  fecha.split("-");
+
+  var f_a = split_fecha[0]; var f_m = split_fecha[1]; var f_d = split_fecha[2];
+
+  var suma_mes = parseInt(f_m) + parseInt(cant); var new_mes = 0;
+
+  if (suma_mes > 12) {
+    new_mes = suma_mes - 12;
+  } else {
+    
+  }
+  console.log(split_fecha);
+
+  return ``;
 }

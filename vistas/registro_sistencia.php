@@ -50,9 +50,19 @@
                         <h3 class="card-title" id="card-registrar">
                           <!-- <button type="button" class="btn bg-gradient-success"  data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();" style="margin-right: 10px; height: 61px;"><i class="fas fa-user-plus"></i> Agregar </button> -->
                         </h3>
-                        <h3 class="card-title mr-3" id="card-regresar" style="display: none;" style="padding-left: 10px;">
-                          <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);" style="margin-right: 10px; height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
+                        <!-- regresar -->
+                        <h3 class="card-title mr-3" id="card-regresar" style="display: none;" style="padding-left: 2px;">
+                          <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
                         </h3>
+                        <!-- Editar -->
+                        <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
+                          <button type="button" class="btn bg-gradient-orange" onclick="editar_fechas_asistencia();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> Editar</button>
+                        </h3>
+                        <!-- Guardar -->
+                        <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
+                          <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
+                        </h3>
+                        <!-- Botones de quincenas -->
                         <div id="Lista_quincenas" class="row-horizon disenio-scroll " >
                           <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                           <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
@@ -115,25 +125,25 @@
                                   <th rowspan="3" class="stile">Adicional <br> descuento</th>
                                   <th rowspan="3" class="stile">Pago quincenal</th>
                                 </tr>
-                                <tr class="dias">
-                                  <th style="padding: 0px 10px 0px 10px !important;"  >L</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >M</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >M</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >J</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >V</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >S</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >D</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >L</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >M</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >M</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >J</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >V</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >S</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >D</th>
-                                  <th style="padding: 0px 10px 0px 10px !important;" >L</th>
+                                <tr class="table-dias data-dia-semana">
+                                  <!-- <th class=""> Lu </th>
+                                  <th class=""> Ma </th>
+                                  <th class=""> Mi </th>
+                                  <th class=""> Ju </th>
+                                  <th class=""> Vi </th>
+                                  <th class=" bg-color-acc3c7" >Sa </th>
+                                  <th class=""> Do </th>
+                                  <th class=""> Lu </th>
+                                  <th class=""> Ma </th>
+                                  <th class=""> Mi </th>
+                                  <th class=""> Ju </th>
+                                  <th class=""> Vi </th>
+                                  <th class=" bg-color-acc3c7"> Sa </th>
+                                  <th class=""> Do </th>
+                                  <th class=""> Lu </th> -->
                                 </tr>
-                                <tr class="dias">
-                                  <th>1</th>
+                                <tr class="table-dias data-numero-semana">
+                                  <!-- <th>1</th>
                                   <th>2</th>
                                   <th>3</th>
                                   <th>4</th>
@@ -147,10 +157,10 @@
                                   <th>12</th>
                                   <th>13</th>
                                   <th>14</th>
-                                  <th>15</th>
+                                  <th>15</th> -->
                                 </tr>
                               </thead>
-                              <tbody class="tcuerpo nameappend" >
+                              <tbody class="tcuerpo data_table_body" >
                                 <!-- <tr>
                                   <td>H/N</td>
                                   <td>Maestro de obra</td>
@@ -323,7 +333,7 @@
                           <input type="hidden" name="idproyecto2" id="idproyecto2" required />
 
                           <!-- id asistencia -->
-                          <input type="hidden" name="idasistencia_trabajador2" id="idasistencia_trabajador2" />
+                          <input type="hidden" name="idasistencia_trabajador2" id="idasistencia_trabajador2"   />
 
                           <!-- fecha del registro de la asistencia -->
                           <div class="col-lg-12 mb-2">

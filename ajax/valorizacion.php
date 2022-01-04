@@ -199,7 +199,8 @@
         
         case 'listarquincenas':
 
-          $nube_idproyecto = $_POST["nube_idproyecto"];
+          // $nube_idproyecto = $_POST["nube_idproyecto"];
+          $nube_idproyecto = 1;
 
           $rspta=$valorizacion->listarquincenas($nube_idproyecto);
 

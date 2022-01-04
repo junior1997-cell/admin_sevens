@@ -13,7 +13,7 @@ function init() {
 
   $("#mRecurso").addClass("active");
 
-   $("#lAllTrabajador").addClass("active");
+   $("#lAllMaquinas").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {
 

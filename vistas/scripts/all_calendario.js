@@ -110,7 +110,7 @@ function listar() {
     //initialize the calendar
     var date = new Date()
 
-    var d    = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+    var d    = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear(); //console.log(`${d} ${m} ${y}`);
 
     var Calendar = FullCalendar.Calendar;
 
@@ -142,6 +142,8 @@ function listar() {
 
         $('#fecha_select').html(info.dateStr);
 
+        localStorage.setItem('dateStr', info.dateStr); console.log(info.dateStr); 
+
         $('#titulo').val('Feriado');
 
         // $("#background_color").val("").trigger("change");
@@ -171,6 +173,8 @@ function listar() {
         $('#text_color').val(info.event.textColor);
 
         $('#fecha_select').html(year+'-' + month + '-'+dt);
+
+        localStorage.setItem('dateStr', year+'-' + month + '-'+dt); console.log(year+'-' + month + '-'+dt);
 
         $('#fecha_invertida').val(info.event.extendedProps.fecha_invertida);
 
@@ -220,6 +224,12 @@ function listar() {
     });
 
     calendar.setOption('locale', 'es');
+
+    if ( localStorage.getItem('dateStr') ) { 
+      calendar.changeView('dayGridMonth', localStorage.getItem('dateStr'));       
+    }
+
+    localStorage.setItem('dateStr', y + '-' + m + '-' + d);
 
     calendar.render(); 
   });

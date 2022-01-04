@@ -367,7 +367,33 @@
                                 <input type="text" name="empresa_acargo" id="empresa_acargo" class="form-control"  placeholder="Empresa a cargo" value="Seven's Ingenieros SAC">
                               </div>
                             </div>
-                            
+
+                            <!-- fechas de valorizacion -->
+                            <div class="col-lg-4">                               
+                              <div class="form-group">
+                                <label for="fecha_valorizacion">Valorizacion</label>
+                                <select class="form-control select2" name="fecha_valorizacion" id="fecha_valorizacion" style="width: 100%;">
+                                  <option selected value="quincenal">Quincenal</option>
+                                  <option value="mensual">Mensual</option>
+                                  <option value="al finalizar">Al finalizar</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <!-- fechas de pago de obreros -->
+                            <div class="col-lg-4">
+                               
+                              <div class="form-group">
+                                <label for="fecha_pago_obrero">Pago de obreros</label>
+                                <select class="form-control select2" name="fecha_pago_obrero" id="fecha_pago_obrero" style="width: 100%;">
+                                  <option value="quincenal">Quincenal</option>
+                                  <option value="semanal">Semanal</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="col-4"> <!-- relleno--> </div>
+
                             <!-- Pdf 1 -->
                             <div class="col-md-6 col-lg-4" >                               
                               <div class="row text-center">
@@ -701,8 +727,9 @@
                             <div class="mailbox-attachment-info">
                               <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra.pdf</a>
                                 <span class="mailbox-attachment-size clearfix mt-1">
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm" data-toggle="tooltip" data-original-title="Descargar doc."><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm" data-toggle="tooltip" data-original-title="Ver doc."><i class="far fa-eye"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm" data-toggle="tooltip" data-original-title="Imprimir doc." onclick="printJS({printable:'admin_sevens/dist/pdf/13163632640334.pdf', type:'pdf', showModal:true})"><i class="fas fa-print"></i></a>
                                 </span>
                             </div>
                           </li>
@@ -715,7 +742,8 @@
                               <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-entrega-de-terreno.pdf</a>
                                 <span class="mailbox-attachment-size clearfix mt-1">
                                   <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
                                 </span>
                             </div>
                           </li>
@@ -728,7 +756,8 @@
                               <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-inicio-de-obra.pdf</a>
                                 <span class="mailbox-attachment-size clearfix mt-1">
                                   <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
                                 </span>
                             </div>
                           </li>
@@ -741,7 +770,8 @@
                               <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Presupuesto.pdf</a>
                                 <span class="mailbox-attachment-size clearfix mt-1">
                                   <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
                                 </span>
                             </div>
                           </li>
@@ -754,7 +784,8 @@
                               <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Analisis-de-costos-unitarios.pdf</a>
                                 <span class="mailbox-attachment-size clearfix mt-1">
                                   <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
                                 </span>
                             </div>
                           </li>
@@ -767,7 +798,8 @@
                               <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Insumos.pdf</a>
                                 <span class="mailbox-attachment-size clearfix mt-1">
                                   <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
+                                  <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
                                 </span>
                             </div>
                           </li>
@@ -886,6 +918,7 @@
           require 'script.php';
         ?>
 
+        
         <script src="../plugins/moment/locales.js"></script>
         <script type="text/javascript" src="scripts/proyecto.js"></script>        
         

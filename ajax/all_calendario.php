@@ -14,7 +14,7 @@
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
-    if ($_SESSION['calendario'] == 1) {
+    if ($_SESSION['recurso'] == 1) {
 
       require_once "../modelos/AllCalendario.php";
 

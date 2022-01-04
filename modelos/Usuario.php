@@ -60,9 +60,6 @@ Class Usuario
 			$sql="UPDATE usuario SET idtrabajador='$trabajador_old', cargo='$cargo', login='$login', password='$clave' WHERE idusuario='$idusuario'";
 		}
 		
-				 	
-		
-		
 		$num_elementos=0;	$sw=true;
 
 		if ($permisos != "" ) {

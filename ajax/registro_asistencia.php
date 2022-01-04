@@ -17,19 +17,23 @@ ob_start();
       $asist_trabajador=new Asistencia_trabajador();
 
       //$idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
-      $idproyecto		          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-      $idasistencia_trabajador= isset($_POST["idasistencia_trabajador"])? limpiarCadena($_POST["idasistencia_trabajador"]):"";
-      
-      $fecha	                = isset($_POST["fecha"])? limpiarCadena($_POST["fecha"]):"";
+      //$idproyecto		          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
+      //$idasistencia_trabajador= isset($_POST["idasistencia_trabajador"])? limpiarCadena($_POST["idasistencia_trabajador"]):"";      
+      //$fecha	                = isset($_POST["fecha"])? limpiarCadena($_POST["fecha"]):"";
 
+      
       switch ($_GET["op"]){
 
         case 'guardaryeditar':
-         
-          $rspta=$asist_trabajador->insertar($idproyecto, $_POST["trabajador"], $_POST["horas_trabajo"], $fecha);
 
-          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
+          $data_asistencia = $_POST["array"];
+           
+          $asistencia_decode = json_decode($data_asistencia, true);
 
+          $rspta=$asist_trabajador->insertar2( json_encode($asistencia_decode) );
+
+          // echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
+          echo json_encode($rspta);
         break;
 
         case 'desactivar':
