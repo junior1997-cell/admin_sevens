@@ -13,8 +13,13 @@ $marca			  = isset($_POST["marca"])? limpiarCadena($_POST["marca"]):"";
 $precio_unitario  = isset($_POST["precio_unitario"])? limpiarCadena($_POST["precio_unitario"]):"";
 $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
 $foto1		      = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
+
 $foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 
+$estado_igv		  = isset($_POST["estado_igv"])? limpiarCadena($_POST["estado_igv"]):"";
+$monto_igv		  = isset($_POST["monto_igv"])? limpiarCadena($_POST["monto_igv"]):"";
+$precio_real	  = isset($_POST["precio_real"])? limpiarCadena($_POST["precio_real"]):"";
+//$estado_igv,$monto_igv,$precio_real
 
 switch ($_GET["op"]){
 	case 'guardaryeditar':
@@ -43,7 +48,7 @@ switch ($_GET["op"]){
 				// ficha técnica
 				if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
 
-					$ficha_tecnica=$_POST["foto1_actual"]; $flat_ficha1 = false;
+					$ficha_tecnica=$_POST["foto2_actual"]; $flat_ficha1 = false;
 
 				} else {
 
@@ -58,7 +63,7 @@ switch ($_GET["op"]){
 
 				if (empty($idproducto)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$materiales->insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica);
+					$rspta=$materiales->insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
@@ -86,7 +91,7 @@ switch ($_GET["op"]){
 							unlink("../dist/ficha_tecnica_materiales/" . $ficha1_ant);
 						}
 					}
-					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica);
+					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real);
 					//var_dump($idproducto,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
@@ -179,6 +184,7 @@ switch ($_GET["op"]){
 		 		$data= Array();
 				$imagen = '';
 				$ficha_tecnica = '';
+				$monto_igv = '';
 		 		while ($reg=$rspta->fetch_object()){
 					 if (empty($reg->imagen)) {
 						$imagen='img_material_defect.jpg';
@@ -186,8 +192,8 @@ switch ($_GET["op"]){
 						$imagen=$reg->imagen;
 					 }
 
-					 empty($reg->ficha_tecnica)?$ficha_tecnica='<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>':$ficha_tecnica='<div><center><a type="btn btn-danger" onclick="modal_ficha_tec('."'".$reg->ficha_tecnica."'".')"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center></div>';
-					 
+					 empty($reg->ficha_tecnica)?$ficha_tecnica='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$ficha_tecnica='<div><center><a type="btn btn-danger" onclick="modal_ficha_tec('."'".$reg->ficha_tecnica."'".')"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center></div>';
+					 empty($reg->precio_igv)?$monto_igv='-':$monto_igv=$reg->precio_igv;
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproducto.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idproducto.')"><i class="far fa-trash-alt  "></i></button>':
@@ -201,8 +207,10 @@ switch ($_GET["op"]){
 		 				"2"=>$reg->marca,
 		 				"3"=>$reg->descripcion,
 		 				"4"=>$reg->precio_unitario,
-		 				"5"=>$ficha_tecnica,
-		 				"6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+		 				"5"=>$monto_igv,
+		 				"6"=>$reg->precio_sin_igv,
+		 				"7"=>$ficha_tecnica,
+		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}

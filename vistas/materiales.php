@@ -7,6 +7,7 @@
     header("Location: login.html");
   }else{
     ?>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -16,6 +17,11 @@
         <?php
         require 'head.php';
         ?>
+        
+        <!--CSS  switch_MATERIALES-->
+
+    <link rel="stylesheet" href="../dist/css/switch_materiales.css">
+
     </head>
     <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -68,6 +74,8 @@
                                                     <th>Marca</th>
                                                     <th>Descripción</th>
                                                     <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio U.</th>
+                                                    <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                                    <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                                     <th>Ficha técnica</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -80,6 +88,8 @@
                                                     <th>Marca</th>
                                                     <th>Descripción</th>
                                                     <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio U.</th>
+                                                    <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                                    <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                                     <th>Ficha técnica</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -136,22 +146,54 @@
                                                 <div class="col-lg-3 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_unitario">Precio Unitario</label>
-                                                        <input type="number" step="0.01" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." />
+                                                        <input type="number" step="0.01" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                                     </div>                                                      
 
                                                 </div>
+                                                <!-- Rounded switch -->
+                                                <div class="col-lg-2 class_pading">
+                                                    <div class="form-group">
+                                                        <div id="switch_igv">                                    
+                                                            <label for="">IGV ?</label> <br>
+                                                            <!-- <input type="checkbox" name="my-checkbox" id="my-checkbox"   data-bootstrap-switch data-off-color="danger" data-on-color="success" > -->
+                                                            <div class="switch-holder" style="padding: 0px 0px!important;">
+                                                                <div class="switch-toggle">
+                                                                    <input type="checkbox" id="my-switch_igv" >
+                                                                    <label for="my-switch_igv"></label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <input type="hidden" name="estado_igv" id="estado_igv" value="0">
+                                                    </div>
+                                                </div>
+                                                <!--IGV-->
+                                                <div class="col-lg-3 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="monto_igv">Monto IGV</label>
+                                                        <input type="number" step="0.01" name="monto_igv" class="form-control" id="monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
+                                                    </div>                                                      
+
+                                                </div>
+                                                <!--Precio sin igv-->
+                                                <div class="col-lg-4 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="precio_real">Precio real</label>
+                                                        <input type="number" step="0.01" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                                    </div>                                                      
+                                                </div>
                                                 <!--Descripcion-->
-                                                <div class="col-lg-9 class_pading">
+                                                <div class="col-lg-12 class_pading">
                                                     <div class="form-group">
                                                         <label for="descripcion_pago">Descripción </label> <br>
-                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
+                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
                                                 <!--iamgen-material-->
                                                 <div class="col-md-6 col-lg-6">
-                                                  <label for="foto1">Imagen</label> <br> <br>
+                                                  <label for="foto1">Imagen</label>
                                                   <div style="text-align: center;" >
-                                                    <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" height="100px" />
+                                                    <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important; height:300px!important;" width="auto" />
                                                     <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
                                                     <input type="hidden" name="foto1_actual" id="foto1_actual" />
                                                     <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
@@ -159,8 +201,6 @@
                                                 </div>
                                                 <!-- Ficha tecnica -->
                                                 <div class="col-md-6 col-lg-6">
-                                                    
-                                                    <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
                                                     <label for="foto2">Ficha técnica <b style="color: red;">(Imagen o PDF)</b></label> <br>
                                                       <div class="text-center">
                                                           <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
@@ -186,7 +226,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer justify-content-between">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
                                     <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
                                 </div>
                             </div>
@@ -215,7 +255,7 @@
 
                     <!--===============Modal-ver-ficha-tècnica =========-->
                     <div class="modal fade" id="modal-ver-ficha_tec">
-                          <div class="modal-dialog modal-dialog-scrollable modal-md">
+                          <div class="modal-dialog modal-dialog-scrollable modal-lg">
                               <div class="modal-content">
                                   <div class="modal-header">
                                       <h4 class="modal-title">Ficha Técnica</h4>

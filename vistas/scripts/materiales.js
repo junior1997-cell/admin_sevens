@@ -209,7 +209,11 @@ function limpiar() {
   $("#nombre").val(""); 
   $("#marca").val(""); 
   $("#descripcion").val("");
+
   $("#precio_unitario").val("");
+  $("#estado_igv").val("");
+  $("#monto_igv").val("");
+  $("#precio_real").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 	$("#foto1").val("");
@@ -219,7 +223,10 @@ function limpiar() {
   $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
   $("#foto2").val("");
 	$("#foto2_actual").val("");  
+	$("#ver_pdf").val("");  
   $("#foto2_nombre").html("");
+  $('#foto2_i').show();
+  $('#ver_pdf').hide();
 }
 
 //Función Listar
@@ -340,8 +347,22 @@ function mostrar(idproducto) {
   $("#marca").val(data.marca); 
   $("#precio_unitario").val(data.precio_unitario); 
   $("#descripcion").val(data.descripcion);
-  console.log('---------- '+data.ficha_tecnica);
 
+  $("#estado_igv").val(data.estado_igv);
+  $("#monto_igv").val(data.precio_igv);
+  $("#precio_real").val(data.precio_sin_igv);
+   //------------
+    
+   if (data.estado_igv == "1") {
+
+    $("#my-switch_igv").prop("checked", true);
+    
+  } else {
+
+    $("#my-switch_igv").prop("checked", false);
+  }  
+
+   //----------------------
   if (data.imagen != "") {
 
     $("#foto1_i").attr("src", "../dist/img/materiales/" + data.imagen);
@@ -350,6 +371,7 @@ function mostrar(idproducto) {
   }
   
   if (data.ficha_tecnica != "") {
+    $("#foto2_actual").val(data.ficha_tecnica);
     $('#ver_pdf').html('');
     $('#foto2_i').attr("src", "");
 
@@ -418,6 +440,74 @@ function activar(idproducto) {
     }
   });      
 }
+
+function precio_con_igv() {
+
+  var precio_total=0;
+  var mont_igv=0.00;
+
+  var precio_base =0;
+  var igv = 0;
+  var precio_re=0;
+
+  //var precio_r=0;
+  precio_total=$("#precio_unitario").val();
+  $("#monto_igv").val(mont_igv.toFixed(2));
+  $("#precio_real").val(precio_total);
+
+  if( $('#my-switch_igv').is(':checked')) {  
+
+    precio_base= precio_total/1.18;
+    igv=precio_total-precio_base;
+    precio_re=precio_total-igv
+    //console.log(igv);
+    $("#monto_igv").val(igv.toFixed(2));
+    $("#precio_real").val(precio_re.toFixed(2));
+
+    $("#estado_igv").val('0');
+
+  }else{
+
+    $("#monto_igv").val("0.00");
+    $("#precio_real").val(precio_total);
+
+    $("#estado_igv").val('0');
+  }
+
+
+}
+
+
+  
+$("#my-switch_igv").on('click ', function(e){
+  var  precio_total = 0;
+  var precio_base=0;
+  var igv = 0;
+  var precio_re=0;
+  precio_total=$("#precio_unitario").val();
+
+  $("#monto_igv").val("");
+  $("#precio_real").val("");
+
+  if( $('#my-switch_igv').is(':checked')) {  
+
+    precio_base= precio_total/1.18;
+    igv=precio_total-precio_base;
+    precio_re=precio_total-igv
+
+    $("#monto_igv").val(igv.toFixed(2));
+    $("#precio_real").val(precio_re.toFixed(2));
+    $("#estado_igv").val('1');
+
+
+  }else{
+
+    $("#monto_igv").val("0.00");
+    $("#precio_real").val(precio_total);
+    $("#estado_igv").val('0');
+  }
+});
+
 
 init();
 
