@@ -14,7 +14,14 @@ $fecha_compra	       = isset($_POST["fecha_compra"])? limpiarCadena($_POST["fech
 $tipo_comprovante	   = isset($_POST["tipo_comprovante"])? limpiarCadena($_POST["tipo_comprovante"]):"";
 $serie_comprovante	   = isset($_POST["serie_comprovante"])? limpiarCadena($_POST["serie_comprovante"]):"";
 $descripcion		   = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
+
+$subtotal_compra	   = isset($_POST["subtotal_compra"])? limpiarCadena($_POST["subtotal_compra"]):"";
+$igv_compra  		   = isset($_POST["igv_compra"])? limpiarCadena($_POST["igv_compra"]):"";
 $total_venta		   = isset($_POST["total_venta"])? limpiarCadena($_POST["total_venta"]):"";
+
+$estado_detraccion     = isset($_POST["estado_detraccion"])? limpiarCadena($_POST["estado_detraccion"]):"";
+
+//$subtotal_compra,$igv_compra
 //$idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion
 //,$_POST["idproducto"],$_POST["cantidad"]_POST["precio_unitario"],$_POST["descuento"]
 //============factura========================
@@ -81,7 +88,7 @@ switch ($_GET["op"]){
 
 				if (empty($idusuario)){
 
-					$rspta=$compra->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,$descripcion,$total_venta,$_POST["idproducto"],$_POST["cantidad"], $_POST["precio_unitario"],$_POST["descuento"]);
+					$rspta=$compra->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,$descripcion,$total_venta,$subtotal_compra,$igv_compra,$estado_detraccion,$_POST["idproducto"],$_POST["cantidad"], $_POST["precio_unitario"],$_POST["descuento"]);
 
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 				} else {
@@ -148,29 +155,43 @@ switch ($_GET["op"]){
 		$nombre="Ver";
 		$info="info";
 		$icon="eye";
+		$stdo_detraccion="";
+		$serie_comprobante="";
+		$function_tipo_comprob="";
+		$bbb="";
 
 		while ($reg=$rspta->fetch_object()){
 
 			$rspta2=$compra->pago_servicio($reg->idcompra_proyecto);
 
 			empty($rspta2)?$saldo=0:$saldo = $reg->monto_total-$rspta2['total_pago_compras'];
+			$bbb=$reg->tipo_comprovante;
+			if ($reg->tipo_comprovante=="Ninguno" || $reg->tipo_comprovante=="Nota de venta") {
+				$function_tipo_comprob="joooo";
+			}else{
+
+				$function_tipo_comprob='<center> <button class="btn btn-info" onclick="facturas_compras('.$reg->idcompra_proyecto.','.$reg->idproyecto.')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>';
+			}
+
+			($reg->tipo_comprovante="Ninguno" || $reg->tipo_comprovante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
 
 			$data[]=array(
-				"0"=>(($reg->estado=='Aceptado')?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>'.
+				"0"=>(($reg->estado=='1')?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>'.
 					' <button class="btn btn-danger btn-sm"  onclick="anular('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Anular venta"><i class="far fa-trash-alt"></i></button>':
 					'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcompra_proyecto.')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>').
 					' ',
 				"1"=>date("d/m/Y", strtotime($reg->fecha_compra)),
 				"2"=>$reg->razon_social,
-				"3"=>$reg->tipo_comprovante,
-				"4"=>$reg->serie_comprovante,
-				"5"=>$reg->monto_total,
-				"6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$reg->idcompra_proyecto.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$reg->idcompra_proyecto.'</button> '.'
+				"3"=>$bbb,
+				"4"=>empty($reg->serie_comprovante)?$serie_comprobante="-":$serie_comprobante=$reg->serie_comprovante,
+				"5"=>empty($reg->estado_detraccion)?$stdo_detraccion="No":$stdo_detraccion='Si',
+				"6"=>$reg->monto_total,
+				"7"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$reg->idcompra_proyecto.','.$reg->idproyecto.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$reg->idcompra_proyecto.'</button> '.'
 				<button class="btn btn-'.$c.' btn-xs">'.number_format($reg->monto_total, 2, '.', ',').'</button> </div>',
-				"7"=>number_format($saldo, 2, '.', ','),
-				"8"=>'<center> <button class="btn btn-info" onclick="facturas_compras('.$reg->idcompra_proyecto.','.$reg->idproyecto.')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-				"9"=>$reg->descripcion,
-				"10"=>($reg->estado=='Aceptado')?'<span class="badge bg-success">Aceptado</span>':
+				"8"=>number_format($saldo, 2, '.', ','),
+				"9"=>$function_tipo_comprob,
+				"10"=>$reg->descripcion,
+				"11"=>($reg->estado=='1')?'<span class="badge bg-success">Aceptado</span>':
 				'<span class="badge bg-danger">Anulado</span>'
 				);
 		}
@@ -282,7 +303,7 @@ switch ($_GET["op"]){
 			empty($reg->ficha_tecnica)?$ficha_tecnica='<a target="_blank" href="../dist/ficha_tecnica_materiales/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#000000c4"></i></a>':$ficha_tecnica='<a target="_blank" href="../dist/ficha_tecnica_materiales/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>';
             //empty($reg->ficha_tecnica)?$ficha_tecnica='si':$ficha_tecnica='no';
 			$datas[]=array(
-                "0"=>'<button class="btn btn-warning" onclick="agregarDetalle('.$reg->idproducto.',\''.$reg->nombre.'\',\''.$reg->precio_unitario.'\',\''.$img.'\')" data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
+                "0"=>'<button class="btn btn-warning" onclick="agregarDetalle('.$reg->idproducto.',\''.$reg->nombre.'\',\''.$reg->precio_sin_igv.'\',\''.$img.'\')" data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
                 "1"=>'<div class="user-block">
                         <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/'.$img.'" alt="user image">
                         <span class="username"><p style="margin-bottom: 0px !important;">'.$reg->nombre.'</p></span>

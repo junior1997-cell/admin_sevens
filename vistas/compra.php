@@ -15,6 +15,8 @@
         <?php
           require 'head.php';
         ?>
+         <!--CSS  switch_MATERIALES-->
+         <link rel="stylesheet" href="../dist/css/switch_compra.css">
         <!-- Theme style -->
         <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
     </head>
@@ -85,10 +87,11 @@
                                                         <th>Proveedor</th>
                                                         <th data-toggle="tooltip" data-original-title="Tipo Comprobante">T. Comprobante</th>
                                                         <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
+                                                        <th>Detracción</th>
                                                         <th>Total</th>
                                                         <th>Añadir pago</th>
                                                         <th>Saldo</th>
-                                                        <th>Facturas</th>
+                                                        <th>Comprobantes</th>
                                                         <th>Descripción</th>
                                                         <th>Estado</th>
                                                     </tr>
@@ -100,11 +103,12 @@
                                                         <th>Fecha</th>
                                                         <th>Proveedor</th>
                                                         <th data-toggle="tooltip" data-original-title="Tipo Comprobante">T. Comprobante</th>
-                                                        <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
+                                                        <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>                                                
+                                                        <th>Detracción</th>
                                                         <th>Total</th>
                                                         <th>Añadir pago</th>
                                                         <th>Saldo</th>
-                                                        <th>Facturas</th>
+                                                        <th>Comprobantes</th>
                                                         <th>Descripción</th>
                                                         <th>Estado</th>
                                                     </tr>
@@ -198,7 +202,8 @@
                                                             <div class="col-lg-4" id="content-t-comprob">
                                                                 <div class="form-group">
                                                                     <label for="tipo_comprovante">Tipo Comprobante</label>
-                                                                    <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="mostrar_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                                                    <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="mostrar_igv(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
+                                                                        <option selected value="Ninguno">Ninguno</option>
                                                                         <option selected value="Boleta">Boleta</option>
                                                                         <option value="Factura">Factura</option>
                                                                         <option value="Nota_de_venta">Nota de venta</option>
@@ -206,7 +211,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- serie_comprovante-->
-                                                            <div class="col-lg-2">
+                                                            <div class="col-lg-2" id="content-comprob">
                                                                 <div class="form-group">
                                                                     <label for="serie_comprovante">N° de Comprobante</label>
                                                                     <input type="text" name="serie_comprovante" id="serie_comprovante" class="form-control" placeholder="N° de Comprobante" />
@@ -227,12 +232,31 @@
                                                                 </div>
                                                             </div>
                                                             <!--Boton agregar material-->
-                                                            <div class="col-lg-3 xs-12">
-                                                                <a data-toggle="modal" data-target="#modal-elegir-material">
-                                                                    <button id="btnAgregarArt" type="button" class="btn btn-success"><span class="fa fa-plus"></span> Agregar Material</button>
-                                                                </a>
-                                                            </div>
+                                                            <div class="row col-lg-12 justify-content-between" >
+                                                                <div class="col-lg-3 xs-12">                                                                                                        
+                                                                    <label for=""style="color: white;">.</label> <br>
+                                                                    <a data-toggle="modal" data-target="#modal-elegir-material">
+                                                                        <button id="btnAgregarArt" type="button" class="btn btn-success"><span class="fa fa-plus"></span> Agregar Material</button>
+                                                                    </a>
+                                                                </div>
+                                                                <!-- Rounded switch -->
+                                                                <div class="col-lg-1 class_pading ">
+                                                                    <div class="form-group">
+                                                                        <div id="switch_detracc">                                    
+                                                                            <label for="">Detracción ?</label> <br>
+                                                                            <!-- <input type="checkbox" name="my-checkbox" id="my-checkbox"   data-bootstrap-switch data-off-color="danger" data-on-color="success" > -->
+                                                                            <div class="switch-holder" style="padding: 0px 0px!important;">
+                                                                                <div class="switch-toggle">
+                                                                                    <input type="checkbox" id="my-switch_detracc" >
+                                                                                    <label for="my-switch_detracc"></label>
+                                                                                </div>
+                                                                            </div>
 
+                                                                        </div>
+                                                                        <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <!--tabla detalles plantas-->
                                                             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
                                                                 <br />
@@ -241,7 +265,7 @@
                                                                         <th>Opciones</th>
                                                                         <th>Material</th>
                                                                         <th>Cantidad</th>
-                                                                        <th>Precio Compra</th>
+                                                                        <th>Precio Compra(Sin IGV)</th>
                                                                         <th>Descuento</th>
                                                                         <th>Subtotal</th>
                                                                     </thead>
@@ -260,7 +284,7 @@
                                                                             <input type="hidden" name="igv_compra" id="igv_compra" />
                                                                             <b>
                                                                                 <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
-                                                                                <input type="hidden" name="total_venta" id="total_venta" />
+                                                                                <input type="text" name="total_venta" id="total_venta" />
                                                                             </b>
                                                                         </th>
                                                                     </tfoot>

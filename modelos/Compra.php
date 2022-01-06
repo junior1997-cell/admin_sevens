@@ -11,10 +11,10 @@ Class Compra
 	}
 	//Implementamos un método para insertar registros
 	public function insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,
-	    $descripcion,$total_venta,$idproducto,$cantidad,$precio_unitario,$descuento){
+	    $descripcion,$total_venta,$subtotal_compra,$igv_compra,$estado_detraccion,$idproducto,$cantidad,$precio_unitario,$descuento){
 		//var_dump($idproyecto,$idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,$descripcion,$total_venta,$idproducto,$cantidad, $precio_unitario,$descuento);die();
-		$sql="INSERT INTO compra_por_proyecto(idproyecto,idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,descripcion,monto_total)
-		VALUES ('$idproyecto','$idproveedor','$fecha_compra','$tipo_comprovante','$serie_comprovante','$descripcion','$total_venta')";
+		$sql="INSERT INTO compra_por_proyecto(idproyecto,idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,descripcion,monto_total,subtotal_compras_proyect,igv_compras_proyect,estado_detraccion)
+		VALUES ('$idproyecto','$idproveedor','$fecha_compra','$tipo_comprovante','$serie_comprovante','$descripcion','$total_venta','$subtotal_compra','$igv_compra','$estado_detraccion')";
 		//return ejecutarConsulta($sql);
 		$idventanew=ejecutarConsulta_retornarID($sql);
 
@@ -83,7 +83,7 @@ Class Compra
 
 	//Implementamos un método para desactivar categorías
 	public function desactivar($idcompra_proyecto){
-		$sql="UPDATE compra_por_proyecto SET estado='Anulado' WHERE idcompra_proyecto='$idcompra_proyecto'";
+		$sql="UPDATE compra_por_proyecto SET estado='0' WHERE idcompra_proyecto='$idcompra_proyecto'";
 
 		return ejecutarConsulta($sql);
 	}
@@ -114,6 +114,7 @@ Class Compra
 		cpp.serie_comprovante as serie_comprovante,
 		cpp.descripcion as descripcion,
 		cpp.monto_total as monto_total,
+		cpp.estado_detraccion as estado_detraccion,
 		p.razon_social as razon_social,
 		cpp.estado as estado
 		FROM compra_por_proyecto as cpp, proveedor as p 

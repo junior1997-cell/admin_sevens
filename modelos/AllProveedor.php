@@ -64,7 +64,7 @@ Class Proveedor
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM proveedor";
+		$sql="SELECT * FROM proveedor WHERE idproveedor>1";
 		return ejecutarConsulta($sql);		
 	}
 	public function listar_compra()

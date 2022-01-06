@@ -493,7 +493,7 @@ $("#my-switch_igv").on('click ', function(e){
 
     precio_base= precio_total/1.18;
     igv=precio_total-precio_base;
-    precio_re=precio_total-igv
+    precio_re=precio_total-igv;
 
     $("#monto_igv").val(igv.toFixed(2));
     $("#precio_real").val(precio_re.toFixed(2));

@@ -80,7 +80,7 @@ function init() {
   });
 
   $("#idproveedor").val("null").trigger("change");
-  $("#tipo_comprovante").val("Factura").trigger("change");
+  $("#tipo_comprovante").val("null").trigger("change");
   //===============Pago============
   $("#forma_pago").val("null").trigger("change");
   $("#tipo_pago").val("null").trigger("change");
@@ -209,20 +209,6 @@ function fecha_actual() {
   console.log(today);
   $('#fecha_compra').val(today);
 }
-function mostrar_igv() {
-  if ($("#tipo_comprovante").select2("val") == 'Boleta' || $("#tipo_comprovante").select2("val") == 'Nota_de_venta' ) {
-    $("#igv").val("");
-    $("#content-igv").hide();
-    $("#content-t-comprob").removeClass("col-lg-4").addClass("col-lg-5")
-  }else{
-   $("#igv").val("0.18");
-   $("#content-igv").show();
-   $("#content-t-comprob").removeClass("col-lg-5").addClass("col-lg-4")
-   //$("#content-descrp").removeClass("col-lg-5").addClass("col-lg-4")
-  }
- 
-  
-}
 
 //Función limpiar
 function limpiar() {
@@ -234,7 +220,7 @@ function limpiar() {
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");
   $("#idproveedor").val("null").trigger("change"); 
-  $("#tipo_comprovante").val("Factura").trigger("change"); 
+  $("#tipo_comprovante").val("null").trigger("change"); 
 
  // $("#fecha_compra").val("");
   $("#serie_comprovante").val("");  
@@ -243,8 +229,19 @@ function limpiar() {
   $("#total_venta").val("");
 	$(".filas").remove();
 	$("#total").html("0");
+  $("#subtotal").html("");
+  $("#subtotal_compra").val("");
+
+  $("#igv_comp").html("");
+  $("#igv_compra").val("");
+
+  $("#total").html("");
+  $("#total_venta").val("");
+
+
 
 }
+
 //Función limpiar
 function limpiardatosproveedor() {
   $("#idproveedor").val(""); 
@@ -290,7 +287,6 @@ function regresar() {
   limpiar();
   limpiardatosproveedor();
 }
-
 
 //Función Listar
 function listar(nube_idproyecto) {
@@ -666,6 +662,7 @@ function limpiar_factura() {
   $("#foto2_nombre").html(""); 
 
 }
+
 function guardaryeditar_factura(e) {
 
     // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -939,6 +936,7 @@ function listar_pagos(idcompra_proyecto,idproyecto) {
  /* total_costo_secc_pagoss(idmaquinaria,idproyecto);*/
 
 }
+
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
@@ -980,12 +978,14 @@ function most_datos_prov_pago(idcompra_proyecto) {
     localStorage.setItem('nubecompra_c_d',data.cuenta_detracciones);
   });
 }
+
 //captura_opicion tipopago
 function  captura_op() {
 
   cuenta_bancaria= localStorage.getItem('nubecompra_c_b');
   cuenta_detracciones=localStorage.getItem('nubecompra_c_d');
   //console.log(cuenta_bancaria,cuenta_detracciones);
+
   $("#cuenta_destino_pago").val("");
 
   if ($("#tipo_pago").select2("val") =="Proveedor") {
@@ -999,6 +999,7 @@ function  captura_op() {
   }
 
 }
+
 //Guardar y editar
 function guardaryeditar_pago(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -1037,6 +1038,7 @@ function guardaryeditar_pago(e) {
     },
   });
 }
+
 //-total Pagos
 function total_pagos(idcompra_proyecto) {
 
@@ -1125,7 +1127,7 @@ function total_pagos(idcompra_proyecto) {
  
    });*/
  //totattotal=0;
- }
+}
 
 //mostrar
 function mostrar_pagos(idpago_compras) {
@@ -1166,6 +1168,7 @@ function mostrar_pagos(idpago_compras) {
 
   });
 }
+
 //Función para desactivar registros
 function desactivar_pagos(idpago_compras) {
   Swal.fire({
@@ -1192,6 +1195,7 @@ function desactivar_pagos(idpago_compras) {
   });  
 
 }
+
 function activar_pagos(idpago_compras) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Pago?",
@@ -1218,6 +1222,7 @@ function activar_pagos(idpago_compras) {
   }); 
  
 }
+
 function ver_modal_vaucher(imagen){
   $('#img-vaucher').attr("src", "");
   $('#modal-ver-vaucher').modal("show");
@@ -1321,6 +1326,7 @@ function evaluar(){
     cont=0;
   }
 }
+
 function modificarSubototales() {
   var cant = document.getElementsByName("cantidad[]");
   var prec = document.getElementsByName("precio_unitario[]");
@@ -1350,34 +1356,72 @@ function calcularTotales(){
   for (var i = 0; i <sub.length; i++) {
      total += document.getElementsByName("subtotal")[i].value;
   }
-  if ($("#tipo_comprovante").select2("val") == 'Boleta' || $("#tipo_comprovante").select2("val") == 'Nota_de_venta' ) {
-    //console.log(total);
-    //formato_miles(num)
-    $("#subtotal").html("S/. "+ formato_miles(total));
-    $("#subtotal_compra").val(formato_miles(total));
-
-    $("#igv_compra").html("-");
-    $("#igv").val("");
-
-    $("#total").html("S/. " + formato_miles(total));
-    $("#total_venta").val(formato_miles(total));
-
-  } else {
-
-    $("#subtotal").html("S/. "+formato_miles(total));
-    $("#subtotal_compra").val(formato_miles(total));
-    igv=total*0.18;
-    console.log('igv '+igv);
-    $("#igv_comp").html("S/. "+igv);
-    $("#igv_compra").val(formato_miles(igv));
-    mtotal=igv+total;
-    $("#total").html("S/. "+formato_miles(mtotal));
-    $("#total_venta").val(formato_miles(mtotal));
-    
-  }
-
+  $("#subtotal").html("S/. "+ formato_miles(total.toFixed(2)));
+  $("#subtotal_compra").val(total.toFixed(2));
  
   evaluar();
+  mostrar_igv();
+}
+
+function mostrar_igv() {
+   var igv=0;
+   var mtotal=0;
+   var subt=0;
+   var parse_Int=0;
+   subt= $("#subtotal_compra").val();
+
+   //console.log('subtotaal: '+typeof(subt));
+   parse_Int_subtt =parseFloat(subt);
+   //console.log('parse_Int_subtt: '+parse_Int_subtt);
+  if ($("#tipo_comprovante").select2("val") == 'Factura' ) {
+
+    $("#igv").val("0.18");
+    $("#content-igv").show();
+    $("#content-t-comprob").removeClass("col-lg-5").addClass("col-lg-4");
+    //$("#content-descrp").removeClass("col-lg-5").addClass("col-lg-4")
+    /**------------------ */
+    igv=parse_Int_subtt*0.18;
+     //console.log('igv '+igv);
+     $("#igv_comp").html("S/. "+igv.toFixed(2));
+     $("#igv_compra").val(igv.toFixed(2));
+     
+     mtotal=parse_Int_subtt+igv;
+     //console.log('mtotal: '+mtotal);
+     $("#total").html("S/. "+mtotal.toFixed(2));
+     $("#total_venta").val(mtotal.toFixed(2));
+
+
+  }else{
+    $("#igv_comp").html("S/. 0.00");
+    $("#igv").val("");
+    $("#content-igv").hide();
+    $("#content-t-comprob").removeClass("col-lg-4").addClass("col-lg-5");
+    /**----------- */
+   // $("#subtotal").html("S/. "+ formato_miles(total));
+    //$("#subtotal_compra").val(formato_miles(total));
+    //console.log('-----sbtttt '+subt);
+    $("#igv_compra").html("0.00");
+
+    $("#total").html("S/. " + formato_miles(subt));
+    $("#total_venta").val(formato_miles(subt));
+  }
+ 
+  
+}
+
+function ocultar_comprob() {
+
+  if ($("#tipo_comprovante").select2("val") == 'Ninguno' ) {
+        $("#content-comprob").hide();
+        $("#content-comprob").val("");
+        $("#content-descrp").removeClass("col-lg-5").addClass("col-lg-7");
+  }else{
+    $("#content-comprob").show();
+
+    $("#content-descrp").removeClass("col-lg-7").addClass("col-lg-5");
+  }
+
+  
 }
 
 function eliminarDetalle(indice){
@@ -1387,6 +1431,17 @@ function eliminarDetalle(indice){
   evaluar();
   toastr.warning('Material removido.'); 
 }
+
+//Detraccion
+$("#my-switch_detracc").on('click ', function(e){
+
+  if( $('#my-switch_detracc').is(':checked')) { 
+    $("#estado_detraccion").val('1');
+  }else{
+    $("#estado_detraccion").val('0');
+  }
+});
+
 /**===========Ver detelle de las compras======== */
 function ver_detalle_compras(idcompra_proyecto) {
   
@@ -1423,6 +1478,7 @@ function ver_detalle_compras(idcompra_proyecto) {
 
 
 init();
+
 function formato_miles(num) {
   if (!num || num == 'NaN') return '-';
   if (num == 'Infinity') return '&#x221e;';
