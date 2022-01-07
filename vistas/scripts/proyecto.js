@@ -1490,7 +1490,7 @@ function mostrar(idproyecto) {
     $("#ubicacion").val(data.ubicacion); 
     $("#actividad_trabajo").val(data.actividad_trabajo);  
        
-    $("#dias_habiles").val(data.dias_habiles); 
+    $("#dias_habiles").val(parseInt( data.dias_habiles)); 
     $("#plazo").val(data.plazo); 
     $("#costo").val(data.costo); 
     $("#empresa_acargo").val(data.empresa_acargo); 

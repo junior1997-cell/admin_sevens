@@ -35,17 +35,17 @@ function ver_quincenas(nube_idproyecto) {
     $('#lista_quincenas').html('');
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
-    if (data) {
-
-      let aFecha = data.fecha_inicio.split('-'); 
-
-      var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];    //console.log(aFecha);
-      
-      var fecha_i = sumaFecha(0,fecha);
-
-      var cal_quincena  =data.plazo/15; var i=0;  var cont=0;
+    if (data) {     
         
       if (data.fecha_valorizacion == "quincenal") {
+
+        $(".h1-titulo").html("Valorización - Quincenal");
+
+        var fecha = format_d_m_a(data.fecha_inicio);  
+        
+        var fecha_i = sumaFecha(0,fecha);
+  
+        var cal_quincena  =data.plazo/15; var i=0;  var cont=0;
 
         while (i <= cal_quincena) {
 
@@ -53,16 +53,11 @@ function ver_quincenas(nube_idproyecto) {
     
           var fecha_inicio = fecha_i;
           
-          fecha = sumaFecha(14,fecha_inicio);
-    
-          // console.log(fecha_inicio+'-'+fecha);
-          let fecha_bd_i = fecha_inicio.split('/');  let fecha_bd_f = fecha.split('/'); 
+          fecha = sumaFecha(14,fecha_inicio); 
   
-          let fecha_ii = fecha_bd_i[2]+'-'+fecha_bd_i[1]+'-'+fecha_bd_i[0]; let fecha_ff = fecha_bd_f[2]+'-'+fecha_bd_f[1]+'-'+fecha_bd_f[0];
-  
-          ver_fechas_init_end = "'"+fecha_ii+"', '"+fecha_ff+"', '"+i+"'" ;
-    
-          $('#lista_quincenas').append(' <button id="boton-'+ i +'" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('+ver_fechas_init_end+');"><i class="far fa-calendar-alt"></i> Valorización '+cont+'<br>'+fecha_inicio+' - '+fecha+'</button>')
+          let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
+          
+          $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
           
           fecha_i = sumaFecha(1,fecha);
     
@@ -72,14 +67,41 @@ function ver_quincenas(nube_idproyecto) {
 
         if (data.fecha_valorizacion == "mensual") {
 
-          var mes = sumar_mes(1, data.fecha_inicio);
+          $(".h1-titulo").html("Valorización - Mensual");
 
-          // console.log(data.fecha_inicio + ' un mes mas:'+mes);
+          var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
+
+          var cal_mes  = false; var i=0;  var cont=0;
+
+          while (cal_mes == false) {
+
+            cont = cont+1;
+
+            fecha_i = fecha;
+
+            fecha_f = sumaFecha(29, fecha_i);
+
+            let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(data.fecha_fin);
+            
+            // console.log(fecha_f + ' - '+data.fecha_fin);
+
+            $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            
+            if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
+
+            fecha = sumaFecha(1,fecha_f);
+
+            i++;
+          }          
 
         } else {
 
           if (data.fecha_valorizacion == "al finalizar") {
-          
+
+            $(".h1-titulo").html("Valorización - Al finalizar");
+
+            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('${data.fecha_inicio}', '${data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(data.fecha_inicio)} // ${format_d_m_a(data.fecha_fin)}</button>`)
+
           } else {
             $('#lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
               <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
@@ -569,7 +591,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
   // traemos loa documentos por fechas de la quincena
   $.post("../ajax/valorizacion.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_i, fecha_f: fecha_f }, function (data, status) {
 
-    data =JSON.parse(data); //console.log(data);  
+    data =JSON.parse(data); console.log(data);  
     
     var vacio = "''";   var count_data2 = 0;
 
@@ -582,7 +604,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
       if (data.data2.doc83 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
       
       var docs_total = count_data2 + parseInt(data.count_data1);
-      var porcent = (docs_total * 100 ) /18
+      var porcent = (docs_total * 100 )/18;
       // mostramos el resumen
       $("#tabs-resumen").html(
         '<div class="info-box bg-warning">'+
@@ -4918,20 +4940,24 @@ function format_a_m_d(fecha) {
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
 
-function sumar_mes(cant, fecha) {
+function sumar_mes(fecha) {
 
   var split_fecha =  fecha.split("-");
 
-  var f_a = split_fecha[0]; var f_m = split_fecha[1]; var f_d = split_fecha[2];
+  // var format_fecha = format_d_m_a(fecha);
 
-  var suma_mes = parseInt(f_m) + parseInt(cant); var new_mes = 0;
+  var dias_total_mes = cantDiasEnUnMes( parseInt(split_fecha[1]), parseInt(split_fecha[0]) );  
 
-  if (suma_mes > 12) {
-    new_mes = suma_mes - 12;
-  } else {
-    
-  }
-  console.log(split_fecha);
+  var mes_next =  sumaFecha(dias_total_mes-1, fecha); 
 
-  return ``;
+  // console.log(`🚀 ${fecha} + ${dias_total_mes-1} =  fecha_f:${mes_next}`);  
+
+  return mes_next;
+}
+
+function cantDiasEnUnMes(mes, año) {
+   
+  var diasMes = new Date(año, mes, 0).getDate(); // console.log('mes:' + mes+ ' cant:' + diasMes);
+
+  return diasMes; 
 }

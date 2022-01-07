@@ -207,7 +207,7 @@ Class Asistencia_trabajador
 
 	//listarquincenas_b
 	public function listarquincenas_b($nube_idproyecto){
-		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
+		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

@@ -42,7 +42,7 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Valorización</h1>
+                  <h1 class="h1-titulo">Valorización - </h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">

@@ -39,6 +39,15 @@ function init() {
   $("#fecha").val(today);
 }
 
+// retrazamos la ejecuccion de una funcion
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+  };
+})();
+
 function mostrar_form_table(estados) {
 
   if (estados == 1 ) {
@@ -137,31 +146,91 @@ function listar(nube_idproyecto) {
   $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
-   
-    var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
 
-    var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/15;
+    // validamos la existencia de DATOS
+    if (data) {
 
-    var i=0; var cont=0;  
-    
-    $('#Lista_quincenas').html('');
+      var dia_regular = 0; var weekday_regular = extraer_dia_semana(format_a_m_d(data.fecha_inicio)); var estado_regular = false;
 
-    while (i <= cal_quincena) {
+      if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
+       //console.log(dia_regular, weekday_regular);
+      if (data.fecha_pago_obrero == "quincenal") {
 
-      cont=cont+1;
+        $('#Lista_quincenas').html('');
 
-      var fecha_inicio = fecha_i;
+        var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
+
+        var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/14;
+
+        var i=0; var cont=0; 
+
+        while (i <= cal_quincena) {
+
+          cont=cont+1; var fecha_inicio = fecha_i;
+
+          if (estado_regular) {
+
+            fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
+
+          } else {
+
+            fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
+          }           
+
+          $('#Lista_quincenas').append(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_inicio}', '${fecha}', '${i}', 14);"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
+          
+          fecha_i =sumaFecha(1,fecha);
+
+          i++;
+        }
+      } else {
+        if (data.fecha_pago_obrero == "semanal") {
+
+          $('#Lista_quincenas').html('');
+
+          var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
+
+          var cal_mes  = false; var i=0;  var cont=0;
+
+          while (cal_mes == false) {
+
+            cont = cont+1; fecha_i = fecha;
+
+            if (estado_regular) {
+
+              fecha_f = sumaFecha(6, fecha_i);
+
+            } else {
+
+              fecha_f = sumaFecha(7+dia_regular, fecha_i); estado_regular = true;
+            }            
+
+            let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(data.fecha_fin);
+            
+            // console.log(fecha_f + ' - '+data.fecha_fin);
+
+            $('#Lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            
+            if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
+
+            fecha = sumaFecha(1,fecha_f);
+
+            i++;
+          } 
+        } else { 
+          $('#Lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
+              <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
+              <div class="info-box-content"> 
+                <span class="info-box-text">Alerta</span> 
+                <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
+              </div> 
+            </div>`);
+        }
+      }
+    } else {
       
-      fecha=sumaFecha(14,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
-
-      ver_asistencia=`'${fecha_inicio}', '${fecha}', '${i}'`;
-
-      $('#Lista_quincenas').append(` <button type="button" id="boton-${i}" class=" mb-2 btn bg-gradient-info text-center" onclick="datos_quincena(${ver_asistencia});"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
-      
-      fecha_i =sumaFecha(1,fecha);
-
-      i++;
     }
+    
     //console.log(fecha);
   });
 }
@@ -216,10 +285,13 @@ function agregar_hora_all() {
 }
 
 // listamos la data de una quincena selecionada
-function datos_quincena(f1, f2, i) {
+function datos_quincena(f1, f2, i, cant_dias_asistencia) {
+
+  // cambiamos el valor del colspan
+  $("#dias_asistidos_s_q").attr("colspan", cant_dias_asistencia);
 
   $("#card-editar").show();
-  $("#card-guardar").hide();
+  $("#card-guardar").hide();  
 
   // vaciamos el array
   array_asistencia = [];
@@ -229,26 +301,56 @@ function datos_quincena(f1, f2, i) {
 
   var nube_idproyect =localStorage.getItem('nube_idproyecto');  //console.log('Quicena: '+f1 + ' al ' +f2 + ' proyect-id: '+nube_idproyect);
   
-  var fecha_inicial_quincena = f1; var table_numero_semana = ""; var table_dia_semana = "";
+  var fecha_inicial_quincena = f1; var table_numero_semana = ""; var table_dia_semana = ""; 
 
-  for (i = 1; i <=15; i++) {
+  var dia_regular = 0; var count_dias_de_asistencias = 1;
 
+  var weekday_regular = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena));
+
+  // asignamos un numero para restar y llegar al dia DOMIGO
+  if (weekday_regular == "do") { dia_regular = -0; } else { if (weekday_regular == "lu") { dia_regular = -1; } else { if (weekday_regular == "ma") { dia_regular = -2; } else { if (weekday_regular == "mi") { dia_regular = -3; } else { if (weekday_regular == "ju") { dia_regular = -4; } else { if (weekday_regular == "vi") { dia_regular = -5; } else { if (weekday_regular == "sa") { dia_regular = -6; } } } } } } }
+
+  var fecha_inicial_quincena_regular = sumaFecha(dia_regular, fecha_inicial_quincena);
+
+  for ( var j = 1; j<=dia_regular*-1; j++ ) {
+
+    var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena_regular));  
+
+    table_dia_semana = table_dia_semana.concat(`<th class="p-x-10px bg-color-acc3c7"> ${fecha_inicial_quincena_regular.substr(0,2)} <br> ${weekday} </th>`);
+
+    table_numero_semana = table_numero_semana.concat(`<th class="p-x-10px bg-color-acc3c7"> ${count_dias_de_asistencias} </th>`);
+
+    // aumentamos mas un dia hasta llegar al dia "dia_regular"
+    fecha_inicial_quincena_regular = sumaFecha(1,fecha_inicial_quincena_regular);
+
+    count_dias_de_asistencias++;
+  }
+
+  for (i = 1; i <=cant_dias_asistencia + dia_regular; i++) {    
     //console.log('fecha-dia-number: ' + fecha_inicial_quincena );  
 
     var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena));  
 
     if (weekday != 'sa') {
+
       table_dia_semana = table_dia_semana.concat(`<th class="p-x-10px"> ${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
-      table_numero_semana = table_numero_semana.concat(`<th class="p-x-10px"> ${i} </th>`);
+
+      table_numero_semana = table_numero_semana.concat(`<th class="p-x-10px"> ${count_dias_de_asistencias} </th>`);
+
     } else {
+
       table_dia_semana = table_dia_semana.concat(`<th class="p-x-10px bg-color-acc3c7">${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
-      table_numero_semana = table_numero_semana.concat(`<td class="p-x-10px bg-color-acc3c7"> ${i} </td>`);
+      
+      table_numero_semana = table_numero_semana.concat(`<td class="p-x-10px bg-color-acc3c7"> ${count_dias_de_asistencias} </td>`);
     }
 
     // aumentamos mas un dia hasta llegar al dia 15
     fecha_inicial_quincena = sumaFecha(1,fecha_inicial_quincena);
+    count_dias_de_asistencias++
   } //end for
+
   $('.data-dia-semana').html(table_dia_semana);
+
   $('.data-numero-semana').html(table_numero_semana);
 
   // ocultamos las tablas
@@ -268,10 +370,22 @@ function datos_quincena(f1, f2, i) {
 
       if (value.asistencia.length != 0) {
 
-        var i;  var fecha = f1; console.log("tiene data");
+        var i;  var fecha = f1; //console.log("tiene data");
         
-        for (i = 1; i <=15; i++) {
+        // renellamos hasta el dia inicial
+        for ( var j = 1; j<=dia_regular*-1; j++ ) {
+
+          tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);
+              
+          tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
+          
+        }
+
+        for (i = 1; i <=cant_dias_asistencia+dia_regular; i++) {
+
           var estado_fecha = false; var fecha_asist = ""; var hora_n = 0; var hora_e = 0;
+
+          // buscamos las fechas asistidas
           for (let i = 0; i < value.asistencia.length; i++) { 
             
             let split_f = format_d_m_a( value.asistencia[i]['fecha_asistencia'] ) ; 
@@ -287,29 +401,61 @@ function datos_quincena(f1, f2, i) {
               horas_total = horas_total + value.asistencia[i]['horas_normal_dia'] + value.asistencia[i]['horas_extras_dia'];
 
               horas_nomr_total = horas_nomr_total + parseFloat(value.asistencia[i]['horas_normal_dia']);
+
               horas_extr_total = horas_extr_total + parseFloat(value.asistencia[i]['horas_extras_dia']);
 
-              count_dias_asistidos++;
-                          
+              count_dias_asistidos++;                          
             }
           } //end for
 
           // imprimimos la fecha de asistencia encontrada 
           if (estado_fecha) {
+
             var weekday = extraer_dia_semana(fecha_asist); //console.log(weekday);
+
             if (weekday != 'sa') {
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha_asist}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha_asist} hidden" type="text" value="${hora_n}" onkeyup="agregar_registro_array(this,${value.idtrabajador_por_proyecto}, '${value.sueldo_hora}', '${fecha_asist}')" ></td>`);
-              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha_asist}" >${hora_e}</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha_asist} hidden" type="text" value="${hora_e}" onkeyup="agregar_registro_array(this,${value.idtrabajador_por_proyecto}, '${value.sueldo_hora}', '${fecha_asist}')" ></td>`);
+
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}')}, 200 );" type="text" value="${hora_n}" ></td>`);
+              
+              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_e}</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="${hora_e}" ></td>`);
+              
+              var input_asistncia = { 
+                'id_trabajador':value.idtrabajador_por_proyecto, 
+                'fecha_asistida':format_d_m_a(fecha_asist), 
+                'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}`, 
+                'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}`
+              };
+  
+              array_asistencia.push( input_asistncia );
+
             } else {
+
               tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat('<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"> </td>');
               // tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat('<td class="text-center bg-color-acc3c7"> </td>');
             }
+             
           } else {
+
             var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
+
             if (weekday != 'sa') {
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" onkeyup="agregar_registro_array(this,${value.idtrabajador_por_proyecto}, '${value.sueldo_hora}', '${fecha}')"></td>`);
-              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" onkeyup="agregar_registro_array(this,${value.idtrabajador_por_proyecto}, '${value.sueldo_hora}', '${fecha}')"></td>`);
+
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}')" type="text" value="" ></td>`);
+              
+              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
+              
+              var input_asistncia = { 
+                'id_trabajador':value.idtrabajador_por_proyecto, 
+                'fecha_asistida':fecha, 
+                'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${fecha}`,
+                'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${fecha}`
+
+              };
+  
+              array_asistencia.push( input_asistncia );
+
             } else {
+
               tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat('<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20 " type="checkbox"> </td>');
               // tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat('<td class="text-center bg-color-acc3c7"> <input class="w-xy-20" type="checkbox"> </td>');
             }
@@ -320,13 +466,39 @@ function datos_quincena(f1, f2, i) {
         } //end for
 
       } else {
-        var fecha = f1; //console.log("no ninguna fecha asistida");        
-        for (i = 1; i <=15; i++) { 
+
+        var fecha = f1; //console.log("no ninguna fecha asistida");  
+
+        // renellamos hasta el dia inicial
+        for ( var j = 1; j<=dia_regular*-1; j++ ) {
+
+          tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);
+              
+          tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
+          
+        }
+
+        for (i = 1; i <=cant_dias_asistencia+dia_regular; i++) { 
+
           var weekday = extraer_dia_semana(format_a_m_d(fecha));
+
           if (weekday != 'sa') {
-            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" onkeyup="agregar_registro_array(this,${value.idtrabajador_por_proyecto}, '${value.sueldo_hora}', '${fecha}')" ></td>`);
-            tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" onkeyup="agregar_registro_array(this,${value.idtrabajador_por_proyecto}, '${value.sueldo_hora}', '${fecha}')" ></td>`);
+
+            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" onkeyup="calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}')" type="text" value="" ></td>`);
+            
+            tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
+            
+            var input_asistncia = { 
+              'id_trabajador':value.idtrabajador_por_proyecto, 
+              'fecha_asistida':fecha, 
+              'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${fecha}`,   
+              'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${fecha}`
+            };
+
+            array_asistencia.push( input_asistncia );
+
           } else {
+
             tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat('<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"> </td>');
             // tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat('<td class="text-center bg-color-acc3c7"> <input class="w-xy-20" type="checkbox"> </td>');
           }
@@ -337,9 +509,13 @@ function datos_quincena(f1, f2, i) {
       //console.log(count_dias_asistidos);
       // validamos el sabatical
       if (horas_total >= 44 && horas_total < 88) {
+
         sabatical = 1;
+
       } else {
+
         if (horas_total >= 88) {
+          
           sabatical = 2;
         }
       }
@@ -434,6 +610,7 @@ function guardaryeditar(e) {
   });
 }
 
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function mostrar(idasistencia_trabajador) {
   $('#modal-editar-asistencia').modal('show')
   $("#cargando-1-fomulario").hide();
@@ -597,133 +774,7 @@ $(function () {
   });
 });
 
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#num_documento").val(); 
-   
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);
-
-        console.log(data);
-
-        if (data.success == false) {
-
-          $("#search").show();
-
-          $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
-        } else {
-
-          $("#search").show();
-
-          $("#charge").hide();
-
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-          toastr.success("Cliente encontrado!!!!");
-        }
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);
-
-          console.log(data);
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
-            
-          } else {
-
-            if (data.estado == "ACTIVO") {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
-            } else {
-
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-              // $("#direccion").val(data.direccion);
-            }
-          }
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
-}
-
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function convertir_a_hora(hora_n) {
 
   var convertido; var suma; var min; var hora; console.log('h:' + hora_n );
@@ -877,34 +928,27 @@ function despintar_btn_select() {
   if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
 }
 
-function agregar_registro_array(input_val, id_trabajador, sueldo_hora, fecha_asistencia) {
+function calcular_he(span_class_he, input_class_hn) {
 
-  var hora_extr = 0; var hora_norm = 0;
+  console.log(span_class_he, input_class_hn);
 
-  if ( parseFloat(input_val.value) > 8) {
+  var hora_extr = 0; var hora_norm = 0; var capturar_val_input = document.getElementById(input_class_hn).value; //$(`.${input_class_hn}`).val();
 
-    hora_extr = parseFloat(input_val.value) - 8;
+  console.log(capturar_val_input);
+
+  if ( parseFloat(capturar_val_input) > 8) {
+
+    hora_extr = parseFloat(capturar_val_input) - 8;
 
     hora_norm = 8;
 
-    $(`.span_HE_${id_trabajador}_${fecha_asistencia}`).html(hora_extr);
+    $(`.${span_class_he}`).html(hora_extr);
+    $(`.${input_class_hn}`).val(hora_norm);
 
-  }else{  hora_norm = parseFloat(input_val.value);  }
-
-  input_asistncia = { 
-    'id_trabajador':id_trabajador, 
-    'horas_normal_dia':hora_norm, 
-    'pago_normal_dia':hora_norm*parseFloat(sueldo_hora), 
-    'horas_extras_dia':hora_extr, 
-    'pago_horas_extras':hora_extr*parseFloat(sueldo_hora),
-    'fecha_asistencia':fecha_asistencia
+  }else{ 
+    $(`.${span_class_he}`).html(0.00); // hora_norm = parseFloat(input_val.value); 
   }
-
-  array_asistencia.push( input_asistncia );
-
-  console.log(array_asistencia);
-
-  console.log( id_trabajador, fecha_asistencia, input_val.value);
+  
 }
 
 function editar_fechas_asistencia(){
@@ -919,6 +963,23 @@ function editar_fechas_asistencia(){
 }
 
 function guardar_fechas_asistencia() {
+
+  //console.log(array_asistencia);
+
+  var array_datos_asistencia = [];
+
+  array_asistencia.forEach((element,index) => {
+
+    var input_asistencia = { 
+      'id_trabajador':element.id_trabajador, 
+      'fecha_asistida':element.fecha_asistida,
+      'horas_normal_dia':$(`.${element.class_input_hn}`).val(),
+      'horas_extras_dia':$(`.${element.class_input_he}`).val()
+    }
+    array_datos_asistencia.push( input_asistencia );
+  });
+
+  console.log(array_datos_asistencia);
   // mostramos los span
   $(".span_asist").show();
   // ocultamos los inputs

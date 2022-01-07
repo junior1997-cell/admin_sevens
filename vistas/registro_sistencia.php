@@ -114,7 +114,7 @@
                                   <th rowspan="4" class="stile">#</th>
                                   <th rowspan="4" class="stile">Nombre del trabajador</th>
                                   <th rowspan="4" class="stile">Cargo</th>
-                                  <th colspan="15" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
+                                  <th colspan="14" id="dias_asistidos_s_q" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
                                   <th rowspan="3" class="stile">Horas<br>normal/extras</th>
                                   <th rowspan="3" class="stile">Días<br>asistidos</th>
                                   <th rowspan="3" class="stile">Sueldo Mensual</th>
