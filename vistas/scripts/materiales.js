@@ -494,20 +494,26 @@ function precio_con_igv() {
     $(".precio_real").val(redondearExp(precio_re,2));
 
     $(".total").val(redondearExp(precio_re,2)+redondearExp(igv,2));
-    $(".total_precio").val(redondearExp(precio_re,2)+redondearExp(igv,2));
+    $("#total_precio").val(redondearExp(precio_re,4)+redondearExp(igv,4));
 
     $("#estado_igv").val('1');
 
   }else{
+    precio_base= precio_total/1.18;
+    console.log(precio_base);
+    igv=precio_total-precio_base;
+    precio_re=parseFloat(precio_total)-igv;
 
-    $(".monto_igv").val("");
-    $(".precio_real").val(precio_total);
     
-    $("#monto_igv").val("0.00");
+    $(".monto_igv").val(redondearExp(igv,2));
+    $("#monto_igv").val(redondearExp(igv,4));
 
-    $("#precio_real").val(precio_total);
+    $(".precio_real").val(redondearExp(precio_total,2));
+    $("#precio_real").val(redondearExp(precio_total,4));
 
-    $(".total").val(precio_total);
+    $(".total").val(redondearExp(precio_re,2)+redondearExp(igv,2));
+    $("#total_precio").val(redondearExp(precio_re,4)+redondearExp(igv,4));
+
 
     $("#estado_igv").val('0');
   }
@@ -546,16 +552,22 @@ $("#my-switch_igv").on('click ', function(e){
 
   }else{
     
-    $(".monto_igv").val(""); 
-    $(".precio_real").val(precio_total);
+    precio_base= precio_total/1.18;
+    console.log(precio_base);
+    igv=precio_total-precio_base;
+    precio_re=parseFloat(precio_total)+igv;
 
-    $("#monto_igv").val("0.00");
+    
+    $(".monto_igv").val(redondearExp(igv,2));
+    $("#monto_igv").val(redondearExp(igv,4));
 
-    $("#precio_real").val(precio_total);
+    $(".precio_real").val(redondearExp(precio_total,2));
+    $("#precio_real").val(redondearExp(precio_total,4));
+
+    $(".total").val(redondearExp(precio_re,2));
+    $("#total_precio").val(redondearExp(precio_re,4));
+
     $("#estado_igv").val('0');
-
-
-    $(".total").val(precio_total);
   }
 });
 
