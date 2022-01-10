@@ -20,7 +20,9 @@ $estado_igv		  = isset($_POST["estado_igv"])? limpiarCadena($_POST["estado_igv"]
 $monto_igv		  = isset($_POST["monto_igv"])? limpiarCadena($_POST["monto_igv"]):"";
 $precio_real	  = isset($_POST["precio_real"])? limpiarCadena($_POST["precio_real"]):"";
 //$estado_igv,$monto_igv,$precio_real
-
+$unid_medida      = isset($_POST["unid_medida"])? limpiarCadena($_POST["unid_medida"]):"";
+$total_precio     = isset($_POST["total_precio"])? limpiarCadena($_POST["total_precio"]):"";
+//$unid_medida,$total_precio
 switch ($_GET["op"]){
 	case 'guardaryeditar':
 		if (!isset($_SESSION["nombre"])) {
@@ -63,7 +65,7 @@ switch ($_GET["op"]){
 
 				if (empty($idproducto)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$materiales->insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real);
+					$rspta=$materiales->insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
@@ -91,7 +93,7 @@ switch ($_GET["op"]){
 							unlink("../dist/ficha_tecnica_materiales/" . $ficha1_ant);
 						}
 					}*/
-					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real);
+					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);
 					//var_dump($idproducto,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
@@ -205,13 +207,14 @@ switch ($_GET["op"]){
 								<span class="username"><p style="margin-bottom: 0px !important;">'.$reg->nombre.'</p></span>
 								<span class="description">'.substr($reg->descripcion, 0, 30).'...</span>
 							 </div>',
-		 				"2"=>$reg->marca,
-		 				"3"=>$reg->descripcion,
+		 				"2"=>$reg->unidad_medida,
+		 				"3"=>$reg->marca,
 		 				"4"=>round($reg->precio_unitario, 2),
-		 				"5"=>round($monto_igv, 2),
-		 				"6"=>round($reg->precio_sin_igv, 2),
-		 				"7"=>$ficha_tecnica,
-		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+		 				"5"=>round($reg->precio_sin_igv, 2),
+		 				"6"=>round($monto_igv, 2),
+		 				"7"=>round($reg->precio_total, 2),
+		 				"8"=>$ficha_tecnica,
+		 				"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}

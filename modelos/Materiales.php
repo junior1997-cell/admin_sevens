@@ -11,19 +11,19 @@ Class Materiales
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real)
+	public function insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio)
 	{
 		//var_dump($idproducto,$idproveedor);die();
-		$sql="INSERT INTO producto (nombre,marca,precio_unitario,descripcion,imagen,ficha_tecnica,estado_igv,precio_igv,precio_sin_igv) 
-		VALUES ('$nombre','$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real')";
+		$sql="INSERT INTO producto (nombre,marca,precio_unitario,descripcion,imagen,ficha_tecnica,estado_igv,precio_igv,precio_sin_igv,unidad_medida,precio_total) 
+		VALUES ('$nombre','$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$total_precio')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real)
+	public function editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio)
 	{
-		//var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real);die();
+		//var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);die();
 		$sql="UPDATE producto SET 
 		nombre='$nombre', 
 		marca='$marca', 
@@ -33,7 +33,9 @@ Class Materiales
 		ficha_tecnica='$ficha_tecnica',
 		estado_igv='$estado_igv',
 		precio_igv='$monto_igv',
-		precio_sin_igv='$precio_real'
+		precio_sin_igv='$precio_real',
+		unidad_medida='$unid_medida',
+		precio_total='$total_precio'
 		WHERE idproducto='$idproducto'";	
 		return ejecutarConsulta($sql);	
 	}

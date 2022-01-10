@@ -20,8 +20,20 @@ function init() {
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
   $("#foto2").change(function(e) { addficha(e,$("#foto2").attr("id")) });
 
+
+  //Initialize Select2 unidad
+  $("#unid_medida").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar una unidad",
+    allowClear: true,
+  });
+  //============unidad================
+  $("#unid_medida").val("null").trigger("change");
+  
+
   // Formato para telefono
   $("[data-mask]").inputmask();
+
 
 }
 
@@ -216,6 +228,9 @@ function limpiar() {
   $("#precio_real").val("");
   $(".precio_real").val("");
   $(".total").val("");
+  $(".monto_igv").val("");
+  $("#unid_medida").val("");
+  $("#total_precio").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 	$("#foto1").val("");
@@ -336,6 +351,8 @@ function mostrar(idproducto) {
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-material").modal("show")
+    
+  $("#unid_medida").val("").trigger("change"); 
 
   $.post("../ajax/materiales.php?op=mostrar", { idproducto: idproducto }, function (data, status) {
 
@@ -353,6 +370,13 @@ function mostrar(idproducto) {
   $("#estado_igv").val(data.estado_igv);
   $("#monto_igv").val(data.precio_igv);
   $("#precio_real").val(data.precio_sin_igv);
+/**-------------------------¡¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿ */
+  $("#unid_medida").val(data.unidad_medida).trigger("change"); 
+  $("#total_precio").val(data.precio_total);
+
+  $(".precio_real").val(data.precio_sin_igv);
+  $(".total").val(data.precio_total);
+  $(".monto_igv").val(data.precio_igv);
    //------------
     
    if (data.estado_igv == "1") {
@@ -461,17 +485,18 @@ function precio_con_igv() {
 
     precio_base= precio_total/1.18;
     igv=precio_total-precio_base;
-    precio_re=parseFloat(precio_total)+parseFloat(igv);
+    precio_re=parseFloat(precio_total)-igv;
 
-    $("#monto_igv").val(redondearExp(igv,2));
-    $("#precio_real").val(redondearExp(precio_re,2));
+    $("#monto_igv").val(redondearExp(igv,4));
+    $("#precio_real").val(redondearExp(precio_re,4));
 
     $(".monto_igv").val(redondearExp(igv,2));
     $(".precio_real").val(redondearExp(precio_re,2));
 
-    $(".total").val(redondearExp(precio_re,2));
+    $(".total").val(redondearExp(precio_re,2)+redondearExp(igv,2));
+    $(".total_precio").val(redondearExp(precio_re,2)+redondearExp(igv,2));
 
-    $("#estado_igv").val('0');
+    $("#estado_igv").val('1');
 
   }else{
 
@@ -505,17 +530,16 @@ $("#my-switch_igv").on('click ', function(e){
 
     precio_base= precio_total/1.18;
     igv=precio_total-precio_base;
-    console.log(igv);
-    precio_re=parseFloat(precio_total)+parseFloat(igv);
-    console.log(precio_re);
+    precio_re=parseFloat(precio_total)-igv;
 
-    $("#monto_igv").val(redondearExp(igv,2));
-    $("#precio_real").val(redondearExp(precio_re,2));
+    $("#monto_igv").val(redondearExp(igv,4));
+    $("#precio_real").val(redondearExp(precio_re,4));
 
     $(".monto_igv").val(redondearExp(igv,2));
     $(".precio_real").val(redondearExp(precio_re,2));
 
-    $(".total").val(redondearExp(precio_re,2));
+    $(".total").val(redondearExp(precio_re,2)+redondearExp(igv,2));
+    $(".total_precio").val(redondearExp(precio_re,2)+redondearExp(igv,2));
 
     $("#estado_igv").val('1');
 
@@ -552,12 +576,16 @@ $(function () {
   $("#form-materiales").validate({
     rules: {
       nombre: { required: true },
-      descripcion:{minlength: 1}
+      descripcion:{minlength: 1},
+      unid_medida:{required: true}
       // terms: { required: true },
     },
     messages: {
       nombre: {
         required: "Por favor ingrese nombre", 
+      },
+      unid_medida:  {
+        required: "Seleccione unidad", 
       },
 
     },

@@ -71,9 +71,10 @@
                                                 <tr>
                                                     <th class="">Acciones</th>
                                                     <th>Nombre</th>
+                                                    <th>Unidad</th>
                                                     <th>Marca</th>
-                                                    <th>Descripción</th>
-                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio U.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
+                                                    <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
                                                     <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
                                                     <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                                     <th>Ficha técnica</th>
@@ -85,9 +86,10 @@
                                                 <tr>
                                                 <th class="">Acciones</th>
                                                     <th>Nombre</th>
+                                                    <th>Unidad</th>
                                                     <th>Marca</th>
-                                                    <th>Descripción</th>
-                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio U.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
+                                                    <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
                                                     <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
                                                     <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                                     <th>Ficha técnica</th>
@@ -142,42 +144,50 @@
                                                     </div>                                                  
 
                                                 </div>
-                                                <!--Precio U-->
-                                                <div class="col-lg-3 class_pading">
+                                                <!-- Unnidad  onchange="mostrar_igv(); ocultar_comprob();"-->
+                                                <div class="col-lg-6" id="content-t-unidad">
                                                     <div class="form-group">
-                                                        <label for="precio_unitario">Precio Unit(Sin IGV)</label>
-                                                        <input type="number" step="0.01" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                                        <label for="Unidad-medida">Unidad-medida</label>
+                                                        <select
+                                                            name="unid_medida"
+                                                            id="unid_medida"
+                                                            class="form-control select2"                                                           
+                                                            placeholder="Seleccinar una unidad">
+                                                            <option selected value="Kilogramo">Kilogramo</option>
+                                                            <option selected value="Tonelada">Tonelada</option>
+                                                            <option selected value="Metro">Metro</option>
+                                                            <option value="Unidad">Unidad</option>
+                                                            <option value="Caja">Caja</option>
+                                                            <option value="Ciento">Ciento</option>
+                                                            <option value="Litros">Litros</option>
+                                                            <option value="Galones">Galones</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--Precio U-->
+                                                <div class="col-lg-4 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="precio_unitario">Precio</label>
+                                                        <input type="number" step="0.01" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                                     </div>                                                      
 
                                                 </div>
                                                 <!-- Rounded switch -->
                                                 <div class="col-lg-2 class_pading">
                                                     <div class="form-group">
-                                                        <div id="switch_igv">                                    
-                                                            <label for="">IGV ?</label> <br>
-                                                            <!-- <input type="checkbox" name="my-checkbox" id="my-checkbox"   data-bootstrap-switch data-off-color="danger" data-on-color="success" > -->
-                                                            <div class="switch-holder" style="padding: 0px 0px!important;">
+                                                        <label for="" class="labelswitch">Sin o Con (Igv)</label>
+                                                        <div id="switch_igv">  
+                                                            <div class="switch-holder myestilo-switch">
                                                                 <div class="switch-toggle">
-                                                                    <input type="checkbox" id="my-switch_igv" >
+                                                                    <input type="checkbox" id="my-switch_igv" checked >
                                                                     <label for="my-switch_igv"></label>
                                                                 </div>
                                                             </div>
-
                                                         </div>
                                                         <input type="hidden" name="estado_igv" id="estado_igv" value="0">
                                                     </div>
                                                 </div>
-                                                <!--IGV-->
-                                                <div class="col-lg-3 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="monto_igv">IGV</label>
-                                                        <input type="number" step="0.01" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
-                                                        <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
-                                                    
-                                                    </div>                                                      
-
-                                                </div>
-                                                <!--igv-->
+                                                <!--Sub Total precio_real monto_igv total-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_real">Sub Total</label>
@@ -186,18 +196,29 @@
                                                     
                                                     </div>                                                      
                                                 </div>
+                                                <!--IGV-->
+                                                <div class="col-lg-4 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="monto_igv">IGV</label>
+                                                        <input type="number" step="0.01" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
+                                                        <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
+                                                    
+                                                    </div>                                                      
+
+                                                </div>
                                                 <!--Total-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_real">Total</label>
                                                         <input type="number" step="0.01" class="form-control total" placeholder="Precio real." readonly />
+                                                        <input type="hidden" step="0.01" name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                                     </div>                                                      
                                                 </div>
                                                 <!--Descripcion-->
-                                                <div class="col-lg-8 class_pading">
+                                                <div class="col-lg-12 class_pading">
                                                     <div class="form-group">
                                                         <label for="descripcion_pago">Descripción </label> <br>
-                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
+                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
                                                 <!--iamgen-material-->
