@@ -15,8 +15,8 @@
         <?php
           require 'head.php';
         ?>
-         <!--CSS  switch_MATERIALES-->
-         <link rel="stylesheet" href="../dist/css/switch_compra.css">
+        <!--CSS  switch_MATERIALES-->
+        <link rel="stylesheet" href="../dist/css/switch_compra.css" />
         <!-- Theme style -->
         <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
     </head>
@@ -103,7 +103,7 @@
                                                         <th>Fecha</th>
                                                         <th>Proveedor</th>
                                                         <th data-toggle="tooltip" data-original-title="Tipo Comprobante">T. Comprobante</th>
-                                                        <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>                                                
+                                                        <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
                                                         <th>Detracción</th>
                                                         <th>Total</th>
                                                         <th>Añadir pago</th>
@@ -144,7 +144,7 @@
                                                         <th>Comprobante</th>
                                                         <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
                                                         <th>Total</th>
-                                                        <th>Estado</th>
+                                                        <th>Descripcion</th>
                                                         <th>Estado</th>
                                                     </tr>
                                                 </thead>
@@ -156,7 +156,7 @@
                                                         <th>Comprobante</th>
                                                         <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
                                                         <th>Total</th>
-                                                        <th>Estado</th>
+                                                        <th>Descripcion</th>
                                                         <th>Estado</th>
                                                     </tr>
                                                 </tfoot>
@@ -202,7 +202,13 @@
                                                             <div class="col-lg-4" id="content-t-comprob">
                                                                 <div class="form-group">
                                                                     <label for="tipo_comprovante">Tipo Comprobante</label>
-                                                                    <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="mostrar_igv(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
+                                                                    <select
+                                                                        name="tipo_comprovante"
+                                                                        id="tipo_comprovante"
+                                                                        class="form-control select2"
+                                                                        onchange="mostrar_igv(); ocultar_comprob();"
+                                                                        placeholder="Seleccinar un tipo de comprobante"
+                                                                    >
                                                                         <option selected value="Ninguno">Ninguno</option>
                                                                         <option selected value="Boleta">Boleta</option>
                                                                         <option value="Factura">Factura</option>
@@ -232,28 +238,27 @@
                                                                 </div>
                                                             </div>
                                                             <!--Boton agregar material-->
-                                                            <div class="row col-lg-12 justify-content-between" >
-                                                                <div class="col-lg-3 xs-12">                                                                                                        
-                                                                    <label for=""style="color: white;">.</label> <br>
+                                                            <div class="row col-lg-12 justify-content-between">
+                                                                <div class="col-lg-3 xs-12">
+                                                                    <label for="" style="color: white;">.</label> <br />
                                                                     <a data-toggle="modal" data-target="#modal-elegir-material">
                                                                         <button id="btnAgregarArt" type="button" class="btn btn-success"><span class="fa fa-plus"></span> Agregar Material</button>
                                                                     </a>
                                                                 </div>
                                                                 <!-- Rounded switch -->
-                                                                <div class="col-lg-1 class_pading ">
+                                                                <div class="col-lg-1 class_pading">
                                                                     <div class="form-group">
-                                                                        <div id="switch_detracc">                                    
-                                                                            <label for="">Detracción ?</label> <br>
+                                                                        <div id="switch_detracc">
+                                                                            <label for="">Detracción ?</label> <br />
                                                                             <!-- <input type="checkbox" name="my-checkbox" id="my-checkbox"   data-bootstrap-switch data-off-color="danger" data-on-color="success" > -->
-                                                                            <div class="switch-holder" style="padding: 0px 0px!important;">
+                                                                            <div class="switch-holder" style="padding: 0px 0px !important;">
                                                                                 <div class="switch-toggle">
-                                                                                    <input type="checkbox" id="my-switch_detracc" >
+                                                                                    <input type="checkbox" id="my-switch_detracc" />
                                                                                     <label for="my-switch_detracc"></label>
                                                                                 </div>
                                                                             </div>
-
                                                                         </div>
-                                                                        <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0">
+                                                                        <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -346,14 +351,11 @@
                                             </table>
                                         </div>
 
-                                        <!--Pagos-->
+                                        <!--Pagos sin detracciòn-->
                                         <div id="pago_compras" style="display: none;">
                                             <h5>pago Compras</h5>
                                             <div style="text-align: center;">
-                                                <!--  <div> <h4>Total a pagar:  <b id="total_costo_secc_pagos"></b> </h4></div> <br>
-                                            <div style="background-color: aliceblue;"> <h5>Proveedor S/ <b id="t_proveedor"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_provee_porc"></b> <b>%</b> </h4></div>
-                                          </div>-->
-                                                <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
+                                                <div> <h4>Total a pagar:  <b id="total_compra"></b> </h4></div> 
                                                 <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                                                     <thead>
                                                         <tr>
@@ -374,19 +376,6 @@
                                                     <tbody></tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <!--<th  rowspan="2" style="padding: 48px 18px 6px 18px;">Aciones</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Forma pago</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Beneficiario</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Banco</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Descripción</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                                    <th  style="color:#ff0000;background-color:#45c920;"><b id="monto_total_prob"></b> <br> <b id="porcnt_prove" style="color: black;"></b> </th>
-
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Vaucher</th>
-                                                    <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Estado</th>-->
                                                             <th>Aciones</th>
                                                             <th>Forma pago</th>
                                                             <th>Beneficiario</th>
@@ -403,16 +392,138 @@
                                                             <th>Vaucher</th>
                                                             <th>Estado</th>
                                                         </tr>
-                                                        <!-- <tr>
-                                                  <td colspan="8"></td>                                   
-                                                  <td style="font-weight: bold;font-size: 20px;text-align: center;">Saldo</td>                                   
-                                                    <th  style="color:#ff0000;background-color:#f3e700;"><b id="saldo_p"></b> <br> <b id="porcnt_sald_p" style="color: black;"></b> </th>
-                                                    <td colspan="2"></td> 
-
-                                                </tr>-->
                                                     </tfoot>
                                                 </table>
                                             </div>
+                                        </div>
+
+                                        <!--Pagos con Detracción-->
+                                        <div id="pagos_con_detraccion" style="display: none;">
+                                            <h5>pagos con detracccion</h5>
+                                            <div style="text-align: center;">
+                                                <div>
+                                                    <h4>Total a pagar: <b id="ttl_monto_pgs_detracc"></b></h4>
+                                                </div>
+                                                <br />
+
+                                                <div style="background-color: aliceblue;">
+                                                    <h5>
+                                                        Proveedor S/
+                                                        <b id="t_proveedor"></b>
+                                                        <i class="fas fa-arrow-right fa-xs"></i>
+                                                        <b id="t_provee_porc"></b>
+                                                        <b>%</b>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                            <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
+                                            <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Acciones</th>
+                                                        <th>Forma pago</th>
+                                                        <th>Beneficiario</th>
+                                                        <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                                        <th>Banco</th>
+                                                        <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                        <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                                        <th>Descripción</th>
+                                                        <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                        <th>Monto</th>
+                                                        <th>Vaucher</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Aciones</th>
+                                                        <th>Forma pago</th>
+                                                        <th>Beneficiario</th>
+                                                        <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                                        <th>Banco</th>
+                                                        <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                        <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                                        <th>Descripción</th>
+                                                        <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                        <th style="color: #ff0000; background-color: #45c920;">
+                                                            <b id="monto_total_prob"></b> <br />
+                                                            <b id="porcnt_prove" style="color: black;"></b>
+                                                        </th>
+                                                        <th>Vaucher</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8"></td>
+                                                        <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                                        <th style="color: #ff0000; background-color: #f3e700;">
+                                                            <b id="saldo_p"></b> <br />
+                                                            <b id="porcnt_sald_p" style="color: black;"></b>
+                                                        </th>
+                                                        <td colspan="2"></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                            <!--Tabla 2-->
+                                            <br />
+                                            <div style="text-align: center;">
+                                                <div style="background-color: aliceblue;">
+                                                    <h5>
+                                                        Detracción S/
+                                                        <b id="t_detaccion"></b>
+                                                        <i class="fas fa-arrow-right fa-xs"></i>
+                                                        <b id="t_detacc_porc"></b>
+                                                        <b>%</b>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                            <table id="tabla-pagos-detrecciones" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Acciones</th>
+                                                        <th>Forma pago</th>
+                                                        <th>Beneficiario</th>
+                                                        <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                                        <th>Banco</th>
+                                                        <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                        <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                                        <th>Descripción</th>
+                                                        <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                        <th>Monto</th>
+                                                        <th>Vaucher</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Aciones</th>
+                                                        <th>Forma pago</th>
+                                                        <th>Beneficiario</th>
+                                                        <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                                        <th>Banco</th>
+                                                        <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                        <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                                        <th>Descripción</th>
+                                                        <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                        <th style="color: #ff0000; background-color: #45c920;">
+                                                            <b id="monto_total_detracc"></b> <br />
+                                                            <b id="porcnt_detrcc" style="color: black;"></b>
+                                                        </th>
+                                                        <th>Vaucher</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="8"></td>
+                                                        <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                                        <th style="color: #ff0000; background-color: #f3e700;">
+                                                            <b id="saldo_d"></b> <br />
+                                                            <b id="porcnt_sald_d" style="color: black;"></b>
+                                                        </th>
+                                                        <td colspan="2"></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
                                         </div>
 
                                         <!-- /.card-body -->
@@ -883,52 +994,49 @@
                                             <div class="col-lg-7">
                                                 <div class="form-group">
                                                     <label for="idproveedor">Proveedor</label>
-                                                    <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
+
+                                                    <h5 class="idproveedor" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem;"></h5>
                                                 </div>
                                             </div>
                                             <!-- fecha -->
                                             <div class="col-lg-5">
                                                 <div class="form-group">
                                                     <label for="fecha_compra">Fecha </label>
-                                                    <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />
+                                                    <input type="date" class="form-control fecha_compra" placeholder="Fecha" />
                                                 </div>
                                             </div>
                                             <!-- Tipo de comprobante -->
-                                            <div class="col-lg-4" id="content-t-comprob">
+                                            <div class="col-lg-4 content-t-comprob">
                                                 <div class="form-group">
                                                     <label for="tipo_comprovante">Tipo Comprobante</label>
-                                                    <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="mostrar_igv();" placeholder="Seleccinar un tipo de comprobante">
-                                                        <option selected value="Boleta">Boleta</option>
-                                                        <option value="Factura">Factura</option>
-                                                        <option value="Nota_de_venta">Nota de venta</option>
-                                                    </select>
+                                                    <h5 class="tipo_comprovante" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem;"></h5>
                                                 </div>
                                             </div>
                                             <!-- serie_comprovante-->
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-2 content-comprob">
                                                 <div class="form-group">
                                                     <label for="serie_comprovante">N° de Comprobante</label>
-                                                    <input type="text" name="serie_comprovante" id="serie_comprovante" class="form-control" placeholder="N° de Comprobante" />
+                                                    <input type="text" class="form-control serie_comprovante" placeholder="N° de Comprobante" />
                                                 </div>
                                             </div>
                                             <!-- IGV-->
-                                            <div class="col-lg-1" id="content-igv">
+                                            <div class="col-lg-1 content-igv" style="display: none;">
                                                 <div class="form-group">
                                                     <label for="igv">IGV</label>
-                                                    <input type="text" name="igv" id="igv" class="form-control" readonly value="0.18" />
+                                                    <input type="text" class="form-control igv" readonly value="0.18" />
                                                 </div>
                                             </div>
                                             <!-- Descripcion-->
-                                            <div class="col-lg-5" id="content-descrp">
+                                            <div class="col-lg-5 content-descrp">
                                                 <div class="form-group">
                                                     <label for="descripcion">Descripción </label> <br />
-                                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
+                                                    <textarea class="form-control descripcion" rows="1"></textarea>
                                                 </div>
                                             </div>
                                             <!--tabla detalles plantas-->
                                             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
                                                 <br />
-                                                <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
+                                                <table id="detalles_compra" class="table table-striped table-bordered table-condensed table-hover">
                                                     <thead style="background-color: #ff6c046b;">
                                                         <th>Opciones</th>
                                                         <th>Material</th>
@@ -944,11 +1052,12 @@
                                                             <h5>IGV</h5>
                                                             <h5>TOTAL</h5>
                                                         </th>
+                                                        <!--idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,igv,descripcion, igv_comp, total-->
                                                         <th>
-                                                            <h5 class="text-right" id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
-                                                            <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
+                                                            <h5 class="text-right subtotal" style="font-weight: bold;">S/. 0.00</h5>
+                                                            <h5 class="text-right igv_comp" style="font-weight: bold;">S/. 0.00</h5>
                                                             <b>
-                                                                <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
+                                                                <h4 class="text-right total" style="font-weight: bold;">S/. 0.00</h4>
                                                             </b>
                                                         </th>
                                                     </tfoot>
@@ -966,7 +1075,130 @@
                                     </div>
                                     <div class="modal-footer justify-content-between">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                    </div>  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--===============Modal agregar comprobantes =========-->
+                        <!-- Modal agregar Comprobante -->
+                        <div class="modal fade" id="modal-comprobantes-pago">
+                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Agregar Documentos</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span class="text-danger" aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <!-- form start -->
+                                        <form id="form-plano-otro" name="form-plano-otro" method="POST">
+                                            <div class="card-body">
+                                                <div class="row" id="cargando-3-fomulario">
+                                                    <!-- id Comprobante -->
+                                                    <input type="hidden" name="comprobante_c" id="comprobante_c" />
+
+                                                    <!-- Doc  -->
+                                                    <div class="col-md-12 col-lg-12">
+                                                        <div class="row text-center">
+                                                            <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                                                <label for="cip" class="control-label">Documento </label>
+                                                            </div>
+                                                            <div class="col-md-6 text-center subir">
+                                                                <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                                                <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                                                <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" />
+                                                            </div>
+                                                            <div class="col-md-6 text-center comprobante">
+                                                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion();"><i class="fa fa-eye"></i> Comprobante.</button>
+                                                            </div>
+                                                            <div class="col-md-4 text-center descargar" style="display: none;">
+                                                                <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob" style="padding: 0px 12px 0px 12px !important;" download="Comprobantes">
+                                                                    <i class="fas fa-download"></i> Descargar.
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-md-4 text-center ver_completo" style="display: none;">
+                                                                <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo" style="padding: 0px 12px 0px 12px !important;">
+                                                                    <i class="fas fa-expand"></i> Ver completo.
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="doc1_ver" class="text-center mt-4">
+                                                            <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
+                                                        </div>
+                                                        <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                                                    </div>
+
+                                                    <!-- ver_completo descargar comprobante subir -->
+                                                    <!-- barprogress -->
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                                        <div class="progress" id="div_barra_progress2">
+                                                            <div
+                                                                id="barra_progress2"
+                                                                class="progress-bar progress-bar-striped progress-bar-animated"
+                                                                role="progressbar"
+                                                                aria-valuenow="2"
+                                                                aria-valuemin="0"
+                                                                aria-valuemax="100"
+                                                                style="min-width: 2em; width: 0%;"
+                                                            >
+                                                                0%
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" id="cargando-4-fomulario" style="display: none;">
+                                                    <div class="col-lg-12 text-center">
+                                                        <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                                        <br />
+                                                        <h4>Cargando...</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.card-body -->
+                                            <button type="submit" style="display: none;" id="submit-form-planootro">Submit</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal ver los documentos subidos -->
+                        <div class="modal fade" id="modal-ver-docs">
+                            <div class="modal-dialog modal-dialog-scrollable modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Documentos subidos</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span class="text-danger" aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <!-- Pdf 1 -->
+                                            <div class="col-md-12 col-lg-12 mb-4">
+                                                <div class="text-center mb-4" id="verdoc1_nombre">
+                                                    <!-- aqui va el nombre del pdf -->
+                                                </div>
+
+                                                <div id="verdoc1" class="text-center">
+                                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                                    <br />
+                                                    <h4>Cargando...</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer justify-content-end">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

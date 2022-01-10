@@ -214,6 +214,8 @@ function limpiar() {
   $("#estado_igv").val("");
   $("#monto_igv").val("");
   $("#precio_real").val("");
+  $(".precio_real").val("");
+  $(".total").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 	$("#foto1").val("");
@@ -459,27 +461,37 @@ function precio_con_igv() {
 
     precio_base= precio_total/1.18;
     igv=precio_total-precio_base;
-    precio_re=precio_total-igv
-    //console.log(igv);
-    $("#monto_igv").val(igv.toFixed(2));
-    $("#precio_real").val(precio_re.toFixed(2));
+    precio_re=parseFloat(precio_total)+parseFloat(igv);
+
+    $("#monto_igv").val(redondearExp(igv,2));
+    $("#precio_real").val(redondearExp(precio_re,2));
+
+    $(".monto_igv").val(redondearExp(igv,2));
+    $(".precio_real").val(redondearExp(precio_re,2));
+
+    $(".total").val(redondearExp(precio_re,2));
 
     $("#estado_igv").val('0');
 
   }else{
 
+    $(".monto_igv").val("");
+    $(".precio_real").val(precio_total);
+    
     $("#monto_igv").val("0.00");
+
     $("#precio_real").val(precio_total);
+
+    $(".total").val(precio_total);
 
     $("#estado_igv").val('0');
   }
 
 
 }
-
-
   
 $("#my-switch_igv").on('click ', function(e){
+
   var  precio_total = 0;
   var precio_base=0;
   var igv = 0;
@@ -493,18 +505,33 @@ $("#my-switch_igv").on('click ', function(e){
 
     precio_base= precio_total/1.18;
     igv=precio_total-precio_base;
-    precio_re=precio_total-igv;
+    console.log(igv);
+    precio_re=parseFloat(precio_total)+parseFloat(igv);
+    console.log(precio_re);
 
-    $("#monto_igv").val(igv.toFixed(2));
-    $("#precio_real").val(precio_re.toFixed(2));
+    $("#monto_igv").val(redondearExp(igv,2));
+    $("#precio_real").val(redondearExp(precio_re,2));
+
+    $(".monto_igv").val(redondearExp(igv,2));
+    $(".precio_real").val(redondearExp(precio_re,2));
+
+    $(".total").val(redondearExp(precio_re,2));
+
     $("#estado_igv").val('1');
 
 
   }else{
+    
+    $(".monto_igv").val(""); 
+    $(".precio_real").val(precio_total);
 
     $("#monto_igv").val("0.00");
+
     $("#precio_real").val(precio_total);
     $("#estado_igv").val('0');
+
+
+    $(".total").val(precio_total);
   }
 });
 
@@ -559,9 +586,17 @@ $(function () {
   });
 });
 
-
-
-
+/**Redondear */
+function redondearExp(numero, digitos) {
+  function toExp(numero, digitos){
+      let arr = numero.toString().split("e");
+      let mantisa = arr[0], exponente = digitos;
+      if (arr[1]) exponente = Number(arr[1]) + digitos;
+      return Number(mantisa + "e" + exponente.toString());
+  }
+  let entero = Math.round(toExp(Math.abs(numero), digitos));
+  return Math.sign(numero) * toExp(entero, -digitos);
+}
 
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec() {
@@ -689,6 +724,7 @@ function buscar_sunat_reniec() {
     }
   }
 }
+
 
 function extrae_extencion(filename) {
   return filename.split('.').pop();

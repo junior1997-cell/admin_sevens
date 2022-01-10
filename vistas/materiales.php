@@ -145,7 +145,7 @@
                                                 <!--Precio U-->
                                                 <div class="col-lg-3 class_pading">
                                                     <div class="form-group">
-                                                        <label for="precio_unitario">Precio Unitario</label>
+                                                        <label for="precio_unitario">Precio Unit(Sin IGV)</label>
                                                         <input type="number" step="0.01" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                                     </div>                                                      
 
@@ -170,23 +170,34 @@
                                                 <!--IGV-->
                                                 <div class="col-lg-3 class_pading">
                                                     <div class="form-group">
-                                                        <label for="monto_igv">Monto IGV</label>
-                                                        <input type="number" step="0.01" name="monto_igv" class="form-control" id="monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
+                                                        <label for="monto_igv">IGV</label>
+                                                        <input type="number" step="0.01" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
+                                                        <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
+                                                    
                                                     </div>                                                      
 
                                                 </div>
-                                                <!--Precio sin igv-->
+                                                <!--igv-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
-                                                        <label for="precio_real">Precio real</label>
-                                                        <input type="number" step="0.01" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                                        <label for="precio_real">Sub Total</label>
+                                                        <input type="number" step="0.01"  class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                                        <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
+                                                    
+                                                    </div>                                                      
+                                                </div>
+                                                <!--Total-->
+                                                <div class="col-lg-4 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="precio_real">Total</label>
+                                                        <input type="number" step="0.01" class="form-control total" placeholder="Precio real." readonly />
                                                     </div>                                                      
                                                 </div>
                                                 <!--Descripcion-->
-                                                <div class="col-lg-12 class_pading">
+                                                <div class="col-lg-8 class_pading">
                                                     <div class="form-group">
                                                         <label for="descripcion_pago">Descripción </label> <br>
-                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
                                                     </div>                                              
                                                 </div>
                                                 <!--iamgen-material-->
@@ -255,7 +266,7 @@
 
                     <!--===============Modal-ver-ficha-tècnica =========-->
                     <div class="modal fade" id="modal-ver-ficha_tec">
-                          <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                          <div class="modal-dialog modal-dialog-scrollable modal-xl ">
                               <div class="modal-content">
                                   <div class="modal-header">
                                       <h4 class="modal-title">Ficha Técnica</h4>

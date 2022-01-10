@@ -80,7 +80,7 @@ switch ($_GET["op"]){
 						}
 					}
 					// validamos si existe ficha tecnica para eliminarlo
-					if ($flat_ficha1 == true) {
+					/*if ($flat_ficha1 == true) {
 
 						$datos_ficha1 = $materiales->ficha_tec($idproducto);
 			
@@ -90,7 +90,7 @@ switch ($_GET["op"]){
 			
 							unlink("../dist/ficha_tecnica_materiales/" . $ficha1_ant);
 						}
-					}
+					}*/
 					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real);
 					//var_dump($idproducto,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
@@ -191,8 +191,9 @@ switch ($_GET["op"]){
 					 } else {
 						$imagen=$reg->imagen;
 					 }
-
-					 empty($reg->ficha_tecnica)?$ficha_tecnica='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$ficha_tecnica='<div><center><a type="btn btn-danger" onclick="modal_ficha_tec('."'".$reg->ficha_tecnica."'".')"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center></div>';
+					 	//'<a target="_blank" href="../dist/ficha_tecnica_materiales/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>
+						 //'<div><center><a type="btn btn-danger" onclick="modal_ficha_tec('."'".$reg->ficha_tecnica."'".')"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center></div>'
+					 empty($reg->ficha_tecnica)?$ficha_tecnica='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$ficha_tecnica='<center><a target="_blank" href="../dist/ficha_tecnica_materiales/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 					 empty($reg->precio_igv)?$monto_igv='-':$monto_igv=$reg->precio_igv;
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproducto.')"><i class="fas fa-pencil-alt"></i></button>'.
@@ -206,9 +207,9 @@ switch ($_GET["op"]){
 							 </div>',
 		 				"2"=>$reg->marca,
 		 				"3"=>$reg->descripcion,
-		 				"4"=>$reg->precio_unitario,
-		 				"5"=>$monto_igv,
-		 				"6"=>$reg->precio_sin_igv,
+		 				"4"=>round($reg->precio_unitario, 2),
+		 				"5"=>round($monto_igv, 2),
+		 				"6"=>round($reg->precio_sin_igv, 2),
 		 				"7"=>$ficha_tecnica,
 		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'

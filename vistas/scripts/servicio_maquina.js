@@ -1469,7 +1469,7 @@ $(function () {
       if ($("#maquinaria").select2("val") == null) {
         
         $("#maquinaria_validar").show(); //console.log($("#proveedor").select2("val") + ", "+ $("#proveedor_old").val());
-        console.log('holaaa""2222');
+       // console.log('holaaa""2222');
       } else {
 
         $("#maquinaria_validar").hide();
