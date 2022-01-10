@@ -368,6 +368,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
       
       var tabla_bloc_HN_asistencia_3=""; var tabla_bloc_HE_asistencia_2 ="";
 
+      // existe alguna asistencia -------
       if (value.asistencia.length != 0) {
 
         var i;  var fecha = f1; //console.log("tiene data");
@@ -415,9 +416,9 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
             if (weekday != 'sa') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}')}, 200 );" type="text" value="${hora_n}" ></td>`);
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist  span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}')}, 200 );" type="text" value="${hora_n}" ></td>`);
               
-              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_e}</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="${hora_e}" ></td>`);
+              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_e}</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="${hora_e}" ></td>`);
               
               var input_asistncia = { 
                 'id_trabajador':value.idtrabajador_por_proyecto, 
@@ -440,9 +441,9 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
             if (weekday != 'sa') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}')" type="text" value="" ></td>`);
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}')}, 200 );" type="text" value="" ></td>`);
               
-              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
+              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
               
               var input_asistncia = { 
                 'id_trabajador':value.idtrabajador_por_proyecto, 
@@ -464,7 +465,8 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
           // aumentamos mas un dia hasta llegar al dia 15
           fecha = sumaFecha(1,fecha);
         } //end for
-
+      
+      // no existe ninguna asistencia ------- 
       } else {
 
         var fecha = f1; //console.log("no ninguna fecha asistida");  
@@ -484,9 +486,9 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
           if (weekday != 'sa') {
 
-            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" onkeyup="calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}')" type="text" value="" ></td>`);
+            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}') }, 200 );" type="text" value="" ></td>`);
             
-            tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30  input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
+            tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HN_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
             
             var input_asistncia = { 
               'id_trabajador':value.idtrabajador_por_proyecto, 
