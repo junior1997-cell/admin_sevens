@@ -499,9 +499,9 @@ function precio_con_igv() {
     $("#estado_igv").val('1');
 
   }else{
-    precio_base= precio_total/1.18;
+    precio_base= precio_total*1.18;
     console.log(precio_base);
-    igv=precio_total-precio_base;
+    igv=precio_base-precio_total;
     precio_re=parseFloat(precio_total)-igv;
 
     
@@ -552,9 +552,9 @@ $("#my-switch_igv").on('click ', function(e){
 
   }else{
     
-    precio_base= precio_total/1.18;
+    precio_base= precio_total*1.18;
     console.log(precio_base);
-    igv=precio_total-precio_base;
+    igv=precio_base-precio_total;
     precio_re=parseFloat(precio_total)+igv;
 
     
