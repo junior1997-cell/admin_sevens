@@ -186,7 +186,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" name="estado_igv" id="estado_igv" value="0">
+                                                        <input type="text" name="estado_igv" id="estado_igv">
                                                     </div>
                                                 </div>
                                                 <!--Sub Total precio_real monto_igv total-->
@@ -194,7 +194,7 @@
                                                     <div class="form-group">
                                                         <label for="precio_real">Sub Total</label>
                                                         <input type="number"  class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                                        <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
+                                                        <input type="text" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
                                                     
                                                     </div>                                                      
                                                 </div>
@@ -203,7 +203,7 @@
                                                     <div class="form-group">
                                                         <label for="monto_igv">IGV</label>
                                                         <input type="number" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
-                                                        <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
+                                                        <input type="text" name="monto_igv" class="form-control" id="monto_igv"/>
                                                     
                                                     </div>                                                      
 
@@ -213,7 +213,7 @@
                                                     <div class="form-group">
                                                         <label for="precio_real">Total</label>
                                                         <input type="number" class="form-control total" placeholder="Precio real." readonly />
-                                                        <input type="hidden"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
+                                                        <input type="text"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                                     </div>                                                      
                                                 </div>
                                                 <!--Descripcion-->

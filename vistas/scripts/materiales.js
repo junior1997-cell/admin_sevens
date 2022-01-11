@@ -244,6 +244,9 @@ function limpiar() {
   $("#foto2_nombre").html("");
   $('#foto2_i').show();
   $('#ver_pdf').hide();
+  $("#unid_medida").val("null").trigger("change");
+  $('#my-switch_igv').prop('checked', true);
+  $('#estado_igv').val("1");
 }
 
 //Función Listar
@@ -499,8 +502,9 @@ function precio_con_igv() {
     $("#estado_igv").val('1');
 
   }else{
+
     precio_base= precio_total*1.18;
-    console.log(precio_base);
+    console.log('precio_base precio_con_igv '+precio_base);
     igv=precio_base-precio_total;
     precio_re=parseFloat(precio_total)-igv;
 
@@ -511,8 +515,8 @@ function precio_con_igv() {
     $(".precio_real").val(redondearExp(precio_total,2));
     $("#precio_real").val(redondearExp(precio_total,4));
 
-    $(".total").val(redondearExp(precio_re,2)+redondearExp(igv,2));
-    $("#total_precio").val(redondearExp(precio_re,4)+redondearExp(igv,4));
+    $(".total").val(redondearExp(precio_base,2));
+    $("#total_precio").val(redondearExp(precio_base,4));
 
 
     $("#estado_igv").val('0');
@@ -544,8 +548,8 @@ $("#my-switch_igv").on('click ', function(e){
     $(".monto_igv").val(redondearExp(igv,2));
     $(".precio_real").val(redondearExp(precio_re,2));
 
-    $(".total").val(redondearExp(precio_re,2)+redondearExp(igv,2));
-    $(".total_precio").val(redondearExp(precio_re,2)+redondearExp(igv,2));
+    $(".total").val(redondearExp(precio_base,2)+redondearExp(igv,2));
+    $("#total_precio").val(redondearExp(precio_re,4)+redondearExp(igv,4));
 
     $("#estado_igv").val('1');
 
