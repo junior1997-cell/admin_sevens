@@ -170,7 +170,7 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_unitario">Precio</label>
-                                                        <input type="number" step="0.01" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                                        <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                                     </div>                                                      
 
                                                 </div>
@@ -193,7 +193,7 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_real">Sub Total</label>
-                                                        <input type="number" step="0.01"  class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                                        <input type="number"  class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                                         <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
                                                     
                                                     </div>                                                      
@@ -202,7 +202,7 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="monto_igv">IGV</label>
-                                                        <input type="number" step="0.01" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
+                                                        <input type="number" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
                                                         <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
                                                     
                                                     </div>                                                      
@@ -212,8 +212,8 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="precio_real">Total</label>
-                                                        <input type="number" step="0.01" class="form-control total" placeholder="Precio real." readonly />
-                                                        <input type="hidden" step="0.01" name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
+                                                        <input type="number" class="form-control total" placeholder="Precio real." readonly />
+                                                        <input type="hidden"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                                     </div>                                                      
                                                 </div>
                                                 <!--Descripcion-->
