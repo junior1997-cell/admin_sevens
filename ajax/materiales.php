@@ -199,7 +199,7 @@ switch ($_GET["op"]){
 					 empty($reg->precio_igv)?$monto_igv='-':$monto_igv=$reg->precio_igv;
 		 			$data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproducto.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idproducto.')"><i class="far fa-trash-alt  "></i></button>':
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idproducto.')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproducto.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idproducto.')"><i class="fa fa-check"></i></button>',
 						"1"=>'<div class="user-block">
