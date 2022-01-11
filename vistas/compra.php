@@ -269,13 +269,16 @@
                                                                     <thead style="background-color: #ff6c046b;">
                                                                         <th>Opciones</th>
                                                                         <th>Material</th>
+                                                                        <th>Unidad</th>
                                                                         <th>Cantidad</th>
-                                                                        <th>Precio Compra(Sin IGV)</th>
+                                                                        <th>Precio Compra</th>
+                                                                        <th class="hidden">IGV</th>
+                                                                        <th class="hidden">Precio(Con IGV)</th>
                                                                         <th>Descuento</th>
                                                                         <th>Subtotal</th>
                                                                     </thead>
                                                                     <tfoot>
-                                                                        <td colspan="4"></td>
+                                                                        <td colspan="5" id="colpan"></td>
                                                                         <th class="text-center">
                                                                             <h5>Subtotal</h5>
                                                                             <h5>IGV</h5>
@@ -283,10 +286,10 @@
                                                                         </th>
                                                                         <th>
                                                                             <h5 class="text-right" id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
-                                                                            <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
+                                                                            <input type="text" name="subtotal_compra" id="subtotal_compra" />
 
                                                                             <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
-                                                                            <input type="hidden" name="igv_compra" id="igv_compra" />
+                                                                            <input type="text" name="igv_compra" id="igv_compra" />
                                                                             <b>
                                                                                 <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
                                                                                 <input type="text" name="total_venta" id="total_venta" />

@@ -98,12 +98,15 @@ switch ($_GET["op"]) {
                         $igv_compra,
                         $estado_detraccion,
                         $_POST["idproducto"],
+                        $_POST["unidad_medida"],
                         $_POST["cantidad"],
-                        $_POST["precio_unitario"],
+                        $_POST["precio_sin_igv"],
+                        $_POST["precio_igv"],
+                        $_POST["precio_total"],
                         $_POST["descuento"],
                         $_POST["ficha_tecnica_producto"]
                     );
-
+                    //precio_sin_igv,precio_igv,precio_total
                     echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
                 } else {
                     //	$rspta=$compra->editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clavehash, $permiso);
@@ -428,7 +431,13 @@ switch ($_GET["op"]) {
                     ',\'' .
                     $reg->nombre .
                     '\',\'' .
-                    $reg->precio_unitario .
+                    $reg->unidad_medida.
+                    '\',\'' .
+                    $reg->precio_sin_igv .
+                    '\',\'' .
+                    $reg->precio_igv.
+                    '\',\'' .
+                    $reg->precio_total.
                     '\',\'' .
                     $img .
                     '\',\'' .

@@ -21,8 +21,11 @@ class Compra
         $igv_compra,
         $estado_detraccion,
         $idproducto,
+        $unidad_medida,
         $cantidad,
-        $precio_unitario,
+        $precio_sin_igv,
+        $precio_igv,
+        $precio_total,
         $descuento,
         $ficha_tecnica_producto
     	) {
@@ -36,8 +39,8 @@ class Compra
         $sw = true;
 
         while ($num_elementos < count($idproducto)) {
-            $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto,idproducto,cantidad,precio_venta,descuento,ficha_tecnica_producto) 
-			VALUES ('$idventanew', '$idproducto[$num_elementos]','$cantidad[$num_elementos]','$precio_unitario[$num_elementos]','$descuento[$num_elementos]','$ficha_tecnica_producto[$num_elementos]')";
+            $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto,idproducto,unidad_medida,cantidad,precio_venta,igv,precio_igv,descuento,ficha_tecnica_producto) 
+			VALUES ('$idventanew','$idproducto[$num_elementos]','$unidad_medida[$num_elementos]','$cantidad[$num_elementos]','$precio_sin_igv[$num_elementos]','$precio_igv[$num_elementos]','$precio_total[$num_elementos]','$descuento[$num_elementos]','$ficha_tecnica_producto[$num_elementos]')";
             ejecutarConsulta($sql_detalle) or ($sw = false);
 
             $num_elementos = $num_elementos + 1;
