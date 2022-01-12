@@ -331,7 +331,7 @@
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id idunidad_medida -->
-                                            <input type="text" name="idunidad_medida" id="idunidad_medida" />
+                                            <input type="hidden" name="idunidad_medida" id="idunidad_medida" />
                                             <!-- nombre_medida -->
                                             <div class="col-lg-6 class_pading">
                                                 <div class="form-group">
