@@ -15,7 +15,8 @@ function init() {
 
   // $("#lasistencia").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) { $("#submit-form-asistencia").submit(); });
+  // submnit a adicional descuento
+  $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });
   // $("#modal-agregar-asistencia").on("submit",function(e) { guardaryeditar(e);	})
   
   // Formato para telefono
@@ -81,6 +82,82 @@ function mostrar_form_table(estados) {
     }
   }
 }
+
+function guardaryeditar_adicional_descuento(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-adicional-descuento")[0]);
+
+  $.ajax({
+    url: "../ajax/registro_asistencia.php?op=guardaryeditar_adicional_descuento",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {
+			 
+        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
+
+	      tabla.ajax.reload();
+         
+				limpiar();
+
+        $("#modal-agregar-asistencia").modal("hide");
+
+			}else{
+
+				Swal.fire("Error!", datos, "error");
+			}
+    },
+  });
+}
+
+$(function () {
+
+  $.validator.setDefaults({
+
+    submitHandler: function (e) { 
+
+      guardaryeditar_adicional_descuento(e);         
+         
+    },
+  });  
+
+  $("#form-adicional-descuento").validate({
+    
+    rules: {      
+      detalle_adicional: { required: true, minlength: 4},
+    },
+
+    messages: {
+      detalle_adicional: {
+        required: "Este campo es requerido",
+        min:"Escriba almenos 4 letras"
+      },
+    },  
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+  });
+});
 
 //Función limpiar
 function limpiar() {
@@ -237,7 +314,7 @@ function listar(nube_idproyecto) {
   });
 }
 
-// listamos los trabajadores para tomar la asistencia
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function lista_trabajadores(nube_idproyecto) {
 
   $("#lista-de-trabajadores").html(
@@ -281,6 +358,7 @@ function lista_trabajadores(nube_idproyecto) {
   });
 }
 
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function agregar_hora_all() {
   var hora_all = $("#hora_all").val();
   $('input[type=time][name="horas_trabajo[]"]').val(hora_all);
@@ -420,7 +498,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
             if (weekday != 'sa') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist  span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );" type="text" value="${hora_n}" ></td>`);
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist  span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );" type="text" value="${hora_n}" autocomplete="off" ></td>`);
               
               tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_e}</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="${hora_e}" ></td>`);
               
@@ -446,7 +524,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
             if (weekday != 'sa') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );" type="text" value="" ></td>`);
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );" type="text" value="" autocomplete="off" ></td>`);
               
               tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
               
@@ -491,7 +569,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
           if (weekday != 'sa') {
 
-            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}') }, 300 );" type="text" value="" ></td>`);
+            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}') }, 300 );" type="text" value="" autocomplete="off"></td>`);
             
             tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
             
@@ -550,7 +628,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
       var tabla_bloc_HN_pago_parcial_8 = `<td class="text-center center-vertical"> <span  class="pago_parcial_HN_${value.idtrabajador_por_proyecto}"> ${(parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)}</span> </td>`;
 
-      var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> <span class="span_asist" >-</span> <input class="w-px-45 input_asist hidden adicional_descuento_${value.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${data.length}', '${value.idtrabajador_por_proyecto}') }, 300 );" type="text" value="0" > <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento(1);"><i class="far fa-eye"></i></span></td>`;
+      var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> <span class="span_asist" >-</span> <input class="w-px-45 input_asist hidden adicional_descuento_${value.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${data.length}', '${value.idtrabajador_por_proyecto}') }, 300 );" type="text" value="0" autocomplete="off" > <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento(1);"><i class="far fa-eye"></i></span></td>`;
 
       var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> <span  class="val_pago_quincenal_${index+1} pago_quincenal_${value.idtrabajador_por_proyecto}"> ${(parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)) + parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2))).toFixed(2)} </span> </td>`;
 
@@ -616,37 +694,6 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
   count_dias_asistidos = 0;  horas_nomr_total = 0;   horas_extr_total = 0;
 }
 
-// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
-function guardaryeditar(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-asistencia")[0]);
-
-  $.ajax({
-    url: "../ajax/registro_asistencia.php?op=guardaryeditar",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-             
-      if (datos == 'ok') {
-			 
-        Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
-
-	      tabla.ajax.reload();
-         
-				limpiar();
-
-        $("#modal-agregar-asistencia").modal("hide");
-
-			}else{
-
-				Swal.fire("Error!", datos, "error");
-			}
-    },
-  });
-}
 
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function mostrar(idasistencia_trabajador) {
@@ -753,65 +800,6 @@ function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proye
 
 init();
 
-$(function () {
-
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {  
-
-      Swal.fire({
-        title: "¿Está seguro de guardar estos registros?",
-        text: "",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#28a745",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, guardar!",
-      }).then((result) => {
-
-        if (result.isConfirmed) {
-
-          guardaryeditar(e);
-          
-        }
-      });
-    },
-  });  
-
-  $("#form-asistencia").validate({    
-    
-
-    rules: {      
-      idproyecto: { required: true},
-    },
-
-    messages: {
-      idproyecto: {
-        required: "Por favor  seleccione proyecto",
-      },
-    },  
-        
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-    },
-  });
-});
-
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function convertir_a_hora(hora_n) {
 
@@ -907,7 +895,7 @@ function format_a_m_d(fecha) {
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
 
-function modal_adicional_descuento() {
+function modal_adicional_descuento( id_trabjador, fecha_q_s) {
   $("#modal-adicional-descuento").modal("show");
 }
 
@@ -1123,18 +1111,21 @@ function guardar_fechas_asistencia() {
   array_trabajador.forEach((element,index) => {
 
     var data_array_extras = {
-      total_hn:$(`.total_HN_${element.id_trabajador}`).text(),
-      total_he:$(`.total_HE_${element.id_trabajador}`).text(),
-      dias_asistidos:$(`.dias_asistidos_${element.id_trabajador}`).text(),
-      sabatical:$(`.sabatical_${element.id_trabajador}`).text(),
-      pago_parcial_hn:$(`.pago_parcial_HN_${element.id_trabajador}`).text(),
-      pago_parcial_he:$(`.pago_parcial_HE_${element.id_trabajador}`).text(),
-      adicional_descuento:$(`.adicional_descuento_${element.id_trabajador}`).val(),
-      pago_quincenal:$(`.pago_quincenal_${element.id_trabajador}`).text()
+      'id_trabajador':element.id_trabajador,
+      'fecha_q_s':format_a_m_d(f1_r),
+      'total_hn':$(`.total_HN_${element.id_trabajador}`).text(),
+      'total_he':$(`.total_HE_${element.id_trabajador}`).text(),
+      'dias_asistidos':$(`.dias_asistidos_${element.id_trabajador}`).text(),
+      'sabatical':$(`.sabatical_${element.id_trabajador}`).text(),
+      'pago_parcial_hn':$(`.pago_parcial_HN_${element.id_trabajador}`).text(),
+      'pago_parcial_he':$(`.pago_parcial_HE_${element.id_trabajador}`).text(),
+      'adicional_descuento':$(`.adicional_descuento_${element.id_trabajador}`).val(),
+      'pago_quincenal':$(`.pago_quincenal_${element.id_trabajador}`).text()
     }
     array_extras.push( data_array_extras );
   }); 
 
+  // console.log(array_trabajador);
   console.log(array_extras);
   console.log(array_datos_asistencia);
   // mostramos los span
@@ -1149,7 +1140,12 @@ function guardar_fechas_asistencia() {
   $.ajax({
     url: "../ajax/registro_asistencia.php?op=guardaryeditar",
     type: "POST",
-    data:  {'asistencia': JSON.stringify(array_datos_asistencia), 'extras':JSON.stringify(array_extras)},
+    data:  {
+      'asistencia': JSON.stringify(array_datos_asistencia), 
+      'extras':JSON.stringify(array_extras),
+      'fecha_inicial':format_a_m_d(f1_r), 
+      'fecha_final':format_a_m_d(f2_r)
+    },
     // contentType: false,
     // processData: false,
     success: function (datos) {
@@ -1162,13 +1158,13 @@ function guardar_fechas_asistencia() {
 
         // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
         
-	      $(".progress-bar").addClass("bg-success");
+	      $(".progress-bar").addClass("bg-success"); $("#barra_progress").text("100% Completado!");
         
 			}else{
 
         $("#icono-respuesta").html(`<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`);
 
-        $(".progress-bar").addClass("bg-danger");
+        $(".progress-bar").addClass("bg-danger"); $("#barra_progress").text("100% Error!");
 
 				// Swal.fire("Error!", datos, "error");
 			}
@@ -1201,7 +1197,7 @@ function guardar_fechas_asistencia() {
 function l_m(){  
    
   // $("#barra_progress").css({"width":'0%'});
-  $("#barra_progress").text("100% completado");
+  // $("#barra_progress").text("100% completado");
   $(".progress-bar").removeClass("progress-bar-striped")
   
 }
