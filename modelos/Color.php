@@ -48,7 +48,8 @@ Class Color
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM color";
+		$sql="SELECT * FROM color 
+		WHERE idcolor>'1' ";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

@@ -255,8 +255,8 @@ function limpiar() {
   $("#foto2_nombre").html("");
   $('#foto2_i').show();
   $('#ver_pdf').hide();
- // $("#unid_medida").val("null").trigger("change");
- // $("#color").val("null").trigger("change");
+  $("#unid_medida").val("null").trigger("change");
+  $("#color").val("null").trigger("change");
   $('#my-switch_igv').prop('checked', true);
   $('#estado_igv').val("1");
 }
