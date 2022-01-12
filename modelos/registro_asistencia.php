@@ -105,18 +105,19 @@ Class Asistencia_trabajador
 	//Implementamos un método para insertar registros
 	public function insertar2($data_asistencia)
 	{
-		$data = json_decode( $data_asistencia, true );
-		$persona = "";
-		foreach ($data as $indice => $key) {
-			$persona = $key['val_input'];
-			$sql_detalle="INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, sabatical, fecha_asistencia)
-			VALUES ('$trabajador[$num_elementos]', '$horas_trabajo', '$pago_dia', '$horas_extras', '$pago_horas_extras', '$sabatical', '$fecha')";
-			ejecutarConsulta($sql_detalle) or $sw = false;
+		$data = json_decode( $data_asistencia, true );	$persona = ""; $sw=true;
 
+		foreach ($data as $indice => $key) {
+
+			$persona = $key['fecha_asistida'];
+
+			$sql_detalle="INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras,  fecha_asistencia)
+			VALUES ('".$key['id_trabajador']."', '".$key['horas_normal_dia']."', '".$key['pago_normal_dia']."', '".$key['horas_extras_dia']."', '".$key['pago_horas_extras']."', '".$key['fecha_asistida']."')";
+
+			ejecutarConsulta($sql_detalle) or $sw = false;
 		}
 		
-		return $persona ;
-			
+		return $sw ;			
 	}
 
 	//Implementamos un método para editar registros

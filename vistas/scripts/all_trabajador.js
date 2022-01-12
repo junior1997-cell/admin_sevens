@@ -6,7 +6,7 @@ function init() {
   listar( );
 
   //Mostramos los BANCOS
-  $.post("../ajax/trabajador.php?op=select2Banco", function (r) { $("#trabajador").html(r); });
+  $.post("../ajax/all_trabajador.php?op=select2Banco", function (r) { $("#banco").html(r); });
 
   $("#bloc_Recurso").addClass("menu-open");
 

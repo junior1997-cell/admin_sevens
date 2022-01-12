@@ -26,14 +26,14 @@ ob_start();
 
         case 'guardaryeditar':
 
-          $data_asistencia = $_POST["array"];
+          $data_asistencia = $_POST["asistencia"];  $extras = $_POST["extras"];
            
           $asistencia_decode = json_decode($data_asistencia, true);
 
           $rspta=$asist_trabajador->insertar2( json_encode($asistencia_decode) );
 
-          // echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
-          echo json_encode($rspta);
+           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
+          // echo $rspta;
         break;
 
         case 'desactivar':

@@ -99,7 +99,7 @@
 
     public function select2_banco()
     {
-      $sql="SELECT idbancos as id, nombres as nombre FROM bancos WHERE estado='1';";
+      $sql="SELECT idbancos as id, nombre FROM bancos WHERE estado='1';";
       return ejecutarConsulta($sql);		
     }
 

@@ -219,9 +219,22 @@ table th {
 .w-px-30{
   width: 30px !important;
 }
+
+.w-px-40{
+  width: 40px !important;
+}
+
+.w-px-45{
+  width: 45px !important;
+}
+
 .w-xy-20{
   width: 20px !important;
   height: 20px !important;
+}
+
+.h-px-30{
+  height: 30px !important;
 }
 
 .center-vertical{

@@ -497,6 +497,37 @@
                 </div>
               </div>
 
+              <!-- Modal cargando -->
+              <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      
+                      <div id="icono-respuesta">
+                        <!-- icon ERROR -->
+                        <!-- icon success -->
+                      </div>
+                      
+                      <!-- barprogress -->
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                        <div class="progress h-px-30" id="div_barra_progress">
+                          <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                            0%
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- boton -->
+                      <div class="swal2-actions">
+                        <div class="swal2-loader"></div>
+                        <button onclick="cerrar_modal()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>                         
+                      </div>
+                    </div>                     
+                  </div>
+                </div>
+              </div>
+              
+
             </section>
             <!-- /.content -->
           </div>
