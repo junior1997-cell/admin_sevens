@@ -20,15 +20,26 @@ function init() {
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
   $("#foto2").change(function(e) { addficha(e,$("#foto2").attr("id")) });
 
+  //Mostramos colores
+  $.post("../ajax/color.php?op=selectcolor", function (r) { $("#color").html(r); });
+  //Mostramos colores
+  $.post("../ajax/unidades_m.php?op=selectUnidad", function (r) { $("#unid_medida").html(r); });
 
-  //Initialize Select2 unidad
-  $("#unid_medida").select2({
+  //Initialize Select2 color
+  $("#color").select2({
     theme: "bootstrap4",
-    placeholder: "Seleccinar una unidad",
+    placeholder: "Seleccinar color",
     allowClear: true,
   });
+    //Initialize Select2 unidad
+    $("#unid_medida").select2({
+      theme: "bootstrap4",
+      placeholder: "Seleccinar una unidad",
+      allowClear: true,
+    });
   //============unidad================
   $("#unid_medida").val("null").trigger("change");
+  $("#color").val("null").trigger("change");
   
 
   // Formato para telefono
@@ -244,7 +255,8 @@ function limpiar() {
   $("#foto2_nombre").html("");
   $('#foto2_i').show();
   $('#ver_pdf').hide();
-  $("#unid_medida").val("null").trigger("change");
+ // $("#unid_medida").val("null").trigger("change");
+ // $("#color").val("null").trigger("change");
   $('#my-switch_igv').prop('checked', true);
   $('#estado_igv').val("1");
 }
@@ -349,13 +361,14 @@ function guardaryeditar(e) {
 function mostrar(idproducto) {
   console.log(idproducto);
   
-  $("#proveedor").val("").trigger("change"); 
+  //$("#proveedor").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-material").modal("show")
     
   $("#unid_medida").val("").trigger("change"); 
+  $("#color").val("").trigger("change"); 
 
   $.post("../ajax/materiales.php?op=mostrar", { idproducto: idproducto }, function (data, status) {
 
@@ -373,8 +386,10 @@ function mostrar(idproducto) {
   $("#estado_igv").val(data.estado_igv);
   $("#monto_igv").val(data.precio_igv);
   $("#precio_real").val(data.precio_sin_igv);
-/**-------------------------¡¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿ */
-  $("#unid_medida").val(data.unidad_medida).trigger("change"); 
+  /**-------------------------*/
+  $("#unid_medida").val(data.idunidad_medida).trigger("change"); 
+  $("#color").val(data.idcolor).trigger("change"); 
+    
   $("#total_precio").val(data.precio_total);
 
   $(".precio_real").val(data.precio_sin_igv);

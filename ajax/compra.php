@@ -431,7 +431,7 @@ switch ($_GET["op"]) {
                     ',\'' .
                     $reg->nombre .
                     '\',\'' .
-                    $reg->unidad_medida.
+                    $reg->nombre_medida.
                     '\',\'' .
                     $reg->precio_sin_igv .
                     '\',\'' .

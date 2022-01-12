@@ -64,11 +64,11 @@ switch ($_GET["op"]){
  		echo json_encode($results);
 
 	break;
-	case "selectUnidad de medida":
+	case "selectUnidad":
         $rspta = $unidades_m->select();
 
         while ($reg = $rspta->fetch_object()) {
-          echo '<option  value=' . $reg->nombre . '>' . $reg->nombre . '</option>';
+          echo '<option  value=' . $reg->idunidad_medida . '>' . $reg->nombre_medida . ' - '. $reg->abreviacion.'</option>';
         }
         break;
 	case 'salir':

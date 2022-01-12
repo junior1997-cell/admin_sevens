@@ -129,7 +129,7 @@
                                                 <!-- id proveedores -->
                                                 <input type="hidden" name="idproducto" id="idproducto" />
                                                 <!-- Nombre -->
-                                                <div class="col-lg-6 class_pading">
+                                                <div class="col-lg-12 class_pading">
                                                     <div class="form-group">
                                                         <label for="nombre">Nombre</label>
                                                         <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del material." />
@@ -144,26 +144,22 @@
                                                     </div>                                                  
 
                                                 </div>
+                                                <!-- Color -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="color">Color</label>
+                                                        <select name="color" id="color" class="form-control select2" style="width: 100%;" >
+                                                        </select>
+                                                        <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                                    </div>
+                                                </div>
                                                 <!-- Unnidad  onchange="mostrar_igv(); ocultar_comprob();"-->
                                                 <div class="col-lg-6" id="content-t-unidad">
                                                     <div class="form-group">
                                                         <label for="Unidad-medida">Unidad-medida</label>
-                                                        <select
-                                                            name="unid_medida"
-                                                            id="unid_medida"
-                                                            class="form-control select2"                                                           
-                                                            placeholder="Seleccinar una unidad">
-                                                            <option selected value="Kilogramo">Kilogramo</option>
-                                                            <option selected value="Tonelada">Tonelada</option>
-                                                            <option selected value="Metro">Metro</option>
-                                                            <option value="Unidad">Unidad</option>
-                                                            <option value="Pie cuadrado">Pie cuadrado</option>
-                                                            <option value="Pie cúbico">Pie cúbico</option>
-                                                            <option value="Caja">Caja</option>
-                                                            <option value="Ciento">Ciento</option>
-                                                            <option value="Litros">Litros</option>
-                                                            <option value="Galones">Galones</option>
+                                                        <select name="unid_medida"  id="unid_medida" class="form-control select2"  style="width: 100%;">
                                                         </select>
+                                                        <!--<input type="hidden" name="unid_medida_old" id="unid_medida_old" />-->
                                                     </div>
                                                 </div>
                                                 <!--Precio U-->
@@ -186,7 +182,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <input type="text" name="estado_igv" id="estado_igv">
+                                                        <input type="hidden" name="estado_igv" id="estado_igv">
                                                     </div>
                                                 </div>
                                                 <!--Sub Total precio_real monto_igv total-->
@@ -194,7 +190,7 @@
                                                     <div class="form-group">
                                                         <label for="precio_real">Sub Total</label>
                                                         <input type="number"  class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                                        <input type="text" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
+                                                        <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
                                                     
                                                     </div>                                                      
                                                 </div>
@@ -203,7 +199,7 @@
                                                     <div class="form-group">
                                                         <label for="monto_igv">IGV</label>
                                                         <input type="number" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
-                                                        <input type="text" name="monto_igv" class="form-control" id="monto_igv"/>
+                                                        <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
                                                     
                                                     </div>                                                      
 
@@ -213,7 +209,7 @@
                                                     <div class="form-group">
                                                         <label for="precio_real">Total</label>
                                                         <input type="number" class="form-control total" placeholder="Precio real." readonly />
-                                                        <input type="text"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
+                                                        <input type="hidden"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                                     </div>                                                      
                                                 </div>
                                                 <!--Descripcion-->

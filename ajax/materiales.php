@@ -3,7 +3,7 @@ ob_start();
 if (strlen(session_id()) < 1){
 	session_start();//Validamos si existe o no la sesión
 }
-require_once "../modelos/materiales.php";
+require_once "../modelos/Materiales.php";
 
 $materiales=new Materiales();
 
@@ -21,16 +21,17 @@ $monto_igv		  = isset($_POST["monto_igv"])? limpiarCadena($_POST["monto_igv"]):"
 $precio_real	  = isset($_POST["precio_real"])? limpiarCadena($_POST["precio_real"]):"";
 //$estado_igv,$monto_igv,$precio_real
 $unid_medida      = isset($_POST["unid_medida"])? limpiarCadena($_POST["unid_medida"]):"";
+$color      = isset($_POST["color"])? limpiarCadena($_POST["color"]):"";
 $total_precio     = isset($_POST["total_precio"])? limpiarCadena($_POST["total_precio"]):"";
 //$unid_medida,$total_precio
 switch ($_GET["op"]){
 	case 'guardaryeditar':
 		if (!isset($_SESSION["nombre"])) {
 
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
 
 		} else {
-			//Validamos el acceso solo al usuario logueado y autorizado.
+			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['recurso']==1)
 			{
 				// imgen
@@ -65,7 +66,7 @@ switch ($_GET["op"]){
 
 				if (empty($idproducto)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$materiales->insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);
+					$rspta=$materiales->insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$color,$total_precio);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
@@ -93,7 +94,7 @@ switch ($_GET["op"]){
 							unlink("../dist/ficha_tecnica_materiales/" . $ficha1_ant);
 						}
 					}*/
-					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);
+					$rspta=$materiales->editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$color,$total_precio);
 					//var_dump($idproducto,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
@@ -108,15 +109,15 @@ switch ($_GET["op"]){
 	case 'desactivar':
 		if (!isset($_SESSION["nombre"]))
 		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
 		}
 		else
 		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
+			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$materiales->desactivar($idproducto);
- 				echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
+ 				echo $rspta ? "material Desactivado" : "material no se puede desactivar";
 			//Fin de las validaciones de acceso
 			}
 			else
@@ -129,15 +130,15 @@ switch ($_GET["op"]){
 	case 'activar':
 		if (!isset($_SESSION["nombre"]))
 		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
 		}
 		else
 		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
+			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['recurso']==1)
 			{
 				$rspta=$materiales->activar($idproducto);
- 				echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+ 				echo $rspta ? "Material activado" : "material no se puede activar";
 			//Fin de las validaciones de acceso
 			}
 			else
@@ -150,11 +151,11 @@ switch ($_GET["op"]){
 	case 'mostrar':
 		if (!isset($_SESSION["nombre"]))
 		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
 		}
 		else
 		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
+			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['recurso']==1)
 			{
 				//$idproducto='1';
@@ -173,11 +174,11 @@ switch ($_GET["op"]){
 	case 'listar':
 		if (!isset($_SESSION["nombre"]))
 		{
-		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
 		}
 		else
 		{
-			//Validamos el acceso solo al usuario logueado y autorizado.
+			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['recurso']==1)
 			{
 				
@@ -207,7 +208,7 @@ switch ($_GET["op"]){
 								<span class="username"><p style="margin-bottom: 0px !important;">'.$reg->nombre.'</p></span>
 								<span class="description">'.substr($reg->descripcion, 0, 30).'...</span>
 							 </div>',
-		 				"2"=>$reg->unidad_medida,
+		 				"2"=>$reg->nombre_medida,
 		 				"3"=>$reg->marca,
 		 				"4"=>round($reg->precio_unitario, 2),
 		 				"5"=>round($reg->precio_sin_igv, 2),

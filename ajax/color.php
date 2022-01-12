@@ -3,7 +3,7 @@ ob_start();
 if (strlen(session_id()) < 1){
 	session_start();//Validamos si existe o no la sesión
 }
-require_once "../modelos/color.php";
+require_once "../modelos/Color.php";
 
 $color=new Color();
 
@@ -66,7 +66,7 @@ switch ($_GET["op"]){
         $rspta = $color->select();
 
         while ($reg = $rspta->fetch_object()) {
-          echo '<option  value=' . $reg->nombre_color . '>' . $reg->nombre_color . '</option>';
+          echo '<option  value=' . $reg->idcolor . '>' . $reg->nombre_color . '</option>';
         }
         break;
 	case 'salir':
