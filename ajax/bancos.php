@@ -11,7 +11,7 @@ $idbancos=isset($_POST["idbancos"])? limpiarCadena($_POST["idbancos"]):"";
 $nombre=isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 
 switch ($_GET["op"]){
-	case 'guardaryeditar':
+	case 'guardaryeditar_bancos':
 		if (empty($idbancos)){
 			$rspta=$bancos->insertar($nombre);
 			echo $rspta ? "ok" : "bancos no se pudo registrar";
@@ -22,17 +22,17 @@ switch ($_GET["op"]){
 		}
 	break;
 
-	case 'desactivar':
+	case 'desactivar_bancos':
 		$rspta=$bancos->desactivar($idbancos);
  		echo $rspta ? "bancos Desactivada" : "bancos no se puede desactivar";
 	break;
 
-	case 'activar':
+	case 'activar_bancos':
 		$rspta=$bancos->activar($idbancos);
  		echo $rspta ? "bancos activada" : "bancos no se puede activar";
 	break;
 
-	case 'mostrar':
+	case 'mostrar_bancos':
 		$rspta=$bancos->mostrar($idbancos);
  		//Codificar el resultado utilizando json
  		echo json_encode($rspta);
@@ -45,10 +45,10 @@ switch ($_GET["op"]){
 
  		while ($reg=$rspta->fetch_object()){
  			$data[]=array(
- 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idbancos.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idbancos.')"><i class="far fa-trash-alt"></i></button>':
- 					'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idbancos.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idbancos.')"><i class="fa fa-check"></i></button>',
+ 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_bancos('.$reg->idbancos.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_bancos('.$reg->idbancos.')"><i class="far fa-trash-alt"></i></button>':
+ 					'<button class="btn btn-warning btn-sm" onclick="mostrar_bancos('.$reg->idbancos.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-primary btn-sm" onclick="activar_bancos('.$reg->idbancos.')"><i class="fa fa-check"></i></button>',
  				"1"=>$reg->nombre,
  				"2"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
  				'<span class="text-center badge badge-danger">Desactivado</span>'

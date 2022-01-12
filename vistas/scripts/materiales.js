@@ -7,7 +7,7 @@ function init() {
 
   $("#mRecurso").addClass("active");
 
-  $("#lAllMateriales").addClass("active");
+  //$("#lAllMateriales").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {
     

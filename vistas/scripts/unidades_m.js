@@ -1,18 +1,18 @@
-var tabla;
+var tabla_unidades_m;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar();
+  listar_unidades_m();
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
 
- // $("#lBancoColor").addClass("active");
+  //$("#lAllMateriales").addClass("active");
 
 
-  $("#guardar_registro_color").on("click", function (e) {
-    //console.log('jjjjjjjjjjjjjjjjjjjj');
-    $("#submit-form-color").submit();
+  $("#guardar_registro_unidad_m").on("click", function (e) {
+    
+    $("#submit-form-unidad-m").submit();
   });
 
   // Formato para telefono
@@ -21,16 +21,17 @@ function init() {
 
 }
 //Función limpiar
-function limpiar() {
+function limpiar_unidades_m() {
   //Mostramos los Materiales
-  $("#idcolor").val("");
-  $("#nombre_color").val(""); 
+  $("#idunidad_medida").val("");
+  $("#nombre_medida").val(""); 
+  $("#abreviacion").val(""); 
 }
 
 //Función Listar
-function listar() {
+function listar_unidades_m() {
 
-  tabla=$('#tabla-colores').dataTable({
+  tabla_unidades_m=$('#tabla-unidades-m').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -38,7 +39,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5','pdf'],
     "ajax":{
-        url: '../ajax/color.php?op=listar',
+        url: '../ajax/unidades_m.php?op=listar__unidades_m',
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -63,12 +64,12 @@ function listar() {
 
 //Función para guardar o editar
 
-function guardaryeditar(e) {
+function guardaryeditar_unidades_m(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-color")[0]);
+  var formData = new FormData($("#form-unidad-m")[0]);
  
   $.ajax({
-    url: "../ajax/color.php?op=guardaryeditar",
+    url: "../ajax/unidades_m.php?op=guardaryeditar_unidades_m",
     type: "POST",
     data: formData,
     contentType: false,
@@ -80,11 +81,11 @@ function guardaryeditar(e) {
 
 				toastr.success('Registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla_unidades_m.ajax.reload();
          
 				limpiar();
 
-        $("#modal-agregar-color").modal("hide");
+        $("#modal-agregar-unidad-m").modal("hide");
 
 			}else{
 
@@ -94,28 +95,29 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idcolor) {
-  console.log(idcolor);
+function mostrar_unidades_m(idunidad_medida) {
+  console.log(idunidad_medida);
 
-  $("#modal-agregar-color").modal("show")
+  $("#modal-agregar-unidad-m").modal("show")
 
-  $.post("../ajax/color.php?op=mostrar", { idcolor: idcolor }, function (data, status) {
+  $.post("../ajax/unidades_m.php?op=mostrar_unidades_m", { idunidad_medida: idunidad_medida }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
-    $("#idcolor").val(data.idcolor);
-    $("#nombre_color").val(data.nombre_color); 
+    $("#idunidad_medida").val(data.idunidad_medida);
+    $("#nombre_medida").val(data.nombre_medida); 
+    $("#abreviacion").val(data.abreviacion); 
   });
 }
 
 //Función para desactivar registros
-function desactivar(idcolor) {
+function desactivar_unidades_m(idunidad_medida) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar el registro?",
-    text: "Color",
+    text: "Unidad de medida",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -123,21 +125,21 @@ function desactivar(idcolor) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/color.php?op=desactivar", { idcolor: idcolor }, function (e) {
+      $.post("../ajax/unidades_m.php?op=desactivar_unidades_m", { idunidad_medida: idunidad_medida }, function (e) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla_unidades_m.ajax.reload();
       });      
     }
   });   
 }
 
 //Función para activar registros
-function activar(idcolor) {
+function activar_unidades_m(idunidad_medida) {
   Swal.fire({
     title: "¿Está Seguro de  Activar el registro?",
-    text: "Color",
+    text: "Unidad de medida",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -145,11 +147,11 @@ function activar(idcolor) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/color.php?op=activar", { idcolor: idcolor }, function (e) {
+      $.post("../ajax/unidades_m.php?op=activar_unidades_m", { idunidad_medida: idunidad_medida }, function (e) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla_unidades_m.ajax.reload();
       });
       
     }
@@ -165,19 +167,18 @@ $(function () {
   $.validator.setDefaults({
 
     submitHandler: function (e) {
-      console.log('kkkkkk');
-        guardaryeditar(e);
+        guardaryeditar_unidades_m(e);
       
     },
   });
 
-  $("#form-color").validate({
+  $("#form-unidad-m").validate({
     rules: {
-      nombre_color: { required: true }      // terms: { required: true },
+      nombre_medida: { required: true }      // terms: { required: true },
     },
     messages: {
-      nombre_color: {
-        required: "Por favor ingrese nombre", 
+      nombre_medida: {
+        required: "Por favor ingrese nombre.", 
       },
 
     },

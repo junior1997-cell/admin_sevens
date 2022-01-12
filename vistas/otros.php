@@ -34,6 +34,7 @@
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
                 <div class="row">
+                    <!--====Bancos============-->
                     <div class="col-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
@@ -60,7 +61,7 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-bancos" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                            Admnistrar Bancos.
+                                            Administrar Bancos.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
@@ -91,6 +92,7 @@
                         </section>
                         <!-- /.content -->
                     </div>
+                    <!--====Color============-->
                     <div class="col-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
@@ -149,14 +151,74 @@
                             <!-- /.container-fluid -->
                         </section>
                         <!-- /.content -->
+                    </div>
+                    <!--====Unidad de medida==-->
+                    <div class="col-6">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <h1>Unidades de Medida</h1>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Unidad de Medida</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <!-- Main content -->
+
+                        <!-- Main content -->
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-unidad-m" onclick="limpiar_unidades_m();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                                            Admnistrar Unidad de medidas.
+                                        </h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <table id="tabla-unidades-m" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">Acciones</th>
+                                                    <th>Nombre</th>
+                                                    <th>Abreviación</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th class="">Acciones</th>
+                                                    <th>Nombre</th>
+                                                    <th>Abreviación</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
                         <!-- /.content -->
                     </div>
                 </div>
-                <!--=====================================
-                            modals-Bancos
-                ========================================-->
-                
-                <!-- Modal agregar-->
+
+                <!--================
+                    modals-Bancos
+                ======================-->
                 <div class="modal fade" id="modal-agregar-bancos">
                     <div class="modal-dialog modal-dialog-scrollable modal-md">
                         <div class="modal-content">
@@ -178,7 +240,7 @@
                                             <div class="col-lg-12 class_pading">
                                                 <div class="form-group">
                                                     <label for="nombre">Nombre</label>
-                                                    <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del material." />
+                                                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del banco." />
                                                 </div>
                                             </div>
                                         </div>
@@ -202,12 +264,9 @@
                         </div>
                     </div>
                 </div>
-
-                 <!--=====================================
-                            modals-Color
-                ========================================-->
-                
-                <!-- Modal agregar-->
+                <!--================
+                modals-Color
+                ======================-->
                 <div class="modal fade" id="modal-agregar-color">
                     <div class="modal-dialog modal-dialog-scrollable modal-md">
                         <div class="modal-content">
@@ -228,7 +287,7 @@
                                             <!-- Nombre -->
                                             <div class="col-lg-12 class_pading">
                                                 <div class="form-group">
-                                                    <label for="nombre">Nombre</label>
+                                                    <label for="nombre_color">Nombre</label>
                                                     <input type="text" name="nombre_color" class="form-control" id="nombre_color" placeholder="Nombre del color." />
                                                 </div>
                                             </div>
@@ -253,8 +312,61 @@
                         </div>
                     </div>
                 </div>
-                
+                <!--================
+                    modals-Unidad-medidas
+                ======================-->
+                <div class="modal fade" id="modal-agregar-unidad-m">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Agregar Unidad de Medida</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
 
+                            <div class="modal-body">
+                                <!-- form start -->
+                                <form id="form-unidad-m" name="form-unidad-m" method="POST">
+                                    <div class="card-body">
+                                        <div class="row" id="cargando-1-fomulario">
+                                            <!-- id idunidad_medida -->
+                                            <input type="text" name="idunidad_medida" id="idunidad_medida" />
+                                            <!-- nombre_medida -->
+                                            <div class="col-lg-6 class_pading">
+                                                <div class="form-group">
+                                                    <label for="nombre">Nombre</label>
+                                                    <input type="text" name="nombre_medida" class="form-control" id="nombre_medida" placeholder="Nombre de la medida" />
+                                                </div>
+                                            </div>
+                                            <!-- abreviacion -->
+                                            <div class="col-lg-6 class_pading">
+                                                <div class="form-group">
+                                                    <label for="abreviacion">Abreviación</label>
+                                                    <input type="text" name="abreviacion" class="form-control" id="abreviacion" placeholder="Abreviación." />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                            <div class="col-lg-12 text-center">
+                                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                                <br />
+                                                <h4>Cargando...</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <button type="submit" style="display: none;" id="submit-form-unidad-m">Submit</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_unidades_m();">Close</button>
+                                <button type="submit" class="btn btn-success" id="guardar_registro_unidad_m">Guardar Cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <?php
@@ -294,6 +406,7 @@
 
         <script type="text/javascript" src="scripts/bancos.js"></script>
         <script type="text/javascript" src="scripts/color.js"></script>
+        <script type="text/javascript" src="scripts/unidades_m.js"></script>
 
         <script>
             $(function () {

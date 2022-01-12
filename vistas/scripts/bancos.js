@@ -1,13 +1,13 @@
-var tabla;
+var tabla_bancos;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar();
+  listar_bancos();
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
 
-  $("#lAllMateriales").addClass("active");
+  //$("#lAllMateriales").addClass("active");
 
 
   $("#guardar_registro").on("click", function (e) {
@@ -28,9 +28,9 @@ function limpiar() {
 }
 
 //Función Listar
-function listar() {
+function listar_bancos() {
 
-  tabla=$('#tabla-bancos').dataTable({
+  tabla_bancos=$('#tabla-bancos').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -63,12 +63,12 @@ function listar() {
 
 //Función para guardar o editar
 
-function guardaryeditar(e) {
+function guardaryeditar_bancos(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-bancos")[0]);
  
   $.ajax({
-    url: "../ajax/bancos.php?op=guardaryeditar",
+    url: "../ajax/bancos.php?op=guardaryeditar_bancos",
     type: "POST",
     data: formData,
     contentType: false,
@@ -80,7 +80,7 @@ function guardaryeditar(e) {
 
 				toastr.success('Registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla_bancos.ajax.reload();
          
 				limpiar();
 
@@ -94,12 +94,12 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idbancos) {
+function mostrar_bancos(idbancos) {
   console.log(idbancos);
 
   $("#modal-agregar-bancos").modal("show")
 
-  $.post("../ajax/bancos.php?op=mostrar", { idbancos: idbancos }, function (data, status) {
+  $.post("../ajax/bancos.php?op=mostrar_bancos", { idbancos: idbancos }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
@@ -112,7 +112,7 @@ function mostrar(idbancos) {
 }
 
 //Función para desactivar registros
-function desactivar(idbancos) {
+function desactivar_bancos(idbancos) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar el registro?",
     text: "Banco",
@@ -123,18 +123,18 @@ function desactivar(idbancos) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/bancos.php?op=desactivar", { idbancos: idbancos }, function (e) {
+      $.post("../ajax/bancos.php?op=desactivar_bancos", { idbancos: idbancos }, function (e) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla_bancos.ajax.reload();
       });      
     }
   });   
 }
 
 //Función para activar registros
-function activar(idbancos) {
+function activar_bancos(idbancos) {
   Swal.fire({
     title: "¿Está Seguro de  Activar el registro?",
     text: "Banco",
@@ -145,11 +145,11 @@ function activar(idbancos) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/bancos.php?op=activar", { idbancos: idbancos }, function (e) {
+      $.post("../ajax/bancos.php?op=activar_bancos", { idbancos: idbancos }, function (e) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla_bancos.ajax.reload();
       });
       
     }
@@ -165,7 +165,7 @@ $(function () {
   $.validator.setDefaults({
 
     submitHandler: function (e) {
-        guardaryeditar(e);
+        guardaryeditar_bancos(e);
       
     },
   });

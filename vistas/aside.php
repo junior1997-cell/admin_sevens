@@ -124,29 +124,16 @@
                   <p>All-Calendario</p>
                 </a>
               </li>
-            </ul>
-          </li>
-        <?php  }  ?>
-
-        <?php if ($_SESSION['recurso']==1) {  ?>
-          <!-- Recursos -->
-          <li class="nav-item" id="bloc_Recurso">
-            <a href="#" class="nav-link" id="mRecurso">
-              <i class="nav-icon fas fa-project-diagram"></i>
-              <p>Datos Generales</p>
-            </a>
-            <ul class="nav nav-treeview ">
               <!-- Datos Generales Bancos y color -->
               <li class="nav-item ">
-                <a href="bancos_colores.php" class="nav-link" id="lAllTrabajador">
-                  <i class="nav-icon fas fa-university"></i>-<i class="nav-icon fas fa-palette"></i>
-                  <p>Bancos y colores</p>
+                <a href="otros.php" class="nav-link" id="lBancoColor">
+                  <i class="nav-icon fas fa-coins"></i>
+                  <p>Otros</p>
                 </a>
               </li>
             </ul>
           </li>
         <?php  }  ?>
-
       </ul>
       <!-- cargando -->
       <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-2" style="display: none !important;">      
