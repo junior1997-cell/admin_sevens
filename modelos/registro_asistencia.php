@@ -103,21 +103,69 @@ Class Asistencia_trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar2($data_asistencia)
+	public function insertar2($asistencia, $extras, $fecha_i, $fecha_f)
 	{
-		$data = json_decode( $data_asistencia, true );	$persona = ""; $sw=true;
+		$data_asistencia = json_decode( $asistencia, true ); $data_extras = json_decode( $extras, true );   $pruebas = ""; $sw=true; 
+		
+		$buscar_asistencia = ""; $buscar_extras = "";
 
-		foreach ($data as $indice => $key) {
+		// registramos o editamos las "asistencias de cada trabajador"
+		foreach ($data_asistencia as $indice => $key) {
 
-			$persona = $key['fecha_asistida'];
+			// $pruebas = $key['fecha_asistida'];
+			// buscamos la existencia de una asistencia
+			$sql_1 = "SELECT idasistencia_trabajador FROM asistencia_trabajador WHERE idtrabajador_por_proyecto='".$key['id_trabajador']."' AND fecha_asistencia = '".$key['fecha_asistida']."';" ;
+			
+			$buscar_asistencia = ejecutarConsultaSimpleFila($sql_1);
 
-			$sql_detalle="INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras,  fecha_asistencia)
-			VALUES ('".$key['id_trabajador']."', '".$key['horas_normal_dia']."', '".$key['pago_normal_dia']."', '".$key['horas_extras_dia']."', '".$key['pago_horas_extras']."', '".$key['fecha_asistida']."')";
+			if (empty($buscar_asistencia)) {
 
-			ejecutarConsulta($sql_detalle) or $sw = false;
+				// insertamos un nuevo registro
+				$sql_2="INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras,  fecha_asistencia)
+			
+				VALUES ('".$key['id_trabajador']."', '".$key['horas_normal_dia']."', '".$key['pago_normal_dia']."', '".$key['horas_extras_dia']."', '".$key['pago_horas_extras']."', '".$key['fecha_asistida']."')";
+
+				ejecutarConsulta($sql_2) or $sw = false;
+
+			} else {
+				# editamos el registro existente
+				$sql_3="UPDATE asistencia_trabajador SET idtrabajador_por_proyecto='".$key['id_trabajador']."', horas_normal_dia='".$key['horas_normal_dia']."', pago_normal_dia='".$key['pago_normal_dia']."', horas_extras_dia='".$key['horas_extras_dia']."', pago_horas_extras='".$key['pago_horas_extras']."' WHERE idasistencia_trabajador='".$buscar_asistencia['idasistencia_trabajador']."';";	
+					
+				ejecutarConsulta($sql_3) or $sw = false;
+				// $pruebas = $buscar_asistencia['idasistencia_trabajador'];
+			}
+		}
+
+		// registramos o editamos las "sumas adicionales"
+		foreach ($data_extras as $indice => $key) {
+
+			$sql_4 = "SELECT idsumas_adicionales FROM sumas_adicionales WHERE idtrabajador_por_proyecto = '".$key['id_trabajador']."' AND fecha_registro = '".$key['fecha_q_s']."';";
+			
+			$buscar_extras = ejecutarConsultaSimpleFila($sql_4);
+
+			if (empty($buscar_extras)) {
+				# insertamos un nuevo registro
+				$sql_5 = "INSERT INTO sumas_adicionales(idtrabajador_por_proyecto, fecha_registro, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, pago_quincenal) 
+				VALUES ('".$key['id_trabajador']."', '".$key['fecha_q_s']."', '".$key['total_hn']."', '".$key['total_he']."', '".$key['dias_asistidos']."', '".$key['sabatical']."', '".$key['pago_parcial_hn']."', '".$key['pago_parcial_hn']."', '".$key['adicional_descuento']."', '".$key['pago_quincenal']."')";
+				
+				ejecutarConsulta($sql_5) or $sw = false;
+			} else {
+				# editamos el registro encontrado
+				$sql_6 = "UPDATE sumas_adicionales SET  idtrabajador_por_proyecto='".$key['id_trabajador']."', 
+				fecha_registro='".$key['fecha_q_s']."', 
+				total_hn='".$key['total_hn']."', 
+				total_he='".$key['total_he']."', 
+				total_dias_asistidos='".$key['dias_asistidos']."', 
+				sabatical='".$key['sabatical']."', 
+				pago_parcial_hn='".$key['pago_parcial_hn']."', 
+				pago_parcial_he='".$key['pago_parcial_he']."', 
+				adicional_descuento='".$key['adicional_descuento']."', 
+				pago_quincenal='".$key['pago_quincenal']."' 
+				WHERE idsumas_adicionales = '".$buscar_extras['idsumas_adicionales']."'";
+			}			
 		}
 		
-		return $sw ;			
+		return $sw  ;			
 	}
 
 	//Implementamos un método para editar registros
@@ -167,7 +215,7 @@ Class Asistencia_trabajador
 		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,
 		 t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
 		SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
-		SUM(at.sabatical) AS total_sabatical, at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.cargo
+		 at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.cargo
 		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS at,  proyecto AS p
 		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto'
 		GROUP BY tp.idtrabajador;";
@@ -215,10 +263,10 @@ Class Asistencia_trabajador
 	//ver detalle quincena 
 	public function ver_detalle_quincena($f1,$f2,$nube_idproyect){
 		// sql por siacaso - luego lo borro si no lo nescito
-		$sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombres, t.tipo_documento as tipo_doc, t.numero_documento as num_doc, tpp.cargo as cargo , t.imagen_perfil as imagen_perfil, tpp.sueldo_hora as sueldo_hora, tpp.sueldo_diario as sueldo_diario, tpp.sueldo_mensual as sueldo_mensual, SUM(atr.horas_normal_dia) as horas_normal_dia, SUM(atr.horas_extras_dia) as horas_extras_dia, SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect FROM asistencia_trabajador as atr, trabajador_por_proyecto AS tpp, trabajador as t, proyecto as p 
-		WHERE atr.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND tpp.estado=1 AND tpp.idproyecto='$nube_idproyect' AND tpp.idproyecto=p.idproyecto 
-		AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2' 
-		GROUP BY atr.idtrabajador_por_proyecto;";
+		// $sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombres, t.tipo_documento as tipo_doc, t.numero_documento as num_doc, tpp.cargo as cargo , t.imagen_perfil as imagen_perfil, tpp.sueldo_hora as sueldo_hora, tpp.sueldo_diario as sueldo_diario, tpp.sueldo_mensual as sueldo_mensual, SUM(atr.horas_normal_dia) as horas_normal_dia, SUM(atr.horas_extras_dia) as horas_extras_dia, SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect FROM asistencia_trabajador as atr, trabajador_por_proyecto AS tpp, trabajador as t, proyecto as p 
+		// WHERE atr.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND tpp.estado=1 AND tpp.idproyecto='$nube_idproyect' AND tpp.idproyecto=p.idproyecto 
+		// AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2' 
+		// GROUP BY atr.idtrabajador_por_proyecto;";
 
 		// extraemos todos lo trabajadores del proyecto
 		$sql2 = "SELECT tpp.idtrabajador_por_proyecto, tpp.cargo, tpp.tipo_trabajador, t.nombres, t.tipo_documento, t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora
@@ -226,7 +274,10 @@ Class Asistencia_trabajador
 		WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$nube_idproyect';";
 		$trabajador = ejecutarConsultaArray($sql2);
 
-		$data = array();
+		$data = array(); $extras= "";
+
+		$idsumas_adicionales = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; 
+		$pago_parcial_hn = ""; $pago_parcial_he = ""; $adicional_descuento = ""; $descripcion_descuento = ""; $pago_quincenal = "";
 
 		foreach ($trabajador as $indice => $key) {
 
@@ -235,6 +286,20 @@ Class Asistencia_trabajador
 			// extraemos la asistencia por trabajador
 			$sql3 = "SELECT * FROM asistencia_trabajador  AS atr WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
 			$asistencia = ejecutarConsultaArray($sql3);
+
+			$sql4 = "SELECT idsumas_adicionales, idtrabajador_por_proyecto, fecha_registro, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal 
+			FROM sumas_adicionales WHERE idtrabajador_por_proyecto = '$id_trabajador_proyect' AND fecha_registro = '$f1';";
+
+			$extras = ejecutarConsultaSimpleFila($sql4);
+
+			if (empty($extras)) {
+				$idsumas_adicionales = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; 
+				$pago_parcial_hn = ""; $pago_parcial_he = ""; $adicional_descuento = ""; $descripcion_descuento = ""; $pago_quincenal = "";
+			} else {
+				$idsumas_adicionales = $extras['idsumas_adicionales']; $fecha_registro=$extras['fecha_registro']; $total_hn = $extras['total_hn']; $total_he = $extras['total_he']; $total_dias_asistidos = $extras['total_dias_asistidos']; $sabatical = $extras['sabatical']; 
+				$pago_parcial_hn = $extras['pago_parcial_hn']; $pago_parcial_he = $extras['pago_parcial_he']; $adicional_descuento = $extras['adicional_descuento']; $descripcion_descuento = $extras['descripcion_descuento']; $pago_quincenal = $extras['pago_quincenal'];
+			}
+			
 
 			$data[]= array(				
 				"idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
@@ -247,7 +312,22 @@ Class Asistencia_trabajador
 				"sueldo_diario"   => $key['sueldo_diario'],
 				"sueldo_hora"     => $key['sueldo_hora'],
 				"asistencia"      => $asistencia,
+
+				'idsumas_adicionales'=> $,
+				'fecha_registro'=> $, 
+				'total_hn'=> $, 
+				'total_he'=> $, 
+				'total_dias_asistidos'=> $, 
+				'sabatical'=> $, 
+				'pago_parcial_hn'=> $, 
+				'pago_parcial_he'=> $, 
+				'adicional_descuento'=> $, 
+				'descripcion_descuento'=> $, 
+				'pago_quincenal'=> $
 			);
+
+			$idsumas_adicionales = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; 
+			$pago_parcial_hn = ""; $pago_parcial_he = ""; $adicional_descuento = ""; $descripcion_descuento = ""; $pago_quincenal = "";
 		}
 
 		return $data ;

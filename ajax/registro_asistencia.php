@@ -26,14 +26,18 @@ ob_start();
 
         case 'guardaryeditar':
 
-          $data_asistencia = $_POST["asistencia"];  $extras = $_POST["extras"];
+          $data_asistencia = $_POST["asistencia"];  $extras = $_POST["extras"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
            
-          $asistencia_decode = json_decode($data_asistencia, true);
+          // $asistencia_decode = json_decode($data_asistencia, true);
 
-          $rspta=$asist_trabajador->insertar2( json_encode($asistencia_decode) );
+          $rspta=$asist_trabajador->insertar2( $data_asistencia, $extras, $fecha_i, $fecha_f);
 
-           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
-          // echo $rspta;
+          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
+          //  echo $rspta;
+        break;
+
+        case 'guardaryeditar_adicional_descuento':
+
         break;
 
         case 'desactivar':
@@ -78,7 +82,8 @@ ob_start();
           //Codificar el resultado utilizando json
           echo json_encode($rspta);		
         break;
-
+        
+        // lo voy a borrar cuando no lo nesecite
         case 'ver_datos_quincena_xdia':
           //$f1 = $_POST["f1"];
           $f1 = $_POST["f1"];
@@ -151,7 +156,7 @@ ob_start();
               "4"=> $reg->sueldo_hora,
               "5"=> $jornal_diario,
               "6"=> $reg->sueldo_mensual,              
-              "7"=> $reg->total_sabatical,
+              "7"=> 1,
               "8"=> round($sueldo_acumudado, 1),
             );
 

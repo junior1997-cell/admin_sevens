@@ -461,21 +461,18 @@
                       <form id="form-adicional-descuento" name="form-adicional-descuento" method="POST">
                         <div class="row" id="cargando-5-fomulario">
                           
-                          <!-- id asistencia -->
-                          <input type="hidden" name="idasistencia_trabajador3" id="idasistencia_trabajador3" />                                         
+                          <!-- ID trabajador por proyecto -->
+                          <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />   
+                          <!-- fecha de quincena o semana -->
+                          <input type="hidden" name="fecha_q_s" id="fecha_q_s" />                                         
                           
                           <!-- Descripcion -->
                           <div class="col-md-12 col-lg-12">
                             <div class="form-group">
                               <label for="nombre">Descripción</label>
-                              <textarea name="detalle" id="detalle" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
+                              <textarea name="detalle_adicional" id="detalle_adicional" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
                             </div>
-                          </div>  
-                          
-                          Nombre: <span id="1" ondblclick="edit(this);"> Zhang San </span> <br/>
-                          Dirección particular: <span id="2" ondblclick="edit(this);"> Zhang San </span> <br/>
-                          
-
+                          </div> 
                         </div>
 
                         <div class="row" id="cargando-6-fomulario" style="display: none;">
