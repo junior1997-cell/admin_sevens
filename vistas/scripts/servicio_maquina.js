@@ -910,8 +910,8 @@ function total_pagos(idmaquinaria,idproyecto) {
 
     porcen_sal=(90-((data.total_monto*100)/totattotal)).toFixed(2);
     porcen_sal_ocult=(90-((data.total_monto*100)/totattotal)).toFixed(4);
-    console.log('porcen_saldoooooooooooooo ' +porcen_sal);
-    console.log('porcen_saldoooooooooooooo ' +porcen_sal_ocult);
+   // console.log('porcen_saldoooooooooooooo ' +porcen_sal);
+   // console.log('porcen_saldoooooooooooooo ' +porcen_sal_ocult);
     
 
     saldo=(data.total_monto*porcen_sal_ocult)/((data.total_monto*100)/totattotal);

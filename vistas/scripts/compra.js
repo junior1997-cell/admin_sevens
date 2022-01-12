@@ -1,9 +1,12 @@
+var reload_detraccion='';
 var tabla;
 var tabla_comp_prov;
 var tablamateriales;
 var tabla_list_comp_prov;
 var tabla_facturas;
 var tabla_pagos1;
+var tabla_pagos2;
+var tabla_pagos3;
 //Requejo99@
 //Función que se ejecuta al inicio
 function init() {
@@ -456,6 +459,7 @@ function regresar() {
     
     $("#monto_total").html("");
     $("#ttl_monto_pgs_detracc").html("");
+    $("#pagos_con_detraccion").hide();
     limpiar();
     limpiardatosproveedor();
 }
@@ -1056,6 +1060,7 @@ function comprobante_compras(idcompra_proyecto, doc) {
 //=========================================
 
 function listar_pagos(idcompra_proyecto, idproyecto,monto_total) {
+    reload_detraccion='no';
     most_datos_prov_pago(idcompra_proyecto);
     localStorage.setItem("idcompra_pago_comp_nube", idcompra_proyecto);
     $("#total_compra").html(formato_miles(monto_total));
@@ -1088,7 +1093,7 @@ function listar_pagos(idcompra_proyecto, idproyecto,monto_total) {
                 },
                 /* success:function(data){
           console.log(data);	
-        },*/
+            },*/
             },
             language: {
                 lengthMenu: "Mostrar : _MENU_ registros",
@@ -1111,7 +1116,15 @@ function listar_pagos(idcompra_proyecto, idproyecto,monto_total) {
 }
 
 function listar_pagos_detraccion(idcompra_proyecto, idproyecto,monto_total) {
+    var total=0;  reload_detraccion='si';
+    most_datos_prov_pago(idcompra_proyecto);
     $("#ttl_monto_pgs_detracc").html(formato_miles(monto_total));
+    //mostramos los montos del 90 y 10 % 
+    $("#t_proveedor").html(formato_miles(monto_total*0.90));
+    $("#t_provee_porc").html("90");
+    $("#t_detaccion").html(formato_miles(monto_total*0.10));
+    $("#t_detacc_porc").html("10");
+   // t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc
     $("#tabla-compra").hide();
     $("#tabla-compra-proveedor").hide();
     // $("#agregar_compras").show();
@@ -1123,6 +1136,76 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto,monto_total) {
     $("#pagos_con_detraccion").show();
 
     $("#btn-pagar").show();
+
+    tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs")
+    .dataTable({
+        responsive: true,
+        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+        aProcessing: true, //Activamos el procesamiento del datatables
+        aServerSide: true, //Paginación y filtrado realizados por el servidor
+        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+        ajax: {
+            url: "../ajax/compra.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_proyecto=" + idcompra_proyecto,
+            type: "get",
+            dataType: "json",
+            error: function (e) {
+                console.log(e.responseText);
+            },
+            /* success:function(data){
+      console.log(data);	
+        },*/
+        },
+        language: {
+            lengthMenu: "Mostrar : _MENU_ registros",
+            buttons: {
+                copyTitle: "Tabla Copiada",
+                copySuccess: {
+                    _: "%d líneas copiadas",
+                    1: "1 línea copiada",
+                },
+            },
+        },
+        bDestroy: true,
+        iDisplayLength: 5, //Paginación
+        order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
+    //Tabla 3 
+    tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs")
+    .dataTable({
+        responsive: true,
+        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+        aProcessing: true, //Activamos el procesamiento del datatables
+        aServerSide: true, //Paginación y filtrado realizados por el servidor
+        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+        ajax: {
+            url: "../ajax/compra.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_proyecto=" + idcompra_proyecto,
+            type: "get",
+            dataType: "json",
+            error: function (e) {
+                console.log(e.responseText);
+            },
+            /* success:function(data){
+      console.log(data);	
+        },*/
+        },
+        language: {
+            lengthMenu: "Mostrar : _MENU_ registros",
+            buttons: {
+                copyTitle: "Tabla Copiada",
+                copySuccess: {
+                    _: "%d líneas copiadas",
+                    1: "1 línea copiada",
+                },
+            },
+        },
+        bDestroy: true,
+        iDisplayLength: 5, //Paginación
+        order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
 }
 
 //Función limpiar
@@ -1201,16 +1284,24 @@ function guardaryeditar_pago(e) {
                 toastr.success("servicio registrado correctamente");
 
                 tabla.ajax.reload();
-
                 $("#modal-agregar-pago").modal("hide");
                 // console.log(tabla2);
                 //tabla2.ajax.reload();
-                tabla_pagos1.ajax.reload();
+                if (reload_detraccion=='si') { 
+                    tabla_pagos2.ajax.reload();
+                    tabla_pagos3.ajax.reload();  
+                }else{
+                    tabla_pagos1.ajax.reload();
+                }
+                console.log('1');
                 // tabladetrecc.ajax.reload();
                 /**================================================== */
                 total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+                
                 // total_costo_secc_pagoss(localStorage.getItem('nubeidmaquinaria'),localStorage.getItem('nube_idproyecto'));
                 limpiar_c_pagos();
+                
+                
             } else {
                 toastr.error(datos);
             }

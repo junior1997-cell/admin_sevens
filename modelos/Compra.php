@@ -374,7 +374,7 @@ class Compra
 		WHERE idpago_compras='$idpago_compras'";
         return ejecutarConsulta($sql);
     }
-    //Listar pagos
+    //Listar pagos-normal
     public function listar_pagos($idcompra_proyecto)
     {
         //var_dump($idproyecto,$idmaquinaria);die();
@@ -395,6 +395,29 @@ class Compra
 		ps.estado as estado
 		FROM pago_compras ps, bancos as bn 
 		WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos";
+        return ejecutarConsulta($sql);
+    }
+        //Listar pagos1-con detraccion --tabla Proveedor
+    public function listar_pagos_compra_prov_con_dtracc($idcompra_proyecto,$tipo_pago)
+    {
+        //var_dump($idproyecto,$idmaquinaria);die();
+        $sql = "SELECT
+        ps.idpago_compras  as idpago_compras,
+        ps.forma_pago as forma_pago,
+        ps.tipo_pago as tipo_pago,
+        ps.beneficiario as beneficiario,
+        ps.cuenta_destino as cuenta_destino,
+        ps.titular_cuenta as titular_cuenta,
+        ps.fecha_pago as fecha_pago,
+        ps.descripcion as descripcion,
+        ps.idbancos as id_banco,
+        bn.nombre as banco,
+        ps.numero_operacion as numero_operacion,
+        ps.monto as monto,
+        ps.imagen as imagen,
+        ps.estado as estado
+        FROM pago_compras ps, bancos as bn 
+        WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos AND ps.tipo_pago='$tipo_pago'";
         return ejecutarConsulta($sql);
     }
     //Implementamos un método para desactivar categorías

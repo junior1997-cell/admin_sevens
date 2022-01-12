@@ -400,7 +400,9 @@
                                             </div>
                                         </div>
 
-                                        <!--Pagos con Detracción-->
+                                        <!--=======================
+                                            Pagos con Detracción
+                                        ========================-->
                                         <div id="pagos_con_detraccion" style="display: none;">
                                             <h5>pagos con detracccion</h5>
                                             <div style="text-align: center;">
@@ -420,7 +422,7 @@
                                                 </div>
                                             </div>
                                             <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
-                                            <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <table id="tbl-pgs-detrac-prov-cmprs" class="table table-bordered table-striped display" style="width: 100% !important;">
                                                 <thead>
                                                     <tr>
                                                         <th>Acciones</th>
@@ -480,7 +482,7 @@
                                                     </h5>
                                                 </div>
                                             </div>
-                                            <table id="tabla-pagos-detrecciones" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <table id="tbl-pgs-detrac-detracc-cmprs" class="table table-bordered table-striped display" style="width: 100% !important;">
                                                 <thead>
                                                     <tr>
                                                         <th>Acciones</th>
