@@ -38,6 +38,19 @@ ob_start();
 
         case 'guardaryeditar_adicional_descuento':
 
+          if (empty($_POST["idsumas_adicionales"])) {
+
+            $rspta = $asist_trabajador->insertar_adicionales( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario"; 
+
+          } else {
+
+            $rspta = $asist_trabajador->editar_adicionales($_POST["idsumas_adicionales"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+          }
+          
         break;
 
         case 'desactivar':
@@ -82,7 +95,7 @@ ob_start();
           //Codificar el resultado utilizando json
           echo json_encode($rspta);		
         break;
-        
+
         // lo voy a borrar cuando no lo nesecite
         case 'ver_datos_quincena_xdia':
           //$f1 = $_POST["f1"];
