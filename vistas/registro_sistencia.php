@@ -446,7 +446,7 @@
               </div> 
               
               <!-- Modal adicinoal / descuento -->
-              <div class="modal fade" id="modal-adicional-descuento">
+              <div class="modal fade" id="modal-adicional-descuento" >
                 <div class="modal-dialog modal-dialog-scrollable modal-md">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -461,6 +461,8 @@
                       <form id="form-adicional-descuento" name="form-adicional-descuento" method="POST">
                         <div class="row" id="cargando-5-fomulario">
                           
+                          <!-- id adicionales -->
+                          <input type="hidden" name="idsumas_adicionales" id="idsumas_adicionales" /> 
                           <!-- ID trabajador por proyecto -->
                           <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />   
                           <!-- fecha de quincena o semana -->
