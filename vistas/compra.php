@@ -389,8 +389,8 @@
                                                             <th>Descripción</th>
                                                             <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                                             <th style="color: #ff0000; background-color: #45c920;">
-                                                                <b id="monto_total_prob"></b> <br />
-                                                                <b id="porcnt_prove" style="color: black;"></b>
+                                                                <b id="monto_total"></b> <br />
+                                                                <b id="porcentaje" style="color: black;"></b>
                                                             </th>
                                                             <th>Vaucher</th>
                                                             <th>Estado</th>
@@ -452,7 +452,7 @@
                                                         <th>Descripción</th>
                                                         <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                                         <th style="color: #ff0000; background-color: #45c920;">
-                                                            <b id="monto_total_prob"></b> <br />
+                                                            <b id="monto_total_prov"></b> <br />
                                                             <b id="porcnt_prove" style="color: black;"></b>
                                                         </th>
                                                         <th>Vaucher</th>

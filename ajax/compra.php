@@ -1019,34 +1019,39 @@ switch ($_GET["op"]) {
         }
     break;
 
-    case 'suma_total_pagos_proveedor':
+    case 'suma_total_pagos':
         $idcompra_proyecto = $_POST["idcompra_proyecto"];
-        //$idproyecto=$_POST["idproyecto"];
-        //$tipopago ='Proveedor';
+        $rspta = $compra->suma_total_pagos($idcompra_proyecto);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta);
+    break;
+
+    //----suma total de pagos con detraccion-----
+    case 'suma_total_pagos_prov':
+        $idcompra_proyecto = $_POST["idcompra_proyecto"];
+        $tipopago = 'Proveedor';
         //$idmaquinaria='1';
         //$idproyecto='1';
 
-        $rspta = $compra->suma_total_pagos($idcompra_proyecto);
+        $rspta = $compra->suma_total_pagos_detraccion($idcompra_proyecto,$tipopago);
         //Codificar el resultado utilizando json
         echo json_encode($rspta);
         //Fin de las validaciones de acceso
 
     break;
-
     case 'suma_total_pagos_detracc':
-        $idmaquinaria = $_POST["idmaquinaria"];
-        $idproyecto = $_POST["idproyecto"];
+        $idcompra_proyecto = $_POST["idcompra_proyecto"];
         $tipopago = 'Detraccion';
         //$idmaquinaria='1';
         //$idproyecto='1';
 
-        $rspta = $compra->suma_total_pagos($idmaquinaria, $idproyecto, $tipopago);
+        $rspta = $compra->suma_total_pagos_detraccion($idcompra_proyecto,$tipopago);
         //Codificar el resultado utilizando json
         echo json_encode($rspta);
         //Fin de las validaciones de acceso
 
     break;
-
+  //---- fin suma total de pagos con detraccion-----
     case 'total_costo_parcial_pago':
         $idmaquinaria = $_POST["idmaquinaria"];
         $idproyecto = $_POST["idproyecto"];

@@ -1021,7 +1021,7 @@ function validando_excedentes() {
   var monto_entrada = $("#monto_pago").val();
   var total_suma=parseFloat(monto_total_dep)+parseFloat(monto_entrada);
   var debe =totattotal-monto_total_dep
-console.log(typeof total_suma);
+   //console.log(typeof total_suma);
   if (total_suma>totattotal) {
     toastr.error('ERROR monto excedido al total del monto a pagar!');
   }else{

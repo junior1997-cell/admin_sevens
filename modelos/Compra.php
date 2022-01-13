@@ -458,6 +458,7 @@ class Compra
         return ejecutarConsultaSimpleFila($sql);
     }
 
+    // consulta para totales sin detracion
     public function suma_total_pagos($idcompra_proyecto)
     {
         $sql = "SELECT SUM(ps.monto) as total_monto
@@ -465,6 +466,15 @@ class Compra
 		WHERE  ps.idcompra_proyecto='$idcompra_proyecto' AND ps.estado='1'";
         return ejecutarConsultaSimpleFila($sql);
     }
+    //consultas para totales con detracion
+    public function suma_total_pagos_detraccion($idcompra_proyecto,$tipopago)
+    {
+        $sql = "SELECT SUM(ps.monto) as total_montoo
+		FROM pago_compras as ps
+		WHERE  ps.idcompra_proyecto='$idcompra_proyecto' AND ps.tipo_pago='$tipopago' AND ps.estado='1'";
+        return ejecutarConsultaSimpleFila($sql);
+    }
+
     public function total_costo_parcial_pago($idmaquinaria, $idproyecto)
     {
         $sql = "SELECT
