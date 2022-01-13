@@ -1123,8 +1123,10 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto,monto_total) {
     $("#ttl_monto_pgs_detracc").html(formato_miles(monto_total));
     //mostramos los montos del 90 y 10 % 
     $("#t_proveedor").html(formato_miles(monto_total*0.90));
+    $(".t_proveedor").val(formato_miles(monto_total*0.90));
     $("#t_provee_porc").html("90");
     $("#t_detaccion").html(formato_miles(monto_total*0.10));
+    $(".t_detaccion").val(formato_miles(monto_total*0.10));
     $("#t_detacc_porc").html("10");
    // t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc
     $("#tabla-compra").hide();
@@ -1324,23 +1326,61 @@ function total_pagos_detracc(idcompra_proyecto) {
     $.post("../ajax/compra.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
 
         $("#monto_total_prov").html("");
-
+        var inputValue=0;
+        var x = 0;
+        var x_saldo = 0;
+        var diferencia = 0;
         data = JSON.parse(data);
         //console.log(data);
-        //et inputValue = $("#t_proveedor").val();
-      //  console.log(inputValue);
-        $("#monto_total_prov").html(formato_miles(data.total_montoo));
+        inputValue = $(".t_proveedor").val();
 
+        $("#monto_total_prov").html(formato_miles(data.total_montoo));
+        x =(data.total_montoo*90)/inputValue;
+        $("#porcnt_prove").html(redondearExp(x,2)+' %');
+
+        diferencia=90-x;
+
+        x_saldo =(diferencia*data.total_montoo)/x;
+
+        if (x_saldo==0) {
+            $('#saldo_p').html('0.00');
+            $('#porcnt_sald_p').html('0.00'+' %');
+        }else{
+            $('#saldo_p').html(redondearExp(x_saldo, 2));
+            $('#porcnt_sald_p').html(redondearExp(diferencia, 2)+' %');
+        }
     });
 
     //tabla 2 detracion
     $.post("../ajax/compra.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
 
         $("#monto_total_detracc").html("");
+        var valor_tt_detrcc=0;
+        var x_detrcc = 0;
+        var x_saldo_detrcc = 0;
+        var diferencia_detrcc = 0;
 
-        data = JSON.parse(data);
-        console.log(data);
+        data = JSON.parse(data); console.log(data);
+
+        valor_tt_detrcc = $(".t_detaccion").val();
+
         $("#monto_total_detracc").html(formato_miles(data.total_montoo));
+
+        x_detrcc =(data.total_montoo*10)/valor_tt_detrcc;
+        $("#porcnt_detrcc").html(redondearExp(x_detrcc,2)+' %');
+
+        diferencia_detrcc=10-x_detrcc;
+
+        x_saldo_detrcc =(diferencia_detrcc*data.total_montoo)/x_detrcc;
+
+        if (x_saldo_detrcc==0) {
+            $('#saldo_d').html('0.00');
+            $('#porcnt_sald_d').html('0.00'+' %');
+        }else{
+            $('#saldo_d').html(redondearExp(x_saldo_detrcc, 2));
+            $('#porcnt_sald_d').html(redondearExp(diferencia_detrcc, 2)+' %');
+        }
+
     });
 }
 //mostrar

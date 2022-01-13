@@ -186,10 +186,10 @@ switch ($_GET["op"]) {
         $rspta = $compra->listar_compra($nube_idproyecto);
         //Vamos a declarar un array
         $data = [];
-        $c = "info";
-        $nombre = "Ver";
-        $info = "info";
-        $icon = "eye";
+        $c = "";
+        $nombre = "";
+        $info = "";
+        $icon = "";
         $stdo_detraccion = "";
         $serie_comprobante = "";
         $function_tipo_comprob = "";
@@ -208,6 +208,33 @@ switch ($_GET["op"]) {
             } else {
                 $function_tipo_comprob = '<center> <button class="btn btn-info" onclick="facturas_compras(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>';
             }*/
+            if ($saldo == $reg->monto_total) {
+                $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
+                $c="danger";
+                $nombre="Pagar";
+                $icon="dollar-sign";
+            }else{
+                		
+                if ($saldo<$reg->monto_total && $saldo>"0" ) {
+
+                    $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+                    $c="warning";
+                    $nombre="Pagar";
+                    $icon="dollar-sign";
+                    } else {
+                        if ($saldo<="0") {
+                            $estado = '<span class="text-center badge badge-success">Pagado</span>';
+                            $c="info";
+                            $nombre="Ver";
+                            $info="info";
+                            $icon="eye";
+                        }else{
+                            $estado = '<span class="text-center badge badge-success">Error</span>';
+                        }
+                        //$estado = '<span class="text-center badge badge-success">Terminado</span>';
+                    }  
+
+            }
 
             if ($reg->estado_detraccion == "1") {
                 $list_segun_estado_detracc =
@@ -222,8 +249,10 @@ switch ($_GET["op"]) {
                     ')"><i class="fas fa-' .
                     $icon .
                     ' nav-icon"></i> ' .
-                    $reg->idcompra_proyecto .
+                    $nombre.
                     '</button></div>';
+                    
+               // "9" => '<center> <button class="btn btn-'.$c.' btn-xs" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> </center>',
              } else {
                 $list_segun_estado_detracc =
                     '<div class="text-center"> <button class="btn btn-' .
@@ -237,7 +266,7 @@ switch ($_GET["op"]) {
                     ')"><i class="fas fa-' .
                     $icon .
                     ' nav-icon"></i> ' .
-                    $reg->idcompra_proyecto .
+                    $nombre .
                     '</button></div>';
             }
             $vercomprobantes="'$reg->idcompra_proyecto','$reg->imagen_comprobante'";
@@ -823,7 +852,7 @@ switch ($_GET["op"]) {
                         $titular_cuenta = $reg->titular_cuenta;
                     }
                     empty($reg->imagen)
-                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
+                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
                         : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
                     $tool = '"tooltip"';
                     $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
@@ -899,7 +928,7 @@ switch ($_GET["op"]) {
                         $titular_cuenta = $reg->titular_cuenta;
                     }
                     empty($reg->imagen)
-                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
+                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
                         : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
                     $tool = '"tooltip"';
                     $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
@@ -973,7 +1002,7 @@ switch ($_GET["op"]) {
                         $titular_cuenta = $reg->titular_cuenta;
                     }
                     empty($reg->imagen)
-                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
+                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
                         : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
                     $tool = '"tooltip"';
                     $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";

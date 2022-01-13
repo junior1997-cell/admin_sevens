@@ -187,6 +187,7 @@ switch ($_GET["op"]){
 
 					empty($rspta2)?$saldo=0:$saldo = $reg->costo_parcial-$rspta2['monto'];
 					empty($rspta2['monto'])?$monto="0.00":$monto = $rspta2['monto'];
+					
 					empty($rspta3)?$saldo_factura=0:$saldo_factura = $reg->costo_parcial-$rspta3['monto_factura'];
 					empty($rspta3['monto_factura'])?$monto_factura="0.00":$monto_factura = $rspta3['monto_factura'];
 					//empty($rspta2['monto']?($monto="0.00"?$clase="dangar":$clase="warning"): ($monto = $rspta2['monto'] ? 'verdadero2' : 'falso');

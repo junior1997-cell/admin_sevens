@@ -415,6 +415,7 @@
                                                     <h5>
                                                         Proveedor S/
                                                         <b id="t_proveedor"></b>
+                                                        <input type="hidden" class="t_proveedor">
                                                         <i class="fas fa-arrow-right fa-xs"></i>
                                                         <b id="t_provee_porc"></b>
                                                         <b>%</b>
@@ -476,6 +477,7 @@
                                                     <h5>
                                                         Detracción S/
                                                         <b id="t_detaccion"></b>
+                                                        <input type="hidden" class="t_detaccion">
                                                         <i class="fas fa-arrow-right fa-xs"></i>
                                                         <b id="t_detacc_porc"></b>
                                                         <b>%</b>
@@ -523,6 +525,7 @@
                                                         <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                                         <th style="color: #ff0000; background-color: #f3e700;">
                                                             <b id="saldo_d"></b> <br />
+                                                           <!-- <input type="hidden" class="saldo_d">-->
                                                             <b id="porcnt_sald_d" style="color: black;"></b>
                                                         </th>
                                                         <td colspan="2"></td>
@@ -1203,6 +1206,27 @@
 
                                     <div class="modal-footer justify-content-end">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--===============Modal-ver-vaucher-pagos =========-->
+                        <div class="modal fade" id="modal-ver-vaucher">
+                            <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: #ce834926;" >
+                                        <h4 class="modal-title">voucher</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span class="text-danger" aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="datosservicios" class="class-style" style="text-align: center;"> 
+                                        <a class="btn btn-warning  btn-block" href="#" id="descargar" download="Voucher" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
+                                            <br>
+                                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
+                        
+                                        </div>
                                     </div>
                                 </div>
                             </div>
