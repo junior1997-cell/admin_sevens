@@ -1588,28 +1588,30 @@ function agregarDetalle(idproducto,nombre,unidad_medida,precio_sin_igv,precio_ig
                     </div>
                 </td>
                 <td><input  style="font-weight: bold;  border: none;" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"></td>
-                <td><input class="producto_${idproducto} producto_selecionado cantidad_${idproducto}" onkeyup="modificarSubototales()" onchange="modificarSubototales()" style="width: 70px;" type="number" style="width: 70px;" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}"></td>
-                <td><input type="number" class="precio_compra_${idproducto}" style="width: 135px;" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${precio_sin_igv}" onkeyup="modificarSubototales(); modificando_precio(this,${idproducto});" onchange="modificarSubototales(); modificando_precio(this,${idproducto})"></td>
-                <td class="hidden"><input class="igv_produc_${idproducto} " type="number" readonly  style="width: 135px; border: none; text-align: center;" name="precio_igv[]" id="precio_igv[]" value="${precio_igv}"></td>
-                <td class="hidden"><input class="precio_total_${idproducto} preciocon_igv_${idproducto}" type="number" readonly  style="width: 135px; border: none; text-align: center;" name="precio_total[]" id="precio_total[]" value="${precio_total}"></td>
-                <td><input type="number" class="descuento_${idproducto}" style="width: 135px;" name="descuento[]" value="${descuento}" onkeyup="modificarSubototales()" onchange="modificarSubototales()"></td>
-                <td class="text-right"><span class="text-right subtotal_m_${idproducto}" name="subtotal" id="subtotal ${cont}">${subtotal}</span></td>
+                <td><input class="producto_${idproducto} producto_selecionado cantidad_${cont}" onkeyup="modificarSubototales()" onchange="modificarSubototales()" style="width: 70px;" type="number" style="width: 70px;" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}"></td>
+                <td><input type="number" class="precio_compra_${cont}" style="width: 135px;" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${precio_sin_igv}" onkeyup="modificarSubototales(); modificando_precio(this,${idproducto});" onchange="modificarSubototales(); modificando_precio(this,${idproducto})"></td>
+                <td class="hidden"><input class="igv_produc_${cont} " type="number" readonly  style="width: 135px; border: none; text-align: center;" name="precio_igv[]" id="precio_igv[]" value="${precio_igv}"></td>
+                <td class="hidden"><input class="precio_total_${idproducto} preciocon_igv_${cont}" type="number" readonly  style="width: 135px; border: none; text-align: center;" name="precio_total[]" id="precio_total[]" value="${precio_total}"></td>
+                <td><input type="number" class="descuento_${cont}" style="width: 135px;" name="descuento[]" value="${descuento}" onkeyup="modificarSubototales()" onchange="modificarSubototales()"></td>
+                <td class="text-right"><span class="text-right subtotal_m_${cont}" name="subtotal" id="subtotal ${cont}">${subtotal}</span></td>
                 <td><button type="button" onclick="modificarSubototales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
             </tr>`
-            cont++;
+           
             detalles = detalles + 1;
             $("#detalles").append(fila);
             modificarSubototales();
             toastr.success("Material: " + nombre + " agregado !!");
 
             var data_array_m = {
-                'id_material':idproducto,
-                'class_cantidad':`cantidad_${idproducto}`,
-                'class_precio_compra':`precio_compra_${idproducto}`,
-                'class_preciocon_igv':`preciocon_igv_${idproducto}`,
-                'class_descuento':`descuento_${idproducto}`
+                'id_material':cont,
+                'class_cantidad':`cantidad_${cont}`,
+                'class_precio_compra':`precio_compra_${cont}`,
+                'class_preciocon_igv':`preciocon_igv_${cont}`,
+                'class_descuento':`descuento_${cont}`
               }
               array_clss_materiales.push( data_array_m );
+            
+              cont++;
               
         }
     } else {
@@ -1652,7 +1654,7 @@ function modificarSubototales() {
 }
 
 function modificando_precio(thiss,idproducto) {
-    console.log('idproducto '+idproducto);
+   // console.log('idproducto '+idproducto);
     var precio_actual = 0;
     var igv=0;
     var totalconigv=0;
@@ -1676,30 +1678,50 @@ function calcularTotales() {
 
     for (var i = 0; i < sub.length; i++) {
         total += document.getElementsByName("subtotal")[i].value;
+        console.log('total__________ ' +total);
     }
     $("#subtotal").html("S/. " + formato_miles(total));
-
     $("#subtotal_compra").val( redondearExp(total, 4));
    // console.log('total '+redondearExp(total, 4));
+   $("#total").html("S/. " + formato_miles(total.toFixed(2)));
+   $("#total_venta").val(redondearExp(total, 4));
 
-    evaluar();
-    mostrar_igv();
 }
 
 function mostrar_igv() {
-    var igv = 0;
-    var mtotal = 0;
-    var subt = 0;
-    var parse_Int = 0;
-    subt = $("#subtotal_compra").val();
-
-    //console.log('subtotaal: '+typeof(subt));
-    parse_Int_subtt = parseFloat(subt); 
 
     if ($("#tipo_comprovante").select2("val") == "Factura") {
+       // console.log(array_clss_materiales);
+        var subtotal_all=0;
+        var igv=0;
+        var total=0;
+        array_clss_materiales.forEach((element,index) => {
+            // class_precio_compra =$(`.${element.class_cantidad}`).val(),
+           // console.log($(`.${element.class_preciocon_igv}`).val());
+            if ($(`.${element.class_preciocon_igv}`).val() != undefined) {
+                    
+                var cantidad = 0; var preciocon_igv=0; var descuento=0; var subtotal_p=0;
 
-        var precio_total =  document.getElementsByName("precio_total");
-        console.log(precio_total);
+                cantidad =parseFloat($(`.${element.class_cantidad}`).val()),
+                preciocon_igv =parseFloat($(`.${element.class_preciocon_igv}`).val()),
+                descuento =parseFloat($(`.${element.class_descuento}`).val()),
+
+                subtotal_p=(cantidad*preciocon_igv)-descuento;
+
+                total=total+subtotal_p;
+
+               // console.log(cantidad);
+
+                $(`.subtotal_m_${element.id_material}`).html(subtotal_p.toFixed(2));
+            
+            }
+        });
+        
+        igv=total/1.18;
+        subtotal_all=total-igv;
+        console.log('subtotal_all '+subtotal_all);
+        console.log('igv '+igv);
+        console.log('total '+total);
 
         $("#igv").val("0.18");
         $("#content-igv").show();
@@ -1709,26 +1731,56 @@ function mostrar_igv() {
         $(".hidden").show();
         $("#colpan").attr("colspan",7);
         /**------------------ */
-        igv = parse_Int_subtt * 0.18; 
-
-        $("#igv_comp").html("S/. " +redondearExp(igv, 2));
+        //sub-total
+        $("#subtotal").html("S/. " + formato_miles(subtotal_all.toFixed(2))); 
+        $("#subtotal_compra").val(redondearExp(subtotal_all, 4));
+        //igv
+        $("#igv_comp").html("S/. " + formato_miles(igv.toFixed(2)));
         $("#igv_compra").val(redondearExp(igv, 4));
-
-        mtotal = parse_Int_subtt + igv; 
-
-        $("#total").html("S/. " + redondearExp(mtotal, 2));
-        $("#total_venta").val(redondearExp(mtotal, 4));
+        //total
+        $("#total").html("S/. " + formato_miles(total.toFixed(2)));
+        $("#total_venta").val(redondearExp(total, 4));
 
     } else {
+        var total=0;
+
+        array_clss_materiales.forEach((element,index) => {
+            // class_precio_compra =$(`.${element.class_cantidad}`).val(),
+            //console.log($(`.${element.class_preciocon_igv}`).val());
+            if ($(`.${element.class_precio_compra}`).val() != undefined) {
+                    
+                var cantidad = 0; var preciosin_igv=0; var descuento=0; var subtotal_p=0;
+
+                cantidad =parseFloat($(`.${element.class_cantidad}`).val()),
+                preciosin_igv =parseFloat($(`.${element.class_precio_compra}`).val()),
+                descuento =parseFloat($(`.${element.class_descuento}`).val()),
+
+                subtotal_p=(cantidad*preciosin_igv)-descuento;
+
+                total=total+subtotal_p;
+
+              //  console.log(cantidad);
+
+                $(`.subtotal_m_${element.id_material}`).html(subtotal_p.toFixed(2));
+            
+            }
+        });
+
         $("#igv_comp").html("S/. 0.00");
         $("#igv").val("");
+       // igv_compra
         $("#content-igv").hide();
         $("#content-t-comprob").removeClass("col-lg-4").addClass("col-lg-5");
-
+    
+        //subtotal
+        $("#subtotal").html("S/. " + formato_miles(total.toFixed(2))); 
+        $("#subtotal_compra").val(redondearExp(total, 4));
+        //igv
         $("#igv_compra").html("0.00");
 
-        $("#total").html("S/. " + formato_miles(redondearExp(subt, 2)));
-        $("#total_venta").val(formato_miles(redondearExp(subt, 4)));
+        //total
+        $("#total").html("S/. " + formato_miles(total.toFixed(2)));
+        $("#total_venta").val(redondearExp(total,4));
 
         //tabla
         $(".hidden").hide();

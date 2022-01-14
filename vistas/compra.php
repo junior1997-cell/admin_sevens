@@ -17,6 +17,7 @@
         ?>
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_compra.css" />
+        <link rel="stylesheet" href="../dist/css/carouselTicker.css" />
         <!-- Theme style -->
         <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
     </head>
@@ -58,12 +59,20 @@
 
                 <!-- Main content -->
                 <section class="content">
+
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card card-primary card-outline">
-                                    <div class="card-header">
+                                                            <!-- Start Main Top -->
+                            <div class="main-top">
+                                <div class="container-fluid">
+                                    <div class="row" >
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        
+                                        <div class="card-header">
                                         <h3 class="card-title">
+                                            
                                             <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
                                             <button type="button" class="btn bg-gradient-success" id="btn_agregar" onclick="ver_form_add();"><i class="fas fa-plus-circle"></i> Agregar</button>
                                             <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar();"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -75,6 +84,30 @@
                                             </button>
                                         </h3>
                                     </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <div class="text-slid-box  ">
+                                                <div id="offer-box" class="carouselTicker" style="float: right !important;">
+                                                    <ul class="offer-box">
+                                                        <li>
+                                                    <span style=" color: #ffffff;"> Horario de atencíon </span>
+                                                        </li>
+                                                        <li>
+                                                        <span style=" color: #ffffff;" > Lunes a Jueves de 8:00am a 1:00pm - 3:00pm a 6:00pm </span> 
+                                                        </li>
+                                                        <li>
+                                                        <span style=" color: #ffffff;">  Viernes  de 8:00am a 1:00pm </span> 
+                                                        </li>                            
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- End Main Top -->
+
                                     <!-- /.card-header -->
                                     <div class="card-body">
                                         <div id="div_tabla_compra">
@@ -269,7 +302,7 @@
                                                                         <th>Material</th>
                                                                         <th>Unidad</th>
                                                                         <th>Cantidad</th>
-                                                                        <th>Precio Compra</th>
+                                                                        <th>Precio Compra(Sin IGV)</th>
                                                                         <th class="hidden">IGV</th>
                                                                         <th class="hidden">Precio(Con IGV)</th>
                                                                         <th>Descuento</th>
