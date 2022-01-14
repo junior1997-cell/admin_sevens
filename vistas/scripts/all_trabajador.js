@@ -19,6 +19,7 @@ function init() {
   // Formato para telefono
   $("[data-mask]").inputmask();
 
+  // abrimos el navegador de archivos
   $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
   $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
 
@@ -27,6 +28,12 @@ function init() {
 
   $("#foto3_i").click(function() { $('#foto3').trigger('click'); });
   $("#foto3").change(function(e) { addImage(e,$("#foto3").attr("id")) });
+
+  $("#doc4_i").click(function() {  $('#doc4').trigger('click'); });
+  $("#doc4").change(function(e) {  addDocs(e,$("#doc4").attr("id")) });
+
+  $("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
+  $("#doc5").change(function(e) {  addDocs(e,$("#doc5").attr("id")) });
 
   //Initialize Select2 Elements
   $("#banco").select2({
@@ -126,6 +133,244 @@ function addImage(e,id) {
 	}
 }
 
+/* PREVISUALIZAR LOS DOCUMENTOS */
+function addDocs(e,id) {
+
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
+
+	var file = e.target.files[0], imageType = /application.*/;
+	
+	if (e.target.files[0]) {
+    
+		var sizeByte = file.size; console.log(file.type);
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(imageType)){
+			// return;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.pdf',
+        showConfirmButton: false,
+        timer: 1500
+      });			 
+      $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+
+		}else{
+
+			if (sizekiloBytes <= 40960) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+				 
+          // $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+
+          // cargamos la imagen adecuada par el archivo
+				  if ( extrae_extencion(file.name) == "doc") {
+            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+          } else {
+            if ( extrae_extencion(file.name) == "docx" ) {
+              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+            }else{
+              if ( extrae_extencion(file.name) == "pdf" ) {
+                $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+              }else{
+                if ( extrae_extencion(file.name) == "csv" ) {
+                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+                } else {
+                  if ( extrae_extencion(file.name) == "xls" ) {
+                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                  } else {
+                    if ( extrae_extencion(file.name) == "xlsx" ) {
+                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                    } else {
+                      if ( extrae_extencion(file.name) == "xlsm" ) {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                      } else {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } 
+					$("#"+id+"_nombre").html(''+
+						'<div class="row">'+
+              '<div class="col-md-12">'+
+                '<i>' + file.name + '</i>' +
+              '</div>'+
+              '<div class="col-md-12">'+
+                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+              '</div>'+
+            '</div>'+
+					'');
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'El documento: '+file.name.toUpperCase()+' es aceptado.',
+            showConfirmButton: false,
+            timer: 1500
+          });
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado.',
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+        $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+
+				$("#"+id).val("");
+			}
+		}
+	}else{
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    })
+		 
+    $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+		$("#"+id+"_nombre").html("");
+	}	
+}
+
+// recargar un doc para ver
+function re_visualizacion(id) {
+
+  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
+
+  pdffile     = document.getElementById("doc"+id+"").files[0];
+
+  var antiguopdf  = $("#doc_old_"+id+"").val();
+
+  if(pdffile === undefined){
+
+    if (antiguopdf == "") {
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Seleccione un documento',
+        showConfirmButton: false,
+        timer: 1500
+      })
+
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+		  $("#doc"+id+"_nombre").html("");
+
+    } else {
+      if ( extrae_extencion(antiguopdf) == "doc") {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      } else {
+        if ( extrae_extencion(antiguopdf) == "docx" ) {
+          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+        } else {
+          if ( extrae_extencion(antiguopdf) == "pdf" ) {
+            $("#doc"+id+"_ver").html('<iframe src="../dist/pdf/'+antiguopdf+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+            toastr.success('Documento vizualizado correctamente!!!')
+          } else {
+            if ( extrae_extencion(antiguopdf) == "csv" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+            } else {
+              if ( extrae_extencion(antiguopdf) == "xls" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+              } else {
+                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                } else {
+                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                  } else {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                  }
+                }
+              }
+            }
+          }
+        }
+      }      
+    }
+    // console.log('hola'+dr);
+  }else{
+
+    pdffile_url=URL.createObjectURL(pdffile);
+
+    // cargamos la imagen adecuada par el archivo
+    if ( extrae_extencion(pdffile.name) == "doc") {
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+    } else {
+      if ( extrae_extencion(pdffile.name) == "docx" ) {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      }else{
+        if ( extrae_extencion(pdffile.name) == "pdf" ) {
+          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+          toastr.success('Documento vizualizado correctamente!!!')
+        }else{
+          if ( extrae_extencion(pdffile.name) == "csv" ) {
+            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+          } else {
+            if ( extrae_extencion(pdffile.name) == "xls" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+            } else {
+              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+              } else {
+                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                } else {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                }
+              }
+            }
+          }
+        }
+      }
+    }  
+    	
+    console.log(pdffile);
+
+  }
+}
+
 function foto1_eliminar() {
 
 	$("#foto1").val("");
@@ -151,6 +396,38 @@ function foto3_eliminar() {
 	$("#foto3_i").attr("src", "../dist/img/default/dni_reverso.webp");
 
 	$("#foto3_nombre").html("");
+}
+
+// Eliminamos el doc 4
+function doc4_eliminar() {
+
+	$("#doc4").val("");
+
+	$("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc4_nombre").html("");
+}
+
+// Eliminamos el doc 5
+function doc5_eliminar() {
+
+	$("#doc5").val("");
+
+	$("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc5_nombre").html("");
+}
+
+function no_pdf() {
+  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
+}
+
+function dowload_pdf() {
+  toastr.success("El documento se descargara en breve!!")
+}
+
+function extrae_extencion(filename) {
+  return filename.split('.').pop();
 }
 
 function sueld_mensual(){

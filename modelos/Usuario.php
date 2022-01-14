@@ -13,8 +13,10 @@ Class Usuario
 	//Implementamos un método para insertar registros
 	public function insertar($trabajador, $cargo, $login, $clave, $permisos)
 	{
+		
 		// insertamos al usuario
 		$sql="INSERT INTO usuario ( idtrabajador, cargo, login, password) VALUES ('$trabajador', '$cargo', '$login', '$clave')";
+
 		// marcamos al trabajador como usuario
 		$sql2="UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";	
 		ejecutarConsulta($sql2);
@@ -108,7 +110,7 @@ Class Usuario
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idusuario)
 	{
-		$sql="SELECT * FROM usuario WHERE idusuario='$idusuario'";
+		$sql="SELECT u.idusuario, u.idtrabajador, u.cargo, u.login, u.password, u.estado, t.nombres FROM usuario AS u, trabajador AS t WHERE u.idusuario='$idusuario' AND u.idtrabajador = t.idtrabajador;";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -140,7 +142,7 @@ Class Usuario
 	//Seleccionar Trabajador Select2
 	public function select2_trabajador()
 	{
-		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1' ;";
+		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1' AND estado_usuario = '0' ;";
 		return ejecutarConsulta($sql);		
 	}
 }

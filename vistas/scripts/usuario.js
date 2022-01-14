@@ -1,4 +1,4 @@
-var tabla;
+var tabla; var estado_usuario_requerido = true;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -34,8 +34,8 @@ function init() {
     allowClear: true,
   });
   
-  $("#trabajador").val("null").trigger("change");
-  $("#cargo").val("Administrador").trigger("change");
+  // $("#trabajador").val("").trigger("change");
+  // $("#cargo").val("").trigger("change");
 
   // Formato para telefono
   $("[data-mask]").inputmask();   
@@ -56,17 +56,18 @@ function seleccion() {
 
 //Función limpiar
 function limpiar() {
-  //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) {   $("#trabajador").html(r);  });
+  estado_usuario_requerido = true;
 
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");
-  $("#trabajador").val("null").trigger("change"); 
+  $("#trabajador").val("").trigger("change"); 
   $("#trabajador_old").val(""); 
-  $("#cargo").val("Administrador").trigger("change"); 
+  $("#cargo").val("").trigger("change"); 
   $("#login").val("");
   $("#password").val("");
-  $("#password-old").val("");   
+  $("#password-old").val(""); 
+  
+  $(".modal-title").html("Agregar usuario");
   
   //Mostramos los permisos
   $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
@@ -139,8 +140,10 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
+  estado_usuario_requerido = false;
+  $(".modal-title").html("Editar usuario");
   $("#trabajador").val("").trigger("change"); 
-  $("#trabajador_c").html("(Nuevo) Trabajador");
+  $("#trabajador_c").html(`Trabajador <b class="text-danger">(Selecione nuevo) </b>`);
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
@@ -148,7 +151,9 @@ function mostrar(idusuario) {
 
   $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data); 
+
+    $(".modal-title").html(`Editar usuario: <b> ${data.nombres} </b> `);
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
@@ -253,18 +258,26 @@ $(function () {
   $("#form-usuario").validate({
     rules: {
       login: { required: true, minlength: 3, maxlength: 20 },
-      password: {minlength: 4, maxlength: 20 },
+      password: { minlength: 4, maxlength: 20 },
+      // estado_usuario_requerido? trabajador: { required: estado_usuario_requerido},:
+      cargo: { required: true }
       // terms: { required: true },
     },
     messages: {
       login: {
-        required: "Por favor ingrese un login.",
+        required: "Este campo es requerido.",
         minlength: "El login debe tener MÍNIMO 4 caracteres.",
         maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
       },
       password: {
         minlength: "La contraseña debe tener MÍNIMO 4 caracteres.",
         maxlength: "La contraseña debe tener como MÁXIMO 20 caracteres.",
+      },
+      trabajador: {
+        required: "Este campo es requerido."
+      },
+      cargo: {
+        required: "Este campo es requerido."
       },
     },
     
@@ -274,12 +287,12 @@ $(function () {
 
       error.addClass("invalid-feedback");
 
-      element.closest(".form-group").append(error);
+      element.closest(".form-group").append(error); 
     },
 
     highlight: function (element, errorClass, validClass) {
 
-      $(element).addClass("is-invalid");
+      $(element).addClass("is-invalid"); //console.log(estado_usuario_requerido);
     },
 
     unhighlight: function (element, errorClass, validClass) {

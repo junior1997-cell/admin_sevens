@@ -120,7 +120,7 @@
                             <input type="hidden" name="idusuario" id="idusuario" />
 
                             <!-- Trabajador -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-8">
                               <div class="form-group">
                                 <label for="trabajador" id="trabajador_c">Trabajador</label>                               
                                 <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="seleccion();" >
@@ -146,15 +146,15 @@
                             <!-- Login -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label for="login">Login <small>(Dato para ingresar al sistema)</small></label>
-                                <input type="text" name="login" class="form-control" id="login" placeholder="Login">
+                                <label for="login">Login <small class="text-danger">(Dato para ingresar al sistema)</small></label>
+                                <input type="text" name="login" class="form-control" id="login" placeholder="Login" autocomplete="off">
                               </div>
                             </div>
 
                             <!-- Contraseña -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label for="password">Contraseña <small>(por defecto "1234")</small></label>
+                                <label for="password">Contraseña <small class="text-danger">(por defecto "123456")</small></label>
                                 <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" autocomplete="off">
                                 <input type="hidden" name="password-old"   id="password-old"  >
                               </div>

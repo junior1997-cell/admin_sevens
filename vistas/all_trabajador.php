@@ -240,6 +240,60 @@
                             <input style="display: none;" type="file" name="foto3" id="foto3" accept="image/*" />
                             <input type="hidden" name="foto3_actual" id="foto3_actual" />
                             <div class="text-center" id="foto3_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                          </div>                           
+
+                          <!-- Pdf 4 -->
+                          <div class="col-md-6 col-lg-4  mt-2" >  
+                            <!-- linea divisoria -->
+                            <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>                             
+                            <div class="row">
+                              <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                <label for="Presupuesto" class="control-label" >CV Documentado</label>
+                              </div>
+                              <div class="col-md-6 text-center">
+                                <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i">
+                                  <i class="fas fa-file-upload"></i> Subir.
+                                </button>
+                                <input type="hidden" id="doc_old_4" name="doc_old_4" />
+                                <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" /> 
+                              </div>
+                              <div class="col-md-6 text-center">
+                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4);">
+                                  <i class="fa fa-eye"></i> PDF.
+                                </button>
+                              </div>
+                            </div>                              
+                            <div id="doc4_ver" class="text-center mt-4">
+                              <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                            </div>
+                            <div class="text-center" id="doc4_nombre"><!-- aqui va el nombre del pdf --></div>                              
+                          </div>
+                            
+                          <!-- Pdf 5 -->
+                          <div class="col-md-6 col-lg-4  mt-2" > 
+                            <!-- linea divisoria -->
+                            <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>                              
+                            <div class="row">
+                              <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                <label for="analisis-de-costos-unitarios" class="control-label" > CV No Documentado</label>
+                              </div>
+                              <div class="col-md-6 text-center">
+                                <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i">
+                                  <i class="fas fa-file-upload"></i> Subir.
+                                </button>
+                                <input type="hidden" id="doc_old_5" name="doc_old_5" />
+                                <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" /> 
+                              </div>
+                              <div class="col-md-6 text-center">
+                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5);">
+                                  <i class="fa fa-eye"></i> PDF.
+                                </button>
+                              </div>
+                            </div>                              
+                            <div id="doc5_ver" class="text-center mt-4">
+                              <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                            </div>
+                            <div class="text-center" id="doc5_nombre"><!-- aqui va el nombre del pdf --></div>                            
                           </div>
 
                         </div>
