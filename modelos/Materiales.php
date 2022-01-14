@@ -101,7 +101,7 @@ Class Materiales
 			c.nombre_color as nombre_color,
 			um.nombre_medida as nombre_medida
 			FROM producto p, unidad_medida as um, color as c  
-			WHERE um.idunidad_medida=p.idproducto AND c.idcolor=p.idcolor
+			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor
 			ORDER BY idproducto DESC";
 		return ejecutarConsulta($sql);		
 	}

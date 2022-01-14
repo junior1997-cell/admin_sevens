@@ -209,7 +209,7 @@ class Compra
     {
         $sql = "SELECT SUM(monto) as total_pago_compras
 		FROM pago_compras 
-		WHERE idcompra_proyecto='$idcompra_proyecto'";
+		WHERE idcompra_proyecto='$idcompra_proyecto' AND estado=1";
         return ejecutarConsultaSimpleFila($sql);
     }
 

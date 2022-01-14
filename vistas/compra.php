@@ -847,11 +847,11 @@
                                             <div class="card-body">
                                                 <div class="row" id="cargando-1-fomulario">
                                                     <!-- id proveedor -->
-                                                    <input type="text" name="idproveedor_pago" id="idproveedor_pago" />
+                                                    <input type="hidden" name="idproveedor_pago" id="idproveedor_pago" />
                                                     <!-- idcompras_proyecto -->
-                                                    <input type="text" name="idcompra_proyecto_p" id="idcompra_proyecto_p" />
+                                                    <input type="hidden" name="idcompra_proyecto_p" id="idcompra_proyecto_p" />
                                                     <!-- id compras -->
-                                                    <input type="text" name="idpago_compras" id="idpago_compras" />
+                                                    <input type="hidden" name="idpago_compras" id="idpago_compras" />
                                                     <!-- Beneficiario -->
                                                     <div class="col-lg-12">
                                                         <div class="form-group">

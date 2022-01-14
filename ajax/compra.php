@@ -187,6 +187,7 @@ switch ($_GET["op"]) {
         //Vamos a declarar un array
         $data = [];
         $c = "";
+        $cc = "";
         $nombre = "";
         $info = "";
         $icon = "";
@@ -213,6 +214,7 @@ switch ($_GET["op"]) {
                 $c="danger";
                 $nombre="Pagar";
                 $icon="dollar-sign";
+                $cc="danger";
             }else{
                 		
                 if ($saldo<$reg->monto_total && $saldo>"0" ) {
@@ -221,13 +223,15 @@ switch ($_GET["op"]) {
                     $c="warning";
                     $nombre="Pagar";
                     $icon="dollar-sign";
+                    $cc="warning";
                     } else {
-                        if ($saldo<="0") {
+                        if ($saldo<="0" || $saldo=="0") {
                             $estado = '<span class="text-center badge badge-success">Pagado</span>';
-                            $c="info";
+                            $c="success";
                             $nombre="Ver";
                             $info="info";
                             $icon="eye";
+                            $cc="success";
                         }else{
                             $estado = '<span class="text-center badge badge-success">Error</span>';
                         }
@@ -250,9 +254,8 @@ switch ($_GET["op"]) {
                     $icon .
                     ' nav-icon"></i> ' .
                     $nombre.
-                    '</button></div>';
-                    
-               // "9" => '<center> <button class="btn btn-'.$c.' btn-xs" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> </center>',
+                    '</button>'.' <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
+               
              } else {
                 $list_segun_estado_detracc =
                     '<div class="text-center"> <button class="btn btn-' .
@@ -267,7 +270,7 @@ switch ($_GET["op"]) {
                     $icon .
                     ' nav-icon"></i> ' .
                     $nombre .
-                    '</button></div>';
+                    '</button>'.' <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
             }
             $vercomprobantes="'$reg->idcompra_proyecto','$reg->imagen_comprobante'";
             //($reg->tipo_comprovante="Ninguno" || $reg->tipo_comprovante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
@@ -299,7 +302,7 @@ switch ($_GET["op"]) {
             "sEcho" => 1, //Información para el datatables
             "iTotalRecords" => count($data), //enviamos el total registros al datatable
             "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "aaData" => $data,
+            "data" => $data,
         ];
         echo json_encode($results);
 
