@@ -85,8 +85,7 @@
                                                         <th class="">Acciones</th>
                                                         <th>Fecha</th>
                                                         <th>Proveedor</th>
-                                                        <th data-toggle="tooltip" data-original-title="Tipo Comprobante">T. Comprobante</th>
-                                                        <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
+                                                        <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo. Num. - Comprob</th>
                                                         <th>Detracción</th>
                                                         <th>Total</th>
                                                         <th>Añadir pago</th>
@@ -102,8 +101,7 @@
                                                         <th class="">Acciones</th>
                                                         <th>Fecha</th>
                                                         <th>Proveedor</th>
-                                                        <th data-toggle="tooltip" data-original-title="Tipo Comprobante">T. Comprobante</th>
-                                                        <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
+                                                        <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo. Num.-Comprob</th>
                                                         <th>Detracción</th>
                                                         <th>Total</th>
                                                         <th>Añadir pago</th>

@@ -487,18 +487,18 @@ function listar(nube_idproyecto) {
             },
             "createdRow":function(row,data,ixdex) {
               //console.log(data);
-              if (data[8]>0) {
-                $('td', row).eq(8).css({
+              if (data[7]>0) {
+                $('td', row).eq(7).css({
                     'background-color':'#ffc107',
                     'color':'black',
                   });
-              }else if(data[8]==0){
-                $('td', row).eq(8).css({
+              }else if(data[7]==0){
+                $('td', row).eq(7).css({
                   'background-color':'#28a745',
                   'color':'white',
                 });
               }else{
-                $('td', row).eq(8).css({
+                $('td', row).eq(7).css({
                     'background-color':'#ff5252',
                     'color':'white',
                   }); 
@@ -517,6 +517,13 @@ function listar(nube_idproyecto) {
             bDestroy: true,
             iDisplayLength: 5, //Paginación
             order: [[0, "desc"]], //Ordenar (columna,orden)
+            columnDefs:[
+                {
+                    "targets": [ 9 ],
+                    "visible": false,
+                    "searchable": false
+                }
+            ]
         })
         .DataTable();
 

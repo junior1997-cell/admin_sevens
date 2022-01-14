@@ -196,7 +196,7 @@ switch ($_GET["op"]) {
         $function_tipo_comprob = "";
         $list_segun_estado_detracc = "";
         $tipo_comprovante1 = "";
-        $tipo_comprovante2 = "";
+        $num_comprob = "";
 
         while ($reg = $rspta->fetch_object()) {
             $rspta2 = $compra->pago_servicio($reg->idcompra_proyecto);
@@ -274,7 +274,8 @@ switch ($_GET["op"]) {
             }
             $vercomprobantes="'$reg->idcompra_proyecto','$reg->imagen_comprobante'";
             //($reg->tipo_comprovante="Ninguno" || $reg->tipo_comprovante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
-
+            
+            empty($reg->serie_comprovante) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg->serie_comprovante);
             $data[] = [
                 "0" =>
                     ($reg->estado == '1'
@@ -287,15 +288,17 @@ switch ($_GET["op"]) {
                         : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>') . ' ',
                 "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
                 "2" => $reg->razon_social,
-                "3" => $tipo_comprovante1,
-                "4" => empty($reg->serie_comprovante) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg->serie_comprovante),
-                "5" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
-                "6" => $reg->monto_total,
-                "7" => $list_segun_estado_detracc,
-                "8" => number_format($saldo, 2, '.', ','),
-                "9" => '<center> <button class="btn btn-info" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-                "10" => $reg->descripcion,
-                "11" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+                "3" => '<div class="user-block">
+                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$tipo_comprovante1.'</p></span>
+                <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
+                </div>',
+                "4" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
+                "5" => $reg->monto_total,
+                "6" => $list_segun_estado_detracc,
+                "7" => number_format($saldo, 2, '.', ','),
+                "8" => '<center> <button class="btn btn-info" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+                "9" => $reg->descripcion,
+                "10" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
             ];
         }
         $results = [
