@@ -8,6 +8,12 @@ function init() {
   //Mostramos los BANCOS
   $.post("../ajax/all_trabajador.php?op=select2Banco", function (r) { $("#banco").html(r); });
 
+  //Mostramos los tipo
+  $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#tipo").html(r); });
+
+  //Mostramos los ocupación
+  $.post("../ajax/ocupacion.php?op=selectocupacion", function (r) { $("#ocupacion").html(r); });
+
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
@@ -39,6 +45,18 @@ function init() {
   $("#banco").select2({
     theme: "bootstrap4",
     placeholder: "Selecione banco",
+    allowClear: true,
+  });
+  //Initialize Select2 Elements
+  $("#tipo").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione tipo",
+    allowClear: true,
+  });
+  //Initialize Select2 Elements
+  $("#ocupacion").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione Ocupación",
     allowClear: true,
   });
 }
@@ -456,7 +474,10 @@ function limpiar() {
   $("#nacimiento").val("");
   $("#edad").val("0");  $("#p_edad").html("0");    
   $("#c_bancaria").val("");  
+  $("#cci").val("");  
   $("#banco").val("").trigger("change");
+  $("#tipo").val("").trigger("change");
+  $("#ocupacion").val("").trigger("change");
   $("#titular_cuenta").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -654,10 +675,14 @@ function mostrar(idtrabajador) {
     $("#email").val(data.email);
     $("#nacimiento").val(data.fecha_nacimiento);
     $("#c_bancaria").val(data.cuenta_bancaria);
+    $("#cci").val(data.cci);
     $("#banco").val(data.idbancos).trigger("change");
+    $("#tipo").val(data.idtipo).trigger("change");
+    $("#ocupacion").val(data.idocupacion).trigger("change");
     $("#titular_cuenta").val(data.titular_cuenta);
     $("#idtrabajador").val(data.idtrabajador);
-
+    $("#ruc").val(data.ruc);
+//cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado
     if (data.imagen_perfil != "") {
 
 			$("#foto1_i").attr("src", "../dist/img/usuarios/" + data.imagen_perfil);
@@ -678,6 +703,21 @@ function mostrar(idtrabajador) {
 
 			$("#foto3_actual").val(data.imagen_dni_reverso);
 		}
+    //cvs
+    if (data.cv_documentado != "") {
+
+			$("#doc4_i").attr("src", "../dist/img/cv_documentado/" + data.cv_documentado);
+
+			$("#doc_old_4").val(data.cv_documentado);
+		}
+
+    if (data.cv_no_documentado != "") {
+
+			$("#doc5_i").attr("src", "../dist/img/cv_no_documentado/" + data.cv_no_documentado);
+
+			$("#doc_old_5").val(data.cv_no_documentado);
+		}
+
 
     edades();
   });
@@ -753,6 +793,9 @@ $(function () {
       cargo: { required: true},
       c_bancaria: { minlength: 14, maxlength: 14},
       banco: { required: true},
+      tipo: { required: true},
+      ocupacion: { required: true},
+      ruc: { minlength: 11, maxlength: 11},
 
       // terms: { required: true },
     },
@@ -793,8 +836,18 @@ $(function () {
         minlength: "El número documento debe tener 14 caracteres.",
         maxlength: "El número documento debe tener maximo 14 caracteres.",
       },
+      tipo: {
+        required: "Este campo es requerido",
+      },
+      ocupacion: {
+        required: "Este campo es requerido",
+      },
       banco: {
         required: "Este campo es requerido",
+      },
+      ruc: {
+        minlength: "El número documento debe tener 11 caracteres.",
+        maxlength: "El número documento debe tener maximo 11 caracteres.",
       },
     },
 

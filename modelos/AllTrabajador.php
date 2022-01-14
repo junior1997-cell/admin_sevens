@@ -10,21 +10,22 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3)
+    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado)
     {
-      $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso)
-      VALUES ( '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$c_bancaria', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3')";
+      $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado)
+      VALUES ( '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$c_bancaria', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$cci', '$tipo', '$ocupacion', '$ruc', '$cv_documentado', '$cv_nodocumentado')";
       
       return ejecutarConsulta($sql);
         
     }
 
-      //Implementamos un método para editar registros
-    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3)
+      //Implementamos un método para editar registros $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado
+    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado)
     {
       $sql="UPDATE trabajador SET idbancos='$banco', nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', 
       fecha_nacimiento='$nacimiento', edad='$edad', cuenta_bancaria='$c_bancaria', titular_cuenta='$titular_cuenta',direccion='$direccion', 
-      telefono='$telefono', email='$email', imagen_perfil ='$imagen1', imagen_dni_anverso ='$imagen2', imagen_dni_reverso ='$imagen3'
+      telefono='$telefono', email='$email', imagen_perfil ='$imagen1', imagen_dni_anverso ='$imagen2', imagen_dni_reverso ='$imagen3',
+      cci='$cci', idtipo='$tipo', idocupacion='$ocupacion', ruc='$ruc', cv_documentado='$cv_documentado', cv_no_documentado='$cv_nodocumentado'
       WHERE idtrabajador='$idtrabajador'";	
       
       return ejecutarConsulta($sql);
@@ -93,6 +94,13 @@
     public function obtenerImg($idtrabajador) {
 
       $sql = "SELECT imagen_perfil, imagen_dni_anverso, imagen_dni_reverso FROM trabajador WHERE idtrabajador='$idtrabajador'";
+
+      return ejecutarConsulta($sql);
+    }
+    // obtebnemos los DOCS para eliminar
+    public function obtenercv($idtrabajador) {
+
+      $sql = "SELECT cv_documentado, cv_no_documentado FROM trabajador WHERE idtrabajador='$idtrabajador'";
 
       return ejecutarConsulta($sql);
     }

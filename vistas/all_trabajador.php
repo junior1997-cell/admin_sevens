@@ -192,8 +192,15 @@
                               <input type="number" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
                             </div>
                           </div>
-                          <!-- banco -->
+                          <!-- CCI -->
                           <div class="col-lg-4">
+                            <div class="form-group">
+                              <label for="c_bancaria">CCI</label>
+                              <input type="number" name="cci" class="form-control" id="cci" placeholder="CCI" />
+                            </div>
+                          </div>
+                          <!-- banco -->
+                          <div class="col-lg-3">
                             <div class="form-group">
                               <label for="banco">Banco</label>
                               <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
@@ -203,10 +210,35 @@
                             </div>
                           </div>
                           <!-- Titular de la cuenta -->
-                          <div class="col-lg-4">
+                          <div class="col-lg-3">
                             <div class="form-group">
                               <label for="titular_cuenta">Titular de la cuenta</label>
                               <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
+                            </div>
+                          </div>
+                          <!-- tipo -->
+                          <div class="col-lg-3">
+                              <div class="form-group">
+                                  <label for="tipo">Tipo</label>
+                                  <select name="tipo" id="tipo" class="form-control select2" style="width: 100%;" >
+                                  </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                              </div>
+                          </div>
+                          <!-- ocupacion -->
+                          <div class="col-lg-3">
+                              <div class="form-group">
+                                  <label for="ocupacion">Ocupación</label>
+                                  <select name="ocupacion" id="ocupacion" class="form-control select2" style="width: 100%;" >
+                                  </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                              </div>
+                          </div>
+                          <!-- Ruc -->
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label for="ruc">Ruc</label>
+                              <input type="number" name="ruc" class="form-control" id="ruc" placeholder="Ingrese número de ruc" />
                             </div>
                           </div>
                           

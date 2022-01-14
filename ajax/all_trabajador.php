@@ -21,23 +21,31 @@
       $trabajador = new AllTrabajador();
 
       //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
-      $idtrabajador		= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
-      $nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
-      $tipo_documento	= isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-      $num_documento	= isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
-      $direccion		  = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
-      $telefono		    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
+      $idtrabajador	  	= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
+      $nombre 		      = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
+      $tipo_documento 	= isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
+      $num_documento  	= isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
+      $direccion		    = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
+      $telefono		      = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
       $nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
       $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";
       $c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
       $email			      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
       $banco			      = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
       $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
+      
+      $cci	          	= isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
+      $tipo	          	= isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
+      $ocupacion	      = isset($_POST["ocupacion"])? limpiarCadena($_POST["ocupacion"]):"";
+      $ruc	          	= isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
 
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
       $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
       $imagen3			    = isset($_POST["foto3"])? limpiarCadena($_POST["foto3"]):"";
-
+      //cvs
+      $cv_documentado			    = isset($_POST["doc4"])? limpiarCadena($_POST["doc4"]):"";
+      $cv_nodocumentado			  = isset($_POST["doc5"])? limpiarCadena($_POST["doc5"]):"";
+      //$cci,$tipo,$ocupacion,$ruc,$cv_documentado,$cv_nodocumentado
       switch ($_GET["op"]) {
 
         case 'guardaryeditar':
@@ -86,10 +94,38 @@
             move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/img/usuarios/" . $imagen3);
 						
 					}
+          // cv documentado
+          if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
+
+            $cv_documentado=$_POST["doc_old_4"]; $flat_cv1 = false;
+
+          } else {
+
+            $ext3 = explode(".", $_FILES["doc4"]["name"]); $flat_cv1 = true;
+            
+            $cv_documentado = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
+
+            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/img/cv_documentado/" .  $cv_documentado);
+            
+          }
+          // cv  no documentado
+          if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
+
+            $cv_nodocumentado=$_POST["doc_old_5"]; $flat_cv2 = false;
+
+          } else {
+
+            $ext3 = explode(".", $_FILES["doc5"]["name"]); $flat_cv2 = true;
+            
+            $cv_nodocumentado = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
+
+            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/img/cv_no_documentado/" . $cv_nodocumentado);
+            
+          }
 
           if (empty($idtrabajador)){
 
-            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3);
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3,$cci,$tipo,$ocupacion,$ruc,$cv_documentado,$cv_nodocumentado);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
   
@@ -124,16 +160,39 @@
 
               $datos_f3 = $trabajador->obtenerImg($idtrabajador);
 
-              $img3_ant = $datos_f3->fetch_object()->imagen_dni_reverso;
+              $img3_ant = $datos_f3->fetch_object()->cv_documentado;
 
               if ($img3_ant != "") {
 
                 unlink("../dist/img/usuarios/" . $img3_ant);
               }
             }
+            //cvs
+            if ($flat_cv1 == true) {
+
+              $datos_cv1 = $trabajador->obtenercv($idtrabajador);
+
+              $cv1_ant = $datos_cv1->fetch_object()->cv_documentado;
+
+              if ($cv1_ant != "") {
+
+                unlink("../dist/img/cv_documentado/" . $cv1_ant);
+              }
+            }
+            if ($flat_cv2 == true) {
+
+              $datos_cv2 = $trabajador->obtenercv($idtrabajador);
+
+              $cv2_ant = $datos_cv2->fetch_object()->cv_no_documentado;
+
+              if ($cv2_ant != "") {
+
+                unlink("../dist/img/cv_no_documentado/" . $cv2_ant);
+              }
+            }
 
             // editamos un trabajador existente
-            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3);
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3,$cci,$tipo,$ocupacion,$ruc,$cv_documentado,$cv_nodocumentado);
             
             echo $rspta ? "ok" : "Trabajador no se pudo actualizar";
           }            
