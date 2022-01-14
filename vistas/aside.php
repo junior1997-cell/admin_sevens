@@ -170,7 +170,7 @@
           <li class="nav-item">
             <a href="trabajador.php" class="nav-link" id="mTrabajador">
               <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
-              <img src="../dist/svg/constructor-ico.svg " class="nav-icon" alt="" style="width: 21px !important;" >
+              <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
               <p>
                 Trabajadores
               </p>
@@ -231,7 +231,9 @@
           <!-- SERVICIO -->       
           <li class="nav-item">
             <a href="servicio_maquina.php" class="nav-link" id="mServicio">
-              <i class="nav-icon fas fa-tractor"></i>
+              <!-- <i class="nav-icon fas fa-tractor"></i> -->
+              <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+
               <p>
                 Servicio - Maquina
                 <span class="badge badge-info right">2</span>
@@ -244,7 +246,9 @@
           <!-- EQUIPOS -->       
           <li class="nav-item">
             <a href="servicio_equipos.php" class="nav-link" id="mEquipo">
-              <i class="nav-icon fas fa-tractor"></i>
+              <!-- <i class="nav-icon fas fa-tractor"></i> -->
+              <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+
               <p>
                 Servicio - Equipos
                 <span class="badge badge-info right">2</span>

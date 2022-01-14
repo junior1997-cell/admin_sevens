@@ -345,7 +345,7 @@
                 </div>',
               "2"=> '<div class="asignar_paint_'.$reg->idproyecto.'">  <span class="description" >'.$reg->nombre_codigo.'</span> </div>' ,
               "3"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $ubicacion.'</div>',
-              "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'">'. $reg->costo.'</div>',
+              "4"=> '<div class="asignar_paint_'.$reg->idproyecto.'"> <div class="justify-content-between"><span><b> S/. </b></span> <span >'. number_format($reg->costo, 2, '.', ',').'</span></div> </div>',
               "5"=>'<div class="asignar_paint_'.$reg->idproyecto.'">
                 <center>
                   <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >

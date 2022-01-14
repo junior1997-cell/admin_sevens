@@ -19,7 +19,7 @@ ob_start();
       //$idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
       //$idproyecto		          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       //$idasistencia_trabajador= isset($_POST["idasistencia_trabajador"])? limpiarCadena($_POST["idasistencia_trabajador"]):"";      
-      //$fecha	                = isset($_POST["fecha"])? limpiarCadena($_POST["fecha"]):"";
+      $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
 
       
       switch ($_GET["op"]){
@@ -40,7 +40,7 @@ ob_start();
 
           if (empty($_POST["idsumas_adicionales"])) {
 
-            $rspta = $asist_trabajador->insertar_adicionales( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+            $rspta = $asist_trabajador->insertar_adicionales( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$detalle_adicional);
 
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario"; 
 
