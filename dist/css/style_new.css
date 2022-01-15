@@ -201,21 +201,14 @@ table th {
   padding: 0px !important;
 }
 
-.w-px-300{
-  width: 300px !important;
-}
-
-.w-px-600{
-  width: 600px !important;
+.hidden{
+  display: none;
 }
 
 .w-px-35{
   width: 35px !important;
 }
 
-.hidden{
-  display: none;
-}
 .w-px-30{
   width: 30px !important;
 }
@@ -226,6 +219,22 @@ table th {
 
 .w-px-45{
   width: 45px !important;
+}
+
+.w-px-70{
+  width: 70px !important;
+}
+
+.w-px-135{
+  width: 135px !important;
+}
+
+.w-px-300{
+  width: 300px !important;
+}
+
+.w-px-600{
+  width: 600px !important;
 }
 
 .w-xy-20{

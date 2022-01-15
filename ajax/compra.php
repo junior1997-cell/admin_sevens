@@ -461,7 +461,7 @@ switch ($_GET["op"]) {
             //empty($reg->ficha_tecnica)?$ficha_tecnica='si':$ficha_tecnica='no';
             $datas[] = [
                 "0" =>
-                    '<button class="btn btn-warning" onclick="agregarDetalle(' .
+                    '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' .
                     $reg->idproducto .
                     ',\'' .
                     $reg->nombre .
