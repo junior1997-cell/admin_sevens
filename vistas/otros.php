@@ -216,7 +216,7 @@
                     </div>
                     <div class="col-12">
                         <div class="row">
-                            <!--====Unidad de Ocupación==-->
+                            <!--====Ocupación==-->
                             <div class="col-6">
                                 <!-- Content Header (Page header) -->
                                 <section class="content-header">
@@ -270,7 +270,7 @@
                                 </section>
                                 <!-- /.content -->
                             </div>
-                            <!--====Unidad de tipo==-->
+                            <!--==== tipo==-->
                             <div class="col-6">
                                 <!-- Content Header (Page header) -->
                                 <section class="content-header">
@@ -325,6 +325,68 @@
                                 <!-- /.content -->
                             </div>
                         </div>
+                    </div>
+                    <!--====Cargo==-->
+                    <div class="col-6">
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <h1>Cargos</h1>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ol class="breadcrumb float-sm-right">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item active">Cargos</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+
+                        <!-- Main content -->
+
+                        <!-- Main content -->
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-cargo" onclick="limpiar_cargo();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                                            Admnistrar Cargos.
+                                        </h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <table id="tabla-cargo" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="">Acciones</th>
+                                                    <th>Tipo</th>
+                                                    <th>Nombre</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th class="">Acciones</th>
+                                                    <th>Tipo</th>
+                                                    <th>Nombre</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+                        <!-- /.content -->
                     </div>
                 </div>
 
@@ -575,6 +637,63 @@
                         </div>
                     </div>
                 </div>
+                <!--================
+                    modals-cargo
+                ======================-->
+                <div class="modal fade" id="modal-agregar-cargo">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Cargo</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <!-- form start -->
+                                <form id="form-cargo" name="form-cargo" method="POST">
+                                    <div class="card-body">
+                                        <div class="row" id="cargando-1-fomulario">
+                                            <!-- id idunidad_medida -->
+                                            <input type="hidden" name="idcargo_trabajador" id="idcargo_trabajador" />
+                                             <!-- tipo -->
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="idtipo_trabjador">Tipo trabajador</label>
+                                                    <select name="idtipo_trabjador" id="idtipo_trabjador" class="form-control select2" style="width: 100%;" >
+                                                    </select>
+                                                    <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                                </div>
+                                            </div>
+                                            <!-- nombre_trabajador -->
+                                            <div class="col-lg-6 class_pading">
+                                                <div class="form-group">
+                                                    <label for="nombre_cargo">Nombre Cargo</label>
+                                                    <input type="text" name="nombre_cargo" id="nombre_cargo" class="form-control"  placeholder="Nombre Cargo" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                            <div class="col-lg-12 text-center">
+                                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                                <br />
+                                                <h4>Cargando...</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <button type="submit" style="display: none;" id="submit-form-cargo">Submit</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_cargo();">Close</button>
+                                <button type="submit" class="btn btn-success" id="guardar_registro_cargo">Guardar Cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <?php
@@ -617,6 +736,7 @@
         <script type="text/javascript" src="scripts/unidades_m.js"></script>
         <script type="text/javascript" src="scripts/ocupacion.js"></script>
         <script type="text/javascript" src="scripts/tipo.js"></script>
+        <script type="text/javascript" src="scripts/cargo.js"></script>
 
         <script>
             $(function () {

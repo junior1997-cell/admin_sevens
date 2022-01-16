@@ -83,9 +83,22 @@
     //Implementar un método para listar los registros
     public function listar()
     {
-      $sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.cuenta_bancaria, t.telefono, t.imagen_perfil, t.estado, b.nombre AS banco 
-      FROM trabajador AS t, bancos AS b
-      WHERE t.idbancos = b.idbancos; ";
+      $sql="SELECT 
+      t.idtrabajador, 
+      t.nombres, 
+      t.tipo_documento, 
+      t.numero_documento, 
+      t.fecha_nacimiento, 
+      t.edad, 
+      t.cuenta_bancaria, 
+      t.telefono, 
+      t.imagen_perfil, 
+      t.estado, 
+      b.nombre AS banco,
+      tp.nombre_tipo AS nombre_tipo,
+      o.nombre_ocupacion AS nombre_ocupacion 
+      FROM trabajador AS t, bancos AS b, tipo as tp, ocupacion as o
+      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND t.idtipo= tp.idtipo; ";
 
       return ejecutarConsulta($sql);		
     }

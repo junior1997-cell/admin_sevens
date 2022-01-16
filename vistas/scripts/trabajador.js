@@ -46,9 +46,9 @@ function sueld_mensual(){
 
   var sueldo_mensual = $('#sueldo_mensual').val();
 
-  var sueldo_diario=(sueldo_mensual/30).toFixed(1);
+  var sueldo_diario=(sueldo_mensual/30).toFixed(2);
 
-  var sueldo_horas=(sueldo_diario/8).toFixed(1);
+  var sueldo_horas=(sueldo_diario/8).toFixed(2);
 
   $("#sueldo_diario").val(sueldo_diario);
 

@@ -66,9 +66,11 @@
                           <tr>
                             <th class="">Aciones</th>
                             <th>Nombres</th>
-                            <th>Cuenta bancaria</th>
+                            <th>Tipo</th>
+                            <th>Ocupación</th>
                             <th>Telefono</th>
                             <th>Fecha Nac. / Edad</th>
+                            <th>Cuenta bancaria</th>
                             <th>Estado</th>
                           </tr>
                         </thead>
@@ -77,9 +79,11 @@
                           <tr>
                             <th>Aciones</th>
                             <th>Nombres</th>
-                            <th>Cuenta bancaria</th>
+                            <th>Tipo</th>
+                            <th>Ocupación</th>
                             <th>Telefono</th>
                             <th>Fecha Nac. / Edad</th>
+                            <th>Cuenta bancaria</th>
                             <th>Estado</th>
                           </tr>
                         </tfoot>

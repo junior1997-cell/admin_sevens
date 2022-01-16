@@ -244,10 +244,12 @@
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "3"=>$reg->telefono,
-              "4"=>$reg->fecha_nacimiento.' : '.$reg->edad,
-              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              "2"=> $reg->nombre_tipo,
+              "3"=> $reg->nombre_ocupacion,
+              "4"=>$reg->telefono,
+              "5"=>$reg->fecha_nacimiento.' : '.$reg->edad,
+              "6"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
