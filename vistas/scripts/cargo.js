@@ -107,7 +107,7 @@ function mostrar_cargo(idcargo_trabajador) {
   $("#modal-agregar-cargo").modal("show")
   $("#idtipo_trabjador").val("null").trigger("change");
 
-  $.post("../ajax/cargo.php?op=mostrar", { idcargo_trabajador: idcargo_trabajador }, function (data, status) {
+  $.post("../ajax/cargo.php?op=mostrar", {idcargo_trabajador: idcargo_trabajador}, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
@@ -119,6 +119,7 @@ function mostrar_cargo(idcargo_trabajador) {
     $("#idtipo_trabjador").val(data.idtipo_trabjador).trigger("change");
 
   });
+
 }
 
 //Función para desactivar registros

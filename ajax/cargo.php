@@ -7,7 +7,7 @@ require_once "../modelos/Cargo.php";
 
 $cargo=new Cargo();
 
-$idcargo_trabajador =isset($_POST["idcargo_trabajador "])? limpiarCadena($_POST["idcargo_trabajador "]):"";
+$idcargo_trabajador =isset($_POST["idcargo_trabajador"])? limpiarCadena($_POST["idcargo_trabajador"]):"";
 $idtipo_trabjador  =isset($_POST["idtipo_trabjador"])? limpiarCadena($_POST["idtipo_trabjador"]):"";
 $nombre=isset($_POST["nombre_cargo"])? limpiarCadena($_POST["nombre_cargo"]):"";
 
@@ -34,6 +34,7 @@ switch ($_GET["op"]){
 	break;
 
 	case 'mostrar':
+		//$idcargo_trabajador='1';
 		$rspta=$cargo->mostrar($idcargo_trabajador);
  		//Codificar el resultado utilizando json
  		echo json_encode($rspta);
@@ -46,11 +47,11 @@ switch ($_GET["op"]){
 
  		while ($reg=$rspta->fetch_object()){
  			$data[]=array(
- 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_cargo('.$reg->idcargo_trabajador .')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar_cargo('.$reg->idcargo_trabajador .')"><i class="far fa-trash-alt"></i></button>':
- 					'<button class="btn btn-warning btn-sm" onclick="mostrar_cargo('.$reg->idcargo_trabajador .')"><i class="fa fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-primary btn-sm" onclick="activar_cargo('.$reg->idcargo_trabajador .')"><i class="fa fa-check"></i></button>',
- 				"1"=>$reg->idtipo_trabjador,
+ 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_cargo('.$reg->idcargo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_cargo('.$reg->idcargo_trabajador.')"><i class="far fa-trash-alt"></i></button>':
+ 					'<button class="btn btn-warning btn-sm" onclick="mostrar_cargo('.$reg->idcargo_trabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-primary btn-sm" onclick="activar_cargo('.$reg->idcargo_trabajador.')"><i class="fa fa-check"></i></button>',
+ 				"1"=>$reg->nombre_tipo_t,
  				"2"=>$reg->nombre,
  				"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
  				'<span class="text-center badge badge-danger">Desactivado</span>'
