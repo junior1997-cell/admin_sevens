@@ -50,53 +50,83 @@ class Compra
     }
 
     //Implementamos un método para editar registros
-    /*public function editar($idcompra_por_proyecto, $trabajador_old, $trabajador, $cargo, $login, $clave, $permisos){
-		if (!empty($trabajador) ) {
+    public function editar($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto){
+		 			
+		 
 
-			$sql="UPDATE compra_por_proyecto SET idtrabajador='$trabajador', cargo='$cargo', login='$login', password='$clave' WHERE idcompra_por_proyecto='$idcompra_por_proyecto'";
-			
-			// desmarcamos al trabajador old como compra_por_proyecto
-			$sql3="UPDATE trabajador SET estado_compra_por_proyecto='0' WHERE idtrabajador='$trabajador_old';";
-			ejecutarConsulta($sql3);
-			// marcamos al trabajador new como compra_por_proyecto
-			$sql4="UPDATE trabajador SET estado_compra_por_proyecto='1' WHERE idtrabajador='$trabajador';";
-			ejecutarConsulta($sql4);
-		} else {
-			$sql="UPDATE compra_por_proyecto SET idtrabajador='$trabajador_old', cargo='$cargo', login='$login', password='$clave' WHERE idcompra_por_proyecto='$idcompra_por_proyecto'";
-		}
-		
-				 	
-		
-		
-		$num_elementos=0;	$sw=true;
-
-		if ($permisos != "" ) {
-
-			ejecutarConsulta($sql);
+		if ($idcompra_proyecto != "" ) {			 
 
 			//Eliminamos todos los permisos asignados para volverlos a registrar
-			$sqldel="DELETE FROM compra_por_proyecto_permiso WHERE idcompra_por_proyecto='$idcompra_por_proyecto'";
-
+			$sqldel="DELETE FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
 			ejecutarConsulta($sqldel);
 
-			while ($num_elementos < count($permisos)){
-
-				$sql_detalle = "INSERT INTO compra_por_proyecto_permiso(idcompra_por_proyecto, idpermiso) VALUES('$idcompra_por_proyecto', '$permisos[$num_elementos]')";
-				ejecutarConsulta($sql_detalle) or $sw = false;
-				$num_elementos=$num_elementos + 1;
-			}
+            $sql = "UPDATE compra_por_proyecto SET idproyecto = '$idproyecto', idproveedor = '$idproveedor', fecha_compra = '$fecha_compra',
+            tipo_comprovante = '$tipo_comprovante', serie_comprovante = '$serie_comprovante', descripcion = '$descripcion',
+            monto_total = '$total_venta', subtotal_compras_proyect = '$subtotal_compra', igv_compras_proyect = '$igv_compra', 
+            estado_detraccion = '$estado_detraccion' WHERE idcompra_proyecto = '$idcompra_proyecto'";
+            ejecutarConsulta($sql);
+    
+            $num_elementos = 0;
+            $sw = true;
+    
+            while ($num_elementos < count($idproducto)) {
+                $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto,idproducto,unidad_medida,cantidad,precio_venta,igv,precio_igv,descuento,ficha_tecnica_producto) 
+                VALUES ('$idcompra_proyecto','$idproducto[$num_elementos]','$unidad_medida[$num_elementos]','$cantidad[$num_elementos]','$precio_sin_igv[$num_elementos]','$precio_igv[$num_elementos]','$precio_total[$num_elementos]','$descuento[$num_elementos]','$ficha_tecnica_producto[$num_elementos]')";
+                ejecutarConsulta($sql_detalle) or ($sw = false);
+    
+                $num_elementos = $num_elementos + 1;
+            }			 
 		}
 
-		if ($permisos != "") {
+		if ($idcompra_proyecto != "") { return $sw;	} else { return false; }
+	}
 
-			return $sw;
+    public function mostrar_compra_para_editar($id_compras_x_proyecto)
+    {
+        $sql = "SELECT  cpp.idcompra_proyecto as idcompra_proyecto, 
+         cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, 
+         cpp.tipo_comprovante as tipo_comprobante, 
+         cpp.serie_comprovante as serie_comprobante, 
+         cpp.descripcion as descripcion, 
+         cpp.subtotal_compras_proyect as subtotal_compras, 
+         cpp.igv_compras_proyect as igv_compras_proyect, 
+         cpp.monto_total as monto_total,
+         cpp.estado as estado
+         FROM compra_por_proyecto as cpp
+         WHERE idcompra_proyecto='$id_compras_x_proyecto';";
 
-		} else {
+        $compra = ejecutarConsultaSimpleFila($sql);
+        
+        $sql_2 = "SELECT 	dp.idproducto as idproducto,
+		dp.ficha_tecnica_producto as ficha_tecnica,
+		dp.cantidad as cantidad,
+		dp.precio_venta as precio_venta, dp.igv,
+		dp.descuento as descuento,
+		p.nombre as nombre_producto, p.imagen,
+        um.nombre_medida, c.nombre_color
+		FROM detalle_compra AS dp, producto AS p, unidad_medida AS um, color AS c
+		WHERE idcompra_proyecto='$id_compras_x_proyecto' AND  dp.idproducto=p.idproducto AND P.idcolor = c.idcolor AND p.idunidad_medida = um.idunidad_medida;";
 
-			return ejecutarConsulta($sql);
-		}
-	}*/
+        $producto = ejecutarConsultaArray($sql_2);
 
+        $results = array(
+			"idcompra_x_proyecto" =>$compra['idcompra_proyecto'],
+            "idproyecto" =>$compra['idproyecto'],
+            "idproveedor" =>$compra['idproveedor'],
+			"fecha_compra" =>$compra['fecha_compra'],
+			"tipo_comprobante" =>$compra['tipo_comprobante'],
+            "serie_comprobante" =>$compra['serie_comprobante'],
+            "descripcion" =>$compra['descripcion'],
+            "subtotal_compras" =>$compra['subtotal_compras'],
+            "igv_compras_proyect" =>$compra['igv_compras_proyect'],
+            "monto_total" =>$compra['monto_total'],
+            "estado" =>$compra['estado'],
+			"producto" =>$producto,
+		);
+
+        return $results ;
+    }
+    
     //Implementamos un método para desactivar categorías
     public function desactivar($idcompra_proyecto)
     {
@@ -143,6 +173,7 @@ class Compra
 		ORDER BY cpp.idcompra_proyecto DESC ";
         return ejecutarConsulta($sql);
     }
+
     //Implementar un método para listar los registros x proveedor
     public function listar_compraxporvee($nube_idproyecto)
     {
@@ -202,7 +233,6 @@ class Compra
 
         return ejecutarConsulta($sql);
     }
-
 
     //pago servicio
     public function pago_servicio($idcompra_proyecto)

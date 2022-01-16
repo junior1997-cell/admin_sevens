@@ -64,60 +64,42 @@ $doc1 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
 $doc_old_1 = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
 
 switch ($_GET["op"]) {
-    case 'guardaryeditarcompra':
-        if (!isset($_SESSION["nombre"])) {
-            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    case 'guardaryeditarcompra': 
+        if (empty($idcompra_proyecto)) {
+            $rspta = $compra->insertar(
+                $idproyecto,
+                $idproveedor,
+                $fecha_compra,
+                $tipo_comprovante,
+                $serie_comprovante,
+                $descripcion,
+                $total_venta,
+                $subtotal_compra,
+                $igv_compra,
+                $estado_detraccion,
+                $_POST["idproducto"],
+                $_POST["unidad_medida"],
+                $_POST["cantidad"],
+                $_POST["precio_sin_igv"],
+                $_POST["precio_igv"],
+                $_POST["precio_con_igv"],
+                $_POST["descuento"],
+                $_POST["ficha_tecnica_producto"]
+            );
+            //precio_sin_igv,precio_igv,precio_total
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
         } else {
-            //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['acceso'] == 1) {
-                $clavehash = "";
+            $rspta=$compra->editar($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante,
+            $serie_comprovante, $descripcion, $total_venta, $subtotal_compra,
+            $igv_compra, $estado_detraccion, $_POST["idproducto"],
+            $_POST["unidad_medida"],  $_POST["cantidad"],
+            $_POST["precio_sin_igv"], $_POST["precio_igv"],
+            $_POST["precio_con_igv"], $_POST["descuento"],
+            $_POST["ficha_tecnica_producto"]);
 
-                if (!empty($clave)) {
-                    //Hash SHA256 en la contraseña
-                    $clavehash = hash("SHA256", $clave);
-                } else {
-                    if (!empty($clave_old)) {
-                        // enviamos la contraseña antigua
-                        $clavehash = $clave_old;
-                    } else {
-                        //Hash SHA256 en la contraseña
-                        $clavehash = hash("SHA256", "1234");
-                    }
-                }
-
-                if (empty($idusuario)) {
-                    $rspta = $compra->insertar(
-                        $idproyecto,
-                        $idproveedor,
-                        $fecha_compra,
-                        $tipo_comprovante,
-                        $serie_comprovante,
-                        $descripcion,
-                        $total_venta,
-                        $subtotal_compra,
-                        $igv_compra,
-                        $estado_detraccion,
-                        $_POST["idproducto"],
-                        $_POST["unidad_medida"],
-                        $_POST["cantidad"],
-                        $_POST["precio_sin_igv"],
-                        $_POST["precio_igv"],
-                        $_POST["precio_total"],
-                        $_POST["descuento"],
-                        $_POST["ficha_tecnica_producto"]
-                    );
-                    //precio_sin_igv,precio_igv,precio_total
-                    echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
-                } else {
-                    //	$rspta=$compra->editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clavehash, $permiso);
-
-                    echo $rspta ? "ok" : "Usuario no se pudo actualizar";
-                }
-                //Fin de las validaciones de acceso
-            } else {
-                require 'noacceso.php';
-            }
-        }
+            echo $rspta ? "ok" : "Usuario no se pudo actualizar";
+        }        
+             
     break;
     case 'guardaryeditar_comprobante':
         // imgen de perfil
@@ -279,13 +261,11 @@ switch ($_GET["op"]) {
             $data[] = [
                 "0" =>
                     ($reg->estado == '1'
-                        ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
-                            $reg->idcompra_proyecto .
-                            ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
-                            ' <button class="btn btn-danger btn-sm"  onclick="anular(' .
-                            $reg->idcompra_proyecto .
-                            ')" data-toggle="tooltip" data-original-title="Anular venta"><i class="far fa-trash-alt"></i></button>'
-                        : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>') . ' ',
+                        ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                            ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
+                            ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Anular venta"><i class="far fa-trash-alt"></i></button>'
+                        : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>') . 
+                        ' ',
                 "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
                 "2" => $reg->razon_social,
                 "3" => '<div class="user-block">
@@ -422,20 +402,21 @@ switch ($_GET["op"]) {
     break;
 
     case 'ver_compra':
-        if (!isset($_SESSION["nombre"])) {
-            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-        } else {
-            //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
-                //$idpago_compras ='1';
-                $rspta = $compra->ver_compra($idcompra_proyecto);
-                //Codificar el resultado utilizando json
-                echo json_encode($rspta);
-                //Fin de las validaciones de acceso
-            } else {
-                require 'noacceso.php';
-            }
-        }
+        
+        //$idpago_compras ='1';
+        $rspta = $compra->ver_compra($idcompra_proyecto);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta);
+        //Fin de las validaciones de acceso
+             
+    break;
+
+    case 'ver_compra_editar':
+        
+        $rspta = $compra->mostrar_compra_para_editar($idcompra_proyecto);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta);
+                     
     break;
 
     case 'listarMaterialescompra':
