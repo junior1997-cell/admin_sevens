@@ -198,7 +198,7 @@
                                 <div class="row" id="cargando-1-fomulario">
                                   <!-- id proyecto -->
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
-                                  <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" />
+                                  <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
 
                                   <!-- Tipo de Empresa -->
                                   <div class="col-lg-7">
@@ -230,8 +230,8 @@
                                     <div class="form-group">
                                       <label for="tipo_comprovante">Tipo Comprobante</label>
                                       <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
-                                        <option selected value="Ninguno">Ninguno</option>
-                                        <option selected value="Boleta">Boleta</option>
+                                        <option value="Ninguno">Ninguno</option>
+                                        <option value="Boleta">Boleta</option>
                                         <option value="Factura">Factura</option>
                                         <option value="Nota_de_venta">Nota de venta</option>
                                       </select>
@@ -307,13 +307,13 @@
                                         </th>
                                         <th>
                                           <h5 class="text-right" id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
-                                          <input type="text" name="subtotal_compra" id="subtotal_compra" />
+                                          <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
 
                                           <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
-                                          <input type="text" name="igv_compra" id="igv_compra" />
+                                          <input type="hidden" name="igv_compra" id="igv_compra" />
                                           <b>
                                             <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
-                                            <input type="text" name="total_venta" id="total_venta" />
+                                            <input type="hidden" name="total_venta" id="total_venta" />
                                           </b>
                                         </th>
                                       </tfoot>
