@@ -21,7 +21,7 @@ function init() {
 //Función limpiar
 function limpiar_tipo() {
   //Mostramos los Materiales
-  $("#idtipo").val("");
+  $("#idtipo_trabajador").val("");
   $("#nombre_tipo").val(""); 
 }
 
@@ -84,6 +84,7 @@ function guardaryeditar_tipo(e) {
 				limpiar();
 
         $("#modal-agregar-tipo").modal("hide");
+        $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
 
 			}else{
 
@@ -93,25 +94,25 @@ function guardaryeditar_tipo(e) {
   });
 }
 
-function mostrar_tipo(idtipo) {
-  console.log(idtipo);
+function mostrar_tipo(idtipo_trabajador) {
+  console.log(idtipo_trabajador);
 
   $("#modal-agregar-tipo").modal("show")
 
-  $.post("../ajax/tipo.php?op=mostrar_tipo", { idtipo: idtipo }, function (data, status) {
+  $.post("../ajax/tipo.php?op=mostrar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
-    $("#idtipo").val(data.idtipo);
-    $("#nombre_tipo").val(data.nombre_tipo);
+    $("#idtipo_trabajador").val(data.idtipo_trabajador);
+    $("#nombre_tipo").val(data.nombre);
   });
 }
 
 //Función para desactivar registros
-function desactivar_tipo(idtipo) {
+function desactivar_tipo(idtipo_trabajador) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar el registro?",
     text: "Tipo",
@@ -122,18 +123,20 @@ function desactivar_tipo(idtipo) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/tipo.php?op=desactivar_tipo", { idtipo: idtipo }, function (e) {
+      $.post("../ajax/tipo.php?op=desactivar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
         tabla_tipo.ajax.reload();
+        
+        $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
       });      
     }
   });   
 }
 
 //Función para activar registros
-function activar_tipo(idtipo) {
+function activar_tipo(idtipo_trabajador) {
   Swal.fire({
     title: "¿Está Seguro de  Activar el registro?",
     text: "Tipo",
@@ -144,11 +147,13 @@ function activar_tipo(idtipo) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/tipo.php?op=activar_tipo", { idtipo: idtipo }, function (e) {
+      $.post("../ajax/tipo.php?op=activar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
         tabla_tipo.ajax.reload();
+        
+        $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
       });
       
     }

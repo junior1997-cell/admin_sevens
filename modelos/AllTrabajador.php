@@ -12,7 +12,8 @@
     //Implementamos un método para insertar registros
     public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado)
     {
-      $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado)
+      //var_dump($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
+      $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, cci, idtipo_trabajador , idocupacion, ruc, cv_documentado, cv_no_documentado)
       VALUES ( '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$c_bancaria', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$cci', '$tipo', '$ocupacion', '$ruc', '$cv_documentado', '$cv_nodocumentado')";
       
       return ejecutarConsulta($sql);
@@ -25,7 +26,7 @@
       $sql="UPDATE trabajador SET idbancos='$banco', nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', 
       fecha_nacimiento='$nacimiento', edad='$edad', cuenta_bancaria='$c_bancaria', titular_cuenta='$titular_cuenta',direccion='$direccion', 
       telefono='$telefono', email='$email', imagen_perfil ='$imagen1', imagen_dni_anverso ='$imagen2', imagen_dni_reverso ='$imagen3',
-      cci='$cci', idtipo='$tipo', idocupacion='$ocupacion', ruc='$ruc', cv_documentado='$cv_documentado', cv_no_documentado='$cv_nodocumentado'
+      cci='$cci', idtipo_trabajador ='$tipo', idocupacion='$ocupacion', ruc='$ruc', cv_documentado='$cv_documentado', cv_no_documentado='$cv_nodocumentado'
       WHERE idtrabajador='$idtrabajador'";	
       
       return ejecutarConsulta($sql);
@@ -95,10 +96,10 @@
       t.imagen_perfil, 
       t.estado, 
       b.nombre AS banco,
-      tp.nombre_tipo AS nombre_tipo,
+      tt.nombre AS nombre_tipo,
       o.nombre_ocupacion AS nombre_ocupacion 
-      FROM trabajador AS t, bancos AS b, tipo as tp, ocupacion as o
-      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND t.idtipo= tp.idtipo; ";
+      FROM trabajador AS t, bancos AS b,  tipo_trabajador as tt, ocupacion as o
+      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador ; ";
 
       return ejecutarConsulta($sql);		
     }

@@ -12,48 +12,48 @@ Class Tipo
 	//Implementamos un método para insertar registros
 	public function insertar($nombre_tipo)
 	{
-		$sql="INSERT INTO tipo (nombre_tipo)VALUES ('$nombre_tipo')";
+		$sql="INSERT INTO tipo_trabajador (nombre)VALUES ('$nombre_tipo')";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idtipo,$nombre_tipo)
+	public function editar($idtipo_trabajador,$nombre_tipo)
 	{
-		$sql="UPDATE tipo SET nombre_tipo='$nombre_tipo' WHERE idtipo='$idtipo'";
+		$sql="UPDATE tipo_trabajador SET nombre='$nombre_tipo' WHERE idtipo_trabajador='$idtipo_trabajador'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para desactivar tipo
-	public function desactivar($idtipo)
+	public function desactivar($idtipo_trabajador)
 	{
-		$sql="UPDATE tipo SET estado='0' WHERE idtipo='$idtipo'";
+		$sql="UPDATE tipo_trabajador SET estado='0' WHERE idtipo_trabajador='$idtipo_trabajador'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para activar tipo
-	public function activar($idtipo)
+	public function activar($idtipo_trabajador)
 	{
-		$sql="UPDATE tipo SET estado='1' WHERE idtipo='$idtipo'";
+		$sql="UPDATE tipo_trabajador SET estado='1' WHERE idtipo_trabajador='$idtipo_trabajador'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idtipo)
+	public function mostrar($idtipo_trabajador)
 	{
-		$sql="SELECT * FROM tipo WHERE idtipo='$idtipo'";
+		$sql="SELECT * FROM tipo_trabajador WHERE idtipo_trabajador='$idtipo_trabajador'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM tipo";
+		$sql="SELECT * FROM tipo_trabajador";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select
 	public function select()
 	{
-		$sql="SELECT * FROM tipo where estado=1";
+		$sql="SELECT * FROM tipo_trabajador where estado=1";
 		return ejecutarConsulta($sql);		
 	}
 }
