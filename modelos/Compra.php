@@ -100,7 +100,7 @@ class Compra
         $sql_2 = "SELECT 	dp.idproducto as idproducto,
 		dp.ficha_tecnica_producto as ficha_tecnica,
 		dp.cantidad as cantidad,
-		dp.precio_venta as precio_venta, dp.igv,
+		dp.precio_venta as precio_venta, dp.igv, dp.precio_igv,
 		dp.descuento as descuento,
 		p.nombre as nombre_producto, p.imagen,
         um.nombre_medida, c.nombre_color
@@ -138,7 +138,7 @@ class Compra
     //Implementamos un método para activar categorías
     public function activar($idcompra_por_proyecto)
     {
-        $sql = "UPDATE compra_por_proyecto SET estado='1' WHERE idcompra_por_proyecto='$idcompra_por_proyecto'";
+        $sql = "UPDATE compra_por_proyecto SET estado='1' WHERE idcompra_proyecto='$idcompra_por_proyecto'";
 
         return ejecutarConsulta($sql);
     }
