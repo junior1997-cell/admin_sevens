@@ -102,7 +102,7 @@
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="trabajador" id="trabajador_c">Trabajador</label>                               
-                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;"   >                                    
+                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_trabajador();"   >                                    
                                   </select>
                                   <input type="hidden" name="trabajador_old" id="trabajador_old" />
                                   <!-- <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>   -->
@@ -112,17 +112,20 @@
                               <!-- Tipo trabajador -->
                               <div class="col-lg-2">
                                 <div class="form-group">
-                                  <label for="tipo_trabajador">Tipo trabajador</label>                                   
-                                  <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="disable_cargo();" >
-                                    <option value="Técnico">Técnico</option>
-                                    <option value="Obrero">Obrero</option>
+                                  <label for="tipo_trabajador">Tipo Trabajador</label>                               
+                                  <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="">                                    
                                   </select>
-                                  <!-- <small id="tipo_trab_validar" class="text-danger" style="display: none;">Por favor selecione un tipo trabajador </small> -->
+                                </div>  
+                              </div>
+                              <!-- Tipo Ocupación -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="tipo_trabajador">Ocupación</label>                                   
+                                  <input type="text" id="ocupacion" class="form-control" disabled>
                                 </div>
                               </div>
-
                               <!-- cargo -->
-                              <div class="col-lg-2">
+                              <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="cargo">Cargo</label>
                                   <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  >                                    
@@ -140,7 +143,7 @@
                                 </div>
                               </div>
                               <!-- Desempeño -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="desempeño">Desempeño</label>
                                   <input type="text" name="desempenio" class="form-control" id="desempenio" placeholder="Desempeño" />
@@ -148,21 +151,21 @@
                               </div>                              
                               
                               <!-- Sueldo(Mensual) -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="sueldo_mensual">Sueldo(Mensual)</label>
                                   <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
                                 </div>
                               </div>
                               <!-- Sueldo(Diario) -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="sueldo_diario">Sueldo(Diario)</label>
                                   <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
                                 </div>
                               </div>
                               <!-- Sueldo(Hora) -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="sueldo_hora">Sueldo(8 Hora)</label>
                                   <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />

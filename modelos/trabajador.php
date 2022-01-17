@@ -94,6 +94,21 @@ Class Trabajador
 		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento FROM trabajador WHERE estado='1';";
 		return ejecutarConsulta($sql);		
 	}
+	//Seleccionar Trabajador Select2
+		public function m_datos_trabajador($idtrabajador)
+		{
+			$sql="SELECT
+			t.numero_documento,
+			t.idtipo_trabajador as idtipo_trabajador,
+            t.idocupacion,
+            o.nombre_ocupacion as nombre_ocupacion
+			FROM 
+			trabajador  as t, 
+            ocupacion as o
+			WHERE 
+			t.idtrabajador='$idtrabajador' AND t.estado='1' AND t.idocupacion=o.idocupacion";
+			return ejecutarConsultaSimpleFila($sql);		
+		}
 
 }
 

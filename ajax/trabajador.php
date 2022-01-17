@@ -75,6 +75,14 @@
           echo json_encode($rspta);
 
         break;
+        case 'm_datos_trabajador':
+         $idtrabajador = $_POST["idtrabajador"];
+         // $idtrabajador = '8';
+          $rspta=$trabajadorproyecto->m_datos_trabajador($idtrabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
+        break;
         
         case 'verdatos':
 
@@ -127,7 +135,7 @@
       
           while ($reg = $rspta->fetch_object())  {
 
-            echo '<option value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
+            echo '<option  value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
           }
 
         break;

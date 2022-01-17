@@ -19,6 +19,9 @@ function init() {
   //Mostramos los trabajadores
   $.post("../ajax/trabajador.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
+    //Mostramos los tipo
+    $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#tipo_trabajador").html(r); });
+
   //Initialize Select2 Elements
   $("#trabajador").select2({
     theme: "bootstrap4",
@@ -40,6 +43,25 @@ function init() {
     allowClear: true,
   });
   
+}
+
+function capture_trabajador() {
+ var idtrabajador= $("#trabajador").select2("val");
+ if (idtrabajador=='null' || idtrabajador=='' ) {
+   
+ }else{
+  $("#tipo_trabajador").val("null").trigger("change");
+  
+  $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);   
+
+    $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
+
+    $("#ocupacion").val(data.nombre_ocupacion);   
+  });
+}
+
 }
 
 function sueld_mensual(){
