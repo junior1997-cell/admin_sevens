@@ -24,7 +24,7 @@
       $idtrabajador_por_proyecto		= isset($_POST["idtrabajador_por_proyecto"])? limpiarCadena($_POST["idtrabajador_por_proyecto"]):"";
       $trabajador		  = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
 
-      $tipo_trabajador= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
+      //$tipo_trabajador= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
       $desempenio	    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";      
       $cargo			    = isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
       
@@ -39,13 +39,13 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
             
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
@@ -75,14 +75,6 @@
           echo json_encode($rspta);
 
         break;
-        case 'm_datos_trabajador':
-         $idtrabajador = $_POST["idtrabajador"];
-         // $idtrabajador = '8';
-          $rspta=$trabajadorproyecto->m_datos_trabajador($idtrabajador);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-
-        break;
         
         case 'verdatos':
 
@@ -103,10 +95,10 @@
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
                 ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-pencil-alt"></i></button>'.
+                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
@@ -116,7 +108,7 @@
                 </div>',
               "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
               "3"=>$reg->sueldo_mensual,
-              "4"=>$reg->tipo_trabajador.' / '.$reg->cargo,
+              "4"=>$reg->nombre_tipo.' / '.$reg->cargo,
               "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
@@ -139,6 +131,27 @@
           }
 
         break;
+
+        case 'm_datos_trabajador':
+          $idtrabajador = $_POST["idtrabajador"];
+          // $idtrabajador = '8';
+           $rspta=$trabajadorproyecto->m_datos_trabajador($idtrabajador);
+           //Codificar el resultado utilizando json
+           echo json_encode($rspta);
+ 
+         break;
+
+         case 'select_cargo':
+           $id_tipo = $_GET["id_tipo"];
+           // $idtrabajador = '8';
+            $rspta=$trabajadorproyecto->select_cargo($id_tipo);
+
+            while ($reg = $rspta->fetch_object())  {
+
+              echo '<option  value=' . $reg->idcargo_trabajador  . '>' . $reg->nombre .'</option>';
+            }
+  
+         break;
         
       }
 

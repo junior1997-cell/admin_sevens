@@ -54,7 +54,7 @@
                   <div class="card card-primary card-outline">
                     <div class="card-header">
                       <h3 class="card-title">
-                        <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(true);"><i class="fas fa-user-plus"></i> Agregar</button>
+                        <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(true); estado_editar(false);"><i class="fas fa-user-plus"></i> Agregar</button>
                         Admnistra de manera eficiente a los trabajdores
                       </h3>
                     </div>
@@ -102,7 +102,7 @@
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="trabajador" id="trabajador_c">Trabajador</label>                               
-                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_trabajador();"   >                                    
+                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_idtrabajador();"   >                                    
                                   </select>
                                   <input type="hidden" name="trabajador_old" id="trabajador_old" />
                                   <!-- <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>   -->
@@ -113,14 +113,14 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="tipo_trabajador">Tipo Trabajador</label>                               
-                                  <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="">                                    
+                                  <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="captura_idtipo();">                                    
                                   </select>
                                 </div>  
                               </div>
                               <!-- Tipo Ocupación -->
                               <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="tipo_trabajador">Ocupación</label>                                   
+                                  <label for="ocupacion">Ocupación</label>                                   
                                   <input type="text" id="ocupacion" class="form-control" disabled>
                                 </div>
                               </div>
@@ -128,18 +128,8 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="cargo">Cargo</label>
-                                  <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  >                                    
-                                    <!-- <option value="Maestro">Maestro</option> -->
-                                    <option value="Ingeniero Residente">Ingeniero Residente</option>
-                                    <option value="Asitente Técnico">Asitente Técnico</option>
-                                    <option value="Asistente Administrativo">Asistente Administrativo</option>
-                                    <option value="Almacenero">Almacenero</option>
-
-                                    <option value="Operario" >Operario</option>
-                                    <option value="Oficial" >Oficial</option>
-                                    <option value="Peón" >Peón</option>
+                                  <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  > 
                                   </select>
-                                  <!-- <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
                                 </div>
                               </div>
                               <!-- Desempeño -->

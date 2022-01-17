@@ -76,7 +76,7 @@ Class Materiales
 		c.nombre_color as nombre_color,
 		um.nombre_medida as nombre_medida
 		FROM producto p, unidad_medida as um, color as c  
-		WHERE p.idproducto ='$idproducto' AND um.idunidad_medida=p.idproducto AND c.idcolor=p.idcolor";
+		WHERE p.idproducto ='$idproducto' AND um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

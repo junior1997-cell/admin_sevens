@@ -1,4 +1,6 @@
 var tabla;
+var editando=false;
+var editando2=false;
 
 //Función que se ejecuta al inicio
 function init() {  
@@ -43,25 +45,55 @@ function init() {
     allowClear: true,
   });
   
-}
-
-function capture_trabajador() {
- var idtrabajador= $("#trabajador").select2("val");
- if (idtrabajador=='null' || idtrabajador=='' ) {
-   
- }else{
-  $("#tipo_trabajador").val("null").trigger("change");
+  $("#cargo").val('null').trigger("change");
   
-  $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (data, status) {
+}
+//captura id del trabajador
+function capture_idtrabajador() {
+  if (editando2==false) {
+      var idtrabajador= $("#trabajador").select2("val");
+      if (idtrabajador == null || idtrabajador == '' ) {
 
-    data = JSON.parse(data);  console.log(data);   
+      }else{
 
-    $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
+        $("#tipo_trabajador").val("null").trigger("change");
+          
+        $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (data, status) {
 
-    $("#ocupacion").val(data.nombre_ocupacion);   
-  });
+          data = JSON.parse(data);  console.log(data);   
+
+          $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
+
+          $("#ocupacion").val(data.nombre_ocupacion);   
+        });
+
+      }
+  }
+  editando2=false;
+
+}
+//captura id del tipo
+
+function captura_idtipo() {
+  if (editando==false) {
+
+    var idtipo= $("#tipo_trabajador").select2("val");
+    if (idtipo != null || idtipo != ' ' ) {
+       //console.log(idtipo);
+       $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
+     }else{
+   
+     }
+
+  }
+  editando=false;
+
 }
 
+function estado_editar(estado) {
+  editando=estado;
+  editando2=estado;
+  
 }
 
 function sueld_mensual(){
@@ -197,7 +229,7 @@ function guardaryeditar(e) {
 
 	      tabla.ajax.reload();
          
-				show_hide_form(false)
+				show_hide_form(false);
 
 			}else{
 
@@ -302,13 +334,14 @@ function verdatos(idtrabajador){
 
 }
 
-function mostrar(idtrabajador) {
-
+function mostrar(idtrabajador,idtipo) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
-
+ // $("#tipo_trabajador").val('null').trigger("change");
+ // $("#cargo").val('null').trigger("change");
   show_hide_form(true);
-
+  $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
+  estado_editar(true);
   $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
@@ -319,8 +352,8 @@ function mostrar(idtrabajador) {
     $("#idtrabajador_por_proyecto").val(data.idtrabajador_por_proyecto);
     $("#trabajador").val(data.idtrabajador).trigger("change");
 
-    $("#tipo_trabajador").val(data.tipo_trabajador).trigger("change");
-    $("#cargo").val(data.cargo).trigger("change");
+    $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
+    $("#cargo").val(data.idcargo_trabajador).trigger("change");
     $("#desempenio").val(data.desempenio);
   
     $("#sueldo_mensual").val(data.sueldo_mensual);   
