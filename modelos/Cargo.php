@@ -55,7 +55,7 @@ Class Cargo
 		tt.nombre as nombre_tipo_t,
 		ct.estado as estado
 		FROM cargo_trabajador as ct, tipo_trabajador as tt
-		WHERE ct.idcargo_trabajador=tt.idtipo_trabajador";
+		WHERE ct.idtipo_trabjador=tt.idtipo_trabajador";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

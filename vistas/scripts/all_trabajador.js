@@ -677,7 +677,7 @@ function mostrar(idtrabajador) {
     $("#c_bancaria").val(data.cuenta_bancaria);
     $("#cci").val(data.cci);
     $("#banco").val(data.idbancos).trigger("change");
-    $("#tipo").val(data.idtipo).trigger("change");
+    $("#tipo").val(data.idtipo_trabajador).trigger("change");
     $("#ocupacion").val(data.idocupacion).trigger("change");
     $("#titular_cuenta").val(data.titular_cuenta);
     $("#idtrabajador").val(data.idtrabajador);
@@ -704,7 +704,7 @@ function mostrar(idtrabajador) {
 			$("#foto3_actual").val(data.imagen_dni_reverso);
 		}
     //cvs
-    if (data.cv_documentado != "") {
+   /* if (data.cv_documentado != "") {
 
 			$("#doc4_i").attr("src", "../dist/img/cv_documentado/" + data.cv_documentado);
 
@@ -716,7 +716,129 @@ function mostrar(idtrabajador) {
 			$("#doc5_i").attr("src", "../dist/img/cv_no_documentado/" + data.cv_no_documentado);
 
 			$("#doc_old_5").val(data.cv_no_documentado);
-		}
+		}*/
+    //validamoos DOC-4
+    if (data.cv_documentado != "" ) {
+
+      $("#doc_old_4").val(data.cv_documentado);
+
+      $("#doc4_nombre").html('Presupuesto.' + extrae_extencion(data.cv_documentado));
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.cv_documentado) == "xls") {
+
+        $("#doc4_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+
+      } else {
+
+        if ( extrae_extencion(data.cv_documentado) == "xlsx" ) {
+
+          $("#doc4_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+
+        }else{
+
+          if ( extrae_extencion(data.cv_documentado) == "csv" ) {
+
+            $("#doc4_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+
+          }else{
+
+            if ( extrae_extencion(data.cv_documentado) == "xlsm" ) {
+
+              $("#doc4_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+
+            }else{
+
+              if ( extrae_extencion(data.cv_documentado) == "doc" || extrae_extencion(data.cv_documentado) == "docx" ) {
+
+                $("#doc4_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+  
+              }else{
+
+                if ( extrae_extencion(data.cv_documentado) == "pdf" ) {
+
+                  $("#doc4_ver").html('<iframe src="../dist/img/cv_documentado/'+data.cv_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+                }else{
+
+                  $("#doc4_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+
+      $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
+
+      $("#doc4_nombre").html('');
+
+      $("#doc_old_4").val("");
+    }
+
+    //validamoos DOC-5
+    if (data.cv_no_documentado != "" ) {
+
+      $("#doc_old_5").val(data.cv_no_documentado);
+
+      $("#doc5_nombre").html('Analisis de costos unitarios.' + extrae_extencion(data.cv_no_documentado));
+
+      // $("#doc5_ver").html('<iframe src="../dist/pdf/'+data.cv_no_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.cv_no_documentado) == "xls") {
+
+        $("#doc5_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+
+      } else {
+
+        if ( extrae_extencion(data.cv_no_documentado) == "xlsx" ) {
+
+          $("#doc5_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+
+        }else{
+
+          if ( extrae_extencion(data.cv_no_documentado) == "csv" ) {
+
+            $("#doc5_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+
+          }else{
+
+            if ( extrae_extencion(data.cv_no_documentado) == "xlsm" ) {
+
+              $("#doc5_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+
+            }else{
+
+              if ( extrae_extencion(data.cv_no_documentado) == "doc" || extrae_extencion(data.cv_no_documentado) == "docx" ) {
+
+                $("#doc5_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+  
+              }else{
+
+                if ( extrae_extencion(data.cv_no_documentado) == "pdf" ) {
+
+                  $("#doc5_ver").html('<iframe src="../dist/img/cv_no_documentado/'+data.cv_no_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+                }else{
+
+                  $("#doc5_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+
+      $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
+
+      $("#doc5_nombre").html('');
+
+      $("#doc_old_5").val("");
+    }
+    
 
 
     edades();

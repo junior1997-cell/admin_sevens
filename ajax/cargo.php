@@ -8,17 +8,17 @@ require_once "../modelos/Cargo.php";
 $cargo=new Cargo();
 
 $idcargo_trabajador =isset($_POST["idcargo_trabajador"])? limpiarCadena($_POST["idcargo_trabajador"]):"";
-$idtipo_trabjador  =isset($_POST["idtipo_trabjador"])? limpiarCadena($_POST["idtipo_trabjador"]):"";
+$idtipo_trabjador_c  =isset($_POST["idtipo_trabjador_c"])? limpiarCadena($_POST["idtipo_trabjador_c"]):"";
 $nombre=isset($_POST["nombre_cargo"])? limpiarCadena($_POST["nombre_cargo"]):"";
 
 switch ($_GET["op"]){
 	case 'guardaryeditar_cargo':
 		if (empty($idcargo_trabajador )){
-			$rspta=$cargo->insertar($idtipo_trabjador,$nombre);
+			$rspta=$cargo->insertar($idtipo_trabjador_c,$nombre);
 			echo $rspta ? "ok" : "Cargo no se pudo registrar";
 		}
 		else {
-			$rspta=$cargo->editar($idcargo_trabajador,$idtipo_trabjador,$nombre);
+			$rspta=$cargo->editar($idcargo_trabajador,$idtipo_trabjador_c,$nombre);
 			echo $rspta ? "ok" : "Cargo no se pudo actualizar";
 		}
 	break;

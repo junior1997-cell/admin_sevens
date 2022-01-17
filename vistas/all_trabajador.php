@@ -188,7 +188,17 @@
                               <label for="edad">Edad</label>
                               <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
                             </div>
-                          </div>                          
+                          </div> 
+                          <!-- banco -->
+                          <div class="col-lg-4">
+                            <div class="form-group">
+                              <label for="banco">Banco</label>
+                              <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
+                                <!-- Aqui listamos los bancos -->
+                              </select>
+                              <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+                            </div>
+                          </div>                         
                           <!-- Cuenta bancaria -->
                           <div class="col-lg-4">
                             <div class="form-group">
@@ -203,16 +213,6 @@
                               <input type="number" name="cci" class="form-control" id="cci" placeholder="CCI" />
                             </div>
                           </div>
-                          <!-- banco -->
-                          <div class="col-lg-3">
-                            <div class="form-group">
-                              <label for="banco">Banco</label>
-                              <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
-                                <!-- Aqui listamos los bancos -->
-                              </select>
-                              <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
-                            </div>
-                          </div>
                           <!-- Titular de la cuenta -->
                           <div class="col-lg-3">
                             <div class="form-group">
@@ -221,7 +221,7 @@
                             </div>
                           </div>
                           <!-- tipo -->
-                          <div class="col-lg-3">
+                          <div class="col-lg-2">
                               <div class="form-group">
                                   <label for="tipo">Tipo</label>
                                   <select name="tipo" id="tipo" class="form-control select2" style="width: 100%;" >

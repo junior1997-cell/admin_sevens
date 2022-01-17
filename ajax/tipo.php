@@ -7,33 +7,33 @@ require_once "../modelos/Tipo.php";
 
 $tipo=new Tipo();
 
-$idtipo =isset($_POST["idtipo"])? limpiarCadena($_POST["idtipo"]):"";
+$idtipo_trabajador =isset($_POST["idtipo_trabajador"])? limpiarCadena($_POST["idtipo_trabajador"]):"";
 $nombre_tipo=isset($_POST["nombre_tipo"])? limpiarCadena($_POST["nombre_tipo"]):"";
 
 switch ($_GET["op"]){
 	case 'guardaryeditar_tipo':
-		if (empty($idtipo)){
+		if (empty($idtipo_trabajador)){
 			$rspta=$tipo->insertar($nombre_tipo);
 			echo $rspta ? "ok" : "tipo de medida no se pudo registrar";
 		}
 		else {
-			$rspta=$tipo->editar($idtipo,$nombre_tipo);
+			$rspta=$tipo->editar($idtipo_trabajador,$nombre_tipo);
 			echo $rspta ? "ok" : "tipo de medida no se pudo actualizar";
 		}
 	break;
 
 	case 'desactivar_tipo':
-		$rspta=$tipo->desactivar($idtipo);
+		$rspta=$tipo->desactivar($idtipo_trabajador);
  		echo $rspta ? "tipo de medida Desactivada" : "tipo de medida no se puede desactivar";
 	break;
 
 	case 'activar_tipo':
-		$rspta=$tipo->activar($idtipo);
+		$rspta=$tipo->activar($idtipo_trabajador);
  		echo $rspta ? "tipo de medida activada" : "tipo de medida no se puede activar";
 	break;
 
 	case 'mostrar_tipo':
-		$rspta=$tipo->mostrar($idtipo);
+		$rspta=$tipo->mostrar($idtipo_trabajador);
  		//Codificar el resultado utilizando json
  		echo json_encode($rspta);
 	break;
@@ -45,11 +45,11 @@ switch ($_GET["op"]){
 
  		while ($reg=$rspta->fetch_object()){
  			$data[]=array(
- 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-xs" onclick="mostrar_tipo('.$reg->idtipo .')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-xs" onclick="desactivar_tipo('.$reg->idtipo .')"><i class="far fa-trash-alt"></i></button>':
- 					'<button class="btn btn-warning btn-xs" onclick="mostrar_tipo('.$reg->idtipo .')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-primary btn-xs" onclick="activar_tipo('.$reg->idtipo .')"><i class="fa fa-check"></i></button>',
- 				"1"=>$reg->nombre_tipo,
+ 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-xs" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-danger btn-xs" onclick="desactivar_tipo('.$reg->idtipo_trabajador.')"><i class="far fa-trash-alt"></i></button>':
+ 					'<button class="btn btn-warning btn-xs" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-primary btn-xs" onclick="activar_tipo('.$reg->idtipo_trabajador .')"><i class="fa fa-check"></i></button>',
+ 				"1"=>$reg->nombre,
  				"2"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
  				'<span class="text-center badge badge-danger">Desactivado</span>'
  				);
@@ -66,7 +66,7 @@ switch ($_GET["op"]){
         $rspta = $tipo->select();
 
         while ($reg = $rspta->fetch_object()) {
-          echo '<option  value=' . $reg->idtipo  . '>' . $reg->nombre_tipo . '</option>';
+          echo '<option  value=' . $reg->idtipo_trabajador  . '>' . $reg->nombre . '</option>';
         }
         break;
 	case 'salir':

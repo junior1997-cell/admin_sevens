@@ -9,20 +9,20 @@ function init() {
 
   // $("#lBancoColor").addClass("active");
   //Mostramos idtipo_trabjador
-  $.post("../ajax/cargo.php?op=selecttipotrabajador", function (r) { $("#idtipo_trabjador").html(r); });
+  $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
 
   //Guardar  
   $("#guardar_registro_cargo").on("click", function (e) {$("#submit-form-cargo").submit(); });
 
   //Initialize Select2 Elements
-  $("#idtipo_trabjador").select2({
+  $("#idtipo_trabjador_c").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un tipo",
     allowClear: true,
   });
 
   // $("#idtipo_trabjador").val("").trigger("change");
-    $("#idtipo_trabjador").val("null").trigger("change");
+    $("#idtipo_trabjador_c").val("null").trigger("change");
   
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -31,7 +31,7 @@ function init() {
 function limpiar_cargo() {
   $("#idcargo_trabajador").val("");
   $("#nombre_cargo").val(""); 
-  $("#idtipo_trabjador").val("null").trigger("change");
+  $("#idtipo_trabjador_c").val("null").trigger("change");
 }
 
 //Función listar_cargo
@@ -105,7 +105,7 @@ function mostrar_cargo(idcargo_trabajador) {
   console.log(idcargo_trabajador);
 
   $("#modal-agregar-cargo").modal("show")
-  $("#idtipo_trabjador").val("null").trigger("change");
+  $("#idtipo_trabjador_c").val("null").trigger("change");
 
   $.post("../ajax/cargo.php?op=mostrar", {idcargo_trabajador: idcargo_trabajador}, function (data, status) {
 
@@ -116,7 +116,7 @@ function mostrar_cargo(idcargo_trabajador) {
 
     $("#idcargo_trabajador").val(data.idcargo_trabajador);
     $("#nombre_cargo").val(data.nombre); 
-    $("#idtipo_trabjador").val(data.idtipo_trabjador).trigger("change");
+    $("#idtipo_trabjador_c").val(data.idtipo_trabjador).trigger("change");
 
   });
 
