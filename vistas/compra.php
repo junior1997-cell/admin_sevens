@@ -305,8 +305,8 @@
                                           <h5>IGV</h5>
                                           <h5>TOTAL</h5>
                                         </th>
-                                        <th>
-                                          <h5 class="text-right" id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
+                                        <th class="w-px-250"> 
+                                          <h5 class="text-right " id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
                                           <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
 
                                           <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
@@ -1093,7 +1093,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Documentos</h4>
+                        <h4 class="modal-title">Actualizar Comprobante</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -1101,7 +1101,7 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-plano-otro" name="form-plano-otro" method="POST">
+                        <form id="form-comprobante" name="form-comprobante" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
                               <!-- id Comprobante -->

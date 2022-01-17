@@ -133,34 +133,21 @@ switch ($_GET["op"]) {
     break;
 
     case 'anular':
-        if (!isset($_SESSION["nombre"])) {
-            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-        } else {
-            //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['acceso'] == 1) {
-                $rspta = $compra->desactivar($idcompra_proyecto);
+         
+        $rspta = $compra->desactivar($idcompra_proyecto);
 
-                echo $rspta ? "ok" : "Compra no se puede Anular";
-                //Fin de las validaciones de acceso
-            } else {
-                require 'noacceso.php';
-            }
-        }
+        echo $rspta ? "ok" : "Compra no se puede Anular";
+        //Fin de las validaciones de acceso
+             
     break;
 
-    case 'activar':
-        if (!isset($_SESSION["nombre"])) {
-            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-        } else {
-            //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['acceso'] == 1) {
-                $rspta = $compra->activar($idusuario);
-                echo $rspta ? "ok" : "Usuario no se puede activar";
-                //Fin de las validaciones de acceso
-            } else {
-                require 'noacceso.php';
-            }
-        }
+    case 'des_anular':
+        
+        $rspta = $compra->activar($idcompra_proyecto);
+
+        echo $rspta ? "ok" : "Compra no se puede recuperar";
+        //Fin de las validaciones de acceso
+             
     break;
 
     case 'listar_compra':
@@ -239,20 +226,19 @@ switch ($_GET["op"]) {
                     '</button>'.' <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
                
              } else {
+                $deposito_Actual = 0;
+                if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
+                    $deposito_Actual = 0;
+                } else {
+                    $deposito_Actual = $rspta2['total_pago_compras'];
+                }
+                 
                 $list_segun_estado_detracc =
                     '<div class="text-center"> <button class="btn btn-' .
                     $c .
-                    ' btn-xs" onclick="listar_pagos(' .
-                    $reg->idcompra_proyecto .
-                    ',' .
-                    $reg->idproyecto .
-                    ',' .
-                    $reg->monto_total .
-                    ')"><i class="fas fa-' .
-                    $icon .
-                    ' nav-icon"></i> ' .
-                    $nombre .
-                    '</button>'.' <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
+                    ' btn-xs" onclick="listar_pagos(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .', '.$deposito_Actual.')">
+                    <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
+                    <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
             }
             $vercomprobantes="'$reg->idcompra_proyecto','$reg->imagen_comprobante'";
             //($reg->tipo_comprovante="Ninguno" || $reg->tipo_comprovante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
@@ -263,9 +249,9 @@ switch ($_GET["op"]) {
                     ($reg->estado == '1'
                         ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                             ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
-                            ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Anular venta"><i class="far fa-trash-alt"></i></button>'
-                        : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>') . 
-                        ' ',
+                            ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
+                        : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                        ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                 "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
                 "2" => $reg->razon_social,
                 "3" => '<div class="user-block">
@@ -338,7 +324,7 @@ switch ($_GET["op"]) {
                 "3" => $reg->serie_comprovante,
                 "4" => $reg->monto_total,
                 "5" => $reg->descripcion,
-                "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-success">Anulado</span>',
+                "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
             ];
         }
         $results = [
