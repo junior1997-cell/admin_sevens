@@ -214,12 +214,12 @@ Class Asistencia_trabajador
 	public function listar($nube_idproyecto)
 	{
 		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,
-		 t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
-		SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
-		 at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.cargo
-		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS at,  proyecto AS p
-		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto'
-		GROUP BY tp.idtrabajador;";
+		t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
+	   SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
+		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
+	   FROM trabajador AS t, trabajador_por_proyecto AS tp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
+	   WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto' AND tp.idcargo_trabajador = c.idcargo_trabajador
+	   GROUP BY tp.idtrabajador;;";
 		return ejecutarConsulta($sql);		
 	}
 
