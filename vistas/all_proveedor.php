@@ -178,17 +178,13 @@
                                                 <!-- banco -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
-                                                        <label for="banco">Banco</label>
-                                                        <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
-                                                            <option value="1">BCP</option>
-                                                            <option value="2">BBVA</option>
-                                                            <option value="3">SCOTIA BANK</option>
-                                                            <option value="4">INTERBANK</option>
-                                                            <option value="5">NACIÓN</option>
-                                                        </select>
-                                                        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+                                                    <label for="banco">Banco</label>
+                                                    <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
+                                                        <!-- Aqui listamos los bancos -->
+                                                    </select>
+                                                    <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
                                                     </div>
-                                                </div>
+                                                </div>   
                                                 <!-- Titular de la cuenta -->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">

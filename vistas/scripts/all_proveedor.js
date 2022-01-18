@@ -10,11 +10,21 @@ function init() {
 
    $("#lAllProveedor").addClass("active");
 
+    //Mostramos los BANCOS
+    $.post("../ajax/all_trabajador.php?op=select2Banco", function (r) { $("#banco").html(r); });
+
   $("#guardar_registro").on("click", function (e) {
 
     $("#submit-form-proveedor").submit();
   });
 
+    //Initialize Select2 Elements
+    $("#banco").select2({
+      theme: "bootstrap4",
+      placeholder: "Selecione banco",
+      allowClear: true,
+    });
+    $("#banco").val("null").trigger("change");
   // Formato para telefono
   $("[data-mask]").inputmask();
 
@@ -31,7 +41,8 @@ function limpiar() {
   $("#c_bancaria").val("");  
   $("#c_detracciones").val("");  
   //$("#banco").val("");
-  $("#banco option[value='BCP']").attr("selected", true);  
+  // $("#banco option[value='BCP']").attr("selected", true);   
+  $("#banco").val("").trigger("change");
   $("#titular_cuenta").val("");   
   
 }
@@ -121,7 +132,8 @@ function mostrar(idproveedor) {
      $("#num_documento").val(data.ruc);
      $("#direccion").val(data.direccion);
      $("#telefono").val(data.telefono);
-     $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
+    // $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
+     $("#banco").val(data.idbancos).trigger("change");
      $("#c_bancaria").val(data.cuenta_bancaria);
      $("#c_detracciones").val(data.cuenta_detracciones);
      $("#titular_cuenta").val(data.titular_cuenta);
