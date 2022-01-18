@@ -208,11 +208,11 @@ switch ($_GET["op"]){
 						  $nombre="Pagar";
 						  $icon="dollar-sign";
 						} else {
-							if ($saldo<="0") {
+							if ($saldo<="0" || $saldo=="0") {
 								$estado = '<span class="text-center badge badge-success">Pagado</span>';
-								$c="info";
+								$c="success";
 								$nombre="Ver";
-								$info="info";
+								$info="success";
 								$icon="eye";
 							}else{
 								$estado = '<span class="text-center badge badge-success">Error</span>';
@@ -230,8 +230,8 @@ switch ($_GET["op"]){
 						  $cc="warning";
 						} else {
 							if ($saldo_factura<="0") {
-								$cc="info";
-								$info="info";
+								$cc="success";
+								$info="success";
 								$icons="eye";
 							}
 						}                

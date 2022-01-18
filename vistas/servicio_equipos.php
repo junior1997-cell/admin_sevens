@@ -16,6 +16,7 @@
         <?php
         require 'head.php';
         ?>
+        <link rel="stylesheet" href="../dist/css/leyenda.css" />
     </head>
     <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -52,14 +53,54 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="card card-primary card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title display" id="btn-agregar" >
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                            Admnistra de manera eficiente a tus servicios.
-                                        </h3>
-                                        <button id="btn-regresar" type="button" class="btn bg-gradient-warning"  style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                                        <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();"><i class="fas fa-dollar-sign"></i> Agregar Pago</button>
-                                        <button type="button" id="btn-factura" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-factura" onclick="limpiar_factura();"><i class="fas fa-file-invoice"></i> Agregar Factura</button>
+                                  <div class="row">
+                                      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <div class="card-header">
+                                            <h3 class="card-title display" id="btn-agregar" >
+                                                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                                                Admnistra de manera eficiente a tus servicios.
+                                            </h3>
+                                            <button id="btn-regresar" type="button" class="btn bg-gradient-warning"  style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                                            <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();"><i class="fas fa-dollar-sign"></i> Agregar Pago</button>
+                                            <button type="button" id="btn-factura" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-factura" onclick="limpiar_factura();"><i class="fas fa-file-invoice"></i> Agregar Factura</button>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
+                                        <div class="text-slid-box">
+                                          <div id="offer-box" class="contenedor">
+                                            <div> <b>Leyenda-pago</b> </div>
+                                            <ul class="offer-box cls-ul">
+                                              <li>
+                                                <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
+                                              </li>
+                                              <li>
+                                                <span class="text-center badge badge-warning" >Pago en proceso </span>
+                                              </li>
+                                              <li>
+                                                <span class="text-center badge badge-success" >Pago completo</span>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
+                                            <div class="text-slid-box">
+                                              <div id="offer-box" class="contenedorr">
+                                                <div> <b>Leyenda-saldos</b> </div>
+                                                <ul class="offer-box clss-ul">
+                                                  <li>
+                                                    <span class="text-center badge badge-warning " >Pago nulo o pago en proceso </span> 
+                                                  </li>
+                                                  <li>
+                                                    <span class="text-center badge badge-success" >Pago Completo </span>
+                                                  </li>
+                                                  <li>
+                                                    <span class="text-center badge badge-danger" >Pago excedido</span>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                      </div>
                                     </div>
                                     <!--===============Tabla Principal =========-->
                                       <div class="card-body display" id="tabla_principal" >

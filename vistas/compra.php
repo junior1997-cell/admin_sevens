@@ -17,7 +17,7 @@
         ?>
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_compra.css" />
-        <link rel="stylesheet" href="../dist/css/carouselTicker.css" />
+        <link rel="stylesheet" href="../dist/css/leyenda.css" />
         <!-- Theme style -->
         <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
     </head>
@@ -67,7 +67,7 @@
                       <div class="main-top">
                         <div class="container-fluid">
                           <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                               <div class="card-header">
                                 <h3 class="card-title">
                                   <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
@@ -82,22 +82,41 @@
                                 </h3>
                               </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                              <div class="text-slid-box">
-                                <div id="offer-box" class="carouselTicker" style="float: right !important;">
-                                  <ul class="offer-box">
-                                    <li>
-                                      <span style="color: #ffffff;"> Horario de atencíon </span>
-                                    </li>
-                                    <li>
-                                      <span style="color: #ffffff;"> Lunes a Jueves de 8:00am a 1:00pm - 3:00pm a 6:00pm </span>
-                                    </li>
-                                    <li>
-                                      <span style="color: #ffffff;"> Viernes de 8:00am a 1:00pm </span>
-                                    </li>
-                                  </ul>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
+                                <div class="text-slid-box">
+                                  <div id="offer-box" class="contenedor">
+                                    <div> <b>Leyenda-pago</b> </div>
+                                    <ul class="offer-box cls-ul">
+                                      <li>
+                                        <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
+                                      </li>
+                                      <li>
+                                        <span class="text-center badge badge-warning" >Pago en proceso </span>
+                                      </li>
+                                      <li>
+                                        <span class="text-center badge badge-success" >Pago completo</span>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
-                              </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
+                                  <div class="text-slid-box">
+                                    <div id="offer-box" class="contenedorr">
+                                      <div> <b>Leyenda-saldos</b> </div>
+                                      <ul class="offer-box clss-ul">
+                                        <li>
+                                          <span class="text-center badge badge-warning " >Pago nulo o pago en proceso </span> 
+                                        </li>
+                                        <li>
+                                          <span class="text-center badge badge-success" >Pago Completo </span>
+                                        </li>
+                                        <li>
+                                          <span class="text-center badge badge-danger" >Pago excedido</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
                             </div>
                           </div>
                         </div>

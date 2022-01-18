@@ -23,7 +23,7 @@
         <style>
           .contenedor{
            display: flex;
-           justify-content:flex-end;
+           /*justify-content:flex-end;*/
             height: 40px;
             font-size: 20px;
             line-height: 40px;
@@ -40,7 +40,7 @@
           .cls-ul{
             list-style: none;
             padding-left: 10px;
-            animation: cambiar 7s infinite;
+            animation: cambiar 9s infinite;
           }
           @keyframes cambiar {
             0%{margin-top: 0; }
@@ -57,6 +57,50 @@
 
             100%{margin-top: 0px; }
           }
+          /**------------------- */
+          
+          .contenedorr{
+           display: flex;
+         /*  justify-content:flex-end;*/
+            height: 40px;
+            font-size: 20px;
+            line-height: 40px;
+
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+
+            overflow: hidden;
+          }
+          .clss-ul{
+            list-style: none;
+            padding-left: 10px;
+            animation: cambiarr 12s infinite;
+          }
+          @keyframes cambiarr {
+            0%{margin-top: 0; }
+            20%{margin-top: 0; }
+
+            25%{margin-top: -40px; }
+            50%{margin-top: -40px; }
+
+            55%{margin-top: -80px; }
+            80%{margin-top: -80px; }
+
+            85%{margin-top: -40px; }
+            95%{margin-top: -40px; }
+
+            100%{margin-top: 0px; }
+          }
+          /* Para 341px hasta 960px */  
+          @media only screen and (max-width: 960px) and (min-width: 341px) {  
+            .hiddenn{
+              display: none;
+            }
+          }  
         </style>
     </head>
     <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
@@ -105,7 +149,7 @@
                       <div class="main-top">
                         <div class="container-fluid">
                           <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                               <div class="card-header">
                                 <h3 class="card-title">
                                   <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
@@ -120,23 +164,41 @@
                                 </h3>
                               </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                              <div class="text-slid-box">
-                                <div id="offer-box" class="contenedor">
-                                <div>Leyenda</div>
-                                  <ul class="offer-box cls-ul">
-                                    <li>
-                                      <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
-                                    </li>
-                                    <li>
-                                      <span class="text-center badge badge-warning" >Pago en proceso </span>
-                                    </li>
-                                    <li>
-                                      <span class="text-center badge badge-success" >Pago completado</span>
-                                    </li>
-                                  </ul>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
+                                <div class="text-slid-box">
+                                  <div id="offer-box" class="contenedor">
+                                    <div> <b>Leyenda-pago</b> </div>
+                                    <ul class="offer-box cls-ul">
+                                      <li>
+                                        <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
+                                      </li>
+                                      <li>
+                                        <span class="text-center badge badge-warning" >Pago en proceso </span>
+                                      </li>
+                                      <li>
+                                        <span class="text-center badge badge-success" >Pago completo</span>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
-                              </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
+                                  <div class="text-slid-box">
+                                    <div id="offer-box" class="contenedorr">
+                                      <div> <b>Leyenda-saldos</b> </div>
+                                      <ul class="offer-box clss-ul">
+                                        <li>
+                                          <span class="text-center badge badge-warning " >Pago nulo o pago en proceso </span> 
+                                        </li>
+                                        <li>
+                                          <span class="text-center badge badge-success" >Pago Completo </span>
+                                        </li>
+                                        <li>
+                                          <span class="text-center badge badge-danger" >Pago excedido</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
                             </div>
                           </div>
                         </div>

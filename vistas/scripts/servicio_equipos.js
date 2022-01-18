@@ -469,7 +469,7 @@ function listar( nube_idproyecto ) {
         });  
       }else if(data[7]==0){
         $('td', row).eq(7).css({
-          'background-color':'rgb(19 132 150 / 67%)',
+          'background-color':'#28a745',
           'color':'white',
         });
       }else{
