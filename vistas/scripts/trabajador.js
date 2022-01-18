@@ -169,6 +169,7 @@ function limpiar() {
   $("#tipo_trabajador").val("").trigger("change");
   $("#cargo").val("").trigger("change");
   $("#desempenio").val("");
+  $("#ocupacion").val("");
 
   $("#sueldo_mensual").val("");   
   $("#sueldo_diario").val("");   
@@ -292,7 +293,7 @@ function verdatos(idtrabajador){
                       '</tr>'+
                       '<tr data-widget="expandable-table" aria-expanded="false">'+
                           '<th>Cargo</th>'+
-                          '<td>'+data.cargo+'</td>'+
+                          '<td>'+data.cargo_trabajador+'</td>'+
                       '</tr>'+
                       '<tr data-widget="expandable-table" aria-expanded="false">'+
                           '<th>Desempeño</th>'+
@@ -353,6 +354,7 @@ function mostrar(idtrabajador,idtipo) {
     $("#trabajador").val(data.idtrabajador).trigger("change");
 
     $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
+    $("#ocupacion").val(data.nombre_ocupacion);
     $("#cargo").val(data.idcargo_trabajador).trigger("change");
     $("#desempenio").val(data.desempenio);
   

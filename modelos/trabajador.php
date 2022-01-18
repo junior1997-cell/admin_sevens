@@ -48,10 +48,29 @@ Class Trabajador
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idtrabajador)
 	{
-		$sql="SELECT  tp.idtrabajador_por_proyecto, tp.idtrabajador,tp.idproyecto,tp.idcargo_trabajador,tp.desempenio,
-		tp.sueldo_mensual,tp.sueldo_diario,tp.sueldo_hora, tt.idtipo_trabajador, ct.idcargo_trabajador
-		FROM trabajador_por_proyecto as tp, cargo_trabajador as ct, tipo_trabajador as tt
-		WHERE tp.idtrabajador_por_proyecto='$idtrabajador' AND ct.idcargo_trabajador=tp.idcargo_trabajador AND ct.idtipo_trabjador=tt.idtipo_trabajador";
+		$sql="SELECT  
+			tp.idtrabajador_por_proyecto, 
+			tp.idtrabajador,
+			tp.idproyecto,
+			tp.idcargo_trabajador,
+			tp.desempenio,
+			tp.sueldo_mensual,
+			tp.sueldo_diario,
+			tp.sueldo_hora,
+			tt.idtipo_trabajador,
+			ct.idcargo_trabajador,
+			o.nombre_ocupacion
+		FROM 
+			trabajador_por_proyecto as tp, 
+			trabajador as t, 
+			cargo_trabajador as ct, 
+			tipo_trabajador as tt,
+			ocupacion as o
+		WHERE tp.idtrabajador_por_proyecto='$idtrabajador' 
+			AND ct.idcargo_trabajador=tp.idcargo_trabajador 
+			AND ct.idtipo_trabjador=tt.idtipo_trabajador
+			AND t.idocupacion=o.idocupacion
+			AND t.idtrabajador = tp.idtrabajador";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -66,7 +85,6 @@ Class Trabajador
 		t.fecha_nacimiento as fecha_nacimiento,
 		tp.desempenio as desempeno,
 		tp.idcargo_trabajador  as cargo,
-		tp.tipo_trabajador as tipo_trabajador ,
 		t.cuenta_bancaria as cuenta_bancaria,
 		t.titular_cuenta as titular_cuenta,
 		tp.sueldo_mensual as sueldo_mensual,
@@ -76,9 +94,11 @@ Class Trabajador
 		t.telefono as telefono,
 		t.email as email,
 		t.imagen_perfil as imagen,
-		b.nombre as banco 
-		FROM trabajador AS t, bancos AS b,  trabajador_por_proyecto AS tp
-		WHERE tp.idtrabajador = t.idtrabajador AND tp.idtrabajador_por_proyecto = '$idtrabajador' AND t.idbancos =b.idbancos;";
+		b.nombre as banco,
+        tt.nombre tipo_trabajador,
+        ct.nombre cargo_trabajador
+		FROM trabajador AS t, bancos AS b,  trabajador_por_proyecto AS tp, cargo_trabajador as ct, tipo_trabajador as tt
+		WHERE tp.idtrabajador = t.idtrabajador AND tp.idtrabajador_por_proyecto = '$idtrabajador' AND t.idbancos =b.idbancos AND ct.idcargo_trabajador= tp.idcargo_trabajador AND ct.idtipo_trabjador=tt.idtipo_trabajador";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
