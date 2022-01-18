@@ -171,7 +171,7 @@
                           <div class="col-lg-4">
                             <div class="form-group">
                               <label for="telefono">Teléfono</label>
-                              <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
+                              <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
                             </div>
                           </div>
                           <!-- fecha de nacimiento -->

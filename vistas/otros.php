@@ -71,6 +71,7 @@
                                                 <tr>
                                                     <th class="">Acciones</th>
                                                     <th>Nombre</th>
+                                                    <th>Formato Cta/CCI</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -79,6 +80,7 @@
                                                 <tr>
                                                     <th class="">Acciones</th>
                                                     <th>Nombre</th>
+                                                    <th>Formato</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -153,7 +155,7 @@
                         <!-- /.content -->
                     </div>
                     <!--====Unidad de medida==-->
-                    <div class="col-12">
+                    <div class="col-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -406,11 +408,28 @@
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id banco -->
                                             <input type="hidden" name="idbancos" id="idbancos" />
+
                                             <!-- Nombre -->
                                             <div class="col-lg-12 class_pading">
                                                 <div class="form-group">
                                                     <label for="nombre">Nombre</label>
                                                     <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del banco." />
+                                                </div>
+                                            </div>
+
+                                            <!-- Formato cuenta bancaria -->
+                                            <div class="col-lg-12 class_pading">
+                                                <div class="form-group">
+                                                    <label for="formato_cta">Formato Cuenta Bancaria</label>
+                                                    <input type="text" name="formato_cta" id="formato_cta" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
+                                                </div>
+                                            </div>
+
+                                            <!-- Formato CCI -->
+                                            <div class="col-lg-12 class_pading">
+                                                <div class="form-group">
+                                                    <label for="formato_cci">Formato CCI</label>
+                                                    <input type="text" name="formato_cci" id="formato_cci" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
                                                 </div>
                                             </div>
                                         </div>

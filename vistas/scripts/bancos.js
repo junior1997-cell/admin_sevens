@@ -25,6 +25,8 @@ function limpiar() {
   //Mostramos los Materiales
   $("#idbancos").val("");
   $("#nombre").val(""); 
+  $("#formato_cta").val("0000"); 
+  $("#formato_cci").val("0000"); 
 }
 
 //Función Listar
@@ -108,6 +110,8 @@ function mostrar_bancos(idbancos) {
 
     $("#idbancos").val(data.idbancos);
     $("#nombre").val(data.nombre); 
+    $("#formato_cta").val(data.formato_cta); 
+    $("#formato_cci").val(data.formato_cci); 
   });
 }
 
@@ -172,13 +176,20 @@ $(function () {
 
   $("#form-bancos").validate({
     rules: {
-      nombre: { required: true }      // terms: { required: true },
+      nombre: { required: true },    
+      formato_cta: { required: true },
+      formato_cci: { required: true },
     },
     messages: {
       nombre: {
         required: "Por favor ingrese nombre ", 
       },
-
+      formato_cta: {
+        required: "Campo requerido", 
+      },
+      formato_cci: {
+        required: "Campo requerido", 
+      },
     },
         
     errorElement: "span",
