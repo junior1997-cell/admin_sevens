@@ -292,22 +292,35 @@ function costo_partcial() {
   var cantidad = $('#cantidad').val();
 
 
-  if (horometro_final!=0) {
-    var horas=(horometro_final-horometro_inicial).toFixed(1);
-    var costo_parcial=(horas*costo_unitario).toFixed(1);
+  if (cantidad==0) {
+
+    if (horometro_final!=0) {
+      var horas=(horometro_final-horometro_inicial).toFixed(1);
+      var costo_parcial=(horas*costo_unitario);
+      /*console.log('horas '+horas);
+      console.log('costo_unitario '+costo_unitario);
+      console.log('costo_parcial '+costo_parcial);*/
+    }else{
+      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
+      var costo_parcial=costo_unitario;
+    }
+
   }else{
-    var horas=(horometro_inicial-horometro_inicial).toFixed(1);
-    var costo_parcial=costo_unitario
-  }
-  if (cantidad!=0) {
-    var costo_parcial=(cantidad*costo_unitario).toFixed(1);
-  }else{
-    var costo_parcial=costo_unitario
+
+    if (cantidad!=0) {
+      var costo_parcial=(cantidad*costo_unitario).toFixed(1);
+  
+    }else{
+      var costo_parcial=costo_unitario;
+  
+    }
+
   }
   
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
 }
+
 function calculardia() {
 
   if($("#fecha_inicio").val().length > 0){ 
@@ -874,37 +887,89 @@ function total_pagos(idmaquinaria,idproyecto) {
   console.log(typeof totattotal);
   console.log(totattotal);
 
+  //------
+
+
   $.post("../ajax/servicio_equipos.php?op=suma_total_pagos_proveedor", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    var t_provee_porc=0;
-    $("#monto_total_prob").html("");
+    var porcen_sal=0;
+    var porcen_sal_ocult=0;
+    var saldo=0;
+    var t_proveedor_p=0;
     $("#t_proveedor").html("");
     $("#t_provee_porc").html("");
 
-    data = JSON.parse(data); 
-    //console.log(data);
-    $("#monto_total_prob").html(data.total_monto);
-    t_provee_porc = (data.total_monto/totattotal)*100;
-    $("#t_proveedor").html(data.total_monto);
-    $("#t_provee_porc").html(t_provee_porc.toFixed(2));
-    t_provee_porc=0;
-  });
- // console.log('idmaquinaria: '+idmaquinaria,'idproyecto '+idproyecto);
-  $.post("../ajax/servicio_equipos.php?op=suma_total_pagos_detracc", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    var t_detacc_porc=0;
-    $("#t_detaccion").html("");
-    $("#t_detacc_porc").html("");
-    $("#monto_total_detracc").html(""); 
+    $("#porcnt_sald_p").html("");
+    $("#saldo_p").html("");
+    
+    $("#monto_total_prob").html(""); 
 
     data = JSON.parse(data); 
     //console.log(data);
-    $("#monto_total_detracc").html(data.total_monto);
-    t_detacc_porc = (data.total_monto*100)/totattotal;
-    $("#t_detaccion").html(data.total_monto);
-    $("#t_detacc_porc").html(t_detacc_porc.toFixed(2));
-    t_detacc_porc=0;
+    $('#monto_total_prob').html( formato_miles(data.total_monto));
+    $('#porcnt_prove').html(((data.total_monto*100)/totattotal).toFixed(2)+' %')
+
+    porcen_sal=(90-((data.total_monto*100)/totattotal)).toFixed(2);
+    porcen_sal_ocult=(90-((data.total_monto*100)/totattotal)).toFixed(4);
+   // console.log('porcen_saldoooooooooooooo ' +porcen_sal);
+   // console.log('porcen_saldoooooooooooooo ' +porcen_sal_ocult);
+    
+
+    saldo=(data.total_monto*porcen_sal_ocult)/((data.total_monto*100)/totattotal);
+    var saldoxmiles_p=formato_miles(saldo);
+    $("#saldo_p").html(saldoxmiles_p);
+    console.log('saldooooo ' +saldoxmiles_p);
+    //console.log('saldo---'+typeof((data.total_monto*porcen_sal).toFixed(2)/((data.total_monto*100)/totattotal).toFixed(2)));
+    $("#porcnt_sald_p").html(porcen_sal+' %');
+
+     t_proveedor_p=(totattotal*90)/100;
+    var totalxmiles_p=formato_miles(t_proveedor_p);
+    $("#t_proveedor").html(totalxmiles_p);
+    $("#t_provee_porc").html('90');
+
+
+  });
+ // console.log('idmaquinaria: '+idmaquinaria,'idproyecto '+idproyecto);
+  $.post("../ajax/servicio_equipos.php?op=suma_total_pagos_detracc", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
+    var porcen_sal_d=0;
+    var porcen_sal_oclt=0;
+    var saldo_d=0;
+    var t_detaccion_miles=0;
+    t_mont_d=0;
+    $("#monto_total_detracc").html(""); 
+    $("#porcnt_detrcc").html("");
+
+    $("#porcnt_sald_d").html("");
+    $("#saldo_d").html("");
+
+    $("#t_detaccion").html("");
+    $("#t_detacc_porc").html("");
+
+    data = JSON.parse(data); 
+    //console.log(data);
+    t_mont_d=formato_miles(data.total_monto);
+    $("#monto_total_detracc").html(t_mont_d);
+    $("#porcnt_detrcc").html(((data.total_monto*100)/totattotal).toFixed(2)+' %'); 
+
+    porcen_sal_d=(10-((data.total_monto*100)/totattotal)).toFixed(2);
+    porcen_sal_oclt=(10-((data.total_monto*100)/totattotal)).toFixed(4);
+    //console.log('porcen_sal_oclt '+porcen_sal_oclt);
+    saldo_d=(data.total_monto*porcen_sal_oclt)/((data.total_monto*100)/totattotal);
+    var saldoxmiles=formato_miles(saldo_d);
+    //console.log('saldoxmiles '+saldoxmiles);
+
+    $("#saldo_d").html(saldoxmiles);
+    $("#porcnt_sald_d").html(porcen_sal_d+' %');
+
+    t_detaccion_miles=(totattotal*10)/100;
+    var t_detaccion_t=formato_miles(t_detaccion_miles);
+
+    $("#t_detaccion").html(t_detaccion_t);
+    $("#t_detacc_porc").html('10');
+
   });
 //totattotal=0;
 }
+
 //mostrar datos proveedor pago
 function most_datos_prov_pago(idmaquinaria,idproyecto) {
 
@@ -956,7 +1021,7 @@ function validando_excedentes() {
   var monto_entrada = $("#monto_pago").val();
   var total_suma=parseFloat(monto_total_dep)+parseFloat(monto_entrada);
   var debe =totattotal-monto_total_dep
-  console.log(typeof total_suma);
+   //console.log(typeof total_suma);
   if (total_suma>totattotal) {
     toastr.error('ERROR monto excedido al total del monto a pagar!');
   }else{
@@ -1063,7 +1128,6 @@ function ver_modal_vaucher(imagen){
   $('#img-vaucher').attr("src", "../dist/img/vauchers_pagos/" +imagen);
   $("#descargar").attr("href","../dist/img/vauchers_pagos/" +imagen);
   
-  
  // $(".tooltip").hide();
 }
 
@@ -1092,6 +1156,7 @@ function guardaryeditar_factura(e) {
 
         
         tabla4.ajax.reload();
+        tabla.ajax.reload();
 
         $("#modal-agregar-factura").modal("hide");
         total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
@@ -1103,59 +1168,77 @@ function guardaryeditar_factura(e) {
     },
   });
 }
+
 function listar_facturas(idmaquinaria,idproyecto) {
   localStorage.setItem('nubeidmaquif',idmaquinaria);
   localStorage.setItem('nubeidproyectf',idproyecto);
-$("#tabla_principal").hide();
-$("#tabla_pagos").hide();
-$("#tabla_facturas_h").show();
-$("#btn-agregar").hide();
-$("#btn-regresar").show();
-$("#btn-pagar").hide();
-$("#btn-factura").show();
+  $("#tabla_principal").hide();
+  $("#tabla_pagos").hide();
+  $("#tabla_facturas_h").show();
+  $("#btn-agregar").hide();
+  $("#btn-regresar").show();
+  $("#btn-pagar").hide();
+  $("#btn-factura").show();
 
-tabla4=$('#tabla_facturas').dataTable({
-  "responsive": true,
-  "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-  "aProcessing": true,//Activamos el procesamiento del datatables
-  "aServerSide": true,//Paginación y filtrado realizados por el servidor
-  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-  buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-  "ajax":{
-      url: '../ajax/servicio_equipos.php?op=listar_facturas&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
+  tabla4=$('#tabla_facturas').dataTable({  
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/servicio_equipos.php?op=listar_facturas&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
       }
     },
-  "language": {
-    "lengthMenu": "Mostrar : _MENU_ registros",
-    "buttons": {
-      "copyTitle": "Tabla Copiada",
-      "copySuccess": {
-        _: '%d líneas copiadas',
-        1: '1 línea copiada'
-      }
-    }
-  },
-  "bDestroy": true,
-  "iDisplayLength": 5,//Paginación
-  "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-}).DataTable();
-$("#idmaquina").val(idmaquinaria);
-$("#idproyectof").val(idproyecto);
-total_monto_f(idmaquinaria,idproyecto);
-total_costo_parcial(idmaquinaria,idproyecto);
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+  $("#idmaquina").val(idmaquinaria);
+  $("#idproyectof").val(idproyecto);
+  total_monto_f(idmaquinaria,idproyecto);
+  total_costo_parcial(idmaquinaria,idproyecto);
+
+} 
+//Calcular Igv y subtotal
+function calcula_igv_subt() {
+   var subtotal=0;
+   var igv=0;
+  $("#subtotal").val("");
+  $("#igv").val("");
+  var monto = parseFloat($('#monto').val());
+  
+  subtotal= monto/1.18;
+  igv= monto-subtotal;
+  $("#subtotal").val(subtotal.toFixed(4));
+  $("#igv").val(igv.toFixed(4));
 
 }
-//Función limpiar
+//Función limpiar-factura
 function limpiar_factura() {
   $("#codigo").val("");
   $("#monto").val("");
   $("#idfactura").val("");
   $("#fecha_emision").val("");
-  $("#descripcion_f").val("");
+  $("#descripcion_f").val("Por concepto de alquiler de maquinaria");
+  $("#subtotal").val("");
+  $("#igv").val("");
+  $("#nota").val("");
   $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
   $('#foto2_i').show();
   $('#ver_pdf').html('');
@@ -1179,6 +1262,9 @@ function mostrar_factura(idfactura) {
     $("#monto").val(data.monto);
     $("#fecha_emision").val(data.fecha_emision);
     $("#descripcion_f").val(data.descripcion);
+    $("#subtotal").val(data.subtotal);
+    $("#igv").val(data.igv);
+    $("#nota").val(data.nota);
 
     if (data.imagen != "") {
       var img = data.imagen;
@@ -1287,7 +1373,9 @@ var extencion = img.substr(img.length - 3); // => "1"
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
     $('#img-factura').attr("src", "../dist/img/facturas/" +img);
+
     $("#iddescargar").attr("href","../dist/img/facturas/" +img);
+
   }else{
     $('#img-factura').hide();
     $('#ver_fact_pdf').show();
@@ -1354,6 +1442,23 @@ function total_costo_parcial(idmaquinaria,idproyecto) {
 //========FIN=================
 init();
 
+function formato_miles(num) {
+  if (!num || num == 'NaN') return '-';
+  if (num == 'Infinity') return '&#x221e;';
+  num = num.toString().replace(/\$|\,/g, '');
+  if (isNaN(num))
+      num = "0";
+  sign = (num == (num = Math.abs(num)));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10)
+      cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+      num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+  return (((sign) ? '' : '-') + num + '.' + cents);
+}
+
 $(function () {
 
   
@@ -1364,7 +1469,7 @@ $(function () {
       if ($("#maquinaria").select2("val") == null) {
         
         $("#maquinaria_validar").show(); //console.log($("#proveedor").select2("val") + ", "+ $("#proveedor_old").val());
-        console.log('holaaa""2222');
+       // console.log('holaaa""2222');
       } else {
 
         $("#maquinaria_validar").hide();
@@ -1688,6 +1793,7 @@ function buscar_sunat_reniec() {
     }
   }
 }
+
 function extrae_extencion(filename) {
   return filename.split('.').pop();
 }

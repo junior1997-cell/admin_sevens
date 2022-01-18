@@ -3,10 +3,10 @@ ob_start();
 if (strlen(session_id()) < 1){
 	session_start();//Validamos si existe o no la sesión
 }
-require_once "../modelos/servicio_equipos.php";
+require_once "../modelos/Servicio_equipos.php";
 require_once "../modelos/Fechas.php";
 
-$servicioequipo= new ServicioEquipo();
+$servicioequipos=new ServicioEquipos();
 
 //============SERVICIOS========================
 $idservicio 		= isset($_POST["idservicio"])? limpiarCadena($_POST["idservicio"]):"";	
@@ -48,6 +48,10 @@ $codigo              = isset($_POST["codigo"])? limpiarCadena($_POST["codigo"]):
 $monto               = isset($_POST["monto"])? limpiarCadena($_POST["monto"]):"";
 $fecha_emision       = isset($_POST["fecha_emision"])? limpiarCadena($_POST["fecha_emision"]):"";
 $descripcion_f       = isset($_POST["descripcion_f"])? limpiarCadena($_POST["descripcion_f"]):"";
+$subtotal            = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
+$igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+$nota                = isset($_POST["nota"])? limpiarCadena($_POST["nota"]):"";
+
 
 $imagen2             = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 //$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$foto2
@@ -60,19 +64,19 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				$clavehash="";
 
 
 				if (empty($idservicio)){
 					
-					$rspta=$servicioequipo->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad);
+					$rspta=$servicioequipos->insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					
-					$rspta=$servicioequipo->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad);
+					$rspta=$servicioequipos->editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -92,9 +96,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicioequipo->desactivar($idservicio);
+				$rspta=$servicioequipos->desactivar($idservicio);
  				echo $rspta ? "Servicio Anulado" : "Servicio no se puede Anular";
 			//Fin de las validaciones de acceso
 			}
@@ -113,9 +117,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicioequipo->activar($idservicio);
+				$rspta=$servicioequipos->activar($idservicio);
  				echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
 			//Fin de las validaciones de acceso
 			}
@@ -134,10 +138,10 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idservicioo='1';
-				$rspta=$servicioequipo->mostrar($idservicio);
+				$rspta=$servicioequipos->mostrar($idservicio);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -157,11 +161,11 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{	
 				//$_GET["nube_idproyecto"]
 				$nube_idproyecto =$_GET["nube_idproyecto"];
-				$rspta=$servicioequipo->listar($nube_idproyecto);
+				$rspta=$servicioequipos->listar($nube_idproyecto);
 		 		//Vamos a declarar un array
 				 setlocale(LC_MONETARY, 'en_US');
 		 		$data= Array();
@@ -170,13 +174,22 @@ switch ($_GET["op"]){
 				$c="";
 				$nombre="";
 				$icon="";
+				//----
+				$monto_factura=0;
+				$cc="";
+				$nombree="";
+				$icons="";
 				//$c_parcial = 0;
 		 		while ($reg=$rspta->fetch_object()){
 					//$parametros="'$reg->idservicio','$reg->idproyecto'";
-					$rspta2=$servicioequipo->pago_servicio($reg->idmaquinaria,$reg->idproyecto);
+					$rspta2=$servicioequipos->pago_servicio($reg->idmaquinaria,$reg->idproyecto);
+					$rspta3=$servicioequipos->monto_factura($reg->idmaquinaria,$reg->idproyecto);
 
 					empty($rspta2)?$saldo=0:$saldo = $reg->costo_parcial-$rspta2['monto'];
 					empty($rspta2['monto'])?$monto="0.00":$monto = $rspta2['monto'];
+					
+					empty($rspta3)?$saldo_factura=0:$saldo_factura = $reg->costo_parcial-$rspta3['monto_factura'];
+					empty($rspta3['monto_factura'])?$monto_factura="0.00":$monto_factura = $rspta3['monto_factura'];
 					//empty($rspta2['monto']?($monto="0.00"?$clase="dangar":$clase="warning"): ($monto = $rspta2['monto'] ? 'verdadero2' : 'falso');
 					//$c_parcial = number_format($reg->costo_parcial, 2, '.', ',');
 					if ($saldo == $reg->costo_parcial) {
@@ -207,11 +220,27 @@ switch ($_GET["op"]){
 							//$estado = '<span class="text-center badge badge-success">Terminado</span>';
 						}                
 					  }
+
+					  if ($saldo_factura == $reg->costo_parcial) {
+						$cc="danger";
+
+					  } else {
+		
+						if ($saldo_factura<$reg->costo_parcial && $saldo_factura>"0" ) {
+						  $cc="warning";
+						} else {
+							if ($saldo_factura<="0") {
+								$cc="info";
+								$info="info";
+								$icons="eye";
+							}
+						}                
+					  }
 					  $unidad_medida="'$reg->idmaquinaria','$reg->idproyecto','$reg->unidad_medida'";
 					  $verdatos="'$reg->idmaquinaria','$reg->idproyecto','$reg->costo_parcial','$monto'";
 
 		 			$data[]=array(
-		 				"0"=>' <button class="btn btn-info" onclick="listar_detalle('.$unidad_medida.')"><i class="far fa-eye"></i></button>',
+		 				"0"=>' <button class="btn btn-info btn-sm" onclick="listar_detalle('.$unidad_medida.')"><i class="far fa-eye"></i></button>',
 		 				"1"=>'<div class="user-block">
 						 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->maquina .'</p></span>
 						 <span class="description" style="margin-left: 0px !important;">'. $reg->codigo_maquina .' </span>
@@ -221,12 +250,14 @@ switch ($_GET["op"]){
 		 				"4"=>$reg->cantidad_veces,		 				
 		 				"5"=>number_format($reg->costo_parcial, 2, '.', ','),
 		 				"6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$verdatos.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
-						 <button class="btn btn-'.$c.' btn-xs">'.number_format($monto, 2, '.', ',').'</button> </div>',
+						 <button style="font-size: 14px;" class="btn btn-'.$c.' btn-xs">'.number_format($monto, 2, '.', ',').'</button> </div>',
 		 				"7"=>number_format($saldo, 2, '.', ','),
-		 				"8"=>'<center> <button class="btn btn-info" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+		 				"8"=>'<div class="text-center"> <button class="btn btn-'.$cc.' btn-sm" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg btn-'.$cc.' nav-icon"></i></button> '.'
+						 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($monto_factura, 2, '.', ',').'</button> </div>',
+		 				
 		 				"9"=>$estado
 		 				);
-
+						// "8"=>'<center> <button class="btn btn-info" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
 		 		}
 		 		$results = array(
 		 			"sEcho"=>1, //Información para el datatables
@@ -257,7 +288,7 @@ switch ($_GET["op"]){
 				$idproyecto=$_GET["idproyecto"];
 				/*$idmaquinaria='1';
 				$idproyecto='1';*/
-				$rspta=$servicioequipo->ver_detalle_m($idmaquinaria,$idproyecto);
+				$rspta=$servicioequipos->ver_detalle_m($idmaquinaria,$idproyecto);
 				$fecha_entreg='';
 				$fecha_recoj='';
 				$fecha='';
@@ -336,7 +367,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='1';
 
-		$rspta=$servicioequipo->suma_horas_costoparcial($idmaquinaria,$idproyecto);
+		$rspta=$servicioequipos->suma_horas_costoparcial($idmaquinaria,$idproyecto);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
@@ -346,7 +377,7 @@ switch ($_GET["op"]){
 
 	case 'select2_servicio': 
 
-		$rspta=$servicioequipo->select2_servicio();
+		$rspta=$servicioequipos->select2_servicio();
 
 		while ($reg = $rspta->fetch_object())
 			{
@@ -366,11 +397,11 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idservicioo='1';
 				$idmaquinaria=$_POST["idmaquinaria"];
-				$rspta=$servicioequipo->most_datos_prov_pago($idmaquinaria);
+				$rspta=$servicioequipos->most_datos_prov_pago($idmaquinaria);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 				//Fin de las validaciones de acceso
@@ -389,7 +420,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 					// imgen de perfil
 				if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
@@ -409,14 +440,14 @@ switch ($_GET["op"]){
 
 				if (empty($idpago_servicio)){
 					
-					$rspta=$servicioequipo->insertar_pago($idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
+					$rspta=$servicioequipos->insertar_pago($idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					// validamos si existe LA IMG para eliminarlo
 					if ($flat_img1 == true) {
 
-						$datos_f1 = $servicioequipo->obtenerImg($idpago_servicio);
+						$datos_f1 = $servicioequipos->obtenerImg($idpago_servicio);
 			
 						$img1_ant = $datos_f1->fetch_object()->imagen;
 			
@@ -426,7 +457,7 @@ switch ($_GET["op"]){
 						}
 					}
 					
-					$rspta=$servicioequipo->editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
+					$rspta=$servicioequipos->editar_pago($idpago_servicio,$idproyecto_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$id_maquinaria_pago,$imagen1);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -446,9 +477,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicioequipo->desactivar_pagos($idpago_servicio);
+				$rspta=$servicioequipos->desactivar_pagos($idpago_servicio);
  				echo $rspta ? "Servicio Anulado" : "Servicio no se puede Anular";
 			//Fin de las validaciones de acceso
 			}
@@ -467,9 +498,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicioequipo->activar_pagos($idpago_servicio);
+				$rspta=$servicioequipos->activar_pagos($idpago_servicio);
  				echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
 			//Fin de las validaciones de acceso
 			}
@@ -488,7 +519,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{	
 				//$_GET["nube_idproyecto"]
 				$idmaquinaria =$_GET["idmaquinaria"];
@@ -496,7 +527,7 @@ switch ($_GET["op"]){
 				$tipopago ='Proveedor';
 				//$idmaquinaria ='3';
 				//$idproyecto ='2';
-				$rspta=$servicioequipo->listar_pagos($idmaquinaria,$idproyecto,$tipopago);
+				$rspta=$servicioequipos->listar_pagos($idmaquinaria,$idproyecto,$tipopago);
 		 		//Vamos a declarar un array
 				 //$banco='';
 		 		$data= Array();
@@ -518,7 +549,7 @@ switch ($_GET["op"]){
 		 				"3"=>$reg->cuenta_destino,		 				
 		 				"4"=>$reg->banco,
 		 				"5"=>'<div data-toggle="tooltip" data-original-title="'.$reg->titular_cuenta.'">'.$titular_cuenta.'</div>',
-		 				"6"=>$reg->fecha_pago,
+		 				"6"=>date("d/m/Y", strtotime($reg->fecha_pago)),
 		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
 		 				"8"=>$reg->numero_operacion,
 		 				"9"=>number_format($reg->monto, 2, '.', ','),
@@ -552,7 +583,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{	
 				//$_GET["nube_idproyecto"]
 				$idmaquinaria =$_GET["idmaquinaria"];
@@ -560,7 +591,7 @@ switch ($_GET["op"]){
 				$tipopago ='Detraccion';
 				//$idmaquinaria ='3';
 				//$idproyecto ='2';
-				$rspta=$servicioequipo->listar_pagos($idmaquinaria,$idproyecto,$tipopago);
+				$rspta=$servicioequipos->listar_pagos($idmaquinaria,$idproyecto,$tipopago);
 		 		//Vamos a declarar un array
 				 //$banco='';
 		 		$data= Array();
@@ -577,12 +608,12 @@ switch ($_GET["op"]){
 						 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="far fa-trash-alt"></i></button>':
 						 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 						 ' <button class="btn btn-primary btn-sm" onclick="activar_pagos('.$reg->idpago_servicio.','.$reg->id_maquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"1"=>$reg->forma_pago,	 				
+		 				"1"=>$reg->forma_pago ,	 				
 		 				"2"=>$reg->beneficiario,		 				
 		 				"3"=>$reg->cuenta_destino,		 				
 		 				"4"=>$reg->banco,
 		 				"5"=>'<div data-toggle="tooltip" data-original-title="'.$reg->titular_cuenta.'">'.$titular_cuenta.'</div>',
-		 				"6"=>$reg->fecha_pago,
+		 				"6"=>date("d/m/Y", strtotime($reg->fecha_pago)),
 		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
 		 				"8"=>$reg->numero_operacion,
 		 				"9"=>number_format($reg->monto, 2, '.', ','),
@@ -616,7 +647,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='1';
 
-		$rspta=$servicioequipo->suma_total_pagos($idmaquinaria,$idproyecto,$tipopago);
+		$rspta=$servicioequipos->suma_total_pagos($idmaquinaria,$idproyecto,$tipopago);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
@@ -631,7 +662,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='1';
 
-		$rspta=$servicioequipo->suma_total_pagos($idmaquinaria,$idproyecto,$tipopago);
+		$rspta=$servicioequipos->suma_total_pagos($idmaquinaria,$idproyecto,$tipopago);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
@@ -645,7 +676,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='2';
 
-		$rspta=$servicioequipo->total_costo_parcial_pago($idmaquinaria,$idproyecto);
+		$rspta=$servicioequipos->total_costo_parcial_pago($idmaquinaria,$idproyecto);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
@@ -661,10 +692,10 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idpago_servicio='1';
-				$rspta=$servicioequipo->mostrar_pagos($idpago_servicio);
+				$rspta=$servicioequipos->mostrar_pagos($idpago_servicio);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -686,7 +717,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 					// imgen de perfil
 				if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
@@ -706,14 +737,14 @@ switch ($_GET["op"]){
 
 				if (empty($idfactura)){
 					
-					$rspta=$servicioequipo->insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);
+					$rspta=$servicioequipos->insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2,$subtotal,$igv,$nota);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 				}
 				else {
 					// validamos si existe LA IMG para eliminarlo
 					if ($flat_img1 == true) {
 
-						$datos_f1 = $servicioequipo->obtenerImg($idfactura);
+						$datos_f1 = $servicioequipos->obtenerImg($idfactura);
 			
 						$img1_ant = $datos_f1->fetch_object()->imagen;
 			
@@ -723,7 +754,7 @@ switch ($_GET["op"]){
 						}
 					}
 					
-					$rspta=$servicioequipo->editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);
+					$rspta=$servicioequipos->editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2,$subtotal,$igv,$nota);
 					
 					echo $rspta ? "ok" : "Servicio no se pudo actualizar";
 				}
@@ -743,14 +774,14 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{	
 				//$_GET["nube_idproyecto"]
 				$idmaquinaria =$_GET["idmaquinaria"];
 				$idproyecto =$_GET["idproyecto"];
 				//$idmaquinaria ='3';
 				//$idproyecto ='2';
-				$rspta=$servicioequipo->listar_facturas($idmaquinaria,$idproyecto);
+				$rspta=$servicioequipos->listar_facturas($idmaquinaria,$idproyecto);
 		 		//Vamos a declarar un array
 				 //$banco='';
 		 		$data= Array();
@@ -759,6 +790,7 @@ switch ($_GET["op"]){
 		 		while ($reg=$rspta->fetch_object()){
 					$suma=$suma+$reg->monto;
 					if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+					if (strlen($reg->nota) >= 20 ) { $nota = substr($reg->nota, 0, 20).'...';  } else { $nota = $reg->nota; }
 					empty($reg->imagen)?$imagen='<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>':$imagen='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_factura('."'".$reg->imagen."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
 					$tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 		 			$data[]=array(
@@ -767,11 +799,14 @@ switch ($_GET["op"]){
 						 '<button class="btn btn-warning btn-sm" onclick="mostrar_factura('.$reg->idfactura.')"><i class="fa fa-pencil-alt"></i></button>'.
 						 ' <button class="btn btn-primary btn-sm" onclick="activar_factura('.$reg->idfactura.')"><i class="fa fa-check"></i></button>',
 		 				"1"=>$reg->codigo,	 				
-		 				"2"=>$reg->fecha_emision,		 				
-		 				"3"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
-		 				"4"=>number_format($reg->monto, 2, '.', ','),
-						"5"=>$imagen,
-					   	"6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+		 				"2"=>date("d/m/Y", strtotime($reg->fecha_emision)),		 				
+		 				"3"=>empty($reg->nota)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->nota.'">'.$nota.'</div>',
+		 				"4"=>number_format($reg->subtotal, 4, '.', ','),
+		 				"5"=>number_format($reg->igv, 4, '.', ','),
+		 				"6"=>number_format($reg->monto, 2, '.', ','),
+		 				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+						"8"=>$imagen,
+					   	"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
 						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 
@@ -801,9 +836,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicioequipo->desactivar_factura($idfactura);
+				$rspta=$servicioequipos->desactivar_factura($idfactura);
  				echo $rspta ? "Servicio Anulado" : "Servicio no se puede Anular";
 			//Fin de las validaciones de acceso
 			}
@@ -822,9 +857,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
-				$rspta=$servicioequipo->activar_factura($idfactura);
+				$rspta=$servicioequipos->activar_factura($idfactura);
  				echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
 			//Fin de las validaciones de acceso
 			}
@@ -843,10 +878,10 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['servicio_equipo']==1)
+			if ($_SESSION['servicio_maquina']==1)
 			{
 				//$idpago_servicio='1';
-				$rspta=$servicioequipo->mostrar_factura($idfactura);
+				$rspta=$servicioequipos->mostrar_factura($idfactura);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -865,7 +900,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='1';
 
-		$rspta=$servicioequipo->total_monto_f($idmaquinaria,$idproyecto);
+		$rspta=$servicioequipos->total_monto_f($idmaquinaria,$idproyecto);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
@@ -880,7 +915,7 @@ switch ($_GET["op"]){
 		//$idmaquinaria='1';
 		//$idproyecto='1';
 
-		$rspta=$servicioequipo->total_costo_parcial($idmaquinaria,$idproyecto);
+		$rspta=$servicioequipos->total_costo_parcial($idmaquinaria,$idproyecto);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso

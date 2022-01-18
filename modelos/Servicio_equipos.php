@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-Class ServicioEquipo
+Class ServicioEquipos
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -35,7 +35,7 @@ Class ServicioEquipo
 		FROM servicio as s, maquinaria as m, proveedor as p
 		WHERE s.estado = 1 
 		AND s.idproyecto='$nube_idproyecto'
-		AND m.tipo=2
+		AND m.tipo = 2
 		AND s.idmaquinaria=m.idmaquinaria
         AND m.idproveedor=p.idproveedor
 		GROUP BY s.idmaquinaria";
@@ -45,6 +45,12 @@ Class ServicioEquipo
 	public function pago_servicio($idmaquinaria,$nube_idproyecto){
 		$sql="SELECT SUM(ps.monto) as monto FROM pago_servicio as ps 
 		WHERE ps.estado=1 AND  ps.id_maquinaria ='$idmaquinaria' AND ps.idproyecto='$nube_idproyecto'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+	//monto facturas
+	public function monto_factura($idmaquinaria,$nube_idproyecto){
+		$sql = "SELECT SUM(monto) as monto_factura FROM factura 
+		WHERE estado=1 AND idproyecto='$nube_idproyecto' AND idmaquinaria='$idmaquinaria'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -271,9 +277,10 @@ Class ServicioEquipo
 	/**
 	 * ==========SECCION FACTURAS=============
 	 */
-	public function insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2){
-		$sql="INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen) 
-		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2')";
+	public function insertar_factura($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2,$subtotal,$igv,$nota){
+		//var_dump($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);die();
+		$sql="INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,nota) 
+		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv','$nota')";
 		return ejecutarConsulta($sql);
 	}
 	// obtebnemos los DOCS para eliminar
@@ -284,7 +291,7 @@ Class ServicioEquipo
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para editar registros
-	public function editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2){
+	public function editar_factura($idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2,$subtotal,$igv,$nota){
 		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
 		$sql="UPDATE factura SET
 		idproyecto='$idproyectof',
@@ -293,6 +300,9 @@ Class ServicioEquipo
 		monto='$monto',
 		fecha_emision='$fecha_emision',
 		descripcion='$descripcion_f',
+		subtotal='$subtotal',
+		igv='$igv',
+		nota='$nota',
 		imagen='$imagen2'
 		WHERE idfactura ='$idfactura'";	
 		return ejecutarConsulta($sql);	

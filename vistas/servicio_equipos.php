@@ -66,12 +66,12 @@
                                         <table id="tabla-servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
-                                                    <th>Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
                                                     <th>Nombre Máquina</th>
-                                                    <th>Proveedor</th>
-                                                    <th>Unidad Medida</th>
-                                                    <th>Cantidad(veces)</th>
-                                                    <th>Costo Parcial</th>
+                                                    <th>Proveedor</th>                                                    
+                                                    <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>                                                    
+                                                    <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Costo Parcial">C. Parcial</th>
                                                     <th>Añadir pago</th>
                                                     <th>Saldo</th>
                                                     <th>Facturas</th>
@@ -81,12 +81,12 @@
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Aciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
                                                     <th>Nombre Máquina</th>
                                                     <th>Proveedor</th>
-                                                    <th>Unidad Medida</th>
-                                                    <th>Cantidad(veces)</th>
-                                                    <th>Costo Parcial</th>
+                                                    <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Costo Parcial">C. Parcial</th>
                                                     <th>Añadir pago</th>
                                                     <th>Saldo</th>
                                                     <th>Facturas</th>
@@ -96,6 +96,7 @@
                                         </table>
                                       </div>
                                     <!--=============== FIN Tabla Principal =======--->
+
                                     <!--===============Tabla detalle por maquina  =======--->
                                       <div class="card-body" id="tabla_detalles" style="display: none;">
                                         <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -133,6 +134,7 @@
                                         </table>
                                       </div>
                                     <!--=============== FIN Tabla detalle por maquina =======--->
+
                                     <!--===============Tabla Pagos =======--->
                                       <div class="card-body" id="tabla_pagos" style="display: none;">
                                           <div style="text-align: center;">
@@ -146,12 +148,12 @@
                                                     <th>Acciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th  data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
+                                                    <th  data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                                     <th>Monto</th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
@@ -163,15 +165,22 @@
                                                     <th>Aciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
-                                                    <th id="monto_total_prob" style="color:#ff0000;background-color:#f3e700;"></th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                    <th  style="color:#ff0000;background-color:#45c920;"><b id="monto_total_prob"></b> <br> <b id="porcnt_prove" style="color: black;"></b> </th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
+                                                </tr>
+                                                <tr>
+                                                  <td colspan="8"></td>                                   
+                                                  <td style="font-weight: bold;font-size: 20px;text-align: center;">Saldo</td>                                   
+                                                    <th  style="color:#ff0000;background-color:#f3e700;"><b id="saldo_p"></b> <br> <b id="porcnt_sald_p" style="color: black;"></b> </th>
+                                                    <td colspan="2"></td> 
+
                                                 </tr>
                                             </tfoot>
                                           </table>
@@ -186,12 +195,12 @@
                                                     <th>Acciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                                     <th>Monto</th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
@@ -203,32 +212,42 @@
                                                     <th>Aciones</th>
                                                     <th>Forma pago</th>
                                                     <th>Beneficiario</th>
-                                                    <th>C. Destino</th>
+                                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
                                                     <th>Banco</th>
-                                                    <th>Titular C.</th>
-                                                    <th>Fecha P.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                                     <th>Descripción</th>
-                                                    <th>Número Op.</th>
-                                                    <th id="monto_total_detracc" style="color:#ff0000;background-color:#f3e700;"></th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                                    <th style="color:#ff0000;background-color:#45c920;">  <b id="monto_total_detracc"></b> <br> <b id="porcnt_detrcc" style="color: black;"></b>  </th>
                                                     <th>Vaucher</th>
                                                     <th>Estado</th>
+                                                </tr>
+                                                <tr>
+                                                  <td colspan="8"></td>
+                                                  <td style="font-weight: bold;font-size: 20px;text-align: center;">Saldo</td>                                        
+                                                  <th  style="color:#ff0000;background-color:#f3e700;"><b id="saldo_d"></b> <br> <b id="porcnt_sald_d" style="color: black;"></b> </th>
+                                                  <td colspan="2"></td>
                                                 </tr>
                                             </tfoot>
                                           </table>
                                       </div>
                                     <!--===============FIN Tabla Pagos =======--->
+
                                     <!--===============Tabla facturas =======--->
                                       <div class="card-body" id="tabla_facturas_h" style="display: none;">
                                             
-                                            <div style="text-align:center;"> <h4 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;">6000.00 </b> </h5> </div>
+                                            <div style="text-align:center;"> <h4 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;"></b> </h5> </div>
                                             <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                                               <thead>
                                                   <tr>
                                                       <th>Aciones</th>
                                                       <th>Código</th>
                                                       <th>Fecha Emisión</th>
-                                                      <th>Descripción</th>
+                                                      <th>Nota</th>
+                                                      <th>Sub total</th>
+                                                      <th>IGV</th>
                                                       <th>Monto</th>
+                                                      <th>Descripción</th>
                                                       <th>Factura</th>
                                                       <th>Estado</th>
                                                   </tr>
@@ -239,8 +258,11 @@
                                                       <th>Aciones</th>
                                                       <th>Código</th>
                                                       <th>Fecha Emisión</th>
-                                                      <th>Descripción</th>
-                                                      <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th>                                                    
+                                                      <th>Nota</th>
+                                                      <th>Sub total</th>
+                                                      <th>IGV</th>
+                                                      <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th> 
+                                                      <th>Descripción</th>                                                   
                                                       <th>Factura</th>
                                                       <th>Estado</th>
                                                   </tr> 
@@ -399,6 +421,7 @@
                               </div>
                           </div>
                       </div>
+
                      <!--===============Modal agregar Pagos =========-->
                       <div class="modal fade" id="modal-agregar-pago">
                           <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -546,6 +569,7 @@
                               </div>
                           </div>
                       </div>
+
                      <!--===============Modal-ver-vaucher =========-->
                       <div class="modal fade" id="modal-ver-vaucher">
                           <div class="modal-dialog modal-dialog-scrollable modal-xm">
@@ -567,6 +591,7 @@
                               </div>
                           </div>
                       </div>
+
                       <!--===============Modal-ver-factura =========-->
                       <div class="modal fade" id="modal-ver-factura">
                           <div class="modal-dialog modal-dialog-scrollable modal-xm">
@@ -578,8 +603,8 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <div  class="class-style" style="text-align: center;">
-                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="factura" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a> 
+                                      <div  class="class-style" style="text-align: center;"> 
+                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="factura" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
                                         <br>
                                         <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
                                           <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
@@ -588,7 +613,8 @@
                               </div>
                           </div>
                       </div>
-                    <!--===============Modal agregar Pagos =========-->
+                      
+                    <!--===============Modal agregar factura =========-->
                       <div class="modal fade" id="modal-agregar-factura">
                           <div class="modal-dialog modal-dialog-scrollable modal-lg">
                               <div class="modal-content">
@@ -605,11 +631,11 @@
                                           <div class="card-body">
                                               <div class="row" id="cargando-1-fomulario">
                                                   <!-- id proyecto -->
-                                                  <input type="text" name="idproyectof" id="idproyectof" />
+                                                  <input type="hidden" name="idproyectof" id="idproyectof" />
                                                   <!-- id maquina -->
-                                                  <input type="text" name="idmaquina" id="idmaquina" />
+                                                  <input type="hidden" name="idmaquina" id="idmaquina" />
                                                   <!-- id idfactura -->
-                                                  <input type="text" name="idfactura" id="idfactura" />
+                                                  <input type="hidden" name="idfactura" id="idfactura" />
 
                                                   <!-- Código-->
                                                   <div class="col-lg-6">
@@ -622,7 +648,7 @@
                                                   <div class="col-lg-6">
                                                     <div class="form-group">
                                                       <label for="monto">Monto</label>                               
-                                                      <input type="number"  step="0.01"  name="monto" id="monto" class="form-control"  placeholder="Monto"> 
+                                                      <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();"> 
                                                     </div>                                                        
                                                   </div>
 
@@ -633,8 +659,29 @@
                                                           <input class="form-control" type="date" id="fecha_emision" name="fecha_emision"/>
                                                         </div>
                                                   </div>
+                                                  <!-- Sub total -->
+                                                  <div class="col-lg-3">
+                                                      <div class="form-group">
+                                                          <label for="subtotal">Sub total</label>
+                                                          <input class="form-control" type="number"  id="subtotal" name="subtotal" placeholder="Sub total" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" readonly/>
+                                                        </div>
+                                                  </div>
+                                                  <!-- Fecha Emisión -->
+                                                  <div class="col-lg-3">
+                                                      <div class="form-group">
+                                                          <label for="igv">IGV</label>
+                                                          <input class="form-control" type="number"  id="igv" name="igv" placeholder="IGV" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" readonly />
+                                                        </div>
+                                                  </div>
                                                   <!-- Descripcion-->
-                                                  <div class="col-lg-12">
+                                                  <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                      <label for="nota">Nota </label> <br>
+                                                      <textarea name="nota" id="nota" class="form-control" rows="2"></textarea>
+                                                    </div>                                                        
+                                                  </div>
+                                                  <!-- Descripcion-->
+                                                  <div class="col-lg-6">
                                                     <div class="form-group">
                                                       <label for="descripcion_f">Descripción </label> <br>
                                                       <textarea name="descripcion_f" id="descripcion_f" class="form-control" rows="2"></textarea>
