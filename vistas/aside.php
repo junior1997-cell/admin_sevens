@@ -281,7 +281,7 @@
           </li>
         <?php  }  ?>
         
-        <?php if (true) {  ?>
+        <?php if ($_SESSION['viatico']==1) {  ?>
           <!-- BIÁTICOS -->
           <li class="nav-item">
             <a href="#" class="nav-link">
