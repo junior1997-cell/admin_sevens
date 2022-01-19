@@ -152,7 +152,7 @@ switch ($_GET["op"]){
 			if ($_SESSION['viatico']==1)
 			{
 
-				$rspta=$hospedaje->total();
+				$rspta=$hospedaje->total($idproyecto);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -174,13 +174,11 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['viatico']==1)
 			{
-				
-				$rspta=$hospedaje->listar();
+				$idproyecto= $_GET["idproyecto"];
+				$rspta=$hospedaje->listar($idproyecto);
 		 		//Vamos a declarar un array
 		 		$data= Array();
-				$imagen = '';
 				$comprobante = '';
-				$monto_igv = '';
 		 		while ($reg=$rspta->fetch_object()){
 
 					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_hospedajes/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';

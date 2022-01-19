@@ -220,7 +220,7 @@ function limpiar() {
 
 //Función Listar
 function listar() {
-
+  var idproyecto=localStorage.getItem('nube_idproyecto');
   tabla=$('#tabla-hospedaje').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
@@ -229,7 +229,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/hospedaje.php?op=listar',
+        url: '../ajax/hospedaje.php?op=listar&idproyecto='+idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -370,8 +370,9 @@ function mostrar(idhospedaje) {
 }
 
 function total() {
+  var idproyecto=localStorage.getItem('nube_idproyecto');
   $("#total_monto").html("");
-  $.post("../ajax/hospedaje.php?op=total", function (data, status) {
+  $.post("../ajax/hospedaje.php?op=total", { idproyecto: idproyecto }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 

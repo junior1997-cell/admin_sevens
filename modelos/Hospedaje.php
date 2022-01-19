@@ -61,9 +61,9 @@ Class Hospedaje
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM hospedaje ORDER BY idhospedaje DESC";
+		$sql="SELECT*FROM hospedaje WHERE idproyecto='$idproyecto' ORDER BY idhospedaje DESC";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -74,8 +74,8 @@ Class Hospedaje
 		return ejecutarConsulta($sql);		
 	}
 	//total
-	public function total(){
-		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM hospedaje WHERE estado=1";
+	public function total($idproyecto){
+		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM hospedaje WHERE idproyecto='$idproyecto' AND estado=1";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
