@@ -222,15 +222,15 @@ function listar(nube_idproyecto) {
   //Listar quincenas(botones)
   $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); //console.log(data);
+    data =JSON.parse(data); console.log(data);
 
     // validamos la existencia de DATOS
     if (data) {
 
-      var dia_regular = 0; var weekday_regular = extraer_dia_semana(format_a_m_d(data.fecha_inicio)); var estado_regular = false;
+      var dia_regular = 0; var weekday_regular = extraer_dia_semana(data.fecha_inicio); var estado_regular = false;
 
       if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
-       //console.log(dia_regular, weekday_regular);
+      // console.log(data.fecha_inicio, dia_regular, weekday_regular);
       if (data.fecha_pago_obrero == "quincenal") {
 
         $('#Lista_quincenas').html('');
@@ -386,7 +386,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
   var dia_regular = 0; var count_dias_de_asistencias = 1; var total_pago = 0;
 
   var weekday_regular = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena));
-
+  console.log(weekday_regular);
   // asignamos un numero para restar y llegar al dia DOMIGO
   if (weekday_regular == "do") { dia_regular = -0; } else { if (weekday_regular == "lu") { dia_regular = -1; } else { if (weekday_regular == "ma") { dia_regular = -2; } else { if (weekday_regular == "mi") { dia_regular = -3; } else { if (weekday_regular == "ju") { dia_regular = -4; } else { if (weekday_regular == "vi") { dia_regular = -5; } else { if (weekday_regular == "sa") { dia_regular = -6; } } } } } } }
 

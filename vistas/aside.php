@@ -181,7 +181,7 @@
         <?php if ($_SESSION['asistencia_trabajador']==1) {  ?>
           <!-- REGISTRO DE ASISTENCIA -->
           <li class="nav-item">
-            <a href="registro_sistencia.php" class="nav-link" id="mAsistencia">
+            <a href="registro_asistencia.php" class="nav-link" id="mAsistencia">
               <i class="fas fa-clipboard-list nav-icon"></i>
               <p>
                 Asistencia del trabajador

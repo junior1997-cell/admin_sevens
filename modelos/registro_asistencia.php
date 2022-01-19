@@ -270,9 +270,9 @@ Class Asistencia_trabajador
 		// GROUP BY atr.idtrabajador_por_proyecto;";
 
 		// extraemos todos lo trabajadores del proyecto
-		$sql2 = "SELECT tpp.idtrabajador_por_proyecto, tpp.cargo, tpp.tipo_trabajador, t.nombres, t.tipo_documento, t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora
-		FROM trabajador_por_proyecto AS tpp, trabajador AS t
-		WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$nube_idproyect' AND tpp.tipo_trabajador='Obrero';";
+		$sql2 = "SELECT tpp.idtrabajador_por_proyecto, ct.nombre as cargo, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora
+		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, cargo_trabajador AS ct
+		WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$nube_idproyect' AND ct.idcargo_trabajador = tpp.idcargo_trabajador AND ct.idtipo_trabjador = tp.idtipo_trabajador AND tp.nombre ='Obrero';";
 		$trabajador = ejecutarConsultaArray($sql2);
 
 		$data = array(); $extras= "";
