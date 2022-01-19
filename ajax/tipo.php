@@ -45,10 +45,10 @@ switch ($_GET["op"]){
 
  		while ($reg=$rspta->fetch_object()){
  			$data[]=array(
- 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-xs" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-xs" onclick="desactivar_tipo('.$reg->idtipo_trabajador.')"><i class="far fa-trash-alt"></i></button>':
- 					'<button class="btn btn-warning btn-xs" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-primary btn-xs" onclick="activar_tipo('.$reg->idtipo_trabajador .')"><i class="fa fa-check"></i></button>',
+ 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_tipo('.$reg->idtipo_trabajador.')"><i class="far fa-trash-alt"></i></button>':
+ 					'<button class="btn btn-warning btn-sm" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+ 					' <button class="btn btn-primary btn-sm" onclick="activar_tipo('.$reg->idtipo_trabajador .')"><i class="fa fa-check"></i></button>',
  				"1"=>$reg->nombre,
  				"2"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
  				'<span class="text-center badge badge-danger">Desactivado</span>'

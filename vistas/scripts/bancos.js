@@ -177,18 +177,18 @@ $(function () {
   $("#form-bancos").validate({
     rules: {
       nombre: { required: true },    
-      formato_cta: { required: true },
-      formato_cci: { required: true },
+      formato_cta: { required: true, minlength:8 },
+      formato_cci: { required: true, minlength:8 },
     },
     messages: {
       nombre: {
         required: "Por favor ingrese nombre ", 
       },
       formato_cta: {
-        required: "Campo requerido", 
+        required: "Campo requerido", minlength:"Ingrese almenos 8 dígitos"
       },
       formato_cci: {
-        required: "Campo requerido", 
+        required: "Campo requerido", minlength:"Ingrese almenos 8 dígitos"
       },
     },
         

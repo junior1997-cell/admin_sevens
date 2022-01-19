@@ -403,7 +403,7 @@
 
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form id="form-bancos" name="form-bancos" method="POST">
+                                <form id="form-bancos" name="form-bancos" method="POST" autocomplete="off">
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id banco -->
@@ -468,7 +468,7 @@
 
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form id="form-color" name="form-color" method="POST">
+                                <form id="form-color" name="form-color" method="POST" autocomplete="off">
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id banco -->
@@ -505,7 +505,7 @@
                     modals-Unidad-medidas
                 ======================-->
                 <div class="modal fade" id="modal-agregar-unidad-m">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-dialog modal-dialog-scrollable modal-md">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title">Agregar Unidad de Medida</h4>
@@ -516,20 +516,20 @@
 
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form id="form-unidad-m" name="form-unidad-m" method="POST">
+                                <form id="form-unidad-m" name="form-unidad-m" method="POST" autocomplete="off">
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id idunidad_medida -->
                                             <input type="hidden" name="idunidad_medida" id="idunidad_medida" />
                                             <!-- nombre_medida -->
-                                            <div class="col-lg-6 class_pading">
+                                            <div class="col-lg-12 class_pading">
                                                 <div class="form-group">
                                                     <label for="nombre">Nombre</label>
                                                     <input type="text" name="nombre_medida" class="form-control" id="nombre_medida" placeholder="Nombre de la medida" />
                                                 </div>
                                             </div>
                                             <!-- abreviacion -->
-                                            <div class="col-lg-6 class_pading">
+                                            <div class="col-lg-12 class_pading">
                                                 <div class="form-group">
                                                     <label for="abreviacion">Abreviación</label>
                                                     <input type="text" name="abreviacion" class="form-control" id="abreviacion" placeholder="Abreviación." />
@@ -571,7 +571,7 @@
 
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form id="form-ocupacion" name="form-ocupacion" method="POST">
+                                <form id="form-ocupacion" name="form-ocupacion" method="POST" autocomplete="off">
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id idunidad_medida -->
@@ -619,7 +619,7 @@
 
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form id="form-tipo" name="form-tipo" method="POST">
+                                <form id="form-tipo" name="form-tipo" method="POST" autocomplete="off">
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id idunidad_medida -->
@@ -667,7 +667,7 @@
 
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form id="form-cargo" name="form-cargo" method="POST">
+                                <form id="form-cargo" name="form-cargo" method="POST" autocomplete="off">
                                     <div class="card-body">
                                         <div class="row" id="cargando-1-fomulario">
                                             <!-- id idunidad_medida -->
