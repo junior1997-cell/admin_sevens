@@ -119,10 +119,14 @@
       return ejecutarConsulta($sql);
     }
 
-    public function select2_banco()
-    {
+    public function select2_banco() {
       $sql="SELECT idbancos as id, nombre FROM bancos WHERE estado='1';";
       return ejecutarConsulta($sql);		
+    }
+
+    public function formato_banco($idbanco){
+      $sql="SELECT nombre, formato_cta, formato_cci FROM bancos WHERE estado='1' AND idbancos = '$idbanco';";
+      return ejecutarConsultaSimpleFila($sql);		
     }
 
   }

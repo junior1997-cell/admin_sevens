@@ -461,7 +461,6 @@ function sueld_mensual(){
   $("#sueldo_hora").val(sueldo_horas);
 }
 
-
 //Función limpiar
 function limpiar() {
   $("#idtrabajador").val("");
@@ -682,7 +681,7 @@ function mostrar(idtrabajador) {
     $("#titular_cuenta").val(data.titular_cuenta);
     $("#idtrabajador").val(data.idtrabajador);
     $("#ruc").val(data.ruc);
-//cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado
+    //cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado
     if (data.imagen_perfil != "") {
 
 			$("#foto1_i").attr("src", "../dist/img/usuarios/" + data.imagen_perfil);
@@ -838,8 +837,6 @@ function mostrar(idtrabajador) {
 
       $("#doc_old_5").val("");
     }
-    
-
 
     edades();
   });
@@ -913,12 +910,11 @@ $(function () {
       telefono: { minlength: 8 },
       tipo_trabajador: { required: true},
       cargo: { required: true},
-      c_bancaria: { minlength: 14, maxlength: 14},
+      c_bancaria: { minlength: 10,},
       banco: { required: true},
       tipo: { required: true},
       ocupacion: { required: true},
       ruc: { minlength: 11, maxlength: 11},
-
       // terms: { required: true },
     },
     messages: {
@@ -955,8 +951,7 @@ $(function () {
         required: "Por favor  un cargo.",
       },
       c_bancaria: {
-        minlength: "El número documento debe tener 14 caracteres.",
-        maxlength: "El número documento debe tener maximo 14 caracteres.",
+        minlength: "El número documento debe tener 10 caracteres."
       },
       tipo: {
         required: "Este campo es requerido",
@@ -972,7 +967,6 @@ $(function () {
         maxlength: "El número documento debe tener maximo 11 caracteres.",
       },
     },
-
         
     errorElement: "span",
 
@@ -998,7 +992,6 @@ $(function () {
 
   });
 });
-
 
 /*Validación Fecha de Nacimiento Mayoria de edad del usuario*/
 function edades() {
@@ -1122,7 +1115,6 @@ function validacion_form() {
   }
 
 }
-
 
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec() {
@@ -1252,4 +1244,61 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+
+// damos formato a: Cta, CCI
+function formato_banco() {
+
+  if ($("#banco").select2("val") == null || $("#banco").select2("val") == "") {
+
+    $("#c_bancaria").prop("readonly",true);   $("#cci").prop("readonly",true);
+  } else {
+    
+    $(".chargue-format-1").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+
+    $("#c_bancaria").prop("readonly",false);   $("#cci").prop("readonly",false);
+
+    $.post("../ajax/all_trabajador.php?op=formato_banco", { idbanco: $("#banco").select2("val") }, function (data, status) {
+
+      data = JSON.parse(data);  console.log(data); 
+
+      $(".chargue-format-1").html('Cuenta Bancaria'); $(".chargue-format-2").html('CCI');
+
+      var format_cta = decifrar_format_banco(data.formato_cta); var format_cci = decifrar_format_banco(data.formato_cci);
+
+      $("#c_bancaria").inputmask(`${format_cta}`);
+
+      $("#cci").inputmask(`${format_cci}`);
+
+    });    
+  }  
+}
+
+function decifrar_format_banco(format) {
+
+  var array_format =  format.split("-"); var format_final = "";
+
+  array_format.forEach((item, index)=>{
+
+    console.log(parseInt(item));
+
+    for (let index = 0; index < parseInt(item); index++) {
+
+      format_final = format_final.concat("9");
+    }   
+
+    if (parseInt(item) != 0) {
+      format_final = format_final.concat("-");      
+    }
+  });
+
+  var ultima_letra = format_final.slice(-1);
+   
+  if (ultima_letra == "-") {
+    format_final = format_final.slice(0, (format_final.length-1));
+  }
+
+  console.log(format_final);
+
+  return format_final;
 }

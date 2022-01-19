@@ -193,7 +193,7 @@
                           <div class="col-lg-4">
                             <div class="form-group">
                               <label for="banco">Banco</label>
-                              <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
+                              <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
                                 <!-- Aqui listamos los bancos -->
                               </select>
                               <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
@@ -202,15 +202,15 @@
                           <!-- Cuenta bancaria -->
                           <div class="col-lg-4">
                             <div class="form-group">
-                              <label for="c_bancaria">Cuenta Bancaria</label>
-                              <input type="number" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
+                              <label for="c_bancaria" class="chargue-format-1">Cuenta Bancaria</label>
+                              <input type="text" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
                             </div>
                           </div>
                           <!-- CCI -->
                           <div class="col-lg-4">
                             <div class="form-group">
-                              <label for="c_bancaria">CCI</label>
-                              <input type="number" name="cci" class="form-control" id="cci" placeholder="CCI" />
+                              <label for="c_bancaria" class="chargue-format-2">CCI</label>
+                              <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
                             </div>
                           </div>
                           <!-- Titular de la cuenta -->

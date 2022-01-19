@@ -125,7 +125,7 @@
 
           if (empty($idtrabajador)){
 
-            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3,$cci,$tipo,$ocupacion,$ruc,$cv_documentado,$cv_nodocumentado);
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  str_replace("-", "", $c_bancaria), $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
   
@@ -192,7 +192,7 @@
             }
 
             // editamos un trabajador existente
-            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3,$cci,$tipo,$ocupacion,$ruc,$cv_documentado,$cv_nodocumentado);
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, str_replace("-", "", $c_bancaria), $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
             
             echo $rspta ? "ok" : "Trabajador no se pudo actualizar";
           }            
@@ -263,7 +263,6 @@
         break;  
         
         case 'verdatos':
-
           $rspta=$trabajador->verdatos($idtrabajador);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
@@ -278,6 +277,14 @@
             echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
           }
 
+        break;
+
+        case 'formato_banco':
+           
+          $rspta=$trabajador->formato_banco($_POST["idbanco"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+           
         break;
       }
 

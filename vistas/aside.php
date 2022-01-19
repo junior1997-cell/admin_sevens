@@ -148,7 +148,7 @@
         </li>
       </ul>
 
-      <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-1" >
+      <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-1" data-widget="treeview" role="menu" data-accordion="false" >
         <!-- OTROS -->
         <li class="nav-header">Modulos</li>
 
@@ -270,7 +270,7 @@
         <?php  }  ?>
 
         <?php if ($_SESSION['plano_otro']==1) {  ?>
-          <!-- CALENDARIO -->       
+          <!-- PLANOS Y OTROS -->       
           <li class="nav-item">
             <a href="plano_otro.php" class="nav-link" id="mPlanoOtro">
               <i class="nav-icon fas fa-map-marked-alt"></i>
@@ -280,11 +280,67 @@
             </a>
           </li>
         <?php  }  ?>
-
-      </ul>
-
-     
-       
+        
+        <?php if (true) {  ?>
+          <!-- BIÁTICOS -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-plane"></i>
+              <p>
+                Viáticos
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <!-- TRANSPORTE -->
+              <li class="nav-item">
+                <a href="transporte.php" class="nav-link">
+                  <i class="fas fa-shuttle-van nav-icon"></i>
+                  <p>Transporte</p>
+                </a>
+              </li>
+              <!-- HOSPEDAJE -->
+              <li class="nav-item">
+                <a href="hospedaje.php" class="nav-link">
+                  <i class="fas fa-hotel nav-icon"></i>
+                  <p>Hospedaje</p>
+                </a>
+              </li>
+              <!-- COMIDA -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-fish nav-icon"></i>
+                  <p>
+                    Comida
+                    <i class="right fas fa-angle-left"></i> 
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="pension.php" class="nav-link">
+                      <i class="fas fa-utensils nav-icon"></i>
+                      <p>Pensión</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="break.php" class="nav-link">
+                      <i class="fas fa-hamburger nav-icon"></i>
+                      <p>Break</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="comidas_extras.php" class="nav-link">
+                      <i class="fas fa-drumstick-bite nav-icon"></i>
+                      <p>Comidas - extras</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>              
+            </ul>
+          </li>
+        <?php  }  ?>       
+        
+      </ul>      
     </nav>
     <!-- /.sidebar-menu -->
   </div>
