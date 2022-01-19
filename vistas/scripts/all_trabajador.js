@@ -589,61 +589,65 @@ function verdatos(idtrabajador){
     var imagen_dni_anverso =data.imagen_dni_anverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_anverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
     var imagen_dni_reverso =data.imagen_dni_reverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_reverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
     
-    verdatos=''+                                                                            
-    '<div class="col-12">'+
-      '<div class="card">'+
-          '<div class="card-body ">'+
-              '<table class="table table-hover table-bordered">'+          
-                  '<tbody>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th rowspan="2">'+imagen_perfil+'</th>'+
-                          '<td> <b>Nombre: </b> '+data.nombres+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<td> <b>DNI: </b>  '+data.numero_documento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Dirección</th>'+
-                          '<td>'+data.direccion+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Correo</th>'+
-                          '<td>'+data.email+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Teléfono</th>'+
-                          '<td>'+data.telefono+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Fecha nacimiento</th>'+
-                          '<td>'+data.fecha_nacimiento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cuenta bancaria</th>'+
-                          '<td>'+data.cuenta_bancaria+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Banco</th>'+
-                          '<td>'+data.banco+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Titular cuenta </th>'+
-                          '<td>'+data.titular_cuenta+'</td>'+
-                      '</tr>'+
-
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>DNI anverso</th>'+
-                          '<td> '+imagen_dni_anverso+' </td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>DNI reverso</th>'+
-                          '<td> '+imagen_dni_reverso+' </td>'+
-                      '</tr>'+
-                  '</tbody>'+
-              '</table>'+
-          '</div>'+
-      '</div>'+
-    '</div>';
+    verdatos=`                                                                            
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-hover table-bordered">        
+            <tbody>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th rowspan="2">${imagen_perfil}</th>
+                <td> <b>Nombre: </b> ${data.nombres}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <td> <b>DNI: </b>  ${data.numero_documento}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Dirección</th>
+                <td>${data.direccion}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Correo</th>
+                <td>${data.email}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Teléfono</th>
+                <td>${data.telefono}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Fecha nacimiento</th>
+                  <td>${data.fecha_nacimiento}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Cuenta bancaria</th>
+                <td>${data.cuenta_bancaria_format}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>CCI </th>
+                <td>${data.cci_format}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Banco</th>
+                <td>${data.banco}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Titular cuenta </th>
+                <td>${data.titular_cuenta}</td>
+              </tr>
+              
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>DNI anverso</th>
+                <td> ${imagen_dni_anverso} </td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>DNI reverso</th>
+                <td> ${imagen_dni_reverso} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
   
     $("#datostrabajador").html(verdatos);
 
@@ -1269,7 +1273,6 @@ function formato_banco() {
       $("#c_bancaria").inputmask(`${format_cta}`);
 
       $("#cci").inputmask(`${format_cci}`);
-
     });    
   }  
 }
@@ -1280,25 +1283,14 @@ function decifrar_format_banco(format) {
 
   array_format.forEach((item, index)=>{
 
-    console.log(parseInt(item));
+    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
 
-    for (let index = 0; index < parseInt(item); index++) {
-
-      format_final = format_final.concat("9");
-    }   
-
-    if (parseInt(item) != 0) {
-      format_final = format_final.concat("-");      
-    }
+    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
   });
 
   var ultima_letra = format_final.slice(-1);
    
-  if (ultima_letra == "-") {
-    format_final = format_final.slice(0, (format_final.length-1));
-  }
-
-  console.log(format_final);
+  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
 
   return format_final;
 }

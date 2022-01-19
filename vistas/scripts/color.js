@@ -63,7 +63,7 @@ function listar() {
 
 //Función para guardar o editar
 
-function guardaryeditar(e) {
+function guardaryeditar_color(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-color")[0]);
  
@@ -166,7 +166,7 @@ $(function () {
 
     submitHandler: function (e) {
       console.log('kkkkkk');
-        guardaryeditar(e);
+      guardaryeditar_color(e);
       
     },
   });

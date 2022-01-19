@@ -46,7 +46,7 @@
 				//Vamos a declarar un array
 				$data= Array();
 
-				$cta = "001102280200692616"; $cci = "01122800020069261642";
+				$cta = "123456789012345678901234567890"; $cci = "123456789012345678901234567890";
 
 				while ($reg=$rspta->fetch_object()){
 					$data[]=array(
@@ -110,7 +110,7 @@
 					}	
 				}  
 			}			
-			return $format_cuenta;
+			return substr($format_cuenta, 0, -1);
 		} 
 
 	ob_end_flush();

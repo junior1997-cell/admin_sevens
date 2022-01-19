@@ -30,11 +30,13 @@
       $nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
       $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";
       $c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
+      $c_bancaria_format= isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
       $email			      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
       $banco			      = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
       $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
       
       $cci	          	= isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
+      $cci_format      	= isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
       $tipo	          	= isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
       $ocupacion	      = isset($_POST["ocupacion"])? limpiarCadena($_POST["ocupacion"]):"";
       $ruc	          	= isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
@@ -125,7 +127,7 @@
 
           if (empty($idtrabajador)){
 
-            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  str_replace("-", "", $c_bancaria), $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, str_replace("-", "", $c_bancaria), $c_bancaria_format, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $cci_format, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
   
@@ -192,7 +194,7 @@
             }
 
             // editamos un trabajador existente
-            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, str_replace("-", "", $c_bancaria), $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, str_replace("-", "", $c_bancaria), $c_bancaria_format, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $cci_format, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
             
             echo $rspta ? "ok" : "Trabajador no se pudo actualizar";
           }            
@@ -248,7 +250,7 @@
               "3"=> $reg->nombre_ocupacion,
               "4"=>$reg->telefono,
               "5"=>$reg->fecha_nacimiento.' : '.$reg->edad,
-              "6"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
+              "6"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria_format .' <br> <b>CCI: </b>'.$reg->cci_format,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
