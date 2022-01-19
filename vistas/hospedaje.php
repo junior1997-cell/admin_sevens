@@ -76,7 +76,7 @@
                                                     <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
                                                     <th data-toggle="tooltip" data-original-title="Unidad">Unidad</th>
                                                     <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Parcial">Parcial</th>
+                                                    <th data-toggle="tooltip" data-original-title="Parcial">Momto Parcial</th>
                                                     <th>Comprobante</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -91,7 +91,9 @@
                                                 <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
                                                 <th data-toggle="tooltip" data-original-title="Unidad">Unidad</th>
                                                 <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                <th data-toggle="tooltip" data-original-title="Parcial">Parcial</th>
+                                                <th data-toggle="tooltip" data-original-title="Parcial" style="background-color: #ffdd00;" >
+                                                    <span id="total_monto"></span>
+                                                </th>
                                                 <th>Comprobante</th>
                                                 <th>Estado</th>
 

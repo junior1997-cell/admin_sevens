@@ -141,6 +141,28 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+	case 'total':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['recurso']==1)
+			{
+
+				$rspta=$hospedaje->total();
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
 
 	case 'listar':
 		if (!isset($_SESSION["nombre"]))

@@ -250,6 +250,7 @@ function listar() {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+  total();
 }
 //ver ficha tecnica
 function modal_comprobante(comprobantenica){
@@ -306,6 +307,7 @@ function guardaryeditar(e) {
 				limpiar();
 
         $("#modal-agregar-hospedaje").modal("hide");
+        total();
 
 			}else{
 
@@ -367,6 +369,17 @@ function mostrar(idhospedaje) {
   });
 }
 
+function total() {
+  $("#total_monto").html("");
+  $.post("../ajax/hospedaje.php?op=total", function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);  
+
+    $("#total_monto").html('S/. '+data.precio_parcial);
+  });
+}
+
+
 //Función para desactivar registros
 function desactivar(idhospedaje) {
   Swal.fire({
@@ -384,6 +397,7 @@ function desactivar(idhospedaje) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
         tabla.ajax.reload();
+        total();
       });      
     }
   });   
@@ -406,6 +420,7 @@ function activar(idhospedaje) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
         tabla.ajax.reload();
+        total();
       });
       
     }

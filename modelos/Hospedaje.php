@@ -73,6 +73,11 @@ Class Hospedaje
 		$sql="SELECT comprobante FROM hospedaje WHERE idhospedaje='$idhospedaje'";
 		return ejecutarConsulta($sql);		
 	}
+	//total
+	public function total(){
+		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM hospedaje WHERE estado=1";
+		return ejecutarConsultaSimpleFila($sql);
+	}
 
 }
 
