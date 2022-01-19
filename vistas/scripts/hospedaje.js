@@ -181,7 +181,7 @@ if ($("#cantidad").val()!='') {
   
   precio_parcial=cantidad*precio_unitario;
 
-  $("#precio_parcial").val(precio_parcial);
+  $("#precio_parcial").val(formato_miles(precio_parcial));
 
 }else{
   $("#precio_parcial").val("");
@@ -253,8 +253,8 @@ function listar() {
   total();
 }
 //ver ficha tecnica
-function modal_comprobante(comprobantenica){
-  var comprobante = comprobantenica;
+function modal_comprobante(comprobante){
+  var comprobante = comprobante;
   console.log(comprobante);
 var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 //console.log(extencion);
@@ -545,4 +545,22 @@ function restrigir_fecha_ant() {
 
   document.getElementById("fecha_fin").setAttribute("min", today2);
 }
+
+function formato_miles(num) {
+  if (!num || num == 'NaN') return '-';
+  if (num == 'Infinity') return '&#x221e;';
+  num = num.toString().replace(/\$|\,/g, '');
+  if (isNaN(num))
+      num = "0";
+  sign = (num == (num = Math.abs(num)));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10)
+      cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+      num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
+  return (((sign) ? '' : '-') + num + '.' + cents);
+}
+
 
