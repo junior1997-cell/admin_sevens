@@ -27,7 +27,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['recurso']==1)
+			if ($_SESSION['viatico']==1)
 			{
 
 				// Comprobante
@@ -85,7 +85,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['recurso']==1)
+			if ($_SESSION['viatico']==1)
 			{
 				$rspta=$hospedaje->desactivar($idhospedaje);
  				echo $rspta ? "material Desactivado" : "material no se puede desactivar";
@@ -106,7 +106,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['recurso']==1)
+			if ($_SESSION['viatico']==1)
 			{
 				$rspta=$hospedaje->activar($idhospedaje);
  				echo $rspta ? "Material activado" : "material no se puede activar";
@@ -127,7 +127,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['recurso']==1)
+			if ($_SESSION['viatico']==1)
 			{
 				//$idhospedaje='1';
 				$rspta=$hospedaje->mostrar($idhospedaje);
@@ -149,7 +149,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['recurso']==1)
+			if ($_SESSION['viatico']==1)
 			{
 
 				$rspta=$hospedaje->total();
@@ -172,7 +172,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['recurso']==1)
+			if ($_SESSION['viatico']==1)
 			{
 				
 				$rspta=$hospedaje->listar();

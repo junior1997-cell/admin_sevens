@@ -29,7 +29,7 @@
             <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['recurso']==1){
+          if ($_SESSION['viatico']==1){
           ?>
 
             <!-- Content Wrapper. Contains page content -->
