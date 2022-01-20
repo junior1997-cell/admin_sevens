@@ -57,13 +57,13 @@ ob_start();
 
           if (empty($_POST["idsumas_adicionales"])) {
 
-            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"]);
+            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"], $_POST["estado_envio_contador"]);
 
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario"; 
 
           } else {
 
-            $rspta = $asist_trabajador->editar_pago_al_contador($_POST["idsumas_adicionales"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"]);
+            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idsumas_adicionales"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"], $_POST["estado_envio_contador"]);
 
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
           }
@@ -142,15 +142,15 @@ ob_start();
           //Codificar el resultado utilizando json
           echo json_encode($data);		
         break;
-
-        case 'listarquincenas':
+        
+        // listamos los botones de la quincena o semana
+        case 'listarquincenas_botones':
 
           $nube_idproyecto = $_POST["nube_idproyecto"];
 
-          $rspta=$asist_trabajador->listarquincenas_b($nube_idproyecto);
-
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);	
+          $rspta=$asist_trabajador->listarquincenas_botones($nube_idproyecto);
+          
+          echo json_encode($rspta);	 //Codificar el resultado utilizando json
 
         break;
         // lista la tabla principal 
@@ -205,12 +205,13 @@ ob_start();
           echo json_encode($results);
 
         break;
+
         // lista la tabla individual por trabajador
         case 'listar_asis_individual':
 
-          $idtrabajador_proyecto = $_GET["idtrabajadorproyecto"];
+          $idtrabajador_x_proyecto = $_GET["idtrabajadorproyecto"];
           
-          $rspta=$asist_trabajador->listar_asis_individual($idtrabajador_proyecto);
+          $rspta=$asist_trabajador->listar_asis_individual($idtrabajador_x_proyecto);
           //Vamos a declarar un array
           $data= Array();
           
@@ -247,6 +248,7 @@ ob_start();
           echo json_encode($results);
         break;
         
+        // no se utiliza
         case 'ver_asistencia_trab':
 
           $idtrabajador= '1';
@@ -256,6 +258,7 @@ ob_start();
           echo json_encode($rspta);		
 
         break;
+
         // listamos para registrar asistencia
         case 'lista_trabajador': 
 
@@ -280,6 +283,13 @@ ob_start();
           // enviamos los datos codificado
           echo json_encode($datos);
 
+        break;
+
+        case 'descripcion_adicional_descuento':
+
+          $rspta=$asist_trabajador->descripcion_adicional_descuento($_POST["id_adicional"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
         break;
       } // end switch
 
