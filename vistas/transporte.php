@@ -236,14 +236,14 @@
                           <div class="modal-dialog modal-dialog-scrollable modal-xl ">
                               <div class="modal-content">
                                   <div class="modal-header">
-                                      <h4 class="modal-title">Ficha Técnica</h4>
+                                      <h4 class="modal-title">Comprobante Transporte</h4>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span class="text-danger" aria-hidden="true">&times;</span>
                                       </button>
                                   </div>
                                   <div class="modal-body">
                                       <div  class="class-style" style="text-align: center;"> 
-                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="Ficha Técnica" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
+                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download=" Comprobante transporte" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
                                         <br>
                                         <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
                                           <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
