@@ -184,16 +184,16 @@ $(function () {
 
   $("#form-cargo").validate({
     rules: {
-      nombre_color: { required: true },      // terms: { required: true },
-      idtipo_trabjador: { required: true }
+      idtipo_trabjador_c: { required: true },      // terms: { required: true },
+      nombre_cargo: { required: true }
     },
     messages: {
 
-      nombre_color: {
-        required: "Por favor ingrese nombre", 
+      idtipo_trabjador_c: {
+        required: "Campo requerido", 
       },
-      idtipo_trabjador: {
-        required: "Por favor selecione un tipo trabajador", 
+      nombre_cargo: {
+        required: "Campo requerido", 
       },
 
     },

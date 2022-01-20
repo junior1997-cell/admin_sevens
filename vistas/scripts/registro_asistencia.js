@@ -222,7 +222,7 @@ function listar(nube_idproyecto) {
   //Listar quincenas(botones)
   $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); console.log(data);
+    data =JSON.parse(data); //console.log(data);
 
     // validamos la existencia de DATOS
     if (data) {
@@ -370,6 +370,9 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
   // cambiamos el valor del colspan
   $("#dias_asistidos_s_q").attr("colspan", cant_dias_asistencia);
 
+  // cambiamos el TABLE-HEAD tipo de pago
+  if (cant_dias_asistencia == 7) { $(".head_pago_q_s").html("Pago semanal"); }else{ $(".head_pago_q_s").html("Pago quincenal"); }
+
   $("#card-editar").show();
   $("#card-guardar").hide();  
 
@@ -386,7 +389,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
   var dia_regular = 0; var count_dias_de_asistencias = 1; var total_pago = 0;
 
   var weekday_regular = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena));
-  console.log(weekday_regular);
+  //console.log(weekday_regular);
   // asignamos un numero para restar y llegar al dia DOMIGO
   if (weekday_regular == "do") { dia_regular = -0; } else { if (weekday_regular == "lu") { dia_regular = -1; } else { if (weekday_regular == "ma") { dia_regular = -2; } else { if (weekday_regular == "mi") { dia_regular = -3; } else { if (weekday_regular == "ju") { dia_regular = -4; } else { if (weekday_regular == "vi") { dia_regular = -5; } else { if (weekday_regular == "sa") { dia_regular = -6; } } } } } } }
 
@@ -658,19 +661,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
           fecha = sumaFecha(1,fecha);
         } //end for
       }
-      //console.log(count_dias_asistidos);
-      // validamos el sabatical
-      // if (horas_total >= 44 && horas_total < 88) {
-
-      //   sabatical = 1;
-
-      // } else {
-
-      //   if (horas_total >= 88) {
-          
-      //     sabatical = 2;
-      //   }
-      // }
+      
 
       // asignamos lo trabajadores a un "array"
       var data_trabajador = { 
@@ -696,33 +687,42 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
       
       var fechas_adicional = "";
       
-      if (value.idsumas_adicionales == "") {
+      // validamos si existe una suma_adicional 
+      if (value.idsumas_adicionales == "") { fechas_adicional = format_a_m_d(f1); } else { fechas_adicional = value.fecha_registro; }
 
-        fechas_adicional = format_a_m_d(f1);
-
-      } else {
-
-        fechas_adicional = value.fecha_registro;
-      }
       var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> <span class="span_asist" >${value.adicional_descuento}</span> <input class="w-px-45 input_asist hidden adicional_descuento_${value.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${data.length}', '${value.idtrabajador_por_proyecto}') }, 300 );" type="text" value="${value.adicional_descuento}" autocomplete="off" > <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${value.idsumas_adicionales}', '${value.idtrabajador_por_proyecto}', '${fechas_adicional}', '${value.descripcion_descuento}');"><i class="far fa-eye"></i></span></td>`;
 
       var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> <span  class="val_pago_quincenal_${index+1} pago_quincenal_${value.idtrabajador_por_proyecto}"> ${((parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)) + parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2))) + parseFloat(value.adicional_descuento) ).toFixed(2)} </span> </td>`;
 
+      var tabla_bloc_envio_contador_11 = "";
+
+      // validamos el el envio al contador
+      if (value.estado_envio_contador == "") {
+        tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_asignar_pago_contador_${value.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idsumas_adicionales}', '${value.pago_quincenal}');"> </td>`;        
+      } else {
+        if (value.estado_envio_contador == "0") {
+          tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_asignar_pago_contador_${value.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idsumas_adicionales}', '${value.pago_quincenal}');"> </td>`;                  
+        } else {
+          tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked id="checkbox_asignar_pago_contador_${value.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idsumas_adicionales}', '${value.pago_quincenal}');"> </td>`;                  
+        }
+      }
+
       // acumulamos el total de pagos
       total_pago = total_pago + parseFloat( (  (parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)) + parseFloat( (parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2) ) ) + parseFloat(value.adicional_descuento)  ).toFixed(2) );
       
-      var tabla_bloc_HN_1 = '<tr>'+
-              '<td>H/N</td>'+
-              tabla_bloc_HN_trabaj_2 +
-              tabla_bloc_HN_asistencia_3 +
-              tabla_bloc_HN_total_hora_4 +
-              tabla_bloc_HN_total_dia_5 +
-              tabla_bloc_HN_sueldos_6 +
-              tabla_bloc_HN_sabatical_7 +
-              tabla_bloc_HN_pago_parcial_8 +
-              tabla_bloc_HN_descuent_9 +
-              tabla_bloc_HN_pago_total_10 +
-            '</tr>';      
+      var tabla_bloc_HN_1 = `<tr>
+              <td>H/N</td>
+              ${tabla_bloc_HN_trabaj_2}
+              ${tabla_bloc_HN_asistencia_3} 
+              ${tabla_bloc_HN_total_hora_4}
+              ${tabla_bloc_HN_total_dia_5} 
+              ${tabla_bloc_HN_sueldos_6} 
+              ${tabla_bloc_HN_sabatical_7} 
+              ${tabla_bloc_HN_pago_parcial_8} 
+              ${tabla_bloc_HN_descuent_9}
+              ${tabla_bloc_HN_pago_total_10}
+              ${tabla_bloc_envio_contador_11}
+            </tr>`;      
     
       var tabla_bloc_HE_total_hora_3 = `<td class="text-center"> <span  class="total_HE_${value.idtrabajador_por_proyecto}">${horas_extr_total}</span> </td>`;
     
@@ -1106,15 +1106,15 @@ function calcular_he(fecha, span_class_he, input_class_hn, id_trabajador, cant_d
   $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles((suma_he * parseFloat(sueldo_hora)).toFixed(2)));
 
   // calculamos el pago quincenal con: Pago parcial,	Adicional/descuento
-  var pago_quincenal = ( (parseFloat((suma_hn * parseFloat(sueldo_hora)).toFixed(2)) + parseFloat((suma_he * parseFloat(sueldo_hora)).toFixed(2))) + adicional_descuento ).toFixed(2)
+  var pago_quincenal = ( (parseFloat((suma_hn * parseFloat(sueldo_hora)).toFixed(2)) + parseFloat((suma_he * parseFloat(sueldo_hora)).toFixed(2))) + adicional_descuento ).toFixed(1)
 
   $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal));
 
   var suma_total_quincena = 0;
 
-  for (let k = 1; k < parseInt(cant_trabajador); k++) {    
-    // console.log($(`.val_pago_quincenal_${k}`).text()); 
-    suma_total_quincena = suma_total_quincena + parseFloat($(`.val_pago_quincenal_${k}`).text()); 
+  for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
+    //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
+    suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
   }
 
   // console.log(suma_total_quincena);
@@ -1135,14 +1135,14 @@ function adicional_descuento(cant_trabajador, id_trabajador) {
 
     suma_resta = (pago_parcial_HN + pago_parcial_HE) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
 
-    $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(2)));
+    $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(1)));
 
     var suma_total_quincena = 0;
 
     // acumulamos todos los pagos quicenales
-    for (let k = 1; k < parseInt(cant_trabajador); k++) {    
-      // console.log($(`.val_pago_quincenal_${k}`).text()); 
-      suma_total_quincena = suma_total_quincena + parseFloat($(`.val_pago_quincenal_${k}`).text()); 
+    for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
+      console.log($(`.val_pago_quincenal_${k}`).text()); 
+      suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
     }
 
     $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
@@ -1305,7 +1305,7 @@ function cerrar_modal() {
   $(".progress-bar").addClass("progress-bar-striped");
 }
 
-function calcular_sabatical(fecha,  id_trabajador, cant_dias_asistencia, sueldo_hora, cant_trabajador) {
+function calcular_sabatical(fecha,  id_trabajador_x_proyecto, cant_dias_asistencia, sueldo_hora, cant_trabajador) {
 
   if ($(`#${checkbox_input_class}`).is(':checked')) {
 
@@ -1315,4 +1315,77 @@ function calcular_sabatical(fecha,  id_trabajador, cant_dias_asistencia, sueldo_
   }
   //calcular_he(fecha, span_class_he, input_class_hn, id_trabajador, cant_dias_asistencia, sueldo_hora, cant_trabajador);
 
+}
+
+function asignar_pago_al_contador(fecha_q_s, id_trabajador_x_proyecto, nombre_trabajador, idsumas_adicionales, pago_quincenal) {
+ 
+  if (idsumas_adicionales !== "" && parseFloat(pago_quincenal) > 0) {
+     
+    if ($(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).is(':checked')) {
+
+      Swal.fire({
+        title: "¿Está Seguro de enviar el pago al contador?",
+        text: `Al enviar, el contador podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, enviar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.post("../ajax/registro_asistencia.php?op=guardaryeditar_pago_al_contador", { 
+            fecha_q_s: fecha_q_s,
+            id_trabajador_x_proyecto: id_trabajador_x_proyecto,
+            idsumas_adicionales: idsumas_adicionales 
+          }, function (e) {
+
+            if (e == 'ok') {
+              datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+              Swal.fire("Enviado!", `El pago de: ${nombre_trabajador} a sido enviado con éxito.`, "success");
+              // $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', true);
+            } else {
+              $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+            }
+          });    
+        }else{
+          $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+        }
+      });  
+  
+    } else {
+  
+      Swal.fire({
+        title: "¿Está Seguro de ANULAR el pago al contador?",
+        text: `Al ANULAR, el contador NO podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, enviar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // $.post("../ajax/registro_asistencia.php?op=guardaryeditar_pago_al_contador", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+    
+          //   Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
+        
+          //   tabla.ajax.reload(); tabla2.ajax.reload();
+          // });  
+          $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+    
+        }else{
+          $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', true);
+        }
+      });
+    }
+  }else{
+
+    toastr.error(`El trabajador no tiene ningun pago registrado, <h5>registre alguno.</h5>`);
+
+    $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+  }  
+}
+
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, '');
+  return inVal;
 }

@@ -278,7 +278,8 @@ Class Asistencia_trabajador
 		$data = array(); $extras= "";
 
 		$idsumas_adicionales = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; $sabatical_manual_1 =""; $sabatical_manual_2 = "";
-		$pago_parcial_hn = ""; $pago_parcial_he = ""; $adicional_descuento = ""; $descripcion_descuento = ""; $pago_quincenal = "";
+		$pago_parcial_hn = ""; $pago_parcial_he = ""; $adicional_descuento = ""; $descripcion_descuento = ""; $pago_quincenal = ""; $estado_envio_contador = "";
+
 
 		foreach ($trabajador as $indice => $key) {
 
@@ -288,17 +289,17 @@ Class Asistencia_trabajador
 			$sql3 = "SELECT * FROM asistencia_trabajador  AS atr WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
 			$asistencia = ejecutarConsultaArray($sql3);
 
-			$sql4 = "SELECT idsumas_adicionales, idtrabajador_por_proyecto, fecha_registro, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal 
+			$sql4 = "SELECT idsumas_adicionales, idtrabajador_por_proyecto, fecha_registro, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal, estado_envio_contador 
 			FROM sumas_adicionales WHERE idtrabajador_por_proyecto = '$id_trabajador_proyect' AND fecha_registro = '$f1';";
 
 			$extras = ejecutarConsultaSimpleFila($sql4);
 
 			if (empty($extras)) {
 				$idsumas_adicionales = ""; $fecha_registro=""; $total_hn = 0; $total_he = 0; $total_dias_asistidos = 0; $sabatical = 0; $sabatical_manual_1 = 0; $sabatical_manual_2 = 0;
-				$pago_parcial_hn = 0; $pago_parcial_he = 0; $adicional_descuento = 0; $descripcion_descuento = ""; $pago_quincenal = 0;
+				$pago_parcial_hn = 0; $pago_parcial_he = 0; $adicional_descuento = 0; $descripcion_descuento = ""; $pago_quincenal = 0; $estado_envio_contador="";
 			} else {
 				$idsumas_adicionales = $extras['idsumas_adicionales']; $fecha_registro=$extras['fecha_registro']; $total_hn = $extras['total_hn']; $total_he = $extras['total_he']; $total_dias_asistidos = $extras['total_dias_asistidos']; $sabatical = $extras['sabatical']; $sabatical_manual_1 = $extras['sabatical_manual_1']; $sabatical_manual_2 = $extras['sabatical_manual_2'];
-				$pago_parcial_hn = $extras['pago_parcial_hn']; $pago_parcial_he = $extras['pago_parcial_he']; $adicional_descuento = $extras['adicional_descuento']; $descripcion_descuento = $extras['descripcion_descuento']; $pago_quincenal = $extras['pago_quincenal'];
+				$pago_parcial_hn = $extras['pago_parcial_hn']; $pago_parcial_he = $extras['pago_parcial_he']; $adicional_descuento = $extras['adicional_descuento']; $descripcion_descuento = $extras['descripcion_descuento']; $pago_quincenal = $extras['pago_quincenal']; $estado_envio_contador = $extras['estado_envio_contador'];
 			}
 			
 
@@ -326,7 +327,8 @@ Class Asistencia_trabajador
 				'pago_parcial_he'=> $pago_parcial_he, 
 				'adicional_descuento'=> $adicional_descuento, 
 				'descripcion_descuento'=> $descripcion_descuento, 
-				'pago_quincenal'=> $pago_quincenal
+				'pago_quincenal'=> $pago_quincenal,
+				'estado_envio_contador' => $estado_envio_contador
 			);
 
 			$idsumas_adicionales = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; $sabatical_manual_1 = ""; $sabatical_manual_2 = "";
@@ -371,6 +373,22 @@ Class Asistencia_trabajador
 	{
 		$sql = "UPDATE sumas_adicionales 
 			SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_registro='$fecha_registro', descripcion_descuento = '$detalle_adicional'
+			WHERE idsumas_adicionales = '$idsumas_adicionales';";
+		return		ejecutarConsulta($sql);
+	}
+
+	public function insertar_pago_al_contador( $id_trabajador_x_proyecto, $fecha_q_s)
+	{
+		$sql = "INSERT INTO sumas_adicionales(idtrabajador_por_proyecto, fecha_registro, descripcion_descuento) 
+				VALUES ('$id_trabajador_x_proyecto', '$fecha_q_s', '1' )";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function editar_pago_al_contador($idsumas_adicionales, $id_trabajador_x_proyecto, $fecha_q_s)
+	{
+		$sql = "UPDATE sumas_adicionales 
+			SET  idtrabajador_por_proyecto='$id_trabajador_x_proyecto', fecha_registro='$fecha_q_s', descripcion_descuento = '0'
 			WHERE idsumas_adicionales = '$idsumas_adicionales';";
 		return		ejecutarConsulta($sql);
 	}

@@ -53,6 +53,23 @@ ob_start();
           
         break;
 
+        case 'guardaryeditar_pago_al_contador':
+
+          if (empty($_POST["idsumas_adicionales"])) {
+
+            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"]);
+
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario"; 
+
+          } else {
+
+            $rspta = $asist_trabajador->editar_pago_al_contador($_POST["idsumas_adicionales"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"]);
+
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+          }
+          
+        break;
+
         case 'desactivar':
 
           $rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
