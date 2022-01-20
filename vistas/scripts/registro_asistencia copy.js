@@ -1,75 +1,74 @@
-var tabla;
-var editando=false;
-var editando2=false;
+var tabla; var tabla2; var array_asistencia = []; var array_trabajador = [];
+
+var f1_r = 0, f2_r = 0, i_r = 0, cant_dias_asistencia_r = 0;
 
 //Función que se ejecuta al inicio
-function init() {  
+function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar( localStorage.getItem('nube_idproyecto') );
+  listar(localStorage.getItem('nube_idproyecto'));  
 
   // $("#bloc_Accesos").addClass("menu-open");
 
-  $("#mTrabajador").addClass("active");
+  $("#mAsistencia").addClass("active");
 
-  // $("#ltrabajador").addClass("active"); 
+  // $("#lasistencia").addClass("active");
 
+  // submnit a adicional descuento
+  $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });
+  // $("#modal-agregar-asistencia").on("submit",function(e) { guardaryeditar(e);	})
+  
   // Formato para telefono
   $("[data-mask]").inputmask();
 
-  //Mostramos los trabajadores
-  $.post("../ajax/trabajador.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
+  //Timepicker
+  $('#timepicker').datetimepicker({
+    // format: 'LT',
+    format:'HH:mm ',
+    lang:'ru'
+  })
 
-    //Mostramos los tipo
-    $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#tipo_trabajador").html(r); });
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1; //January is 0!
+  var yyyy = today.getFullYear();
 
-  //Initialize Select2 Elements
-  $("#trabajador").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
-    allowClear: true,
-  });  
+  if (dd < 10) {  dd = '0' + dd; }
 
-  //Initialize Select2 Elements
-  $("#tipo_trabajador").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione tipo trabajador",
-    allowClear: true,
-  });
+  if (mm < 10) {  mm = '0' + mm;  }
 
-  //Initialize Select2 Elements
-  $("#cargo").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione cargo",
-    allowClear: true,
-  });
-  
-  $("#cargo").val('null').trigger("change");
-  
+  today = yyyy + '-' + mm + '-' + dd;
+  $("#fecha").val(today);
 }
+
+// retrazamos la ejecuccion de una funcion
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+  };
+})();
 
 function mostrar_form_table(estados) {
 
   if (estados == 1 ) {
-    $("#mostrar-tabla").show();
-
-    $("#tabla-registro").hide();
-
+    $("#card-registrar").show();
     $("#card-regresar").hide();
     $("#card-editar").hide();
     $("#card-guardar").hide();
-
+    $("#tabla-asistencia-trab").show();
+    $("#ver_asistencia").hide();
+    $("#detalle_asistencia").hide();
   } else {
     if (estados == 2) {
       $("#card-registrar").hide();
       $("#card-regresar").show();
       $("#card-editar").show();
-
-      $("#mostrar-tabla").hide();
-      $("#tabla-registro").show();
-
-     // $("#detalle_asistencia").hide();
+      $("#tabla-asistencia-trab").hide();
+      $("#ver_asistencia").show();
+      $("#detalle_asistencia").hide();
       
     } else {
       $("#card-registrar").hide();
@@ -83,111 +82,90 @@ function mostrar_form_table(estados) {
     }
   }
 }
-function editarbreak() {
-   // ocultamos los span
-   $(".span-visible").hide();
-   // mostramos los inputs
-   $(".input-visible").show();
-   $("#textarea-visible").attr("readonly", false);
- 
-   $("#card-editar").hide();
-   $("#card-guardar").show();
 
+function guardaryeditar_adicional_descuento(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-adicional-descuento")[0]);
 
-  
-}
-//captura id del trabajador
-function capture_idtrabajador() {
-  if (editando2==false) {
-      var idtrabajador= $("#trabajador").select2("val");
-      if (idtrabajador == null || idtrabajador == '' ) {
+  $.ajax({
+    url: "../ajax/registro_asistencia.php?op=guardaryeditar_adicional_descuento",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
 
-      }else{
+    success: function (datos) {
+             
+      if (datos == 'ok') {
 
-        $("#tipo_trabajador").val("null").trigger("change");
-          
-        $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (data, status) {
+        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
 
-          data = JSON.parse(data);  console.log(data);   
+        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
 
-          $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
+        $("#modal-adicional-descuento").modal("hide");
 
-          $("#ocupacion").val(data.nombre_ocupacion);   
-        });
+			}else{
 
-      }
-  }
-  editando2=false;
-
-}
-//captura id del tipo
-
-function captura_idtipo() {
-  if (editando==false) {
-
-    var idtipo= $("#tipo_trabajador").select2("val");
-    if (idtipo != null || idtipo != ' ' ) {
-       //console.log(idtipo);
-       $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
-     }else{
-   
-     }
-
-  }
-  editando=false;
-
+				Swal.fire("Error!", datos, "error");
+			}
+    },
+  });
 }
 
-function estado_editar(estado) {
-  editando=estado;
-  editando2=estado;
-  
-}
+$(function () {
 
-function sueld_mensual(){
+  $.validator.setDefaults({
 
-  var sueldo_mensual = $('#sueldo_mensual').val();
+    submitHandler: function (e) { 
 
-  var sueldo_diario=(sueldo_mensual/30).toFixed(2);
+      guardaryeditar_adicional_descuento(e);         
+         
+    },
+  });  
 
-  var sueldo_horas=(sueldo_diario/8).toFixed(2);
+  $("#form-adicional-descuento").validate({
+    
+    rules: {      
+      detalle_adicional: { required: true, minlength: 4},
+    },
 
-  $("#sueldo_diario").val(sueldo_diario);
+    messages: {
+      detalle_adicional: {
+        required: "Este campo es requerido",
+        min:"Escriba almenos 4 letras"
+      },
+    },  
+        
+    errorElement: "span",
 
-  $("#sueldo_hora").val(sueldo_horas);
-}
+    errorPlacement: function (error, element) {
 
-function show_hide_form(flag) {
+      error.addClass("invalid-feedback");
 
-  limpiar();
+      element.closest(".form-group").append(error);
+    },
 
-	if (flag)	{
+    highlight: function (element, errorClass, validClass) {
 
-		$("#mostrar-form").show();
-		$("#mostrar-tabla").hide();
+      $(element).addClass("is-invalid");
+    },
 
-	}	else	{
+    unhighlight: function (element, errorClass, validClass) {
 
-		$("#mostrar-form").hide();
-		$("#mostrar-tabla").show();
-	}
-}
-
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+  });
+});
 
 //Función limpiar
-function limpiar() {  
-
-  $("#trabajador").val("").trigger("change");
-
-  $("#tipo_trabajador").val("").trigger("change");
-  $("#cargo").val("").trigger("change");
-  $("#desempenio").val("");
-  $("#ocupacion").val("");
-
-  $("#sueldo_mensual").val("");   
-  $("#sueldo_diario").val("");   
-  $("#sueldo_hora").val("");
+function limpiar() {
+  $("#idasistencia_trabajador").val(""); 
+  $("#trabajador").val("");
+  $("#horas_trabajo").val("");
+  
+  lista_trabajadores(localStorage.getItem('nube_idproyecto'));
 }
+
 // Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
   var Fecha = new Date();
@@ -206,12 +184,12 @@ sumaFecha = function(d, fecha){
   return (fechaFinal);
 }
 
-
 //Función Listar
-function listar( nube_idproyecto ) {
-  console.log(nube_idproyecto);
+function listar(nube_idproyecto) {
 
-  tabla=$('#tabla-trabajadors').dataTable({
+  $('#Lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
+
+  tabla=$('#tabla-asistencia').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -219,7 +197,7 @@ function listar( nube_idproyecto ) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/trabajador.php?op=listar&nube_idproyecto='+nube_idproyecto,
+        url: '../ajax/registro_asistencia.php?op=listar&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -242,7 +220,7 @@ function listar( nube_idproyecto ) {
   }).DataTable();
 
   //Listar quincenas(botones)
-  $.post("../ajax/break.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+  $.post("../ajax/registro_asistencia.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
 
@@ -253,6 +231,37 @@ function listar( nube_idproyecto ) {
 
       if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
       // console.log(data.fecha_inicio, dia_regular, weekday_regular);
+      if (data.fecha_pago_obrero == "quincenal") {
+
+        $('#Lista_quincenas').html('');
+
+        var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
+
+        var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/14;
+
+        var i=0; var cont=0; 
+
+        while (i <= cal_quincena) {
+
+          cont=cont+1; var fecha_inicio = fecha_i;
+
+          if (estado_regular) {
+
+            fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
+
+          } else {
+
+            fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
+          }           
+
+          $('#Lista_quincenas').append(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_inicio}', '${fecha}', '${i}', 14);"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
+          
+          fecha_i =sumaFecha(1,fecha);
+
+          i++;
+        }
+      } else {
+        if (data.fecha_pago_obrero == "semanal") {
 
           $('#Lista_quincenas').html('');
 
@@ -261,7 +270,7 @@ function listar( nube_idproyecto ) {
           var cal_mes  = false; var i=0;  var cont=0;
 
           while (cal_mes == false) {
-  
+
             cont = cont+1; fecha_i = fecha;
 
             if (estado_regular) {
@@ -277,7 +286,7 @@ function listar( nube_idproyecto ) {
             
             // console.log(fecha_f + ' - '+data.fecha_fin);
 
-            $('#Lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#Lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -285,221 +294,76 @@ function listar( nube_idproyecto ) {
 
             i++;
           } 
+        } else { 
+          $('#Lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
+              <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
+              <div class="info-box-content"> 
+                <span class="info-box-text">Alerta</span> 
+                <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
+              </div> 
+            </div>`);
+        }
+      }
     } else {
-      $('#Lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
-        <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
-        <div class="info-box-content"> 
-          <span class="info-box-text">Alerta</span> 
-          <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
-        </div> 
-      </div>`);
+      
     }
     
     //console.log(fecha);
   });
 }
-//Función para guardar o editar
 
-function guardaryeditar(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-trabajador-proyecto")[0]);
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
+function lista_trabajadores(nube_idproyecto) {
 
-  $.ajax({
-    url: "../ajax/trabajador.php?op=guardaryeditar",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
+  $("#lista-de-trabajadores").html(
+    '<div class="col-lg-12 text-center">'+  
+      '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />'+
+      '<br />'+
+      '<h4>Cargando...</h4>'+
+    '</div>'
+  );
 
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+  $.post("../ajax/registro_asistencia.php?op=lista_trabajador", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-        Swal.fire("Correcto!", "Trabajador registrado correctamente", "success");
+    data = JSON.parse(data);  //console.log(data); 
 
-	      tabla.ajax.reload();
-         
-				show_hide_form(false);
+    $("#lista-de-trabajadores").html("");
 
-			}else{
-
-				Swal.fire("Error!", datos, "error");
-			}
-    },
-  });
-}
-
-function verdatos(idtrabajador){
-
-  console.log('id_verdatos'+idtrabajador);
-  
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-
-  $('#datostrabajador').html('');
-  var verdatos='';
-  var imagenver='';
-
-  $("#modal-ver-trabajador").modal("show")
-
-  $.post("../ajax/trabajador.php?op=verdatos", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data); 
-
-    var img =data.imagen != '' ? '<img src="../dist/img/usuarios/'+data.imagen+'" alt="" style="width: 90px;border-radius: 10px;">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-     verdatos=''+                                                                            
-    '<div class="col-12">'+
-      '<div class="card">'+
-          '<div class="card-body ">'+
-              '<table class="table table-hover table-bordered">'+          
-                  '<tbody>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th rowspan="2">'+img+'</th>'+
-                          '<td>'+data.nombres+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<td>'+data.numero_documento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Dirección</th>'+
-                          '<td>'+data.direccion+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Correo</th>'+
-                          '<td>'+data.email+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Teléfono</th>'+
-                          '<td>'+data.telefono+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Fecha nacimiento</th>'+
-                          '<td>'+data.fecha_nacimiento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Tipo trabajador</th>'+
-                          '<td>'+data.tipo_trabajador+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cargo</th>'+
-                          '<td>'+data.cargo_trabajador+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Desempeño</th>'+
-                          '<td>'+data.desempeno+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cuenta bancaria</th>'+
-                          '<td>'+data.cuenta_bancaria+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Banco</th>'+
-                          '<td>'+data.banco+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Titular cuenta </th>'+
-                          '<td>'+data.titular_cuenta+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por mes</th>'+
-                          '<td>'+data.sueldo_mensual+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por día</th>'+
-                          '<td>'+data.sueldo_diario+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por hora</th>'+
-                          '<td>'+data.sueldo_hora+'</td>'+
-                      '</tr>'+
-                  '</tbody>'+
-              '</table>'+
-          '</div>'+
-      '</div>'+
-    '</div>';
-  
-  $("#datostrabajador").append(verdatos);
-
-});
-
-}
-
-function mostrar(idtrabajador,idtipo) {
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
- // $("#tipo_trabajador").val('null').trigger("change");
- // $("#cargo").val('null').trigger("change");
-  show_hide_form(true);
-  $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
-  estado_editar(true);
-  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);   
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-    $("#idtrabajador_por_proyecto").val(data.idtrabajador_por_proyecto);
-    $("#trabajador").val(data.idtrabajador).trigger("change");
-
-    $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
-    $("#ocupacion").val(data.nombre_ocupacion);
-    $("#cargo").val(data.idcargo_trabajador).trigger("change");
-    $("#desempenio").val(data.desempenio);
-  
-    $("#sueldo_mensual").val(data.sueldo_mensual);   
-    $("#sueldo_diario").val(data.sueldo_diario);   
-    $("#sueldo_hora").val(data.sueldo_hora);
-  });
-}
-
-//Función para desactivar registros
-function desactivar(idtrabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el trabajador?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=desactivar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
-
-        Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
-    
-        tabla.ajax.reload();
-      });      
-    }
-  });   
-}
-
-//Función para activar registros
-function activar(idtrabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  el trabajador?",
-    text: "Este trabajador tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=activar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
-
-        Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
-
-        tabla.ajax.reload();
-      });
+    $.each(data, function (index, value) {
+      // console.log(value.idtrabajador_por_proyecto);
+      var img =value.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+value.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
       
-    }
-  });      
+      $("#lista-de-trabajadores").append(
+        '<!-- Trabajador -->'+                         
+        '<div class="col-lg-6">'+
+          '<div class="user-block">'+
+            img+
+            '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+value.nombres+'</p></span>'+
+            '<span class="description">'+value.documento+': '+value.numero_documento+'</span>'+
+          '</div>'+                         
+          '<input type="hidden" name="trabajador[]" value="'+value.idtrabajador_por_proyecto+'" />'+
+        '</div>'+
+
+        '<!-- Horas de trabajo -->'+
+        '<div class="col-lg-6 mt-2">'+
+          '<div class="form-group">'+
+            '<input id="horas_trabajo" name="horas_trabajo[]" type="time"   class="form-control" value="00:00" />'+             
+          '</div>'+
+        '</div> '+
+        '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+      );
+    });
+  });
+}
+
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
+function agregar_hora_all() {
+  var hora_all = $("#hora_all").val();
+  $('input[type=time][name="horas_trabajo[]"]').val(hora_all);
 }
 
 // listamos la data de una quincena selecionada
-function datos_semana(f1, f2, i, cant_dias_asistencia) {
+function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
   f1_r = f1; f2_r = f2; i_r = i; cant_dias_asistencia_r = cant_dias_asistencia;
 
@@ -575,7 +439,7 @@ function datos_semana(f1, f2, i, cant_dias_asistencia) {
   // ocultamos las tablas
   mostrar_form_table(2)
 
-  $.post("../ajax/registro_asistencia.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
+  $.post("../ajax/registro_asistencia.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
         
     data =JSON.parse(data); console.log(data);   
 
@@ -897,7 +761,7 @@ function datos_semana(f1, f2, i, cant_dias_asistencia) {
 
     $(".data_table_body").append(tabla_bloc_TOTAL_1);
 
-  }); //end post - ver_datos_semana
+  }); //end post - ver_datos_quincena
 
   $("#cargando-1-fomulario").show();
   $("#cargando-2-fomulario").hide();
@@ -907,89 +771,190 @@ function datos_semana(f1, f2, i, cant_dias_asistencia) {
 }
 
 
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
+function mostrar(idasistencia_trabajador) {
+  $('#modal-editar-asistencia').modal('show')
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $.post("../ajax/registro_asistencia.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);
+    
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+
+    $("#fecha2").val(data.fecha_asistencia);      
+    var suma = (parseFloat(data.horas_normal_dia) + parseFloat(data.horas_extras_dia)).toFixed(2).toString();
+    var hr_total_c =  convertir_a_hora(suma);
+
+    console.log(hr_total_c);
+
+    var img =data.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
+    
+    $("#lista-de-trabajadores2").html(
+      '<!-- Trabajador -->'+                         
+      '<div class="col-lg-12">'+
+        '<label >Trabajador</label> <br>'+
+        '<div class="user-block">'+
+          img+
+          '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+data.nombres+'</p></span>'+
+          '<span class="description">'+data.documento+': '+data.numero_documento+'</span>'+
+        '</div>'+                         
+        '<input type="hidden" name="trabajador2[]" value="'+data.idtrabajador_por_proyecto+'" />'+
+      '</div>'+
+
+      '<!-- Horas de trabajo -->'+
+      '<div class="col-lg-12 mt-3">'+
+        '<label for="fecha">Horas</label>'+
+        '<div class="form-group">'+
+          '<input id="horas_trabajo" name="horas_trabajo2[]" type="time"   class="form-control" value="'+hr_total_c+'" />'+             
+        '</div>'+
+      '</div> '+
+      '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+    );
+
+  });
+}
+
+//Función para desactivar registros
+function justificar(idasistencia,horas, estado) {
+
+  if (estado == "0") {
+
+    Swal.fire("Activa este registro!", "Para usar esta opcion, active este registro.", "info");
+
+  } else {
+
+    if (horas >= 8) {
+
+      Swal.fire("No puedes Justificar!", "Este trabajador tiene 8 horas completas, las justificación es para compensar horas perdidas.", "info");
+    
+    } else {
+      $("#modal-justificar-asistencia").modal("show")
+    }
+  } 
+}
+
+// ver_asistencias
+function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proyect) {
+
+  console.log(idtrabajador_por_proyecto,fecha_inicio_proyect);
+  
+  mostrar_form_table(3);
+
+  tabla2=$('#tabla-detalle-asistencia-individual').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();   
+}
+
 init();
 
-$(function () {
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
+function convertir_a_hora(hora_n) {
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-       
-      guardaryeditar(e);
+  var convertido; var suma; var min; var hora; console.log('h:' + hora_n );
       
+  var recortado_suma = hora_n.split('.').pop();
 
-    },
-  });
+  min = Math.round((parseFloat(recortado_suma)*60)/100);
+  
+  if (hora_n >=10) {
 
-  $("#form-trabajador-proyecto").validate({
-    rules: {
-      trabajador: { required: true},
-      tipo_trabajador: { required: true},
-      cargo: { required: true},
-      desempenio: { minlength: 4, maxlength: 100},
-      sueldo_mensual: { required: true, minlength: 1},
-      sueldo_diario: { required: true, minlength: 1},
-      sueldo_hora: { required: true, minlength: 1},
+    hora = hora_n.substr(0,2)
+
+  } else {
+
+    hora = '0'+hora_n.substr(0,1)
+
+  }
+
+  if (min >= 10) {
+
+    convertido = hora + ':' + min;
+
+  } else {
+
+    convertido = hora + ':0' + min;
+
+  }    
+  
+  return convertido;
+}
+
+//Función para desactivar registros
+function desactivar(idasistencia_trabajador) {
+  $(".tooltip").hide();
+  Swal.fire({
+    title: "¿Está Seguro de  Desactivar la Asistencia?",
+    text: "Al desactivar, las horas de este registro no seran contado.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=desactivar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+
+        Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
+    
+        tabla.ajax.reload(); tabla2.ajax.reload();
+      });      
+    }
+  });   
+}
+
+//Función para activar registros
+function activar(idasistencia_trabajador) {
+  $(".tooltip").hide();
+  Swal.fire({
+    title: "¿Está Seguro de  Activar  la Asistencia?",
+    text: "Al activar, las horas de este registro seran contados",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=activar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+
+        Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
+
+        tabla.ajax.reload(); tabla2.ajax.reload();
+      });
       
-      // terms: { required: true },
-    },
-    messages: {
-      trabajador: {
-        required: "Por favor  seleccione un trabajador.",
-      },
+    }
+  });      
+}
 
-      tipo_trabajador: {
-        required: "Por favor  seleccione un tipo trabajador.",
-      },
-      cargo: {
-        required: "Por favor  un cargo.",
-      },
-      desempenio: {
-        minlength: "Escriba como minimo 4 letras.",
-        maxlength: "Escriba como máximo 100 letras.",
-      },
-      sueldo_mensual: {
-        required: "Por favor  ingrese sueldo por mes.",
-      },
-      sueldo_diario: {
-        required: "Por favor  ingrese sueldo por día.",
-      },
-      sueldo_hora: {
-        required: "Por favor ingrese sueldo por hora.",
-      },
-    },
-        
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-      }
-
-    },
-  });
-});
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
@@ -997,6 +962,7 @@ function format_d_m_a(fecha) {
 
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
+
 // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
 function format_a_m_d(fecha) {
 
@@ -1004,7 +970,40 @@ function format_a_m_d(fecha) {
 
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
-//extraer_dia_semana
+
+function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s, descripcion) {
+
+  $("#idsumas_adicionales").val(id_adicional);
+  $("#idtrabajador_por_proyecto").val(id_trabjador);
+  $("#fecha_q_s").val(fecha_q_s);
+  $("#detalle_adicional").val(descripcion);
+
+  $("#modal-adicional-descuento").modal("show");
+}
+
+
+// function edit(element) {
+  
+//   var hora_Acual = $("#id2").text()
+//   $("#h_exra2").show();
+//   $("#h_exra1").hide();
+//    console.log( hora_Acual );
+// }
+
+// $(document).click(function(){
+//   $("#h_exra2").blur(function(){
+//     $(this).css("background-color", "#FFFFCC");
+//   });
+//   // $("#h_exra2").hide();
+//   // $("#h_exra1").show();
+//   console.log("click en cual quier parte");
+//   // alert("has pulsado en botón");
+
+//   // // si lo deseamos podemos eliminar el evento click
+//   // // una vez utilizado por primera vez
+//   // $(document).unbind("click");
+// })
+
 function extraer_dia_semana(fecha) {
   const fechaComoCadena = fecha; // día fecha
   const dias = ['lu', 'ma', 'mi', 'ju', 'vi', 'sa', 'do']; //
@@ -1012,6 +1011,7 @@ function extraer_dia_semana(fecha) {
   const nombreDia = dias[numeroDia];
   return nombreDia;
 }
+
 function pintar_boton_selecionado(i) {
   localStorage.setItem('i', i); //enviamos el ID-BOTON al localStorage
   // validamos el id para pintar el boton
@@ -1032,3 +1032,360 @@ function pintar_boton_selecionado(i) {
   }
 }
 
+function despintar_btn_select() {  
+  if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
+}
+
+// Calculamos las: Horas normal/extras,	Días asistidos,	Sueldo Mensual,	Jornal,	Sueldo hora,	Sabatical,	Pago parcial,	Adicional/descuento,	Pago quincenal
+function calcular_he(fecha, span_class_he, input_class_hn, id_trabajador, cant_dias_asistencia, sueldo_hora, cant_trabajador) {
+
+  //console.log(span_class_he, input_class_hn);
+
+  var hora_extr = 0; var hora_norm = 0; var capturar_val_input = document.getElementById(input_class_hn).value; //$(`.${input_class_hn}`).val();
+
+  // console.log(capturar_val_input);
+
+  if ( parseFloat(capturar_val_input) > 8) {
+
+    hora_extr = parseFloat(capturar_val_input) - 8;
+
+    hora_norm = 8;
+
+    $(`.input_HE_${id_trabajador}_${fecha}`).val(hora_extr); $(`.${span_class_he}`).html(hora_extr);   $(`.${input_class_hn}`).val(hora_norm);
+
+  }else{ 
+
+    $(`.${span_class_he}`).html('0.0'); // hora_norm = parseFloat(input_val.value); 
+
+    $(`.input_HE_${id_trabajador}_${fecha}`).val(0.00);
+  }
+
+  var suma_hn = 0; var suma_he = 0; var dias_asistidos = 0; var pago_parcial_hn = 0; var pago_parcial_he = 0; var adicional_descuento = 0;
+
+  // calcular pago quincenal
+  for (let index = 1; index < parseInt(cant_dias_asistencia); index++) {
+
+    // console.log( $(`.input_HN_${id_trabajador}_${index}`).val());    console.log( $(`.input_HE_${id_trabajador}_${index}`).val());
+
+    if (parseFloat($(`.input_HN_${id_trabajador}_${index}`).val()) >= 0 ) {
+
+      suma_hn = suma_hn + parseFloat($(`.input_HN_${id_trabajador}_${index}`).val());
+
+      dias_asistidos++;
+    }
+
+    if (parseFloat($(`.input_HE_${id_trabajador}_${index}`).val()) >= 0 ) {
+
+      suma_he = suma_he + parseFloat($(`.input_HE_${id_trabajador}_${index}`).val());
+    }
+
+  }
+
+  // validamos el adicional descuento
+  if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
+
+    adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val());     
+
+  } else {
+
+    adicional_descuento = 0;
+
+    toastr.error(`El dato adicional/descuento:: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
+  }
+
+  //  pago_parcial_HN_1
+  $(`.total_HN_${id_trabajador}`).html(suma_hn);
+
+  $(`.total_HE_${id_trabajador}`).html(suma_he);
+
+  $(`.dias_asistidos_${id_trabajador}`).html(dias_asistidos);  
+
+  // asignamos los pagos parciales
+  $(`.pago_parcial_HN_${id_trabajador}`).html(formato_miles((suma_hn * parseFloat(sueldo_hora)).toFixed(2)));
+
+  $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles((suma_he * parseFloat(sueldo_hora)).toFixed(2)));
+
+  // calculamos el pago quincenal con: Pago parcial,	Adicional/descuento
+  var pago_quincenal = ( (parseFloat((suma_hn * parseFloat(sueldo_hora)).toFixed(2)) + parseFloat((suma_he * parseFloat(sueldo_hora)).toFixed(2))) + adicional_descuento ).toFixed(1)
+
+  $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal));
+
+  var suma_total_quincena = 0;
+
+  for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
+    //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
+    suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
+  }
+
+  // console.log(suma_total_quincena);
+
+  $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
+}
+
+function adicional_descuento(cant_trabajador, id_trabajador) {
+
+  var suma_resta = 0; var pago_parcial_HN = 0; pago_parcial_HE = 0;
+
+  //console.log($(`.pago_quincenal_${id_trabajador}`).text());   console.log($(`.adicional_descuento_${id_trabajador}`).val());
+
+  // capturamos los pgos parciales
+  pago_parcial_HN = parseFloat( $(`.pago_parcial_HN_${id_trabajador}`).text()); pago_parcial_HE = parseFloat( $(`.pago_parcial_HE_${id_trabajador}`).text());
+
+  if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
+
+    suma_resta = (pago_parcial_HN + pago_parcial_HE) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
+
+    $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(1)));
+
+    var suma_total_quincena = 0;
+
+    // acumulamos todos los pagos quicenales
+    for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
+      console.log($(`.val_pago_quincenal_${k}`).text()); 
+      suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
+    }
+
+    $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
+
+  } else {
+
+    toastr.error(`El dato de adicional/descuento: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un numero cero o un positivo o un negativo.`);    
+  }  
+}
+
+function editar_fechas_asistencia(){
+
+  // ocultamos los span
+  $(".span_asist").hide();
+  // mostramos los inputs
+  $(".input_asist").show();
+
+  $("#card-editar").hide();
+  $("#card-guardar").show();
+}
+
+function guardar_fechas_asistencia() {
+
+  // abrimos el modal cargando
+  $("#modal-cargando").modal("show");
+
+  var array_datos_asistencia = []; var array_extras = [];
+
+  // rellenamos el array ASISTENCIA para la bd "ASISTENCIA TRABAJADOR"
+  array_asistencia.forEach((element,index) => {
+
+    if ( parseFloat($(`.${element.class_input_hn}`).val()) >= 0) {
+
+      var input_asistencia = { 
+        'id_trabajador':element.id_trabajador, 
+        'fecha_asistida':format_a_m_d(element.fecha_asistida),
+        'horas_normal_dia':$(`.${element.class_input_hn}`).val(),
+        'pago_normal_dia':(parseFloat($(`.${element.class_input_hn}`).val()) * element.sueldo_hora).toFixed(2) ,
+        'horas_extras_dia':$(`.${element.class_input_he}`).val(),
+        'pago_horas_extras':(parseFloat($(`.${element.class_input_he}`).val()) * element.sueldo_hora).toFixed(2)
+      }
+
+      array_datos_asistencia.push( input_asistencia );
+    }    
+  }); 
+
+  // rellenamos el array EXTRAS para la bd "SUMAS ADICIONALES"
+  array_trabajador.forEach((element,index) => {
+
+    var data_array_extras = {
+      'id_trabajador':element.id_trabajador,
+      'fecha_q_s':format_a_m_d(f1_r),
+      'total_hn':$(`.total_HN_${element.id_trabajador}`).text(),
+      'total_he':$(`.total_HE_${element.id_trabajador}`).text(),
+      'dias_asistidos':$(`.dias_asistidos_${element.id_trabajador}`).text(),
+      'sabatical':$(`.sabatical_${element.id_trabajador}`).text(),
+      'pago_parcial_hn':$(`.pago_parcial_HN_${element.id_trabajador}`).text(),
+      'pago_parcial_he':$(`.pago_parcial_HE_${element.id_trabajador}`).text(),
+      'adicional_descuento':$(`.adicional_descuento_${element.id_trabajador}`).val(),
+      'pago_quincenal':$(`.pago_quincenal_${element.id_trabajador}`).text()
+    }
+    array_extras.push( data_array_extras );
+  }); 
+
+  // console.log(array_trabajador);
+  console.log(array_extras);
+  console.log(array_datos_asistencia);
+  // mostramos los span
+  $(".span_asist").show();
+  // ocultamos los inputs
+  $(".input_asist").hide();
+
+  $("#card-editar").show();
+  $("#card-guardar").hide();
+
+
+  $.ajax({
+    url: "../ajax/registro_asistencia.php?op=guardaryeditar",
+    type: "POST",
+    data:  {
+      'asistencia': JSON.stringify(array_datos_asistencia), 
+      'extras':JSON.stringify(array_extras),
+      'fecha_inicial':format_a_m_d(f1_r), 
+      'fecha_final':format_a_m_d(f2_r)
+    },
+    // contentType: false,
+    // processData: false,
+    success: function (datos) {
+             
+      if (datos == 'ok') {
+
+        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+        
+        $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
+
+        // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
+        
+	      $(".progress-bar").addClass("bg-success"); $("#barra_progress").text("100% Completado!");
+        
+			}else{
+
+        $("#icono-respuesta").html(`<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`);
+
+        $(".progress-bar").addClass("bg-danger"); $("#barra_progress").text("100% Error!");
+
+				// Swal.fire("Error!", datos, "error");
+			}
+    },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            setTimeout(l_m, 600);
+          }
+        }
+      }, false);
+      return xhr;
+    }
+  });
+}
+
+function l_m(){  
+   
+  // $("#barra_progress").css({"width":'0%'});
+  // $("#barra_progress").text("100% completado");
+  $(".progress-bar").removeClass("progress-bar-striped")
+  
+}
+
+/**formato_miles */
+function formato_miles(num) {
+  if (!num || num == "NaN") return "-";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
+}
+
+function cerrar_modal() {
+  $("#modal-cargando").modal("hide");
+  $(".progress-bar").removeClass("bg-success bg-danger");
+  $(".progress-bar").addClass("progress-bar-striped");
+}
+
+function calcular_sabatical(fecha,  id_trabajador_x_proyecto, cant_dias_asistencia, sueldo_hora, cant_trabajador) {
+
+  if ($(`#${checkbox_input_class}`).is(':checked')) {
+
+    $(`#${input_class_hn}`).val('8'); console.log("tienen 8");
+  } else {
+    $(`#${input_class_hn}`).val('0'); console.log("tienen 0");
+  }
+  //calcular_he(fecha, span_class_he, input_class_hn, id_trabajador, cant_dias_asistencia, sueldo_hora, cant_trabajador);
+
+}
+
+function asignar_pago_al_contador(fecha_q_s, id_trabajador_x_proyecto, nombre_trabajador, idsumas_adicionales, pago_quincenal) {
+ 
+  if (idsumas_adicionales !== "" && parseFloat(pago_quincenal) > 0) {
+     
+    if ($(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).is(':checked')) {
+
+      Swal.fire({
+        title: "¿Está Seguro de enviar el pago al contador?",
+        text: `Al enviar, el contador podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, enviar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.post("../ajax/registro_asistencia.php?op=guardaryeditar_pago_al_contador", { 
+            fecha_q_s: fecha_q_s,
+            id_trabajador_x_proyecto: id_trabajador_x_proyecto,
+            idsumas_adicionales: idsumas_adicionales 
+          }, function (e) {
+
+            if (e == 'ok') {
+              datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+              Swal.fire("Enviado!", `El pago de: ${nombre_trabajador} a sido enviado con éxito.`, "success");
+              // $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', true);
+            } else {
+              $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+            }
+          });    
+        }else{
+          $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+        }
+      });  
+  
+    } else {
+  
+      Swal.fire({
+        title: "¿Está Seguro de ANULAR el pago al contador?",
+        text: `Al ANULAR, el contador NO podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, enviar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // $.post("../ajax/registro_asistencia.php?op=guardaryeditar_pago_al_contador", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+    
+          //   Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
+        
+          //   tabla.ajax.reload(); tabla2.ajax.reload();
+          // });  
+          $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+    
+        }else{
+          $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', true);
+        }
+      });
+    }
+  }else{
+
+    toastr.error(`El trabajador no tiene ningun pago registrado, <h5>registre alguno.</h5>`);
+
+    $(`#checkbox_asignar_pago_contador_${id_trabajador_x_proyecto}`).prop('checked', false);
+  }  
+}
+
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, '');
+  return inVal;
+}

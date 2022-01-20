@@ -123,8 +123,7 @@
                                   <th rowspan="3" class="stile">Sabatical</th>
                                   <th rowspan="3" class="stile">Pago <br> parcial</th>
                                   <th rowspan="3" class="stile">Adicional <br> descuento</th>
-                                  <th rowspan="3" class="stile head_pago_q_s">Pago quincenal</th>
-                                  <th rowspan="3" class="stile">Enviar <br> pago?</th>
+                                  <th rowspan="3" class="stile">Pago quincenal</th>
                                 </tr>
                                 <tr class="table-dias data-dia-semana">
                                   <!-- <th class=""> Lu </th>

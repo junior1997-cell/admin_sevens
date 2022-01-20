@@ -16,6 +16,24 @@
     <?php
     require 'head.php';
     ?>
+    <style>
+        .tablee {
+          width: 100%;
+          border: 1px solid #000;
+        }
+        th, td {
+          width: 25%;
+          text-align: left;
+          vertical-align: top;
+          border: 1px solid #000;
+          border-collapse: collapse;
+          padding: 0.3em;
+        }
+        caption {
+          padding: 0.3em;
+        }
+    </style>
+
   </head>
   <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
     <!-- Content Wrapper. Contains page content -->
@@ -53,10 +71,23 @@
                 <div class="col-12">
                   <div class="card card-primary card-outline">
                     <div class="card-header">
-                      <h3 class="card-title">
-                        <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(true); estado_editar(false);"><i class="fas fa-user-plus"></i> Agregar</button>
-                        Admnistra de manera eficiente a los trabajdores
+                      <!-- regresar -->
+                      <h3 class="card-title mr-3" id="card-regresar" style="display: none;" style="padding-left: 2px;">
+                        <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
                       </h3>
+                      <!-- Editar -->
+                      <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
+                        <button type="button" class="btn bg-gradient-orange" onclick="editarbreak();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> Editar</button>
+                      </h3>
+                      <!-- Guardar -->
+                      <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
+                        <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
+                      </h3>
+                      <!-- Botones de quincenas -->
+                      <div id="Lista_quincenas" class="row-horizon disenio-scroll " >
+                        <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
+                        <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
+                      </div>   
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -88,96 +119,74 @@
                       </div>
 
                       <!-- agregar trabajador al sistema -->
-                      <div id="mostrar-form" style="display: none;">
-                        
-                        <!-- form start -->
-                        <form id="form-trabajador-proyecto" name="form-trabajador-proyecto" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
-                              <!-- id PROYECTO -->
-                              <input type="hidden" name="idproyecto" id="idproyecto" />
-                              <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />
+                      <div id="tabla-registro" style="display: none;">
+                        <style>
+                          table.colapsado {border-collapse: collapse;}
+                        </style>
+                        <div class="container table-responsive disenio-scroll">
 
-                              <!-- Trabajador -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="trabajador" id="trabajador_c">Trabajador</label>                               
-                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_idtrabajador();"   >                                    
-                                  </select>
-                                  <input type="hidden" name="trabajador_old" id="trabajador_old" />
-                                  <!-- <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>   -->
-                                </div>                                                        
-                              </div>
+                          <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                              <thead style="background-color: #e0e0e0;" >
+                                <tr>
+                                  <th class="text-center w-px-300">Día</th>
+                                  <th class="text-center  w-px-135">Cantidad</th>
+                                  <th class="text-center"> Parcial</th>
+                                  <th class="text-center"> Descripción</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td> <b>Domingo:</b>  12-01-2021</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible" style="width: 430px;" ></textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>L</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;"></textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>M</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>M</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>J</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>V</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;"></textarea> </td>
+                                </tr>
+                                <tr>
+                                  <td>S</td>
+                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
+                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
+                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
+                                </tr>
+                              </tbody>
+                              <tfoot>
+                                <th style="border-bottom: hidden;border-left: hidden;" ></th>
+                                <th  class="text-center">Total</th>
+                                <th>----</th>
+                                <th style="border-bottom: hidden;border-right: hidden;" ></th>
+                              </tfoot>
+                          </table>
 
-                              <!-- Tipo trabajador -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="tipo_trabajador">Tipo Trabajador</label>                               
-                                  <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="captura_idtipo();">                                    
-                                  </select>
-                                </div>  
-                              </div>
-                              <!-- Tipo Ocupación -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="ocupacion">Ocupación</label>                                   
-                                  <input type="text" id="ocupacion" class="form-control" disabled>
-                                </div>
-                              </div>
-                              <!-- cargo -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="cargo">Cargo</label>
-                                  <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  > 
-                                  </select>
-                                </div>
-                              </div>
-                              <!-- Desempeño -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="desempeño">Desempeño</label>
-                                  <input type="text" name="desempenio" class="form-control" id="desempenio" placeholder="Desempeño" />
-                                </div>
-                              </div>                              
-                              
-                              <!-- Sueldo(Mensual) -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                  <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
-                                </div>
-                              </div>
-                              <!-- Sueldo(Diario) -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="sueldo_diario">Sueldo(Diario)</label>
-                                  <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
-                                </div>
-                              </div>
-                              <!-- Sueldo(Hora) -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                                  <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
-                                </div>
-                              </div>
-                              
-                            </div>
-
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <div class=" justify-content-between">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="show_hide_form(false);"> <i class="fas fa-arrow-left"></i> Close</button>
-                            <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                          </div>
-                        </form>
+                        </div>
 
                       </div>
                     </div>
@@ -268,7 +277,7 @@
     <!-- sweetalert2 -->
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-    <script type="text/javascript" src="scripts/trabajador.js"></script>
+    <script type="text/javascript" src="scripts/break.js"></script>
 
     <script>
         $(function () {
