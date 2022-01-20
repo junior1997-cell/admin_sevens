@@ -1,0 +1,223 @@
+<?php
+ob_start();
+if (strlen(session_id()) < 1){
+	session_start();//Validamos si existe o no la sesión
+}
+require_once "../modelos/Comidas_extras.php";
+
+$comidas_extras=new Comidas_extras();
+ //transporte.js $idproyecto,$idcomida_extra,$fecha,$precio_parcial,$descripcion
+$idproyecto       = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";	
+$idcomida_extra    = isset($_POST["idcomida_extra"])? limpiarCadena($_POST["idcomida_extra"]):"";	
+$fecha            = isset($_POST["fecha"])? limpiarCadena($_POST["fecha"]):"";
+$precio_parcial   = isset($_POST["precio_parcial"])? limpiarCadena($_POST["precio_parcial"]):"";
+$descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
+
+$foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+
+switch ($_GET["op"]){
+	case 'guardaryeditar':
+		if (!isset($_SESSION["nombre"])) {
+
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+
+		} else {
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+
+				// Comprobante
+				if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
+
+					$comprobante=$_POST["foto2_actual"]; $flat_ficha1 = false;
+
+				} else {
+
+					$ext1 = explode(".", $_FILES["foto2"]["name"]); $flat_ficha1 = true;						
+
+					$comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+					move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comidas_extras/" . $comprobante);
+				
+				}
+
+
+				if (empty($idcomida_extra)){
+					//var_dump($idproyecto,$idproveedor);
+					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante);
+					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+				}
+				else {
+					//validamos si existe comprobante para eliminarlo
+					if ($flat_ficha1 == true) {
+
+						$datos_ficha1 = $comidas_extras->ficha_tec($idcomida_extra);
+			
+						$ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
+			
+						if ($ficha1_ant != "") {
+			
+							unlink("../dist/img/comidas_extras/" . $ficha1_ant);
+						}
+					}
+
+					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante);
+					//var_dump($idcomida_extra,$idproveedor);
+					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+				}
+				//Fin de las validaciones de acceso
+			} else {
+
+		  		require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'desactivar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+				$rspta=$comidas_extras->desactivar($idcomida_extra);
+ 				echo $rspta ? "material Desactivado" : "material no se puede desactivar";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'activar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+				$rspta=$comidas_extras->activar($idcomida_extra);
+ 				echo $rspta ? "Material activado" : "material no se puede activar";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'mostrar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+				//$idcomida_extra='1';
+				$rspta=$comidas_extras->mostrar($idcomida_extra);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+	case 'total':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+
+				$rspta=$comidas_extras->total($idproyecto);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'listar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+				$idproyecto= $_GET["idproyecto"];
+				$rspta=$comidas_extras->listar($idproyecto);
+		 		//Vamos a declarar un array
+		 		$data= Array();
+				$comprobante = '';
+		 		while ($reg=$rspta->fetch_object()){
+
+					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comidas_extras/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
+		 			
+					
+					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
+					 $data[]=array(
+		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcomida_extra .')"><i class="far fa-trash-alt"></i></button>':
+							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcomida_extra .')"><i class="fa fa-check"></i></button>',
+						"1"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
+		 				"2"=> $reg->descripcion, 
+		 				"3"=>$comprobante,
+		 				"4"=>number_format($reg->costo_parcial, 2, '.', ','),
+		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+		 				'<span class="text-center badge badge-danger">Desactivado</span>'
+		 				);
+		 		}
+		 		$results = array(
+		 			"sEcho"=>1, //Información para el datatables
+		 			"iTotalRecords"=>count($data), //enviamos el total registros al datatable
+		 			"iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+		 			"data"=>$data);
+		 		echo json_encode($results);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}
+	break;
+
+	case 'salir':
+		//Limpiamos las variables de sesión   
+        session_unset();
+        //Destruìmos la sesión
+        session_destroy();
+        //Redireccionamos al login
+        header("Location: ../index.php");
+
+	break;
+}
+ob_end_flush();
+?>

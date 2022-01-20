@@ -283,8 +283,8 @@
         
         <?php if ($_SESSION['viatico']==1) {  ?>
           <!-- BIÁTICOS -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
+          <li class="nav-item"  id="bloc_Viaticos">
+            <a href="#" class="nav-link" id="mViatico">
               <i class="nav-icon fas fa-plane"></i>
               <p>
                 Viáticos
@@ -294,21 +294,21 @@
             <ul class="nav nav-treeview">
               <!-- TRANSPORTE -->
               <li class="nav-item">
-                <a href="transporte.php" class="nav-link">
+                <a href="transporte.php" class="nav-link" id="lTransporte">
                   <i class="fas fa-shuttle-van nav-icon"></i>
                   <p>Transporte</p>
                 </a>
               </li>
               <!-- HOSPEDAJE -->
               <li class="nav-item">
-                <a href="hospedaje.php" class="nav-link">
+                <a href="hospedaje.php" class="nav-link" id="lHospedaje"> 
                   <i class="fas fa-hotel nav-icon"></i>
                   <p>Hospedaje</p>
                 </a>
               </li>
               <!-- COMIDA -->
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link"  id="mmcomidas">
                   <i class="fas fa-fish nav-icon"></i>
                   <p>
                     Comida
@@ -317,19 +317,19 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="pension.php" class="nav-link">
+                    <a href="pension.php" class="nav-link" id="lPension">
                       <i class="fas fa-utensils nav-icon"></i>
                       <p>Pensión</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="break.php" class="nav-link">
+                    <a href="break.php" class="nav-link" id="lbreak" >
                       <i class="fas fa-hamburger nav-icon"></i>
                       <p>Break</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="comidas_extras.php" class="nav-link">
+                    <a href="comidas_extras.php" class="nav-link" id="lComidas_extras" >
                       <i class="fas fa-drumstick-bite nav-icon"></i>
                       <p>Comidas - extras</p>
                     </a>

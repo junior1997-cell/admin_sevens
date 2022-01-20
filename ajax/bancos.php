@@ -46,7 +46,7 @@
 				//Vamos a declarar un array
 				$data= Array();
 
-				$cta = "123456789012345678901234567890"; $cci = "123456789012345678901234567890";
+				$cta = "00000000000000000000000000000"; $cci = "00000000000000000000000000000";
 
 				while ($reg=$rspta->fetch_object()){
 					$data[]=array(
@@ -55,7 +55,7 @@
 							'<button class="btn btn-warning btn-sm" onclick="mostrar_bancos('.$reg->idbancos.')"><i class="fas fa-pencil-alt"></i></button>'.
 							' <button class="btn btn-primary btn-sm" onclick="activar_bancos('.$reg->idbancos.')"><i class="fa fa-check"></i></button>',
 						"1"=>$reg->nombre,
-						"2"=>'<span> <b>Cta: </b>'.darFormatoBanco($cta, $reg->formato_cta).'</span> <br> <span> <b>CCI: </b>'.darFormatoBanco($cci, $reg->formato_cci).'</span>',
+						"2"=>'<span> <b>Formato CTA :</b>'.$reg->formato_cta.'<br> <b>Ej. cta: </b>'.darFormatoBanco($cta, $reg->formato_cta).'</span> <br> <span> <b>Formato CCI :</b>'.$reg->formato_cci.'<br>  <b>Ej. cci: </b>'.darFormatoBanco($cci, $reg->formato_cci).'</span>',
 						"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 						'<span class="text-center badge badge-danger">Desactivado</span>'
 						);

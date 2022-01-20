@@ -4,11 +4,10 @@ var tabla;
 function init() {
   listar();
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
-  $("#bloc_Recurso").addClass("menu-open");
 
-  $("#mRecurso").addClass("active");
+  $("#mViatico").addClass("active");
 
-  //$("#lAllMateriales").addClass("active");
+  $("#lTransporte").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-transporte").submit();});
 

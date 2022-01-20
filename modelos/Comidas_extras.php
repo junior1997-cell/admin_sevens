@@ -1,0 +1,80 @@
+<?php 
+//Incluímos inicialmente la conexión a la base de datos
+require "../config/Conexion.php";
+
+Class Comidas_extras
+{
+	//Implementamos nuestro constructor
+	public function __construct()
+	{
+
+	}
+	//$idcomida_extra,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
+	//Implementamos un método para insertar registros
+	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante)
+	{
+	
+		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,comprobante) 
+		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$comprobante')";
+		return ejecutarConsulta($sql);
+			
+	}
+
+	//Implementamos un método para editar registros
+	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante)
+	{
+		$sql="UPDATE comida_extra SET 
+		idproyecto='$idproyecto',
+		fecha_comida='$fecha',
+		costo_parcial='$precio_parcial',
+		descripcion='$descripcion',
+		comprobante='$comprobante'
+
+		WHERE idcomida_extra ='$idcomida_extra'";	
+		return ejecutarConsulta($sql);	
+	}
+
+	//Implementamos un método para desactivar categorías
+	public function desactivar($idcomida_extra )
+	{
+		$sql="UPDATE comida_extra SET estado='0' WHERE idcomida_extra ='$idcomida_extra'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para activar categorías
+	public function activar($idcomida_extra )
+	{
+		$sql="UPDATE comida_extra SET estado='1' WHERE idcomida_extra ='$idcomida_extra'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para mostrar los datos de un registro a modificar
+	public function mostrar($idcomida_extra )
+	{
+		$sql="SELECT*FROM comida_extra   
+		WHERE idcomida_extra ='$idcomida_extra'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//Implementar un método para listar los registros
+	public function listar($idproyecto)
+	{
+		$sql="SELECT*FROM comida_extra WHERE idproyecto='$idproyecto' ORDER BY idcomida_extra DESC";
+		return ejecutarConsulta($sql);		
+	}
+
+	//Seleccionar un comprobante
+	public function ficha_tec($idcomida_extra)
+	{
+		$sql="SELECT comprobante FROM comida_extra WHERE idcomida_extra='$idcomida_extra'";
+		return ejecutarConsulta($sql);		
+	}
+	//total
+	public function total($idproyecto){
+		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM comida_extra WHERE idproyecto='$idproyecto' AND estado=1";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+}
+
+?>

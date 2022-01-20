@@ -76,7 +76,7 @@
                                                     <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
                                                     <th data-toggle="tooltip" data-original-title="Unidad">Unidad</th>
                                                     <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Parcial">Momto Parcial</th>
+                                                    <th data-toggle="tooltip" data-original-title="Parcial">Monto Parcial</th>
                                                     <th>Comprobante</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -229,14 +229,14 @@
                           <div class="modal-dialog modal-dialog-scrollable modal-xl ">
                               <div class="modal-content">
                                   <div class="modal-header">
-                                      <h4 class="modal-title">Ficha Técnica</h4>
+                                      <h4 class="modal-title">Comprobante hospedaje</h4>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span class="text-danger" aria-hidden="true">&times;</span>
                                       </button>
                                   </div>
                                   <div class="modal-body">
                                       <div  class="class-style" style="text-align: center;"> 
-                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="Ficha Técnica" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
+                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="Comprobante" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
                                         <br>
                                         <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
                                           <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
