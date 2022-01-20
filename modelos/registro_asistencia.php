@@ -219,26 +219,26 @@ Class Asistencia_trabajador
 		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
 	   FROM trabajador AS t, trabajador_por_proyecto AS tp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
 	   WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto' AND tp.idcargo_trabajador = c.idcargo_trabajador
-	   GROUP BY tp.idtrabajador;;";
+	   GROUP BY tp.idtrabajador;";
 		return ejecutarConsulta($sql);		
 	}
 
 	//Implementar un método para listar asistencia
-	public function listar_asis_individual($idasistencia_trabajador)
+	public function listar_asis_individual($idtrabajador_x_proyecto)
 	{
-		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador, atra.sabatical, atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, atra.pago_horas_extras, atra.fecha_asistencia, atra.estado, t.nombres as trabajador
+		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador,  atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, atra.pago_horas_extras, atra.fecha_asistencia, atra.estado, t.nombres as trabajador
 		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t 
-		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$idasistencia_trabajador' ORDER BY  atra.estado DESC; ";
+		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ORDER BY  atra.estado DESC; ";
 		return ejecutarConsulta($sql);		
 	}
 	
-	//traemos el sueldo po hora del trabajador
+	//traemos el sueldo po hora del trabajador - no se utiliza - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	public function sueldoxhora($idtrabajador, $idproyecto){
 		$sql="SELECT tp.sueldo_hora AS sueldo_hora FROM trabajador_por_proyecto AS tp WHERE tp.idtrabajador=2 AND tp.idproyecto=1;";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	//visualizar Horas y sueldo
+	//visualizar Horas y sueldo - no se utiliza - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	public function horas_acumulada($trabajador,$idproyecto){
 		$sql="SELECT sum(atr.horas_trabajador) as horas_trabajo,sum(atr.sabatical) as sabatical
 		FROM asistencia_trabajador as atr, trabajador as t WHERE atr.idtrabajador='$trabajador' AND atr.idtrabajador= t.idtrabajador AND t.idproyecto='$idproyecto';";
@@ -246,7 +246,7 @@ Class Asistencia_trabajador
 		
 	}
 
-	//visualizar registro asistencia por dìa
+	//visualizar registro asistencia por dìa - no se utiliza - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	public function registro_asist_trab($id_trabajador){
 		$sql="SELECT atr.idasistencia_trabajador as idasistencia, atr.horas_trabajador as horas_trabajador, 
 		atr.horas_extras_dia as horas_extras_dia, atr.sabatical as sabatical, atr.fecha as fecha, t.nombres as nombres, 
@@ -255,8 +255,8 @@ Class Asistencia_trabajador
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	//listarquincenas_b
-	public function listarquincenas_b($nube_idproyecto){
+	//listar botones de la quincena o semana
+	public function listarquincenas_botones($nube_idproyecto){
 		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -377,20 +377,28 @@ Class Asistencia_trabajador
 		return		ejecutarConsulta($sql);
 	}
 
-	public function insertar_pago_al_contador( $id_trabajador_x_proyecto, $fecha_q_s)
+	public function insertar_pago_al_contador( $id_trabajador_x_proyecto, $fecha_q_s, $estado_envio_contador)
 	{
-		$sql = "INSERT INTO sumas_adicionales(idtrabajador_por_proyecto, fecha_registro, descripcion_descuento) 
-				VALUES ('$id_trabajador_x_proyecto', '$fecha_q_s', '1' )";
+		$sql = "INSERT INTO sumas_adicionales(idtrabajador_por_proyecto, fecha_registro, estado_envio_contador) 
+				VALUES ('$id_trabajador_x_proyecto', '$fecha_q_s', '$estado_envio_contador' )";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function editar_pago_al_contador($idsumas_adicionales, $id_trabajador_x_proyecto, $fecha_q_s)
+	public function quitar_editar_pago_al_contador($idsumas_adicionales, $id_trabajador_x_proyecto, $fecha_q_s, $estado_envio_contador)
 	{
 		$sql = "UPDATE sumas_adicionales 
-			SET  idtrabajador_por_proyecto='$id_trabajador_x_proyecto', fecha_registro='$fecha_q_s', descripcion_descuento = '0'
+			SET  idtrabajador_por_proyecto='$id_trabajador_x_proyecto', fecha_registro='$fecha_q_s', estado_envio_contador= '$estado_envio_contador'
 			WHERE idsumas_adicionales = '$idsumas_adicionales';";
 		return		ejecutarConsulta($sql);
+	}
+
+	// mostramos la descripcion
+	public function descripcion_adicional_descuento($id_adicional){
+		
+		$sql = "SELECT descripcion_descuento FROM sumas_adicionales WHERE idsumas_adicionales = '$id_adicional';";
+			
+		return ejecutarConsultaSimpleFila($sql);
 	}
 
 }
