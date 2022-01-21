@@ -1343,7 +1343,8 @@ function asignar_pago_al_contador(fecha_q_s, id_trabajador_x_proyecto, nombre_tr
 
       Swal.fire({
         title: "¿Está Seguro de enviar el pago al contador?",
-        text: `Al enviar, el contador podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
+        text: ``,
+        html:`Se enviara datos de: <b>${nombre_trabajador}</b> al contador, este podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#28a745",
@@ -1374,7 +1375,7 @@ function asignar_pago_al_contador(fecha_q_s, id_trabajador_x_proyecto, nombre_tr
   
       Swal.fire({
         title: "¿Está Seguro de ANULAR el pago al contador?",
-        text: `Al ANULAR, el contador NO podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
+        html: `Al ANULAR a: <b>${nombre_trabajador}</b>, el contador NO podra hacer el pago del trabajdor de esta "quincena" o "semana".`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#28a745",

@@ -30,12 +30,11 @@ function listar_tipo() {
 
   tabla_tipo=$('#tabla-tipo').dataTable({
     "responsive": true,
-    "lengthChange": false,
-    //"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['excelHtml5'],
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf'],
     "ajax":{
         url: '../ajax/tipo.php?op=listar_tipo',
         type : "get",

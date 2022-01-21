@@ -60,7 +60,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <!-- Lista de trabajdores -->                      
+                      <!-- Lista de trabajdores activos -->                      
                       <table id="tabla-trabajador" class="table table-bordered table-striped display" style="width: 100% !important;">
                         <thead>
                           <tr>
@@ -87,7 +87,37 @@
                             <th>Estado</th>
                           </tr>
                         </tfoot>
-                      </table>                      
+                      </table>
+                      
+                      <div class="mt-4 card-danger card-outline">
+                        <h1 style="text-align: center;background-color: aliceblue;">Trabajador Expulsado</h1>
+                          <table id="tabla-trabajador-expulsado" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">Aciones</th>
+                                <th>Nombres</th>
+                                <th>Tipo</th>
+                                <th>Ocupación</th>
+                                <th>Telefono</th> 
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th>Aciones</th>
+                                <th>Nombres</th>
+                                <th>Tipo</th>
+                                <th>Ocupación</th>
+                                <th>Telefono</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                      </div>
+                      
                     </div>
                     <!-- /.card-body -->
                   </div>
@@ -391,16 +421,17 @@
     require 'script.php';
     ?>
     <style>
-        .class-style label{
-            font-size: 14px;
-        }
-        .class-style small {
-            background-color: #f4f7ee;
-            border: solid 1px #ce542a21;
-            margin-left: 3px;
-            padding: 5px;
-            border-radius: 6px;
-        }
+      .class-style label{
+        font-size: 14px;
+      }
+      .class-style small {
+        background-color: #f4f7ee;
+        border: solid 1px #ce542a21;
+        margin-left: 3px;
+        padding: 5px;
+        border-radius: 6px;
+      }
+       
     </style>
     <!-- Bootstrap 4 -->
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -416,10 +447,9 @@
     <script type="text/javascript" src="scripts/all_trabajador.js"></script>
 
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
+      $(function () {  $('[data-toggle="tooltip"]').tooltip();  });
     </script>
+
     <script>
       if ( localStorage.getItem('nube_idproyecto') ) {
 

@@ -203,9 +203,15 @@
 
         case 'desactivar':
 
-          $rspta=$trabajador->desactivar($idtrabajador);
+          $ok = ['ok'=> true, 'redirected'=> true, 'status'=> 200];
 
- 				  echo $rspta ? "Usuario Desactivado" : "Trabajador no se puede desactivar";
+          $error = ['ok'=> false, 'redirected'=> true, 'status'=> 404];
+
+          $idtrabajador = $_GET["idtrabajador"];  $descripcion = $_GET["descripcion"];
+
+          $rspta=$trabajador->desactivar($idtrabajador, $descripcion);
+
+ 				  echo $rspta ? json_encode($ok) : json_encode($error);
 
         break;
 
@@ -248,7 +254,7 @@
                 </div>',
               "2"=> $reg->nombre_tipo,
               "3"=> $reg->nombre_ocupacion,
-              "4"=>$reg->telefono,
+              "4"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
               "5"=>$reg->fecha_nacimiento.' : '.$reg->edad,
               "6"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria_format .' <br> <b>CCI: </b>'.$reg->cci_format,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
@@ -263,6 +269,42 @@
           echo json_encode($results);
 
         break;  
+
+        case 'listar_expulsado':
+          $rspta=$trabajador->listar_expulsado();
+          //Vamos a declarar un array
+          $data= Array();
+
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
+          while ($reg=$rspta->fetch_object()){
+            $data[]=array(
+              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
+                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
+              "1"=>'<div class="user-block">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
+                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .'<br>'.$reg->fecha_nacimiento.' : '.$reg->edad.' años</span>
+                </div>',
+              "2"=> '<div class="center-vertical">'. $reg->nombre_tipo .'</div>',
+              "3"=> $reg->nombre_ocupacion,
+              "4"=> '<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
+              "5"=> $reg->descripcion_expulsion ,
+              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              '<span class="text-center badge badge-danger">Desactivado</span>'
+              );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);
+        break;
         
         case 'verdatos':
           $rspta=$trabajador->verdatos($idtrabajador);
@@ -296,6 +338,8 @@
       require 'noacceso.php';
     }
   }
+
+  function quitar_guion($numero){ return str_replace("-", "", $numero); } 
 
   ob_end_flush();
 

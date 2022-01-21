@@ -1,4 +1,4 @@
-var tabla;
+var tabla; var tabla2;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -528,6 +528,37 @@ function listar() {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+
+  // listamos al trabajadores expulsados
+  tabla2=$('#tabla-trabajador-expulsado').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/all_trabajador.php?op=listar_expulsado',
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
 }
 //Función para guardar o editar
 
@@ -848,24 +879,66 @@ function mostrar(idtrabajador) {
 
 //Función para desactivar registros
 function desactivar(idtrabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el trabajador?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_trabajador.php?op=desactivar", { idtrabajador: idtrabajador }, function (e) {
 
-        Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
-    
-        tabla.ajax.reload();
-      });      
+  Swal.fire({
+    icon: "warning",
+    title: 'Antes de expulsar ingrese una descripción',
+    input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+    showCancelButton: true,
+    cancelButtonColor: "#d33",
+    confirmButtonText: 'Si, expulsar!',
+    confirmButtonColor: "#28a745",
+    showLoaderOnConfirm: true,
+    preConfirm: (login) => {
+      // console.log(login);
+      return fetch(`../ajax/all_trabajador.php?op=desactivar&idtrabajador=${idtrabajador}&descripcion=${login}`)
+        .then(response => {
+          console.log(response);
+          if (!response.ok) {
+            throw new Error(response.statusText)
+          }
+          return response.json()
+        })
+        .catch(error => {
+          Swal.showValidationMessage(
+            `Request failed: ${error}`
+          )
+        })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    console.log(result );
+    if (result.isConfirmed) {
+      if (result.value.ok) {
+        Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
+        tabla.ajax.reload(); tabla2.ajax.reload();
+      }else{
+        Swal.fire("Error!", "No se pudo realizar la petición.", "error");
+      }     
     }
-  });   
+  })
+
+  // Swal.fire({
+  //   title: "¿Está Seguro de  Desactivar  el trabajador?",
+  //   text: "",
+  //   icon: "warning",
+  //   showCancelButton: true,
+  //   confirmButtonColor: "#28a745",
+  //   cancelButtonColor: "#d33",
+  //   confirmButtonText: "Si, desactivar!",
+  // }).then((result) => {
+  //   if (result.isConfirmed) {
+  //     $.post("../ajax/all_trabajador.php?op=desactivar", { idtrabajador: idtrabajador }, function (e) {
+
+  //       Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
+    
+  //       tabla.ajax.reload(); tabla2.ajax.reload();
+  //     });      
+  //   }
+  // });   
 }
 
 //Función para activar registros
@@ -884,7 +957,7 @@ function activar(idtrabajador) {
 
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(); tabla2.ajax.reload();
       });
       
     }

@@ -35,7 +35,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <!--====Bancos============-->
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -95,7 +95,7 @@
                         <!-- /.content -->
                     </div>
                     <!--====Color============-->
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -155,7 +155,7 @@
                         <!-- /.content -->
                     </div>
                     <!--====Unidad de medida==-->
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -217,7 +217,7 @@
                         <!-- /.content -->
                     </div>
                     <!--====Ocupación==-->
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -271,7 +271,7 @@
                         <!-- /.content -->
                     </div>
                     <!--==== tipo==-->
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -325,7 +325,7 @@
                         <!-- /.content -->
                     </div>
                     <!--====Cargo==-->
-                    <div class="col-6">
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                         <!-- Content Header (Page header) -->
                         <section class="content-header">
                             <div class="container-fluid">
@@ -734,6 +734,7 @@
                 padding: 5px;
                 border-radius: 6px;
             }
+             
         </style>
         <!-- Bootstrap 4 -->
         <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
