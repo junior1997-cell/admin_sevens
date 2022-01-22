@@ -1,6 +1,12 @@
 var tabla;
 var editando=false;
 var editando2=false;
+////////////////////////////
+var array_class=[];
+var array_datosPost=[];
+var f1_reload=''; var f2_reload=''; var i_reload  = '';
+
+
 
 //Función que se ejecuta al inicio
 function init() {  
@@ -17,35 +23,6 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-
-  //Mostramos los trabajadores
-  $.post("../ajax/trabajador.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
-
-    //Mostramos los tipo
-    $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#tipo_trabajador").html(r); });
-
-  //Initialize Select2 Elements
-  $("#trabajador").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
-    allowClear: true,
-  });  
-
-  //Initialize Select2 Elements
-  $("#tipo_trabajador").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione tipo trabajador",
-    allowClear: true,
-  });
-
-  //Initialize Select2 Elements
-  $("#cargo").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione cargo",
-    allowClear: true,
-  });
-  
-  $("#cargo").val('null').trigger("change");
   
 }
 
@@ -88,7 +65,7 @@ function editarbreak() {
    $(".span-visible").hide();
    // mostramos los inputs
    $(".input-visible").show();
-   $("#textarea-visible").attr("readonly", false);
+   $(".textarea-visible").attr("readonly", false);
  
    $("#card-editar").hide();
    $("#card-guardar").show();
@@ -96,98 +73,7 @@ function editarbreak() {
 
   
 }
-//captura id del trabajador
-function capture_idtrabajador() {
-  if (editando2==false) {
-      var idtrabajador= $("#trabajador").select2("val");
-      if (idtrabajador == null || idtrabajador == '' ) {
 
-      }else{
-
-        $("#tipo_trabajador").val("null").trigger("change");
-          
-        $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (data, status) {
-
-          data = JSON.parse(data);  console.log(data);   
-
-          $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
-
-          $("#ocupacion").val(data.nombre_ocupacion);   
-        });
-
-      }
-  }
-  editando2=false;
-
-}
-//captura id del tipo
-
-function captura_idtipo() {
-  if (editando==false) {
-
-    var idtipo= $("#tipo_trabajador").select2("val");
-    if (idtipo != null || idtipo != ' ' ) {
-       //console.log(idtipo);
-       $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
-     }else{
-   
-     }
-
-  }
-  editando=false;
-
-}
-
-function estado_editar(estado) {
-  editando=estado;
-  editando2=estado;
-  
-}
-
-function sueld_mensual(){
-
-  var sueldo_mensual = $('#sueldo_mensual').val();
-
-  var sueldo_diario=(sueldo_mensual/30).toFixed(2);
-
-  var sueldo_horas=(sueldo_diario/8).toFixed(2);
-
-  $("#sueldo_diario").val(sueldo_diario);
-
-  $("#sueldo_hora").val(sueldo_horas);
-}
-
-function show_hide_form(flag) {
-
-  limpiar();
-
-	if (flag)	{
-
-		$("#mostrar-form").show();
-		$("#mostrar-tabla").hide();
-
-	}	else	{
-
-		$("#mostrar-form").hide();
-		$("#mostrar-tabla").show();
-	}
-}
-
-
-//Función limpiar
-function limpiar() {  
-
-  $("#trabajador").val("").trigger("change");
-
-  $("#tipo_trabajador").val("").trigger("change");
-  $("#cargo").val("").trigger("change");
-  $("#desempenio").val("");
-  $("#ocupacion").val("");
-
-  $("#sueldo_mensual").val("");   
-  $("#sueldo_diario").val("");   
-  $("#sueldo_hora").val("");
-}
 // Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
   var Fecha = new Date();
@@ -205,8 +91,6 @@ sumaFecha = function(d, fecha){
   var fechaFinal = dia+sep+mes+sep+anno;
   return (fechaFinal);
 }
-
-
 //Función Listar
 function listar( nube_idproyecto ) {
   console.log(nube_idproyecto);
@@ -241,8 +125,8 @@ function listar( nube_idproyecto ) {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
-  //Listar quincenas(botones)
-  $.post("../ajax/break.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+  //Listar semanas(botones)
+  $.post("../ajax/break.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
 
@@ -251,10 +135,10 @@ function listar( nube_idproyecto ) {
 
       var dia_regular = 0; var weekday_regular = extraer_dia_semana(data.fecha_inicio); var estado_regular = false;
 
-      if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
+      if (weekday_regular == "Domingo") { dia_regular = -1; } else { if (weekday_regular == "Lunes") { dia_regular = -2; } else { if (weekday_regular == "Martes") { dia_regular = -3; } else { if (weekday_regular == "Miercoles") { dia_regular = -4; } else { if (weekday_regular == "Jueves") { dia_regular = -5; } else { if (weekday_regular == "Viernes") { dia_regular = -6; } else { if (weekday_regular == "Sábado") { dia_regular = -7; } } } } } } }
       // console.log(data.fecha_inicio, dia_regular, weekday_regular);
 
-          $('#Lista_quincenas').html('');
+          $('#Lista_breaks').html('');
 
           var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
 
@@ -277,7 +161,7 @@ function listar( nube_idproyecto ) {
             
             // console.log(fecha_f + ' - '+data.fecha_fin);
 
-            $('#Lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#Lista_breaks').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -286,7 +170,7 @@ function listar( nube_idproyecto ) {
             i++;
           } 
     } else {
-      $('#Lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
+      $('#Lista_breaks').html(`<div class="info-box shadow-lg w-px-600"> 
         <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
         <div class="info-box-content"> 
           <span class="info-box-text">Alerta</span> 
@@ -300,456 +184,242 @@ function listar( nube_idproyecto ) {
 }
 //Función para guardar o editar
 
-function guardaryeditar(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-trabajador-proyecto")[0]);
-
+function guardaryeditar_semana_break() {
+  $("#modal-cargando").modal("show");
   $.ajax({
-    url: "../ajax/trabajador.php?op=guardaryeditar",
+    url: "../ajax/break.php?op=guardaryeditar",
     type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
+    data: {
+      'array_break': JSON.stringify(array_datosPost),
+      'idproyecto': localStorage.getItem('nube_idproyecto'),
+    },
+    // contentType: false,
+    // processData: false,
     success: function (datos) {
              
       if (datos == 'ok') {
 
-        Swal.fire("Correcto!", "Trabajador registrado correctamente", "success");
+        datos_semana( f1_reload, f2_reload , i_reload);
+        
+        $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
 
-	      tabla.ajax.reload();
-         
-				show_hide_form(false);
+        // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
+        
+       $(".progress-bar").addClass("bg-success"); $("#barra_progress").text("100% Completado!");
+            
+      }else{
 
-			}else{
+            $("#icono-respuesta").html(`<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`);
 
-				Swal.fire("Error!", datos, "error");
-			}
+            $(".progress-bar").addClass("bg-danger"); $("#barra_progress").text("100% Error!");
+
+        // Swal.fire("Error!", datos, "error");
+      }
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            setTimeout(l_m, 600);
+          }
+        }
+      }, false);
+      return xhr;
+    }
   });
 }
+function l_m(){ $(".progress-bar").removeClass("progress-bar-striped")}
 
-function verdatos(idtrabajador){
-
-  console.log('id_verdatos'+idtrabajador);
-  
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-
-  $('#datostrabajador').html('');
-  var verdatos='';
-  var imagenver='';
-
-  $("#modal-ver-trabajador").modal("show")
-
-  $.post("../ajax/trabajador.php?op=verdatos", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data); 
-
-    var img =data.imagen != '' ? '<img src="../dist/img/usuarios/'+data.imagen+'" alt="" style="width: 90px;border-radius: 10px;">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-     verdatos=''+                                                                            
-    '<div class="col-12">'+
-      '<div class="card">'+
-          '<div class="card-body ">'+
-              '<table class="table table-hover table-bordered">'+          
-                  '<tbody>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th rowspan="2">'+img+'</th>'+
-                          '<td>'+data.nombres+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<td>'+data.numero_documento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Dirección</th>'+
-                          '<td>'+data.direccion+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Correo</th>'+
-                          '<td>'+data.email+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Teléfono</th>'+
-                          '<td>'+data.telefono+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Fecha nacimiento</th>'+
-                          '<td>'+data.fecha_nacimiento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Tipo trabajador</th>'+
-                          '<td>'+data.tipo_trabajador+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cargo</th>'+
-                          '<td>'+data.cargo_trabajador+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Desempeño</th>'+
-                          '<td>'+data.desempeno+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cuenta bancaria</th>'+
-                          '<td>'+data.cuenta_bancaria+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Banco</th>'+
-                          '<td>'+data.banco+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Titular cuenta </th>'+
-                          '<td>'+data.titular_cuenta+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por mes</th>'+
-                          '<td>'+data.sueldo_mensual+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por día</th>'+
-                          '<td>'+data.sueldo_diario+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por hora</th>'+
-                          '<td>'+data.sueldo_hora+'</td>'+
-                      '</tr>'+
-                  '</tbody>'+
-              '</table>'+
-          '</div>'+
-      '</div>'+
-    '</div>';
-  
-  $("#datostrabajador").append(verdatos);
-
-});
-
+function cerrar_modal() {
+  $("#modal-cargando").modal("hide");
+  $(".progress-bar").removeClass("bg-success bg-danger");
+  $(".progress-bar").addClass("progress-bar-striped");
 }
 
-function mostrar(idtrabajador,idtipo) {
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
- // $("#tipo_trabajador").val('null').trigger("change");
- // $("#cargo").val('null').trigger("change");
-  show_hide_form(true);
-  $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
-  estado_editar(true);
-  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);   
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-    $("#idtrabajador_por_proyecto").val(data.idtrabajador_por_proyecto);
-    $("#trabajador").val(data.idtrabajador).trigger("change");
-
-    $("#tipo_trabajador").val(data.idtipo_trabajador).trigger("change");
-    $("#ocupacion").val(data.nombre_ocupacion);
-    $("#cargo").val(data.idcargo_trabajador).trigger("change");
-    $("#desempenio").val(data.desempenio);
-  
-    $("#sueldo_mensual").val(data.sueldo_mensual);   
-    $("#sueldo_diario").val(data.sueldo_diario);   
-    $("#sueldo_hora").val(data.sueldo_hora);
-  });
-}
-
-//Función para desactivar registros
-function desactivar(idtrabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el trabajador?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=desactivar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
-
-        Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
-    
-        tabla.ajax.reload();
-      });      
-    }
-  });   
-}
-
-//Función para activar registros
-function activar(idtrabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  el trabajador?",
-    text: "Este trabajador tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=activar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
-
-        Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
-
-        tabla.ajax.reload();
-      });
-      
-    }
-  });      
-}
-
+////////////////////////////datos_semana////////////////////////////////////////////////
 // listamos la data de una quincena selecionada
-function datos_semana(f1, f2, i, cant_dias_asistencia) {
-
-  f1_r = f1; f2_r = f2; i_r = i; cant_dias_asistencia_r = cant_dias_asistencia;
-
-  // cambiamos el valor del colspan
-  $("#dias_asistidos_s_q").attr("colspan", cant_dias_asistencia);
-
-  // cambiamos el TABLE-HEAD tipo de pago
-  if (cant_dias_asistencia == 7) { $(".head_pago_q_s").html("Pago semanal"); }else{ $(".head_pago_q_s").html("Pago quincenal"); }
+function datos_semana(f1, f2, i) {
+  var tabla_bloc_dia_1=''; var tabla_bloc_cantidad_2=''; var tabla_bloc_precio_3=''; var tabla_bloc_descripcion_4='';
+  var tabla_bloc_semana='';
+  f1_reload = f1; f2_reload = f2; i_reload  = i;
 
   $("#card-editar").show();
   $("#card-guardar").hide();  
 
   // vaciamos el array
-  array_asistencia = []; array_trabajador = []
+  array_datosPost=[];
 
   // pintamos el botón
   pintar_boton_selecionado(i);
 
+  //capturamos el id del proyecto.
   var nube_idproyect =localStorage.getItem('nube_idproyecto');  //console.log('Quicena: '+f1 + ' al ' +f2 + ' proyect-id: '+nube_idproyect);
   
-  var fecha_inicial_quincena = f1; var table_numero_semana = ""; var table_dia_semana = ""; 
+  var fecha_inicial_semana = f1; var count_numero_dia =1;
 
-  var dia_regular = 0; var count_dias_de_asistencias = 1; var total_pago = 0;
+  var dia_regular = 0;  var total_pago = 0;
 
-  var weekday_regular = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena));
+  var weekday_regular = extraer_dia_semana(format_a_m_d(fecha_inicial_semana));
   //console.log(weekday_regular);
   // asignamos un numero para restar y llegar al dia DOMIGO
-  if (weekday_regular == "do") { dia_regular = -0; } else { if (weekday_regular == "lu") { dia_regular = -1; } else { if (weekday_regular == "ma") { dia_regular = -2; } else { if (weekday_regular == "mi") { dia_regular = -3; } else { if (weekday_regular == "ju") { dia_regular = -4; } else { if (weekday_regular == "vi") { dia_regular = -5; } else { if (weekday_regular == "sa") { dia_regular = -6; } } } } } } }
+  if (weekday_regular == "Domingo") { dia_regular = -0; } else { if (weekday_regular == "Lunes") { dia_regular = -1; } else { if (weekday_regular == "Martes") { dia_regular = -2; } else { if (weekday_regular == "Miercoles") { dia_regular = -3; } else { if (weekday_regular == "Jueves") { dia_regular = -4; } else { if (weekday_regular == "Viernes") { dia_regular = -5; } else { if (weekday_regular == "Sábado") { dia_regular = -6; } } } } } } }
 
-  var fecha_inicial_quincena_regular = sumaFecha(dia_regular, fecha_inicial_quincena);
-
+  var fecha_inicial_semana_regular = sumaFecha(dia_regular, fecha_inicial_semana);
+  //Regulamos los días hasta el inicio del dia del inicio del proyecto
   for ( var j = 1; j<=dia_regular*-1; j++ ) {
 
-    var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena_regular));  
+    var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_semana_regular));
 
-    table_dia_semana = table_dia_semana.concat(`<th class="p-x-10px bg-color-acc3c7"> ${fecha_inicial_quincena_regular.substr(0,2)} <br> ${weekday} </th>`);
+    
+    tabla_bloc_dia_1 =`<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${fecha_inicial_semana_regular}</td>`;
 
-    table_numero_semana = table_numero_semana.concat(`<th class="p-x-10px bg-color-acc3c7"> ${count_dias_de_asistencias} </th>`);
+    tabla_bloc_cantidad_2 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+
+    tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+
+    tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+
+    //fila
+    tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
 
     // aumentamos mas un dia hasta llegar al dia "dia_regular"
-    fecha_inicial_quincena_regular = sumaFecha(1,fecha_inicial_quincena_regular);
+    fecha_inicial_semana_regular = sumaFecha(1,fecha_inicial_semana_regular);
 
-    count_dias_de_asistencias++;
+
+    count_numero_dia++;
   }
-
-  for (i = 1; i <=cant_dias_asistencia + dia_regular; i++) {    
-    //console.log('fecha-dia-number: ' + fecha_inicial_quincena );  
-
-    var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena));  
-
-    if (weekday != 'sa') {
-
-      table_dia_semana = table_dia_semana.concat(`<th class="p-x-10px"> ${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
-
-      table_numero_semana = table_numero_semana.concat(`<th class="p-x-10px"> ${count_dias_de_asistencias} </th>`);
-
-    } else {
-
-      table_dia_semana = table_dia_semana.concat(`<th class="p-x-10px bg-color-acc3c7">${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
-      
-      table_numero_semana = table_numero_semana.concat(`<td class="p-x-10px bg-color-acc3c7"> ${count_dias_de_asistencias} </td>`);
-    }
-
-    // aumentamos mas un dia hasta llegar al dia 15
-    fecha_inicial_quincena = sumaFecha(1,fecha_inicial_quincena);
-    count_dias_de_asistencias++
-  } //end for
-
-  $('.data-dia-semana').html(table_dia_semana);
-
-  $('.data-numero-semana').html(table_numero_semana);
-
   // ocultamos las tablas
   mostrar_form_table(2)
 
-  $.post("../ajax/registro_asistencia.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
+  $.post("../ajax/break.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
         
     data =JSON.parse(data); console.log(data);   
-
-    $(".data_table_body").html('');   
      
-    $.each(data, function (index, value) {
-
-      var count_dias_asistidos = 0; var horas_total = 0; var horas_nomr_total = 0; var horas_extr_total = 0; var sabatical = 0;
-      
-      var tabla_bloc_HN_asistencia_3=""; var tabla_bloc_HE_asistencia_2 =""; var estado_hallando_sabado = true;
-
       // existe alguna asistencia -------
-      if (value.asistencia.length != 0) {
+      if (data.length!= 0) {
 
         var i;  var fecha = f1; //console.log("tiene data");
-        
-        // renellamos hasta el dia inicial
-        for ( var j = 1; j<=dia_regular*-1; j++ ) {
 
-          tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);
-              
-          tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
-          
-        }
+        for (i = 1; i <=7+dia_regular; i++) {
 
-        for (i = 1; i <=cant_dias_asistencia+dia_regular; i++) {
+          var estado_fecha = false; var fecha_compra_encontrado = ""; var costo_parcial_encontrado=0; var descripcion_encontrado=''; var cantidad_encontrado=0; var idbreak="";
 
-          var estado_fecha = false; var fecha_asist = ""; var hora_n = 0; var hora_e = 0;
-
-          // buscamos las fechas asistidas
-          for (let i = 0; i < value.asistencia.length; i++) { 
+          // buscamos las fechas 
+          for (let i = 0; i < data.length; i++) { 
             
-            let split_f = format_d_m_a( value.asistencia[i]['fecha_asistencia'] ) ; 
+            let split_f = data[i]['fecha_compra']; 
              
-            let fecha_semana = new Date( format_a_m_d(fecha) ); let fecha_asistencia = new Date(format_a_m_d(split_f));
+            let fecha_semana = new Date( format_a_m_d(fecha) ); let fecha_asistencia = new Date(split_f);
              
             if ( fecha_semana.getTime() == fecha_asistencia.getTime() ) { 
 
-              horas_total = horas_total + parseFloat(value.asistencia[i]['horas_normal_dia']);
+              total_pago = total_pago + parseFloat(data[i]['costo_parcial']);
 
-              estado_fecha = true; fecha_asist = value.asistencia[i]['fecha_asistencia'];  hora_n = value.asistencia[i]['horas_normal_dia'];  hora_e = value.asistencia[i]['horas_extras_dia'];
-
-              horas_total = horas_total + value.asistencia[i]['horas_normal_dia'] + value.asistencia[i]['horas_extras_dia'];
-
-              horas_nomr_total = horas_nomr_total + parseFloat(value.asistencia[i]['horas_normal_dia']);
-
-              horas_extr_total = horas_extr_total + parseFloat(value.asistencia[i]['horas_extras_dia']);
-
-              count_dias_asistidos++;                          
+              fecha_compra_encontrado = data[i]['fecha_compra'];
+              costo_parcial_encontrado=data[i]['costo_parcial'];
+              descripcion_encontrado=data[i]['descripcion'];
+              cantidad_encontrado=data[i]['cantidad'];
+              idbreak=data[i]['idbreak'];
+              estado_fecha = true;                       
             }
           } //end for
 
-          // imprimimos la fecha de asistencia encontrada 
+          // imprimimos la fecha compra encontrada 
           if (estado_fecha) {
 
-            var weekday = extraer_dia_semana(fecha_asist); //console.log(weekday);
+            var weekday = extraer_dia_semana(fecha_compra_encontrado); //console.log(weekday);
 
-            if (weekday != 'sa') {
+            if (weekday != 'Sábado') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist  span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );" type="text" value="${hora_n}" autocomplete="off" ></td>`);
-              
-              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_e}</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="${hora_e}" ></td>`);
-              
-              var input_asistncia = { 
-                'id_trabajador':value.idtrabajador_por_proyecto, 
-                'fecha_asistida':format_d_m_a(fecha_asist), 
-                'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}`, 
-                'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}`,
-                'sueldo_hora':value.sueldo_hora
-              };
+              /*tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b> ${format_d_m_a(fecha_compra_encontrado)} <input type="hidden" value="${weekday}"> </td>`;
+
+              tabla_bloc_cantidad_2 = `<td><span class="span-visible">${cantidad_encontrado}</span> <input type="number" value="${cantidad_encontrado}" class="hidden input-visible"></td>`;
+
+              tabla_bloc_precio_3 =  `<td><span class="span-visible">${costo_parcial_encontrado}</span> <input type="number" value="${costo_parcial_encontrado}" class="hidden input-visible"></td>`;
+
+              tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible" value="${descripcion_encontrado}" style="width: 430px;"></textarea></td>`;*/
+                //-------------------------------------------------------------
+              tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${format_d_m_a(fecha_compra_encontrado)} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${fecha_compra_encontrado}"><input type="hidden" class="idbreak_${count_numero_dia}" value="${idbreak}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
+
+              tabla_bloc_cantidad_2 = `<td><span class="span-visible">${cantidad_encontrado}</span><input type="number" value="${cantidad_encontrado}" class="cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
   
-              array_asistencia.push( input_asistncia );
+              tabla_bloc_precio_3 =  `<td><span class="span-visible">${costo_parcial_encontrado}</span><input type="number" value="${costo_parcial_encontrado}" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+  
+              tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="${descripcion_encontrado}" style="width: 430px;">${descripcion_encontrado}</textarea></td>`;
+  
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
+                //
 
             } else {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" id="checkbox_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onclick="delay(function(){ calcular_sabatical('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', 'checkbox_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}')}, 300 );"> <input class="input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
-              // tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat('<td class="text-center bg-color-acc3c7"> </td>');
+              tabla_bloc_dia_1 =`<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${format_d_m_a(fecha_compra_encontrado)}</td>`;
+
+              tabla_bloc_cantidad_2 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+          
+              tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+          
+              tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+          
+              //fila
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
+                    ${tabla_bloc_dia_1}
+                    ${tabla_bloc_cantidad_2}
+                    ${tabla_bloc_precio_3}
+                    ${tabla_bloc_descripcion_4}
+                </tr>`);
             }
              
           } else {
 
             var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
 
-            if (weekday != 'sa') {
+            if (weekday != 'Sábado') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );" type="text" value="" autocomplete="off" ></td>`);
-              
-              tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
-              
-              var input_asistncia = { 
-                'id_trabajador':value.idtrabajador_por_proyecto, 
-                'fecha_asistida':fecha, 
-                'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${fecha}`,
-                'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${fecha}`,
-                'sueldo_hora':value.sueldo_hora
-              };
-  
-              array_asistencia.push( input_asistncia );
+                tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(fecha)}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
+
+                tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class=" cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
+    
+                tabla_bloc_precio_3 =  `<td><span class="span-visible">-</span><input type="number" value="" class=" precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+    
+                tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width: 430px;"></textarea></td>`;
+    
+                tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
+                  //
 
             } else {
-              // SABATICALES
-              if (estado_hallando_sabado) {
 
-                if (value.sabatical_manual_1 == "1") {
+              tabla_bloc_dia_1 =`<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${fecha}</td>`;
 
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked  id="checkbox_HN_${value.idtrabajador_por_proyecto}_${fecha}" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_1" type="text" value="8" > </td>`);
-                  
-                  count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
+              tabla_bloc_cantidad_2 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+          
+              tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+          
+              tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+          
+              //fila
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
+                    ${tabla_bloc_dia_1}
+                    ${tabla_bloc_cantidad_2}
+                    ${tabla_bloc_precio_3}
+                    ${tabla_bloc_descripcion_4}
+                </tr>`);
 
-                  sabatical = 1;
-                } else {
-
-                  if (horas_nomr_total >= 44 ) {
-
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked  id="checkbox_HN_${value.idtrabajador_por_proyecto}_${fecha}" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_1" type="text" value="8" > </td>`);
-                    
-                    count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
-
-                    sabatical = 1;
-                  } else {
-
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_HN_${value.idtrabajador_por_proyecto}_${fecha}" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_1" type="text" value="0" > </td>`);
-                                         
-                  }
-                }
-
-                estado_hallando_sabado = false;
-              } else {
-
-                if (value.sabatical_manual_2 == "1") {
-
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_2" type="text" value="8" > </td>`);
-                  
-                  count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
-
-                  sabatical = sabatical + 1;
-                } else {
-
-                  if (sabatical == "1") {
-                    if ((horas_nomr_total - 52) >= 44 ) {
-
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_2" type="text" value="8" > </td>`);
-                      
-                      count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
-  
-                      sabatical = sabatical + 1;
-                    } else {
-  
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_2" type="text" value="0" > </td>`);
-                                             
-                    }
-                  } else {
-
-                    if ((horas_nomr_total - 44) >= 44 ) {
-
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_2" type="text" value="8" > </td>`);
-                      
-                      count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
-  
-                      sabatical = sabatical + 1;
-                    } else {
-  
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="delay(function(){ calcular_sabatical('${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}')}, 300 );"> <input class="hidden" id="input_sabatical_${value.idtrabajador_por_proyecto}_2" type="text" value="0" > </td>`);
-                                             
-                    }
-                  }                  
-                }                
-              }
-              // tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat('<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20 " type="checkbox"> </td>');
-              
-              // tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat('<td class="text-center bg-color-acc3c7"> <input class="w-xy-20" type="checkbox"> </td>');
             }
           }
-
+          //aumentamos el número de días
+          count_numero_dia++;
           // aumentamos mas un dia hasta llegar al dia 15
           fecha = sumaFecha(1,fecha);
         } //end for
@@ -759,143 +429,52 @@ function datos_semana(f1, f2, i, cant_dias_asistencia) {
 
         var fecha = f1; //console.log("no ninguna fecha asistida");  
 
-        // renellamos hasta el dia inicial
-        for ( var j = 1; j<=dia_regular*-1; j++ ) {
-
-          tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);
-              
-          tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
-          
-        }
-
-        for (i = 1; i <=cant_dias_asistencia+dia_regular; i++) { 
+        for (i = 1; i <=7+dia_regular; i++) { 
 
           var weekday = extraer_dia_semana(format_a_m_d(fecha));
 
-          if (weekday != 'sa') {
+          if (weekday != 'Sábado') {
 
-            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}') }, 300 );" type="text" value="" autocomplete="off"></td>`);
-            
-            tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
-            
-            var input_asistncia = { 
-              'id_trabajador':value.idtrabajador_por_proyecto, 
-              'fecha_asistida':fecha, 
-              'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${fecha}`,   
-              'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${fecha}`,
-              'sueldo_hora':value.sueldo_hora
-            };
+            tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(fecha)}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
 
-            array_asistencia.push( input_asistncia );
+            tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class=" cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
+
+            tabla_bloc_precio_3 =  `<td><span class="span-visible">-</span><input type="number" value="" class=" precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+
+            tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width: 430px;"></textarea></td>`;
+
+            tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
+              //
+            
 
           } else {
+            
+            tabla_bloc_dia_1 =`<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${fecha}</td>`;
 
-            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat('<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"> </td>');
-            // tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat('<td class="text-center bg-color-acc3c7"> <input class="w-xy-20" type="checkbox"> </td>');
+            tabla_bloc_cantidad_2 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+        
+            tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+        
+            tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+        
+            //fila
+            tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
+                  ${tabla_bloc_dia_1}
+                  ${tabla_bloc_cantidad_2}
+                  ${tabla_bloc_precio_3}
+                  ${tabla_bloc_descripcion_4}
+              </tr>`);
+
+
           }
+          //contamos el número del día 
+          count_numero_dia++;
           // aumentamos mas un dia hasta llegar al dia 15
           fecha = sumaFecha(1,fecha);
         } //end for
       }
-      
-
-      // asignamos lo trabajadores a un "array"
-      var data_trabajador = { 
-        'id_trabajador':value.idtrabajador_por_proyecto, 
-        'fecha_asistida':value.nombres,
-        'sueldo_hora':value.sueldo_hora
-      };
-      array_trabajador.push( data_trabajador );
-      
-      var tabla_bloc_HN_trabaj_2 =  `<td rowspan="2" class="center-vertical">${value.nombres}</td> <td rowspan="2" class="center-vertical">${value.cargo}</td>`;       
-
-      var tabla_bloc_HN_total_hora_4 =  `<td class="text-center center-vertical"> <span  class="total_HN_${value.idtrabajador_por_proyecto}">${horas_nomr_total}</span> </td>`;
-
-      var tabla_bloc_HN_total_dia_5 = `<td class="text-center center-vertical" rowspan="2" ><span  class="dias_asistidos_${value.idtrabajador_por_proyecto}">${count_dias_asistidos}</span> </td>`;
-
-      var tabla_bloc_HN_sueldos_6 = `<td class="text-center center-vertical" rowspan="2">${formato_miles(value.sueldo_mensual)}</td>`+
-              `<td class="text-center center-vertical" rowspan="2">${value.sueldo_diario}</td>`+
-              `<td class="text-center center-vertical" rowspan="2">${value.sueldo_hora}</td>`;
-   
-      var tabla_bloc_HN_sabatical_7 =  `<td class="text-center center-vertical" rowspan="2"><span  class="sabatical_${value.idtrabajador_por_proyecto}">${sabatical}</span></td>`;
-
-      var tabla_bloc_HN_pago_parcial_8 = `<td class="text-center center-vertical"> <span  class="pago_parcial_HN_${value.idtrabajador_por_proyecto}"> ${(parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)}</span> </td>`;
-      
-      var fechas_adicional = "";
-      
-      // validamos si existe una suma_adicional 
-      if (value.idsumas_adicionales == "") { fechas_adicional = format_a_m_d(f1); } else { fechas_adicional = value.fecha_registro; }
-
-      var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> <span class="span_asist" >${value.adicional_descuento}</span> <input class="w-px-45 input_asist hidden adicional_descuento_${value.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${data.length}', '${value.idtrabajador_por_proyecto}') }, 300 );" type="text" value="${value.adicional_descuento}" autocomplete="off" > <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${value.idsumas_adicionales}', '${value.idtrabajador_por_proyecto}', '${fechas_adicional}', '${value.descripcion_descuento}');"><i class="far fa-eye"></i></span></td>`;
-
-      var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> <span  class="val_pago_quincenal_${index+1} pago_quincenal_${value.idtrabajador_por_proyecto}"> ${((parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)) + parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2))) + parseFloat(value.adicional_descuento) ).toFixed(2)} </span> </td>`;
-
-      var tabla_bloc_envio_contador_11 = "";
-
-      // validamos el el envio al contador
-      if (value.estado_envio_contador == "") {
-        tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_asignar_pago_contador_${value.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idsumas_adicionales}', '${value.pago_quincenal}');"> </td>`;        
-      } else {
-        if (value.estado_envio_contador == "0") {
-          tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox"  id="checkbox_asignar_pago_contador_${value.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idsumas_adicionales}', '${value.pago_quincenal}');"> </td>`;                  
-        } else {
-          tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20" type="checkbox" checked id="checkbox_asignar_pago_contador_${value.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idsumas_adicionales}', '${value.pago_quincenal}');"> </td>`;                  
-        }
-      }
-
-      // acumulamos el total de pagos
-      total_pago = total_pago + parseFloat( (  (parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)) + parseFloat( (parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2) ) ) + parseFloat(value.adicional_descuento)  ).toFixed(2) );
-      
-      var tabla_bloc_HN_1 = `<tr>
-              <td>H/N</td>
-              ${tabla_bloc_HN_trabaj_2}
-              ${tabla_bloc_HN_asistencia_3} 
-              ${tabla_bloc_HN_total_hora_4}
-              ${tabla_bloc_HN_total_dia_5} 
-              ${tabla_bloc_HN_sueldos_6} 
-              ${tabla_bloc_HN_sabatical_7} 
-              ${tabla_bloc_HN_pago_parcial_8} 
-              ${tabla_bloc_HN_descuent_9}
-              ${tabla_bloc_HN_pago_total_10}
-              ${tabla_bloc_envio_contador_11}
-            </tr>`;      
-    
-      var tabla_bloc_HE_total_hora_3 = `<td class="text-center"> <span  class="total_HE_${value.idtrabajador_por_proyecto}">${horas_extr_total}</span> </td>`;
-    
-      var tabla_bloc_HE_pago_parcial_4 =`<td class="text-center"><span  class="pago_parcial_HE_${value.idtrabajador_por_proyecto}"> ${(parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2)}</span> </td>`;
-    
-      var tabla_bloc_HE_1 = '<tr>'+
-            '<td>H/E</td>'+
-            tabla_bloc_HE_asistencia_2 +
-            tabla_bloc_HE_total_hora_3 +
-            tabla_bloc_HE_pago_parcial_4 +      	       
-          '</tr>';
-
-      //Unimos y mostramos los bloques separados
-      $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);
-
-    }); // end foreach
-
-    var tabla_bloc_TOTAL_1 = '';
-
-    if (cant_dias_asistencia == 14) {
-
-      tabla_bloc_TOTAL_1 = `<tr> <td class="text-center" colspan="24"></td> <td class="text-center"> <b>TOTAL</b> </td> <td class="text-center"><span  class="pago_total_quincenal"> ${formato_miles(total_pago.toFixed(2))}</span> </td> </tr>`;
-      
-    } else { 
-
-      if (cant_dias_asistencia == 7) {
-
-        tabla_bloc_TOTAL_1 = `<tr> <td class="text-center" colspan="17"></td> <td class="text-center"> <b>TOTAL</b> </td> <td class="text-center"><span  class="pago_total_quincenal"> ${formato_miles(total_pago.toFixed(2))}</span> </td> </tr>`;
-        
-      } else {
-
-        tabla_bloc_TOTAL_1 = `<tr> <td class="text-center" colspan="24"></td> <td class="text-center"> <b>TOTAL</b> </td> <td class="text-center"><span  class="pago_total_quincenal"> ${formato_miles(total_pago.toFixed(2))}</span> </td> </tr>`;
-        
-      }
-    }
-
-    $(".data_table_body").append(tabla_bloc_TOTAL_1);
+      $("#monto_total").html(formato_miles(total_pago.toFixed(2)));
+      $("#data_table_body").html(tabla_bloc_semana);
 
   }); //end post - ver_datos_semana
 
@@ -906,90 +485,50 @@ function datos_semana(f1, f2, i, cant_dias_asistencia) {
   count_dias_asistidos = 0;  horas_nomr_total = 0;   horas_extr_total = 0;
 }
 
+function obtener_datos_semana () {
+
+  var fecha_compra=''; var dia_semana=''; var cantidad_compra=0; var precio_compra=0;  var descripcion_compra=''; var monto_total=0; var idbreak="";
+
+  array_datosPost=[];
+
+  for (let j = 1; j <= 7; j++) {
+    
+    //console.log(j);
+    fecha_compra       =  $(`.fecha_compra_${j}`).val();
+    dia_semana         =  $(`.dia_semana_${j}`).val();
+    cantidad_compra    =  $(`.cantidad_compra_${j}`).val();
+    precio_compra      =  $(`.precio_compra_${j}`).val();
+    descripcion_compra =  $(`.descripcion_compra_${j}`).val();
+   
+
+   
+
+    if ($(`.idbreak_${j}`).val()!=undefined){idbreak=$(`.idbreak_${j}`).val();}
+
+    if (cantidad_compra!=undefined) {
+
+      monto_total=monto_total+parseFloat(precio_compra);
+
+      array_datosPost.push(
+        {
+          "fecha_compra":fecha_compra,
+          "dia_semana":dia_semana,
+          "cantidad_compra":cantidad_compra,
+          "precio_compra":precio_compra,
+          "descripcion_compra":descripcion_compra,
+          "idbreak":idbreak
+        }
+      ); 
+    }
+
+  }
+  console.log(array_datosPost);
+  $("#monto_total").html(formato_miles(monto_total.toFixed(2)));
+  
+}
 
 init();
 
-$(function () {
-
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-       
-      guardaryeditar(e);
-      
-
-    },
-  });
-
-  $("#form-trabajador-proyecto").validate({
-    rules: {
-      trabajador: { required: true},
-      tipo_trabajador: { required: true},
-      cargo: { required: true},
-      desempenio: { minlength: 4, maxlength: 100},
-      sueldo_mensual: { required: true, minlength: 1},
-      sueldo_diario: { required: true, minlength: 1},
-      sueldo_hora: { required: true, minlength: 1},
-      
-      // terms: { required: true },
-    },
-    messages: {
-      trabajador: {
-        required: "Por favor  seleccione un trabajador.",
-      },
-
-      tipo_trabajador: {
-        required: "Por favor  seleccione un tipo trabajador.",
-      },
-      cargo: {
-        required: "Por favor  un cargo.",
-      },
-      desempenio: {
-        minlength: "Escriba como minimo 4 letras.",
-        maxlength: "Escriba como máximo 100 letras.",
-      },
-      sueldo_mensual: {
-        required: "Por favor  ingrese sueldo por mes.",
-      },
-      sueldo_diario: {
-        required: "Por favor  ingrese sueldo por día.",
-      },
-      sueldo_hora: {
-        required: "Por favor ingrese sueldo por hora.",
-      },
-    },
-        
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-      }
-
-    },
-  });
-});
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
@@ -1007,7 +546,7 @@ function format_a_m_d(fecha) {
 //extraer_dia_semana
 function extraer_dia_semana(fecha) {
   const fechaComoCadena = fecha; // día fecha
-  const dias = ['lu', 'ma', 'mi', 'ju', 'vi', 'sa', 'do']; //
+  const dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']; //
   const numeroDia = new Date(fechaComoCadena).getDay();
   const nombreDia = dias[numeroDia];
   return nombreDia;
@@ -1030,5 +569,23 @@ function pintar_boton_selecionado(i) {
 
     $("#boton-"+i).addClass('click-boton');
   }
+}
+//despintar_btn_select
+function despintar_btn_select() {  
+  if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
+}
+//coma por miles
+function formato_miles(num) {
+  if (!num || num == "NaN") return "-";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
 }
 

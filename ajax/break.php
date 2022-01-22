@@ -17,88 +17,54 @@
 
       require_once "../modelos/Break.php";
 
-      $trabajadorproyecto=new Trabajador();
+      $breaks=new Breaks();
 
-      //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
-      $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-      $idtrabajador_por_proyecto		= isset($_POST["idtrabajador_por_proyecto"])? limpiarCadena($_POST["idtrabajador_por_proyecto"]):"";
-      $trabajador		  = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
-
-      //$tipo_trabajador= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
-      $desempenio	    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";      
-      $cargo			    = isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
-      
-      $sueldo_diario	= isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
-      $sueldo_mensual = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
-      $sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
 
       switch ($_GET["op"]){
 
         case 'guardaryeditar':
-          	
-          // registramos un nuevo trabajador
-          if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$breaks->insertar_editar($_POST['array_break'],$_POST['idproyecto']);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
-
-          }else {
-            // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
-            
-            echo $rspta ? "ok" : "Trabador no se pudo actualizar";
-          }
+           echo $rspta ? "ok" : "No se pudieron registrar todos datos";
+           // echo $rspta ;
 
         break;
-
-        case 'desactivar':
-
-          $rspta=$trabajadorproyecto->desactivar($idtrabajador_por_proyecto);
-
-          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
-
-        break;
-
-        case 'activar':
-
-          $rspta=$trabajadorproyecto->activar($idtrabajador_por_proyecto);
-
-          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
-
-        break;
-
-        case 'mostrar':
-
-          $rspta=$trabajadorproyecto->mostrar($idtrabajador_por_proyecto);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-
-        break;
-        
-        case 'verdatos':
-
-          $rspta=$trabajadorproyecto->verdatos($idtrabajador_por_proyecto);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-
-        break;
-        
-        case 'listarquincenas':
+        	///////////////////////BREAK///////////////////////
+        case 'listar_semana_botones':
 
           $nube_idproyecto = $_POST["nube_idproyecto"];
 
-          $rspta=$trabajadorproyecto->listarquincenas_b($nube_idproyecto);
+          $rspta=$breaks->listarsemana_botones($nube_idproyecto);
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta);	
 
         break;
+        case 'ver_datos_semana':
+          
+          $f1 = $_POST["f1"];
+          $f2 = $_POST["f2"];
+          $nube_idproyect = $_POST["nube_idproyect"];
+          /* $f1 = '2022-01-09';
+          $f2 = '2022-01-15';
+          $nube_idproyect = '2';*/
+
+          $rspta=$breaks->ver_detalle_semana_dias($f1,$f2,$nube_idproyect);
+
+          //Vamos a declarar un array
+          // $data= Array();           
+          // while ($reg=$rspta->fetch_object()){  $data[]=array( "idtrabajador"=>$reg->idtrabajador); }
+
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);		
+        break;
+        /////////////////////// FIN BREAK///////////////////////
 
         case 'listar':
           $nube_idproyecto = $_GET["nube_idproyecto"];
 
-          $rspta=$trabajadorproyecto->listar($nube_idproyecto);
+          $rspta=$breaks->listar($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array();
 
@@ -131,38 +97,6 @@
             "data"=>$data);
           echo json_encode($results);
         break;
-
-        case 'select2Trabajador': 
-
-          $rspta = $trabajadorproyecto->select2_trabajador();
-      
-          while ($reg = $rspta->fetch_object())  {
-
-            echo '<option  value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
-          }
-
-        break;
-
-        case 'm_datos_trabajador':
-          $idtrabajador = $_POST["idtrabajador"];
-          // $idtrabajador = '8';
-           $rspta=$trabajadorproyecto->m_datos_trabajador($idtrabajador);
-           //Codificar el resultado utilizando json
-           echo json_encode($rspta);
- 
-         break;
-
-         case 'select_cargo':
-           $id_tipo = $_GET["id_tipo"];
-           // $idtrabajador = '8';
-            $rspta=$trabajadorproyecto->select_cargo($id_tipo);
-
-            while ($reg = $rspta->fetch_object())  {
-
-              echo '<option  value=' . $reg->idcargo_trabajador  . '>' . $reg->nombre .'</option>';
-            }
-  
-         break;
         
       }
 

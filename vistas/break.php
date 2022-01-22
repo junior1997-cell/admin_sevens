@@ -81,10 +81,10 @@
                       </h3>
                       <!-- Guardar -->
                       <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
+                        <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_break();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
                       </h3>
                       <!-- Botones de quincenas -->
-                      <div id="Lista_quincenas" class="row-horizon disenio-scroll " >
+                      <div id="Lista_breaks" class="row-horizon disenio-scroll " >
                         <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                         <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                       </div>   
@@ -126,7 +126,7 @@
                         <div class="container table-responsive disenio-scroll">
 
                           <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
-                              <thead style="background-color: #e0e0e0;" >
+                              <thead style="background-color: #408c98; color: white;" >
                                 <tr>
                                   <th class="text-center w-px-300">Día</th>
                                   <th class="text-center  w-px-135">Cantidad</th>
@@ -134,54 +134,13 @@
                                   <th class="text-center"> Descripción</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <tr>
-                                  <td> <b>Domingo:</b>  12-01-2021</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible" style="width: 430px;" ></textarea> </td>
-                                </tr>
-                                <tr>
-                                  <td>L</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;"></textarea> </td>
-                                </tr>
-                                <tr>
-                                  <td>M</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
-                                </tr>
-                                <tr>
-                                  <td>M</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
-                                </tr>
-                                <tr>
-                                  <td>J</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
-                                </tr>
-                                <tr>
-                                  <td>V</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;"></textarea> </td>
-                                </tr>
-                                <tr>
-                                  <td>S</td>
-                                  <td><span class="span-visible"> 5</span> <input type="number" class="hidden input-visible"></td>
-                                  <td> <span class="span-visible">10</span> <input type="number" class="hidden input-visible"></td>
-                                  <td>  <textarea name="" id="" cols="30" rows="1" readonly class="textarea-visible"  style="width: 430px;" ></textarea> </td>
-                                </tr>
+                              <tbody id="data_table_body">
+                                <!--aqui va el listado de los días-->
                               </tbody>
                               <tfoot>
                                 <th style="border-bottom: hidden;border-left: hidden;" ></th>
                                 <th  class="text-center">Total</th>
-                                <th>----</th>
+                                <th id="monto_total" >----</th>
                                 <th style="border-bottom: hidden;border-right: hidden;" ></th>
                               </tfoot>
                           </table>
@@ -200,44 +159,36 @@
             </div>
             <!-- /.container-fluid -->
 
-            <!-- Modal agregar trabajador -->
-            <div class="modal fade" id="modal-agregar-trabajador">
-              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <!-- Modal cargando -->
+            <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
                 <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title">Agregar trabajador</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span class="text-danger" aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-
                   <div class="modal-body">
                     
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-
-            <!--Modal ver trabajador-->
-            <div class="modal fade" id="modal-ver-trabajador">
-              <div class="modal-dialog modal-dialog-scrollable modal-xm">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title">Datos trabajador</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span class="text-danger" aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-
-                  <div class="modal-body">
-                    <div id="datostrabajador" class="class-style">
-                      
+                    <div id="icono-respuesta">
+                      <!-- icon ERROR -->
+                      <!-- icon success -->
+                    </div>
+                    
+                    <!-- barprogress -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                      <div class="progress h-px-30" id="div_barra_progress">
+                        <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                          0%
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- boton -->
+                    <div class="swal2-actions">
+                      <div class="swal2-loader"></div>
+                      <button onclick="cerrar_modal()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </section>
           <!-- /.content -->
         </div>
