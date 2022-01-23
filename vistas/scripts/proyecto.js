@@ -1987,19 +1987,19 @@ function abrir_proyecto(idproyecto,nombre_proyecto) {
   $("#ver-otros-modulos").show();
 
   setTimeout(function() {
-    $("#ver-otros-modulos-1").fadeOut(0);
+    $(".ver-otros-modulos-1").fadeOut(0);
   },0);
 
   setTimeout(function() {
-    $("#ver-otros-modulos-2").fadeIn(150);
+    $(".ver-otros-modulos-2").fadeIn(150);
   },4);
 
   setTimeout(function() {
-    $("#ver-otros-modulos-2").fadeOut(200);
+    $(".ver-otros-modulos-2").fadeOut(200);
   },400);
 
   setTimeout(function() {
-    $("#ver-otros-modulos-1").fadeIn(400);
+    $(".ver-otros-modulos-1").fadeIn(400);
   },500);
 
   Swal.fire("Abierto!", "Proyecto abierto corrrectamente", "success");

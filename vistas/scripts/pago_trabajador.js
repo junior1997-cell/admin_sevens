@@ -8,11 +8,11 @@ function init() {
   //Mostramos los trabajadores
   $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
-  // $("#bloc_Accesos").addClass("menu-open");
+  $("#bloc_PagosTrabajador").addClass("menu-open");
 
   $("#mPagosTrabajador").addClass("active");
 
-  // $("#lUsuario").addClass("active");
+  $("#lPagosObrero").addClass("active");
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
 
