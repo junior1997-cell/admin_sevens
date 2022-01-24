@@ -11,10 +11,10 @@ Class Breaks
 	}
 	
 	//Implementamos un método para insertar registros
-	public function insertar_editar($array_break,$idproyecto){
-
+	public function insertar_editar($array_break,$fechas_semanas_btn,$idproyecto){
+		$total  = 0;
 		$desglese_break = json_decode($array_break,true); $sw = true;
-
+		$fechas_semanas_btn = json_decode($fechas_semanas_btn, true);
 		// registramos o editamos los "Break por semana"
 		foreach ($desglese_break as $indice => $key) {
 		
@@ -38,7 +38,30 @@ Class Breaks
 				
 				ejecutarConsulta($sql_3) or $sw = false;
 			}
+			$total = $total+ floatval($key['precio_compra']); 
 
+
+		}
+		foreach ($fechas_semanas_btn as $key => $value) {
+
+			$sql_4 = "SELECT idsemana_break FROM semana_break WHERE idproyecto='$idproyecto' AND fecha_inicial = '".$value['fecha_in_btn']."' AND  fecha_final = '".$value['fecha_fi_btn']."' ";
+			
+			$buscar_idbreak = ejecutarConsultaSimpleFila($sql_4);
+
+			if(empty($buscar_idbreak['idsemana_break'])){
+				$sql5 = "INSERT INTO semana_break(idproyecto, numero_semana, fecha_inicial, fecha_final, total) 
+				VALUES ('$idproyecto','".$value['num_semana']."','".$value['fecha_in_btn']."','".$value['fecha_fi_btn']."','$total')";
+				ejecutarConsulta($sql5) or $sw = false;
+			}else{
+				$sql6 = " UPDATE semana_break SET 
+					idproyecto='$idproyecto',
+					numero_semana='".$value['num_semana']."',
+					fecha_inicial='".$value['fecha_in_btn']."',
+					fecha_final='".$value['fecha_fi_btn']."',
+					total='$total'
+					WHERE  idsemana_break='".$buscar_idbreak['idsemana_break']."';";
+				ejecutarConsulta($sql6) or $sw = false;
+			}
 		}
 		return $sw;	
 	}
@@ -58,15 +81,42 @@ Class Breaks
 	///////////////////////CONSULTAS BREAK///////////////////////
 
 	//Implementar un método para listar los registros
+	/*public function listar_totales_semana($nube_idproyecto,$array_fi_ff)
+	{
+		$fecha_in =""; $fecha_fi=""; $num_semana=""; $semana=""; $total_por_semana=[]; $val_total="";
+		$desglese_fechas_semanas = json_decode($array_fi_ff,true);
+
+		foreach ($desglese_fechas_semanas as $key => $value) {
+
+			$data_array=[];
+			$fecha_in =  $value['fecha_in']; 
+			$fecha_fi = $value['fecha_fi']; 
+			$num_semana = $value['num_semana']; 
+
+			$sql="SELECT SUM(costo_parcial) AS total FROM breaks WHERE idproyecto='$nube_idproyecto' AND fecha_compra BETWEEN '$fecha_in' AND '$fecha_fi'";
+			$semana=ejecutarConsultaSimpleFila($sql);
+			if (empty($semana['total'])) {
+				$val_total="0.00";
+			} else {
+				$val_total=$semana['total'];
+			}
+			
+			$data_array=array(
+				'total'=>$val_total,
+				'fecha_in'=>$fecha_in,
+				'fecha_fi'=>$fecha_fi,
+				'num_semana'=>$num_semana
+			);
+			
+			array_push($total_por_semana, $data_array);
+		}
+		return json_encode($total_por_semana, true);		
+	}*/
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria, t.imagen_perfil as imagen, 
-		tp.idcargo_trabajador , tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.estado, tp.idtrabajador_por_proyecto, 
-		tp.estado, b.nombre as banco, ct.nombre as cargo, ct.idtipo_trabjador as idtipo_trabjador, tt.nombre as nombre_tipo
-		FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p, bancos AS b, cargo_trabajador as ct, tipo_trabajador as tt
-		WHERE tp.idproyecto = p.idproyecto AND tp.idproyecto = '$nube_idproyecto'   AND tp.idtrabajador = t.idtrabajador AND t.idbancos = b.idbancos AND
-		ct.idcargo_trabajador=tp.idcargo_trabajador AND tt.idtipo_trabajador=ct.idtipo_trabjador";
-		return ejecutarConsulta($sql);		
+		$sql="SELECT * FROM semana_break 
+		WHERE idproyecto ='$nube_idproyecto'";
+		return ejecutarConsulta($sql);
 	}
 
 }

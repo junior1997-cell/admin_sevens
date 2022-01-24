@@ -24,7 +24,7 @@
 
         case 'guardaryeditar':
 
-            $rspta=$breaks->insertar_editar($_POST['array_break'],$_POST['idproyecto']);
+            $rspta=$breaks->insertar_editar($_POST['array_break'],$_POST['fechas_semanas_btn'],$_POST['idproyecto']);
             
            echo $rspta ? "ok" : "No se pudieron registrar todos datos";
            // echo $rspta ;
@@ -60,34 +60,49 @@
           echo json_encode($rspta);		
         break;
         /////////////////////// FIN BREAK///////////////////////
+        case 'listar_totales_semana':
 
-        case 'listar':
-          $nube_idproyecto = $_GET["nube_idproyecto"];
+          $rspta=$breaks->listar($_GET['nube_idproyecto']);
+          //Vamos a declarar un array
+          $data= Array();
+     
+          while ($reg=$rspta->fetch_object()){ 
+            $data[]=array(
+              "0"=>'<div class="user-block">
+              <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '.$reg->numero_semana.'</p></span>
+              <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicial)).' - '.date("d/m/Y", strtotime($reg->fecha_final)).' </span>
+              </div>',
+            "1"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
+            "2"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_facturas('.$reg->idsemana_break.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
+              );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+          echo json_encode($results);
 
-          $rspta=$breaks->listar($nube_idproyecto);
+        
+          break;
+       /* case 'listar_totales_semana':
+          $nube_idproyecto = $_POST["idproyecto"];
+          //$array_fi_ff = $_GET["array_fi_ff"];
+
+          $rspta=$breaks->listar_totales_semana($nube_idproyecto,$_POST["array_fi_ff"]);
           //Vamos a declarar un array
           $data= Array();
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
-          while ($reg=$rspta->fetch_object()){
+          $total=0;
+          foreach ( json_decode($rspta, true) as $key => $value) {
+            //$total = $value['total'];
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
-              "1"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+              "0"=>'<div class="user-block">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '. $value['num_semana'] .'</p></span>
+                <span class="description">'. $value['fecha_in'] .': '.  $value['fecha_fi'] .' </span>
                 </div>',
-              "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "3"=>$reg->sueldo_mensual,
-              "4"=>$reg->nombre_tipo.' / '.$reg->cargo,
-              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
+              "1"=>'<b>'.number_format($value['total'], 2, '.', ',').'</b>' 
               );
           }
           $results = array(
@@ -95,8 +110,9 @@
             "iTotalRecords"=>count($data), //enviamos el total registros al datatable
             "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
             "data"=>$data);
-          echo json_encode($results);
-        break;
+          echo json_encode($data);
+         // echo $rspta;
+        break;*/
         
       }
 

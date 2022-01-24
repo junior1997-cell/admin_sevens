@@ -4,17 +4,19 @@ var editando2=false;
 ////////////////////////////
 var array_class=[];
 var array_datosPost=[];
+var array_fi_ff=[];
 var f1_reload=''; var f2_reload=''; var i_reload  = '';
-
-
+var total_semanas=0;
+var array_guardar_fi_ff = [];
 
 //Función que se ejecuta al inicio
 function init() {  
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar( localStorage.getItem('nube_idproyecto') );
-
+  listar_botoness( localStorage.getItem('nube_idproyecto') );
+  listar( localStorage.getItem('nube_idproyecto'));
+ 
   // $("#bloc_Accesos").addClass("menu-open");
 
   $("#mTrabajador").addClass("active");
@@ -74,28 +76,10 @@ function editarbreak() {
   
 }
 
-// Función que suma o resta días a la fecha indicada
-sumaFecha = function(d, fecha){
-  var Fecha = new Date();
-  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
-  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
-  var aFecha = sFecha.split(sep);
-  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
-  fecha= new Date(fecha);
-  fecha.setDate(fecha.getDate()+parseInt(d));
-  var anno=fecha.getFullYear();
-  var mes= fecha.getMonth()+1;
-  var dia= fecha.getDate();
-  mes = (mes < 10) ? ("0" + mes) : mes;
-  dia = (dia < 10) ? ("0" + dia) : dia;
-  var fechaFinal = dia+sep+mes+sep+anno;
-  return (fechaFinal);
-}
 //Función Listar
-function listar( nube_idproyecto ) {
-  console.log(nube_idproyecto);
+function listar(nube_idproyecto) {
 
-  tabla=$('#tabla-trabajadors').dataTable({
+  tabla=$('#tabla-resumen-break-semanal').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -103,7 +87,7 @@ function listar( nube_idproyecto ) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/trabajador.php?op=listar&nube_idproyecto='+nube_idproyecto,
+        url: '../ajax/break.php?op=listar_totales_semana&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -124,7 +108,28 @@ function listar( nube_idproyecto ) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+}
 
+// Función que suma o resta días a la fecha indicada
+sumaFecha = function(d, fecha){
+  var Fecha = new Date();
+  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+  var aFecha = sFecha.split(sep);
+  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+  fecha= new Date(fecha);
+  fecha.setDate(fecha.getDate()+parseInt(d));
+  var anno=fecha.getFullYear();
+  var mes= fecha.getMonth()+1;
+  var dia= fecha.getDate();
+  mes = (mes < 10) ? ("0" + mes) : mes;
+  dia = (dia < 10) ? ("0" + dia) : dia;
+  var fechaFinal = dia+sep+mes+sep+anno;
+  return (fechaFinal);
+}
+//Función Listar
+function listar_botoness( nube_idproyecto ) {
+  //array_fi_ff=[];
   //Listar semanas(botones)
   $.post("../ajax/break.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
@@ -160,15 +165,19 @@ function listar( nube_idproyecto ) {
             let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(data.fecha_fin);
             
             // console.log(fecha_f + ' - '+data.fecha_fin);
+            array_fi_ff.push({'fecha_in':format_a_m_d(fecha_i),'fecha_fi':format_a_m_d(fecha_f), 'num_semana':cont });
+            //array_data_fi_ff.push()
 
-            $('#Lista_breaks').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#Lista_breaks').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
             fecha = sumaFecha(1,fecha_f);
 
             i++;
+
           } 
+        
     } else {
       $('#Lista_breaks').html(`<div class="info-box shadow-lg w-px-600"> 
         <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
@@ -178,7 +187,45 @@ function listar( nube_idproyecto ) {
         </div> 
       </div>`);
     }
-    
+    console.log(array_fi_ff);
+    //Listamos la tabla principal agrupos por semana
+    //------------------------------------------------
+   /*$.ajax({
+      url: "../ajax/break.php?op=listar_totales_semana",
+      type: "POST",
+      data: {
+        'array_fi_ff': JSON.stringify(array_fi_ff),
+        'idproyecto': localStorage.getItem('nube_idproyecto'),
+      },
+      success: function (datos) {
+        //Swal.fire("Desactivado!",datos, "success");
+        console.log(datos);
+        datos=JSON.parse(datos);
+        // console.log(datos);
+        tabla=$('#tabla-resumen-break-semanal').dataTable({
+          "responsive": true,
+          "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+          "aProcessing": true,//Activamos el procesamiento del datatables
+          "aServerSide": true,//Paginación y filtrado realizados por el servidor
+          dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+          buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+          data: datos,
+          "language": {
+            "lengthMenu": "Mostrar : _MENU_ registros",
+            "buttons": {
+              "copyTitle": "Tabla Copiada",
+              "copySuccess": {
+                _: '%d líneas copiadas',
+                1: '1 línea copiada'
+              }
+            }
+          },
+          "bDestroy": true,
+          "iDisplayLength": 5,//Paginación
+          "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+        }).DataTable();
+      },
+    });*/
     //console.log(fecha);
   });
 }
@@ -191,6 +238,7 @@ function guardaryeditar_semana_break() {
     type: "POST",
     data: {
       'array_break': JSON.stringify(array_datosPost),
+      'fechas_semanas_btn': JSON.stringify(array_guardar_fi_ff),
       'idproyecto': localStorage.getItem('nube_idproyecto'),
     },
     // contentType: false,
@@ -200,6 +248,7 @@ function guardaryeditar_semana_break() {
       if (datos == 'ok') {
 
         datos_semana( f1_reload, f2_reload , i_reload);
+        listar( localStorage.getItem('nube_idproyecto'));
         
         $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
 
@@ -250,7 +299,11 @@ function cerrar_modal() {
 
 ////////////////////////////datos_semana////////////////////////////////////////////////
 // listamos la data de una quincena selecionada
-function datos_semana(f1, f2, i) {
+function datos_semana(f1, f2, i,cont) {
+  console.log('i'+i);
+  array_guardar_fi_ff=[];
+  array_guardar_fi_ff.push({'fecha_in_btn':format_a_m_d(f1),'fecha_fi_btn':format_a_m_d(f2),'num_semana':cont});
+console.log(array_guardar_fi_ff);
   var tabla_bloc_dia_1=''; var tabla_bloc_cantidad_2=''; var tabla_bloc_precio_3=''; var tabla_bloc_descripcion_4='';
   var tabla_bloc_semana='';
   f1_reload = f1; f2_reload = f2; i_reload  = i;
@@ -526,6 +579,8 @@ function obtener_datos_semana () {
   $("#monto_total").html(formato_miles(monto_total.toFixed(2)));
   
 }
+
+
 
 init();
 

@@ -93,31 +93,26 @@
                     <div class="card-body">
                       <!-- Lista de trabajdores -->
                       <div id="mostrar-tabla">
-                        <table id="tabla-trabajadors" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <table id="tabla-resumen-break-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
-                              <th class="">Aciones</th>
-                              <th>Nombres</th>
-                              <th>Cuenta bancaria</th>
-                              <th>Sueldo mensual</th>
-                              <th>Tipo / cargo</th>
-                              <th>Estado</th>
+                              <th class="">Fecha semana</th>
+                              <th>Total</th>
+                              <th>Comprobantes</th>
+
                             </tr>
                           </thead>
                           <tbody></tbody>
                           <tfoot>
                             <tr>
-                              <th>Aciones</th>
-                              <th>Nombres</th>
-                              <th>Cuenta bancaria</th>
-                              <th>Sueldo mensual</th>
-                              <th>Tipo / cargo</th>
-                              <th>Estado</th>
+                              <th class="">Fecha semana</th>
+                              <th>Total</th>
+                              <th>Comprobantes</th>
                             </tr>
                           </tfoot>
                         </table>
                       </div>
-
+                      
                       <!-- agregar trabajador al sistema -->
                       <div id="tabla-registro" style="display: none;">
                         <style>
@@ -178,8 +173,8 @@
                         </div>
                       </div>
                     </div>
-                    
-                    <!-- boton -->
+                   <!-- <input type="hidden" class="class_fecha_${i}" value="${fecha_i}"/><input type="hidden" class="class_fecha_${i}" value="${fecha_f}"/>
+                     boton -->
                     <div class="swal2-actions">
                       <div class="swal2-loader"></div>
                       <button onclick="cerrar_modal()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>
