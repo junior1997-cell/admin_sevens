@@ -83,6 +83,15 @@
                       <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
                         <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_break();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
                       </h3>
+                      <!-- regresar de comprobantes -->
+                      <h3 class="card-title mr-3" id="regresar_aprincipal" style="display: none;" style="padding-left: 2px;">
+                          <button type="button" class="btn bg-gradient-warning" onclick="regresar(); limpiar_comprobante();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
+                      </h3>
+                      <!-- Guardar comporbantees -->
+                      <h3 class="card-title mr-3" id="guardar" style="display: none; padding-left: 2px;">
+                        <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-comprobante" onclick="limpiar_comprobante()" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Agregar</button>
+                      </h3>
+                      
                       <!-- Botones de quincenas -->
                       <div id="Lista_breaks" class="row-horizon disenio-scroll " >
                         <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
@@ -143,6 +152,38 @@
                         </div>
 
                       </div>
+                      <!-- Listar comprobantes-->
+                      <div id="tabla-comprobantes" style="display: none;">
+                        <table id="t-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <thead>
+                              <tr>
+                                  <th>Aciones</th>
+                                  <th>Núm Comprobante</th>
+                                  <th>Fecha Emisión</th>
+                                  <th>Sub total</th>
+                                  <th>IGV</th>
+                                  <th>Monto</th>
+                                  <th>Descripción</th>
+                                  <th>Comprobante</th>
+                                  <th>Estado</th>
+                              </tr>
+                          </thead>
+                          <tbody></tbody>
+                          <tfoot>
+                              <tr>
+                                  <th>Aciones</th>
+                                  <th>Núm Comprobante</th>
+                                  <th>Fecha Emisión</th>
+                                  <th>Sub total</th>
+                                  <th>IGV</th>
+                                  <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th> 
+                                  <th>Descripción</th>                                                   
+                                  <th>Comprobante</th>
+                                  <th>Estado</th>
+                              </tr> 
+                          </tfoot>
+                        </table>
+                      </div>
                     </div>
                     <!-- /.card-body -->
                   </div>
@@ -183,6 +224,142 @@
                 </div>
               </div>
             </div>
+            <!--===============Modal agregar Comprobantes =========-->
+            <div class="modal fade" id="modal-agregar-comprobante">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Agregar Comprobante</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="text-danger" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <!-- form start -->
+                            <form id="form-agregar-comprobante" name="form-agregar-comprobante" method="POST">
+                                <div class="card-body">
+                                    <div class="row" id="cargando-1-fomulario">
+                                        <!-- id semana_break -->
+                                        <input type="hidden" name="idsemana_break" id="idsemana_break" />
+                                        <!-- id factura_break -->
+                                        <input type="hidden" name="idfactura_break" id="idfactura_break" />
+
+                                      <!-- Tipo de comprobante -->
+                                      <div class="col-lg-4" id="content-t-comprob">
+                                        <div class="form-group">
+                                          <label for="tipo_comprovante">Tipo Comprobante</label>
+                                          <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                            <option value="Ninguno">Ninguno</option>
+                                            <option value="Boleta">Boleta</option>
+                                            <option value="Factura">Factura</option>
+                                            <option value="Nota_de_venta">Nota de venta</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                        <!-- Código-->
+                                        <div class="col-lg-5">
+                                          <div class="form-group">
+                                            <label for="codigo">Núm. comprobante </label>                               
+                                            <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
+                                          </div>                                                        
+                                        </div>
+                                        <!-- Monto-->
+                                        <div class="col-lg-3">
+                                          <div class="form-group">
+                                            <label for="monto">Monto</label>                               
+                                            <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto"  onkeyup="comprob_factura();"> 
+                                          </div>                                                        
+                                        </div>
+
+                                        <!-- Fecha Emisión -->
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="fecha_emision">Fecha Emisión</label>
+                                                <input class="form-control" type="date" id="fecha_emision" name="fecha_emision"/>
+                                              </div>
+                                        </div>
+                                        <!-- Sub total -->
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="subtotal">Sub total</label>
+                                                <input class="form-control" type="number"  id="subtotal" name="subtotal" placeholder="Sub total" readonly/>
+                                              </div>
+                                        </div>
+                                        <!-- Fecha Emisión -->
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label for="igv">IGV</label>
+                                                <input class="form-control" type="number"  id="igv" name="igv" placeholder="IGV"  readonly />
+                                              </div>
+                                        </div>
+                                        <!-- Descripcion-->
+                                        <div class="col-lg-12">
+                                          <div class="form-group">
+                                            <label for="descripcion_f">Descripción </label> <br>
+                                            <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                          </div>                                                        
+                                        </div>
+                                        <!--vaucher-->
+                                        <div class="col-md-6 col-lg-12">
+                                          
+                                          <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                                          <label for="foto2">Factura en <b style="color: red;">(Imagen o PDF)</b></label> <br>
+                                            <div class="text-center">
+                                                <img onerror="this.src='../dist/img/default/img_defecto2.png';" src="../dist/img/default/img_defecto2.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
+                                                <div id="ver_pdf"></div>
+                                            </div>
+                                          <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
+                                          <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                          <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                          
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                        <div class="col-lg-12 text-center">
+                                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                            <br />
+                                            <h4>Cargando...</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <button type="submit" style="display: none;" id="submit-form-comprobante">Submit</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_comprobante();">Close</button>
+                            <button type="submit" class="btn btn-success" id="guardar_registro_comprobaante">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--===============Modal-ver-vaucher =========-->
+            <div class="modal fade" id="modal-ver-comprobante">
+              <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                  <div class="modal-content">
+                      <div class="modal-header" style="background-color: #ce834926;" >
+                          <h4 class="modal-title">Factura</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <div  class="class-style" style="text-align: center;"> 
+                          <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download="factura" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
+                            <br>
+                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
+                              <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+                      
+        </div>
+
 
           </section>
           <!-- /.content -->

@@ -118,6 +118,69 @@ Class Breaks
 		WHERE idproyecto ='$nube_idproyecto'";
 		return ejecutarConsulta($sql);
 	}
+	//----------------------comprobantes------------------------------
+	public function insertar_comprobante($idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
+		//var_dump($idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);die();
+		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, subtotal, tipo_comprobante, descripcion, comprobante) 
+		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$subtotal','$tipo_comprovante','$descripcion','$imagen2')";
+		return ejecutarConsulta($sql);
+	}
+	// obtebnemos los DOCS para eliminar
+	public function obtenerDoc($idfactura_break) {
+
+		$sql = "SELECT comprobante FROM factura_break WHERE idfactura_break  ='$idfactura_break'";
+	
+		return ejecutarConsulta($sql);
+	}
+	//Implementamos un método para editar registros
+	public function editar_comprobante($idfactura_break,$idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
+		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
+		$sql="UPDATE `factura_break` SET 
+		
+		idsemana_break='$idsemana_break',
+		nro_comprobante='$nro_comprobante',
+		fecha_emision='$fecha_emision',
+		monto='$monto',
+		igv='$igv',
+		subtotal='$subtotal',
+		tipo_comprobante='$tipo_comprovante',
+		descripcion='$descripcion',
+		comprobante='$imagen2'
+		 WHERE idfactura_break='$idfactura_break';";	
+		return ejecutarConsulta($sql);	
+		//return $vaa;
+	}
+
+	public function listar_comprobantes($idsemana_break){
+
+		$sql="SELECT * FROM factura_break 
+		WHERE idsemana_break  ='$idsemana_break'";
+		return ejecutarConsulta($sql);
+	}
+	//mostrar_comprobante
+	public function mostrar_comprobante($idfactura_break){
+		$sql="SELECT * FROM factura_break WHERE idfactura_break ='$idfactura_break '";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+	//Implementamos un método para activar 
+	public function desactivar_comprobante($idfactura_break){
+		//var_dump($idfactura);die();
+		$sql="UPDATE factura_break SET estado='0' WHERE idfactura_break ='$idfactura_break '";
+		return ejecutarConsulta($sql);
+	}
+	//Implementamos un método para desactivar 
+	public function activar_comprobante($idfactura_break){
+		//var_dump($idpago_servicio);die();
+		$sql="UPDATE factura_break SET estado='1' WHERE idfactura_break ='$idfactura_break '";
+		return ejecutarConsulta($sql);
+	}
+	
+	public function total_monto_comp($idsemana_break){
+		$sql="SELECT SUM(subtotal) as total FROM factura_break WHERE idsemana_break='$idsemana_break' AND estado='1'";
+		return ejecutarConsultaSimpleFila($sql);
+
+	}
+
 
 }
 
