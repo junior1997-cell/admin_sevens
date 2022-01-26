@@ -111,6 +111,10 @@
   background-color: #71919547;
 }
 
+.bg-color-57d7ed{
+  background-color: #57d7ed;
+}
+
 /* ::::::::::::::::: stylos para tblas::::::::::::::::::: */
 .styletabla thead th {
   border-bottom: 1px solid #000000 !important; 
@@ -124,6 +128,12 @@ table th {
   text-align: center !important;
   border: black 1px solid;
 }
+
+.stile-celda{
+  text-align: center !important;
+  border: black 1px solid;
+}
+
 .tcuerpo tr td{
   text-align: center !important;
   padding-top: 18px !important;

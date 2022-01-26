@@ -43,7 +43,7 @@
             <!-- Main content -->
             <section class="content">
               <div class="container-fluid">
-                <div class="row">
+                <div class="row"> 
                   <div class="col-12">
                     <div class="card card-primary card-outline">
                       <div class="card-header">
@@ -56,7 +56,7 @@
                         </h3>
                         <!-- Editar -->
                         <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
-                          <button type="button" class="btn bg-gradient-orange" onclick="editar_fechas_asistencia();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> Editar</button>
+                          <button type="button" class="btn bg-gradient-orange" onclick="editar_fechas_asistencia(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> Editar</button>
                         </h3>
                         <!-- Guardar -->
                         <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
@@ -111,19 +111,20 @@
                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
                               <thead>
                                 <tr>
-                                  <th rowspan="4" class="stile">#</th>
-                                  <th rowspan="4" class="stile">Nombre del trabajador</th>
-                                  <th rowspan="4" class="stile">Cargo</th>
+                                  <th rowspan="2" class="stile-celda">#</th>
+                                  <th rowspan="2" class="stile-celda">Nombre del trabajador</th>
+                                  <th rowspan="2" class="stile-celda">Cargo</th>
                                   <th colspan="14" id="dias_asistidos_s_q" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
-                                  <th rowspan="3" class="stile">Horas<br>normal/extras</th>
-                                  <th rowspan="3" class="stile">Días<br>asistidos</th>
-                                  <th rowspan="3" class="stile">Sueldo Mensual</th>
-                                  <th rowspan="3" class="stile">Jornal</th>
-                                  <th rowspan="3" class="stile">Sueldo hora</th>
-                                  <th rowspan="3" class="stile">Sabatical</th>
-                                  <th rowspan="3" class="stile">Pago <br> parcial</th>
-                                  <th rowspan="3" class="stile">Adicional <br> descuento</th>
-                                  <th rowspan="3" class="stile">Pago quincenal</th>
+                                  <th rowspan="2" class="stile-celda">Horas<br>normal/extras</th>
+                                  <th rowspan="2" class="stile-celda">Días<br>asistidos</th>
+                                  <th rowspan="2" class="stile-celda">Sueldo Mensual</th>
+                                  <th rowspan="2" class="stile-celda">Jornal</th>
+                                  <th rowspan="2" class="stile-celda">Sueldo <br> hora</th>
+                                  <th rowspan="2" class="stile-celda">Sabatical</th>
+                                  <th rowspan="2" class="stile-celda">Pago <br> parcial</th>
+                                  <th rowspan="2" class="stile-celda">Adicional <br> descuento</th>
+                                  <th rowspan="2" class="stile-celda">Pago quincenal</th> 
+                                  <th rowspan="2" class="stile-celda"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
                                 </tr>
                                 <tr class="table-dias data-dia-semana">
                                   <!-- <th class=""> Lu </th>
@@ -142,23 +143,10 @@
                                   <th class=""> Do </th>
                                   <th class=""> Lu </th> -->
                                 </tr>
-                                <tr class="table-dias data-numero-semana">
-                                  <!-- <th>1</th>
-                                  <th>2</th>
-                                  <th>3</th>
-                                  <th>4</th>
-                                  <th>5</th>
-                                  <th>6</th>
-                                  <th>7</th>
-                                  <th>8</th>
-                                  <th>9</th>
-                                  <th>10</th>
-                                  <th>11</th>
-                                  <th>12</th>
-                                  <th>13</th>
-                                  <th>14</th>
-                                  <th>15</th> -->
-                                </tr>
+                                <!-- <tr class="table-dias data-numero-semana">
+                                  <th>1</th> <th>2</th> <th>3</th> <th>4</th> <th>5</th> <th>6</th> <th>7</th> 
+                                  <th>8</th> <th>9</th> <th>10</th> <th>11</th> <th>12</th> <th>13</th> <th>14</th> 
+                                </tr> -->
                               </thead>
                               <tbody class="tcuerpo data_table_body" >
                                 <!-- <tr>

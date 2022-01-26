@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Pagos de Trbajadores</title>
+        <title>Admin Sevens | Pagos de Administradores</title>
         <?php
           require 'head.php';
         ?>
@@ -38,13 +38,13 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0">Pagos de Trabajadores</h1>
+                    <h1 class="m-0">Pagos de Administradores</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item"><a href="pago_trabajador.php">Home</a></li>
-                      <li class="breadcrumb-item active">Pagos de T.</li>
+                      <li class="breadcrumb-item"><a href="pago_administrador.php">Pagos</a></li>
+                      <li class="breadcrumb-item active">Pagos de Admin.</li>
                     </ol>
                   </div>
                   <!-- /.col -->
@@ -477,7 +477,7 @@
         ?>
          
 
-        <script type="text/javascript" src="scripts/pago_trabajador.js"></script>
+        <script type="text/javascript" src="scripts/pago_administrador.js"></script>
         <!-- previzualizamos el pdf cargado -->
         <script type="text/javascript">
           function PreviewImage() {

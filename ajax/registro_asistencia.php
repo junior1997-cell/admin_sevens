@@ -23,49 +23,64 @@ ob_start();
 
       
       switch ($_GET["op"]){
-
+        // Gurdamos cada dia de asistencia del OBRERO
         case 'guardaryeditar':
 
           $data_asistencia = $_POST["asistencia"];  $extras = $_POST["extras"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
-           
-          // $asistencia_decode = json_decode($data_asistencia, true);
+                     
+          $rspta=$asist_trabajador->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $extras, $fecha_i, $fecha_f);
 
-          $rspta=$asist_trabajador->insertar2( $data_asistencia, $extras, $fecha_i, $fecha_f);
-
-          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";          
-          //  echo $rspta;
+          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del trabajador";          
+          
         break;
-
+        // Agregamos o editamos el detalle adicional de: "resumen_q_s_asistencia"
         case 'guardaryeditar_adicional_descuento':
 
           if (empty($_POST["idsumas_adicionales"])) {
 
-            $rspta = $asist_trabajador->insertar_adicionales( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$detalle_adicional);
+            $rspta = $asist_trabajador->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$detalle_adicional);
 
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario"; 
+            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento"; 
 
           } else {
 
-            $rspta = $asist_trabajador->editar_adicionales($_POST["idsumas_adicionales"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+            $rspta = $asist_trabajador->editar_detalle_adicionales($_POST["idsumas_adicionales"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
 
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento";
           }
           
         break;
+        // activamos el sabatical manual
+        case 'agregar_quitar_sabatical_manual':
 
-        case 'guardaryeditar_pago_al_contador':
+          if (empty($_POST["idresumen_q_s_asistencia"])) {
 
-          if (empty($_POST["idsumas_adicionales"])) {
+            $rspta = $asist_trabajador->insertar_sabatical_manual( $_POST["fecha_asist"], $_POST["sueldo_x_hora"],  $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
 
-            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"], $_POST["estado_envio_contador"]);
-
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario"; 
+            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
 
           } else {
 
-            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idsumas_adicionales"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s"], $_POST["estado_envio_contador"]);
+            $rspta = $asist_trabajador->quitar_editar_sabatical_manual($_POST["idresumen_q_s_asistencia"], $_POST["fecha_asist"], $_POST["sueldo_x_hora"], $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
 
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador";
+          }
+          
+        break;
+        // enviamos el pagos de quincena o semana al contador
+        case 'guardaryeditar_pago_al_contador':
+
+          if (empty($_POST["idresumen_q_s_asistencia"])) {
+
+            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
+
+            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
+
+          } else {
+
+            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
+
+            echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";
           }
           
         break;
@@ -99,15 +114,9 @@ ob_start();
           $f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
           $nube_idproyect = $_POST["nube_idproyect"];
-          // $f1 = '2021-07-09';
-          // $f2 = '2021-07-23';
-          // $nube_idproyect = '1';
+          // $f1 = '2021-07-09'; $f2 = '2021-07-23'; $nube_idproyect = '1';
 
           $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
-
-          //Vamos a declarar un array
-          // $data= Array();           
-          // while ($reg=$rspta->fetch_object()){  $data[]=array( "idtrabajador"=>$reg->idtrabajador); }
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta);		
@@ -233,7 +242,7 @@ ob_start();
               "3"=> $reg->pago_normal_dia,
               "4"=> $reg->horas_extras_dia,
               "5"=> $reg->pago_horas_extras,
-              "6"=> $reg->fecha_asistencia,
+              "6"=> '<b>Fecha: </b>'. $reg->fecha_asistencia ."<br> <b>Día: </b>". $reg->nombre_dia,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
             );
           }

@@ -12,7 +12,7 @@ function init() {
 
   $("#mPagosTrabajador").addClass("active");
 
-  $("#lPagosObrero").addClass("active");
+  $("#lPagosAdministrador").addClass("active");
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
 
@@ -35,8 +35,7 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();   
-}
- 
+} 
 
 function seleccion() {
 

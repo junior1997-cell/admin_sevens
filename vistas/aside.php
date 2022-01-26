@@ -134,10 +134,10 @@
             </ul>
           </li>
         <?php  }  ?>
-      <!-- </ul> -->
-      <!-- cargando -->
-      <!-- <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-2" style="display: none !important;">       -->
-        <li class="nav-header">Modulos</li>        
+        
+        <li class="nav-header">Modulos</li>   
+
+        <!-- cargando -->     
         <li class="nav-item ver-otros-modulos-2" style="display: none !important;">
           <a href="#" class="nav-link" >
           <i class="fas fa-spinner fa-pulse "></i>
@@ -146,11 +146,6 @@
             </p>
           </a>
         </li>
-      <!-- </ul> -->
-
-      <!-- <ul class="nav nav-pills nav-sidebar flex-column" id="ver-otros-modulos-1" data-widget="treeview" role="menu" data-accordion="false" > -->
-        <!-- OTROS -->
-        <!-- <li class="nav-header">Modulos</li> -->
 
         <?php if ($_SESSION['valorizacion']==1) {  ?>
           <!-- VALORIZACIONES -->
@@ -190,56 +185,35 @@
           </li>
         <?php  }  ?> 
 
-        <?php if ($_SESSION['pago_trabajador']==1) {  ?>
-          <!-- PAGOSD E TRABAJADORES -->
-          <!-- <li class="nav-item">
-            <a href="pago_trabajador.php" class="nav-link" id="mPagosTrabajador">
-              <i class="fas fa-dollar-sign nav-icon"></i>
-              <p>
-                  Pago del Trabajador
-              </p>
-            </a>
-          </li> -->
+        <?php if ($_SESSION['pago_trabajador']==1) {  ?>          
           <!-- PAGOS DE TRABAJADORES -->
           <li class="nav-item ver-otros-modulos-1" id="bloc_PagosTrabajador">
             <a href="#" class="nav-link" id="mPagosTrabajador">
-              <i class="nav-icon fas fa-project-diagram"></i>
+              <i class="fas fa-dollar-sign nav-icon"></i>
               <p>
                 Pago Trabajador
                 <i class="fas fa-angle-left right"></i>
                 <span class="badge badge-info right">2</span>
               </p>
             </a>
-            <ul class="nav nav-treeview ">
+            <ul class="nav nav-treeview">
               <!-- Usuarios del sistema -->
               <li class="nav-item ">
-                <a href="pago_trabajador.php" class="nav-link" id="lPagosObrero">
+                <a href="pago_obrero.php" class="nav-link" id="lPagosObrero">
                   <i class="nav-icon fas fa-users"></i>
                   <p>Obreros</p>
                 </a>
               </li>
               <!-- Proveedores de la empresa -->
               <li class="nav-item ">
-                <a href="all_proveedor.php" class="nav-link" id="lPagosAdministrador">
-                  <i class="nav-icon fas fa-truck"></i>
+                <a href="pago_administrador.php" class="nav-link" id="lPagosAdministrador">
+                  <i class="nav-icon fas fa-briefcase"></i>
                   <p>Administradores</p>
                 </a>
               </li> 
             </ul>
           </li>
-        <?php  }  ?>       
-
-        <?php //if ($_SESSION['proveedor']==1) {  ?>
-          <!-- PROVEEDORES -->
-          <!-- <li class="nav-item">
-            <a href="proveedor.php" class="nav-link" id="mProveedor">
-              <i class="fas fa-users nav-icon"></i>
-              <p>
-                Proveedores
-              </p>
-            </a>
-          </li> -->
-        <?php  //}  ?>  
+        <?php  }  ?> 
 
         <?php if ($_SESSION['compra']==1) {  ?>   
           <!-- COMPRAS -->      
