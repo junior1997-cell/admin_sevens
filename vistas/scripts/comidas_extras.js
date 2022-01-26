@@ -6,10 +6,12 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
  // $("#bloc_Viaticos").addClass("menu-open");
-
+  //Activamos el "aside"
+  $("#bloc_Viaticos").addClass("menu-open");
   $("#mViatico").addClass("active");
+  //$("#sub_bloc_comidas").addClass("menu-open");
+  $("#sub_bloc_comidas").addClass("active");
 
-  $("#mmcomidas").addClass("active");
   $("#lComidas_extras").addClass("active");
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-comidas-ex").submit();});

@@ -16,10 +16,13 @@ function init() {
 
   listar_botoness( localStorage.getItem('nube_idproyecto') );
   listar( localStorage.getItem('nube_idproyecto'));
- 
-  // $("#bloc_Accesos").addClass("menu-open");
 
-  $("#mTrabajador").addClass("active");
+  //Activamos el "aside"
+  $("#bloc_Viaticos").addClass("menu-open");
+  $("#mViatico").addClass("active");
+  $("#sub_bloc_comidas").addClass("active");
+
+  $("#lbreak").addClass("active");
 
   // $("#ltrabajador").addClass("active"); 
   //=====Guardar factura=============

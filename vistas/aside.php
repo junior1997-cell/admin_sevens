@@ -308,7 +308,7 @@
               </li>
               <!-- COMIDA -->
               <li class="nav-item">
-                <a href="#" class="nav-link"  id="mmcomidas">
+                <a href="#" class="nav-link"  id="sub_bloc_comidas">
                   <i class="fas fa-fish nav-icon"></i>
                   <p>
                     Comida

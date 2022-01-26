@@ -5,6 +5,9 @@ function init() {
   listar();
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
+  //Activamos el "aside"
+  $("#bloc_Viaticos").addClass("menu-open");
+
   $("#mViatico").addClass("active");
 
   $("#lTransporte").addClass("active");
