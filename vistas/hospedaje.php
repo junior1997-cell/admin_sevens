@@ -67,16 +67,16 @@
                                     <!-- /.card-header -->
                                     <div class="card-body">
                                         <table id="tabla-hospedaje" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                            <thead>
+                                        <thead>
                                                 <tr>
                                                     <th class="">Acciones</th>
-                                                    <th>Fecha inicial</th>
-                                                    <th>Fecha final</th>
-                                                    <th>Descripción</th>
-                                                    <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
-                                                    <th data-toggle="tooltip" data-original-title="Unidad">Unidad</th>
-                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Parcial">Monto Parcial</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                    <th>Fecha</th>
+                                                    <th>Sub total</th>
+                                                    <th>Igv</th>
+                                                    <th>Monto Total </th>
+                                                    <th>Descripción </th>
                                                     <th>Comprobante</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -84,19 +84,16 @@
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
-                                                <th class="">Acciones</th>
-                                                <th>Fecha inicial</th>
-                                                <th>Fecha final</th>
-                                                <th>Descripción</th>
-                                                <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
-                                                <th data-toggle="tooltip" data-original-title="Unidad">Unidad</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                <th data-toggle="tooltip" data-original-title="Parcial" style="background-color: #ffdd00;" >
-                                                    <span id="total_monto"></span>
-                                                </th>
-                                                <th>Comprobante</th>
-                                                <th>Estado</th>
-
+                                                    <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                    <th>Fecha</th>
+                                                    <th>Sub total</th>
+                                                    <th>Igv</th>
+                                                    <th>Monto Total </th>
+                                                    <th>Descripción </th>
+                                                    <th>Comprobante</th>
+                                                    <th>Estado</th>                                            
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -131,11 +128,38 @@
                                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id hospedaje -->
                                                 <input type="hidden" name="idhospedaje" id="idhospedaje" />
+                                                <!-- Tipo de comprobante -->
+                                                <div class="col-lg-4" id="content-t-comprob">
+                                                    <div class="form-group">
+                                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="calculando_totales() ;" placeholder="Seleccinar un tipo de comprobante">
+                                                        <option value="Ninguno">Ninguno</option>
+                                                        <option value="Boleta">Boleta</option>
+                                                        <option value="Factura">Factura</option>
+                                                        <option value="Nota_de_venta">Nota de venta</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Código-->
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="codigo">Núm. comprobante </label>                               
+                                                        <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
+                                                    </div>                                                        
+                                                </div>
+                                                <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
+                                                <div class="col-lg-4 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="fecha">Fecha Comprobante</label>
+                                                        <input type="date" name="fecha_comprobante" class="form-control" id="fecha_comprobante" />
+                                                    </div>
+
+                                                </div>
                                                 <!-- Unidad-->
                                                 <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="unidad">Unidad</label>
-                                                        <select name="unidad"  id="unidad" class="form-control select2"  onchange="calculando_cantidad();"  style="width: 100%;">
+                                                        <select name="unidad"  id="unidad" class="form-control select2"  onchange="calculando_cantidad(); calculando_totales();"  style="width: 100%;">
                                                         <option value="Día">Día</option>
                                                         <option value="Mes">Mes</option>
                                                         </select>
@@ -146,7 +170,7 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha del</label>
-                                                        <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad();" />
+                                                        <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); calculando_totales();" />
                                                     </div>
 
                                                 </div>
@@ -155,33 +179,50 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha al</label>
-                                                        <input type="date" name="fecha_fin" class="form-control" id="fecha_fin" onchange="calculando_cantidad(); " onkeyup="calculando_cantidad();"/>
+                                                        <input type="date" name="fecha_fin" class="form-control" id="fecha_fin" onchange="calculando_cantidad(); " onkeyup="calculando_cantidad(); calculando_totales();"/>
                                                     </div>
 
                                                 </div>
                                                 <!-- Cantidad  -->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="cantidad">Cantidad</label>
-                                                        <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calculando_total();" onkeyup="calculando_total();" />
+                                                        <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calculando_totales() ;" onkeyup="calculando_totales() ;" />
                                                     </div>
 
                                                 </div>
                                                 <!--Precio Unitario-->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="marca">Precio Unitario</label>
-                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="calculando_total();" onkeyup="calculando_total();" />
+                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="calculando_totales() ;" onkeyup="calculando_totales() ;" />
                                                     </div>                                                  
 
+                                                </div>
+                                                <!-- Sub total -->
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="subtotal">Sub total</label>
+                                                        <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
+                                                        <input class="form-control" type="hidden"  id="subtotal" name="subtotal"/>
+                                                    </div>
+                                                </div>
+                                                <!-- Fecha Emisión -->
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="igv">IGV</label>
+                                                        <input class="form-control igv" type="number" placeholder="IGV"  readonly />
+                                                        <input class="form-control" type="hidden"  id="igv" name="igv"/>
+                                                    </div>
                                                 </div>
                                                 <!--Precio Parcial-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="marca">Precio Parcial </label>
-                                                        <input type="numbre" name="precio_parcial" class="form-control" id="precio_parcial" placeholder="Precio Parcial" />
+                                                        <input type="number" class="form-control precio_parcial" onchange="calculando_totales() ;" onkeyup="calculando_totales() ;" placeholder="Precio Parcial" />
+                                                        <input type="hidden" name="precio_parcial" id="precio_parcial"/>
+                                                       
                                                     </div>                                                  
-
                                                 </div>
                                                 <!--Descripcion-->
                                                 <div class="col-lg-12 class_pading">
@@ -244,6 +285,25 @@
                                   </div>
                               </div>
                           </div>
+                    </div>
+                    <!--Modal ver datos-->
+                    <div class="modal fade" id="modal-ver-hospedaje">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Datos Hospedaje</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div id="datoshospedaje" class="class-style">
+                                <!-- vemos los datos del trabajador -->
+                                </div>
+                            </div>
+                            </div>
+                        </div>
                     </div>
 
                 </section>

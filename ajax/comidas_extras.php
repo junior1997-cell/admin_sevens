@@ -6,12 +6,17 @@ if (strlen(session_id()) < 1){
 require_once "../modelos/Comidas_extras.php";
 
 $comidas_extras=new Comidas_extras();
- //transporte.js $idproyecto,$idcomida_extra,$fecha,$precio_parcial,$descripcion
+ //transporte.js $idproyecto,$idcomida_extra,$fecha,$precio_parcial,$descripcion //$tipo_comprobante,$nro_comprobante,$subtotal,$igv
 $idproyecto       = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";	
-$idcomida_extra    = isset($_POST["idcomida_extra"])? limpiarCadena($_POST["idcomida_extra"]):"";	
+$idcomida_extra   = isset($_POST["idcomida_extra"])? limpiarCadena($_POST["idcomida_extra"]):"";	
 $fecha            = isset($_POST["fecha"])? limpiarCadena($_POST["fecha"]):"";
 $precio_parcial   = isset($_POST["precio_parcial"])? limpiarCadena($_POST["precio_parcial"]):"";
 $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
+
+$tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
+$nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
+$subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
+$igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
 
 $foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 
@@ -44,7 +49,7 @@ switch ($_GET["op"]){
 
 				if (empty($idcomida_extra)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante);
+					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -61,7 +66,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante);
+					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					//var_dump($idcomida_extra,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
@@ -186,11 +191,15 @@ switch ($_GET["op"]){
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcomida_extra .')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcomida_extra .')"><i class="fa fa-check"></i></button>',
-						"1"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
-		 				"2"=> $reg->descripcion, 
-		 				"3"=>$comprobante,
-		 				"4"=>number_format($reg->costo_parcial, 2, '.', ','),
-		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+						"1"=>$reg->tipo_comprobante, 
+						"2"=>$reg->numero_comprobante, 
+						"3"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
+		 				"4"=>number_format($reg->subtotal, 2, '.', ','),
+		 				"5"=>number_format($reg->igv, 2, '.', ','),
+		 				"6"=>number_format($reg->costo_parcial, 2, '.', ','),
+						"7"=> $reg->descripcion, 
+		 				"8"=>$comprobante,
+		 				"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}

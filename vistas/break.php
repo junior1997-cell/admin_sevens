@@ -41,7 +41,7 @@
       <?php
       require 'nav.php';
       require 'aside.php';
-      if ($_SESSION['trabajador']==1){
+      if ($_SESSION['viatico']==1){
       ?>
 
         <!-- Content Wrapper. Contains page content -->
@@ -51,12 +51,12 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Trabajador</h1>
+                  <h1>Break</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Trabajador</li>
+                    <li class="breadcrumb-item active">Break</li>
                   </ol>
                 </div>
               </div>
@@ -158,8 +158,8 @@
                           <thead>
                               <tr>
                                   <th>Aciones</th>
-                                  <th>Núm Comprobante</th>
-                                  <th>Fecha Emisión</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th>Monto</th>
@@ -172,8 +172,8 @@
                           <tfoot>
                               <tr>
                                   <th>Aciones</th>
-                                  <th>Núm Comprobante</th>
-                                  <th>Fecha Emisión</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th> 

@@ -18,6 +18,11 @@ $precio_parcial   = isset($_POST["precio_parcial"])? limpiarCadena($_POST["preci
 $ruta             = isset($_POST["ruta"])? limpiarCadena($_POST["ruta"]):"";
 $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
 
+$tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
+$nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
+$subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
+$igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+
 $foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 
 switch ($_GET["op"]){
@@ -49,7 +54,7 @@ switch ($_GET["op"]){
 
 				if (empty($idtransporte)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$transporte->insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$comprobante);
+					$rspta=$transporte->insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -66,9 +71,9 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$transporte->editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$comprobante);
+					$rspta=$transporte->editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					//var_dump($idtransporte,$idproveedor);
-					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+					echo $rspta ? "ok" : "No se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
 			} else {
@@ -142,6 +147,28 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+	case 'verdatos':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+				//$idtransporte='1';
+				$rspta=$transporte->mostrar($idtransporte);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
 	case 'total':
 		if (!isset($_SESSION["nombre"]))
 		{
@@ -188,17 +215,19 @@ switch ($_GET["op"]){
 					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
 					 $data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtransporte.')"><i class="far fa-trash-alt"></i></button>':
-							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtransporte.')"><i class="fa fa-check"></i></button>',
-						"1"=> date("d/m/Y", strtotime($reg->fecha_viaje)), 
-		 				"2"=> $reg->tipo_viajero, 
-		 				"3"=>$reg->descripcion,
-		 				"4"=>$reg->tipo_ruta.' <span style="color: red;font-weight: bold;" >::</span> '.$reg->ruta,
-		 				"5"=>$reg->cantidad,
-		 				"6"=>number_format($reg->precio_unitario, 2, '.', ','),
-		 				"7"=>number_format($reg->precio_parcial, 2, '.', ','),
-		 				"8"=>$comprobante,
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtransporte.')"><i class="far fa-trash-alt"></i></button>'.
+		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idtransporte.')"><i class="far fa-eye"></i></button>':
+							'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtransporte.')"><i class="fa fa-check"></i></button>'.
+		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idtransporte.')"><i class="far fa-eye"></i></button>',
+						"1"=>$reg->tipo_comprobante, 
+						"2"=> empty($reg->numero_comprobante)?' - ':$reg->numero_comprobante, 
+						"3"=> date("d/m/Y", strtotime($reg->fecha_viaje)), 
+						"4"=>number_format($reg->subtotal, 2, '.', ','),
+						"5"=>number_format($reg->igv, 2, '.', ','),
+						"6"=>number_format($reg->precio_parcial, 2, '.', ','),
+					   	"7"=> $reg->descripcion, 
+						"8"=>$comprobante,
 		 				"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);

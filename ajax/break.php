@@ -137,7 +137,7 @@
       
           } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina']==1)
+            if ($_SESSION['viatico']==1)
             {
                 // imgen de perfil
               if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
@@ -195,7 +195,7 @@
           else
           {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina']==1)
+            if ($_SESSION['viatico']==1)
             {	
               $idsemana_break ='5';
               //$_GET['idsemana_break']
@@ -257,7 +257,7 @@
           else
           {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina']==1)
+            if ($_SESSION['viatico']==1)
             {
               $rspta=$breaks->desactivar_comprobante($idfactura_break);
                echo $rspta ? "Comprobante Anulado" : "Comprobante no se puede Anular";
@@ -278,7 +278,7 @@
           else
           {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina']==1)
+            if ($_SESSION['viatico']==1)
             {
               $rspta=$breaks->activar_comprobante($idfactura_break);
                echo $rspta ? "Comprobante Restablecido" : "Comprobante no se pudo Restablecido";
@@ -299,7 +299,7 @@
           else
           {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina']==1)
+            if ($_SESSION['viatico']==1)
             {
               //$idpago_Comprobante='1';
               $rspta=$breaks->mostrar_comprobante($idfactura_break);

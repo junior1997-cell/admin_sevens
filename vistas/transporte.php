@@ -70,13 +70,13 @@
                                             <thead>
                                                 <tr>
                                                     <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
-                                                    <th>Tipo</th>
-                                                    <th>Descripción</th>
-                                                    <th data-toggle="tooltip" data-original-title="Ruta" style="text-align: center;" >Ruta</th>
-                                                    <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
-                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Parcial">Momto Parcial</th>
+                                                    <th>Sub total</th>
+                                                    <th>Igv</th>
+                                                    <th>Monto Total </th>
+                                                    <th>Descripción </th>
                                                     <th>Comprobante</th>
                                                     <th>Estado</th>
                                                 </tr>
@@ -84,17 +84,16 @@
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
-                                                <th class="">Acciones</th>
+                                                    <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
-                                                    <th>Tipo</th>
-                                                    <th>Descripción</th>
-                                                    <th data-toggle="tooltip" data-original-title="Ruta" style="text-align: center;">Ruta</th>
-                                                    <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
-                                                    <th data-toggle="tooltip" data-original-title="Precio Unitario">P.U.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Parcial" style="background-color: #ffdd00;"> <span id="total_monto"></span></th>
+                                                    <th>Sub total</th>
+                                                    <th>Igv</th>
+                                                    <th>Monto Total </th>
+                                                    <th>Descripción </th>
                                                     <th>Comprobante</th>
-                                                <th>Estado</th>
-
+                                                    <th>Estado</th>                                            
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -129,40 +128,39 @@
                                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id hospedaje -->
                                                 <input type="hidden" name="idtransporte" id="idtransporte" />
+                                                <!-- Tipo de comprobante -->
+                                                <div class="col-lg-6" id="content-t-comprob">
+                                                    <div class="form-group">
+                                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                                        <option value="Ninguno">Ninguno</option>
+                                                        <option value="Boleta">Boleta</option>
+                                                        <option value="Factura">Factura</option>
+                                                        <option value="Nota_de_venta">Nota de venta</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Código-->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="codigo">Núm. comprobante </label>                               
+                                                        <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
+                                                    </div>                                                        
+                                                </div>
 
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-5 class_pading">
                                                     <div class="form-group">
-                                                        <label for="fecha">Fecha</label>
+                                                        <label for="fecha">Fecha Emisión</label>
                                                         <input type="date" name="fecha_viaje" class="form-control" id="fecha_viaje" />
                                                     </div>
 
                                                 </div>
-                                                <!-- tipo_viajero-->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="unidad">Tipo</label>
-                                                        <select name="tipo_viajero"  id="tipo_viajero" class="form-control select2"  style="width: 100%;">
-                                                        <option value="Personal">Personal</option>
-                                                        <option value="Material">Material</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <!-- tipo_ruta idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion-->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="unidad">Tipo ruta</label>
-                                                        <select name="tipo_ruta"  id="tipo_ruta" class="form-control select2" style="width: 100%;">
-                                                        <option value="Nacional">Nacional</option>
-                                                        <option value="Provincial">Provincial</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                                 <!-- Cantidad  -->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-3 class_pading">
                                                     <div class="form-group">
                                                         <label for="cantidad">Cantidad</label>
-                                                        <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calculando_total();" onkeyup="calculando_total();" />
+                                                        <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="comprob_factura();" onkeyup="comprob_factura();" />
                                                     </div>
 
                                                 </div>
@@ -170,17 +168,54 @@
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="marca">Precio Unitario</label>
-                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="calculando_total();" onkeyup="calculando_total();" />
+                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
                                                     </div>                                                  
 
+                                                </div>
+                                                <!-- Sub total -->
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="subtotal">Sub total</label>
+                                                        <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
+                                                        <input class="form-control" type="hidden"  id="subtotal" name="subtotal"/>
+                                                    </div>
+                                                </div>
+                                                <!-- Fecha Emisión -->
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="igv">IGV</label>
+                                                        <input class="form-control igv" type="number" placeholder="IGV"  readonly />
+                                                        <input class="form-control" type="hidden"  id="igv" name="igv"/>
+                                                    </div>
                                                 </div>
                                                 <!--Precio Parcial-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="marca">Precio Parcial </label>
-                                                        <input type="numbre" name="precio_parcial" class="form-control" id="precio_parcial" placeholder="Precio Parcial" />
+                                                        <input type="number" class="form-control precio_parcial" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
+                                                        <input type="hidden" name="precio_parcial" id="precio_parcial"/>
+                                                       
                                                     </div>                                                  
-
+                                                </div>
+                                                <!-- tipo_viajero-->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="unidad">Tipo clasificación</label>
+                                                        <select name="tipo_viajero"  id="tipo_viajero" class="form-control select2"  style="width: 100%;">
+                                                        <option value="Personal">Personal</option>
+                                                        <option value="Material">Material</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- tipo_ruta idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion-->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="unidad">Tipo ruta</label>
+                                                        <select name="tipo_ruta"  id="tipo_ruta" class="form-control select2" style="width: 100%;">
+                                                        <option value="Nacional">Nacional</option>
+                                                        <option value="Provincial">Provincial</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                                 <!-- ruta 2 -->
                                                 <div class="col-lg-6 class_pading">
@@ -231,7 +266,7 @@
                         </div>
                     </div>
 
-                    <!--===============Modal-ver-ficha-tècnica =========-->
+                    <!--===============Modal-ver-comprobante =========-->
                     <div class="modal fade" id="modal-ver-comprobante">
                           <div class="modal-dialog modal-dialog-scrollable modal-xl ">
                               <div class="modal-content">
@@ -251,6 +286,25 @@
                                   </div>
                               </div>
                           </div>
+                    </div>
+                    <!--Modal ver datos-->
+                    <div class="modal fade" id="modal-ver-transporte">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Datos Transporte</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div id="datostransporte" class="class-style">
+                                <!-- vemos los datos del trabajador -->
+                                </div>
+                            </div>
+                            </div>
+                        </div>
                     </div>
 
                 </section>

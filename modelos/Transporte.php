@@ -11,17 +11,17 @@ Class Transporte
 	}
 	//$idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$comprobante)
+	public function insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 	
-		$sql="INSERT INTO transporte (idproyecto,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion,comprobante) 
-		VALUES ('$idproyecto','$fecha_viaje','$tipo_viajero','$tipo_ruta','$cantidad','$precio_unitario','$precio_parcial','$ruta','$descripcion','$comprobante')";
+		$sql="INSERT INTO transporte (idproyecto,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante) 
+		VALUES ('$idproyecto','$fecha_viaje','$tipo_viajero','$tipo_ruta','$cantidad','$precio_unitario','$precio_parcial','$ruta','$descripcion','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$comprobante)
+	public function editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 		$sql="UPDATE transporte SET 
 		idproyecto='$idproyecto',
@@ -33,6 +33,10 @@ Class Transporte
 		precio_parcial='$precio_parcial',
 		ruta='$ruta',
 		descripcion='$descripcion',
+		tipo_comprobante='$tipo_comprobante',
+		numero_comprobante='$nro_comprobante',
+		subtotal='$subtotal',
+		igv='$igv',
 		comprobante='$comprobante'
 
 		WHERE idtransporte='$idtransporte'";	

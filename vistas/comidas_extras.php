@@ -70,10 +70,14 @@
                                             <thead>
                                                 <tr>
                                                     <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
+                                                    <th>Sub total</th>
+                                                    <th>Igv</th>
+                                                    <th>Monto Total </th>
                                                     <th>Descripción </th>
-                                                    <th>Comprobante </th>
-                                                    <th>Monto Parcial</th>
+                                                    <th>Comprobante</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -81,11 +85,14 @@
                                             <tfoot>
                                                 <tr>
                                                     <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
+                                                    <th>Sub total</th>
+                                                    <th>Igv</th>
+                                                    <th style="background-color: #ffdd00;" > <span id="total_monto"></span> </th>
                                                     <th>Descripción </th>
-                                                    <th>Comprobante </th>
-                                                    <th style="background-color: #ffdd00;" >
-                                                    <span id="total_monto"></span></th>
+                                                    <th>Comprobante</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -123,6 +130,35 @@
                                                 <input type="hidden" name="idcomida_extra" id="idcomida_extra" />
 
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
+                                                <!-- Tipo de comprobante -->
+                                                <div class="col-lg-4" id="content-t-comprob">
+                                                    <div class="form-group">
+                                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                                        <option value="Ninguno">Ninguno</option>
+                                                        <option value="Boleta">Boleta</option>
+                                                        <option value="Factura">Factura</option>
+                                                        <option value="Nota_de_venta">Nota de venta</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                                <!-- Código-->
+                                                <div class="col-lg-5">
+                                                    <div class="form-group">
+                                                        <label for="codigo">Núm. comprobante </label>                               
+                                                        <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
+                                                    </div>                                                        
+                                                </div>
+                                                <!--Precio Parcial-->
+                                                <div class="col-lg-3 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="marca">Precio Parcial </label>
+                                                        <input type="number" class="form-control precio_parcial" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
+                                                        <input type="number" name="precio_parcial" id="precio_parcial"/>
+                                                       
+                                                    </div>                                                  
+                                                </div>
+                                                <!--Fecha-->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha</label>
@@ -130,13 +166,21 @@
                                                     </div>
 
                                                 </div>
-                                                <!--Precio Parcial-->
-                                                <div class="col-lg-6 class_pading">
+                                                <!-- Sub total -->
+                                                <div class="col-lg-3">
                                                     <div class="form-group">
-                                                        <label for="marca">Precio Parcial </label>
-                                                        <input type="numbre" name="precio_parcial" class="form-control" id="precio_parcial" placeholder="Precio Parcial" />
-                                                    </div>                                                  
-
+                                                        <label for="subtotal">Sub total</label>
+                                                        <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
+                                                        <input class="form-control" type="hidden"  id="subtotal" name="subtotal"/>
+                                                    </div>
+                                                </div>
+                                                <!-- Fecha Emisión -->
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <label for="igv">IGV</label>
+                                                        <input class="form-control igv" type="number" placeholder="IGV"  readonly />
+                                                        <input class="form-control" type="hidden"  id="igv" name="igv"/>
+                                                    </div>
                                                 </div>
                                                 <!--Descripcion-->
                                                 <div class="col-lg-12 class_pading">

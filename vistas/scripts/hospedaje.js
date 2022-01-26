@@ -21,8 +21,15 @@ function init() {
     placeholder: "Seleccinar unidad",
     allowClear: true,
   });
+  //Initialize Select2 unidad
+  $("#tipo_comprobante").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar tipo comprobante",
+    allowClear: true,
+  });
 
   $("#unidad").val("null").trigger("change");
+  $("#tipo_comprobante").val("null").trigger("change");
   
 
   // Formato para telefono
@@ -171,19 +178,48 @@ function calculando_cantidad() {
     $("#precio_parcial").val("");
   }
 }
-function calculando_total() {
-  var cantidad = $("#cantidad").val();
 
+function calculando_totales() {
+  var cantidad = $("#cantidad").val();
   var precio_unitario = $("#precio_unitario").val();
   var precio_parcial=0;
-if ($("#cantidad").val()!='') {
-  
-  precio_parcial=cantidad*precio_unitario;
 
-  $("#precio_parcial").val(formato_miles(precio_parcial));
+  var monto = cantidad*precio_unitario
+  var xxxx = $("#tipo_comprobante").select2("val");
+ // $('.precio_parcial').val(monto);
+  //$("#precio_parcial").val(monto);
+  console.log('xxxx '+xxxx +' cantidad'+cantidad + 'precio_unitario '+ precio_unitario );
+
+if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' && $("#unidad").select2("val") !="") {
+  
+  var subtotal=0; var igv=0;
+
+  $("#subtotal").val("");
+  $("#igv").val(""); 
+
+  subtotal= monto/1.18;
+  igv= monto-subtotal;
+
+  $(".subtotal").val(subtotal.toFixed(2));
+  $("#subtotal").val(subtotal.toFixed(4));
+
+  $(".igv").val(igv.toFixed(2));
+  $("#igv").val(igv.toFixed(4));
+
+  $('.precio_parcial').val(monto);
+  $("#precio_parcial").val(monto);
+
 
 }else{
-  $("#precio_parcial").val("");
+  $(".subtotal").val(monto.toFixed(2));
+  $("#subtotal").val(monto);
+
+  $(".igv").val("0.00");
+  $("#igv").val("0.00");
+
+  $('.precio_parcial').val(monto.toFixed(2));
+  $("#precio_parcial").val(monto);
+  
 }
 
 
@@ -202,8 +238,19 @@ function limpiar() {
   $("#cantidad").val(""); 
  // $("#unidad").val(""); 
   $("#precio_unitario").val(""); 
-  $("#precio_parcial").val(""); 
   $("#descripcion").val("");
+
+  $("#fecha_comprobante").val("");
+  $("#nro_comprobante").val("");
+
+  $(".precio_parcial").val(""); 
+  $("#precio_parcial").val("");
+
+  $(".subtotal").val("");
+  $("#subtotal").val("");
+
+  $(".igv").val("");
+  $("#igv").val("");
 
   $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
   $("#foto2").val("");
@@ -214,6 +261,7 @@ function limpiar() {
   $('#ver_pdf').hide();
 
   $("#unidad").val("null").trigger("change");
+  $("#tipo_comprobante").val("null").trigger("change");
 
 }
 
@@ -255,8 +303,8 @@ function listar() {
 function modal_comprobante(comprobante){
   var comprobante = comprobante;
   console.log(comprobante);
-var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-//console.log(extencion);
+  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+  //console.log(extencion);
   $('#ver_fact_pdf').html('');
   $('#img-factura').attr("src", "");
   $('#modal-ver-comprobante').modal("show");
@@ -277,13 +325,10 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
     $("#iddescargar").attr("href","../dist/img/comprob_hospedajes/"+comprobante);
   }
-
-
-  
  // $(".tooltip").hide();
 }
-//Función para guardar o editar
 
+//Función para guardar o editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-hospedaje")[0]);
@@ -325,6 +370,7 @@ function mostrar(idhospedaje) {
   $("#modal-agregar-hospedaje").modal("show")
     
   $("#unidad").val("").trigger("change"); 
+  $("#tipo_comprobante").val("").trigger("change"); 
 
   $.post("../ajax/hospedaje.php?op=mostrar", { idhospedaje: idhospedaje }, function (data, status) {
 
@@ -333,13 +379,25 @@ function mostrar(idhospedaje) {
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
     $("#unidad").val(data.unidad).trigger("change"); 
+    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change"); 
     $("#idhospedaje").val(data.idhospedaje);
     $("#fecha_inicio").val(data.fecha_inicio); 
     $("#fecha_fin").val(data.fecha_fin); 
     $("#cantidad").val(data.cantidad); 
-  // $("#unidad").val(""); 
-    $("#precio_unitario").val(data.precio_unitario); 
-    $("#precio_parcial").val(data.precio_parcial); 
+    $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2)); 
+
+    $("#fecha_comprobante").val(data.fecha_comprobante);
+    $("#nro_comprobante").val(data.numero_comprobante);
+  
+    $(".precio_parcial").val(parseFloat(data.precio_parcial).toFixed(2)); 
+    $("#precio_parcial").val(data.precio_parcial);
+  
+    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
+    $("#subtotal").val(data.subtotal);
+  
+    $(".igv").val(parseFloat(data.igv).toFixed(2));
+    $("#igv").val(data.igv);
+
     $("#descripcion").val(data.descripcion);
     /**-------------------------*/
   if (data.comprobante != "") {
@@ -365,6 +423,77 @@ function mostrar(idhospedaje) {
     $("#foto2_nombre").html('');
     $('#ver_pdf').hide();
   }
+  });
+}
+
+function ver_datos(idhospedaje) {
+
+  $("#modal-ver-hospedaje").modal("show")
+
+  $.post("../ajax/hospedaje.php?op=verdatos", { idhospedaje: idhospedaje }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+    
+    verdatos=`                                                                            
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-hover table-bordered">        
+            <tbody>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Descripción</th>
+                <td>${data.descripcion}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Unidad</th>
+                <td>${data.unidad}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Fecha inicial</th>
+                <td>${data.fecha_inicio}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Fecha final</th>
+                  <td>${data.fecha_fin}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Cantidad</th>
+                <td>${data.cantidad}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Precio unitario</th>
+                <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo comprobante </th>
+                <td>${data.tipo_comprobante}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Fecha comprobante</th>
+                <td>${data.fecha_comprobante}</td>
+              </tr>
+
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Subtotal</th>
+                <td>${parseFloat(data.subtotal).toFixed(2)}</td>
+              </tr>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>IGV</th>
+                <td>${parseFloat(data.igv).toFixed(2)}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Total</th>
+                <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+  
+    $("#datoshospedaje").html(verdatos);
+
   });
 }
 
@@ -442,6 +571,8 @@ $(function () {
  // idhospedaje,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion
   $("#form-hospedaje").validate({
     rules: {
+      tipo_comprobante: { required: true },
+      fecha_comprobante: { required: true },
       fecha_inicio: { required: true },
       cantidad:{minlength: 1},
       precio_unitario:{required: true},
@@ -450,6 +581,12 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
+      tipo_comprobante: {
+        required: "Por favor seleccionar tipo comprobante", 
+      },
+      fecha_comprobante: {
+        required: "Por favor ingrese una fecha", 
+      },
       fecha_inicio: {
         required: "Por favor ingrese una fecha", 
       },

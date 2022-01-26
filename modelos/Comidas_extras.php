@@ -11,24 +11,28 @@ Class Comidas_extras
 	}
 	//$idcomida_extra,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante)
+	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 	
-		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,comprobante) 
-		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$comprobante')";
+		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante) 
+		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$comprobante)
+	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 		$sql="UPDATE comida_extra SET 
 		idproyecto='$idproyecto',
 		fecha_comida='$fecha',
 		costo_parcial='$precio_parcial',
 		descripcion='$descripcion',
-		comprobante='$comprobante'
+		comprobante='$comprobante',
+		tipo_comprobante='$tipo_comprobante',
+		numero_comprobante='$nro_comprobante',
+		subtotal='$subtotal',
+		igv='$igv'
 
 		WHERE idcomida_extra ='$idcomida_extra'";	
 		return ejecutarConsulta($sql);	

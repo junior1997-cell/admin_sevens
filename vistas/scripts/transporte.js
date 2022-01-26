@@ -18,7 +18,13 @@ function init() {
   //Initialize Select2 tipo_viajero
   $("#tipo_viajero").select2({
     theme: "bootstrap4",
-    placeholder: "Seleccinar tipo viajero",
+    placeholder: "Seleccinar tipo clasificación",
+    allowClear: true,
+  });
+  //Initialize Select2 tipo_viajero
+  $("#tipo_comprobante").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar tipo comprobante",
     allowClear: true,
   });
   //Initialize Select2 tipo_viajero
@@ -29,6 +35,7 @@ function init() {
   });
 
   $("#tipo_viajero").val("null").trigger("change");
+  $("#tipo_comprobante").val("null").trigger("change");
   $("#tipo_ruta").val("null").trigger("change");
   
 
@@ -131,24 +138,6 @@ function foto2_eliminar() {
   $('#foto2_i').show();
 }
 
-function calculando_total() {
-  var cantidad = $("#cantidad").val();
-
-  var precio_unitario = $("#precio_unitario").val();
-  var precio_parcial=0;
-if ($("#cantidad").val()!='') {
-  
-  precio_parcial=cantidad*precio_unitario;
-
-  $("#precio_parcial").val(formato_miles(precio_parcial));
-
-}else{
-  $("#precio_parcial").val("");
-}
-  
-}
-
-
 //Función limpiar
 function limpiar() {
 
@@ -158,7 +147,17 @@ function limpiar() {
   $("#cantidad").val(""); 
  // $("#unidad").val(""); 
   $("#precio_unitario").val(""); 
+
+  $(".precio_parcial").val(""); 
   $("#precio_parcial").val(""); 
+  $("#nro_comprobante").val("");
+
+  $(".subtotal").val("");
+  $("#subtotal").val("");
+
+  $(".igv").val("");
+  $("#igv").val("");
+
   $("#ruta").val(""); 
   $("#descripcion").val("");
 
@@ -171,8 +170,50 @@ function limpiar() {
   $('#ver_pdf').hide();
 
   $("#tipo_viajero").val("null").trigger("change");
+  $("#tipo_comprobante").val("null").trigger("change");
   $("#tipo_ruta").val("null").trigger("change");
 
+}
+
+//segun tipo de comprobante
+function comprob_factura() {
+
+  var cantidad = $("#cantidad").val();
+  var precio_unitario = $("#precio_unitario").val();
+
+  var monto = cantidad*precio_unitario
+
+  $('.precio_parcial').val(monto);
+  $("#precio_parcial").val(monto);
+
+ // console.log('monto '+ monto +' cantidad '+ cantidad +' precio_unitario '+ precio_unitario);
+
+ if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' ) {
+
+    var subtotal=0; var igv=0;
+
+    $("#subtotal").val("");
+    $("#igv").val(""); 
+
+    subtotal= monto/1.18;
+    igv= monto-subtotal;
+
+    $(".subtotal").val(subtotal.toFixed(2));
+    $("#subtotal").val(subtotal.toFixed(4));
+
+    $(".igv").val(igv.toFixed(2));
+    $("#igv").val(igv.toFixed(4));
+
+  } else {
+
+    $(".subtotal").val(monto.toFixed(2));
+    $("#subtotal").val(monto);
+
+    $(".igv").val("0.00");
+    $("#igv").val("0.00");
+  }
+  
+  
 }
 
 //Función Listar
@@ -281,26 +322,40 @@ function mostrar(idtransporte) {
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-transporte").modal("show")
-    
+   //$tipo_comprobante,$nro_comprobante,$subtotal,$igv 
   $("#tipo_ruta").val("").trigger("change"); 
+  $("#tipo_comprobante").val("").trigger("change"); 
   $("#tipo_viajero").val("").trigger("change"); 
 
   $.post("../ajax/transporte.php?op=mostrar", { idtransporte: idtransporte }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
+    precio_p=parseFloat(data.precio_parcial);
+
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
     $("#tipo_viajero").val(data.tipo_viajero).trigger("change"); 
+    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change"); 
     $("#tipo_ruta").val(data.tipo_ruta).trigger("change"); 
 
     $("#idtransporte").val(data.idtransporte);
     $("#fecha_viaje").val(data.fecha_viaje); 
+    $("#nro_comprobante").val(data.numero_comprobante);
+
     $("#cantidad").val(data.cantidad); 
-    
-    $("#precio_unitario").val(data.precio_unitario); 
-    $("#precio_parcial").val(data.precio_parcial); 
+    $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2)); 
+
+    $(".precio_parcial").val(precio_p.toFixed(2));
+    $("#precio_parcial").val(precio_p);
+  
+    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
+    $("#subtotal").val(parseFloat(data.subtotal));
+
+    $(".igv").val(parseFloat(data.igv).toFixed(2));
+    $("#igv").val(data.igv);
+
     $("#ruta").val(data.ruta); 
     $("#descripcion").val(data.descripcion);
     /**-------------------------*/
@@ -327,6 +382,76 @@ function mostrar(idtransporte) {
     $("#foto2_nombre").html('');
     $('#ver_pdf').hide();
   }
+  });
+}
+
+function ver_datos(idtransporte) {
+
+  $("#modal-ver-transporte").modal("show")
+
+  $.post("../ajax/transporte.php?op=verdatos", { idtransporte: idtransporte }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+    
+    verdatos=`                                                                            
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-hover table-bordered">        
+            <tbody>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Descripción</th>
+                <td>${data.descripcion}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo clasificación</th>
+                <td>${data.tipo_viajero}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Ruta</th>
+                <td>${data.ruta}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo ruta</th>
+                  <td>${data.tipo_ruta}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Fecha</th>
+                <td>${data.fecha_viaje}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo comprobante </th>
+                <td>${data.tipo_comprobante}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Cantidad</th>
+                <td>${data.cantidad}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Precio unitario</th>
+                <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
+              </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Subtotal</th>
+                <td>${parseFloat(data.subtotal).toFixed(2)}</td>
+              </tr>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>IGV</th>
+                <td>${parseFloat(data.igv).toFixed(2)}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Total</th>
+                <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+  
+    $("#datostransporte").html(verdatos);
+
   });
 }
 
@@ -404,6 +529,7 @@ $(function () {
  //transporte.js idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion
   $("#form-transporte").validate({
     rules: {
+      tipo_comprobante: { required: true },
       fecha_viaje: { required: true },
       cantidad:{required: true},
       precio_unitario:{required: true},
@@ -412,6 +538,9 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
+      tipo_comprobante: {
+        required: "Por favor seleccionar tipo comprobante", 
+      },
       fecha_viaje: {
         required: "Por favor ingrese una fecha", 
       },

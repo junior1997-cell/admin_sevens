@@ -18,6 +18,17 @@ function init() {
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
   $("#foto2").change(function(e) { addficha(e,$("#foto2").attr("id")) });
 
+  //Initialize Select2 Elements
+  $("#tipo_comprobante").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione tipo comprobante",
+    allowClear: true,
+  });
+
+  //============SERVICIO================
+  $("#tipo_comprobante").val("null").trigger("change");
+
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 
@@ -125,7 +136,17 @@ function limpiar() {
   $("#idcomida_extra").val("");
   $("#fecha").val(""); 
   $("#precio_parcial").val("");  
+  $(".precio_parcial").val("");
+  
   $("#descripcion").val("");
+  $("#tipo_comprobante").val("null").trigger("change");
+  $("#nro_comprobante").val("");
+
+  $(".subtotal").val("");
+  $("#subtotal").val("");
+
+  $(".igv").val("");
+  $("#igv").val("");
 
   $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
   $("#foto2").val("");
@@ -198,6 +219,39 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
   }
 
 }
+//segun tipo de comprobante
+function comprob_factura() {
+
+  var monto = parseFloat($('.precio_parcial').val());
+  $("#precio_parcial").val(monto);
+  console.log(monto);
+  if ($("#tipo_comprobante").select2("val") =="Factura") {
+
+      var subtotal=0; var igv=0;
+
+      $("#subtotal").val("");
+      $("#igv").val(""); 
+
+      subtotal= monto/1.18;
+      igv= monto-subtotal;
+
+      $(".subtotal").val(subtotal.toFixed(2));
+      $("#subtotal").val(subtotal.toFixed(4));
+
+      $(".igv").val(igv.toFixed(2));
+      $("#igv").val(igv.toFixed(4));
+
+  } else {
+
+    $(".subtotal").val(monto.toFixed(2));
+    $("#subtotal").val(monto);
+
+    $(".igv").val("0.00");
+    $("#igv").val("0.00");
+  }
+  
+  
+}
 //Función para guardar o editar
 
 function guardaryeditar(e) {
@@ -239,21 +293,36 @@ function mostrar(idcomida_extra ) {
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-comidas_ex").modal("show")
-
+  $("#tipo_comprobante").val("").trigger("change");
 
   $.post("../ajax/comidas_extras.php?op=mostrar", { idcomida_extra : idcomida_extra  }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);  
-
+    data = JSON.parse(data); var precio_p=0;  console.log(data);  
+    precio_p=parseFloat(data.costo_parcial);
+   
+    console.log( typeof (precio_p));
+    console.log('precio_p '+precio_p);
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
 
     $("#idcomida_extra").val(data.idcomida_extra);  
+
+    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
+    $("#nro_comprobante").val(data.numero_comprobante);
     $("#fecha").val(data.fecha_comida);  
 
-    $("#precio_parcial").val(data.costo_parcial); 
+
+    $(".precio_parcial").val(precio_p.toFixed(2));
+    $("#precio_parcial").val(precio_p);
+
     $("#descripcion").val(data.descripcion);
+  
+    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
+    $("#subtotal").val(parseFloat(data.subtotal));
+
+    $(".igv").val(parseFloat(data.igv).toFixed(2));
+    $("#igv").val(data.igv);
     /**-------------------------*/
   if (data.comprobante != "") {
     $("#foto2_actual").val(data.comprobante);
@@ -352,15 +421,19 @@ $(function () {
       
     },
   });
- //transporte.js fecha,precio_parcial,descripcion
+ //transporte.js fecha,precio_parcial,descripcion     //$tipo_comprobante,$nro_comprobante,$subtotal,$igv
   $("#form-comidas_ex").validate({
     rules: {
+      tipo_comprobante: { required: true },
       fecha: { required: true },
       precio_parcial:{required: true},
       descripcion:{required: true}
       // terms: { required: true },
     },
     messages: {
+      tipo_comprobante: {
+        required: "Por favor seleccionar tipo comprobante", 
+      },
       fecha: {
         required: "Por favor ingrese una fecha", 
       },
