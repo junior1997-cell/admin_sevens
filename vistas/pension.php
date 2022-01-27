@@ -12,7 +12,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Sevens | trabajadores</title>
+    <title>Admin Sevens | Pensión</title>
     <?php
     require 'head.php';
     ?>
@@ -51,12 +51,12 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Break</h1>
+                  <h1>Pensión</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Break</li>
+                    <li class="breadcrumb-item active">Pensión</li>
                   </ol>
                 </div>
               </div>
@@ -165,7 +165,7 @@
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td><textarea cols="30" rows="1" style="width: 400px;"></textarea></td>
+                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
                               </tr>
                               <tr>
                                 <td>Almuerzo</td>
@@ -180,7 +180,7 @@
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td><textarea cols="30" rows="1" style="width: 400px;"></textarea></td>
+                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
                               </tr>
                               <tr>
                                 <td>Cena</td>
@@ -195,7 +195,7 @@
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
                                 <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td><textarea cols="30" rows="1" style="width: 400px;" ></textarea></td>
+                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
                               </tr>
                             </tbody>
                             <tfoot>
@@ -487,7 +487,7 @@
     <!-- sweetalert2 -->
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-    <script type="text/javascript" src="scripts/break.js"></script>
+    <script type="text/javascript" src="scripts/pension.js"></script>
 
     <script>
         $(function () {
