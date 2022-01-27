@@ -15,9 +15,9 @@
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['trabajador'] == 1) {
 
-      require_once "../modelos/trabajador.php";
+      require_once "../modelos/Pago_administrador.php";
 
-      $pagotrabajador = new PagoTrabajador();
+      $pago_administrador = new PagoAdministrador();
 
       //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
@@ -39,13 +39,13 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$pagotrabajador->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$pago_administrador->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 
           }else {
             // editamos un trabajador existente
-            $rspta=$pagotrabajador->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$pago_administrador->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
             
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
@@ -54,7 +54,7 @@
 
         case 'desactivar':
 
-          $rspta=$pagotrabajador->desactivar($idtrabajador_por_proyecto);
+          $rspta=$pago_administrador->desactivar($idtrabajador_por_proyecto);
 
           echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
 
@@ -62,7 +62,7 @@
 
         case 'activar':
 
-          $rspta=$pagotrabajador->activar($idtrabajador_por_proyecto);
+          $rspta=$pago_administrador->activar($idtrabajador_por_proyecto);
 
           echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 
@@ -70,7 +70,7 @@
 
         case 'mostrar':
 
-          $rspta=$pagotrabajador->mostrar($idtrabajador_por_proyecto);
+          $rspta=$pago_administrador->mostrar($idtrabajador_por_proyecto);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -78,16 +78,16 @@
         
         case 'verdatos':
 
-          $rspta=$pagotrabajador->verdatos($idtrabajador_por_proyecto);
+          $rspta=$pago_administrador->verdatos($idtrabajador_por_proyecto);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
         break;
 
-        case 'listar':
+        case 'listar_tbla_principal':
           $nube_idproyecto = $_GET["nube_idproyecto"];
 
-          $rspta=$pagotrabajador->listar($nube_idproyecto);
+          $rspta=$pago_administrador->listar_tbla_principal($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array();
 
@@ -102,14 +102,16 @@
                 ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
+              "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria . '<br> <b>CCI:</b> '. $reg->cci,
               "3"=>$reg->sueldo_mensual,
-              "4"=>$reg->tipo_trabajador.' / '.$reg->cargo,
-              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              "4"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes()"><i class="fas fa-dollar-sign nav-icon"></i> Pagar</button> <button style="font-size: 14px;" class="btn btn-danger btn-xs">0.00</button></div>',
+              "5" => '0',
+              "6"=>$reg->tipo.' / '.$reg->cargo,
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
@@ -123,7 +125,7 @@
 
         case 'select2Trabajador': 
 
-          $rspta = $pagotrabajador->select2_trabajador();
+          $rspta = $pago_administrador->select2_trabajador();
       
           while ($reg = $rspta->fetch_object())  {
 

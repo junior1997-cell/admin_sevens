@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-Class PagoTrabajador
+Class PagoAdministrador
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -80,11 +80,15 @@ Class PagoTrabajador
 		return ejecutarConsultaSimpleFila($sql);
 	}
 	//Implementar un método para listar los registros
-	public function listar($nube_idproyecto)
+	public function listar_tbla_principal($nube_idproyecto)
 	{
-		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria, t.imagen_perfil as imagen, tp.tipo_trabajador, tp.cargo, tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.estado, tp.idtrabajador_por_proyecto, tp.estado, b.nombre as banco
-		FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p, bancos AS b
-		WHERE tp.idproyecto = p.idproyecto AND tp.idproyecto = '$nube_idproyecto'   AND tp.idtrabajador = t.idtrabajador AND t.idbancos = b.idbancos;";
+		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria, t.cci, t.imagen_perfil as imagen_perfil, 
+		tpp.desempenio, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.idtrabajador_por_proyecto, tpp.estado, 
+		b.nombre as banco, ct.nombre AS cargo, tt.nombre AS tipo
+		FROM trabajador_por_proyecto as tpp, cargo_trabajador AS ct, tipo_trabajador AS tt, trabajador as t, proyecto AS p, bancos AS b
+		WHERE tpp.idproyecto = p.idproyecto AND tpp.idproyecto = '$nube_idproyecto'   AND tpp.idtrabajador = t.idtrabajador AND 
+		t.idbancos = b.idbancos AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador 
+		AND tt.nombre != 'Obrero';";
 		return ejecutarConsulta($sql);		
 	}
 

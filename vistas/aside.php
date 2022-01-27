@@ -197,14 +197,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <!-- Usuarios del sistema -->
+              <!-- Obreros  -->
               <li class="nav-item ">
                 <a href="pago_obrero.php" class="nav-link" id="lPagosObrero">
                   <i class="nav-icon fas fa-users"></i>
                   <p>Obreros</p>
                 </a>
               </li>
-              <!-- Proveedores de la empresa -->
+              <!-- Administradores -->
               <li class="nav-item ">
                 <a href="pago_administrador.php" class="nav-link" id="lPagosAdministrador">
                   <i class="nav-icon fas fa-briefcase"></i>
@@ -217,14 +217,31 @@
 
         <?php if ($_SESSION['compra']==1) {  ?>   
           <!-- COMPRAS -->      
-          <li class="nav-item ver-otros-modulos-1">
-            <a href="compra.php" class="nav-link" id="mCompra">
+          <li class="nav-item ver-otros-modulos-1" id="bloc_Compras">
+            <a href="#" class="nav-link" id="mCompra">
               <i class="fas fa-shopping-cart nav-icon"></i>
               <p>
                 Compras
-                <!-- <span class="badge badge-info right">2</span> -->
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">2</span>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <!-- Compras del proyecto -->
+              <li class="nav-item ">
+                <a href="compra.php" class="nav-link" id="lCompras">
+                  <i class="nav-icon fas fa-cart-plus"></i>
+                  <p>Compras</p>
+                </a>
+              </li>
+              <!-- Proveedores de la empresa -->
+              <li class="nav-item ">
+                <a href="resumen_insumos.php" class="nav-link" id="lResumenInsumos">
+                  <i class="nav-icon fas fa-tasks"></i>
+                  <p>Resumen de insumos</p>
+                </a>
+              </li> 
+            </ul>
           </li>
         <?php  }  ?>
 

@@ -71,7 +71,40 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <div class="table-responsive">
+
+                        <!-- tabla de pago administrador -->
+                        <table id="tabla-pago-administrador" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <thead>
+                            <tr>
+                              <th class="">Acciones</th>
+                              <th>Trabajdor</th> 
+                              <th>Banco</th>
+                              <th>Sueldo Mensual</th>
+                              <th>Pagar</th>
+                              <th>Saldo</th>
+                              <th>Tipo/Cargo</th>  
+                              <th>Estado</th>                            
+                            </tr>
+                          </thead>
+                          <tbody>                         
+                            
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <th class="">Acciones</th>
+                              <th>Trabajdor</th> 
+                              <th>Banco</th>
+                              <th>Sueldo Mensual</th>
+                              <th>Pagar</th>
+                              <th>Saldo</th>
+                              <th>Tipo/Cargo</th>  
+                              <th>Estado</th>                               
+                            </tr>
+                          </tfoot>
+                        </table>
+
+                        <!-- tabla  -->
+                        <div class="table-responsive" style="display: none;">
                           <div class="table-responsive-lg" style="overflow-x: scroll;">
                             <table class="table styletabla" style="border: black 1px solid;">
                                 <thead>                                  

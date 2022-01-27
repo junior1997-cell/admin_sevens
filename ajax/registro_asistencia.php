@@ -171,38 +171,37 @@ ob_start();
           //Vamos a declarar un array
           $data= Array();
 
-          $jornal_diario = '';
-
-          $sueldo_acumudado='';
-
-          while ($reg=$rspta->fetch_object()){
+          $jornal_diario = '';  $sueldo_acumudado=''; $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
+          foreach (json_decode($rspta, true) as $key => $value) {
             //$jonal_diario=$reg->sueldo_hora*($reg->total_horas+$reg->horas_extras);
-            $jornal_diario=$reg->sueldo_hora*8;
+            $jornal_diario=$value['sueldo_hora']*8;
 
-            $sueldo_acumudado=$reg->sueldo_hora*($reg->total_horas_normal+$reg->total_horas_extras);
+            $sueldo_acumudado=$value['sueldo_hora']*($value['total_horas_normal']+$value['total_horas_extras']);
 
-            $ver_asistencia="'$reg->idtrabajador_por_proyecto','$reg->fecha_inicio_proyect'";
+            $ver_asistencia="'".$value['idtrabajador_por_proyecto']."','".$value['fecha_inicio_proyect']."'";
 
             $data[]=array(
               "0"=>'<button class="btn btn-info" onclick="ver_asistencias_individual('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
-                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
-                style="color: #000000 !important;">'. $reg->cargo .' : </b> <br> '. $reg->nombre .'</p></span>
-                <span class="description" style="margin-left: 0px !important;">'. $reg->tipo_doc .': '. $reg->num_doc .' </span>
-                </div>',              
-              "2"=> round($reg->total_horas_normal+$reg->total_horas_extras, 1),
-              "3"=> round(($reg->total_horas_normal+$reg->total_horas_extras)/8, 1),
-              "4"=> $reg->sueldo_hora,
+              <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" style="/*margin-left: 0px !important;*/"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
+                style="color: #000000 !important;">'. $value['cargo'] .' : </b> <br> '. $value['nombre'] .'</p></span>
+                <span class="description" style="/*margin-left: 0px !important;*/">'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
+              </div>',              
+              "2"=> round($value['total_horas_normal'] + $value['total_horas_extras'], 2),
+              "3"=> round(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 1),
+              "4"=> $value['sueldo_hora'],
               "5"=> $jornal_diario,
-              "6"=> $reg->sueldo_mensual,              
-              "7"=> 1,
-              "8"=> round($sueldo_acumudado, 1),
+              "6"=> number_format($value['sueldo_mensual'], 2, '.', ','),              
+              "7"=> $value['total_sabatical'],
+              "8"=> number_format($sueldo_acumudado, 1, '.', ',') ,
             );
 
             $jornal_diario=0;
 
             $sueldo_acumudado=0;
-          }
+          }           
 
           $results = array(
             "sEcho"=>1, //Información para el datatables
@@ -212,7 +211,14 @@ ob_start();
           );
 
           echo json_encode($results);
+          // echo $rspta;
 
+        break;
+
+        case 'suma_total_acumulado':
+          $rspta=$asist_trabajador->total_acumulado_trabajadores($_POST["nube_idproyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
         break;
 
         // lista la tabla individual por trabajador

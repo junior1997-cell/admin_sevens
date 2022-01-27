@@ -417,14 +417,12 @@ switch ($_GET["op"]) {
         $color_stock = "";
         $ficha_tecnica = "";
         while ($reg = $rspta->fetch_object()) {
-            if (!empty($reg->imagen)) {
-                $img = $reg->imagen;
-            } else {
-                $img = "img_material_defect.jpg";
-            }
-            empty($reg->ficha_tecnica)
-                ? ($ficha_tecnica = '<a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#000000c4"></i></a>')
-                : ($ficha_tecnica = '<a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>');
+
+            if (!empty($reg->imagen)) { $img = $reg->imagen; } else { $img = "img_material_defect.jpg"; }
+
+            !empty($reg->ficha_tecnica)
+                ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+                : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
             //empty($reg->ficha_tecnica)?$ficha_tecnica='si':$ficha_tecnica='no';
             $datas[] = [
                 "0" =>
@@ -447,13 +445,9 @@ switch ($_GET["op"]) {
                     '\')" data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
                 "1" =>
                     '<div class="user-block">
-                        <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' .
-                    $img .
-                    '" alt="user image">
-                        <span class="username"><p style="margin-bottom: 0px !important;">' .
-                    $reg->nombre .
-                    '</p></span>
-                        <span class="description">...</span>
+                        <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' . $img .'" alt="user image">
+                        <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                        <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
                     </div>',
                 "2" => $reg->marca,
                 "3" => $reg->precio_unitario,

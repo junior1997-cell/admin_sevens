@@ -99,7 +99,7 @@
                                 <th>Sueldo diario</th>                                
                                 <th>Sueldo mensual</th>                                
                                 <th>Sabatical</th>
-                                <th>Pago acumulado</th>
+                                <th > <h5 id="total_acumulado_trabjadores">  S/. 0.00 </h5></th>
                               </tr>
                             </tfoot>
                           </table>
@@ -193,6 +193,15 @@
                               </tbody>
                             </table>
                               
+                          </div>
+                        </div>
+
+                        <!-- cargando tabla registro de asistencias -->
+                        <div class="row" id="cargando-registro-asistencia" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
                           </div>
                         </div>
 

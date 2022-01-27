@@ -3,7 +3,7 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
   
-  listar();
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
   //Mostramos los trabajadores
   $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
@@ -68,9 +68,9 @@ function limpiar() {
 }
 
 //Función Listar
-function listar() {
+function listar_tbla_principal(nube_idproyecto) {
 
-  tabla=$('#tabla-usuarios').dataTable({
+  tabla=$('#tabla-pago-administrador').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -78,7 +78,7 @@ function listar() {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/usuario.php?op=listar',
+        url: '../ajax/pago_administrador.php?op=listar_tbla_principal&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){

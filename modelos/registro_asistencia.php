@@ -215,14 +215,49 @@ Class Asistencia_trabajador
 	//Implementar un método para listar asistencia
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,
+		$trabajdor_resumen = Array();
+		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, 
+		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,
 		t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
 	   SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
 		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
 	   FROM trabajador AS t, trabajador_por_proyecto AS tp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
 	   WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto' AND tp.idcargo_trabajador = c.idcargo_trabajador
 	   GROUP BY tp.idtrabajador;";
-		return ejecutarConsulta($sql);		
+		$agrupar_trabajdor = ejecutarConsultaArray($sql);
+
+		foreach ($agrupar_trabajdor as $key => $value) {
+			$sql_2 ="SELECT SUM(sabatical) total_sabatical FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '".$value['idtrabajador_por_proyecto']."';";
+			$sab = ejecutarConsultaSimpleFila($sql_2);
+
+			$data_array=array(
+				'idtrabajador_por_proyecto'=>$value['idtrabajador_por_proyecto'],
+				'idtrabajador'=>$value['idtrabajador'],
+				'nombre'=>$value['nombre'],
+				'tipo_doc'=>$value['tipo_doc'],
+				'num_doc'=> $value['num_doc'],
+				'imagen'=> $value['imagen'],
+				'sueldo_hora'=> $value['sueldo_hora'],
+				'sueldo_mensual'=> $value['sueldo_mensual'],
+				'total_horas_normal'=> $value['total_horas_normal'],
+				'total_horas_extras'=> $value['total_horas_extras'],
+				'estado'=> $value['estado'],
+				'fecha_inicio_proyect'=> $value['fecha_inicio_proyect'],
+				'cargo'=> $value['cargo'],
+				'total_sabatical'=> empty($sab) ? 0 : $sab['total_sabatical'] 
+			);
+
+			array_push($trabajdor_resumen, $data_array);
+		}
+	   	
+		return json_encode($trabajdor_resumen, true);		
+	}
+
+	public function total_acumulado_trabajadores(){
+		$sql = "SELECT SUM(atr.pago_normal_dia) AS pagos_normal_dias, SUM(atr.pago_horas_extras) AS pagos_horas_extras 
+		FROM asistencia_trabajador AS atr, proyecto AS p, trabajador_por_proyecto AS tpp
+		WHERE atr.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND tpp.idproyecto = 1;";
+		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar asistencia
@@ -333,7 +368,7 @@ Class Asistencia_trabajador
 				'estado_envio_contador' => $estado_envio_contador
 			);
 
-			$idresumen_q_s_asistencia = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; $sabatical_manual_1 = ""; $sabatical_manual_2 = "";
+			$idresumen_q_s_asistencia = ""; $fecha_registro=""; $total_hn = ""; $total_he = ""; $total_dias_asistidos = ""; $sabatical = ""; $sabatical_manual_1 = "-"; $sabatical_manual_2 = "-";
 			$pago_parcial_hn = ""; $pago_parcial_he = ""; $adicional_descuento = ""; $descripcion_descuento = ""; $pago_quincenal = "";
 		}
 

@@ -20,9 +20,12 @@ function init() {
         $("#idproveedor").html(r);
     });
 
+    
+    $("#bloc_Compras").addClass("menu-open");
+
     $("#mCompra").addClass("active");
 
-    // $("#lUsuario").addClass("active");
+    $("#lCompras").addClass("active");
 
     $("#guardar_registro_compras").on("click", function (e) {
         Swal.fire({
