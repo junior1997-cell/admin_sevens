@@ -36,9 +36,15 @@ function init() {
     placeholder: "Selecione tipo comprobante",
     allowClear: true,
   });
+  $("#forma_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione una forma de pago",
+    allowClear: true,
+  });
 
   //============SERVICIO================
   $("#tipo_comprovante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -714,6 +720,7 @@ function limpiar_comprobante() {
   $("#subtotal").val("");
   $("#igv").val("");
   $("#tipo_comprovante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
   $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
   $('#foto2_i').show();
   $('#ver_pdf').html('');
@@ -824,6 +831,7 @@ function mostrar_comprobante(idfactura_break) {
 
   $("#modal-agregar-comprobante").modal("show");
   $("#tipo_comprovante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
 
   $.post("../ajax/break.php?op=mostrar_comprobante", { idfactura_break: idfactura_break }, function (data, status) {
 
@@ -837,6 +845,7 @@ function mostrar_comprobante(idfactura_break) {
     $("#subtotal").val(data.subtotal);
     $("#igv").val(data.igv);
     $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
+    $("#forma_pago").val(data.forma_de_pago).trigger("change");
 
     if (data.comprobante != "") {
       var comprobante = data.comprobante;
@@ -997,8 +1006,8 @@ $(function () {
 
   $("#form-agregar-comprobante").validate({
     rules: {
+      forma_pago:{required: true},
       tipo_comprovante:{required: true},
-      nro_comprobante:{required: true},
       monto:{required: true},
       fecha_emision:{required: true},
       descripcion:{minlength: 1},
@@ -1008,11 +1017,11 @@ $(function () {
     },
     messages: {
       //====================
+      forma_pago: {
+        required: "Seleccionar una forma de pago", 
+      },
       tipo_comprovante: {
         required: "Seleccionar un tipo de comprobante", 
-      },
-      nro_comprobante: {
-        required: "Por favor ingresar el númemro comprobante", 
       },
       monto: {
         required: "Por favor ingresar el monto", 

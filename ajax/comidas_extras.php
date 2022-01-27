@@ -14,6 +14,7 @@ $precio_parcial   = isset($_POST["precio_parcial"])? limpiarCadena($_POST["preci
 $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
 
 $tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
+$forma_pago = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
 $subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
 $igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
@@ -49,7 +50,7 @@ switch ($_GET["op"]){
 
 				if (empty($idcomida_extra)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
+					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -66,7 +67,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
+					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					//var_dump($idcomida_extra,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}
@@ -186,21 +187,24 @@ switch ($_GET["op"]){
 		 			
 					
 					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
+					 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+					 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 					 $data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcomida_extra .')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcomida_extra .')"><i class="fa fa-check"></i></button>',
-						"1"=>$reg->tipo_comprobante, 
-						"2"=>$reg->numero_comprobante, 
-						"3"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
-		 				"4"=>number_format($reg->subtotal, 2, '.', ','),
-		 				"5"=>number_format($reg->igv, 2, '.', ','),
-		 				"6"=>number_format($reg->costo_parcial, 2, '.', ','),
-						"7"=> $reg->descripcion, 
-		 				"8"=>$comprobante,
-		 				"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-		 				'<span class="text-center badge badge-danger">Desactivado</span>'
+						"1"=>$reg->forma_de_pago, 
+						"2"=>$reg->tipo_comprobante, 
+						"3"=>$reg->numero_comprobante, 
+						"4"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
+		 				"5"=>number_format($reg->subtotal, 2, '.', ','),
+		 				"6"=>number_format($reg->igv, 2, '.', ','),
+		 				"7"=>number_format($reg->costo_parcial, 2, '.', ','),
+						"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+		 				"9"=>$comprobante,
+		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 		 		}
 		 		$results = array(

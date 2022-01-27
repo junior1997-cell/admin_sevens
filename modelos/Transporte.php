@@ -11,17 +11,17 @@ Class Transporte
 	}
 	//$idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 	
-		$sql="INSERT INTO transporte (idproyecto,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante) 
-		VALUES ('$idproyecto','$fecha_viaje','$tipo_viajero','$tipo_ruta','$cantidad','$precio_unitario','$precio_parcial','$ruta','$descripcion','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
+		$sql="INSERT INTO transporte (idproyecto,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante) 
+		VALUES ('$idproyecto','$fecha_viaje','$tipo_viajero','$tipo_ruta','$cantidad','$precio_unitario','$precio_parcial','$ruta','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 		$sql="UPDATE transporte SET 
 		idproyecto='$idproyecto',
@@ -33,6 +33,7 @@ Class Transporte
 		precio_parcial='$precio_parcial',
 		ruta='$ruta',
 		descripcion='$descripcion',
+		forma_de_pago='$forma_pago',
 		tipo_comprobante='$tipo_comprobante',
 		numero_comprobante='$nro_comprobante',
 		subtotal='$subtotal',

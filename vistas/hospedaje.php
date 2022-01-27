@@ -70,6 +70,7 @@
                                         <thead>
                                                 <tr>
                                                     <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                                     <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                                     <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
@@ -85,6 +86,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                                     <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                                     <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
@@ -113,7 +115,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title"> <b>Agregar</b> </h4>
+                                    <h4 class="modal-title"> <b>Agregar:</b> comprobante de hospedaje </h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -128,8 +130,19 @@
                                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                                 <!-- id hospedaje -->
                                                 <input type="hidden" name="idhospedaje" id="idhospedaje" />
+                                                <!--forma pago-->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                    <label for="forma_pago">Forma Pago</label>
+                                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                                        <option value="Transferencia">Transferencia</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Crédito">Crédito</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
                                                 <!-- Tipo de comprobante -->
-                                                <div class="col-lg-4" id="content-t-comprob">
+                                                <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
                                                     <label for="tipo_comprobante">Tipo Comprobante</label>
                                                     <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="calculando_totales() ;" placeholder="Seleccinar un tipo de comprobante">
@@ -141,14 +154,14 @@
                                                     </div>
                                                 </div>
                                                 <!-- Código-->
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label for="codigo">Núm. comprobante </label>                               
                                                         <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
                                                     </div>                                                        
                                                 </div>
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha Comprobante</label>
                                                         <input type="date" name="fecha_comprobante" class="form-control" id="fecha_comprobante" />
@@ -218,7 +231,7 @@
                                                 <!--Precio Parcial-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
-                                                        <label for="marca">Precio Parcial </label>
+                                                        <label for="marca">Monto total </label>
                                                         <input type="number" class="form-control precio_parcial" onchange="calculando_totales() ;" onkeyup="calculando_totales() ;" placeholder="Precio Parcial" />
                                                         <input type="hidden" name="precio_parcial" id="precio_parcial"/>
                                                        

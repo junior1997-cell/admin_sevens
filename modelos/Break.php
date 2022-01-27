@@ -119,10 +119,10 @@ Class Breaks
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------
-	public function insertar_comprobante($idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
+	public function insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
 		//var_dump($idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);die();
-		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, subtotal, tipo_comprobante, descripcion, comprobante) 
-		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$subtotal','$tipo_comprovante','$descripcion','$imagen2')";
+		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante) 
+		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$subtotal','$forma_pago','$tipo_comprovante','$descripcion','$imagen2')";
 		return ejecutarConsulta($sql);
 	}
 	// obtebnemos los DOCS para eliminar
@@ -133,11 +133,12 @@ Class Breaks
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para editar registros
-	public function editar_comprobante($idfactura_break,$idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
+	public function editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
 		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
 		$sql="UPDATE `factura_break` SET 
 		
 		idsemana_break='$idsemana_break',
+		forma_de_pago='$forma_pago',
 		nro_comprobante='$nro_comprobante',
 		fecha_emision='$fecha_emision',
 		monto='$monto',

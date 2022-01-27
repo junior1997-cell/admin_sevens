@@ -26,9 +26,16 @@ function init() {
     placeholder: "Selecione tipo comprobante",
     allowClear: true,
   });
+    //Initialize Select2 Elements
+    $("#forma_pago").select2({
+      theme: "bootstrap4",
+      placeholder: "Selecione forma de pago",
+      allowClear: true,
+    });
 
   //============SERVICIO================
   $("#tipo_comprobante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
 
 
   // Formato para telefono
@@ -142,6 +149,7 @@ function limpiar() {
   
   $("#descripcion").val("");
   $("#tipo_comprobante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change"); 
   $("#nro_comprobante").val("");
 
   $(".subtotal").val("");
@@ -296,6 +304,7 @@ function mostrar(idcomida_extra ) {
 
   $("#modal-agregar-comidas_ex").modal("show")
   $("#tipo_comprobante").val("").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
 
   $.post("../ajax/comidas_extras.php?op=mostrar", { idcomida_extra : idcomida_extra  }, function (data, status) {
 
@@ -311,6 +320,7 @@ function mostrar(idcomida_extra ) {
     $("#idcomida_extra").val(data.idcomida_extra);  
 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
+    $("#forma_pago").val(data.forma_de_pago).trigger("change");
     $("#nro_comprobante").val(data.numero_comprobante);
     $("#fecha").val(data.fecha_comida);  
 
@@ -426,6 +436,7 @@ $(function () {
  //transporte.js fecha,precio_parcial,descripcion     //$tipo_comprobante,$nro_comprobante,$subtotal,$igv
   $("#form-comidas_ex").validate({
     rules: {
+      forma_pago: { required: true },
       tipo_comprobante: { required: true },
       fecha: { required: true },
       precio_parcial:{required: true},
@@ -433,6 +444,9 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
+      forma_pago: {
+        required: "Por favor seleccionar una forma de pago", 
+      },
       tipo_comprobante: {
         required: "Por favor seleccionar tipo comprobante", 
       },

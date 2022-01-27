@@ -22,6 +22,7 @@
       //============Comprobantes========================
       $idsemana_break      = isset($_POST["idsemana_break"])? limpiarCadena($_POST["idsemana_break"]):"";
       $idfactura_break     = isset($_POST["idfactura_break"])? limpiarCadena($_POST["idfactura_break"]):"";
+      $forma_pago          = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
       $tipo_comprovante    = isset($_POST["tipo_comprovante"])? limpiarCadena($_POST["tipo_comprovante"]):"";
 
       $nro_comprobante     = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
@@ -157,7 +158,7 @@
       
               if (empty($idfactura_break)){
                 
-                $rspta=$breaks->insertar_comprobante($idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
+                $rspta=$breaks->insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
                 echo $rspta ? "ok" : "No se pudieron registrar todos los datos de Comprobante";
               }
               else {
@@ -174,7 +175,7 @@
                   }
                 }
                 
-                $rspta=$breaks->editar_comprobante($idfactura_break,$idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
+                $rspta=$breaks->editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
                 
                 echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
               }
@@ -220,14 +221,17 @@
                   ' <button class="btn btn-danger btn-sm" onclick="desactivar_comprobante('.$reg->idfactura_break .')"><i class="far fa-trash-alt"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fa fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_break .')"><i class="fa fa-check"></i></button>',
-                  "1"=>$reg->nro_comprobante,	 				
-                  "2"=>date("d/m/Y", strtotime($reg->fecha_emision)),
-                  "3"=>number_format($subtotal, 2, '.', ','), 
-                  "4"=>number_format($igv, 2, '.', ','),
-                  "5"=>number_format($monto, 2, '.', ','),
-                  "6"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
-                  "7"=>$comprobante,
-                  "8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+                  
+                  "1"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,	 				
+                  "2"=> empty($reg->tipo_comprobante)?' - ':$reg->tipo_comprobante,	 				
+                  "3"=> empty($reg->nro_comprobante)?' - ':$reg->nro_comprobante,	 				
+                  "4"=>date("d/m/Y", strtotime($reg->fecha_emision)),
+                  "5"=>number_format($subtotal, 2, '.', ','), 
+                  "6"=>number_format($igv, 2, '.', ','),
+                  "7"=>number_format($monto, 2, '.', ','),
+                  "8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+                  "9"=>$comprobante,
+                  "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
                   '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
                   );
 
