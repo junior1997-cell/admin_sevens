@@ -22,20 +22,22 @@ function init() {
   $("#mViatico").addClass("active");
   $("#sub_bloc_comidas").addClass("active");
 
-  $("#lbreak").addClass("active");
+  $("#lPension").addClass("active");
 
-  // $("#ltrabajador").addClass("active"); 
   //=====Guardar factura=============
   $("#guardar_registro_comprobaante").on("click", function (e) {$("#submit-form-comprobante").submit();});
+  
   //Factura
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
   $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
+
   //Initialize Select2 Elements
   $("#tipo_comprovante").select2({
     theme: "bootstrap4",
     placeholder: "Selecione tipo comprobante",
     allowClear: true,
   });
+
   $("#forma_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione una forma de pago",
@@ -203,7 +205,7 @@ function listar(nube_idproyecto) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/break.php?op=listar_totales_semana&nube_idproyecto='+nube_idproyecto,
+        url: '../ajax/pension.php?op=listar_totales_semana&nube_idproyecto='+nube_idproyecto,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -247,7 +249,7 @@ sumaFecha = function(d, fecha){
 function listar_botoness( nube_idproyecto ) {
   //array_fi_ff=[];
   //Listar semanas(botones)
-  $.post("../ajax/break.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+  $.post("../ajax/pension.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
 
@@ -307,7 +309,7 @@ function listar_botoness( nube_idproyecto ) {
     //Listamos la tabla principal agrupos por semana
     //------------------------------------------------
    /*$.ajax({
-      url: "../ajax/break.php?op=listar_totales_semana",
+      url: "../ajax/pension.php?op=listar_totales_semana",
       type: "POST",
       data: {
         'array_fi_ff': JSON.stringify(array_fi_ff),
@@ -350,7 +352,7 @@ function listar_botoness( nube_idproyecto ) {
 function guardaryeditar_semana_break() {
   $("#modal-cargando").modal("show");
   $.ajax({
-    url: "../ajax/break.php?op=guardaryeditar",
+    url: "../ajax/pension.php?op=guardaryeditar",
     type: "POST",
     data: {
       'array_break': JSON.stringify(array_datosPost),
@@ -472,7 +474,7 @@ console.log(array_guardar_fi_ff);
   // ocultamos las tablas
   mostrar_form_table(2)
 
-  $.post("../ajax/break.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
+  $.post("../ajax/pension.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
         
     data =JSON.parse(data); console.log(data);   
      
@@ -599,9 +601,9 @@ console.log(array_guardar_fi_ff);
 
             tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(fecha)}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
 
-            tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class="cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
+            tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class=" cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
 
-            tabla_bloc_precio_3 =  `<td><span class="span-visible">-</span><input type="number" value="" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+            tabla_bloc_precio_3 =  `<td><span class="span-visible">-</span><input type="number" value="" class=" precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
 
             tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width: 430px;"></textarea></td>`;
 
@@ -669,11 +671,8 @@ function obtener_datos_semana () {
 
     if (cantidad_compra!=undefined) {
 
-      if (precio_compra>=0 && precio_compra!='') {
-        monto_total=monto_total+parseFloat(precio_compra);
-      } else {
-        monto_total += 0;
-      }
+      monto_total=monto_total+parseFloat(precio_compra);
+
       array_datosPost.push(
         {
           "fecha_compra":fecha_compra,
@@ -689,7 +688,6 @@ function obtener_datos_semana () {
   }
   console.log(array_datosPost);
   $("#monto_total").html(formato_miles(monto_total.toFixed(2)));
-  //$("#monto_total").html('100.00');
   
 }
 
@@ -739,7 +737,7 @@ function guardaryeditar_factura(e) {
   var formData = new FormData($("#form-agregar-comprobante")[0]);
  
   $.ajax({
-    url: "../ajax/break.php?op=guardaryeditar_Comprobante",
+    url: "../ajax/pension.php?op=guardaryeditar_Comprobante",
     type: "POST",
     data: formData,
     contentType: false,
@@ -780,7 +778,7 @@ function listar_comprobantes(idsemana_break) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/break.php?op=listar_comprobantes&idsemana_break='+idsemana_break,
+        url: '../ajax/pension.php?op=listar_comprobantes&idsemana_break='+idsemana_break,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -837,7 +835,7 @@ function mostrar_comprobante(idfactura_break) {
   $("#tipo_comprovante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
-  $.post("../ajax/break.php?op=mostrar_comprobante", { idfactura_break: idfactura_break }, function (data, status) {
+  $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_break: idfactura_break }, function (data, status) {
 
     data = JSON.parse(data);  //console.log(data);   
       
@@ -909,7 +907,7 @@ function desactivar_comprobante(idfactura_break) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/break.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
+      $.post("../ajax/pension.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
 
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
         total_monto(localStorage.getItem('idsemana_break_nube'));
@@ -931,7 +929,7 @@ function activar_comprobante(idfactura_break) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/break.php?op=activar_comprobante", { idfactura_break: idfactura_break }, function (e) {
+      $.post("../ajax/pension.php?op=activar_comprobante", { idfactura_break: idfactura_break }, function (e) {
 
         Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
         total_monto(localStorage.getItem('idsemana_break_nube'));
@@ -969,7 +967,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
 //-total Pagos
 function total_monto(idsemana_break) {
-  $.post("../ajax/break.php?op=total_monto", { idsemana_break:idsemana_break }, function (data, status) {
+  $.post("../ajax/pension.php?op=total_monto", { idsemana_break:idsemana_break }, function (data, status) {
     $("#monto_total_f").html("00.0");
     data = JSON.parse(data); 
    console.log(data);

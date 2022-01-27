@@ -69,7 +69,8 @@
                                         <table id="tabla-hospedaje" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
-                                                    <th class="">Acciones</th>
+                                                    <th class="">Acciones</th>                                                    
+                                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                                     <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                                     <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
@@ -85,6 +86,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <th class="">Acciones</th>
+                                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                                     <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                                     <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
@@ -113,7 +115,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title"> <b>Agregar</b> </h4>
+                                    <h4 class="modal-title"> <b>Agregar:</b> comprobante Transporte </h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -129,6 +131,17 @@
                                                 <!-- id hospedaje -->
                                                 <input type="hidden" name="idtransporte" id="idtransporte" />
                                                 <!-- Tipo de comprobante -->
+                                                <!--forma pago-->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                    <label for="forma_pago">Forma Pago</label>
+                                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                                        <option value="Transferencia">Transferencia</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Crédito">Crédito</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
                                                 <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
                                                     <label for="tipo_comprobante">Tipo Comprobante</label>
@@ -149,7 +162,7 @@
                                                 </div>
 
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                                                <div class="col-lg-5 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha Emisión</label>
                                                         <input type="date" name="fecha_viaje" class="form-control" id="fecha_viaje" />
@@ -157,7 +170,7 @@
 
                                                 </div>
                                                 <!-- Cantidad  -->
-                                                <div class="col-lg-3 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="cantidad">Cantidad</label>
                                                         <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="comprob_factura();" onkeyup="comprob_factura();" />
@@ -165,7 +178,7 @@
 
                                                 </div>
                                                 <!--Precio Unitario-->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="marca">Precio Unitario</label>
                                                         <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
@@ -191,7 +204,7 @@
                                                 <!--Precio Parcial-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
-                                                        <label for="marca">Precio Parcial </label>
+                                                        <label for="marca">Monto total </label>
                                                         <input type="number" class="form-control precio_parcial" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
                                                         <input type="hidden" name="precio_parcial" id="precio_parcial"/>
                                                        

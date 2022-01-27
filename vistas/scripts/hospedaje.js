@@ -5,7 +5,10 @@ function init() {
   listar();
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  $("#mViatico").addClass("active");
+    //Activamos el "aside"
+    $("#bloc_Viaticos").addClass("menu-open");
+
+    $("#mViatico").addClass("active");
 
   $("#lHospedaje").addClass("active");
 
@@ -27,9 +30,16 @@ function init() {
     placeholder: "Seleccinar tipo comprobante",
     allowClear: true,
   });
+    //Initialize Select2 unidad
+    $("#forma_pago").select2({
+      theme: "bootstrap4",
+      placeholder: "Seleccinar una forma de pago",
+      allowClear: true,
+    });
 
   $("#unidad").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
   
 
   // Formato para telefono
@@ -262,6 +272,7 @@ function limpiar() {
 
   $("#unidad").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
 
 }
 
@@ -371,6 +382,7 @@ function mostrar(idhospedaje) {
     
   $("#unidad").val("").trigger("change"); 
   $("#tipo_comprobante").val("").trigger("change"); 
+  $("#forma_pago").val("null").trigger("change");
 
   $.post("../ajax/hospedaje.php?op=mostrar", { idhospedaje: idhospedaje }, function (data, status) {
 
@@ -380,6 +392,7 @@ function mostrar(idhospedaje) {
     $("#cargando-2-fomulario").hide();
     $("#unidad").val(data.unidad).trigger("change"); 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change"); 
+    $("#forma_pago").val(data.forma_de_pago).trigger("change");
     $("#idhospedaje").val(data.idhospedaje);
     $("#fecha_inicio").val(data.fecha_inicio); 
     $("#fecha_fin").val(data.fecha_fin); 
@@ -463,6 +476,10 @@ function ver_datos(idhospedaje) {
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Precio unitario</th>
                 <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo pago </th>
+                <td>${data.forma_de_pago}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo comprobante </th>
@@ -571,6 +588,7 @@ $(function () {
  // idhospedaje,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion
   $("#form-hospedaje").validate({
     rules: {
+      forma_pago: { required: true },
       tipo_comprobante: { required: true },
       fecha_comprobante: { required: true },
       fecha_inicio: { required: true },
@@ -581,6 +599,9 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
+      forma_pago: {
+        required: "Por favor seleccionar una forma de pago", 
+      },
       tipo_comprobante: {
         required: "Por favor seleccionar tipo comprobante", 
       },

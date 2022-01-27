@@ -12,7 +12,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Sevens | trabajadores</title>
+    <title>Admin Sevens | Pensión</title>
     <?php
     require 'head.php';
     ?>
@@ -51,12 +51,12 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Break</h1>
+                  <h1>Pensión</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Break</li>
+                    <li class="breadcrumb-item active">Pensión</li>
                   </ol>
                 </div>
               </div>
@@ -121,6 +121,93 @@
                           </tfoot>
                         </table>
                       </div>
+                      <div class=" table-responsive disenio-scroll">
+                        <style> .w-pxx-80{ width: 80px; } .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;} </style>
+                        <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                            <thead style="background-color: #408c98; color: white;" >
+                              <tr>
+                                <th rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
+                                <th rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
+                                <th class="text-center clas_pading">Do</th>
+                                <th class="text-center clas_pading">Lu</th>
+                                <th class="text-center clas_pading">Ma</th>
+                                <th class="text-center clas_pading">Mi</th>
+                                <th class="text-center clas_pading">Ju</th>
+                                <th class="text-center clas_pading">Vi</th>
+                                <th class="text-center clas_pading">Sa</th>
+                                <th  rowspan="2" colspan="1" class="text-center">Cantidad</th>
+                                <th  rowspan="2" colspan="1" class="text-center">Adicional</th>
+                                <th  rowspan="2" colspan="1" class="text-center">Parcial</th>
+                                <th  rowspan="2" colspan="1" class="text-center">Descripción</th>
+                              </tr>
+                              <tr>
+                                <th class="text-center clas_pading">05</th>
+                                <th class="text-center clas_pading">06</th>
+                                <th class="text-center clas_pading">07</th>
+                                <th class="text-center clas_pading">08</th>
+                                <th class="text-center clas_pading">09</th>
+                                <th class="text-center clas_pading">10</th>
+                                <th class="text-center clas_pading">11</th>
+                              </tr>
+                            </thead>
+                            <tbody >
+                              <!--aqui va el listado de los días-->
+                              <tr>
+                                <td>Desayuno</td>
+                                <td><span class="span-visible" >s/ <b>5.00</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
+                              </tr>
+                              <tr>
+                                <td>Almuerzo</td>
+                                <td><span class="span-visible" >s/ <b>7.00</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
+                              </tr>
+                              <tr>
+                                <td>Cena</td>
+                                <td><span class="span-visible" >s/ <b>4.00</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
+                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                             <tr>
+                                <th colspan="10" style="border-bottom: hidden;border-left: hidden;"></th>
+                                <th class="text-center">Total</th>
+                                <th class="text-center">----</th>
+                                <th class="text-center" style="border-bottom: hidden;border-right: hidden;"></th>
+                              </tr>
+                            </tfoot>
+                        </table>
+                      </div>
                       
                       <!-- agregar trabajador al sistema -->
                       <div id="tabla-registro" style="display: none;">
@@ -158,10 +245,8 @@
                           <thead>
                               <tr>
                                   <th>Aciones</th>
-                                  <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
-                                  <th data-toggle="tooltip" data-original-title="Fecha Emisión">Fecha</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th>Monto</th>
@@ -174,10 +259,8 @@
                           <tfoot>
                               <tr>
                                   <th>Aciones</th>
-                                  <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                   <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
-                                  <th data-toggle="tooltip" data-original-title="Fecha Emisión">Fecha</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th> 
@@ -233,7 +316,7 @@
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Agregar Comprobante: Break</h4>
+                            <h4 class="modal-title">Agregar Comprobante</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span class="text-danger" aria-hidden="true">&times;</span>
                             </button>
@@ -248,19 +331,9 @@
                                         <input type="hidden" name="idsemana_break" id="idsemana_break" />
                                         <!-- id factura_break -->
                                         <input type="hidden" name="idfactura_break" id="idfactura_break" />
-                                      <!--Forma de pago -->
-                                      <div class="col-lg-6">
-                                        <div class="form-group">
-                                          <label for="forma_pago">Forma Pago</label>
-                                          <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                            <option value="Transferencia">Transferencia</option>
-                                            <option value="Efectivo">Efectivo</option>
-                                            <option value="Crédito">Crédito</option>
-                                          </select>
-                                        </div>
-                                      </div>
+
                                       <!-- Tipo de comprobante -->
-                                      <div class="col-lg-6" id="content-t-comprob">
+                                      <div class="col-lg-4" id="content-t-comprob">
                                         <div class="form-group">
                                           <label for="tipo_comprovante">Tipo Comprobante</label>
                                           <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
@@ -272,12 +345,20 @@
                                         </div>
                                       </div>
                                         <!-- Código-->
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-5">
                                           <div class="form-group">
                                             <label for="codigo">Núm. comprobante </label>                               
                                             <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
                                           </div>                                                        
                                         </div>
+                                        <!-- Monto-->
+                                        <div class="col-lg-3">
+                                          <div class="form-group">
+                                            <label for="monto">Monto</label>                               
+                                            <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto"  onkeyup="comprob_factura();"> 
+                                          </div>                                                        
+                                        </div>
+
                                         <!-- Fecha Emisión -->
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -286,25 +367,18 @@
                                               </div>
                                         </div>
                                         <!-- Sub total -->
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label for="subtotal">Sub total</label>
                                                 <input class="form-control" type="number"  id="subtotal" name="subtotal" placeholder="Sub total" readonly/>
                                               </div>
                                         </div>
                                         <!-- Fecha Emisión -->
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <div class="form-group">
                                                 <label for="igv">IGV</label>
                                                 <input class="form-control" type="number"  id="igv" name="igv" placeholder="IGV"  readonly />
                                               </div>
-                                        </div>
-                                        <!-- Monto-->
-                                        <div class="col-lg-4">
-                                          <div class="form-group">
-                                            <label for="monto">Monto total</label>                               
-                                            <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto"  onkeyup="comprob_factura();"> 
-                                          </div>                                                        
                                         </div>
                                         <!-- Descripcion-->
                                         <div class="col-lg-12">
@@ -351,7 +425,7 @@
             </div>
             <!--===============Modal-ver-vaucher =========-->
             <div class="modal fade" id="modal-ver-comprobante">
-              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <div class="modal-dialog modal-dialog-scrollable modal-xm">
                   <div class="modal-content">
                       <div class="modal-header" style="background-color: #ce834926;" >
                           <h4 class="modal-title">Factura</h4>
@@ -413,7 +487,7 @@
     <!-- sweetalert2 -->
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
-    <script type="text/javascript" src="scripts/break.js"></script>
+    <script type="text/javascript" src="scripts/pension.js"></script>
 
     <script>
         $(function () {

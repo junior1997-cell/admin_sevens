@@ -18,6 +18,7 @@ $precio_parcial   = isset($_POST["precio_parcial"])? limpiarCadena($_POST["preci
 $ruta             = isset($_POST["ruta"])? limpiarCadena($_POST["ruta"]):"";
 $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
 
+$forma_pago = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
 $tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
 $subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
@@ -54,7 +55,7 @@ switch ($_GET["op"]){
 
 				if (empty($idtransporte)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$transporte->insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
+					$rspta=$transporte->insertar($idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -71,7 +72,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$transporte->editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
+					$rspta=$transporte->editar($idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
 					//var_dump($idtransporte,$idproveedor);
 					echo $rspta ? "ok" : "No se pudo actualizar";
 				}
@@ -213,6 +214,8 @@ switch ($_GET["op"]){
 		 			
 					
 					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
+					 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+					 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 					 $data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtransporte.')"><i class="far fa-trash-alt"></i></button>'.
@@ -220,16 +223,17 @@ switch ($_GET["op"]){
 							'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtransporte.')"><i class="fa fa-check"></i></button>'.
 		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idtransporte.')"><i class="far fa-eye"></i></button>',
-						"1"=>$reg->tipo_comprobante, 
-						"2"=> empty($reg->numero_comprobante)?' - ':$reg->numero_comprobante, 
-						"3"=> date("d/m/Y", strtotime($reg->fecha_viaje)), 
-						"4"=>number_format($reg->subtotal, 2, '.', ','),
-						"5"=>number_format($reg->igv, 2, '.', ','),
-						"6"=>number_format($reg->precio_parcial, 2, '.', ','),
-					   	"7"=> $reg->descripcion, 
-						"8"=>$comprobante,
-		 				"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-		 				'<span class="text-center badge badge-danger">Desactivado</span>'
+						"1"=>$reg->forma_de_pago, 
+						"2"=>$reg->tipo_comprobante, 
+						"3"=> empty($reg->numero_comprobante)?' - ':$reg->numero_comprobante, 
+						"4"=> date("d/m/Y", strtotime($reg->fecha_viaje)), 
+						"5"=>number_format($reg->subtotal, 2, '.', ','),
+						"6"=>number_format($reg->igv, 2, '.', ','),
+						"7"=>number_format($reg->precio_parcial, 2, '.', ','),
+					   	"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+						"9"=>$comprobante,
+		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 		 		}
 		 		$results = array(

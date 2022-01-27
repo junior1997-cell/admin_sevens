@@ -15,9 +15,9 @@
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['trabajador'] == 1) {
 
-      require_once "../modelos/Break.php";
+      require_once "../modelos/Pension.php";
 
-      $breaks=new Breaks();
+      $breaks=new Pension();
 
       //============Comprobantes========================
       $idsemana_break      = isset($_POST["idsemana_break"])? limpiarCadena($_POST["idsemana_break"]):"";

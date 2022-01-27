@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-Class Breaks
+Class Pension
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -66,10 +66,10 @@ Class Breaks
 		return $sw;	
 	}
 
-	///////////////////////CONSULTAS BREAK///////////////////////
+	///////////////////////CONSULTAS pension///////////////////////
 	//listar_semana_botones
 	public function listarsemana_botones($nube_idproyecto){
-		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
+		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 	//ver detalle semana a semana
@@ -80,38 +80,6 @@ Class Breaks
 	}	
 	///////////////////////CONSULTAS BREAK///////////////////////
 
-	//Implementar un método para listar los registros
-	/*public function listar_totales_semana($nube_idproyecto,$array_fi_ff)
-	{
-		$fecha_in =""; $fecha_fi=""; $num_semana=""; $semana=""; $total_por_semana=[]; $val_total="";
-		$desglese_fechas_semanas = json_decode($array_fi_ff,true);
-
-		foreach ($desglese_fechas_semanas as $key => $value) {
-
-			$data_array=[];
-			$fecha_in =  $value['fecha_in']; 
-			$fecha_fi = $value['fecha_fi']; 
-			$num_semana = $value['num_semana']; 
-
-			$sql="SELECT SUM(costo_parcial) AS total FROM breaks WHERE idproyecto='$nube_idproyecto' AND fecha_compra BETWEEN '$fecha_in' AND '$fecha_fi'";
-			$semana=ejecutarConsultaSimpleFila($sql);
-			if (empty($semana['total'])) {
-				$val_total="0.00";
-			} else {
-				$val_total=$semana['total'];
-			}
-			
-			$data_array=array(
-				'total'=>$val_total,
-				'fecha_in'=>$fecha_in,
-				'fecha_fi'=>$fecha_fi,
-				'num_semana'=>$num_semana
-			);
-			
-			array_push($total_por_semana, $data_array);
-		}
-		return json_encode($total_por_semana, true);		
-	}*/
 	public function listar($nube_idproyecto)
 	{
 		$sql="SELECT * FROM semana_break 

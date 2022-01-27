@@ -443,8 +443,8 @@
                         </div>
 
                         <!--=======================
-                                                      Pagos con Detracción
-                                                  ========================-->
+                            Pagos con Detracción
+                        ========================-->
                         <div id="pagos_con_detraccion" style="display: none;">
                           <h5>pagos con detracccion</h5>
                           <div style="text-align: center;">

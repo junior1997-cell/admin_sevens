@@ -5,6 +5,9 @@ function init() {
   listar();
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
+  //Activamos el "aside"
+  $("#bloc_Viaticos").addClass("menu-open");
+
   $("#mViatico").addClass("active");
 
   $("#lTransporte").addClass("active");
@@ -33,10 +36,17 @@ function init() {
     placeholder: "Seleccinar tipo ruta",
     allowClear: true,
   });
+  //Initialize Select2 tipo_viajero
+  $("#forma_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar forma de pago",
+    allowClear: true,
+  });
 
   $("#tipo_viajero").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#tipo_ruta").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
   
 
   // Formato para telefono
@@ -172,6 +182,7 @@ function limpiar() {
   $("#tipo_viajero").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#tipo_ruta").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
 
 }
 
@@ -326,6 +337,7 @@ function mostrar(idtransporte) {
   $("#tipo_ruta").val("").trigger("change"); 
   $("#tipo_comprobante").val("").trigger("change"); 
   $("#tipo_viajero").val("").trigger("change"); 
+  $("#forma_pago").val("null").trigger("change");
 
   $.post("../ajax/transporte.php?op=mostrar", { idtransporte: idtransporte }, function (data, status) {
 
@@ -339,6 +351,7 @@ function mostrar(idtransporte) {
     $("#tipo_viajero").val(data.tipo_viajero).trigger("change"); 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change"); 
     $("#tipo_ruta").val(data.tipo_ruta).trigger("change"); 
+    $("#forma_pago").val(data.forma_de_pago).trigger("change");
 
     $("#idtransporte").val(data.idtransporte);
     $("#fecha_viaje").val(data.fecha_viaje); 
@@ -418,6 +431,10 @@ function ver_datos(idtransporte) {
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Fecha</th>
                 <td>${data.fecha_viaje}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo pago </th>
+                <td>${data.forma_de_pago}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo comprobante </th>
@@ -529,6 +546,7 @@ $(function () {
  //transporte.js idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion
   $("#form-transporte").validate({
     rules: {
+      forma_pago: { required: true },
       tipo_comprobante: { required: true },
       fecha_viaje: { required: true },
       cantidad:{required: true},
@@ -538,6 +556,9 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
+      forma_pago: {
+        required: "Por favor una forma de pago", 
+      },
       tipo_comprobante: {
         required: "Por favor seleccionar tipo comprobante", 
       },

@@ -11,17 +11,17 @@ Class Hospedaje
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function insertar($idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 	
-		$sql="INSERT INTO hospedaje (idproyecto,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion,tipo_comprobante,fecha_comprobante,numero_comprobante,subtotal,igv,comprobante) 
-		VALUES ('$idproyecto','$fecha_inicio','$fecha_fin','$cantidad','$unidad','$precio_unitario','$precio_parcial','$descripcion','$tipo_comprobante','$fecha_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
+		$sql="INSERT INTO hospedaje (idproyecto,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion,forma_de_pago,tipo_comprobante,fecha_comprobante,numero_comprobante,subtotal,igv,comprobante) 
+		VALUES ('$idproyecto','$fecha_inicio','$fecha_fin','$cantidad','$unidad','$precio_unitario','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$fecha_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idhospedaje,$idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function editar($idhospedaje,$idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
 	{
 		$sql="UPDATE hospedaje SET 
 		idproyecto='$idproyecto',
@@ -32,6 +32,7 @@ Class Hospedaje
 		precio_unitario='$precio_unitario',
 		precio_parcial='$precio_parcial',
 		descripcion='$descripcion',
+		forma_de_pago='$forma_pago',
 		tipo_comprobante='$tipo_comprobante',
 		fecha_comprobante='$fecha_comprobante',
 		numero_comprobante='$nro_comprobante',
