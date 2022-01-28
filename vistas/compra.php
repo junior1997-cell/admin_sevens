@@ -83,40 +83,40 @@
                               </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
-                                <div class="text-slid-box">
-                                  <div id="offer-box" class="contenedor">
-                                    <div> <b>Leyenda-pago</b> </div>
-                                    <ul class="offer-box cls-ul">
-                                      <li>
-                                        <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
-                                      </li>
-                                      <li>
-                                        <span class="text-center badge badge-warning" >Pago en proceso </span>
-                                      </li>
-                                      <li>
-                                        <span class="text-center badge badge-success" >Pago completo</span>
-                                      </li>
-                                    </ul>
-                                  </div>
+                              <div class="text-slid-box">
+                                <div id="offer-box" class="contenedor">
+                                  <div> <b>Leyenda-pago</b> </div>
+                                  <ul class="offer-box cls-ul">
+                                    <li>
+                                      <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
+                                    </li>
+                                    <li>
+                                      <span class="text-center badge badge-warning" >Pago en proceso </span>
+                                    </li>
+                                    <li>
+                                      <span class="text-center badge badge-success" >Pago completo</span>
+                                    </li>
+                                  </ul>
                                 </div>
+                              </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
-                                  <div class="text-slid-box">
-                                    <div id="offer-box" class="contenedorr">
-                                      <div> <b>Leyenda-saldos</b> </div>
-                                      <ul class="offer-box clss-ul">
-                                        <li>
-                                          <span class="text-center badge badge-warning " >Pago nulo o pago en proceso </span> 
-                                        </li>
-                                        <li>
-                                          <span class="text-center badge badge-success" >Pago Completo </span>
-                                        </li>
-                                        <li>
-                                          <span class="text-center badge badge-danger" >Pago excedido</span>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
+                              <div class="text-slid-box">
+                                <div id="offer-box" class="contenedorr">
+                                  <div> <b>Leyenda-saldos</b> </div>
+                                  <ul class="offer-box clss-ul">
+                                    <li>
+                                      <span class="text-center badge badge-warning " >Pago nulo o pago en proceso </span> 
+                                    </li>
+                                    <li>
+                                      <span class="text-center badge badge-success" >Pago Completo </span>
+                                    </li>
+                                    <li>
+                                      <span class="text-center badge badge-danger" >Pago excedido</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -125,6 +125,7 @@
 
                       <!-- /.card-header -->
                       <div class="card-body">
+
                         <div id="div_tabla_compra">
                           <h5><b>Lista de compras Por Facturas</b></h5>
                           <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -133,7 +134,7 @@
                                 <th class="">Acciones</th>
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo. Num. - Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                 <th>Detracción</th>
                                 <th>Total</th>
                                 <th>Añadir pago</th>
@@ -149,7 +150,7 @@
                                 <th class="">Acciones</th>
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo. Num.-Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                 <th>Detracción</th>
                                 <th>Total</th>
                                 <th>Añadir pago</th>
@@ -180,6 +181,7 @@
                             </tfoot>
                           </table>
                         </div>
+
                         <div id="div_tabla_compra_proveedor" style="display: none;">
                           <h5><b>Lista de compras Por Facturas</b></h5>
                           <table id="detalles-tabla-compra-prov" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -324,7 +326,7 @@
                                           <h5>IGV</h5>
                                           <h5>TOTAL</h5>
                                         </th>
-                                        <th class="w-px-250"> 
+                                        <th class=" "> 
                                           <h5 class="text-right " id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
                                           <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
 
@@ -358,6 +360,7 @@
                             <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                           </div>
                         </div>
+
                         <!-- tabla_facturas Facturas Compras-->
                         <div id="factura_compras" style="display: none;">
                           <h5><b>Lista de compras Por Facturas</b></h5>
@@ -442,9 +445,7 @@
                           </div>
                         </div>
 
-                        <!--=======================
-                            Pagos con Detracción
-                        ========================-->
+                        <!--=======================Pagos con Detracción ========================-->
                         <div id="pagos_con_detraccion" style="display: none;">
                           <h5>pagos con detracccion</h5>
                           <div style="text-align: center;">
@@ -711,7 +712,7 @@
 
                 <!-- Modal elegir material -->
                 <div class="modal fade" id="modal-elegir-material">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Seleccionar material</h4>
@@ -1237,6 +1238,27 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- ============ Modal ver grande img producto -->
+                <div class="modal fade" id="modal-ver-img-material">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header" style="background-color: #ce834926;">
+                        <h4 class="modal-title nombre-img-material">Img producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="class-style" style="text-align: center;">
+                           
+                          <img onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" src="" class="img-thumbnail" id="ver_img_material" style="cursor: pointer !important;" width="auto" />
+                           
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
             <!-- /.content -->
@@ -1253,9 +1275,9 @@
       <?php          
         require 'script.php';
       ?>
-
-      <!--<script type="text/javascript" src="scripts/all_proveedor.js"></script>-->
+       
       <script type="text/javascript" src="scripts/compra.js"></script>
+      
       <script>
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();

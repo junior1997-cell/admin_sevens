@@ -4,7 +4,7 @@ var tabla2;
 //Función que se ejecuta al inicio
 function init(){
 	
-	listar_tbla_principal();
+	listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
 	$("#bloc_Compras").addClass("menu-open");
 
@@ -14,7 +14,7 @@ function init(){
 }
 
 //Función Listar
-function listar_tbla_principal()
+function listar_tbla_principal(id_proyecto)
 {
 	tabla=$('#tabla-resumen-insumos').dataTable({
 		"responsive": true,
@@ -24,7 +24,7 @@ function listar_tbla_principal()
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
 	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
 		"ajax":	{
-      url: '../ajax/resumen_insumos.php?op=listar_tbla_principal',
+      url: '../ajax/resumen_insumos.php?op=listar_tbla_principal&id_proyecto='+id_proyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -42,13 +42,22 @@ function listar_tbla_principal()
 		"iDisplayLength": 5,//Paginación
 	  "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
+
+  $.post("../ajax/resumen_insumos.php?op=suma_total_compras", { 'idproyecto': id_proyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+
+    $(".suma_total_de_compras").html( 'S/. '+ formato_miles(data.suma_total_compras));
+  });
 }
 
-function mostrar_detalle( id ) {
+function ver_precios_y_mas( idproyecto, idproducto, nombre_producto, precio_promedio ) {
 
-	$("#modal-ver-usuarios").modal("show");
+  $(".nombre-producto-modal-titel").html('Producto: <b>'+ nombre_producto +'</b>');
+	$("#modal-ver-precios").modal("show");
+  $(".precio_promedio").html(precio_promedio);
 
-	tabla2 = $('#tabla-usuarios').dataTable({
+	tabla2 = $('#tabla-precios').dataTable({
 		"responsive": true,
 		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
@@ -56,7 +65,7 @@ function mostrar_detalle( id ) {
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
 		buttons: [	],
 		"ajax":	{
-      url: '../ajax/permiso.php?op=listar_usuario&id='+id,
+      url: `../ajax/resumen_insumos.php?op=ver_precios_y_mas&idproyecto=${idproyecto}&idproducto=${idproducto}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -68,7 +77,23 @@ function mostrar_detalle( id ) {
 		"iDisplayLength": 5,//Paginación
 		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
+
+  
 }
 
+/**formato_miles */
+function formato_miles(num) {
+  if (!num || num == "NaN") return "-";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
+}
 
 init();

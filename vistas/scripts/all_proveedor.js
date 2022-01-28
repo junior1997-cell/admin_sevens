@@ -273,10 +273,6 @@ $(function () {
   });
 });
 
-
-
-
-
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec() {
   $("#search").hide();

@@ -9,26 +9,9 @@ class Compra
     {
     }
     //Implementamos un método para insertar registros
-    public function insertar(
-        $idproyecto,
-        $idproveedor,
-        $fecha_compra,
-        $tipo_comprovante,
-        $serie_comprovante,
-        $descripcion,
-        $total_venta,
-        $subtotal_compra,
-        $igv_compra,
-        $estado_detraccion,
-        $idproducto,
-        $unidad_medida,
-        $cantidad,
-        $precio_sin_igv,
-        $precio_igv,
-        $precio_total,
-        $descuento,
-        $ficha_tecnica_producto
-    	) {
+    public function insertar( $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante,  $serie_comprovante,  $descripcion,   $total_venta,
+        $subtotal_compra,  $igv_compra, $estado_detraccion, $idproducto,
+        $unidad_medida, $nombre_color, $cantidad, $precio_sin_igv,   $precio_igv,   $precio_total,  $descuento,  $ficha_tecnica_producto ) {
         //var_dump($idproyecto,$idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,$descripcion,$total_venta,$idproducto,$cantidad, $precio_unitario,$descuento,$ficha_tecnica_producto);die();
         $sql = "INSERT INTO compra_por_proyecto(idproyecto,idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,descripcion,monto_total,subtotal_compras_proyect,igv_compras_proyect,estado_detraccion)
 		VALUES ('$idproyecto','$idproveedor','$fecha_compra','$tipo_comprovante','$serie_comprovante','$descripcion','$total_venta','$subtotal_compra','$igv_compra','$estado_detraccion')";
@@ -39,8 +22,9 @@ class Compra
         $sw = true;
 
         while ($num_elementos < count($idproducto)) {
-            $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto,idproducto,unidad_medida,cantidad,precio_venta,igv,precio_igv,descuento,ficha_tecnica_producto) 
-			VALUES ('$idventanew','$idproducto[$num_elementos]','$unidad_medida[$num_elementos]','$cantidad[$num_elementos]','$precio_sin_igv[$num_elementos]','$precio_igv[$num_elementos]','$precio_total[$num_elementos]','$descuento[$num_elementos]','$ficha_tecnica_producto[$num_elementos]')";
+            $subtotal_producto= ( floatval($cantidad[$num_elementos]) * floatval($precio_total[$num_elementos]) ) + $descuento[$num_elementos] ;
+            $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_venta, igv, precio_igv, descuento, subtotal, ficha_tecnica_producto) 
+			VALUES ('$idventanew','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_total[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
             ejecutarConsulta($sql_detalle) or ($sw = false);
 
             $num_elementos = $num_elementos + 1;
@@ -50,7 +34,7 @@ class Compra
     }
 
     //Implementamos un método para editar registros
-    public function editar($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto){
+    public function editar($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida, $nombre_color, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto){
 		 			
 		 
 
@@ -70,8 +54,9 @@ class Compra
             $sw = true;
     
             while ($num_elementos < count($idproducto)) {
-                $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto,idproducto,unidad_medida,cantidad,precio_venta,igv,precio_igv,descuento,ficha_tecnica_producto) 
-                VALUES ('$idcompra_proyecto','$idproducto[$num_elementos]','$unidad_medida[$num_elementos]','$cantidad[$num_elementos]','$precio_sin_igv[$num_elementos]','$precio_igv[$num_elementos]','$precio_total[$num_elementos]','$descuento[$num_elementos]','$ficha_tecnica_producto[$num_elementos]')";
+                $subtotal_producto= ( floatval($cantidad[$num_elementos]) * floatval($precio_total[$num_elementos]) ) + $descuento[$num_elementos] ;
+                $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_venta, igv,precio_igv, descuento, subtotal, ficha_tecnica_producto) 
+                VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_total[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
                 ejecutarConsulta($sql_detalle) or ($sw = false);
     
                 $num_elementos = $num_elementos + 1;
@@ -97,15 +82,15 @@ class Compra
 
         $compra = ejecutarConsultaSimpleFila($sql);
         
-        $sql_2 = "SELECT 	dp.idproducto as idproducto,
-		dp.ficha_tecnica_producto as ficha_tecnica,
-		dp.cantidad as cantidad,
-		dp.precio_venta as precio_venta, dp.igv, dp.precio_igv,
-		dp.descuento as descuento,
+        $sql_2 = "SELECT 	dc.idproducto as idproducto,
+		dc.ficha_tecnica_producto as ficha_tecnica,
+		dc.cantidad as cantidad,
+		dc.precio_venta as precio_venta, dc.igv, dc.precio_igv,
+		dc.descuento as descuento,
 		p.nombre as nombre_producto, p.imagen,
-        um.nombre_medida, c.nombre_color
-		FROM detalle_compra AS dp, producto AS p, unidad_medida AS um, color AS c
-		WHERE idcompra_proyecto='$id_compras_x_proyecto' AND  dp.idproducto=p.idproducto AND P.idcolor = c.idcolor AND p.idunidad_medida = um.idunidad_medida;";
+        dc.unidad_medida, dc.color
+		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c
+		WHERE idcompra_proyecto='$id_compras_x_proyecto' AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor AND p.idunidad_medida = um.idunidad_medida;";
 
         $producto = ejecutarConsultaArray($sql_2);
 
@@ -166,7 +151,7 @@ class Compra
 		cpp.monto_total as monto_total,
 		cpp.imagen_comprobante as imagen_comprobante,
 		cpp.estado_detraccion as estado_detraccion,
-		p.razon_social as razon_social,
+		p.razon_social as razon_social, p.telefono,
 		cpp.estado as estado
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor
@@ -527,6 +512,55 @@ class Compra
         $sql = " SELECT * FROM compra_por_proyecto as cpp, proveedor as p  WHERE cpp.idproveedor=p.idproveedor AND cpp.idcompra_proyecto='$idcompra_proyecto'";
         return ejecutarConsultaSimpleFila($sql);
     }
+
+    //CAPTURAR PERSONA  DE RENIEC 
+	public function datos_reniec($dni)
+	{ 
+		$url = "https://dniruc.apisperu.com/api/v1/dni/".$dni."?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";
+		//  Iniciamos curl
+		$curl = curl_init();
+		// Desactivamos verificación SSL
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0 );
+		// Devuelve respuesta aunque sea falsa
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+		// Especificamo los MIME-Type que son aceptables para la respuesta.
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, [ 'Accept: application/json' ] );
+		// Establecemos la URL
+		curl_setopt( $curl, CURLOPT_URL, $url );
+		// Ejecutmos curl
+		$json = curl_exec( $curl );
+		// Cerramos curl
+		curl_close( $curl );
+  
+		$respuestas = json_decode( $json, true );
+  
+		return $respuestas;
+	}
+
+	//CAPTURAR PERSONA  DE RENIEC
+	public function datos_sunat($ruc)
+	{ 
+		$url = "https://dniruc.apisperu.com/api/v1/ruc/".$ruc."?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";
+		//  Iniciamos curl
+		$curl = curl_init();
+		// Desactivamos verificación SSL
+		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0 );
+		// Devuelve respuesta aunque sea falsa
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+		// Especificamo los MIME-Type que son aceptables para la respuesta.
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, [ 'Accept: application/json' ] );
+		// Establecemos la URL
+		curl_setopt( $curl, CURLOPT_URL, $url );
+		// Ejecutmos curl
+		$json = curl_exec( $curl );
+		// Cerramos curl
+		curl_close( $curl );
+  
+		$respuestas = json_decode( $json, true );
+  
+		return $respuestas;    	
+		
+	}
 }
 
 ?>

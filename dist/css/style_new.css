@@ -104,6 +104,11 @@
   background: #ff000017 !important;
 }
 
+.hove-negrita:hover{
+  font-weight: bold;
+  color: #000000;
+}
+
 .bg-color-acc3c7{
   background-color: #acc3c7;
 }

@@ -78,7 +78,7 @@ switch ($_GET["op"]) {
                 $igv_compra,
                 $estado_detraccion,
                 $_POST["idproducto"],
-                $_POST["unidad_medida"],
+                $_POST["unidad_medida"], $_POST["nombre_color"],
                 $_POST["cantidad"],
                 $_POST["precio_sin_igv"],
                 $_POST["precio_igv"],
@@ -87,17 +87,17 @@ switch ($_GET["op"]) {
                 $_POST["ficha_tecnica_producto"]
             );
             //precio_sin_igv,precio_igv,precio_total
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+            echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la compra";
         } else {
             $rspta=$compra->editar($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante,
             $serie_comprovante, $descripcion, $total_venta, $subtotal_compra,
             $igv_compra, $estado_detraccion, $_POST["idproducto"],
-            $_POST["unidad_medida"],  $_POST["cantidad"],
+            $_POST["unidad_medida"], $_POST["nombre_color"],  $_POST["cantidad"],
             $_POST["precio_sin_igv"], $_POST["precio_igv"],
             $_POST["precio_con_igv"], $_POST["descuento"],
             $_POST["ficha_tecnica_producto"]);
 
-            echo $rspta ? "ok" : "Usuario no se pudo actualizar";
+            echo $rspta ? "ok" : "Compra no se pudo actualizar";
         }        
              
     break;
@@ -253,13 +253,16 @@ switch ($_GET["op"]) {
                         : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
                         ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg->idcompra_proyecto.')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                 "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-                "2" => $reg->razon_social,
+                "2" => '<div class="user-block">
+                    <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
+                    <span class="description" style="margin-left: 0px !important;"><b>Cel: </b><a class="text-body" href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al proveedor.">'. $reg->telefono . '</a> </span>
+                </div>',
                 "3" => '<div class="user-block">
-                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$tipo_comprovante1.'</p></span>
-                <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
+                    <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprovante1.'</p></span>
+                    <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
                 </div>',
                 "4" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
-                "5" => $reg->monto_total,
+                "5" => number_format($reg->monto_total, 2, '.', ','),
                 "6" => $list_segun_estado_detracc,
                 "7" => number_format($saldo, 2, '.', ','),
                 "8" => '<center> <button class="btn btn-info" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
@@ -413,9 +416,8 @@ switch ($_GET["op"]) {
         //Vamos a declarar un array
         $datas = [];
         // echo json_encode($rspta);
-        $img = "";
-        $color_stock = "";
-        $ficha_tecnica = "";
+        $img = ""; $imagen_error = "this.src='../dist/img/materiales/img_material_defect.jpg'";    $color_stock = "";   $ficha_tecnica = ""; 
+        
         while ($reg = $rspta->fetch_object()) {
 
             if (!empty($reg->imagen)) { $img = $reg->imagen; } else { $img = "img_material_defect.jpg"; }
@@ -426,26 +428,13 @@ switch ($_GET["op"]) {
             //empty($reg->ficha_tecnica)?$ficha_tecnica='si':$ficha_tecnica='no';
             $datas[] = [
                 "0" =>
-                    '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' .
-                    $reg->idproducto .
-                    ',\'' .
-                    $reg->nombre .
-                    '\',\'' .
-                    $reg->nombre_medida.
-                    '\',\'' .
-                    $reg->precio_sin_igv .
-                    '\',\'' .
-                    $reg->precio_igv.
-                    '\',\'' .
-                    $reg->precio_total.
-                    '\',\'' .
-                    $img .
-                    '\',\'' .
-                    $reg->ficha_tecnica .
-                    '\')" data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
+                    '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . 
+                    ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->precio_sin_igv . '\',
+                    \'' . $reg->precio_igv. '\', \'' . $reg->precio_total.  '\', \'' . $img . '\', \'' .$reg->ficha_tecnica .'\')" 
+                    data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
                 "1" =>
                     '<div class="user-block">
-                        <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' . $img .'" alt="user image">
+                        <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' . $img .'" alt="user image" onerror="'.$imagen_error.'">
                         <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                         <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
                     </div>',
@@ -1081,6 +1070,26 @@ switch ($_GET["op"]) {
     /**
      * ==============FIN SECCION PAGOS=====
      */
+// buscar datos de RENIEC
+    case 'reniec':
+
+        $dni = $_POST["dni"];
+
+        $rspta = $compra->datos_reniec($dni);
+
+        echo json_encode($rspta);
+
+    break;
+    // buscar datos de SUNAT
+    case 'sunat':
+
+        $ruc = $_POST["ruc"];
+
+        $rspta = $compra->datos_sunat($ruc);
+
+        echo json_encode($rspta);
+
+    break;
 
     case 'salir':
         //Limpiamos las variables de sesión
@@ -1092,5 +1101,8 @@ switch ($_GET["op"]) {
 
     break;
 }
+
+function quitar_guion($numero){ return str_replace("-", "", $numero); }
+
 ob_end_flush();
 ?>

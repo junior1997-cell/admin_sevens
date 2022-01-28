@@ -39,7 +39,7 @@ function init() {
     });
   //============unidad================
   $("#unid_medida").val("null").trigger("change");
-  $("#color").val("null").trigger("change");
+  
   
 
   // Formato para telefono
@@ -256,7 +256,7 @@ function limpiar() {
   $('#foto2_i').show();
   $('#ver_pdf').hide();
   $("#unid_medida").val("null").trigger("change");
-  $("#color").val("null").trigger("change");
+  $("#color").val("1").trigger("change");
   $('#my-switch_igv').prop('checked', true);
   $('#estado_igv').val("1");
 }
@@ -608,8 +608,8 @@ $(function () {
     rules: {
       nombre: { required: true },
       descripcion:{minlength: 1},
-      unid_medida:{required: true}
-      // terms: { required: true },
+      unid_medida:{required: true},
+      color: { required: true },
     },
     messages: {
       nombre: {
@@ -618,7 +618,9 @@ $(function () {
       unid_medida:  {
         required: "Seleccione unidad", 
       },
-
+      color:{
+        required: "Selecione un color", 
+      }
     },
         
     errorElement: "span",

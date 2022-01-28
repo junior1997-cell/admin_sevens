@@ -18,7 +18,7 @@
         ?>
         
       </head>
-      <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
@@ -70,8 +70,9 @@
                               <th class="">Producto</th>
                               <th>Unidad de medida</th>
                               <th>Cantidad</th> 
-                              <th>Precios</th>   
-                              <th>Total</th>                      
+                              <th>Precio promedio</th> 
+                              <th>Precio actual</th>    
+                              <th>Suma Total</th>                      
                             </tr>
                           </thead>
                           <tbody>                         
@@ -82,8 +83,9 @@
                               <th class="">Producto</th>
                               <th>Unidad de medida</th>
                               <th>Cantidad</th> 
-                              <th>Precios</th>   
-                              <th>Total</th>                               
+                              <th>Precio promedio</th>
+                              <th>Precio actual</th>   
+                              <th><h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                             </tr>
                           </tfoot>
                         </table>
@@ -99,12 +101,12 @@
               <!-- /.container-fluid -->
 
               <!-- Modal agregar usuario -->
-              <div class="modal fade" id="modal-ver-usuarios">
+              <div class="modal fade" id="modal-ver-precios">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
 
                     <div class="modal-header">
-                      <h4 class="modal-title">Usuarios que tienen acceso a este permiso</h4>
+                      <h4 class="modal-title nombre-producto-modal-titel">Producto y mas</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
                       </button>
@@ -115,12 +117,15 @@
                         <div class="row" id="cargando-1-fomulario">
                           <!-- Trabajador -->
                           <div class="col-lg-12">
-                            <table id="tabla-usuarios" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <table id="tabla-precios" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th class="">Usuarios que acceden</th>
-                                  <th>Cargo</th>  
-                                  <th>Fecha de creacion</th>                               
+                                  <th>Fecha compra</th>
+                                  <th>Cantidad</th>
+                                  <th>Precio</th>  
+                                  <th>Descuento</th>
+                                  <th>SubTotal</th>
+                                  <th>Ficha técnica</th>                               
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -128,9 +133,12 @@
                               </tbody>
                               <tfoot>
                                 <tr>
-                                <th class="">Usuarios que acceden</th>
-                                  <th>Cargo</th> 
-                                  <th>Fecha de creacion</th>                          
+                                  <th>Fecha compra</th>
+                                  <th >Cantidad</th>
+                                  <th > <h4 class="precio_promedio"> S/. --</h4> </th>  
+                                  <th>Descuento</th> 
+                                  <th>SubTotal</th>
+                                  <th>Ficha técnica</th>                        
                                 </tr>
                               </tfoot>
                             </table>                                                        

@@ -623,17 +623,19 @@ function guardaryeditar(e) {
 
         success: function (datos) {
             if (datos == "ok") {
-                toastr.success("Usuario registrado correctamente");
+                // toastr.success("Usuario registrado correctamente");
+                Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
                 tabla.ajax.reload();
 
                 limpiar();
                 regresar();
-
+                cont = 0
                 $("#modal-agregar-usuario").modal("hide");
                 tabla_comp_prov.ajax.reload();
             } else {
-                toastr.error(datos);
+                // toastr.error(datos);
+                Swal.fire("Error!", datos, "error");
             }
         },
     });
@@ -653,8 +655,8 @@ function guardarproveedor(e) {
 
         success: function (datos) {
             if (datos == "ok") {
-                toastr.success("proveedor registrado correctamente");
-
+                // toastr.success("proveedor registrado correctamente");
+                Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
                 tabla.ajax.reload();
 
                 limpiardatosproveedor();
@@ -666,7 +668,8 @@ function guardarproveedor(e) {
                     $("#idproveedor").html(r);
                 });
             } else {
-                toastr.error(datos);
+                // toastr.error(datos);
+                Swal.fire("Error!", datos, "error");
             }
         },
     });
@@ -1553,7 +1556,7 @@ var impuesto = 18;
 var cont = 0;
 var detalles = 0;
 
-function agregarDetalleComprobante(idproducto,nombre,unidad_medida,precio_sin_igv,precio_igv,precio_total,img,ficha_tecnica_producto) {
+function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_producto) {
 
   var stock = 5;    var cantidad = 1;    var descuento = 0;
 
@@ -1587,11 +1590,12 @@ function agregarDetalleComprobante(idproducto,nombre,unidad_medida,precio_sin_ig
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block">
-            <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/${img}" alt="user image">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
+            <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
         </td>
-        <td><input style="font-weight: bold;  border: none;" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"></td>
+        <td><span class="">${unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
         <td><input class="producto_${idproducto} producto_selecionado w-px-70 cantidad_${cont}" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td><input type="number" class="w-px-135 precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${precio_sin_igv}" min="0" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
         <td class="hidden"><input class="w-px-135 precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${precio_igv}" readonly  style="border: none; text-align: center;"></td>
@@ -1823,7 +1827,7 @@ function guardaryeditar_comprobante(e) {
                 tabla.ajax.reload();
 
                 limpiar();
-
+                 
                 $("#modal-comprobantes-pago").modal("hide");
             } else {
                 Swal.fire("Error!", datos, "error");
@@ -1933,11 +1937,12 @@ function editar_detalle_compras(idcompra_proyecto) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
               <div class="user-block">
-                <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/${img}" alt="user image">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
+                <span class="description"><b>Color: </b>${element.color}</span>
               </div>
             </td>
-            <td><input  style="font-weight: bold;  border: none;" name="unidad_medida[]" id="unidad_medida[]" value="${element.nombre_medida}"></td>
+            <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
             <td><input class="producto_${element.idproducto} producto_selecionado w-px-70 cantidad_${cont}" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td><input type="number" class="w-px-135 precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td class="hidden"><input class="w-px-135 precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly  style="border: none; text-align: center;"></td>
@@ -2532,4 +2537,137 @@ function validando_excedentes() {
   }else{
     toastr.success('Monto Aceptado.'); 
   }
+}
+
+// Buscar Reniec SUNAT
+function buscar_sunat_reniec() {
+    $("#search").hide();
+  
+    $("#charge").show();
+  
+    let tipo_doc = $("#tipo_documento").val();
+  
+    let dni_ruc = $("#num_documento").val(); 
+     
+    if (tipo_doc == "DNI") {
+  
+      if (dni_ruc.length == "8") {
+  
+        $.post("../ajax/compra.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+  
+          data = JSON.parse(data);
+  
+          console.log(data);
+  
+          if (data.success == false) {
+  
+            $("#search").show();
+  
+            $("#charge").hide();
+  
+            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+  
+          } else {
+  
+            $("#search").show();
+  
+            $("#charge").hide();
+  
+            $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+  
+            toastr.success("Cliente encontrado!!!!");
+          }
+        });
+      } else {
+  
+        $("#search").show();
+  
+        $("#charge").hide();
+  
+        toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
+      }
+    } else {
+      if (tipo_doc == "RUC") {
+  
+        if (dni_ruc.length == "11") {
+          $.post("../ajax/compra.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+  
+            data = JSON.parse(data);
+  
+            console.log(data);
+            if (data.success == false) {
+  
+              $("#search").show();
+  
+              $("#charge").hide();
+  
+              toastr.error("Datos no encontrados en la SUNAT!!!");
+              
+            } else {
+  
+              if (data.estado == "ACTIVO") {
+  
+                $("#search").show();
+  
+                $("#charge").hide();
+  
+                $("#nombre").val(data.razonSocial);
+  
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                
+                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                // $("#direccion").val(data.direccion);
+                toastr.success("Cliente encontrado");
+              } else {
+  
+                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+  
+                $("#search").show();
+  
+                $("#charge").hide();
+  
+                $("#nombre").val(data.razonSocial);
+  
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                
+                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+  
+                // $("#direccion").val(data.direccion);
+              }
+            }
+          });
+        } else {
+          $("#search").show();
+  
+          $("#charge").hide();
+  
+          toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
+        }
+      } else {
+        if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
+  
+          $("#search").show();
+  
+          $("#charge").hide();
+  
+          toastr.info("No necesita hacer consulta");
+  
+        } else {
+  
+          $("#tipo_doc").addClass("is-invalid");
+  
+          $("#search").show();
+  
+          $("#charge").hide();
+  
+          toastr.error("Selecione un tipo de documento");
+        }
+      }
+    }
+}
+
+// ver imagen grande del producto agregado a la compra
+function ver_img_material(img, nombre) {
+    $("#ver_img_material").attr("src", `../dist/img/materiales/${img}`); $(".nombre-img-material").html(nombre);
+    $("#modal-ver-img-material").modal('show');
 }
