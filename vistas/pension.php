@@ -93,7 +93,7 @@
                       </h3>
                       
                       <!-- Botones de quincenas -->
-                      <div id="Lista_breaks" class="row-horizon disenio-scroll " >
+                      <div id="List_smnas_pen" class="row-horizon disenio-scroll " >
                         <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                         <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                       </div>   
@@ -105,6 +105,7 @@
                         <table id="tabla-resumen-break-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="">Ver detalle</th>
                               <th class="">Fecha semana</th>
                               <th>Total</th>
                               <th>Comprobantes</th>
@@ -114,6 +115,7 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
+                              <th>Ver detalle</th>
                               <th class="">Fecha semana</th>
                               <th>Total</th>
                               <th>Comprobantes</th>
@@ -121,7 +123,7 @@
                           </tfoot>
                         </table>
                       </div>
-                      <div class=" table-responsive disenio-scroll">
+                      <!--<div class=" table-responsive disenio-scroll">
                         <style> .w-pxx-80{ width: 80px; } .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;} </style>
                         <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                             <thead style="background-color: #408c98; color: white;" >
@@ -150,22 +152,22 @@
                                 <th class="text-center clas_pading">11</th>
                               </tr>
                             </thead>
-                            <tbody >
+                            <tbody >-->
                               <!--aqui va el listado de los días-->
-                              <tr>
+                             <!-- <tr>
                                 <td>Desayuno</td>
-                                <td><span class="span-visible" >s/ <b>5.00</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
+                                <td><span class=" text-center span-visible" >s/ <b>5.00</b></span> <input type="number" class="text-center   hidden input-visible w-pxx-80"></td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-pxx-80"> </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-pxx-80"> </td>
+                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-pxx-80"> </td>
+                                <td><textarea class=" text-center textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
                               </tr>
                               <tr>
                                 <td>Almuerzo</td>
@@ -207,34 +209,44 @@
                               </tr>
                             </tfoot>
                         </table>
-                      </div>
+                      </div>-->
                       
                       <!-- agregar trabajador al sistema -->
                       <div id="tabla-registro" style="display: none;">
-                        <style>
-                          table.colapsado {border-collapse: collapse;}
-                        </style>
+                        <style> .w-pxx-80{ width: 80px; } .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;} </style>
                         <div class="container table-responsive disenio-scroll">
 
-                          <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
-                              <thead style="background-color: #408c98; color: white;" >
-                                <tr>
-                                  <th class="text-center w-px-300">Día</th>
-                                  <th class="text-center  w-px-135">Cantidad</th>
-                                  <th class="text-center"> Parcial</th>
-                                  <th class="text-center"> Descripción</th>
-                                </tr>
-                              </thead>
-                              <tbody id="data_table_body">
-                                <!--aqui va el listado de los días-->
-                              </tbody>
-                              <tfoot>
-                                <th style="border-bottom: hidden;border-left: hidden;" ></th>
-                                <th  class="text-center">Total</th>
-                                <th id="monto_total" >----</th>
-                                <th style="border-bottom: hidden;border-right: hidden;" ></th>
-                              </tfoot>
-                          </table>
+                        <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                          <thead style="background-color: #408c98; color: white;" >
+                            <tr>
+                              <th rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
+                              <th rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
+                              <th class="text-center clas_pading">Do</th>
+                              <th class="text-center clas_pading">Lu</th>
+                              <th class="text-center clas_pading">Ma</th>
+                              <th class="text-center clas_pading">Mi</th>
+                              <th class="text-center clas_pading">Ju</th>
+                              <th class="text-center clas_pading">Vi</th>
+                              <th class="text-center clas_pading">Sa</th>
+                              <th  rowspan="2" colspan="1" class="text-center">Cantidad</th>
+                              <th  rowspan="2" colspan="1" class="text-center">Adicional</th>
+                              <th  rowspan="2" colspan="1" class="text-center">Parcial</th>
+                              <th  rowspan="2" colspan="1" class="text-center">Descripción</th>
+                            </tr>
+                            <tr id="bloque_fechas" ></tr>
+                          </thead>
+                          <tbody id="dataa_table_body">
+                            <!--aqui va el listado de los días-->
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                            <th colspan="10" style="border-bottom: hidden;border-left: hidden;"></th>
+                            <th class="text-center">Total</th>
+                            <th class="text-center">----</th>
+                            <th class="text-center" style="border-bottom: hidden;border-right: hidden;"></th>
+                            </tr>
+                          </tfoot>
+                        </table>
 
                         </div>
 
@@ -442,6 +454,44 @@
                           </div>
                       </div>
                   </div>
+              </div>
+            </div>
+            <!--===============modal-ver-detalle-semana =========-->
+            <div class="modal fade" id="modal-ver-detalle-semana">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Detalles por semana</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                    <div  class="class-style" style="text-align: center;"> 
+                      <table id="tabla-detalles-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <thead>
+                          <tr>
+                            <th class="">Tipo comida</th>
+                            <th class="">Precio</th>
+                            <th>Total platos</th>
+                            <th>Adicional</th>
+                            <th>total</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                          <tr>
+                            <th class="">Tipo comida</th>
+                            <th class="">Precio</th>
+                            <th>Total platos</th>
+                            <th>Adicional</th>
+                            <th>total</th>
+                          </tr>
+                        </tfoot>
+                      </table> 
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
                       

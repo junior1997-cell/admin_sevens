@@ -84,12 +84,13 @@
      
           while ($reg=$rspta->fetch_object()){ 
             $data[]=array(
-              "0"=>'<div class="user-block">
+            "0"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_semana('.$reg->numero_semana.','.$reg->idproyecto.')"><i class="far fa-eye"></i></button>',
+            "1"=>'<div class="user-block">
               <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '.$reg->numero_semana.'</p></span>
-              <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicial)).' - '.date("d/m/Y", strtotime($reg->fecha_final)).' </span>
+              <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicio)).' - '.date("d/m/Y", strtotime($reg->fecha_fin)).' </span>
               </div>',
-            "1"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
-            "2"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->idsemana_break.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
+            "2"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
+            "3"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->numero_semana.','.$reg->idproyecto.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
               );
           }
           $results = array(
@@ -101,6 +102,34 @@
 
         
           break;
+          case 'ver_detalle_semana':
+
+            $rspta=$breaks->ver_detalle_semana($_GET['numero_semana'],$_GET['nube_idproyecto']);
+            //Vamos a declarar un array
+            $data= Array();
+       
+            while ($reg=$rspta->fetch_object()){ 
+              $data[]=array(
+                "0"=>'<div class="user-block">
+                  <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$reg->tipo_pension .'</p></span>
+                  <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicio)).' - '.date("d/m/Y", strtotime($reg->fecha_fin)).' </span>
+                  <br><span style="font-weight: bold; font-size: 13px;"> Semana. '.$reg->numero_semana.' </span>
+                  </div>',
+                "1"=>'<b>'.number_format($reg->precio_comida, 2, '.', ',').'</b>', 
+                "2"=>'<b>'.$reg->cantidad_total_platos.'</b>', 
+                "3"=>'<b>'.number_format($reg->adicional_descuento, 2, '.', ',').'</b>', 
+                "4"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>'
+              );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+              "aaData"=>$data);
+            echo json_encode($results);
+  
+          
+            break;
        /* case 'listar_totales_semana':
           $nube_idproyecto = $_POST["idproyecto"];
           //$array_fi_ff = $_GET["array_fi_ff"];

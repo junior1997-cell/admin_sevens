@@ -674,6 +674,7 @@ function obtener_datos_semana () {
       } else {
         monto_total += 0;
       }
+      
       array_datosPost.push(
         {
           "fecha_compra":fecha_compra,

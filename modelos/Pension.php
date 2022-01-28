@@ -74,16 +74,103 @@ Class Pension
 	}
 	//ver detalle semana a semana
 	public function ver_detalle_semana_dias($f1,$f2,$nube_idproyect){
-		//var_dump($f1,$f2,$nube_idproyect);die();
-		$sql="SELECT * FROM breaks WHERE idproyecto='$nube_idproyect' AND fecha_compra BETWEEN '$f1' AND '$f2' ";
-		return ejecutarConsultaArray($sql);
+
+		$idpension=''; $idproyecto=''; $tipo_pension=''; $precio_variable='';
+
+		$idsemana_pension=''; $precio_comida=''; $cantidad_total_platos=''; $adicional_descuento=''; $total=''; $descripcion='';
+
+		$datos_semana= Array(); 
+
+		$sql_1="SELECT idpension, idproyecto, tipo_pension, precio_variable FROM pension WHERE estado=1 AND idproyecto='$nube_idproyect'";
+		$pension =ejecutarConsultaArray($sql_1);
+
+		if (!empty($pension)) {
+
+			foreach ($pension as $key => $value) {
+
+
+				$idpension = $value['idpension'];
+
+				$sql_2="SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_pension, dp.cantidad_platos
+				FROM detalle_pension as dp, proyecto as p, pension as pen 
+				WHERE dp.estado=1 AND dp.idpension='$idpension' AND dp.idpension= pen.idpension AND pen.idproyecto=p.idproyecto  AND dp.fecha_pension BETWEEN '$f1' AND '$f2'";
+				$datos_rangos_fechas= ejecutarConsultaArray($sql_2);
+
+				$sql_3 = "SELECT idsemana_pension,precio_comida,cantidad_total_platos,adicional_descuento,total,descripcion 
+				FROM semana_pension as sp, pension as p
+				WHERE sp.estado AND sp.idpension='$idpension' AND sp.fecha_inicio='$f1' AND sp.idpension=p.idpension";
+				$rango_fecha_semana= ejecutarConsultaSimpleFila($sql_3);
+
+				if (empty($rango_fecha_semana)) {
+
+					$idsemana_pension=''; $precio_comida=''; $cantidad_total_platos=''; $adicional_descuento=''; $total=''; $descripcion='';	
+
+				} else {
+
+					$idsemana_pension      =$rango_fecha_semana['idsemana_pension']; 
+					$precio_comida         =$rango_fecha_semana['precio_comida']; 
+					$cantidad_total_platos =$rango_fecha_semana['cantidad_total_platos'];  
+					$adicional_descuento   =$rango_fecha_semana['adicional_descuento']; 
+					$total                 =$rango_fecha_semana['total']; 
+					$descripcion           =$rango_fecha_semana['descripcion']; 
+				}
+				
+				$datos_semana[]= array(
+					"idpension"             => $value['idpension'],
+					"idproyecto"     		=> $value['idproyecto'],
+					"tipo_pension"         	=> $value['tipo_pension'],
+					"precio_variable"       => $value['precio_variable'],
+
+					"idsemana_pension"      =>$idsemana_pension,
+					"precio_comida"         => $precio_comida,
+					"cantidad_total_platos" =>$cantidad_total_platos,
+					"adicional_descuento"   =>$adicional_descuento,
+					"total"                 =>$total, 
+					"descripcion"           =>$descripcion,
+					"dias_q_comieron"       =>$datos_rangos_fechas
+
+				);	
+			}
+
+		}else{
+
+			$idpension=''; $idproyecto=''; $tipo_pension=''; $precio_variable='';
+
+			$datos_semana[]= array(
+				"idpension"             =>'',
+				"idproyecto"     		=>'',
+				"tipo_pension"         	=>'',
+				"precio_variable"       =>'',
+
+				"idsemana_pension"      =>'',
+				"precio_comida"         =>'',
+				"cantidad_total_platos" =>'',
+				"adicional_descuento"   =>'',
+				"total"                 =>'', 
+				"descripcion"           =>'',
+				"dias_q_comieron"       =>$data=[]
+
+			);	
+		}
+
+		return $datos_semana;
+		
 	}	
 	///////////////////////CONSULTAS BREAK///////////////////////
 
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT * FROM semana_break 
-		WHERE idproyecto ='$nube_idproyecto'";
+		$sql="SELECT sp.numero_semana as numero_semana,sp.fecha_inicio as fecha_inicio, sp.fecha_fin as fecha_fin,SUM(sp.total) as total, p.idproyecto as idproyecto
+		FROM semana_pension AS sp, pension AS p, proyecto as py
+		WHERE  p.idproyecto = '$nube_idproyecto'  AND p.idpension=sp.idpension AND py.idproyecto=p.idproyecto
+		GROUP BY numero_semana";
+		return ejecutarConsulta($sql);
+	}
+	public function ver_detalle_semana($numero_semana,$nube_idproyecto)
+	{
+		$sql="SELECT sp.numero_semana as numero_semana,sp.fecha_inicio as fecha_inicio, sp.fecha_fin as fecha_fin,sp.total as total, p.tipo_pension, sp.precio_comida as precio_comida,sp.cantidad_total_platos as cantidad_total_platos, sp.adicional_descuento as adicional_descuento
+		FROM semana_pension AS sp, pension AS p, proyecto as py
+		WHERE  p.idproyecto = '$nube_idproyecto'  AND p.idpension=sp.idpension AND py.idproyecto=p.idproyecto AND numero_semana='$numero_semana'";
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------

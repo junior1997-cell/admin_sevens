@@ -1,4 +1,5 @@
 var tabla;
+var tabla_detalle_s;
 var editando=false;
 var editando2=false;
 ////////////////////////////
@@ -26,7 +27,7 @@ function init() {
 
   //=====Guardar factura=============
   $("#guardar_registro_comprobaante").on("click", function (e) {$("#submit-form-comprobante").submit();});
-  
+
   //Factura
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
   $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
@@ -227,6 +228,40 @@ function listar(nube_idproyecto) {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
+//Función ver detalles Detalles
+function ver_detalle_semana(numero_semana,nube_idproyecto) {
+  //console.log(numero_semana,nube_idproyecto);
+  $("#modal-ver-detalle-semana").modal("show");
+  tabla_detalle_s=$('#tabla-detalles-semanal').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/pension.php?op=ver_detalle_semana&numero_semana='+numero_semana+'&nube_idproyecto='+nube_idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+}
 
 // Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
@@ -258,10 +293,10 @@ function listar_botoness( nube_idproyecto ) {
 
       var dia_regular = 0; var weekday_regular = extraer_dia_semana(data.fecha_inicio); var estado_regular = false;
 
-      if (weekday_regular == "Domingo") { dia_regular = -1; } else { if (weekday_regular == "Lunes") { dia_regular = -2; } else { if (weekday_regular == "Martes") { dia_regular = -3; } else { if (weekday_regular == "Miercoles") { dia_regular = -4; } else { if (weekday_regular == "Jueves") { dia_regular = -5; } else { if (weekday_regular == "Viernes") { dia_regular = -6; } else { if (weekday_regular == "Sábado") { dia_regular = -7; } } } } } } }
+      if (weekday_regular == "Do") { dia_regular = -1; } else { if (weekday_regular == "Lu") { dia_regular = -2; } else { if (weekday_regular == "Ma") { dia_regular = -3; } else { if (weekday_regular == "Mi") { dia_regular = -4; } else { if (weekday_regular == "Ju") { dia_regular = -5; } else { if (weekday_regular == "Vi") { dia_regular = -6; } else { if (weekday_regular == "Sa") { dia_regular = -7; } } } } } } }
       // console.log(data.fecha_inicio, dia_regular, weekday_regular);
 
-          $('#Lista_breaks').html('');
+          $('#List_smnas_pen').html('');
 
           var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
 
@@ -286,7 +321,7 @@ function listar_botoness( nube_idproyecto ) {
             array_fi_ff.push({'fecha_in':format_a_m_d(fecha_i),'fecha_fi':format_a_m_d(fecha_f), 'num_semana':cont });
             //array_data_fi_ff.push()
 
-            $('#Lista_breaks').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#List_smnas_pen').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -297,7 +332,7 @@ function listar_botoness( nube_idproyecto ) {
           } 
         
     } else {
-      $('#Lista_breaks').html(`<div class="info-box shadow-lg w-px-600"> 
+      $('#List_smnas_pen').html(`<div class="info-box shadow-lg w-px-600"> 
         <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
         <div class="info-box-content"> 
           <span class="info-box-text">Alerta</span> 
@@ -305,46 +340,7 @@ function listar_botoness( nube_idproyecto ) {
         </div> 
       </div>`);
     }
-    console.log(array_fi_ff);
-    //Listamos la tabla principal agrupos por semana
-    //------------------------------------------------
-   /*$.ajax({
-      url: "../ajax/pension.php?op=listar_totales_semana",
-      type: "POST",
-      data: {
-        'array_fi_ff': JSON.stringify(array_fi_ff),
-        'idproyecto': localStorage.getItem('nube_idproyecto'),
-      },
-      success: function (datos) {
-        //Swal.fire("Desactivado!",datos, "success");
-        console.log(datos);
-        datos=JSON.parse(datos);
-        // console.log(datos);
-        tabla=$('#tabla-resumen-break-semanal').dataTable({
-          "responsive": true,
-          "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-          "aProcessing": true,//Activamos el procesamiento del datatables
-          "aServerSide": true,//Paginación y filtrado realizados por el servidor
-          dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-          buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-          data: datos,
-          "language": {
-            "lengthMenu": "Mostrar : _MENU_ registros",
-            "buttons": {
-              "copyTitle": "Tabla Copiada",
-              "copySuccess": {
-                _: '%d líneas copiadas',
-                1: '1 línea copiada'
-              }
-            }
-          },
-          "bDestroy": true,
-          "iDisplayLength": 5,//Paginación
-          "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-        }).DataTable();
-      },
-    });*/
-    //console.log(fecha);
+    //console.log(array_fi_ff);
   });
 }
 //Función para guardar o editar
@@ -421,7 +417,7 @@ function datos_semana(f1, f2, i,cont) {
   console.log('i'+i);
   array_guardar_fi_ff=[];
   array_guardar_fi_ff.push({'fecha_in_btn':format_a_m_d(f1),'fecha_fi_btn':format_a_m_d(f2),'num_semana':cont});
-console.log(array_guardar_fi_ff);
+  //console.log(array_guardar_fi_ff);
   var tabla_bloc_dia_1=''; var tabla_bloc_cantidad_2=''; var tabla_bloc_precio_3=''; var tabla_bloc_descripcion_4='';
   var tabla_bloc_semana='';
   f1_reload = f1; f2_reload = f2; i_reload  = i;
@@ -445,7 +441,7 @@ console.log(array_guardar_fi_ff);
   var weekday_regular = extraer_dia_semana(format_a_m_d(fecha_inicial_semana));
   //console.log(weekday_regular);
   // asignamos un numero para restar y llegar al dia DOMIGO
-  if (weekday_regular == "Domingo") { dia_regular = -0; } else { if (weekday_regular == "Lunes") { dia_regular = -1; } else { if (weekday_regular == "Martes") { dia_regular = -2; } else { if (weekday_regular == "Miercoles") { dia_regular = -3; } else { if (weekday_regular == "Jueves") { dia_regular = -4; } else { if (weekday_regular == "Viernes") { dia_regular = -5; } else { if (weekday_regular == "Sábado") { dia_regular = -6; } } } } } } }
+  if (weekday_regular == "Do") { dia_regular = -0; } else { if (weekday_regular == "Lu") { dia_regular = -1; } else { if (weekday_regular == "Ma") { dia_regular = -2; } else { if (weekday_regular == "Mi") { dia_regular = -3; } else { if (weekday_regular == "Ju") { dia_regular = -4; } else { if (weekday_regular == "Vi") { dia_regular = -5; } else { if (weekday_regular == "Sa") { dia_regular = -6; } } } } } } }
 
   var fecha_inicial_semana_regular = sumaFecha(dia_regular, fecha_inicial_semana);
   //Regulamos los días hasta el inicio del dia del inicio del proyecto
@@ -476,7 +472,9 @@ console.log(array_guardar_fi_ff);
 
   $.post("../ajax/pension.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
         
-    data =JSON.parse(data); console.log(data);   
+    data =JSON.parse(data);
+    console.log('..................');
+    console.log(data);   
      
       // existe alguna asistencia -------
       if (data.length!= 0) {
@@ -512,7 +510,7 @@ console.log(array_guardar_fi_ff);
 
             var weekday = extraer_dia_semana(fecha_compra_encontrado); //console.log(weekday);
 
-            if (weekday != 'Sábado') {
+            if (weekday != 'Sa') {
 
              //-------------------------------------------------------------
               tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${format_d_m_a(fecha_compra_encontrado)} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${fecha_compra_encontrado}"><input type="hidden" class="idbreak_${count_numero_dia}" value="${idbreak}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
@@ -549,7 +547,7 @@ console.log(array_guardar_fi_ff);
 
             var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
 
-            if (weekday != 'Sábado') {
+            if (weekday != 'Sa') {
 
                 tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(fecha)}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
 
@@ -597,7 +595,7 @@ console.log(array_guardar_fi_ff);
 
           var weekday = extraer_dia_semana(format_a_m_d(fecha));
 
-          if (weekday != 'Sábado') {
+          if (weekday != 'Sa') {
 
             tabla_bloc_dia_1 =  `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(fecha)}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
 
@@ -1075,7 +1073,7 @@ function format_a_m_d(fecha) {
 //extraer_dia_semana
 function extraer_dia_semana(fecha) {
   const fechaComoCadena = fecha; // día fecha
-  const dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']; //
+  const dias = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']; //
   const numeroDia = new Date(fechaComoCadena).getDay();
   const nombreDia = dias[numeroDia];
   return nombreDia;
