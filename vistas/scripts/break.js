@@ -865,7 +865,7 @@ function mostrar_comprobante(idfactura_break) {
         if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
           $('#ver_pdf').hide();
           $('#foto2_i').show();
-          $('#foto2_i').attr("src", "../dist/img/comrob_breaks/" +comprobante);
+          $('#foto2_i').attr("src", "../dist/img/comprob_breaks/" +comprobante);
 
           $("#foto2_nombre").html(''+
           '<div class="row">'+
@@ -879,7 +879,7 @@ function mostrar_comprobante(idfactura_break) {
         }else{
           $('#foto2_i').hide();
           $('#ver_pdf').show();
-          $('#ver_pdf').html('<iframe src="../dist/img/comrob_breaks/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          $('#ver_pdf').html('<iframe src="../dist/img/comprob_breaks/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
           
           $("#foto2_nombre").html(''+
           '<div class="row">'+
@@ -955,15 +955,15 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
   if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/img/comrob_breaks/" +comprobante);
+    $('#img-factura').attr("src", "../dist/img/comprob_breaks/" +comprobante);
 
-    $("#iddescargar").attr("href","../dist/img/comrob_breaks/" +comprobante);
+    $("#iddescargar").attr("href","../dist/img/comprob_breaks/" +comprobante);
 
   }else{
     $('#img-factura').hide();
     $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/img/comrob_breaks/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/img/comrob_breaks/" +comprobante);
+    $('#ver_fact_pdf').html('<iframe src="../dist/img/comprob_breaks/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href","../dist/img/comprob_breaks/" +comprobante);
   } 
  // $(".tooltip").hide();
 }

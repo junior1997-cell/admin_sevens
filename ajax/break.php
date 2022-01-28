@@ -151,7 +151,7 @@
       
                   $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
       
-                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comrob_breaks/" . $imagen2);
+                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comprob_breaks/" . $imagen2);
                 
               }
       
@@ -171,7 +171,7 @@
             
                   if ($img1_ant != "") {
             
-                    unlink("../dist/img/comrob_breaks/" . $img1_ant);
+                    unlink("../dist/img/comprob_breaks/" . $img1_ant);
                   }
                 }
                 
