@@ -23,9 +23,9 @@ Class Proyecto
 		$id_proyect = ejecutarConsulta_retornarID($sql) ;
 
 		// creamos la pensión: desayuno almuerzo y cena
-		$sql_pension = "INSERT INTO pension(idproyecto, tipo_pension, precio_variable) 
-		VALUES ('$id_proyect','Desayuno','0'), ('$id_proyect','Almuerzo','0'), ('$id_proyect','Cena','0')";
-		ejecutarConsulta($sql_pension);
+		// $sql_pension = "INSERT INTO pension(idproyecto, tipo_pension, precio_variable) 
+		// VALUES ('$id_proyect','Desayuno','0'), ('$id_proyect','Almuerzo','0'), ('$id_proyect','Cena','0')";
+		// ejecutarConsulta($sql_pension);
 
 		// extraemos todas fechas
 		$sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
