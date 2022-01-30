@@ -33,7 +33,14 @@
       $igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
 
       $imagen2             = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
-
+      //------------------pension-------------
+      $idproyecto_p        = isset($_POST["idproyecto_p"])? limpiarCadena($_POST["idproyecto_p"]):"";
+      $idpension           = isset($_POST["idpension"])? limpiarCadena($_POST["idpension"]):"";
+      $proveedor           = isset($_POST["proveedor"])? limpiarCadena($_POST["proveedor"]):"";
+      $p_desayuno          = isset($_POST["p_desayuno"])? limpiarCadena($_POST["p_desayuno"]):"";
+      $p_almuerzo          = isset($_POST["p_almuerzo"])? limpiarCadena($_POST["p_almuerzo"]):"";
+      $p_cena              = isset($_POST["p_cena"])? limpiarCadena($_POST["p_cena"]):"";
+      //$idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena
       //$idfactura_break,$idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
 
       switch ($_GET["op"]){
@@ -76,88 +83,34 @@
           echo json_encode($rspta);		
         break;
         /////////////////////// FIN BREAK///////////////////////
-        case 'listar_totales_semana':
+          /* case 'listar_totales_semana':
+              $nube_idproyecto = $_POST["idproyecto"];
+              //$array_fi_ff = $_GET["array_fi_ff"];
 
-          $rspta=$breaks->listar($_GET['nube_idproyecto']);
-          //Vamos a declarar un array
-          $data= Array();
-     
-          while ($reg=$rspta->fetch_object()){ 
-            $data[]=array(
-            "0"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_semana('.$reg->numero_semana.','.$reg->idproyecto.')"><i class="far fa-eye"></i></button>',
-            "1"=>'<div class="user-block">
-              <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '.$reg->numero_semana.'</p></span>
-              <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicio)).' - '.date("d/m/Y", strtotime($reg->fecha_fin)).' </span>
-              </div>',
-            "2"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
-            "3"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->numero_semana.','.$reg->idproyecto.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
-              );
-          }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
-            "aaData"=>$data);
-          echo json_encode($results);
+              $rspta=$breaks->listar_totales_semana($nube_idproyecto,$_POST["array_fi_ff"]);
+              //Vamos a declarar un array
+              $data= Array();
 
-        
-          break;
-          case 'ver_detalle_semana':
-
-            $rspta=$breaks->ver_detalle_semana($_GET['numero_semana'],$_GET['nube_idproyecto']);
-            //Vamos a declarar un array
-            $data= Array();
-       
-            while ($reg=$rspta->fetch_object()){ 
-              $data[]=array(
-                "0"=>'<div class="user-block">
-                  <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$reg->tipo_pension .'</p></span>
-                  <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicio)).' - '.date("d/m/Y", strtotime($reg->fecha_fin)).' </span>
-                  <br><span style="font-weight: bold; font-size: 13px;"> Semana. '.$reg->numero_semana.' </span>
-                  </div>',
-                "1"=>'<b>'.number_format($reg->precio_comida, 2, '.', ',').'</b>', 
-                "2"=>'<b>'.$reg->cantidad_total_platos.'</b>', 
-                "3"=>'<b>'.number_format($reg->adicional_descuento, 2, '.', ',').'</b>', 
-                "4"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>'
-              );
-            }
-            $results = array(
-              "sEcho"=>1, //Información para el datatables
-              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-              "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
-              "aaData"=>$data);
-            echo json_encode($results);
-  
-          
-            break;
-       /* case 'listar_totales_semana':
-          $nube_idproyecto = $_POST["idproyecto"];
-          //$array_fi_ff = $_GET["array_fi_ff"];
-
-          $rspta=$breaks->listar_totales_semana($nube_idproyecto,$_POST["array_fi_ff"]);
-          //Vamos a declarar un array
-          $data= Array();
-
-          $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          $total=0;
-          foreach ( json_decode($rspta, true) as $key => $value) {
-            //$total = $value['total'];
-            $data[]=array(
-              "0"=>'<div class="user-block">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '. $value['num_semana'] .'</p></span>
-                <span class="description">'. $value['fecha_in'] .': '.  $value['fecha_fi'] .' </span>
-                </div>',
-              "1"=>'<b>'.number_format($value['total'], 2, '.', ',').'</b>' 
-              );
-          }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
-          echo json_encode($data);
-         // echo $rspta;
-        break;*/
+              $imagen_error = "this.src='../dist/svg/user_default.svg'";
+              $total=0;
+              foreach ( json_decode($rspta, true) as $key => $value) {
+                //$total = $value['total'];
+                $data[]=array(
+                  "0"=>'<div class="user-block">
+                    <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '. $value['num_semana'] .'</p></span>
+                    <span class="description">'. $value['fecha_in'] .': '.  $value['fecha_fi'] .' </span>
+                    </div>',
+                  "1"=>'<b>'.number_format($value['total'], 2, '.', ',').'</b>' 
+                  );
+              }
+              $results = array(
+                "sEcho"=>1, //Información para el datatables
+                "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+                "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+                "data"=>$data);
+              echo json_encode($data);
+            // echo $rspta;
+            break;*/
 
         case 'guardaryeditar_Comprobante':
 
@@ -349,10 +302,133 @@
         case 'total_monto':
           //falta
           $rspta=$breaks->total_monto_comp($idsemana_break);
-           echo json_encode($rspta);
+           echo json_encode($rspta); 
+      
+        break;
+        //-----------------------------registrar pension--------------
+        case 'guardaryeditar_pension':
 
+          if (!isset($_SESSION["nombre"])) {
+
+            header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
       
+          } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['viatico']==1)
+            {     
       
+              if (empty($idpension)){
+                
+                $rspta=$breaks->insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$_POST['servicio_p']);
+                echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+              }
+              else {
+                
+                $rspta=$breaks->editar_pension($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$_POST['servicio_p']);
+                
+                echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
+              }
+              //Fin de las validaciones de acceso
+            } else {
+      
+                require 'noacceso.php';
+            }
+          }
+        break;
+
+        case 'listar_pensiones':
+
+          $rspta=$breaks->listar_pensiones($_GET['nube_idproyecto']);
+          //Vamos a declarar un array
+          $data= Array();
+     
+          while ($reg=$rspta->fetch_object()){ 
+
+            $total=$breaks->total_x_pension($reg->idpension);
+
+            $data[]=array(
+
+              "0"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg->idpension.')"><i class="fas fa-pencil-alt"></i></button>'.
+              ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.','.$reg->idproyecto.')">Ingresar <i class="far fa-eye"></i></button>',
+              "1"=>'<div class="user-block">
+                <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Pensión. '.$reg->razon_social.'</p></span>
+                <span style="font-weight: bold; font-size: 15px;">'.$reg->direccion.' </span>
+                </div>',
+              "2"=>'<b>'.number_format($total, 2, '.', ',').'</b>', 
+              "3"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
+              "4"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
+                
+            );
+
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+          echo json_encode($results);
+
+        
+        break;
+
+        case 'mostrar_pension':
+          if (!isset($_SESSION["nombre"]))
+          {
+            header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+          }
+          else
+          {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['viatico']==1)
+            {
+              //$idpago_Comprobante='1';
+              $rspta=$breaks->mostrar_pension($idpension);
+               //Codificar el resultado utilizando json
+               echo json_encode($rspta);
+            //Fin de las validaciones de acceso
+            }
+            else
+            {
+              require 'noacceso.php';
+            }
+          }		
+        break;
+
+        case 'ver_detalle_x_servicio':
+
+          $rspta=$breaks->ver_detalle_x_servicio($_GET['idpension']);
+          //Vamos a declarar un array
+          $data= Array();
+          $cont=1;
+          while ($reg=$rspta->fetch_object()){ 
+            $data[]=array(
+              "0"=>'<div class="user-block">
+                <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$cont.'. '.$reg->nombre_servicio .'</p></span></div>',
+              "1"=>'<b>'.number_format($reg->precio, 2, '.', ',').'</b>', 
+              "2"=>'<b>'.$reg->cantidad_total_platos.'</b>', 
+              "3"=>'<b>'.number_format($reg->adicional_descuento, 2, '.', ',').'</b>', 
+              "4"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>'
+            );
+            $cont++;
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+          echo json_encode($results);
+          
+        break;
+
+        case 'select_proveedor':
+
+           $rspta=$breaks->select_proveedor();
+
+           while ($reg = $rspta->fetch_object())  {
+
+             echo '<option  value=' . $reg->idproveedor  . '>' . $reg->razon_social .' - '.$reg->direccion.'</option>';
+           }
+ 
         break;
 
         

@@ -132,25 +132,6 @@ Class Pension
 				);	
 			}
 
-		}else{
-
-			$idpension=''; $idproyecto=''; $tipo_pension=''; $precio_variable='';
-
-			$datos_semana[]= array(
-				"idpension"             =>'',
-				"idproyecto"     		=>'',
-				"tipo_pension"         	=>'',
-				"precio_variable"       =>'',
-
-				"idsemana_pension"      =>'',
-				"precio_comida"         =>'',
-				"cantidad_total_platos" =>'',
-				"adicional_descuento"   =>'',
-				"total"                 =>'', 
-				"descripcion"           =>'',
-				"dias_q_comieron"       =>$data=[]
-
-			);	
 		}
 
 		return $datos_semana;
@@ -168,9 +149,9 @@ Class Pension
 	}
 	public function ver_detalle_semana($numero_semana,$nube_idproyecto)
 	{
-		$sql="SELECT sp.numero_semana as numero_semana,sp.fecha_inicio as fecha_inicio, sp.fecha_fin as fecha_fin,sp.total as total, p.tipo_pension, sp.precio_comida as precio_comida,sp.cantidad_total_platos as cantidad_total_platos, sp.adicional_descuento as adicional_descuento
+		$sql="SELECT sp.idpension, sp.numero_semana as numero_semana,sp.fecha_inicio as fecha_inicio, sp.fecha_fin as fecha_fin,sp.total as total, p.tipo_pension, sp.precio_comida as precio_comida,sp.cantidad_total_platos as cantidad_total_platos, sp.adicional_descuento as adicional_descuento
 		FROM semana_pension AS sp, pension AS p, proyecto as py
-		WHERE  p.idproyecto = '$nube_idproyecto'  AND p.idpension=sp.idpension AND py.idproyecto=p.idproyecto AND numero_semana='$numero_semana'";
+		WHERE  p.idproyecto = '$nube_idproyecto'  AND p.idpension=sp.idpension AND py.idproyecto=p.idproyecto AND numero_semana='$numero_semana' ORDER BY sp.idpension ASC";
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------
@@ -235,6 +216,174 @@ Class Pension
 		$sql="SELECT SUM(subtotal) as total FROM factura_break WHERE idsemana_break='$idsemana_break' AND estado='1'";
 		return ejecutarConsultaSimpleFila($sql);
 
+	}
+	//---------------------------pension-----------------------------------
+	public function insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$servicio_p)
+	{
+		$sql = "INSERT INTO pension(idproyecto, idproveedor) VALUES ('$idproyecto_p','$proveedor')";
+		$idpensionnew = ejecutarConsulta_retornarID($sql);
+		
+        $num_elementos = 0;
+        $sw = true;
+
+        while ($num_elementos < count($servicio_p)) {
+
+			if ($servicio_p[$num_elementos]=='Desayuno') {
+				$sql_servicio = "INSERT INTO servicio_pension(idpension,precio,nombre_servicio) VALUES ('$idpensionnew','$p_desayuno','$servicio_p[$num_elementos]')";
+				ejecutarConsulta($sql_servicio) or ($sw = false);
+			}
+
+			if($servicio_p[$num_elementos]=='Almuerzo'){
+				$sql_servicio = "INSERT INTO servicio_pension(idpension,precio,nombre_servicio) VALUES ('$idpensionnew','$p_almuerzo','$servicio_p[$num_elementos]')";
+				ejecutarConsulta($sql_servicio) or ($sw = false);
+			}
+			
+			if($servicio_p[$num_elementos]=='Cena'){
+				$sql_servicio = "INSERT INTO servicio_pension(idpension,precio,nombre_servicio) VALUES ('$idpensionnew','$p_cena','$servicio_p[$num_elementos]')";
+				ejecutarConsulta($sql_servicio) or ($sw = false);
+			}			
+
+            $num_elementos = $num_elementos + 1;
+        }
+
+        return $sw;
+	}
+	public function editar_pension($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$servicio_p)
+	{
+		//var_dump($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$servicio_p); die();
+		$sql = "UPDATE pension SET idproyecto='$idproyecto_p',idproveedor='$proveedor' WHERE idpension='$idpension'";
+		 ejecutarConsulta($sql);
+		
+        $num_elementos = 0;
+        $sw = true;
+
+        while ($num_elementos < count($servicio_p)) {
+
+			if ($servicio_p[$num_elementos]=='Desayuno') {
+
+				$buscando_serv="SELECT idservicio_pension FROM servicio_pension WHERE idpension='$idpension' AND nombre_servicio='$servicio_p[$num_elementos]'";
+				$idbuscando_serv=ejecutarConsultaSimpleFila($buscando_serv);
+
+				if (empty($idbuscando_serv['idservicio_pension'])) {
+
+					$sql_servicio = "INSERT INTO servicio_pension(idpension,precio,nombre_servicio) VALUES ('$idpension','$p_desayuno','Desayuno')";
+					ejecutarConsulta($sql_servicio) or ($sw = false);
+				}else{
+
+					$sql_servicio = "UPDATE servicio_pension SET precio='$p_desayuno' WHERE idservicio_pension='".$idbuscando_serv['idservicio_pension']."' ";
+					ejecutarConsulta($sql_servicio) or ($sw = false);
+				}
+
+			}
+
+			if($servicio_p[$num_elementos]=='Almuerzo'){
+
+				$buscando_serv="SELECT idservicio_pension FROM servicio_pension WHERE idpension='$idpension' AND nombre_servicio='$servicio_p[$num_elementos]'";
+				$idbuscando_serv=ejecutarConsultaSimpleFila($buscando_serv);
+
+				if (empty($idbuscando_serv['idservicio_pension'])) {
+
+					$sql_servicio = "INSERT INTO servicio_pension(idpension,precio,nombre_servicio) VALUES ('$idpension','$p_almuerzo','Almuerzo')";
+					ejecutarConsulta($sql_servicio) or ($sw = false);
+				}else{
+
+					$sql_servicio = "UPDATE servicio_pension SET precio='$p_almuerzo' WHERE idservicio_pension='".$idbuscando_serv['idservicio_pension']."' ";
+					ejecutarConsulta($sql_servicio) or ($sw = false);
+				}
+
+			}
+			
+			if($servicio_p[$num_elementos]=='Cena'){
+
+				$buscando_serv="SELECT idservicio_pension FROM servicio_pension WHERE idpension='$idpension' AND nombre_servicio='$servicio_p[$num_elementos]'";
+				$idbuscando_serv=ejecutarConsultaSimpleFila($buscando_serv);
+
+				if (empty($idbuscando_serv['idservicio_pension'])) {
+
+					$sql_servicio = "INSERT INTO servicio_pension(idpension,precio,nombre_servicio) VALUES ('$idpension','$p_cena','Cena')";
+					ejecutarConsulta($sql_servicio) or ($sw = false);
+				}else{
+
+					$sql_servicio = "UPDATE servicio_pension SET precio='$p_cena' WHERE idservicio_pension='".$idbuscando_serv['idservicio_pension']."' ";
+					ejecutarConsulta($sql_servicio) or ($sw = false);
+				}
+
+			}	
+
+            $num_elementos = $num_elementos + 1;
+        }
+
+        return $sw;
+	}
+	public function listar_pensiones($nube_idproyecto)
+	{
+		$sql="SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
+		FROM pension as p, proyecto as py, proveedor as pr_v
+		WHERE p.estado=1 AND p.idproyecto='$nube_idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor";
+		return ejecutarConsulta($sql);
+	}
+	public function total_x_pension($idpension)
+	{
+		$total_m=0;
+
+		$sql="SELECT sp.idservicio_pension FROM servicio_pension As sp, pension AS p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
+		$obt_servicio_pen=ejecutarConsulta($sql);
+
+		foreach ($obt_servicio_pen as $key => $value) {
+
+			$idservicio_p= $value['idservicio_pension'];
+
+			$sql_2="SELECT SUM(total) as total FROM semana_pension as sp, servicio_pension as serv_p WHERE sp.idservicio_pension='$idservicio_p' AND sp.idservicio_pension=serv_p.idservicio_pension";
+			$return_pension = ejecutarConsultaSimpleFila($sql_2);
+
+			$total_m=$total_m+$return_pension['total'];
+		}
+
+		return $total_m;
+	}
+	public function ver_detalle_x_servicio($idpension)
+	{
+		$sql="SELECT SUM(se_p.total) as total,sp.nombre_servicio,SUM(se_p.adicional_descuento) as adicional_descuento,SUM(se_p.cantidad_total_platos) as cantidad_total_platos, sp.precio
+		FROM servicio_pension as sp, pension as p, semana_pension as se_p 
+		WHERE p.idpension='$idpension' AND sp.idpension=p.idpension AND se_p.idservicio_pension=sp.idservicio_pension GROUP BY se_p.idservicio_pension";
+		return ejecutarConsulta($sql);
+		
+	
+	}
+	public function mostrar_pension($idpension)
+	{
+		$datos_edit_pension= Array(); 
+
+		$sql="SELECT p.idpension,p.idproyecto,p.idproveedor FROM pension as p, proyecto as py WHERE p.idpension ='$idpension'  AND py.idproyecto=p.idproyecto";
+		$return_pension = ejecutarConsultaSimpleFila($sql);
+
+		$sql_2="SELECT sp.idservicio_pension,sp.nombre_servicio,sp.precio FROM servicio_pension AS sp, pension as p 
+				WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
+
+		$servicio_pension = ejecutarConsultaArray($sql_2);	
+
+		$sql_3="SELECT sp.nombre_servicio FROM servicio_pension AS sp, pension as p 
+		WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
+		
+		$select_s_pension = ejecutarConsultaArray($sql_3);	
+
+		$datos_edit_pension= array(
+			"idpension"             =>$return_pension['idpension'],
+			"idproyecto"     		=>$return_pension['idproyecto'],
+			"idproveedor"         	=> $return_pension['idproveedor'],
+
+			"servicio_pension"       =>$servicio_pension,
+			"select_s_pension"       =>$select_s_pension
+
+		);
+
+		return $datos_edit_pension;
+		
+	}
+	public function select_proveedor()
+	{
+		$sql = "SELECT `idproveedor`,`razon_social`, `direccion` FROM `proveedor` WHERE estado =1 AND idproveedor>1";
+		return ejecutarConsulta($sql);
 	}
 
 

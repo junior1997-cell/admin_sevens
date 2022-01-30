@@ -71,8 +71,12 @@
                 <div class="col-12">
                   <div class="card card-primary card-outline">
                     <div class="card-header">
+                      <!-- Guardar pension -->
+                      <h3 class="card-title mr-3" id="guardar_pension" style=" padding-left: 2px;">
+                        <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-pension" onclick="limpiar_pension()" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Agregar Pensión</button>
+                      </h3>
                       <!-- regresar -->
-                      <h3 class="card-title mr-3" id="card-regresar" style="display: none;" style="padding-left: 2px;">
+                      <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
                         <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
                       </h3>
                       <!-- Editar -->
@@ -84,7 +88,7 @@
                         <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_break();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
                       </h3>
                       <!-- regresar de comprobantes -->
-                      <h3 class="card-title mr-3" id="regresar_aprincipal" style="display: none;" style="padding-left: 2px;">
+                      <h3 class="card-title mr-3" id="regresar_aprincipal" style="display: none; padding-left: 2px;">
                           <button type="button" class="btn bg-gradient-warning" onclick="regresar(); limpiar_comprobante();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
                       </h3>
                       <!-- Guardar comporbantees -->
@@ -93,21 +97,22 @@
                       </h3>
                       
                       <!-- Botones de quincenas -->
-                      <div id="List_smnas_pen" class="row-horizon disenio-scroll " >
+                      <div id="List_smnas_pen" style="display: none; padding-left: 2px;" class="row-horizon disenio-scroll " >
                         <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                         <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                       </div>   
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <!-- Lista de trabajdores -->
+                      <!-- Tabla principal resumen de las penciones -->
                       <div id="mostrar-tabla">
                         <table id="tabla-resumen-break-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
-                              <th class="">Ver detalle</th>
-                              <th class="">Fecha semana</th>
+                              <th><i class="fas fa-cogs"></i></th>
+                              <th>Pension</th>
                               <th>Total</th>
+                              <th>Servicios</th>
                               <th>Comprobantes</th>
 
                             </tr>
@@ -115,103 +120,16 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
-                              <th>Ver detalle</th>
-                              <th class="">Fecha semana</th>
+                              <th><i class="fas fa-cogs"></i></th>
+                              <th>Pension</th>
                               <th>Total</th>
+                              <th>Servicios</th>
                               <th>Comprobantes</th>
                             </tr>
                           </tfoot>
                         </table>
                       </div>
-                      <!--<div class=" table-responsive disenio-scroll">
-                        <style> .w-pxx-80{ width: 80px; } .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;} </style>
-                        <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
-                            <thead style="background-color: #408c98; color: white;" >
-                              <tr>
-                                <th rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
-                                <th rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
-                                <th class="text-center clas_pading">Do</th>
-                                <th class="text-center clas_pading">Lu</th>
-                                <th class="text-center clas_pading">Ma</th>
-                                <th class="text-center clas_pading">Mi</th>
-                                <th class="text-center clas_pading">Ju</th>
-                                <th class="text-center clas_pading">Vi</th>
-                                <th class="text-center clas_pading">Sa</th>
-                                <th  rowspan="2" colspan="1" class="text-center">Cantidad</th>
-                                <th  rowspan="2" colspan="1" class="text-center">Adicional</th>
-                                <th  rowspan="2" colspan="1" class="text-center">Parcial</th>
-                                <th  rowspan="2" colspan="1" class="text-center">Descripción</th>
-                              </tr>
-                              <tr>
-                                <th class="text-center clas_pading">05</th>
-                                <th class="text-center clas_pading">06</th>
-                                <th class="text-center clas_pading">07</th>
-                                <th class="text-center clas_pading">08</th>
-                                <th class="text-center clas_pading">09</th>
-                                <th class="text-center clas_pading">10</th>
-                                <th class="text-center clas_pading">11</th>
-                              </tr>
-                            </thead>
-                            <tbody >-->
-                              <!--aqui va el listado de los días-->
-                             <!-- <tr>
-                                <td>Desayuno</td>
-                                <td><span class=" text-center span-visible" >s/ <b>5.00</b></span> <input type="number" class="text-center   hidden input-visible w-pxx-80"></td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-px-30" > </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-pxx-80"> </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-pxx-80"> </td>
-                                <td> <span class=" text-center span-visible">6</span> <input type="number" class=" text-center hidden input-visible w-pxx-80"> </td>
-                                <td><textarea class=" text-center textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
-                              </tr>
-                              <tr>
-                                <td>Almuerzo</td>
-                                <td><span class="span-visible" >s/ <b>7.00</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
-                              </tr>
-                              <tr>
-                                <td>Cena</td>
-                                <td><span class="span-visible" >s/ <b>4.00</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td> <span class="span-visible">6</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>
-                                <td><textarea class="textarea-visible" cols="30" rows="1" style="width: 400px;" readonly></textarea></td>
-                              </tr>
-                            </tbody>
-                            <tfoot>
-                             <tr>
-                                <th colspan="10" style="border-bottom: hidden;border-left: hidden;"></th>
-                                <th class="text-center">Total</th>
-                                <th class="text-center">----</th>
-                                <th class="text-center" style="border-bottom: hidden;border-right: hidden;"></th>
-                              </tr>
-                            </tfoot>
-                        </table>
-                      </div>-->
-                      
-                      <!-- agregar trabajador al sistema -->
+                      <!-- Registrar pension al sistema -->
                       <div id="tabla-registro" style="display: none;">
                         <style> .w-pxx-80{ width: 80px; } .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;} </style>
                         <div class="container table-responsive disenio-scroll">
@@ -219,21 +137,15 @@
                         <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                           <thead style="background-color: #408c98; color: white;" >
                             <tr>
-                              <th rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
-                              <th rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
-                              <th class="text-center clas_pading">Do</th>
-                              <th class="text-center clas_pading">Lu</th>
-                              <th class="text-center clas_pading">Ma</th>
-                              <th class="text-center clas_pading">Mi</th>
-                              <th class="text-center clas_pading">Ju</th>
-                              <th class="text-center clas_pading">Vi</th>
-                              <th class="text-center clas_pading">Sa</th>
+                              <th  rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
+                              <th  rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
+                              <th  colspan="7" class="text-center clas_pading">Días que semana</th>
                               <th  rowspan="2" colspan="1" class="text-center">Cantidad</th>
                               <th  rowspan="2" colspan="1" class="text-center">Adicional</th>
                               <th  rowspan="2" colspan="1" class="text-center">Parcial</th>
                               <th  rowspan="2" colspan="1" class="text-center">Descripción</th>
                             </tr>
-                            <tr id="bloque_fechas" ></tr>
+                            <tr id="bloque_fechas"></tr>
                           </thead>
                           <tbody id="dataa_table_body">
                             <!--aqui va el listado de los días-->
@@ -321,6 +233,90 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <!--===============Modal agregar pension =========-->
+            <div class="modal fade" id="modal-agregar-pension">
+              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h4 class="modal-title">Agregar nueva pensión</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+
+                      <div class="modal-body">
+                          <!-- form start -->
+                          <form id="form-agregar-pension" name="form-agregar-pension" method="POST">
+                              <div class="card-body">
+                                  <div class="row" id="cargando-1-fomulario">
+                                      <!-- id semana_break -->
+                                      <input type="hidden" name="idproyecto_p" id="idproyecto_p" />
+                                      <!-- id factura_break -->
+                                      <input type="hidden" name="idpension" id="idpension" />
+
+                                    <!-- proveedor -->
+                                    <div class="col-lg-6">
+                                      <div class="form-group">
+                                        <label>Proveedor <sup  class="text-danger">*</sup> </label>                               
+                                        <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;" >                                    
+                                        </select>
+                                      </div>                                                        
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Servicio <sup  class="text-danger">*</sup> <small class="text-danger">los compos que seleccione, al editar no se borrarar</small> </label>
+                                            <div class="select2-purple">
+                                              <select class="form-control select2" multiple="multiple" name="servicio_p[]"  id="servicio_p" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione"  style="width: 100%;">
+                                                <option value="Desayuno">Desayuno</option>
+                                                <option value="Almuerzo">Almuerzo</option>
+                                                <option value="Cena">Cena</option>
+                                              </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- Fecha precios -->
+                                    <div class="col-lg-4">
+                                      <div class="form-group">
+                                        <label for="monto">Precio Desayuno</label>                               
+                                        <input type="number" name="p_desayuno" id="p_desayuno" class="form-control"  placeholder="Precio Desayuno"> 
+                                      </div>                                                        
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group">
+                                        <label for="monto">Precio Almuerzo</label>                               
+                                        <input type="number" name="p_almuerzo" id="p_almuerzo" class="form-control"  placeholder="Precio Almuerzo"> 
+                                      </div>                                                        
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group">
+                                        <label for="monto">Precio Cena</label>                               
+                                        <input type="number" name="p_cena" id="p_cena" class="form-control"  placeholder="Precio Cena"> 
+                                      </div>                                                        
+                                    </div>
+
+                                  </div>
+
+                                  <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                      <div class="col-lg-12 text-center">
+                                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                          <br />
+                                          <h4>Cargando...</h4>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+                              <button type="submit" style="display: none;" id="submit-form-pension">Submit</button>
+                          </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pension();">Close</button>
+                          <button type="submit" class="btn btn-success" id="guardar_registro_pension">Guardar Cambios</button>
+                      </div>
+                  </div>
               </div>
             </div>
             <!--===============Modal agregar Comprobantes =========-->
