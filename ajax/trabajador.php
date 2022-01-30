@@ -32,6 +32,9 @@
       $sueldo_mensual = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
       $sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
 
+      $fecha_inicio 		= isset($_POST['fecha_inicio'])? $_POST['fecha_inicio']:"";
+      $fecha_fin 		= isset($_POST['fecha_fin'])? $_POST['fecha_fin']:"";
+
       switch ($_GET["op"]){
 
         case 'guardaryeditar':
@@ -39,13 +42,13 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin));
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin));
             
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
@@ -106,10 +109,12 @@
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "3"=>$reg->sueldo_mensual,
-              "4"=>$reg->nombre_tipo.' / '.$reg->cargo,
-              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              "2"=>'<b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : $reg->fecha_inicio ). '<br> 
+                <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : $reg->fecha_fin ) ,
+              "3"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
+              "4"=>$reg->sueldo_mensual,
+              "5"=>$reg->nombre_tipo.' / '.$reg->cargo,
+              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
@@ -159,6 +164,23 @@
 
       require 'noacceso.php';
     }
+  }
+
+  // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
+  function format_a_m_d( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
   }
 
 	ob_end_flush();

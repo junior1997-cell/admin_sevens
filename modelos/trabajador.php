@@ -11,21 +11,21 @@ Class Trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora)
+	public function insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin)
 	{
-		$sql="INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora)
-		VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora')";
+		$sql="INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin)
+		VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin')";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar( $idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora )
+	public function editar( $idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin )
 	{
-		$sql="UPDATE trabajador_por_proyecto SET  idtrabajador='$trabajador', 
-		 idcargo_trabajador ='$cargo', desempenio='$desempenio', sueldo_mensual='$sueldo_mensual', 
-   		 sueldo_diario='$sueldo_diario',	sueldo_hora='$sueldo_hora' WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";	
+		$sql="UPDATE trabajador_por_proyecto SET  idtrabajador='$trabajador',  idcargo_trabajador ='$cargo', desempenio='$desempenio', 
+		sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario', sueldo_hora='$sueldo_hora', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin'
+		WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";	
 		
 		return ejecutarConsulta($sql);
 		
@@ -57,6 +57,7 @@ Class Trabajador
 			tp.sueldo_mensual,
 			tp.sueldo_diario,
 			tp.sueldo_hora,
+			tp.fecha_inicio, tp.fecha_fin,
 			tt.idtipo_trabajador,
 			ct.idcargo_trabajador,
 			o.nombre_ocupacion
@@ -90,6 +91,7 @@ Class Trabajador
 		tp.sueldo_mensual as sueldo_mensual,
 		tp.sueldo_diario as sueldo_diario,
 		tp.sueldo_hora as sueldo_hora,
+		tp.fecha_inicio, tp.fecha_fin,
 		t.direccion as direccion,
 		t.telefono as telefono,
 		t.email as email,
@@ -106,7 +108,7 @@ Class Trabajador
 	public function listar($nube_idproyecto)
 	{
 		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria, t.imagen_perfil as imagen, 
-		tp.idcargo_trabajador , tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.estado, tp.idtrabajador_por_proyecto, 
+		tp.idcargo_trabajador , tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.fecha_inicio, tp.fecha_fin, tp.estado, tp.idtrabajador_por_proyecto, 
 		tp.estado, b.nombre as banco, ct.nombre as cargo, ct.idtipo_trabjador as idtipo_trabjador, tt.nombre as nombre_tipo
 		FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p, bancos AS b, cargo_trabajador as ct, tipo_trabajador as tt
 		WHERE tp.idproyecto = p.idproyecto AND tp.idproyecto = '$nube_idproyecto'   AND tp.idtrabajador = t.idtrabajador AND t.idbancos = b.idbancos AND

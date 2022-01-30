@@ -17,7 +17,7 @@
         ?>
         <!-- Theme style -->
         <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->       
-         
+        <link rel="stylesheet" href="../dist/css/switch_domingo.css">
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed ">
         
@@ -236,7 +236,7 @@
                             <!-- Tipo de documento -->
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label for="tipo_documento">Tipo de documento</label>
+                                <label for="tipo_documento">Tipo de documento <sup class="text-danger">*</sup> </label>
                                 <select name="tipo_documento" id="tipo_documento" class="form-control"  placeholder="Tipo de documento">
                                   <option selected value="DNI">DNI</option>
                                   <option value="RUC">RUC</option>
@@ -249,7 +249,7 @@
                             <!-- N° de documento -->
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label for="numero_documento">N° de documento</label>
+                                <label for="numero_documento">N° de documento <sup class="text-danger">*</sup></label>
                                 <div class="input-group">
                                   <input type="number" name="numero_documento" id="numero_documento" class="form-control" placeholder="N° de documento" />
                                   <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
@@ -265,7 +265,7 @@
                             <!-- Empresa -->
                             <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="empresa">Empresa <small class="text-orange">(para quien va la obra)</small> </label>                               
+                                <label for="empresa">Empresa <sup class="text-danger">*</sup> <small class="text-orange">(para quien va la obra)</small> </label>                               
                                 <input type="text" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
                               </div>                                                        
                             </div>
@@ -273,7 +273,7 @@
                             <!-- Nombre del proyecto -->
                             <div class="col-lg-8">
                               <div class="form-group">
-                                <label for="nombre_proyecto">Nombre del proyecto</label>
+                                <label for="nombre_proyecto">Nombre del proyecto <sup class="text-danger">*</sup></label>
                                 <textarea name="nombre_proyecto" id="nombre_proyecto" class="form-control" rows="3" placeholder="Ingresa nombre">
                                 </textarea>
                               </div>                                                        
@@ -308,7 +308,7 @@
                             <!-- FECHA INICIO -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label>Fecha Inicio:</label>
+                                <label>Fecha Inicio: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
                                   <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_fechafin()" />
                                   <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
@@ -321,7 +321,7 @@
                             <!-- Dias habiles -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label for="dias_habiles">Plazo <small class="text-orange">(días hábiles)</small> </label>
+                                <label for="dias_habiles">Plazo <sup class="text-danger">*</sup> <small class="text-orange">(días hábiles)</small> </label>
                                 <input type="number" name="dias_habiles" id="dias_habiles" class="form-control" min="0"  placeholder="Días habiles" onchange="calcular_plazo_fechafin()" onkeyup="calcular_plazo_fechafin()" >
                               </div>
                             </div>
@@ -329,7 +329,7 @@
                             <!-- Plazo -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label for="plazo">Plazo <small class="text-orange">(días calendario)</small></label>
+                                <label for="plazo">Plazo <sup class="text-danger">*</sup> <small class="text-orange">(días calendario)</small></label>
                                 <input type="number" name="plazo" id="plazo" class="form-control" placeholder="Días calendario" readonly >
                               </div>
                             </div>
@@ -337,7 +337,7 @@
                             <!-- FECHA FIN -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label>Fecha fin:</label>
+                                <label>Fecha fin: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
                                   <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin"  data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask readonly/>
                                   <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
@@ -371,7 +371,7 @@
                             <!-- fechas de valorizacion -->
                             <div class="col-lg-4">                               
                               <div class="form-group">
-                                <label for="fecha_valorizacion">Valorizacion</label>
+                                <label for="fecha_valorizacion">Valorizacion <sup class="text-danger">*</sup></label>
                                 <select class="form-control select2" name="fecha_valorizacion" id="fecha_valorizacion" style="width: 100%;">
                                   <option selected value="quincenal">Quincenal</option>
                                   <option value="mensual">Mensual</option>
@@ -381,18 +381,26 @@
                             </div>
 
                             <!-- fechas de pago de obreros -->
-                            <div class="col-lg-4">
-                               
+                            <div class="col-lg-4">                               
                               <div class="form-group">
-                                <label for="fecha_pago_obrero">Pago de obreros</label>
-                                <select class="form-control select2" name="fecha_pago_obrero" id="fecha_pago_obrero" style="width: 100%;">
+                                <label for="fecha_pago_obrero">Pago de obreros <sup class="text-danger">*</sup></label>
+                                <select class="form-control select2" name="fecha_pago_obrero" id="fecha_pago_obrero" style="width: 100%;" onchange="validar_permanent();">
                                   <option value="quincenal">Quincenal</option>
                                   <option value="semanal">Semanal</option>
                                 </select>
                               </div>
                             </div>
 
-                            <div class="col-4"> <!-- relleno--> </div>
+                            <div class="col-lg-4">
+                              <label for="fecha_pago_obrero">Definir permanente <small class="text-danger">(pago de obreros)</small> </label>
+                              <div class="switch-toggle">
+                                <input type="checkbox" id="definiendo" >
+                                <label for="definiendo" onclick="permanente_pago_obrero()"></label>
+                              </div>
+                              <input type="hidden" name="permanente_pago_obrero" id="permanente_pago_obrero"  >
+                            </div>                            
+
+                            
 
                             <!-- Pdf 1 -->
                             <div class="col-md-6 col-lg-4" >                               

@@ -494,6 +494,8 @@ function limpiar() {
 	$("#foto3_actual").val("");  
   $("#foto3_nombre").html(""); 
   
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

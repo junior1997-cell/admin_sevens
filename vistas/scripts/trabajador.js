@@ -46,6 +46,26 @@ function init() {
   });
   
   $("#cargo").val('null').trigger("change");
+
+  $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_inicio').datetimepicker({
+    locale: 'es',
+    // format: 'L',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6],     
+    //defaultDate: "",
+  });
+
+  $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_fin').datetimepicker({
+    locale: 'es',
+    // format: 'L',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6],     
+    //defaultDate: "",
+  });
   
 }
 //captura id del trabajador
@@ -174,6 +194,11 @@ function limpiar() {
   $("#sueldo_mensual").val("");   
   $("#sueldo_diario").val("");   
   $("#sueldo_hora").val("");
+
+  $("#fecha_inicio").val("");  $("#fecha_fin").val("");
+
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar
@@ -242,11 +267,8 @@ function guardaryeditar(e) {
 
 function verdatos(idtrabajador){
 
-  console.log('id_verdatos'+idtrabajador);
+  console.log('id_verdatos'+idtrabajador);  
   
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-
   $('#datostrabajador').html('');
   var verdatos='';
   var imagenver='';
@@ -257,7 +279,7 @@ function verdatos(idtrabajador){
 
     data = JSON.parse(data);  console.log(data); 
 
-    var img =data.imagen != '' ? '<img src="../dist/img/usuarios/'+data.imagen+'" alt="" style="width: 90px;border-radius: 10px;">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
+    var img =data.imagen != '' ? `<img src="../dist/img/usuarios/${data.imagen}" alt="" style="width: 90px;border-radius: 10px;" onerror="this.src='../dist/svg/user_default.svg';">` : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
      verdatos=''+                                                                            
     '<div class="col-12">'+
       '<div class="card">'+
@@ -361,6 +383,9 @@ function mostrar(idtrabajador,idtipo) {
     $("#sueldo_mensual").val(data.sueldo_mensual);   
     $("#sueldo_diario").val(data.sueldo_diario);   
     $("#sueldo_hora").val(data.sueldo_hora);
+
+    $("#fecha_inicio").val(format_d_m_a(data.fecha_inicio));
+    $("#fecha_fin").val(format_d_m_a(data.fecha_fin));
   });
 }
 
@@ -493,3 +518,18 @@ $(function () {
   });
 });
 
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+function format_d_m_a(fecha) {
+
+  let splits = fecha.split("-"); //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
+function format_a_m_d(fecha) {
+
+  let splits = fecha.split("-"); //console.log(splits);
+
+  return splits[2]+'-'+splits[1]+'-'+splits[0];
+}

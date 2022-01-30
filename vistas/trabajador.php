@@ -67,6 +67,7 @@
                             <tr>
                               <th class="">Aciones</th>
                               <th>Nombres</th>
+                              <th>Fechas-Trabajo</th>
                               <th>Cuenta bancaria</th>
                               <th>Sueldo mensual</th>
                               <th>Tipo / cargo</th>
@@ -78,6 +79,7 @@
                             <tr>
                               <th>Aciones</th>
                               <th>Nombres</th>
+                              <th>Fechas-Trabajo</th>
                               <th>Cuenta bancaria</th>
                               <th>Sueldo mensual</th>
                               <th>Tipo / cargo</th>
@@ -161,6 +163,32 @@
                                   <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
                                 </div>
                               </div>
+
+                              <!-- FECHA INICIO -->
+                              <div class="col-lg-2">
+                                <div class="form-group">
+                                  <label>Fecha Inicio:</label>
+                                  <div class="input-group date"  data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask  />
+                                    <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>                                 
+                                </div>
+                              </div>
+
+                              <!-- FECHA INICIO -->
+                              <div class="col-lg-2">
+                                <div class="form-group">
+                                  <label>Fecha Fin:</label>
+                                  <div class="input-group date"  data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask  />
+                                    <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>                                 
+                                </div>
+                              </div>                              
                               
                             </div>
 

@@ -1,4 +1,5 @@
-var tabla; var tabla2; tablero();
+var tabla; var tabla2; tablero(); 
+var form_validate_proyecto;
 //Función que se ejecuta al inicio
 function init(){  
 
@@ -66,8 +67,41 @@ function init(){
 
 init();
 
+function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == null) {  $("#definiendo").prop('checked', false); } }
+
+function permanente_pago_obrero() {
+
+  if ($("#fecha_pago_obrero").select2('val') == null) {
+
+    toastr.error(`Selecione un pago obrero: <ul> <li>Quincenal</li> <li>Semanal</li> </ul>`);
+
+    if($('#definiendo').is(':checked')){ 
+      $("#definiendo").prop('checked', false); 
+    }else{ 
+      $("#definiendo").prop('checked', true); 
+    }
+  
+  } else {
+    if($('#definiendo').is(':checked')){ 
+      if ($('#fecha_pago_obrero').is(':disabled')) {
+        $("#permanente_pago_obrero").val(1);
+      }else{
+        $("#permanente_pago_obrero").val(0);
+      }
+       
+    }else{ 
+      if ($('#fecha_pago_obrero').is(':disabled')) {
+        $("#permanente_pago_obrero").val(1);
+      }else{
+        $("#permanente_pago_obrero").val(1);
+      } 
+    }
+  }
+}
+
 //Función limpiar
-function limpiar() {
+function limpiar() {  
+
   $("#idproyecto").val("");  
   $("#tipo_documento option[value='RUC']").attr("selected", true);
   $("#numero_documento").val(""); 
@@ -80,8 +114,12 @@ function limpiar() {
   $("#costo").val(""); 
   $("#empresa_acargo").val("Seven's Ingenieros SAC"); 
 
+  $("#fecha_pago_obrero").prop("disabled", false);
+  $("#definiendo").removeAttr("disabled");
+  $("#permanente_pago_obrero").val("0");
+
   $("#fecha_pago_obrero").val("").trigger("change");
-  $("#fecha_valorizacion").val("").trigger("change");
+  $("#fecha_valorizacion").val("").trigger("change");  
 
   $("#doc1").val(""); 
   $("#doc_old_1").val(""); 
@@ -112,6 +150,11 @@ function limpiar() {
   $("#doc_old_6").val("");
   $("#doc6_nombre").html('');
   $("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
+
+  form_validate_proyecto.resetForm();
 
 }
 
@@ -445,7 +488,7 @@ $(function () {
     },
   });
 
-  $("#form-proyecto").validate({
+  form_validate_proyecto = $("#form-proyecto").validate({
     rules: {
       tipo_documento: { maxlength: 45 },
       numero_documento: { required: true, minlength: 6, maxlength: 20 },
@@ -1468,6 +1511,8 @@ function dowload_pdf() {
 }
 
 function mostrar(idproyecto) {
+  
+  limpiar();
 
   $("#cargando-1-fomulario").hide();
 
@@ -1498,9 +1543,21 @@ function mostrar(idproyecto) {
     $("#fecha_pago_obrero").val(data.fecha_pago_obrero).trigger("change");
     $("#fecha_valorizacion").val(data.fecha_valorizacion).trigger("change");
      
-    console.log(format_d_m_a(data.fecha_inicio));
+    // console.log(format_d_m_a(data.fecha_inicio));
     $("#fecha_inicio").val(format_d_m_a(data.fecha_inicio));
     $("#fecha_fin").val(format_d_m_a(data.fecha_fin));
+
+    if (data.permanente_pago_obrero == '1') {
+      $("#fecha_pago_obrero").prop("disabled", true); 
+      $("#definiendo").prop('checked', true); 
+      $("#definiendo").attr("disabled", true);
+    } else {
+      $("#fecha_pago_obrero").prop("disabled", false); 
+      $("#definiendo").removeAttr("disabled");
+      $("#definiendo").prop('checked', false);       
+    }
+
+    $("#permanente_pago_obrero").val(data.permanente_pago_obrero);
     
     //validamoos DOC-1
     if (data.doc1_contrato_obra != ""  ) {
