@@ -77,15 +77,15 @@
                       </h3>
                       <!-- regresar -->
                       <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
+                        <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span>Regresar</span> </button>
                       </h3>
                       <!-- Editar -->
                       <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-orange" onclick="editarbreak();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> Editar</button>
+                        <button type="button" class="btn bg-gradient-orange" onclick="editarbreak();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span>Editar</span> </button>
                       </h3>
                       <!-- Guardar -->
                       <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_break();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
+                        <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_break();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span>Guardar</span> </button>
                       </h3>
                       <!-- regresar de comprobantes -->
                       <h3 class="card-title mr-3" id="regresar_aprincipal" style="display: none; padding-left: 2px;">
@@ -132,14 +132,14 @@
                       <!-- Registrar pension al sistema -->
                       <div id="tabla-registro" style="display: none;">
                         <style> .w-pxx-80{ width: 80px; } .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;} </style>
-                        <div class="container table-responsive disenio-scroll">
+                        <div class="container table-responsive disenio-scroll" style="max-width: 1241px!important;" >
 
                         <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                           <thead style="background-color: #bebebe1f; color: black;" >
                             <tr>
                               <th  rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
                               <th  rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
-                              <th  colspan="7" class="text-center clas_pading">Días que semana</th>
+                              <th  colspan="7" class="text-center clas_pading">Días de la semana</th>
                               <th  rowspan="2" colspan="1" class="text-center">Cantidad</th>
                               <th  rowspan="2" colspan="1" class="text-center">Adicional</th>
                               <th  rowspan="2" colspan="1" class="text-center">Parcial</th>

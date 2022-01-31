@@ -519,7 +519,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
             var weekday = extraer_dia_semana(fecha_asist); //console.log(weekday);
 
-              tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">${platos_x_dia}</span> <input type="number" value="${platos_x_dia}" class="hidden input-visible w-px-30" > </td>`);
+              tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">${platos_x_dia}</span> <input type="number" value="${platos_x_dia}" class="hidden input-visible w-px-45" > </td>`);
               
              /* array_class.push( { 
                 'id_trabajador':value.idtrabajador_por_proyecto, 
@@ -533,7 +533,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
             var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
 
-            tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-30" > </td>`);
+            tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45" > </td>`);
 
               /*array_class.push( { 
                 'id_trabajador':value.idtrabajador_por_proyecto, 
@@ -570,7 +570,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
           var weekday = extraer_dia_semana(format_a_m_d(fecha));
 
-          tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-30" > </td>`);
+          tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45" > </td>`);
            
            /* array_class.push( { 
               'id_trabajador':value.idtrabajador_por_proyecto, 
@@ -598,13 +598,13 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
       };
       array_trabajador.push( data_trabajador );*/
       var tabla_bloc_descrip_comida_1 =`<td><b>${value.nombre_servicio}</b></td>`;
-      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${value.precio}</b></span> <input type="number" class="hidden input-visible w-pxx-80"></td>`;
+      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(value.precio).toFixed(2)}</b></span> <input type="number" value="${parseFloat(value.precio).toFixed(2)}" class="hidden input-visible w-px-70"></td>`;
 
      // var tabla_bloc_dia_3 =`<td> <span class="text-center span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>`;
-      var tabla_bloc_cantidad_4 =`<td> <span class="span-visible">${value.cantidad_total_platos}</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>`;
-      var tabla_bloc_adicional_5=`<td> <span class="span-visible">${value.adicional_descuento}</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>`;
-      var tabla_bloc_parcial_6 =`<td> <span class="span-visible">${value.total}</span> <input type="number" class="hidden input-visible w-pxx-80"> </td>`;
-      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center" cols="30" rows="1" style="width: 400px;" readonly value="${value.descripcion}" ></textarea></td>`;
+      var tabla_bloc_cantidad_4 =`<td> <span class="span-visible">${value.cantidad_total_platos}</span> <input type="number" value="${value.cantidad_total_platos}" class="hidden input-visible w-px-70"> </td>`;
+      var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(value.adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(value.adicional_descuento).toFixed(2)}" class="hidden input-visible w-px-70"> </td>`;
+      var tabla_bloc_parcial_6 =`<td> <span class="span-visible">${parseFloat(value.total).toFixed(2)}</span> <input type="number"  value="${parseFloat(value.total).toFixed(2)}" class="hidden input-visible w-px-70"> </td>`;
+      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
 
       var tabla_bloc_HN_1 = `<tr>
               ${tabla_bloc_descrip_comida_1} 
