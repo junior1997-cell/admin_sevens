@@ -69,11 +69,12 @@
           $f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
           $nube_idproyect = $_POST["nube_idproyect"];
+          $id_pen = $_POST["id_pen"];
           /* $f1 = '2022-01-09';
           $f2 = '2022-01-15';
           $nube_idproyect = '2';*/
 
-          $rspta=$breaks->ver_detalle_semana_dias($f1,$f2,$nube_idproyect);
+          $rspta=$breaks->ver_detalle_semana_dias($f1,$f2,$nube_idproyect,$id_pen);
 
           //Vamos a declarar un array
           // $data= Array();           

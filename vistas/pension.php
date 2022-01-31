@@ -135,7 +135,7 @@
                         <div class="container table-responsive disenio-scroll">
 
                         <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
-                          <thead style="background-color: #408c98; color: white;" >
+                          <thead style="background-color: #bebebe1f; color: black;" >
                             <tr>
                               <th  rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
                               <th  rowspan="2" colspan="1" class="text-center  w-px-135">Precio actual</th>
@@ -147,7 +147,7 @@
                             </tr>
                             <tr id="bloque_fechas"></tr>
                           </thead>
-                          <tbody id="dataa_table_body">
+                          <tbody id="data_table_body">
                             <!--aqui va el listado de los días-->
                           </tbody>
                           <tfoot>

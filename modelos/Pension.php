@@ -73,32 +73,32 @@ Class Pension
 		return ejecutarConsultaSimpleFila($sql);
 	}
 	//ver detalle semana a semana
-	public function ver_detalle_semana_dias($f1,$f2,$nube_idproyect){
+	public function ver_detalle_semana_dias($f1,$f2,$nube_idproyect,$id_pen){
 
-		$idpension=''; $idproyecto=''; $tipo_pension=''; $precio_variable='';
+		$idpension='';
 
 		$idsemana_pension=''; $precio_comida=''; $cantidad_total_platos=''; $adicional_descuento=''; $total=''; $descripcion='';
 
 		$datos_semana= Array(); 
 
-		$sql_1="SELECT idpension, idproyecto, tipo_pension, precio_variable FROM pension WHERE estado=1 AND idproyecto='$nube_idproyect'";
-		$pension =ejecutarConsultaArray($sql_1);
+		$sql_1="SELECT sp.idservicio_pension, sp.nombre_servicio, sp.precio FROM servicio_pension As sp, pension AS p WHERE sp.idpension='$id_pen' AND sp.idpension=p.idpension";
+		$servicio_pension =ejecutarConsultaArray($sql_1);
 
-		if (!empty($pension)) {
+		if (!empty($servicio_pension)) {
 
-			foreach ($pension as $key => $value) {
+			foreach ($servicio_pension as $key => $value) {
 
 
-				$idpension = $value['idpension'];
+				$idpension = $value['idservicio_pension'];
 
-				$sql_2="SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_pension, dp.cantidad_platos
-				FROM detalle_pension as dp, proyecto as p, pension as pen 
-				WHERE dp.estado=1 AND dp.idpension='$idpension' AND dp.idpension= pen.idpension AND pen.idproyecto=p.idproyecto  AND dp.fecha_pension BETWEEN '$f1' AND '$f2'";
+				$sql_2="SELECT dp.fecha_pension, dp.cantidad_platos
+				FROM detalle_pension as dp, servicio_pension as sp 
+				WHERE dp.estado='1' AND dp.idservicio_pension='$idpension' AND  dp.idservicio_pension=sp.idservicio_pension AND dp.fecha_pension BETWEEN '$f1' AND '$f2'";
 				$datos_rangos_fechas= ejecutarConsultaArray($sql_2);
 
 				$sql_3 = "SELECT idsemana_pension,precio_comida,cantidad_total_platos,adicional_descuento,total,descripcion 
-				FROM semana_pension as sp, pension as p
-				WHERE sp.estado AND sp.idpension='$idpension' AND sp.fecha_inicio='$f1' AND sp.idpension=p.idpension";
+				FROM semana_pension as sp, servicio_pension as ser_p 
+				WHERE sp.estado='1' AND sp.idservicio_pension='$idpension' AND sp.fecha_inicio ='$f1' AND sp.idservicio_pension=ser_p.idservicio_pension";
 				$rango_fecha_semana= ejecutarConsultaSimpleFila($sql_3);
 
 				if (empty($rango_fecha_semana)) {
@@ -116,10 +116,9 @@ Class Pension
 				}
 				
 				$datos_semana[]= array(
-					"idpension"             => $value['idpension'],
-					"idproyecto"     		=> $value['idproyecto'],
-					"tipo_pension"         	=> $value['tipo_pension'],
-					"precio_variable"       => $value['precio_variable'],
+					"idservicio_pension"     => $value['idservicio_pension'],
+					"nombre_servicio"     	 => $value['nombre_servicio'],
+					"precio"         	     => $value['precio'],
 
 					"idsemana_pension"      =>$idsemana_pension,
 					"precio_comida"         => $precio_comida,
@@ -127,6 +126,7 @@ Class Pension
 					"adicional_descuento"   =>$adicional_descuento,
 					"total"                 =>$total, 
 					"descripcion"           =>$descripcion,
+
 					"dias_q_comieron"       =>$datos_rangos_fechas
 
 				);	
