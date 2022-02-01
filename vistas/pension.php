@@ -51,7 +51,7 @@
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1>Pensión</h1>
+                  <h1>Pensión - <b id="nomb_pension_head"></b> </h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
@@ -77,15 +77,15 @@
                       </h3>
                       <!-- regresar -->
                       <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span>Regresar</span> </button>
+                        <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                       </h3>
                       <!-- Editar -->
                       <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-orange" onclick="editarbreak();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span>Editar</span> </button>
+                        <button type="button" class="btn bg-gradient-orange" onclick="editarbreak();" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
                       </h3>
                       <!-- Guardar -->
                       <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
-                        <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_break();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span>Guardar</span> </button>
+                        <button type="button" class="btn bg-gradient-success" onclick="guardaryeditar_semana_pension();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block">Guardar</span> </button>
                       </h3>
                       <!-- regresar de comprobantes -->
                       <h3 class="card-title mr-3" id="regresar_aprincipal" style="display: none; padding-left: 2px;">
@@ -154,7 +154,7 @@
                             <tr>
                             <th colspan="10" style="border-bottom: hidden;border-left: hidden;"></th>
                             <th class="text-center">Total</th>
-                            <th class="text-center">----</th>
+                            <th class="text-center" id="parcial_total_x_semana">----</th>
                             <th class="text-center" style="border-bottom: hidden;border-right: hidden;"></th>
                             </tr>
                           </tfoot>

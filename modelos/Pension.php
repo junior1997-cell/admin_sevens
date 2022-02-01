@@ -11,55 +11,55 @@ Class Pension
 	}
 	
 	//Implementamos un método para insertar registros
-	public function insertar_editar($array_break,$fechas_semanas_btn,$idproyecto){
-		$total  = 0;
-		$desglese_break = json_decode($array_break,true); $sw = true;
-		$fechas_semanas_btn = json_decode($fechas_semanas_btn, true);
+	public function insertar_editar($array_detalle_pen,$array_semana_pen){
+
+		$desglese_array_detalle_pen = json_decode($array_detalle_pen,true); $sw = true;
+		$desglose_array_semana_pen = json_decode($array_semana_pen, true);
 		// registramos o editamos los "Break por semana"
-		foreach ($desglese_break as $indice => $key) {
+		foreach ($desglese_array_detalle_pen as $indice => $key) {
 		
-			if ( empty($key['idbreak'])) {
+			if ( empty($key['iddetalle_pension'])) {
 
 				// insertamos un nuevo registro
-				$sql_2="INSERT INTO breaks (idproyecto, fecha_compra, dia_semana, cantidad, costo_parcial, descripcion)
-				VALUES ('$idproyecto', '".$key['fecha_compra']."', '".$key['dia_semana']."', '".$key['cantidad_compra']."', '".$key['precio_compra']."', '".$key['descripcion_compra']."')";
+				$sql_2="INSERT INTO `detalle_pension`(`idservicio_pension`, `fecha_pension`, `dia_semana`, `cantidad_platos`, `precio_plato`, `precio_parcial`) 
 
+				VALUES ('".$key['idservicio_pension']."','".$key['fecha_pension']."','".$key['dia_semana']."','".$key['cantidad_platos']."','".$key['precio_plato']."','".$key['precio_parcial']."')";
 				ejecutarConsulta($sql_2) or $sw = false;
 
 			} else {
 				# editamos el registro existente
-				$sql_3="UPDATE breaks SET idproyecto='$idproyecto', 
-				fecha_compra='".$key['fecha_compra']."', 
+				$sql_3="UPDATE detalle_pension SET 
+				idservicio_pension='".$key['idservicio_pension']."', 
+				fecha_pension='".$key['fecha_pension']."', 
 				dia_semana='".$key['dia_semana']."', 
-				cantidad='".$key['cantidad_compra']."', 
-				costo_parcial='".$key['precio_compra']."',
-				descripcion='".$key['descripcion_compra']."'	
-				WHERE idbreak='".$key['idbreak']."';";
+				cantidad_platos='".$key['cantidad_platos']."',
+				precio_plato='".$key['precio_plato']."',	
+				precio_parcial='".$key['precio_parcial']."'	
+				WHERE iddetalle_pension ='".$key['iddetalle_pension']."';";
 				
 				ejecutarConsulta($sql_3) or $sw = false;
 			}
-			$total = $total+ floatval($key['precio_compra']); 
-
-
 		}
-		foreach ($fechas_semanas_btn as $key => $value) {
-
-			$sql_4 = "SELECT idsemana_break FROM semana_break WHERE idproyecto='$idproyecto' AND fecha_inicial = '".$value['fecha_in_btn']."' AND  fecha_final = '".$value['fecha_fi_btn']."' ";
-			
-			$buscar_idbreak = ejecutarConsultaSimpleFila($sql_4);
-
-			if(empty($buscar_idbreak['idsemana_break'])){
-				$sql5 = "INSERT INTO semana_break(idproyecto, numero_semana, fecha_inicial, fecha_final, total) 
-				VALUES ('$idproyecto','".$value['num_semana']."','".$value['fecha_in_btn']."','".$value['fecha_fi_btn']."','$total')";
-				ejecutarConsulta($sql5) or $sw = false;
+		foreach ($desglose_array_semana_pen as $key => $value) {
+           
+			if(empty($value['idsemana_pension'])){
+ 				// insertamos un nuevo registro
+				$sql_5 = "INSERT INTO `semana_pension`(`idservicio_pension`, `fecha_inicio`, `fecha_fin`, `numero_semana`, `precio_comida`, `cantidad_total_platos`, `adicional_descuento`, `total`, `descripcion`) 
+				VALUES ('".$value['idservicio_pension']."','".$value['fecha_inicio']."','".$value['fecha_fin']."','".$value['numero_semana']."','".$value['precio_comida']."','".$value['cantidad_total_platos']."','".$value['adicional_descuento']."','".$value['total']."','".$value['descripcion']."')";
+				ejecutarConsulta($sql_5) or $sw = false;
 			}else{
-				$sql6 = " UPDATE semana_break SET 
-					idproyecto='$idproyecto',
-					numero_semana='".$value['num_semana']."',
-					fecha_inicial='".$value['fecha_in_btn']."',
-					fecha_final='".$value['fecha_fi_btn']."',
-					total='$total'
-					WHERE  idsemana_break='".$buscar_idbreak['idsemana_break']."';";
+				# editamos el registro existente
+				$sql6 = " UPDATE semana_pension SET 
+					idservicio_pension='".$value['idservicio_pension']."',
+					fecha_inicio='".$value['fecha_inicio']."',
+					fecha_fin='".$value['fecha_fin']."',
+					numero_semana='".$value['numero_semana']."',
+					precio_comida='".$value['precio_comida']."',
+					cantidad_total_platos='".$value['cantidad_total_platos']."',
+					adicional_descuento='".$value['adicional_descuento']."',
+					total='".$value['total']."',
+					descripcion='".$value['descripcion']."'
+					WHERE  idsemana_pension='".$value['idsemana_pension']."';";
 				ejecutarConsulta($sql6) or $sw = false;
 			}
 		}
@@ -91,7 +91,7 @@ Class Pension
 
 				$idpension = $value['idservicio_pension'];
 
-				$sql_2="SELECT dp.fecha_pension, dp.cantidad_platos
+				$sql_2="SELECT dp.iddetalle_pension,dp.fecha_pension, dp.cantidad_platos
 				FROM detalle_pension as dp, servicio_pension as sp 
 				WHERE dp.estado='1' AND dp.idservicio_pension='$idpension' AND  dp.idservicio_pension=sp.idservicio_pension AND dp.fecha_pension BETWEEN '$f1' AND '$f2'";
 				$datos_rangos_fechas= ejecutarConsultaArray($sql_2);
@@ -121,7 +121,7 @@ Class Pension
 					"precio"         	     => $value['precio'],
 
 					"idsemana_pension"      =>$idsemana_pension,
-					"precio_comida"         => $precio_comida,
+					"precio_comida"         =>$precio_comida,
 					"cantidad_total_platos" =>$cantidad_total_platos,
 					"adicional_descuento"   =>$adicional_descuento,
 					"total"                 =>$total, 

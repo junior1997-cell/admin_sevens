@@ -47,7 +47,7 @@
 
         case 'guardaryeditar':
 
-            $rspta=$breaks->insertar_editar($_POST['array_break'],$_POST['fechas_semanas_btn'],$_POST['idproyecto']);
+            $rspta=$breaks->insertar_editar($_POST['array_detalle_pen'],$_POST['array_semana_pen']);
             
            echo $rspta ? "ok" : "No se pudieron registrar todos datos";
            // echo $rspta ;
@@ -350,7 +350,7 @@
             $data[]=array(
 
               "0"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg->idpension.')"><i class="fas fa-pencil-alt"></i></button>'.
-              ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.','.$reg->idproyecto.')">Ingresar <i class="far fa-eye"></i></button>',
+              ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.','.$reg->idproyecto.',\'' . $reg->razon_social.  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
               "1"=>'<div class="user-block">
                 <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Pensión. '.$reg->razon_social.'</p></span>
                 <span style="font-weight: bold; font-size: 15px;">'.$reg->direccion.' </span>

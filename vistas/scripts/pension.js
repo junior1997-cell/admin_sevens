@@ -5,6 +5,7 @@ var editando=false;
 var editando2=false;
 ////////////////////////////
 var array_class=[];
+
 var array_datosPost=[];
 var array_fi_ff=[];
 var f1_reload=''; var f2_reload=''; var i_reload  = ''; var cont_reload  = '';
@@ -177,6 +178,7 @@ function foto2_eliminar() {
 function mostrar_form_table(estados) {
 
   if (estados == 1 ) {
+    $("#nomb_pension_head").html("");
     $("#mostrar-tabla").show();
     $("#guardar_pension").show();
 
@@ -317,7 +319,8 @@ function listar_botoness( nube_idproyecto ) {
   });
 }
 //funcion para ingresar la fecha para rellenar los días de las pensiones
-function ingresar_a_pension(idpension,idproyecto) {
+function ingresar_a_pension(idpension,idproyecto,razon_social) {
+  $("#nomb_pension_head").html(razon_social);
   id_pension=idpension;
   mostrar_form_table(2);
   
@@ -325,15 +328,49 @@ function ingresar_a_pension(idpension,idproyecto) {
 }
 //Función para guardar o editar
 
-function guardaryeditar_semana_break() {
+function guardaryeditar_semana_pension() {
   $("#modal-cargando").modal("show");
+  var array_detalle_pen= [];
+  var array_semana_pen= [];
+  array_class.forEach(element => {
+    var precio_x_comida =parseFloat($(`.input_precio_${element.idservicio_pension}`).val())*parseFloat($(`.input_dia_${element.idservicio_pension}_${element.fecha_asist}`).val());
+    //value.adicional_descuento=='' ? adicional_descuento='0.00' : adicional_descuento=value.adicional_descuento;
+    array_detalle_pen.push(
+      {
+        "iddetalle_pension" :element.iddetalle_pension,
+        "idservicio_pension" :element.idservicio_pension,
+        "fecha_pension":element.fecha_asist,
+        "dia_semana":extraer_dia_semana(element.fecha_asist),
+        "cantidad_platos":$(`.input_dia_${element.idservicio_pension}_${element.fecha_asist}`).val(),
+        "precio_plato":$(`.input_precio_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_precio_${element.idservicio_pension}`).val(),
+        "precio_parcial":precio_x_comida.toFixed(2)=='' ?'0.00' : precio_x_comida.toFixed(2),
+      }
+    );
+  });
+  
+  array_servicio.forEach(element => {
+   
+    array_semana_pen.push({
+      "idsemana_pension":element.idsemana_pension,
+      "idservicio_pension":element.idservicio_pension,
+      "fecha_inicio":format_a_m_d(f1_reload),
+      "fecha_fin":format_a_m_d(f2_reload),
+      "numero_semana":cont_reload,
+      "precio_comida":$(`.input_precio_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_precio_${element.idservicio_pension}`).val(),
+      "cantidad_total_platos":$(`.span_cantidad_${element.idservicio_pension}`).text(),
+      "adicional_descuento":$(`.input_adicional_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_adicional_${element.idservicio_pension}`).val(),
+      "total":$(`.span_parcial_${element.idservicio_pension}`).text()=='' ?'0.00' : $(`.span_parcial_${element.idservicio_pension}`).text(),
+      "descripcion":$(`.textarea_descrip_${element.idservicio_pension}`).val(),
+
+    });
+  });
+
   $.ajax({
     url: "../ajax/pension.php?op=guardaryeditar",
     type: "POST",
     data: {
-      'array_break': JSON.stringify(array_datosPost),
-      'fechas_semanas_btn': JSON.stringify(array_guardar_fi_ff),
-      'idproyecto': localStorage.getItem('nube_idproyecto'),
+      'array_detalle_pen': JSON.stringify(array_detalle_pen),
+      'array_semana_pen': JSON.stringify(array_semana_pen),
     },
     // contentType: false,
     // processData: false,
@@ -341,7 +378,8 @@ function guardaryeditar_semana_break() {
              
       if (datos == 'ok') {
 
-        datos_semana( f1_reload, f2_reload , i_reload);
+        datos_semana( f1_reload, f2_reload ,cont_reload, i_reload,id_pen=id_pension);
+       
         listar( localStorage.getItem('nube_idproyecto'));
         
         $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
@@ -405,7 +443,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
   $("#card-editar").show(); $("#card-guardar").hide();  
 
   // vaciamos el array
-  array_class = []; array_trabajador = []
+  array_class = []; array_servicio = []
 
   // pintamos el botón
   pintar_boton_selecionado(i);
@@ -463,8 +501,8 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
   $('#bloque_fechas').html(table_dia_semana);
 
-  // $('.data-numero-semana').html(table_numero_semana);
-  
+  // $('.data-numero-semana').html(table_numero_semana
+  var total_monto_x_semana=0;
   $.post("../ajax/pension.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect,id_pen:id_pen}, function (data, status) {
         
     data =JSON.parse(data); //console.log(data);   
@@ -472,6 +510,15 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
     $("#data_table_body").html('');   
      
     $.each(data, function (index, value) {
+      if (value.total!='') {
+
+        total_monto_x_semana+=parseFloat(value.total);
+
+      } else {
+
+        total_monto_x_semana='0.00';
+      }
+      
       count_bloque_q_s = 1;
       var count_dias_asistidos = 0; var platos_x_servicio = 0; var horas_nomr_total = 0; var horas_extr_total = 0; var sabatical = 0;
       
@@ -492,11 +539,13 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
         }
 
         for (i = 1; i <=7+dia_regular; i++) {
-
-          var estado_fecha = false; var fecha_asist = "";  var platos_x_dia=0;
+          //console.log('i');
+          console.log(i); 
+          var estado_fecha = false; var fecha_asist = "";  var platos_x_dia=0; var iddetalle_pension='';
 
           // buscamos las fechas asistidas
-          for (let i = 0; i < value.dias_q_comieron.length; i++) { 
+          for (let i = 0; i < value.dias_q_comieron.length; i++) {
+            
             
             let split_f = format_d_m_a( value.dias_q_comieron[i]['fecha_pension'] ) ; 
              
@@ -510,6 +559,8 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
               
               platos_x_dia = value.dias_q_comieron[i]['cantidad_platos'];
 
+              iddetalle_pension = value.dias_q_comieron[i]['iddetalle_pension'];
+
               count_dias_asistidos++;                          
             }
           } //end for
@@ -519,29 +570,27 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
             var weekday = extraer_dia_semana(fecha_asist); //console.log(weekday);
 
-              tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">${platos_x_dia}</span> <input type="number" value="${platos_x_dia}" class="hidden input-visible w-px-45" > </td>`);
+              tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">${platos_x_dia}</span> <input type="number" value="${platos_x_dia}" class="hidden input-visible w-px-45 input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${fecha_asist}" onchange="calcular_platos(${value.idservicio_pension},'${fecha_asist}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${fecha_asist}',${data.length})"> </td>`);
               
-             /* array_class.push( { 
-                'id_trabajador':value.idtrabajador_por_proyecto, 
-                'fecha_asistida':format_d_m_a(fecha_asist), 
-                'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}`, 
-                'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}`,
-                'sueldo_hora':value.sueldo_hora
-              } );*/
+              array_class.push( { 
+                'idservicio_pension':value.idservicio_pension, 
+                'iddetalle_pension':iddetalle_pension,
+                'fecha_asist':fecha_asist,
+
+              } );
 
           } else { // imprimimos la fecha de asistencia: "No encontrada"
 
             var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
 
-            tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45" > </td>`);
+            tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45 input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${format_a_m_d(fecha)}" onchange="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})"> </td>`);
 
-              /*array_class.push( { 
-                'id_trabajador':value.idtrabajador_por_proyecto, 
-                'fecha_asistida':fecha, 
-                'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${fecha}`,
-                'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${fecha}`,
-                'sueldo_hora':value.sueldo_hora
-              } );*/
+              array_class.push( { 
+                'idservicio_pension':value.idservicio_pension, 
+                'iddetalle_pension':'',
+                'fecha_asist':format_a_m_d(fecha),
+
+              } );
 
           }
 
@@ -570,15 +619,14 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
           var weekday = extraer_dia_semana(format_a_m_d(fecha));
 
-          tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45" > </td>`);
+          tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45 input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${format_a_m_d(fecha)}" onchange="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})"> </td>`);
            
-           /* array_class.push( { 
-              'id_trabajador':value.idtrabajador_por_proyecto, 
-              'fecha_asistida':fecha, 
-              'class_input_hn':`input_HN_${value.idtrabajador_por_proyecto}_${fecha}`,   
-              'class_input_he':`input_HE_${value.idtrabajador_por_proyecto}_${fecha}`,
-              'sueldo_hora':value.sueldo_hora
-            } );*/
+            array_class.push( { 
+              'idservicio_pension':value.idservicio_pension, 
+              'iddetalle_pension':'',
+              'fecha_asist':format_a_m_d(fecha),
+
+            } );
 
             // aumentamos mas un dia hasta llegar al dia 15
           fecha = sumaFecha(1,fecha);
@@ -591,20 +639,28 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
       
 
       // asignamos lo trabajadores a un "array"
-     /* var data_trabajador = { 
-        'id_trabajador':value.idtrabajador_por_proyecto, 
-        'fecha_asistida':value.nombres,
-        'sueldo_hora':value.sueldo_hora
-      };
-      array_trabajador.push( data_trabajador );*/
+      array_servicio.push( {
+        'idservicio_pension':value.idservicio_pension, 
+        'idsemana_pension':value.idsemana_pension
+
+      } );
+
+
+     
+      var adicional_descuento=0;  
+      value.adicional_descuento=='' ? adicional_descuento='0.00' : adicional_descuento=value.adicional_descuento;
+
+      var total=0;
+      value.total=='' ? total='0.00' : total=value.total;
+      
       var tabla_bloc_descrip_comida_1 =`<td><b>${value.nombre_servicio}</b></td>`;
-      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(value.precio).toFixed(2)}</b></span> <input type="number" value="${parseFloat(value.precio).toFixed(2)}" class="hidden input-visible w-px-70"></td>`;
+      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(value.precio).toFixed(2)}</b></span> <input type="number" value="${parseFloat(value.precio).toFixed(2)}" onchange="calcular_precios(${value.idservicio_pension},${data.length})" onkeyup="calcular_precios(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_precio_${value.idservicio_pension}"></td>`;
 
      // var tabla_bloc_dia_3 =`<td> <span class="text-center span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>`;
-      var tabla_bloc_cantidad_4 =`<td> <span class="span-visible">${value.cantidad_total_platos}</span> <input type="number" value="${value.cantidad_total_platos}" class="hidden input-visible w-px-70"> </td>`;
-      var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(value.adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(value.adicional_descuento).toFixed(2)}" class="hidden input-visible w-px-70"> </td>`;
-      var tabla_bloc_parcial_6 =`<td> <span class="span-visible">${parseFloat(value.total).toFixed(2)}</span> <input type="number"  value="${parseFloat(value.total).toFixed(2)}" class="hidden input-visible w-px-70"> </td>`;
-      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
+      var tabla_bloc_cantidad_4 =`<td class="text-center"> <span class="span_cantidad_${value.idservicio_pension}">${value.cantidad_total_platos}</span> </td>`;
+      var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(adicional_descuento).toFixed(2)}" onchange="calcular_adicional(${value.idservicio_pension},${data.length})" onkeyup="calcular_adicional(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_adicional_${value.idservicio_pension}"> </td>`;
+      var tabla_bloc_parcial_6 =`<td> <span class="span_parcial_${value.idservicio_pension} calcular_total_parcial_${index+1}">${parseFloat(total).toFixed(2)}</span></td>`;
+      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center textarea-visible textarea_descrip_${value.idservicio_pension}" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
 
       var tabla_bloc_HN_1 = `<tr>
               ${tabla_bloc_descrip_comida_1} 
@@ -620,28 +676,8 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
       $("#data_table_body").append(tabla_bloc_HN_1);
 
     }); // end foreach
-
-    var tabla_bloc_TOTAL_1 = '';
-
-    if (cant_dias_asistencia == 14) {
-
-      tabla_bloc_TOTAL_1 = `<tr> <td class="text-center" colspan="24"></td> <td class="text-center"> <b>TOTAL</b> </td> <td class="text-center"><span  class="pago_total_quincenal"> ${formato_miles(total_pago.toFixed(2))}</span> </td> </tr>`;
-      
-    } else { 
-
-      if (cant_dias_asistencia == 7) {
-
-        tabla_bloc_TOTAL_1 = `<tr> <td class="text-center" colspan="17"></td> <td class="text-center"> <b>TOTAL</b> </td> <td class="text-center"><span  class="pago_total_quincenal"> ${formato_miles(total_pago.toFixed(2))}</span> </td> </tr>`;
-        
-      } else {
-
-        tabla_bloc_TOTAL_1 = `<tr> <td class="text-center" colspan="24"></td> <td class="text-center"> <b>TOTAL</b> </td> <td class="text-center"><span  class="pago_total_quincenal"> ${formato_miles(total_pago.toFixed(2))}</span> </td> </tr>`;
-        
-      }
-    }
-
-    $(".data_table_body").append(tabla_bloc_TOTAL_1);
-
+    $("#parcial_total_x_semana").html(total_monto_x_semana);
+    
   }); //end post - ver_datos_semana
 
   $("#ver_asistencia").show();
@@ -651,216 +687,128 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
   count_dias_asistidos = 0;  horas_nomr_total = 0;   horas_extr_total = 0;
 }
 // Calculamos las: Horas normal/extras,	Días asistidos,	Sueldo Mensual,	Jornal,	Sueldo hora,	Sabatical,	Pago parcial,	Adicional/descuento,	Pago quincenal
-function calcular_he(fecha, span_class_he, input_class_hn, id_trabajador, cant_dias_asistencia, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2) {
+function calcular_platos(idservicio_pension,fecha_asist,can_servicios) {
 
-  //limpiamos los sabaticales
-  if (sabatical_manual_1 == '-') { $(`.desglose_q_s_${id_trabajador}_7`).val(''); }
- 
-  if (sabatical_manual_2 == '-') { $(`.desglose_q_s_${id_trabajador}_14`).val(''); }
-
-  var hora_extr = 0; var platos_x_servicioorm = 0; var capturar_val_input = document.getElementById(input_class_hn).value; //$(`.${input_class_hn}`).val();
-
-  // console.log(capturar_val_input);
-
-  if ( parseFloat(capturar_val_input) > 8) {
-
-    hora_extr = parseFloat(capturar_val_input) - 8;
-
-    platos_x_servicioorm = 8;
-
-    $(`.input_HE_${id_trabajador}_${fecha}`).val(hora_extr); $(`.${span_class_he}`).html(hora_extr);   $(`.${input_class_hn}`).val(platos_x_servicioorm);
-
-  }else{ 
-
-    $(`.${span_class_he}`).html('0.0'); // platos_x_servicioorm = parseFloat(input_val.value); 
-
-    $(`.input_HE_${id_trabajador}_${fecha}`).val(0.00);
-  }
-
-  var suma_hn = 0; var suma_he = 0; var dias_asistidos = 0; var pago_parcial_hn = 0; var pago_parcial_he = 0; var adicional_descuento = 0;
+  //variables
+   var platos_x_servicio = 0; var parcial_x_servicio=0; var total_parcial=0; var adicional_descuento=0; var precio=0;
 
   // calcular pago quincenal
-  for (let index = 1; index <= parseInt(cant_dias_asistencia); index++) {
+  for (let index = 1; index <= 7; index++) {
 
     // console.log( $(`.input_HN_${id_trabajador}_${index}`).val());    console.log( $(`.input_HE_${id_trabajador}_${index}`).val());
 
-    if (parseFloat($(`.input_HN_${id_trabajador}_${index}`).val()) > 0 ) {
+    if (parseFloat($(`.input_dia_${idservicio_pension}_${index}`).val()) > 0 ) {
 
-      suma_hn = suma_hn + parseFloat($(`.input_HN_${id_trabajador}_${index}`).val());
+      platos_x_servicio = platos_x_servicio + parseFloat($(`.input_dia_${idservicio_pension}_${index}`).val());
 
-      dias_asistidos++;
-    }
-
-    if (parseFloat($(`.input_HE_${id_trabajador}_${index}`).val()) > 0 ) {
-
-      suma_he = suma_he + parseFloat($(`.input_HE_${id_trabajador}_${index}`).val());
     }
 
   }
 
-  // calculamos los sabaticales automáticos
-  var horas_1_sabado = 0; var horas_2_sabado = 0; var sabatical = 0;
+  // validamos el adicional descuento 
+  if (parseFloat($(`.input_adicional_${idservicio_pension}`).val()) >= 0 || parseFloat($(`.input_adicional_${idservicio_pension}`).val()) <= 0 ) {
 
-  for (let x = 1; x <= parseInt(cant_dias_asistencia); x++) {
-     
-    // acumulamos las horas para el "primer" sabatical
-    if (sabatical_manual_1 == '-') {
-      if ( x < 7 ) {
-        if ($(`.desglose_q_s_${id_trabajador}_${x}`).val() > 0) {
-          horas_1_sabado += parseFloat($(`.desglose_q_s_${id_trabajador}_${x}`).val());
-        }        
-      }      
-    } 
-
-    // acumulamos las horas para el "segundo" sabatical
-    if (sabatical_manual_2 == '-') {
-      if ( x > 7 && x < 14 ) {
-        if ($(`.desglose_q_s_${id_trabajador}_${x}`).val()  > 0) {
-          horas_2_sabado += parseFloat($(`.desglose_q_s_${id_trabajador}_${x}`).val());
-        }        
-      }
-    }
-  }
-
-  if (sabatical_manual_1 == '-') {
-    if (horas_1_sabado >= 44 ) {
-      $(`.desglose_q_s_${id_trabajador}_7`).val('8');
-      $(`#checkbox_sabatical_${id_trabajador}_1`).prop('checked', true); suma_hn += 8; dias_asistidos +=1; sabatical += 1; 
-    } else {
-      $(`.desglose_q_s_${id_trabajador}_7`).val('0');       
-      $(`#checkbox_sabatical_${id_trabajador}_1`).prop('checked', false);
-    }     
-    $(`.sabatical_${id_trabajador}`).html(sabatical);    
-  }
-
-  if (sabatical_manual_2 == '-') {
-    if (horas_2_sabado >= 44) {
-      $(`.desglose_q_s_${id_trabajador}_14`).val('8');
-      $(`#checkbox_sabatical_${id_trabajador}_2`).prop('checked', true); suma_hn += 8; dias_asistidos +=1; sabatical += 1;
-    } else {
-      $(`.desglose_q_s_${id_trabajador}_14`).val('0'); 
-      $(`#checkbox_sabatical_${id_trabajador}_2`).prop('checked', false);
-    }
-    $(`.sabatical_${id_trabajador}`).html(sabatical);
-  }
-
-  if (sabatical_manual_1 == '1') { sabatical += 1; $(`.sabatical_${id_trabajador}`).html(sabatical);}
-  if (sabatical_manual_2 == '1') { sabatical += 1; $(`.sabatical_${id_trabajador}`).html(sabatical);}
-
-  // console.log( horas_1_sabado , horas_2_sabado );
-
-  // validamos el adicional descuento
-  if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
-
-    adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val());     
+    adicional_descuento =   parseFloat($(`.input_adicional_${idservicio_pension}`).val());     
 
   } else {
 
     adicional_descuento = 0;
 
-    toastr.error(`El dato adicional/descuento:: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
+    toastr.error(`El dato adicional:: <h3 class=""> ${$(`.input_adicional_${idservicio_pension}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
+  }
+  //capturamos el precio
+  if (parseFloat($(`.input_precio_${idservicio_pension}`).val()) >= 0) {
+
+    precio =   parseFloat($(`.input_precio_${idservicio_pension}`).val());     
+
   }
 
-  //  pago_parcial_HN_1
-  $(`.total_HN_${id_trabajador}`).html(suma_hn);
+  parcial_x_servicio= (precio*platos_x_servicio)+adicional_descuento; 
 
-  $(`.total_HE_${id_trabajador}`).html(suma_he);
+  //  platos_x_servicio
+  $(`.span_cantidad_${idservicio_pension}`).html(platos_x_servicio);
 
-  $(`.dias_asistidos_${id_trabajador}`).html(dias_asistidos);  
+  $(`.span_parcial_${idservicio_pension}`).html(formato_miles(parcial_x_servicio.toFixed(2))); 
 
-  // asignamos los pagos parciales
-  $(`.pago_parcial_HN_${id_trabajador}`).html(formato_miles((suma_hn * parseFloat(sueldo_hora)).toFixed(2)));
-
-  $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles((suma_he * parseFloat(sueldo_hora)).toFixed(2)));
-
-  // calculamos el pago quincenal con: Pago parcial,	Adicional/descuento
-  var pago_quincenal = ( (parseFloat((suma_hn * parseFloat(sueldo_hora)).toFixed(2)) + parseFloat((suma_he * parseFloat(sueldo_hora)).toFixed(2))) + adicional_descuento ).toFixed(1)
-
-  $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal));
-
-  var suma_total_quincena = 0;
-
-  for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
+  for (let k = 1; k <= parseInt(can_servicios); k++) {    
     //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
-    suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
+    total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text())); 
+
   }
 
   // console.log(suma_total_quincena);
 
-  $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
+  $(`#parcial_total_x_semana`).html(formato_miles(total_parcial.toFixed(2)));
 }
-function adicional_descuento(cant_trabajador, id_trabajador) {
 
-  var suma_resta = 0; var pago_parcial_HN = 0; pago_parcial_HE = 0;
+function calcular_adicional(idservicio_pension,can_servicios) {
 
-  //console.log($(`.pago_quincenal_${id_trabajador}`).text());   console.log($(`.adicional_descuento_${id_trabajador}`).val());
+  var parcial_x_servicio = 0; var reg_precio_actual = 0; can_platos = 0; var total_parcial=0;
 
-  // capturamos los pgos parciales
-  pago_parcial_HN = parseFloat( quitar_formato_miles( $(`.pago_parcial_HN_${id_trabajador}`).text())); pago_parcial_HE = parseFloat( quitar_formato_miles($(`.pago_parcial_HE_${id_trabajador}`).text()));
+  // capturamos precio actual y cantidad de platos
+  var reg_precio_actual  =  parseFloat( $(`.input_precio_${idservicio_pension}`).val());
+  var can_platos =  parseFloat($(`.span_cantidad_${idservicio_pension}`).text());
 
-  if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
+  if (reg_precio_actual<0) {reg_precio_actual=0;}else{reg_precio_actual=parseFloat(reg_precio_actual);}
 
-    suma_resta = (pago_parcial_HN + pago_parcial_HE) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
+  if (parseFloat($(`.input_adicional_${idservicio_pension}`).val()) >= 0 || parseFloat($(`.input_adicional_${idservicio_pension}`).val()) <= 0 ) {
 
-    $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(1)));
-
-    var suma_total_quincena = 0;
-
-    // acumulamos todos los pagos quicenales
-    for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
-      console.log($(`.val_pago_quincenal_${k}`).text()); 
-      suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
-    }
-
-    $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
+    parcial_x_servicio = (reg_precio_actual*can_platos) + parseFloat($(`.input_adicional_${idservicio_pension}`).val());
 
   } else {
 
-    toastr.error(`El dato de adicional/descuento: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un numero cero o un positivo o un negativo.`);    
-  }  
-}
+    parcial_x_servicio = 0;
 
+    toastr.error(`El dato adicional:: <h3 class=""> ${$(`.input_adicional_${idservicio_pension}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
+  }
 
-function obtener_datos_semana () {
+  $(`.span_parcial_${idservicio_pension}`).html(parcial_x_servicio); 
 
-  var fecha_compra=''; var dia_semana=''; var cantidad_compra=0; var precio_compra=0;  var descripcion_compra=''; var monto_total=0; var idbreak="";
-
-  array_datosPost=[];
-
-  for (let j = 1; j <= 7; j++) {
-    
-    //console.log(j);
-    fecha_compra       =  $(`.fecha_compra_${j}`).val();
-    dia_semana         =  $(`.dia_semana_${j}`).val();
-    cantidad_compra    =  $(`.cantidad_compra_${j}`).val();
-    precio_compra      =  $(`.precio_compra_${j}`).val();
-    descripcion_compra =  $(`.descripcion_compra_${j}`).val();
-   
-
-   
-
-    if ($(`.idbreak_${j}`).val()!=undefined){idbreak=$(`.idbreak_${j}`).val();}
-
-    if (cantidad_compra!=undefined) {
-
-      monto_total=monto_total+parseFloat(precio_compra);
-
-      array_datosPost.push(
-        {
-          "fecha_compra":fecha_compra,
-          "dia_semana":dia_semana,
-          "cantidad_compra":cantidad_compra,
-          "precio_compra":precio_compra,
-          "descripcion_compra":descripcion_compra,
-          "idbreak":idbreak
-        }
-      ); 
-    }
+  for (let k = 1; k <= parseInt(can_servicios); k++) {    
+    //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
+    total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text())); 
 
   }
-  console.log(array_datosPost);
-  $("#monto_total").html(formato_miles(monto_total.toFixed(2)));
-  
+
+  $(`#parcial_total_x_semana`).html(formato_miles(total_parcial.toFixed(2)));
+
+}
+
+function calcular_precios(idservicio_pension,can_servicios) {
+
+ var adicional_descuento=0; var parcial_actual=0; var total_parcial=0;
+ var reg_precio_actual  = $(`.input_precio_${idservicio_pension}`).val();
+ var can_platos = $(`.span_cantidad_${idservicio_pension}`).text();
+
+  if (reg_precio_actual<0) {reg_precio_actual=0;}else{reg_precio_actual=parseFloat(reg_precio_actual);}
+
+  if (parseFloat($(`.input_adicional_${idservicio_pension}`).val()) >= 0 || parseFloat($(`.input_adicional_${idservicio_pension}`).val()) <= 0 ) {
+
+    adicional_descuento =   parseFloat($(`.input_adicional_${idservicio_pension}`).val());     
+
+  } else {
+
+    adicional_descuento = 0;
+
+    toastr.error(`El dato adicional:: <h3 class=""> ${$(`.input_adicional_${idservicio_pension}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
+  }
+
+  parcial_actual= (reg_precio_actual*can_platos)+adicional_descuento;
+
+
+  $(`.span_parcial_${idservicio_pension}`).html(parcial_actual); 
+
+  for (let k = 1; k <= parseInt(can_servicios); k++) {    
+    //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
+    total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text())); 
+
+  }
+
+  $(`#parcial_total_x_semana`).html(formato_miles(total_parcial.toFixed(2)));
+
+
+
+
 }
 
 //----------------------Pension--------------------------------------
@@ -1491,6 +1439,11 @@ function formato_miles(num) {
   if (cents < 10) cents = "0" + cents;
   for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
   return (sign ? "" : "-") + num + "." + cents;
+}
+
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, '');
+  return inVal;
 }
 
 
