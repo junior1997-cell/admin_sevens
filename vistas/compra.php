@@ -82,6 +82,7 @@
                                 </h3>
                               </div>
                             </div>
+                            <!-- Leyecnda pagos -->
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
                               <div class="text-slid-box">
                                 <div id="offer-box" class="contenedor">
@@ -100,6 +101,8 @@
                                 </div>
                               </div>
                             </div>
+
+                            <!-- Leyecnda saldos -->
                             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
                               <div class="text-slid-box">
                                 <div id="offer-box" class="contenedorr">
@@ -125,7 +128,7 @@
 
                       <!-- /.card-header -->
                       <div class="card-body">
-
+                        <!-- TABLA - Lista de compras Por Facturas -->
                         <div id="div_tabla_compra">
                           <h5><b>Lista de compras Por Facturas</b></h5>
                           <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -182,6 +185,7 @@
                           </table>
                         </div>
 
+                        <!-- TABLA - Lista de Compras Por Proveedor -->
                         <div id="div_tabla_compra_proveedor" style="display: none;">
                           <h5><b>Lista de compras Por Facturas</b></h5>
                           <table id="detalles-tabla-compra-prov" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -210,6 +214,7 @@
                             </tfoot>
                           </table>
                         </div>
+
                         <!--agregar_compras-->
                         <div id="agregar_compras" style="display: none;">
                           <div class="modal-body">
@@ -228,17 +233,19 @@
                                       <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
                                     </div>
                                   </div>
+
                                   <!-- adduser -->
                                   <div class="col-lg-1">
                                     <div class="form-group">
                                       <label for="Add" style="color: white;">.</label>
-                                      <a data-toggle="modal" href="#agregar_cliente">
-                                        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modal-agregar-proveedor" onclick="limpiar();">
+                                      <a data-toggle="modal" href="#modal-agregar-proveedor" >
+                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiardatosproveedor();">
                                           <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         </button>
                                       </a>
                                     </div>
                                   </div>
+
                                   <!-- fecha -->
                                   <div class="col-lg-4">
                                     <div class="form-group">
@@ -246,6 +253,7 @@
                                       <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />
                                     </div>
                                   </div>
+
                                   <!-- Tipo de comprobante -->
                                   <div class="col-lg-4" id="content-t-comprob">
                                     <div class="form-group">
@@ -258,6 +266,7 @@
                                       </select>
                                     </div>
                                   </div>
+
                                   <!-- serie_comprovante-->
                                   <div class="col-lg-2" id="content-comprob">
                                     <div class="form-group">
@@ -265,6 +274,7 @@
                                       <input type="text" name="serie_comprovante" id="serie_comprovante" class="form-control" placeholder="N° de Comprobante" />
                                     </div>
                                   </div>
+
                                   <!-- IGV-->
                                   <div class="col-lg-1" id="content-igv">
                                     <div class="form-group">
@@ -272,6 +282,7 @@
                                       <input type="text" name="igv" id="igv" class="form-control" readonly value="0.18" />
                                     </div>
                                   </div>
+
                                   <!-- Descripcion-->
                                   <div class="col-lg-5" id="content-descrp">
                                     <div class="form-group">
@@ -279,6 +290,7 @@
                                       <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
                                     </div>
                                   </div>
+
                                   <!--Boton agregar material-->
                                   <div class="row col-lg-12 justify-content-between">
                                     <div class="col-lg-3 xs-12">
@@ -287,6 +299,7 @@
                                         <button id="btnAgregarArt" type="button" class="btn btn-success"><span class="fa fa-plus"></span> Agregar Material</button>
                                       </a>
                                     </div>
+
                                     <!-- Rounded switch -->
                                     <div class="col-lg-1 class_pading">
                                       <div class="form-group">
@@ -303,19 +316,20 @@
                                         <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
                                       </div>
                                     </div>
+
                                   </div>
                                   <!--tabla detalles plantas-->
-                                  <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+                                  <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
                                     <br />
                                     <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
                                       <thead style="background-color: #ff6c046b;">
-                                        <th>Opciones</th>
+                                        <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                                         <th>Material</th>
                                         <th>Unidad</th>
                                         <th>Cantidad</th>
-                                        <th>Precio Compra(Sin IGV)</th>
+                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
                                         <th class="hidden">IGV</th>
-                                        <th class="hidden">Precio(Con IGV)</th>
+                                        <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                         <th>Descuento</th>
                                         <th>Subtotal</th>
                                       </thead>
@@ -712,7 +726,7 @@
 
                 <!-- Modal elegir material -->
                 <div class="modal fade" id="modal-elegir-material">
-                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Seleccionar material</h4>
@@ -723,12 +737,12 @@
                       <div class="modal-body table-responsive">
                         <table id="tblamateriales" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
                           <thead>
-                            <th>Opciones</th>
-                            <th>Nombre</th>
+                            <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                            <th>Nombre Producto</th>
                             <th>Marca</th>
-                            <th>Precio U.</th>
+                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
                             <th>Descripción</th>
-                            <th>Ficha técnica</th>
+                            <th data-toggle="tooltip" data-original-title="Ficha Técnica" >F.T.</th>
                           </thead>
                           <tbody></tbody>
                         </table>
@@ -1252,7 +1266,7 @@
                       <div class="modal-body">
                         <div class="class-style" style="text-align: center;">
                            
-                          <img onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" src="" class="img-thumbnail" id="ver_img_material" style="cursor: pointer !important;" width="auto" />
+                          <img onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
                            
                         </div>
                       </div>

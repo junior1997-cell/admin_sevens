@@ -401,7 +401,7 @@ Class Asistencia_trabajador
 	// insertamos el detalle adicional --------------
 	public function insertar_detalle_adicional( $idtrabajador_por_proyecto, $fecha_registro, $detalle_adicional )
 	{
-		$sql = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, fecha_registro, descripcion_descuento) 
+		$sql = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, fecha_q_s_inicio, descripcion_descuento) 
 				VALUES ('$idtrabajador_por_proyecto', '$fecha_registro', '$detalle_adicional' )";
 
 		return ejecutarConsulta($sql);
@@ -410,7 +410,7 @@ Class Asistencia_trabajador
 	public function editar_detalle_adicionales($idresumen_q_s_asistencia, $idtrabajador_por_proyecto, $fecha_registro, $detalle_adicional)
 	{
 		$sql = "UPDATE resumen_q_s_asistencia 
-			SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_registro='$fecha_registro', descripcion_descuento = '$detalle_adicional'
+			SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_q_s_inicio='$fecha_registro', descripcion_descuento = '$detalle_adicional'
 			WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
 		return ejecutarConsulta($sql);
 	}

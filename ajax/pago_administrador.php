@@ -106,13 +106,19 @@
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria . '<br> <b>CCI:</b> '. $reg->cci,
-              "3"=>$reg->sueldo_mensual,
-              "4"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes()"><i class="fas fa-dollar-sign nav-icon"></i> Pagar</button> <button style="font-size: 14px;" class="btn btn-danger btn-xs">0.00</button></div>',
-              "5" => '0',
-              "6"=>$reg->tipo.' / '.$reg->cargo,
+              "2"=>'13-10-2021',
+              "3"=>'30-01-2022',
+              "4"=>'03-05-2022',
+              "5" => '60',
+              "6"=>'30-12-2022',
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
+              '<span class="text-center badge badge-danger">Desactivado</span>',
+              "8" => '0',
+              "9"=>$reg->tipo.' / '.$reg->cargo,
+              "10" => '0',
+              "11"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes()"><i class="fas fa-dollar-sign nav-icon"></i> Pagar</button> <button style="font-size: 14px;" class="btn btn-danger btn-xs">0.00</button></div>',
+              "12" => '0',
+              "13"=>$reg->tipo.' / '.$reg->cargo,
               );
           }
           $results = array(

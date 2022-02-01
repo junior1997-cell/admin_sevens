@@ -433,13 +433,13 @@ switch ($_GET["op"]) {
                     \'' . $reg->precio_igv. '\', \'' . $reg->precio_total.  '\', \'' . $img . '\', \'' .$reg->ficha_tecnica .'\')" 
                     data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
                 "1" =>
-                    '<div class="user-block">
+                    '<div class="user-block w-px-200">
                         <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' . $img .'" alt="user image" onerror="'.$imagen_error.'">
                         <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                         <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
                     </div>',
                 "2" => $reg->marca,
-                "3" => $reg->precio_unitario,
+                "3" => number_format($reg->precio_unitario, 2, '.', ','),
                 "4" => $reg->descripcion,
                 "5" => $ficha_tecnica,
             ];

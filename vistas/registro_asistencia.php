@@ -52,15 +52,15 @@
                         </h3>
                         <!-- regresar -->
                         <h3 class="card-title mr-3" id="card-regresar" style="display: none;" style="padding-left: 2px;">
-                          <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> Regresar</button>
+                          <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                         </h3>
                         <!-- Editar -->
                         <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
-                          <button type="button" class="btn bg-gradient-orange" onclick="editar_fechas_asistencia(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> Editar</button>
+                          <button type="button" class="btn bg-gradient-orange" onclick="editar_fechas_asistencia(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
                         </h3>
                         <!-- Guardar -->
                         <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
-                          <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> Guardar</button>
+                          <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
                         </h3>
                         <!-- Botones de quincenas -->
                         <div id="Lista_quincenas" class="row-horizon disenio-scroll " >
@@ -459,7 +459,7 @@
                         <div class="row" id="cargando-5-fomulario">
                           
                           <!-- id adicionales -->
-                          <input type="hidden" name="idsumas_adicionales" id="idsumas_adicionales" /> 
+                          <input type="hidden" name="idresumen_q_s_asistencia" id="idresumen_q_s_asistencia" /> 
                           <!-- ID trabajador por proyecto -->
                           <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />   
                           <!-- fecha de quincena o semana -->

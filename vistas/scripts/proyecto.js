@@ -154,7 +154,7 @@ function limpiar() {
   $(".form-control").removeClass('is-valid');
   $(".is-invalid").removeClass("error is-invalid");
 
-  form_validate_proyecto.resetForm();
+  // form_validate_proyecto.resetForm();
 
 }
 

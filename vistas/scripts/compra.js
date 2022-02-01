@@ -27,21 +27,27 @@ function init() {
 
     $("#lCompras").addClass("active");
 
+    // $("#guardar_registro_compras").on("click", function (e) {
+    //     Swal.fire({
+    //         title: "¿Está seguro que deseas guardar esta compra?",
+    //         text: "Al guardar no podrás editar!!",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#28a745",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonText: "Si, Guardar!",
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             $("#submit-form-compras").submit();
+    //         }
+    //     });
+    // });
+
+    // guardar el registro de la compra
     $("#guardar_registro_compras").on("click", function (e) {
-        Swal.fire({
-            title: "¿Está seguro que deseas guardar esta compra?",
-            text: "Al guardar no podrás editar!!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#28a745",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Si, Guardar!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $("#submit-form-compras").submit();
-            }
-        });
-    });
+        $("#submit-form-compras").submit();
+      });
+
     //guardar registro proveedor
     $("#guardar_registro_proveedor").on("click", function (e) {
         $("#submit-form-proveedor").submit();
@@ -391,6 +397,8 @@ function fecha_actual() {
 
 //Función limpiar
 function limpiar() {
+    $(".tooltip").hide();
+
     //Mostramos los selectProveedor
     $.post("../ajax/compra.php?op=selectProveedor", function (r) {
         $("#idproveedor").html(r);
@@ -419,10 +427,15 @@ function limpiar() {
 
     $("#total").html("");
     $("#total_venta").val("");
+
+    $(".form-control").removeClass('is-valid');
+    $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función limpiar
 function limpiardatosproveedor() {
+    $(".tooltip").hide();
+
     $("#idproveedor").val("");
     $("#tipo_documento option[value='RUC']").attr("selected", true);
     $("#nombre").val("");
@@ -434,6 +447,9 @@ function limpiardatosproveedor() {
     //$("#banco").val("");
     $("#banco option[value='BCP']").attr("selected", true);
     $("#titular_cuenta").val("");
+
+    $(".form-control").removeClass('is-valid');
+    $(".is-invalid").removeClass("error is-invalid");
 }
 
 function ver_form_add() {
@@ -607,12 +623,27 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
         .DataTable();
 }
 
-//Función para guardar o editar
-function guardaryeditar(e) {
+//Función para guardar o editar - COMPRAS
+function guardaryeditar_compras(e) {
     // e.preventDefault(); //No se activará la acción predeterminada del evento
-    $("#tabla-compra").hide();
-    $("#agregar_compras").show();
+    // $("#tabla-compra").hide();
+    // $("#agregar_compras").show();
     var formData = new FormData($("#form-compras")[0]);
+    $("#guardar_registro_compras").on("click", function (e) {
+        Swal.fire({
+            title: "¿Está seguro que deseas guardar esta compra?",
+            text: "Al guardar no podrás editar!!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, Guardar!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $("#submit-form-compras").submit();
+            }
+        });
+    });
 
     $.ajax({
         url: "../ajax/compra.php?op=guardaryeditarcompra",
@@ -1589,17 +1620,17 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
         <td>
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
-          <div class="user-block">
+          <div class="user-block w-px-300">
             <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
         </td>
         <td><span class="">${unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td><input class="producto_${idproducto} producto_selecionado w-px-70 cantidad_${cont}" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td><input type="number" class="w-px-135 precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${precio_sin_igv}" min="0" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td class="hidden"><input class="w-px-135 precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${precio_igv}" readonly  style="border: none; text-align: center;"></td>
-        <td class="hidden"><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${precio_total}" readonly  style="border: none; text-align: center;"></td>
+        <td class="form-group"><input class="producto_${idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class="hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${precio_sin_igv}" readonly min="0" ></td>
+        <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${precio_igv}" readonly  ></td>
+        <td ><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${precio_total}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
         <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
         <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
@@ -1677,22 +1708,22 @@ function modificarSubtotales() {
             array_class_trabajador.forEach((element,index) => {
               // console.log(element.id_cont);
               var inpC = parseFloat($(`.cantidad_${element.id_cont}`).val());
-              var inpP = parseFloat($(`.precio_sin_igv_${element.id_cont}`).val());
+              var inpP = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
               var inpIgv = 0;
               var inpPcIgv = 0;
               var inpD = parseFloat($(`.descuento_${element.id_cont}`).val());
               var inpS = 0;
               // console.log(inpC,inpP, inpD );
               // Calculamos: IGV
-              var igv = (inpP * 0.18).toFixed(4);
-              $(`.precio_igv_${element.id_cont}`).val(igv);
+              var precio_sin_igv = (inpP / 1.18).toFixed(4);
+              $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);  
 
               // Calculamos: precio + IGV 
-              var precio_con_igv = (parseFloat(igv) + parseFloat(inpP)).toFixed(4);
-              $(`.precio_con_igv_${element.id_cont}`).val(precio_con_igv);
+              var igv = ( parseFloat(inpP) - parseFloat(precio_sin_igv)).toFixed(4);
+              $(`.precio_igv_${element.id_cont}`).val(igv);
 
               // Calculamos: Subtotal de cada producto
-              inpS = (inpC * parseFloat(precio_con_igv)) - inpD;
+              inpS = (inpC * parseFloat(inpP)) - inpD;
               $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(inpS.toFixed(4)));
 
             }); 
@@ -1707,7 +1738,7 @@ function modificarSubtotales() {
             for (var i = 0; i < cantidad.length; i++) {
                 // console.log(cantidad[i]);
                 var inpC = cantidad[i];
-                var inpP = precio_sin_igv[i];
+                var inpP = precio_con_igv[i];
                 var inpD = descuento[i];
                 var inpS = subtotal_producto[i];
 
@@ -1717,8 +1748,8 @@ function modificarSubtotales() {
                 document.getElementsByName(`precio_igv[${i}]`).innerHTML = igv;
 
                 // Calculamos: precio + IGV 
-                var precio_con_igv = "0";
-                document.getElementsByName(`precio_con_igv[${i}]`).innerHTML = precio_con_igv;
+                var precio_sin_igv = inpP.value;
+                document.getElementsByName(`precio_sin_igv[${i}]`).innerHTML = precio_sin_igv;
         
                 inpS.value = inpC.value * inpP.value - inpD.value;
                 document.getElementsByName(`subtotal_producto`)[i].innerHTML = formato_miles(inpS.value.toFixed(4));
@@ -1936,14 +1967,14 @@ function editar_detalle_compras(idcompra_proyecto) {
             <td>
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
-              <div class="user-block">
+              <div class="user-block w-px-300">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
             </td>
             <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td><input class="producto_${element.idproducto} producto_selecionado w-px-70 cantidad_${cont}" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-px-70 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td><input type="number" class="w-px-135 precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td class="hidden"><input class="w-px-135 precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly  style="border: none; text-align: center;"></td>
             <td class="hidden"><input class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${element.precio_igv}" readonly  style="border: none; text-align: center;"></td>
@@ -2067,47 +2098,46 @@ function redondearExp(numero, digitos) {
     let entero = Math.round(toExp(Math.abs(numero), digitos));
     return Math.sign(numero) * toExp(entero, -digitos);
 }
-//validar formss
+
 $(function () {
-    $.validator.setDefaults({
-        submitHandler: function (e) {
-            guardaryeditar(e);
-            //console.log('factura 22222');
-        },
-    });
+    // Validar formulario Compras
+    // $.validator.setDefaults({
+    //     submitHandler: function (e) {
+    //         guardaryeditar_compras(e);
+    //     },
+    // });
 
     $("#form-compras").validate({
+         
         rules: {
             idproveedor: { required: true },
             tipo_comprovante: { required: true },
-            serie_comprovante: { minlength: 1 },
-            descripcion: { minlength: 1 },
-            fecha_compra: { minlength: 1 },
-            // terms: { required: true },
+            serie_comprovante: { minlength: 2 },
+            descripcion: { minlength: 4 },
+            fecha_compra: { required: true },             
         },
         messages: {
             idproveedor: {
                 required: "Por favor debe seleccionar un proveedor.",
             },
             tipo_comprovante: {
-                required: "Por favor debe tipo de comprobante.",
+                required: "Por favor debe seleccionar tipo de comprobante.",
             },
             serie_comprovante: {
-                minlength: "mayor a un caracter",
+                minlength: "mayor a 2 caracteres",
             },
             descripcion: {
-                minlength: "mayor a un caracter",
+                minlength: "mayor a 4 caracteres",
             },
             fecha_compra: {
-                minlength: "mayor a un caracter",
-            },
+                required: "Campo requerido",
+            },             
         },
 
         errorElement: "span",
 
         errorPlacement: function (error, element) {
             error.addClass("invalid-feedback");
-
             element.closest(".form-group").append(error);
         },
 
@@ -2115,17 +2145,21 @@ $(function () {
             $(element).addClass("is-invalid");
         },
 
-        unhighlight: function (element, errorClass, validClass) {},
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass("is-invalid").addClass("is-valid");
+        },         
+
+        submitHandler: function(form) {
+            guardaryeditar_compras(form);
+        }
     });
 
-    //proveedor
-
-    $.validator.setDefaults({
-        submitHandler: function (e) {
-            guardarproveedor(e);
-            console.log("factura 22222");
-        },
-    });
+    //Validar formulario PROVEEDOR
+    // $.validator.setDefaults({
+    //     submitHandler: function (e) {
+    //         guardarproveedor(e);
+    //     },
+    // });
 
     $("#form-proveedor").validate({
         rules: {
@@ -2183,16 +2217,21 @@ $(function () {
             $(element).addClass("is-invalid");
         },
 
-        unhighlight: function (element, errorClass, validClass) {},
-    });
+        unhighlight: function (element, errorClass, validClass) { 
+            $(element).removeClass("is-invalid").addClass("is-valid");
+        },
 
-    /**=======Factura */
-    $.validator.setDefaults({
         submitHandler: function (e) {
-            guardaryeditar_factura(e);
-            //console.log('factura 22222');
+            guardarproveedor(e);
         },
     });
+
+    // validar formulario FACTURA
+    // $.validator.setDefaults({
+    //     submitHandler: function (e) {
+    //         guardaryeditar_factura(e);
+    //     },
+    // });
 
     $("#form-agregar-factura").validate({
         rules: {
@@ -2200,12 +2239,9 @@ $(function () {
             monto: { required: true },
             fecha_emision: { required: true },
             descripcion_f: { minlength: 1 },
-            foto2_i: { required: true },
-
-            // terms: { required: true },
+            foto2_i: { required: true }
         },
         messages: {
-            //====================
             forma_pago: {
                 codigo: "Por favor ingresar el código",
             },
@@ -2232,18 +2268,21 @@ $(function () {
         unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass("is-invalid").addClass("is-valid");
         },
-    });
 
-    /**=======pagos */
-    $.validator.setDefaults({
         submitHandler: function (e) {
-            guardaryeditar_pago(e);
+            guardaryeditar_factura(e);
         },
     });
 
+    // Validar formulario PAGOS
+    // $.validator.setDefaults({
+    //     submitHandler: function (e) {
+    //         guardaryeditar_pago(e);
+    //     },
+    // });
+
     $("#form-servicios-pago").validate({
         rules: {
-            //=======SECCION PAGO=========
             forma_pago: { required: true },
             tipo_pago: { required: true },
             banco_pago: { required: true },
@@ -2251,12 +2290,9 @@ $(function () {
             monto_pago: { required: true },
             numero_op_pago: { minlength: 1 },
             descripcion_pago: { minlength: 1 },
-            titular_cuenta_pago: { minlength: 1 },
-
-            // terms: { required: true },
+            titular_cuenta_pago: { minlength: 1 }
         },
         messages: {
-            //====================
             forma_pago: {
                 required: "Por favor selecione una forma de pago",
             },
@@ -2289,16 +2325,20 @@ $(function () {
         unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass("is-invalid").addClass("is-valid");
         },
+
+        submitHandler: function (e) {
+            guardaryeditar_pago(e);
+        },
     });
 });
 
-// validacion form
+// validacion formulario COMPROBANTE
 $(function () {
-    $.validator.setDefaults({
-        submitHandler: function (e) {
-          guardaryeditar_comprobante(e);
-        },
-    });
+    // $.validator.setDefaults({
+    //     submitHandler: function (e) {
+    //       guardaryeditar_comprobante(e);
+    //     },
+    // });
 
     $("#form-comprobante").validate({
         rules: {
@@ -2325,6 +2365,10 @@ $(function () {
 
         unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass("is-invalid").addClass("is-valid");
+        },
+
+        submitHandler: function (e) {
+            guardaryeditar_comprobante(e);
         },
     });
 });

@@ -259,6 +259,9 @@ function limpiar() {
   $("#color").val("1").trigger("change");
   $('#my-switch_igv').prop('checked', true);
   $('#estado_igv').val("1");
+
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

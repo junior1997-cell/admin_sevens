@@ -36,15 +36,15 @@ ob_start();
         // Agregamos o editamos el detalle adicional de: "resumen_q_s_asistencia"
         case 'guardaryeditar_adicional_descuento':
 
-          if (empty($_POST["idsumas_adicionales"])) {
+          if (empty($_POST["idresumen_q_s_asistencia"])) {
 
-            $rspta = $asist_trabajador->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$detalle_adicional);
+            $rspta = $asist_trabajador->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
 
             echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento"; 
 
           } else {
 
-            $rspta = $asist_trabajador->editar_detalle_adicionales($_POST["idsumas_adicionales"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+            $rspta = $asist_trabajador->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
 
             echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento";
           }

@@ -63,7 +63,7 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">
                         <h3 class="card-title " >
-                          <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proyecto" onclick="limpiar();">
+                          <button type="button" class="btn bg-gradient-success" disabled data-toggle="modal" data-target="#modal-agregar-proyecto" onclick="limpiar();">
                           <i class="fas fa-plus-circle"></i> Agregar
                           </button>
                           Pagos de Trabajadores                        
@@ -73,35 +73,48 @@
                       <div class="card-body">
 
                         <!-- tabla de pago administrador -->
-                        <table id="tabla-pago-administrador" class="table table-bordered table-striped display" style="width: 100% !important;">
-                          <thead>
-                            <tr>
-                              <th class="">Acciones</th>
-                              <th>Trabajdor</th> 
-                              <th>Banco</th>
-                              <th>Sueldo Mensual</th>
-                              <th>Pagar</th>
-                              <th>Saldo</th>
-                              <th>Tipo/Cargo</th>  
-                              <th>Estado</th>                            
-                            </tr>
-                          </thead>
-                          <tbody>                         
-                            
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <th class="">Acciones</th>
-                              <th>Trabajdor</th> 
-                              <th>Banco</th>
-                              <th>Sueldo Mensual</th>
-                              <th>Pagar</th>
-                              <th>Saldo</th>
-                              <th>Tipo/Cargo</th>  
-                              <th>Estado</th>                               
-                            </tr>
-                          </tfoot>
-                        </table>
+                        <div class="disenio-scroll">
+                          <table id="tabla-pago-administrador" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">Acciones</th>
+                                <th>Trabajdor</th> 
+                                <th>Fecha inicio</th>
+                                <th>Hoy</th>
+                                <th>Fecha culminacion</th>
+                                <th>Tiempo trabajado <br> (dias)</th>
+                                <th>Ultimo pago</th>
+                                <th>Siguiente pago</th>
+                                <th>Sueldo Mensual</th>
+                                <th>Pagar acumulado</th>
+                                <th>Pagar realizado</th>
+                                <th>Saldo</th>
+                                <th>Detalle pagos</th>                        
+                              </tr>
+                            </thead>
+                            <tbody>                         
+                              
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">Acciones</th>
+                                <th>Trabajdor</th> 
+                                <th>Fecha inicio</th>
+                                <th>Hoy</th>
+                                <th>Fecha culminacion</th>
+                                <th>Tiempo trabajado <br> (dias)</th>
+                                <th>Ultimo pago</th>
+                                <th>Siguiente pago</th>
+                                <th>Sueldo Mensual</th>
+                                <th>Pagar acumulado</th>
+                                <th>Pagar realizado</th>
+                                <th>Saldo</th>
+                                <th>Detalle pagos</th>                              
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        
 
                         <!-- tabla  -->
                         <div class="table-responsive" style="display: none;">

@@ -229,12 +229,12 @@ table th {
   display: none;
 }
 
-.w-px-35{
-  width: 35px !important;
-}
-
 .w-px-30{
   width: 30px !important;
+}
+
+.w-px-35{
+  width: 35px !important;
 }
 
 .w-px-40{
@@ -245,12 +245,56 @@ table th {
   width: 45px !important;
 }
 
+.w-px-60{
+  width: 60px !important;
+}
+
+.w-px-65{
+  width: 65px !important;
+}
+
 .w-px-70{
   width: 70px !important;
 }
 
+.w-px-75{
+  width: 75px !important;
+}
+
+.w-px-80{
+  width: 80px !important;
+}
+
+.w-px-85{
+  width: 85px !important;
+}
+
+.w-px-90{
+  width: 90px !important;
+}
+
+.w-px-95{
+  width: 95px !important;
+}
+
+.w-px-100{
+  width: 100px !important;
+}
+
+.w-px-110{
+  width: 110px !important;
+}
+
+.w-px-120{
+  width: 120px !important;
+}
+
 .w-px-135{
   width: 135px !important;
+}
+
+.w-px-200{
+  width: 250px !important;
 }
 
 .w-px-250{
@@ -259,6 +303,10 @@ table th {
 
 .w-px-300{
   width: 300px !important;
+}
+
+.w-px-350{
+  width: 350px !important;
 }
 
 .w-px-600{
@@ -276,6 +324,11 @@ table th {
 
 .center-vertical{
   vertical-align: middle !important;
+}
+
+.input-no-border{
+  border: none !important; 
+  text-align: center !important;
 }
 
 .table td, .table th {
@@ -378,3 +431,4 @@ table th {
 @media (max-width: 1199.98px) {
   
 }
+
