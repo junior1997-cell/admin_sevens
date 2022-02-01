@@ -652,9 +652,16 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
       var total=0;
       value.total=='' ? total='0.00' : total=value.total;
+      var definir_precio_actual=0;
+      if (value.precio_t_semana_p=="") {
+        definir_precio_actual=value.precio_t_servicio_p;
+      }else{
+        definir_precio_actual=value.precio_t_semana_p;
+      }
+
       
       var tabla_bloc_descrip_comida_1 =`<td><b>${value.nombre_servicio}</b></td>`;
-      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(value.precio).toFixed(2)}</b></span> <input type="number" value="${parseFloat(value.precio).toFixed(2)}" onchange="calcular_precios(${value.idservicio_pension},${data.length})" onkeyup="calcular_precios(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_precio_${value.idservicio_pension}"></td>`;
+      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(definir_precio_actual).toFixed(2)}</b></span> <input type="number" value="${parseFloat(definir_precio_actual).toFixed(2)}" onchange="calcular_precios(${value.idservicio_pension},${data.length})" onkeyup="calcular_precios(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_precio_${value.idservicio_pension}"></td>`;
 
      // var tabla_bloc_dia_3 =`<td> <span class="text-center span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>`;
       var tabla_bloc_cantidad_4 =`<td class="text-center"> <span class="span_cantidad_${value.idservicio_pension}">${value.cantidad_total_platos}</span> </td>`;
@@ -676,7 +683,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
       $("#data_table_body").append(tabla_bloc_HN_1);
 
     }); // end foreach
-    $("#parcial_total_x_semana").html(total_monto_x_semana);
+    $("#parcial_total_x_semana").html(formato_miles(total_monto_x_semana));
     
   }); //end post - ver_datos_semana
 

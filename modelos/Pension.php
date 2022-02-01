@@ -118,10 +118,10 @@ Class Pension
 				$datos_semana[]= array(
 					"idservicio_pension"     => $value['idservicio_pension'],
 					"nombre_servicio"     	 => $value['nombre_servicio'],
-					"precio"         	     => $value['precio'],
+					"precio_t_servicio_p"    => $value['precio'],
 
 					"idsemana_pension"      =>$idsemana_pension,
-					"precio_comida"         =>$precio_comida,
+					"precio_t_semana_p"     =>$precio_comida,
 					"cantidad_total_platos" =>$cantidad_total_platos,
 					"adicional_descuento"   =>$adicional_descuento,
 					"total"                 =>$total, 
