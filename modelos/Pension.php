@@ -66,7 +66,6 @@ Class Pension
 		return $sw;	
 	}
 
-	///////////////////////CONSULTAS pension///////////////////////
 	//listar_semana_botones
 	public function listarsemana_botones($nube_idproyecto){
 		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
@@ -137,7 +136,6 @@ Class Pension
 		return $datos_semana;
 		
 	}	
-	///////////////////////CONSULTAS BREAK///////////////////////
 
 	public function listar($nube_idproyecto)
 	{
@@ -147,6 +145,7 @@ Class Pension
 		GROUP BY numero_semana";
 		return ejecutarConsulta($sql);
 	}
+
 	public function ver_detalle_semana($numero_semana,$nube_idproyecto)
 	{
 		$sql="SELECT sp.idpension, sp.numero_semana as numero_semana,sp.fecha_inicio as fecha_inicio, sp.fecha_fin as fecha_fin,sp.total as total, p.tipo_pension, sp.precio_comida as precio_comida,sp.cantidad_total_platos as cantidad_total_platos, sp.adicional_descuento as adicional_descuento
@@ -155,25 +154,25 @@ Class Pension
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------
-	public function insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
-		//var_dump($idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);die();
-		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante) 
-		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$subtotal','$forma_pago','$tipo_comprovante','$descripcion','$imagen2')";
+	public function insertar_comprobante($idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
+
+		$sql="INSERT INTO factura_pension (idpension ,nro_comprobante, fecha_emision, monto, igv, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante) 
+		VALUES ('$idpension_f','$nro_comprobante','$fecha_emision','$monto','$igv','$subtotal','$forma_pago','$tipo_comprovante','$descripcion','$imagen2')";
 		return ejecutarConsulta($sql);
 	}
 	// obtebnemos los DOCS para eliminar
-	public function obtenerDoc($idfactura_break) {
+	public function obtenerDoc($idfactura_pension) {
 
-		$sql = "SELECT comprobante FROM factura_break WHERE idfactura_break  ='$idfactura_break'";
+		$sql = "SELECT comprobante FROM factura_pension WHERE idfactura_pension  ='$idfactura_pension'";
 	
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para editar registros
-	public function editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
+	public function editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2){
 		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
-		$sql="UPDATE `factura_break` SET 
+		$sql="UPDATE `factura_pension` SET 
 		
-		idsemana_break='$idsemana_break',
+		idpension ='$idpension_f',
 		forma_de_pago='$forma_pago',
 		nro_comprobante='$nro_comprobante',
 		fecha_emision='$fecha_emision',
@@ -183,37 +182,37 @@ Class Pension
 		tipo_comprobante='$tipo_comprovante',
 		descripcion='$descripcion',
 		comprobante='$imagen2'
-		 WHERE idfactura_break='$idfactura_break';";	
+		 WHERE idfactura_pension='$idfactura_pension';";	
 		return ejecutarConsulta($sql);	
 		//return $vaa;
 	}
 
-	public function listar_comprobantes($idsemana_break){
+	public function listar_comprobantes($idpension){
 
-		$sql="SELECT * FROM factura_break 
-		WHERE idsemana_break  ='$idsemana_break'";
+		$sql="SELECT * FROM factura_pension 
+		WHERE idpension  ='$idpension'";
 		return ejecutarConsulta($sql);
 	}
 	//mostrar_comprobante
-	public function mostrar_comprobante($idfactura_break){
-		$sql="SELECT * FROM factura_break WHERE idfactura_break ='$idfactura_break '";
+	public function mostrar_comprobante($idfactura_pension){
+		$sql="SELECT * FROM factura_pension WHERE idfactura_pension ='$idfactura_pension'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 	//Implementamos un método para activar 
-	public function desactivar_comprobante($idfactura_break){
-		//var_dump($idfactura);die();
-		$sql="UPDATE factura_break SET estado='0' WHERE idfactura_break ='$idfactura_break '";
+	public function desactivar_comprobante($idfactura_pension){
+		//var_dump($idfactura_pension);die();
+		$sql="UPDATE factura_pension SET estado='0' WHERE idfactura_pension ='$idfactura_pension'";
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para desactivar 
-	public function activar_comprobante($idfactura_break){
+	public function activar_comprobante($idfactura_pension){
 		//var_dump($idpago_servicio);die();
-		$sql="UPDATE factura_break SET estado='1' WHERE idfactura_break ='$idfactura_break '";
+		$sql="UPDATE factura_pension SET estado='1' WHERE idfactura_pension ='$idfactura_pension'";
 		return ejecutarConsulta($sql);
 	}
 	
-	public function total_monto_comp($idsemana_break){
-		$sql="SELECT SUM(subtotal) as total FROM factura_break WHERE idsemana_break='$idsemana_break' AND estado='1'";
+	public function total_monto_comp($idpension){
+		$sql="SELECT SUM(monto) as total FROM factura_pension WHERE idpension='$idpension' AND estado='1'";
 		return ejecutarConsultaSimpleFila($sql);
 
 	}

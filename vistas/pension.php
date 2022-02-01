@@ -169,7 +169,9 @@
                           <thead>
                               <tr>
                                   <th>Aciones</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Forma de pago">Forma </th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo </th>
+                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número </th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
@@ -183,6 +185,8 @@
                           <tfoot>
                               <tr>
                                   <th>Aciones</th>
+                                  <th data-toggle="tooltip" data-original-title="Forma de pago">Forma </th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo </th>
                                   <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
@@ -335,13 +339,23 @@
                             <form id="form-agregar-comprobante" name="form-agregar-comprobante" method="POST">
                                 <div class="card-body">
                                     <div class="row" id="cargando-1-fomulario">
-                                        <!-- id semana_break -->
-                                        <input type="hidden" name="idsemana_break" id="idsemana_break" />
-                                        <!-- id factura_break -->
-                                        <input type="hidden" name="idfactura_break" id="idfactura_break" />
-
+                                        <!-- id idpensionn_f -->
+                                        <input type="hidden" name="idpension_f" id="idpension_f" />
+                                        <!-- id idfactura_pension idpension_f,idfactura_pension-->
+                                        <input type="hidden" name="idfactura_pension" id="idfactura_pension" />
+                                      <!--forma pago-->
+                                      <div class="col-lg-6">
+                                          <div class="form-group">
+                                          <label for="forma_pago">Forma Pago</label>
+                                          <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                              <option value="Transferencia">Transferencia</option>
+                                              <option value="Efectivo">Efectivo</option>
+                                              <option value="Crédito">Crédito</option>
+                                          </select>
+                                          </div>
+                                      </div>  
                                       <!-- Tipo de comprobante -->
-                                      <div class="col-lg-4" id="content-t-comprob">
+                                      <div class="col-lg-6" id="content-t-comprob">
                                         <div class="form-group">
                                           <label for="tipo_comprovante">Tipo Comprobante</label>
                                           <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
@@ -353,20 +367,12 @@
                                         </div>
                                       </div>
                                         <!-- Código-->
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-6">
                                           <div class="form-group">
                                             <label for="codigo">Núm. comprobante </label>                               
                                             <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
                                           </div>                                                        
                                         </div>
-                                        <!-- Monto-->
-                                        <div class="col-lg-3">
-                                          <div class="form-group">
-                                            <label for="monto">Monto</label>                               
-                                            <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto"  onkeyup="comprob_factura();"> 
-                                          </div>                                                        
-                                        </div>
-
                                         <!-- Fecha Emisión -->
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -375,19 +381,30 @@
                                               </div>
                                         </div>
                                         <!-- Sub total -->
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="subtotal">Sub total</label>
-                                                <input class="form-control" type="number"  id="subtotal" name="subtotal" placeholder="Sub total" readonly/>
+                                                <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
+                                                <input type="hidden" id="subtotal"  name="subtotal"  readonly/>
                                               </div>
                                         </div>
                                         <!-- Fecha Emisión -->
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="igv">IGV</label>
-                                                <input class="form-control" type="number"  id="igv" name="igv" placeholder="IGV"  readonly />
+                                                <input class="form-control igv" type="number" placeholder="IGV"  readonly />
+                                                <input type="hidden"  id="igv" name="igv" readonly />
                                               </div>
                                         </div>
+                                        <!-- Monto-->
+                                        <div class="col-lg-4">
+                                          <div class="form-group">
+                                            <label for="monto">Total</label>                               
+                                            <input type="number" class="form-control monto"  placeholder="Monto"  onkeyup="comprob_factura();"> 
+                                            <input type="hidden" name="monto" id="monto" class="form-control"   onkeyup="comprob_factura();"> 
+                                          </div>                                                        
+                                        </div>
+
                                         <!-- Descripcion-->
                                         <div class="col-lg-12">
                                           <div class="form-group">

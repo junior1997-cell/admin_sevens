@@ -644,9 +644,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
         'idsemana_pension':value.idsemana_pension
 
       } );
-
-
-     
+    
       var adicional_descuento=0;  
       value.adicional_descuento=='' ? adicional_descuento='0.00' : adicional_descuento=value.adicional_descuento;
 
@@ -997,12 +995,16 @@ function regresar() {
 }
 //Función limpiar-factura
 function limpiar_comprobante() {
+  //idpension_f,idfactura_pension
   $("#nro_comprobante").val("");
+  $(".monto").val("");
   $("#monto").val("");
-  $("#idfactura_break").val("");
+  $("#idfactura_pension").val("");
   $("#fecha_emision").val("");
   $("#descripcion").val("");
+  $(".subtotal").val("");
   $("#subtotal").val("");
+  $(".igv").val("");
   $("#igv").val("");
   $("#tipo_comprovante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
@@ -1035,8 +1037,8 @@ function guardaryeditar_factura(e) {
         tabla.ajax.reload();
 
         $("#modal-agregar-comprobante").modal("hide");
-       listar_comprobantes(localStorage.getItem('idsemana_break_nube'))
-       total_monto(localStorage.getItem('idsemana_break_nube'))
+       listar_comprobantes(localStorage.getItem('idpension_f_nube'))
+       total_monto(localStorage.getItem('idpension_f_nube'))
         limpiar_comprobante();
 			}else{
 
@@ -1046,12 +1048,11 @@ function guardaryeditar_factura(e) {
   });
 }
 
-function listar_comprobantes(idsemana_break) {
-  localStorage.setItem('idsemana_break_nube',idsemana_break);
+function listar_comprobantes(idpension) {
+  localStorage.setItem('idpension_f_nube',idpension);
 
   ocultar();
-  $("#idsemana_break").val(idsemana_break);
-
+  $("#idpension_f").val(idpension);
   
   tabla=$('#t-comprobantes').dataTable({  
     "responsive": true,
@@ -1061,7 +1062,7 @@ function listar_comprobantes(idsemana_break) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/pension.php?op=listar_comprobantes&idsemana_break='+idsemana_break,
+        url: '../ajax/pension.php?op=listar_comprobantes&idpension='+idpension,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -1082,29 +1083,34 @@ function listar_comprobantes(idsemana_break) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
-  total_monto(localStorage.getItem('idsemana_break_nube'));
+  total_monto(localStorage.getItem('idpension_f_nube'));
 }
 
 function comprob_factura() {
 
-  var monto = parseFloat($('#monto').val());
-
+  var monto = parseFloat($('.monto').val());
+  $('#monto').val(monto);
   if ($("#tipo_comprovante").select2("val") =="Factura") {
 
       var subtotal=0; var igv=0;
 
+      $(".subtotal").val("");   
       $("#subtotal").val("");
+      $(".igv").val("");  
       $("#igv").val(""); 
 
       subtotal= monto/1.18;
       igv= monto-subtotal;
 
+      $(".subtotal").val(subtotal.toFixed(2));
       $("#subtotal").val(subtotal.toFixed(4));
+      $(".igv").val(igv.toFixed(2));
       $("#igv").val(igv.toFixed(4));
 
   } else {
 
-    $("#subtotal").val(monto);
+    $(".subtotal").val(monto.toFixed(2));
+    $("#subtotal").val(monto.toFixed(4));
     $("#igv").val("0.00");
   }
   
@@ -1112,24 +1118,27 @@ function comprob_factura() {
 }
 
 //mostrar
-function mostrar_comprobante(idfactura_break) {
+function mostrar_comprobante(idfactura_pension ) {
 
   $("#modal-agregar-comprobante").modal("show");
   $("#tipo_comprovante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
-  $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_break: idfactura_break }, function (data, status) {
+  $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_pension : idfactura_pension  }, function (data, status) {
 
     data = JSON.parse(data);  //console.log(data);   
-      
-    $("#idfactura_break ").val(data.idfactura_break );
+    
+    $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
+    $("#idfactura_pension  ").val(data.idfactura_pension);
     $("#nro_comprobante").val(data.nro_comprobante);
+    $(".monto").val(parseFloat(data.monto).toFixed(2));
     $("#monto").val(data.monto);
     $("#fecha_emision").val(data.fecha_emision);
     $("#descripcion").val(data.descripcion);
+    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
     $("#subtotal").val(data.subtotal);
-    $("#igv").val(data.igv);
-    $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
+    $(".igv").val(parseFloat(data.igv).toFixed(2));
+    $("#igv").val(parseFloat(data.igv));
     $("#forma_pago").val(data.forma_de_pago).trigger("change");
 
     if (data.comprobante != "") {
@@ -1145,7 +1154,7 @@ function mostrar_comprobante(idfactura_break) {
         if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
           $('#ver_pdf').hide();
           $('#foto2_i').show();
-          $('#foto2_i').attr("src", "../dist/img/comrob_breaks/" +comprobante);
+          $('#foto2_i').attr("src", "../dist/img/comprob_pension/" +comprobante);
 
           $("#foto2_nombre").html(''+
           '<div class="row">'+
@@ -1159,7 +1168,7 @@ function mostrar_comprobante(idfactura_break) {
         }else{
           $('#foto2_i').hide();
           $('#ver_pdf').show();
-          $('#ver_pdf').html('<iframe src="../dist/img/comrob_breaks/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          $('#ver_pdf').html('<iframe src="../dist/img/comprob_pension/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
           
           $("#foto2_nombre").html(''+
           '<div class="row">'+
@@ -1178,8 +1187,8 @@ function mostrar_comprobante(idfactura_break) {
   });
 }
 //Función para desactivar registros
-function desactivar_comprobante(idfactura_break) {
-
+function desactivar_comprobante(idfactura_pension) {
+console.log(idfactura_pension);
   Swal.fire({
     title: "¿Está Seguro de  Desactivar  el comprobante?",
     text: "",
@@ -1190,10 +1199,10 @@ function desactivar_comprobante(idfactura_break) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/pension.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
+      $.post("../ajax/pension.php?op=desactivar_comprobante", {idfactura_pension:idfactura_pension}, function (e) {
 
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
-        total_monto(localStorage.getItem('idsemana_break_nube'));
+        total_monto(localStorage.getItem('idpension_f_nube'));
         tabla.ajax.reload();
       });      
     }
@@ -1201,7 +1210,7 @@ function desactivar_comprobante(idfactura_break) {
 
 }
 
-function activar_comprobante(idfactura_break) {
+function activar_comprobante(idfactura_pension ) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  comprobante?",
     text: "",
@@ -1212,10 +1221,10 @@ function activar_comprobante(idfactura_break) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/pension.php?op=activar_comprobante", { idfactura_break: idfactura_break }, function (e) {
+      $.post("../ajax/pension.php?op=activar_comprobante", { idfactura_pension : idfactura_pension  }, function (e) {
 
         Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
-        total_monto(localStorage.getItem('idsemana_break_nube'));
+        total_monto(localStorage.getItem('idpension_f_nube'));
         tabla.ajax.reload();
       });
       
@@ -1235,22 +1244,22 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
   if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/img/comrob_breaks/" +comprobante);
+    $('#img-factura').attr("src", "../dist/img/comprob_pension/" +comprobante);
 
-    $("#iddescargar").attr("href","../dist/img/comrob_breaks/" +comprobante);
+    $("#iddescargar").attr("href","../dist/img/comprob_pension/" +comprobante);
 
   }else{
     $('#img-factura').hide();
     $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/img/comrob_breaks/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/img/comrob_breaks/" +comprobante);
+    $('#ver_fact_pdf').html('<iframe src="../dist/img/comprob_pension/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href","../dist/img/comprob_pension/" +comprobante);
   } 
  // $(".tooltip").hide();
 }
 
 //-total Pagos
-function total_monto(idsemana_break) {
-  $.post("../ajax/pension.php?op=total_monto", { idsemana_break:idsemana_break }, function (data, status) {
+function total_monto(idpension) {
+  $.post("../ajax/pension.php?op=total_monto", { idpension:idpension }, function (data, status) {
     $("#monto_total_f").html("00.0");
     data = JSON.parse(data); 
    console.log(data);
