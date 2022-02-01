@@ -17,11 +17,11 @@
 
       require_once "../modelos/Pension.php";
 
-      $breaks=new Pension();
+      $pension=new Pension();
 
       //============Comprobantes========================
-      $idsemana_break      = isset($_POST["idsemana_break"])? limpiarCadena($_POST["idsemana_break"]):"";
-      $idfactura_break     = isset($_POST["idfactura_break"])? limpiarCadena($_POST["idfactura_break"]):"";
+      $idpension_f         = isset($_POST["idpension_f"])? limpiarCadena($_POST["idpension_f"]):"";
+      $idfactura_pension   = isset($_POST["idfactura_pension"])? limpiarCadena($_POST["idfactura_pension"]):"";
       $forma_pago          = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
       $tipo_comprovante    = isset($_POST["tipo_comprovante"])? limpiarCadena($_POST["tipo_comprovante"]):"";
 
@@ -41,24 +41,24 @@
       $p_almuerzo          = isset($_POST["p_almuerzo"])? limpiarCadena($_POST["p_almuerzo"]):"";
       $p_cena              = isset($_POST["p_cena"])? limpiarCadena($_POST["p_cena"]):"";
       //$idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena
-      //$idfactura_break,$idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
+      //$idfactura_pension ,$idpension_f,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
 
       switch ($_GET["op"]){
 
         case 'guardaryeditar':
 
-            $rspta=$breaks->insertar_editar($_POST['array_detalle_pen'],$_POST['array_semana_pen']);
+            $rspta=$pension->insertar_editar($_POST['array_detalle_pen'],$_POST['array_semana_pen']);
             
            echo $rspta ? "ok" : "No se pudieron registrar todos datos";
            // echo $rspta ;
 
         break;
-        	///////////////////////BREAK///////////////////////
+
         case 'listar_semana_botones':
 
           $nube_idproyecto = $_POST["nube_idproyecto"];
 
-          $rspta=$breaks->listarsemana_botones($nube_idproyecto);
+          $rspta=$pension->listarsemana_botones($nube_idproyecto);
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta);	
@@ -70,25 +70,17 @@
           $f2 = $_POST["f2"];
           $nube_idproyect = $_POST["nube_idproyect"];
           $id_pen = $_POST["id_pen"];
-          /* $f1 = '2022-01-09';
-          $f2 = '2022-01-15';
-          $nube_idproyect = '2';*/
-
-          $rspta=$breaks->ver_detalle_semana_dias($f1,$f2,$nube_idproyect,$id_pen);
-
-          //Vamos a declarar un array
-          // $data= Array();           
-          // while ($reg=$rspta->fetch_object()){  $data[]=array( "idtrabajador"=>$reg->idtrabajador); }
+          $rspta=$pension->ver_detalle_semana_dias($f1,$f2,$nube_idproyect,$id_pen);
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta);		
         break;
-        /////////////////////// FIN BREAK///////////////////////
+          //------------Comprobantes---------------------
           /* case 'listar_totales_semana':
               $nube_idproyecto = $_POST["idproyecto"];
               //$array_fi_ff = $_GET["array_fi_ff"];
 
-              $rspta=$breaks->listar_totales_semana($nube_idproyecto,$_POST["array_fi_ff"]);
+              $rspta=$pension->listar_totales_semana($nube_idproyecto,$_POST["array_fi_ff"]);
               //Vamos a declarar un array
               $data= Array();
 
@@ -134,31 +126,31 @@
       
                   $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
       
-                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comrob_breaks/" . $imagen2);
+                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comprob_pension/" . $imagen2);
                 
               }
       
       
-              if (empty($idfactura_break)){
+              if (empty($idfactura_pension )){
                 
-                $rspta=$breaks->insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
+                $rspta=$pension->insertar_comprobante($idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
                 echo $rspta ? "ok" : "No se pudieron registrar todos los datos de Comprobante";
               }
               else {
                 // validamos si existe LA IMG para eliminarlo
                 if ($flat_img1 == true) {
       
-                  $datos_f1 = $breaks->obtenerDoc($idfactura_break);
+                  $datos_f1 = $pension->obtenerDoc($idfactura_pension );
             
                   $img1_ant = $datos_f1->fetch_object()->comprobante;
             
                   if ($img1_ant != "") {
             
-                    unlink("../dist/img/comrob_breaks/" . $img1_ant);
+                    unlink("../dist/img/comprob_pension/" . $img1_ant);
                   }
                 }
                 
-                $rspta=$breaks->editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
+                $rspta=$pension->editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
                 
                 echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
               }
@@ -181,9 +173,9 @@
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['viatico']==1)
             {	
-              $idsemana_break ='5';
-              //$_GET['idsemana_break']
-              $rspta=$breaks->listar_comprobantes($_GET['idsemana_break']);
+              //$idpension_f ='5';
+              //$_GET['idpension_f']
+              $rspta=$pension->listar_comprobantes($_GET['idpension']);
 
               //Vamos a declarar un array
               $data= Array();
@@ -200,10 +192,10 @@
                 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
                 $data[]=array(
-                  "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger btn-sm" onclick="desactivar_comprobante('.$reg->idfactura_break .')"><i class="far fa-trash-alt"></i></button>':
-                  '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fa fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_break .')"><i class="fa fa-check"></i></button>',
+                  "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger btn-sm" onclick="desactivar_comprobante('.$reg->idfactura_pension  .')"><i class="far fa-trash-alt"></i></button>':
+                  '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-check"></i></button>',
                   
                   "1"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,	 				
                   "2"=> empty($reg->tipo_comprobante)?' - ':$reg->tipo_comprobante,	 				
@@ -246,7 +238,7 @@
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['viatico']==1)
             {
-              $rspta=$breaks->desactivar_comprobante($idfactura_break);
+              $rspta=$pension->desactivar_comprobante($idfactura_pension);
                echo $rspta ? "Comprobante Anulado" : "Comprobante no se puede Anular";
             //Fin de las validaciones de acceso
             }
@@ -267,7 +259,7 @@
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['viatico']==1)
             {
-              $rspta=$breaks->activar_comprobante($idfactura_break);
+              $rspta=$pension->activar_comprobante($idfactura_pension );
                echo $rspta ? "Comprobante Restablecido" : "Comprobante no se pudo Restablecido";
             //Fin de las validaciones de acceso
             }
@@ -289,7 +281,7 @@
             if ($_SESSION['viatico']==1)
             {
               //$idpago_Comprobante='1';
-              $rspta=$breaks->mostrar_comprobante($idfactura_break);
+              $rspta=$pension->mostrar_comprobante($idfactura_pension );
                //Codificar el resultado utilizando json
                echo json_encode($rspta);
             //Fin de las validaciones de acceso
@@ -302,11 +294,12 @@
         break;
         case 'total_monto':
           //falta
-          $rspta=$breaks->total_monto_comp($idsemana_break);
+          $rspta=$pension->total_monto_comp($idpension);
            echo json_encode($rspta); 
       
         break;
-        //-----------------------------registrar pension--------------
+        //------------ fin Comprobantes---------------------
+        //------------registrar pension--------------
         case 'guardaryeditar_pension':
 
           if (!isset($_SESSION["nombre"])) {
@@ -320,12 +313,12 @@
       
               if (empty($idpension)){
                 
-                $rspta=$breaks->insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$_POST['servicio_p']);
+                $rspta=$pension->insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$_POST['servicio_p']);
                 echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
               }
               else {
                 
-                $rspta=$breaks->editar_pension($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$_POST['servicio_p']);
+                $rspta=$pension->editar_pension($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$_POST['servicio_p']);
                 
                 echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
               }
@@ -339,13 +332,13 @@
 
         case 'listar_pensiones':
 
-          $rspta=$breaks->listar_pensiones($_GET['nube_idproyecto']);
+          $rspta=$pension->listar_pensiones($_GET['nube_idproyecto']);
           //Vamos a declarar un array
           $data= Array();
      
           while ($reg=$rspta->fetch_object()){ 
 
-            $total=$breaks->total_x_pension($reg->idpension);
+            $total=$pension->total_x_pension($reg->idpension);
 
             $data[]=array(
 
@@ -383,7 +376,7 @@
             if ($_SESSION['viatico']==1)
             {
               //$idpago_Comprobante='1';
-              $rspta=$breaks->mostrar_pension($idpension);
+              $rspta=$pension->mostrar_pension($idpension);
                //Codificar el resultado utilizando json
                echo json_encode($rspta);
             //Fin de las validaciones de acceso
@@ -397,7 +390,7 @@
 
         case 'ver_detalle_x_servicio':
 
-          $rspta=$breaks->ver_detalle_x_servicio($_GET['idpension']);
+          $rspta=$pension->ver_detalle_x_servicio($_GET['idpension']);
           //Vamos a declarar un array
           $data= Array();
           $cont=1;
@@ -423,7 +416,7 @@
 
         case 'select_proveedor':
 
-           $rspta=$breaks->select_proveedor();
+           $rspta=$pension->select_proveedor();
 
            while ($reg = $rspta->fetch_object())  {
 
