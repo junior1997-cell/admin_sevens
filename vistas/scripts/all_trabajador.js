@@ -694,6 +694,11 @@ function mostrar(idtrabajador) {
   $("#foto2_i").attr("src", "");
   $("#foto3_i").attr("src", "");
 
+  
+	$("#foto1_actual").val("");  
+	$("#foto2_actual").val("");  
+	$("#foto3_actual").val("");  
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
