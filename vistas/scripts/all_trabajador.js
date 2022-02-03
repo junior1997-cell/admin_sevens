@@ -690,6 +690,10 @@ function verdatos(idtrabajador){
 // mostramos los datos para editar
 function mostrar(idtrabajador) {
 
+  $("#foto1_i").attr("src", "");
+  $("#foto2_i").attr("src", "");
+  $("#foto3_i").attr("src", "");
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
@@ -719,7 +723,7 @@ function mostrar(idtrabajador) {
     $("#idtrabajador").val(data.idtrabajador);
     $("#ruc").val(data.ruc);
     //cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado
-    if (data.imagen_perfil != "") {
+    if (data.imagen_perfil!="") {
 
 			$("#foto1_i").attr("src", "../dist/img/usuarios/" + data.imagen_perfil);
 

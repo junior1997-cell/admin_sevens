@@ -296,6 +296,29 @@
             </a>
           </li>
         <?php  }  ?>
+        <?php if ($_SESSION['planilla_seguro']==1) {  ?>
+          <!-- PLANILLAS Y SEGUROS -->       
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="planillas_seguros.php" class="nav-link" id="mPlanillaSeguro">
+              <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
+              <img src="../dist/svg/planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+              <p>
+                Planillas y seguros                 
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+        <?php if ($_SESSION['otro_servicio']==1) {  ?>
+          <!-- OTROS SERVICIOS -->       
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="otros_servicios.php" class="nav-link" id="mOtroServicio">
+              <i class="nav-icon fas fa-map-marked-alt"></i>
+              <p>
+                Otros servicios                
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
         
         <?php if ($_SESSION['viatico']==1) {  ?>
           <!-- BIÁTICOS -->

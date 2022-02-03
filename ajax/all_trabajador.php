@@ -162,7 +162,7 @@
 
               $datos_f3 = $trabajador->obtenerImg($idtrabajador);
 
-              $img3_ant = $datos_f3->fetch_object()->cv_documentado;
+              $img3_ant = $datos_f3->fetch_object()->imagen_dni_reverso;
 
               if ($img3_ant != "") {
 
