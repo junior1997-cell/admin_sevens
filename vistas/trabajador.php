@@ -169,7 +169,7 @@
                                 <div class="form-group">
                                   <label>Fecha Inicio:</label>
                                   <div class="input-group date"  data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask  />
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();"  />
                                     <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -182,13 +182,21 @@
                                 <div class="form-group">
                                   <label>Fecha Fin:</label>
                                   <div class="input-group date"  data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask  />
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();"  />
                                     <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
                                   </div>                                 
                                 </div>
-                              </div>                              
+                              </div>  
+
+                              <!-- Cantidad de Dias -->
+                              <div class="col-lg-2">
+                                <div class="form-group">
+                                  <label for="cantidad_dias">Cantidad de dias</label>
+                                  <input type="number" name="cantidad_dias" class="form-control" id="cantidad_dias" step="any" readonly />
+                                </div>
+                              </div>                            
                               
                             </div>
 

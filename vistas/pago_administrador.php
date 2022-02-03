@@ -38,7 +38,7 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0">Pagos de Administradores</h1>
+                    <h1 class="m-0 nombre-trabajador">Pagos de Administradores</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
@@ -61,128 +61,200 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="card card-primary card-outline">
-                      <div class="card-header">
-                        <h3 class="card-title " >
-                          <button type="button" class="btn bg-gradient-success" disabled data-toggle="modal" data-target="#modal-agregar-proyecto" onclick="limpiar();">
-                          <i class="fas fa-plus-circle"></i> Agregar
-                          </button>
-                          Pagos de Trabajadores                        
-                        </h3>                      
+                      <div class="card-header">                       
+
+                        <!-- regresar -->
+                        <h3 class="card-title mr-3" id="btn-regresar" style="display: none; padding-left: 2px;" >
+                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(1);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                        </h3>
+
+                        <!-- regresar todo -->
+                        <h3 class="card-title mr-3" id="btn-regresar-todo" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
+                          <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i></button>
+                        </h3>
+                        <!-- regresar 1 -->
+                        <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
+                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                        </h3>
+                        <!-- agregar pago  -->
+                        <h3 class="card-title " id="btn-agregar" style="display: none; padding-left: 2px;" >
+                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar();">
+                          <i class="fas fa-plus-circle"></i> Agregar pago 
+                          </button>                     
+                        </h3> 
+                        
+                        <h3 class="  " id="btn-nombre-mes" style="display: none; padding-left: 2px;" >&nbsp; - Enero </h3> 
+
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
 
-                        <!-- tabla de pago administrador -->
-                        <div class="disenio-scroll">
-                          <table id="tabla-pago-administrador" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <!-- tabla principal -->
+                        <div class="row row-horizon disenio-scroll pb-3" id="tbl-principal">
+                          <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
-                              <tr>
-                                <th class="">Acciones</th>
+                              <tr> 
                                 <th>Trabajdor</th> 
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
-                                <th>Fecha culminacion</th>
-                                <th>Tiempo trabajado <br> (dias)</th>
+                                <th class="text-center">Fecha <br> culminacion</th>
+                                <th class="text-center">Tiempo <br> trabajado (dias)</th>
                                 <th>Ultimo pago</th>
-                                <th>Siguiente pago</th>
+                                <th class="text-center">Pago <br> Siguiente</th>
                                 <th>Sueldo Mensual</th>
-                                <th>Pagar acumulado</th>
-                                <th>Pagar realizado</th>
+                                <th class="text-center">Pago <br> acumulado</th>
+                                <th class="text-center">Pago <br> realizado</th>
                                 <th>Saldo</th>
-                                <th>Detalle pagos</th>                        
+                                <th>Cel:</th>                         
                               </tr>
                             </thead>
                             <tbody>                         
                               
                             </tbody>
                             <tfoot>
-                              <tr>
-                                <th class="">Acciones</th>
+                              <tr> 
                                 <th>Trabajdor</th> 
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
-                                <th>Fecha culminacion</th>
-                                <th>Tiempo trabajado <br> (dias)</th>
+                                <th class="text-center">Fecha <br> culminacion</th>
+                                <th class="text-center">Tiempo <br> trabajado (dias)</th>
                                 <th>Ultimo pago</th>
                                 <th>Siguiente pago</th>
-                                <th>Sueldo Mensual</th>
-                                <th>Pagar acumulado</th>
-                                <th>Pagar realizado</th>
-                                <th>Saldo</th>
-                                <th>Detalle pagos</th>                              
+                                <th class="text-primary">S/. 9,030.00</th>
+                                <th class="text-primary">S/. 900.00</th>
+                                <th class="text-primary">S/. 13,500.00</th>
+                                <th>Saldo</th>  
+                                <th>Cel:</th>                            
                               </tr>
                             </tfoot>
                           </table>
-                        </div>
-                        
+                        </div>                       
 
-                        <!-- tabla  -->
-                        <div class="table-responsive" style="display: none;">
-                          <div class="table-responsive-lg" style="overflow-x: scroll;">
+                        <!-- tabla fecha -->
+                        <div class="table-responsive" id="tbl-fechas" style="display: none;">
+                          <div class="table-responsive-lg" >
                             <table class="table styletabla" style="border: black 1px solid;">
-                                <thead>                                  
-                                  <tr>
-                                    <th rowspan="2" class="stile">Tipo</th>
-                                    <th rowspan="2" class="stile">Nombres</th>
-                                    <th rowspan="2" class="stile">Cargo</th>
-                                    <th colspan="3" class="stile text-center">Quincena 1</th>
-                                    <th colspan="3" class="stile text-center">Quincena 2</th>
-                                    <th rowspan="2" class="stile">Total</th>
-                                    <th rowspan="2" class="stile">Pagado</th>
-                                    <th rowspan="2" class="stile">Saldo</th>
-                                  </tr>
-
-                                  <tr>                                    
-                                    <th colspan="3" class="stile text-center">
-                                      <button class="btn btn-info btn-block" onclick="ver_detalle_pago(1);"  style="padding:0px 12px 0px 12px !important;">Detalle</button>
-                                    </th>
-                                    <th colspan="3" class="stile text-center">
-                                      <button class="btn btn-info btn-block" onclick="ver_detalle_pago(1);" style="padding:0px 12px 0px 12px !important;">Detalle</button>
-                                    </th>                                    
-                                  </tr>   
-                                     
-                                </thead>
-                                <tbody class="tcuerpo nameappend">
-                                  <tr>
-                                    <td>Técnico</td>
-                                    <td>Pool Briones </td>
-                                    <td>Ing. residente</td>
-                                    <td>44 h</td>
-                                    <td>1 sabatical / 1 dominical</td>
-                                    <td> S/. 440.00</td>
-                                    <td>44 h</td>
-                                    <td>1 sabatical / 1 dominical</td>
-                                    <td> S/. 440.00</td>
-                                    <td>880</td>
-                                    <td>400</td>
-                                    <td>480</td>
-                                    <td>
-                                      <button class="btn btn-info" onclick="ver_detalle_pago(1);">Detalle</button>
-                                    </td>                                   
-
-                                  </tr>
-                                  <tr>
-                                    <td>Técnico</td>
-                                    <td>Pedro Carrasco </td>
-                                    <td>Asistente Admin.</td>
-                                    <td>44 h</td>
-                                    <td>1 sabatical / 1 dominical</td>
-                                    <td> S/. 440.00</td>
-                                    <td>44 h</td>
-                                    <td>1 sabatical / 1 dominical</td>
-                                    <td> S/. 440.00</td>
-                                    <td>880</td>
-                                    <td>400</td>
-                                    <td>480</td>
-                                    <td>
-                                      <button class="btn btn-info" onclick="ver_detalle_pago(1);">Detalle</button>
-                                    </td>                                   
-
-                                  </tr>                                 
-                                </tbody>
+                              <thead>                                  
+                                <tr class="bg-gradient-info">
+                                  <th class="stile-celda">N°</th>
+                                  <th class="stile-celda">Mes</th>
+                                  <th colspan="2" class="stile-celda">Fechas Inicial/Final</th>
+                                  <th class="stile-celda text-center">Días</th>
+                                  <th class="stile-celda text-center">Sueldo</th>
+                                  <th class="stile-celda">Monto</th>
+                                  <th class="stile-celda">Pagar/Acumulado</th> 
+                                </tr>
+                              </thead>
+                              <tbody class="tcuerpo data-fechas-mes">
+                                <tr>
+                                  <td>1</td>
+                                  <td>Enero </td>
+                                  <td>12-01-2022</td>
+                                  <td>31-01-2022</td>
+                                  <td>19</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 2696.77</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Febrero </td>
+                                  <td>01-02-2022</td>
+                                  <td>28-02-2022</td>
+                                  <td>28</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 4400.00</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>  
+                                <tr>
+                                  <td>3</td>
+                                  <td>Marzo </td>
+                                  <td>01-03-2022</td>
+                                  <td>31-03-2022</td>
+                                  <td>31</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 4400.00</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Abril </td>
+                                  <td>01-04-2022</td>
+                                  <td>30-04-2022</td>
+                                  <td>30</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 4400.00</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>  
+                                <tr>
+                                  <td>5</td>
+                                  <td>Mayo </td>
+                                  <td>01-05-2022</td>
+                                  <td>27-05-2022</td>
+                                  <td>27</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 3832.26</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>                              
+                              </tbody>
+                              <tfoot>
+                                <tr> 
+                                   
+                                  <th colspan="6" class="text-right" >Total</th> 
+                                  <th class="stile-celda monto_x_mes_total">S/. 19,729.03</th> 
+                                  <th class="stile-celda monto_x_mes_pagado_total">S/. 4,500.00</th>                           
+                                </tr>
+                              </tfoot>
                             </table>
                           </div>
-                        </div>                        
+                        </div>      
+                        
+                        <!-- tabla ingresos de pagos -->
+                        <div class=" " id="tbl-ingreso-pagos" style="display: none !important;">
+                          <table id="tabla-ingreso-pagos" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr> 
+                                <th>Cuenta depósito</th> 
+                                <th>Forma de pago</th>
+                                <th>Cantidad</th>
+                                <th>Baucher</th>
+                                <th>Recibos por honorarios</th>
+                                <th>Descripcion</th> 
+                                <th>Estado</th>                                                        
+                              </tr>
+                            </thead>
+                            <tbody>                         
+                              
+                            </tbody>
+                            <tfoot>
+                              <tr> 
+                                <th>Cuenta depósito</th>
+                                <th>Forma de pago</th>
+                                <th>S/. 900</th>
+                                <th>Baucher</th>
+                                <th>Recibos por honorarios</th>
+                                <th>Descripcion</th> 
+                                <th>Estado</th>                           
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>    
+
                       </div>
                       <!-- /.card-body -->
                     </div>
@@ -195,11 +267,11 @@
               <!-- /.container-fluid -->
 
               <!-- Modal agregar usuario -->
-              <div class="modal fade" id="modal-agregar-proyecto">
-                <div class="modal-dialog /*modal-dialog-scrollable*/ modal-xl">
+              <div class="modal fade" id="modal-agregar-pago-trabajdor">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h4 class="modal-title">Agregar proyecto</h4>
+                      <h4 class="modal-title">Agregar pago: <b> MELVA LOURDES MEDINA MARCHENA </b></h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
                       </button>
@@ -213,126 +285,65 @@
                             <!-- id proyecto -->
                             <input type="hidden" name="idproyecto" id="idproyecto" />
 
-                            <!-- Tipo de documento -->
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label for="tipo_documento">Tipo de documento</label>
-                                <select name="tipo_documento" id="tipo_documento" class="form-control"  placeholder="Tipo de documento">
-                                  <option selected value="DNI">DNI</option>
-                                  <option value="RUC">RUC</option>
-                                  <option value="CEDULA">CEDULA</option>
-                                  <option value="OTRO">OTRO</option>
-                                </select>
-                              </div>
-                            </div>
-
-                            <!-- N° de documento -->
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label for="numero_documento">N° de documento</label>
-                                <div class="input-group">
-                                  <input type="number" name="numero_documento" id="numero_documento" class="form-control" placeholder="N° de documento" />
-                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
-                                    <span class="input-group-text" style="cursor: pointer;">
-                                      <i class="fas fa-search text-primary" id="search"></i>
-                                      <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
                             <!-- Empresa -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="empresa">Empresa <small>(para quien va la obra)</small> </label>                               
-                                <input type="text" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
+                                <label for="empresa">Cuenta deposito <small>(del trabajdor)</small> </label>                               
+                                <input type="text" value="0989-768568756-568" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
                               </div>                                                        
                             </div>
 
                             <!-- Nombre del proyecto -->
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label for="nombre_proyecto">Nombre del proyecto</label>                               
-                                <input type="text" name="nombre_proyecto" id="nombre_proyecto" class="form-control"  placeholder="Nombre">  
-                              </div>                                                        
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                <label for="forma_pago">Forma Pago</label>
+                                <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                </select>
+                                </div>
                             </div>
 
                             <!-- Ubicación (de la obra) -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="ubicacion">Ubicación <small> (de la obra) </small> </label>                               
+                                <label for="ubicacion">Cantidad <small> (cantidad a depositado) </small> </label>                               
                                 <input type="text" name="ubicacion" id="ubicacion" class="form-control"  placeholder="Ubicación"> 
                               </div>                                                        
                             </div>
 
                             <!-- Actividad del trabajo -->
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="actividad_trabajo">Actividad del trabajo </label>
-                                <input type="text" name="actividad_trabajo" id="actividad_trabajo" class="form-control" placeholder="Actividad del trabajo">
+                                <label for="actividad_trabajo">Mes </label>
+                                <input type="text" value="Enero" name="actividad_trabajo" id="actividad_trabajo" class="form-control" placeholder="Actividad del trabajo">
                               </div>
                             </div>
 
-                            <!-- Fecha inicio/fin  -->
-                            <div class="col-lg-3">
+                            <!-- Descripcion-->
+                            <div class="col-lg-12">
                               <div class="form-group">
-                                <label for="costo">Fecha inicio/fin</label>
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                  </div>
-                                  <input type="text" class="form-control float-right" name="fecha_inicio_fin" id="fecha_inicio_fin" onclick="calcular_palzo();" onchange="calcular_palzo();">
-                                </div>
-                              </div>
+                                <label for="descripcion">Descripción </label> <br>
+                                <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                              </div>                                                        
                             </div>
-
-                            <!-- Plazo -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="plazo">Plazo <small>(días calendario)</small></label>
-                                <input type="text" name="plazo" id="plazo" class="form-control" placeholder="Plazo" readonly>
-                              </div>
-                            </div>
-
-                            <!-- Costo total del proyecto -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="costo">Costo <small>("costo total del proyecto")</small></label>
-                                <div class="input-group mb-3">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">S/. </span>
-                                  </div>
-                                  <input type="number"  name="costo" id="costo" class="form-control"  placeholder="Costo" min="1" >
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Empresa a cargo -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="empresa_acargo">Empresa a cargo <small>("Seven's Ingenieros")</small></label>
-                                <input type="text" name="empresa_acargo" id="empresa_acargo" class="form-control"  placeholder="Empresa a cargo" value="Seven's Ingenieros SAC">
-                              </div>
-                            </div>
-                            
+                             
                             <!-- Pdf 1 -->
-                            <div class="col-md-4" >                               
+                            <div class="col-md-6" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                  <label for="cip" class="control-label" > Acta de contrato de obra </label>
+                                  <label for="cip" class="control-label" > Baucher de deposito </label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc1_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                   <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -344,20 +355,20 @@
                             </div> 
 
                             <!-- Pdf 2 -->
-                            <div class="col-md-4" >                               
+                            <div class="col-md-6" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                  <label for="cip" class="control-label" > Acta de entrega de terreno</label>
+                                  <label for="cip" class="control-label" > Recibo x honorarios</label>
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc2_i">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                     <i class="fas fa-file-upload"></i> Subir.
                                   </button>
                                   <input type="hidden" id="doc_old_2" name="doc_old_2" />
                                   <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf" class="docpdf" /> 
                                 </div>
                                 <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -367,31 +378,7 @@
                               </div>
                               <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                             </div>
-                            
-                            <!-- Pdf 3 -->
-                            <div class="col-md-4" >                               
-                              <div class="row text-center">
-                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                  <label for="cip" class="control-label" > Acta de inicio de obra</label>
-                                </div>
-                                <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block" id="doc3_i">
-                                    <i class="fas fa-file-upload"></i> Subir.
-                                  </button>
-                                  <input type="hidden" id="doc_old_3" name="doc_old_3" />
-                                  <input style="display: none;" id="doc3" type="file" name="doc3" accept="application/pdf" class="docpdf" /> 
-                                </div>
-                                <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
-                                    <i class="fa fa-eye"></i> PDF.
-                                  </button>
-                                </div>
-                              </div>                              
-                              <div id="doc3_ver" class="text-center mt-4">
-                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
-                              </div>
-                              <div class="text-center" id="doc3_nombre"><!-- aqui va el nombre del pdf --></div>
-                            </div>
+
                             <!-- barprogress -->
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
                               <div class="progress" id="div_barra_progress">
@@ -419,88 +406,6 @@
                       <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
                     </div>                  
-                  </div>
-                </div>
-              </div>
-
-              <!-- Modal ver los documentos subidos -->
-              <div class="modal fade" id="modal-ver-docs">
-                <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Documentos subidos</h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="text-danger" aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    
-                    <div class="modal-body">
-                      <div class="row" >
-
-                        <!-- Pdf 1 -->
-                        <div class="col-md-6 mb-4" >      
-                          <div id="verdoc1" class="text-center">
-                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                            <h4>Cargando...</h4>
-                          </div>
-                          <div class="text-center" id="verdoc1_nombre">
-                            <!-- aqui va el nombre del pdf -->
-                          </div>
-                        </div> 
-
-                        <!-- Pdf 2 -->
-                        <div class="col-md-6 mb-4" >                            
-                          <div id="verdoc2" class="text-center">
-                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                            <h4>Cargando...</h4>
-                          </div>
-                          <div class="text-center" id="verdoc2_nombre">
-                            <!-- aqui va el nombre del pdf -->
-                          </div>
-                        </div>
-                        
-                        <!-- Pdf 3 -->
-                        <div class="col-md-12 mb-4" >                             
-                          <div id="verdoc3" class="text-center">
-                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                            <h4>Cargando...</h4>
-                          </div>
-                          <div class="text-center" id="verdoc3_nombre">
-                            <!-- aqui va el nombre del pdf -->
-                        </div>
-                        </div>                                                                     
-
-                      </div>                      
-                    </div>
-
-                    <div class="modal-footer justify-content-end">
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>                  
-                  </div>
-                </div>
-              </div>
-
-              <!-- Modal ver detalle del proyecto -->
-              <div class="modal fade" id="modal-ver-detalle">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title" id="detalle_titl">Detalle del proyecto</h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="text-danger" aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    
-                    <div class="modal-body">
-                      <div class="row" id="cargando-detalle-proyecto">
-                        <div class="col-lg-12 text-center">
-                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                          <h4>Cargando...</h4>
-                        </div>
-                      </div>
-                      <!-- /.card-body -->
-                    </div>
-                                       
                   </div>
                 </div>
               </div>

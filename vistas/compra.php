@@ -336,8 +336,8 @@
                                       <tfoot>
                                         <td colspan="5" id="colspan_subtotal"></td>
                                         <th class="text-center">
-                                          <h5>Subtotal</h5>
-                                          <h5>IGV</h5>
+                                          <h5>Gravada</h5>
+                                          <h5>IGV (18%)</h5>
                                           <h5>TOTAL</h5>
                                         </th>
                                         <th class=" "> 

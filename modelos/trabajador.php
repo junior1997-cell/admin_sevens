@@ -11,20 +11,20 @@ Class Trabajador
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin)
+	public function insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin, $cantidad_dias)
 	{
-		$sql="INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin)
-		VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin')";
+		$sql="INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin, cantidad_dias)
+		VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin', '$cantidad_dias')";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar( $idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin )
+	public function editar( $idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin, $cantidad_dias )
 	{
 		$sql="UPDATE trabajador_por_proyecto SET  idtrabajador='$trabajador',  idcargo_trabajador ='$cargo', desempenio='$desempenio', 
-		sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario', sueldo_hora='$sueldo_hora', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin'
+		sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario', sueldo_hora='$sueldo_hora', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin', cantidad_dias='$cantidad_dias'
 		WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";	
 		
 		return ejecutarConsulta($sql);
@@ -57,7 +57,7 @@ Class Trabajador
 			tp.sueldo_mensual,
 			tp.sueldo_diario,
 			tp.sueldo_hora,
-			tp.fecha_inicio, tp.fecha_fin,
+			tp.fecha_inicio, tp.fecha_fin, tp.cantidad_dias,
 			tt.idtipo_trabajador,
 			ct.idcargo_trabajador,
 			o.nombre_ocupacion
@@ -91,7 +91,7 @@ Class Trabajador
 		tp.sueldo_mensual as sueldo_mensual,
 		tp.sueldo_diario as sueldo_diario,
 		tp.sueldo_hora as sueldo_hora,
-		tp.fecha_inicio, tp.fecha_fin,
+		tp.fecha_inicio, tp.fecha_fin, tp.cantidad_dias,
 		t.direccion as direccion,
 		t.telefono as telefono,
 		t.email as email,

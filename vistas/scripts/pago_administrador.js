@@ -16,61 +16,74 @@ function init() {
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
 
-  //Initialize Select2 Elements
-  $("#trabajador").select2({
+  //Initialize Select2 unidad
+  $("#forma_pago").select2({
     theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
+    placeholder: "Seleccinar una forma de pago",
     allowClear: true,
   });
-  
-
-  //Initialize Select2 Elements
-  $("#cargo").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione cargo",
-    allowClear: true,
-  });
-  $("#trabajador").val("null").trigger("change");
-  $("#cargo").val("Administrador").trigger("change");
-
+   
   // Formato para telefono
   $("[data-mask]").inputmask();   
 } 
 
-function seleccion() {
+function table_show_hide(flag) {
+  if (flag == 1) {
+    $("#btn-regresar").hide();
+    $("#btn-regresar-todo").hide();
+    $("#btn-regresar-bloque").hide();
+    $("#btn-agregar").hide(); 
+    $("#btn-nombre-mes").hide();
 
-  if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == null) {
+    $(".nombre-trabajador").html("Pagos de Administradores");
 
-    $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
+    $("#tbl-principal").show();
+    $("#tbl-fechas").hide();
+    $("#tbl-ingreso-pagos").hide();
   } else {
+    if (flag == 2) {
+      $("#btn-regresar").show();
+      $("#btn-regresar-todo").hide();
+      $("#btn-regresar-bloque").hide();
+      $("#btn-agregar").hide();
+      $("#btn-nombre-mes").hide();
 
-    $("#trabajador_validar").hide();
+      $("#tbl-principal").hide();
+      $("#tbl-fechas").show();
+      $("#tbl-ingreso-pagos").hide();
+    }else{
+      if (flag == 3) {
+        $("#btn-regresar").hide();
+        $("#btn-regresar-todo").show();
+        $("#btn-regresar-bloque").show();
+        $("#btn-agregar").show();
+        $("#btn-nombre-mes").show();
+
+        $("#tbl-principal").hide();
+        $("#tbl-fechas").hide();
+        $("#tbl-ingreso-pagos").show();
+        
+      }
+    }
   }
 }
 
 //Función limpiar
-function limpiar() {
-  //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) {   $("#trabajador").html(r);  });
+function limpiar() {  
 
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");
   $("#trabajador").val("null").trigger("change"); 
-  $("#trabajador_old").val(""); 
-  $("#cargo").val("Administrador").trigger("change"); 
+  $("#trabajador_old").val("");  
   $("#login").val("");
   $("#password").val("");
-  $("#password-old").val("");   
-  
-  //Mostramos los permisos
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
+  $("#password-old").val("");  
 }
 
-//Función Listar
+//Función Listar - tabla principal
 function listar_tbla_principal(nube_idproyecto) {
 
-  tabla=$('#tabla-pago-administrador').dataTable({
+  tabla=$('#tabla-principal').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -99,135 +112,79 @@ function listar_tbla_principal(nube_idproyecto) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+
+  
 }
+  
+//Función para ver detalle de fechas por  trabajador
+function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajador, fecha_inicial, fecha_hoy, fecha_final, sueldo_mensual) {
 
-//Función para guardar o editar
-function guardaryeditar(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-usuario")[0]);
+  table_show_hide(2);
 
-  $.ajax({
-    url: "../ajax/usuario.php?op=guardaryeditar",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
+  $(".nombre-trabajador").html(`Pagos - <b> ${nombre_trabajador} </b>`);
 
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+  if (fecha_inicial == '- - -' || fecha_hoy == '- - -') {
 
-				toastr.success('Usuario registrado correctamente')				 
+    $('.data-fechas-mes').html(`<tr>
+      <td colspan="8">
+        <div class="alert alert-warning alert-dismissible text-left">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <h5><i class="icon fas fa-ban"></i> Alerta!</h5>
+          Las fechas: 
+          <ul>
+            <li> <b>Inicial</b></li>
+            <li> <b>Final</b></li>
+          </ul>
+          No estan definidas corectamente, <b>EDITE las fechas</b> de trabajo de este trabajdor, para realizar sus pagos correctamente.
+        </div>
+      </td>       
+    </tr>`);
+    $('.monto_x_mes_total').html('<i class="far fa-frown fa-2x text-danger"></i>');
+    $('.monto_x_mes_pagado_total').html('<i class="far fa-frown fa-2x text-danger"></i>');
 
-	      tabla.ajax.reload();
-         
-				limpiar();
-
-        $("#modal-agregar-usuario").modal("hide");
-
-			}else{
-
-				toastr.error(datos)
-			}
-    },
-  });
-}
-
-function mostrar(idusuario) {
-  $("#trabajador").val("").trigger("change"); 
-  $("#trabajador_c").html("(Nuevo) Trabajador");
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-
-  $("#modal-agregar-usuario").modal("show")
-
-  $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
-
-    data = JSON.parse(data);  //console.log(data);   
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+  } else {
+    $.post("../ajax/pago_administrador.php?op=mostrar_fechas_mes", { 'id_tabajador_x_proyecto': id_tabajador_x_proyecto }, function (data, status) {
     
-    $("#trabajador_old").val(data.idtrabajador); 
-    $("#cargo").val(data.cargo).trigger("change"); 
-    $("#login").val(data.login);
-    $("#password-old").val(data.password);
-    $("#idusuario").val(data.idusuario);
-
-    if (data.imagen != "") {
-
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
-
-			$("#foto2_actual").val(data.imagen);
-		}
-  });
-
-  $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-
-    $("#permisos").html(r);
-  });
+      data = JSON.parse(data);   console.log(data);
+  
+    });
+  }  
 }
 
-//Función para desactivar registros
-function desactivar(idusuario) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el Usuario?",
-    text: "Este usuario no podrá ingresar al sistema!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
-        if (e == 'ok') {
+// Listar - TABLA INGRESO DE PAGOS
+function listar_tbla_pagos_x_mes(nube_idproyecto) {
 
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
+  table_show_hide(3);
+
+  tabla=$('#tabla-ingreso-pagos').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/pago_administrador.php?op=listar_tbla_pagos_x_mes&nube_idproyecto='+nube_idproyecto,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
         }
-      });      
-    }
-  });   
-}
-
-//Función para activar registros
-function activar(idusuario) {
-
-  Swal.fire({
-
-    title: "¿Está Seguro de  Activar  el Usuario?",
-    text: "Este usuario tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
-
-        if (e == 'ok') {
-
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
         }
-      });      
-    }
-  });      
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();  
 }
 
 init();
@@ -236,18 +193,10 @@ $(function () {
 
   $.validator.setDefaults({
 
-    submitHandler: function (e) {
+    submitHandler: function (e) {      
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-        
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-
-        guardaryeditar(e);
-      }
+      guardaryeditar(e);
+      
     },
   });
 

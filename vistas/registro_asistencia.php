@@ -51,7 +51,7 @@
                           <!-- <button type="button" class="btn bg-gradient-success"  data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();" style="margin-right: 10px; height: 61px;"><i class="fas fa-user-plus"></i> Agregar </button> -->
                         </h3>
                         <!-- regresar -->
-                        <h3 class="card-title mr-3" id="card-regresar" style="display: none;" style="padding-left: 2px;">
+                        <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
                           <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                         </h3>
                         <!-- Editar -->

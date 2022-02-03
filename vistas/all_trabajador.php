@@ -187,7 +187,7 @@
                           <div class="col-lg-4">
                             <div class="form-group">
                               <label for="email">Correo electrónico</label>
-                              <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico" />
+                              <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico" onkeyup="convert_minuscula(this);" />
                             </div>
                           </div>
                           <!-- Direccion -->

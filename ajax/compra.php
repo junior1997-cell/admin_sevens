@@ -234,9 +234,9 @@ switch ($_GET["op"]) {
                 }
                  
                 $list_segun_estado_detracc =
-                    '<div class="text-center"> <button class="btn btn-' .
+                    '<div class="text-center text-nowrap"> <button class="btn btn-' .
                     $c .
-                    ' btn-xs" onclick="listar_pagos(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .', '.$deposito_Actual.')">
+                    ' btn-xs m-t-2px" onclick="listar_pagos(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .', '.$deposito_Actual.')">
                     <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                     <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
             }

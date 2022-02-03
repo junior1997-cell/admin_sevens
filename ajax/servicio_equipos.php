@@ -249,10 +249,10 @@ switch ($_GET["op"]){
 		 				"3"=>$reg->unidad_medida,		 				
 		 				"4"=>$reg->cantidad_veces,		 				
 		 				"5"=>number_format($reg->costo_parcial, 2, '.', ','),
-		 				"6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$verdatos.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
+		 				"6"=>'<div class="text-center text-nowrap"> <button class="btn btn-'.$c.' btn-xs" onclick="listar_pagos('.$verdatos.')"><i class="fas fa-'.$icon.' nav-icon"></i> '.$nombre.'</button> '.'
 						 <button style="font-size: 14px;" class="btn btn-'.$c.' btn-xs">'.number_format($monto, 2, '.', ',').'</button> </div>',
 		 				"7"=>number_format($saldo, 2, '.', ','),
-		 				"8"=>'<div class="text-center"> <button class="btn btn-'.$cc.' btn-sm" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg btn-'.$cc.' nav-icon"></i></button> '.'
+		 				"8"=>'<div class="text-center text-nowrap"> <button class="btn btn-'.$cc.' btn-sm" onclick="listar_facturas('.$unidad_medida.')"><i class="fas fa-file-invoice fa-lg btn-'.$cc.' nav-icon"></i></button> '.'
 						 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($monto_factura, 2, '.', ',').'</button> </div>',
 		 				
 		 				"9"=>$estado

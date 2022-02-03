@@ -195,7 +195,8 @@ function limpiar() {
   $("#sueldo_diario").val("");   
   $("#sueldo_hora").val("");
 
-  $("#fecha_inicio").val("");  $("#fecha_fin").val("");
+  $("#fecha_inicio").val("");  $("#fecha_fin").val(""); $('#cantidad_dias').val('')
+  $('#cantidad_dias').removeClass('input-no-valido input-valido');
 
   $(".form-control").removeClass('is-valid');
   $(".is-invalid").removeClass("error is-invalid");
@@ -385,7 +386,8 @@ function mostrar(idtrabajador,idtipo) {
     $("#sueldo_hora").val(data.sueldo_hora);
 
     $("#fecha_inicio").val(format_d_m_a(data.fecha_inicio));
-    $("#fecha_fin").val(format_d_m_a(data.fecha_fin));
+    $("#fecha_fin").val(format_d_m_a(data.fecha_fin)); 
+    $("#cantidad_dias").val(data.cantidad_dias);
   });
 }
 
@@ -432,6 +434,25 @@ function activar(idtrabajador) {
       
     }
   });      
+}
+
+function calcular_dias_trabajo() {
+  var fecha_i = $('#fecha_inicio').val();
+  var fecha_f = $('#fecha_fin').val();
+
+  console.log(fecha_i, fecha_f);
+
+  if (fecha_i != '' && fecha_f != '') {
+
+    cantida_dias = diferencia_de_dias(format_a_m_d( fecha_i), format_a_m_d(fecha_f) );
+
+    $('#cantidad_dias').addClass('input-valido').removeClass('input-no-valido');
+    $('#cantidad_dias').val(cantida_dias);
+
+  } else {
+    $('#cantidad_dias').removeClass('input-valido').addClass('input-no-valido');
+    $('#cantidad_dias').val(0);
+  }  
 }
 
 init();
@@ -532,4 +553,10 @@ function format_a_m_d(fecha) {
   let splits = fecha.split("-"); //console.log(splits);
 
   return splits[2]+'-'+splits[1]+'-'+splits[0];
+}
+
+function diferencia_de_dias(fecha_i, fecha_f) {
+  var fecha1 = moment(fecha_i);
+  var fecha2 = moment(fecha_f); 
+  return fecha2.diff(fecha1, 'days');
 }

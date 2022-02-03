@@ -629,47 +629,46 @@ function guardaryeditar_compras(e) {
     // $("#tabla-compra").hide();
     // $("#agregar_compras").show();
     var formData = new FormData($("#form-compras")[0]);
-    $("#guardar_registro_compras").on("click", function (e) {
-        Swal.fire({
-            title: "¿Está seguro que deseas guardar esta compra?",
-            text: "Al guardar no podrás editar!!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#28a745",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Si, Guardar!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $("#submit-form-compras").submit();
-            }
-        });
-    });
+     
+    Swal.fire({
+        title: "¿Está seguro que deseas guardar esta compra?",
+        html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Guardar!",
+    }).then((result) => {
 
-    $.ajax({
-        url: "../ajax/compra.php?op=guardaryeditarcompra",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
+        if (result.isConfirmed) {
 
-        success: function (datos) {
-            if (datos == "ok") {
-                // toastr.success("Usuario registrado correctamente");
-                Swal.fire("Correcto!", "Compra guardada correctamente", "success");
-
-                tabla.ajax.reload();
-
-                limpiar();
-                regresar();
-                cont = 0
-                $("#modal-agregar-usuario").modal("hide");
-                tabla_comp_prov.ajax.reload();
-            } else {
-                // toastr.error(datos);
-                Swal.fire("Error!", datos, "error");
-            }
-        },
-    });
+            $.ajax({
+                url: "../ajax/compra.php?op=guardaryeditarcompra",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+        
+                success: function (datos) {
+                    if (datos == "ok") {
+                        // toastr.success("Usuario registrado correctamente");
+                        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+        
+                        tabla.ajax.reload();
+        
+                        limpiar();
+                        regresar();
+                        cont = 0
+                        $("#modal-agregar-usuario").modal("hide");
+                        tabla_comp_prov.ajax.reload();
+                    } else {
+                        // toastr.error(datos);
+                        Swal.fire("Error!", datos, "error");
+                    }
+                },
+            });
+        }
+    });    
 }
 
 //guardar proveedor
@@ -1620,7 +1619,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
         <td>
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
-          <div class="user-block w-px-300">
+          <div class="user-block text-nowrap">
             <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
@@ -1663,68 +1662,61 @@ function evaluar() {
     }
 }
 
-function modificarSubtotales() {
+function modificarSubtotales() {    console.log(array_class_trabajador);
     
-    var cantidad = document.getElementsByName("cantidad[]");
-    var precio_sin_igv = document.getElementsByName("precio_sin_igv[]");
-    var precio_igv = document.getElementsByName("precio_igv[]");
-    var precio_con_igv = document.getElementsByName("precio_con_igv[]");  
-    var descuento = document.getElementsByName("descuento[]");
-    var subtotal_producto = document.getElementsByName("subtotal_producto");    
-    // var igv = document.getElementsByName("igv");
     if ($("#tipo_comprovante").select2("val") == null) { 
                
         $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
 
         $("#colspan_subtotal").attr("colspan",5); //cambiamos el: colspan
 
-        for (var i = 0; i < cantidad.length; i++) {
-            // console.log(cantidad[i]);
-            var inpC = cantidad[i];
-            var inpP = precio_sin_igv[i];
-            var inpD = descuento[i];
-            var inpS = subtotal_producto[i];
-            
+        array_class_trabajador.forEach((element,index) => {
+               
+            var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
+            var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
+            var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+            var subtotal_producto = 0;
+             
             // Calculamos: IGV
-            var igv = "0";
-            document.getElementsByName(`precio_igv[${i}]`).innerHTML = igv;
+            var precio_sin_igv = 0;
+            $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);  
 
             // Calculamos: precio + IGV 
-            var precio_con_igv = "0";
-            document.getElementsByName(`precio_con_igv[${i}]`).innerHTML = precio_con_igv;
+            var igv = 0;
+            $(`.precio_igv_${element.id_cont}`).val(igv);
 
-            inpS.value = inpC.value * inpP.value - inpD.value;
-            document.getElementsByName("subtotal_producto")[i].innerHTML = formato_miles(inpS.value.toFixed(4));
-        }
+            // Calculamos: Subtotal de cada producto
+            subtotal_producto = (cantidad * parseFloat(precio_con_igv)) - deacuento;
+            $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
+
+        });
         calcularTotalesSinIgv();         
     }else{
 
         if ($("#tipo_comprovante").select2("val") == "Factura") {
-            console.log(array_class_trabajador);
-            $(".hidden").show(); //Mostramos: IGV, PRECIO CON IGV
+             
+            $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
 
             $("#colspan_subtotal").attr("colspan",7); //cambiamos el: colspan  
 
             array_class_trabajador.forEach((element,index) => {
-              // console.log(element.id_cont);
-              var inpC = parseFloat($(`.cantidad_${element.id_cont}`).val());
-              var inpP = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-              var inpIgv = 0;
-              var inpPcIgv = 0;
-              var inpD = parseFloat($(`.descuento_${element.id_cont}`).val());
-              var inpS = 0;
-              // console.log(inpC,inpP, inpD );
+               
+              var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
+              var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
+              var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+              var subtotal_producto = 0;
+               
               // Calculamos: IGV
-              var precio_sin_igv = (inpP / 1.18).toFixed(4);
+              var precio_sin_igv = (precio_con_igv / 1.18).toFixed(4);
               $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);  
 
               // Calculamos: precio + IGV 
-              var igv = ( parseFloat(inpP) - parseFloat(precio_sin_igv)).toFixed(4);
+              var igv = ( parseFloat(precio_con_igv) - parseFloat(precio_sin_igv)).toFixed(4);
               $(`.precio_igv_${element.id_cont}`).val(igv);
 
               // Calculamos: Subtotal de cada producto
-              inpS = (inpC * parseFloat(inpP)) - inpD;
-              $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(inpS.toFixed(4)));
+              subtotal_producto = (cantidad * parseFloat(precio_con_igv)) - deacuento;
+              $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
 
             }); 
 
@@ -1735,25 +1727,27 @@ function modificarSubtotales() {
 
             $("#colspan_subtotal").attr("colspan",5); //cambiamos el: colspan
 
-            for (var i = 0; i < cantidad.length; i++) {
-                // console.log(cantidad[i]);
-                var inpC = cantidad[i];
-                var inpP = precio_con_igv[i];
-                var inpD = descuento[i];
-                var inpS = subtotal_producto[i];
-
+            array_class_trabajador.forEach((element,index) => {
+               
+                var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
+                var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
+                var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+                var subtotal_producto = 0;
+                 
                 // Calculamos: IGV
-                var igv = "0";
-                
-                document.getElementsByName(`precio_igv[${i}]`).innerHTML = igv;
-
+                var precio_sin_igv = 0;
+                $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);  
+    
                 // Calculamos: precio + IGV 
-                var precio_sin_igv = inpP.value;
-                document.getElementsByName(`precio_sin_igv[${i}]`).innerHTML = precio_sin_igv;
-        
-                inpS.value = inpC.value * inpP.value - inpD.value;
-                document.getElementsByName(`subtotal_producto`)[i].innerHTML = formato_miles(inpS.value.toFixed(4));
-            }
+                var igv = 0;
+                $(`.precio_igv_${element.id_cont}`).val(igv);
+    
+                // Calculamos: Subtotal de cada producto
+                subtotal_producto = (cantidad * parseFloat(precio_con_igv)) - deacuento;
+                $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
+    
+            });
+
             calcularTotalesSinIgv();
         }         
     }    
@@ -1761,12 +1755,12 @@ function modificarSubtotales() {
 }
 
 function calcularTotalesSinIgv() {
-    var sub = document.getElementsByName("subtotal_producto");
+     
     var total = 0.0;
     var igv = 0;
     var mtotal = 0;
 
-    for (var i = 0; i < sub.length; i++) { total += document.getElementsByName("subtotal_producto")[i].value; }
+    array_class_trabajador.forEach((element,index) => { total += parseFloat( quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()) ) });
 
     $("#subtotal").html("S/. " + formato_miles(total));
     $("#subtotal_compra").val( redondearExp(total, 4));
@@ -1967,17 +1961,17 @@ function editar_detalle_compras(idcompra_proyecto) {
             <td>
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
-              <div class="user-block w-px-300">
+              <div class="user-block text-nowrap">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
             </td>
             <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-px-70 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td><input type="number" class="w-px-135 precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-            <td class="hidden"><input class="w-px-135 precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly  style="border: none; text-align: center;"></td>
-            <td class="hidden"><input class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${element.precio_igv}" readonly  style="border: none; text-align: center;"></td>
+            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_venta}" readonly ></td>
+            <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
+            <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${element.precio_igv}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
             <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
@@ -2100,13 +2094,7 @@ function redondearExp(numero, digitos) {
 }
 
 $(function () {
-    // Validar formulario Compras
-    // $.validator.setDefaults({
-    //     submitHandler: function (e) {
-    //         guardaryeditar_compras(e);
-    //     },
-    // });
-
+    
     $("#form-compras").validate({
          
         rules: {
@@ -2142,7 +2130,7 @@ $(function () {
         },
 
         highlight: function (element, errorClass, validClass) {
-            $(element).addClass("is-invalid");
+            $(element).addClass("is-invalid").removeClass("is-valid");
         },
 
         unhighlight: function (element, errorClass, validClass) {

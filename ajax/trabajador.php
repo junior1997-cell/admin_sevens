@@ -33,7 +33,9 @@
       $sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
 
       $fecha_inicio 		= isset($_POST['fecha_inicio'])? $_POST['fecha_inicio']:"";
-      $fecha_fin 		= isset($_POST['fecha_fin'])? $_POST['fecha_fin']:"";
+      $fecha_fin 		    = isset($_POST['fecha_fin'])? $_POST['fecha_fin']:""; 
+      $cantidad_dias 		= isset($_POST['cantidad_dias'])? $_POST['cantidad_dias']:"";
+
 
       switch ($_GET["op"]){
 
@@ -42,13 +44,13 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin));
+            $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin));
+            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias);
             
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
@@ -98,12 +100,12 @@
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>

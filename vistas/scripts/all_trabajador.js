@@ -1369,3 +1369,7 @@ function decifrar_format_banco(format) {
 
   return format_final;
 }
+
+function convert_minuscula(e) {
+  e.value = e.value.toLowerCase();
+}
