@@ -126,7 +126,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idproveedor_proyecto) {
-  console.log(idproveedor_proyecto);
+  limpiar();
   
   $("#proveedor").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();

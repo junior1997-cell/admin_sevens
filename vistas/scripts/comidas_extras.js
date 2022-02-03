@@ -203,10 +203,11 @@ function listar() {
 }
 //ver ficha tecnica
 function modal_comprobante(comprobante){
+  limpiar();
   var comprobante = comprobante;
   console.log(comprobante);
-var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-//console.log(extencion);
+  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+  //console.log(extencion);
   $('#ver_fact_pdf').html('');
   $('#img-factura').attr("src", "");
   $('#modal-ver-comprobante').modal("show");
@@ -297,7 +298,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idcomida_extra ) {
-  
+  limpiar();
   //$("#proveedor").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();

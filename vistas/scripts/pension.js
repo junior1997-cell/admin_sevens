@@ -934,6 +934,7 @@ function ver_detalle_x_servicio(idpension) {
 
 //mostrar
 function mostrar_pension(idpension) {
+  limpiar_pension();
   var array_datosselect=[];
   $("#modal-agregar-pension").modal("show");
 
@@ -1119,7 +1120,7 @@ function comprob_factura() {
 
 //mostrar
 function mostrar_comprobante(idfactura_pension ) {
-
+  limpiar_comprobante();
   $("#modal-agregar-comprobante").modal("show");
   $("#tipo_comprovante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");

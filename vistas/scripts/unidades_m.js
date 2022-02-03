@@ -83,7 +83,7 @@ function guardaryeditar_unidades_m(e) {
 
 	      tabla_unidades_m.ajax.reload();
          
-				limpiar();
+				limpiar_unidades_m();
 
         $("#modal-agregar-unidad-m").modal("hide");
 
@@ -96,7 +96,7 @@ function guardaryeditar_unidades_m(e) {
 }
 
 function mostrar_unidades_m(idunidad_medida) {
-  console.log(idunidad_medida);
+  limpiar_unidades_m();
 
   $("#modal-agregar-unidad-m").modal("show")
 

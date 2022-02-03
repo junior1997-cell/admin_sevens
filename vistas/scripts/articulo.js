@@ -127,6 +127,7 @@ function guardaryeditar(e)
 
 function mostrar(idarticulo)
 {
+	limpiar();
 	$.post("../ajax/articulo.php?op=mostrar",{idarticulo : idarticulo}, function(data, status)
 	{
 		data = JSON.parse(data);		

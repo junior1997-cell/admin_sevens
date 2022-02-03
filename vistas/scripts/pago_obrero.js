@@ -135,6 +135,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
+  limpiar();
   $("#trabajador").val("").trigger("change"); 
   $("#trabajador_c").html("(Nuevo) Trabajador");
   $("#cargando-1-fomulario").hide();

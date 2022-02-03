@@ -493,6 +493,12 @@ function limpiar() {
 	$("#foto3").val("");
 	$("#foto3_actual").val("");  
   $("#foto3_nombre").html(""); 
+
+  $("#doc4").val("");
+  $("#doc_old_4").val("");
+  
+  $("#doc5").val("");
+  $("#doc_old_5").val("");
   
   $(".form-control").removeClass('is-valid');
   $(".is-invalid").removeClass("error is-invalid");
@@ -690,14 +696,7 @@ function verdatos(idtrabajador){
 // mostramos los datos para editar
 function mostrar(idtrabajador) {
 
-  $("#foto1_i").attr("src", "");
-  $("#foto2_i").attr("src", "");
-  $("#foto3_i").attr("src", "");
-
-  
-	$("#foto1_actual").val("");  
-	$("#foto2_actual").val("");  
-	$("#foto3_actual").val("");  
+  limpiar();  
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();

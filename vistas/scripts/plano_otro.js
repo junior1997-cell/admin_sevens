@@ -516,6 +516,8 @@ function mostrar_carpeta(idplano_otro) {
 
 // mostramos los datos para editar
 function mostrar_plano(idplano_otro) {
+
+    limpiar();
     $("#cargando-1-fomulario").hide();
     $("#cargando-2-fomulario").show();
 

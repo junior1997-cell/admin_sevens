@@ -114,6 +114,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idproveedor) {
+  limpiar();
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();

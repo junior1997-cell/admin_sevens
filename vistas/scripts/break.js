@@ -833,7 +833,7 @@ function comprob_factura() {
 
 //mostrar
 function mostrar_comprobante(idfactura_break) {
-
+  limpiar_comprobante();
   $("#modal-agregar-comprobante").modal("show");
   $("#tipo_comprovante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");

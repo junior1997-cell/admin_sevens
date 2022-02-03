@@ -982,7 +982,7 @@ function most_datos_prov_pago(idmaquinaria,idproyecto) {
   $("#banco_pago").val("").trigger("change"); 
   $.post("../ajax/servicio_equipos.php?op=most_datos_prov_pago", { idmaquinaria: idmaquinaria }, function (data, status) {
 
-    data = JSON.parse(data);      console.log(data); 
+    data = JSON.parse(data);     // console.log(data); 
     
     $("#idproyecto_pago").val(idproyecto);
     $("#id_maquinaria_pago").val(data.idmaquinaria);
@@ -1032,6 +1032,7 @@ function validando_excedentes() {
 }
 //mostrar
 function mostrar_pagos(idpago_servicio,id_maquinaria) {
+  limpiar_c_pagos();
   $("#h4_mostrar_beneficiario").html("");
   $("#id_maquinaria_pago").html("");
   $("#maquinaria_pago").html("");
@@ -1249,7 +1250,7 @@ function limpiar_factura() {
 }
 //mostrar
 function mostrar_factura(idfactura) {
-
+  limpiar_factura();
   $("#modal-agregar-factura").modal("show");
 
 

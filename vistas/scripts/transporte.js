@@ -327,7 +327,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idtransporte) {
-  
+  limpiar();
   //$("#proveedor").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();

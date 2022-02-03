@@ -95,6 +95,7 @@ function guardaryeditar_color(e) {
 }
 
 function mostrar(idcolor) {
+  limpiar();
   console.log(idcolor);
 
   $("#modal-agregar-color").modal("show")

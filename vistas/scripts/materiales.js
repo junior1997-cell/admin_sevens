@@ -348,7 +348,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idproducto) {
-  console.log(idproducto);
+  limpiar(); //console.log(idproducto);
 
   //$("#proveedor").val("").trigger("change");
   $("#cargando-1-fomulario").hide();

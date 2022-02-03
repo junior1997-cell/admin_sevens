@@ -150,7 +150,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idmaquinaria) {
-
+  listar();  
   $("#proveedor").val("").trigger("change"); 
   $("#tipo").val("").trigger("change"); 
 

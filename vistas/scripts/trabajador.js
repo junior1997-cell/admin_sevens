@@ -359,6 +359,7 @@ function verdatos(idtrabajador){
 }
 
 function mostrar(idtrabajador,idtipo) {
+  limpiar();
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
  // $("#tipo_trabajador").val('null').trigger("change");

@@ -644,7 +644,7 @@ function guardaryeditar(e) {
 }
 //mostrar
 function mostrar(idservicio) {
-  console.log(idservicio);
+  limpiar();
   
   $("#maquinaria").val("").trigger("change"); 
   $("#unidad_m").val("").trigger("change"); 
@@ -1032,6 +1032,7 @@ function validando_excedentes() {
 }
 //mostrar
 function mostrar_pagos(idpago_servicio,id_maquinaria) {
+  limpiar_c_pagos();
   $("#h4_mostrar_beneficiario").html("");
   $("#id_maquinaria_pago").html("");
   $("#maquinaria_pago").html("");
@@ -1249,7 +1250,7 @@ function limpiar_factura() {
 }
 //mostrar
 function mostrar_factura(idfactura) {
-
+  limpiar_factura();
   $("#modal-agregar-factura").modal("show");
 
 

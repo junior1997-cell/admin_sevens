@@ -97,7 +97,7 @@ function guardaryeditar_bancos(e) {
 }
 
 function mostrar_bancos(idbancos) {
-  console.log(idbancos);
+  limpiar(); //console.log(idbancos);
 
   $("#modal-agregar-bancos").modal("show")
 

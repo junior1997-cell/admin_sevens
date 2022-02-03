@@ -80,7 +80,7 @@ function guardaryeditar_ocupacion(e) {
 
 	      tabla_ocupacion.ajax.reload();
          
-				limpiar();
+				limpiar_ocupacion();
 
         $("#modal-agregar-ocupacion").modal("hide");
 
@@ -93,7 +93,7 @@ function guardaryeditar_ocupacion(e) {
 }
 
 function mostrar_ocupacion(idocupacion) {
-  console.log(idocupacion);
+  limpiar_ocupacion(); //console.log(idocupacion);
 
   $("#modal-agregar-ocupacion").modal("show")
 

@@ -3,7 +3,7 @@ var  calendar;
 //Función que se ejecuta al inicio
 function init() {
 
-  listar( );   
+  listar();   
 
   $("#bloc_Recurso").addClass("menu-open");
 

@@ -89,7 +89,7 @@ function guardaryeditar_cargo(e) {
 
 	      tabla_cargos.ajax.reload();
          
-				limpiar();
+				limpiar_cargo();
 
         $("#modal-agregar-cargo").modal("hide");
 
@@ -102,6 +102,7 @@ function guardaryeditar_cargo(e) {
 }
 
 function mostrar_cargo(idcargo_trabajador) {
+  limpiar_cargo();
   console.log(idcargo_trabajador);
 
   $("#modal-agregar-cargo").modal("show")

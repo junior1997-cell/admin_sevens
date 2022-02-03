@@ -140,6 +140,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
+  limpiar();
   estado_usuario_requerido = false;
   $(".modal-title").html("Editar usuario");
   $("#trabajador").val("").trigger("change"); 

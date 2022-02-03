@@ -94,7 +94,7 @@ function guardaryeditar_tipo(e) {
 }
 
 function mostrar_tipo(idtipo_trabajador) {
-  console.log(idtipo_trabajador);
+  limpiar_tipo();
 
   $("#modal-agregar-tipo").modal("show")
 

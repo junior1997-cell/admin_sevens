@@ -27,22 +27,6 @@ function init() {
 
     $("#lCompras").addClass("active");
 
-    // $("#guardar_registro_compras").on("click", function (e) {
-    //     Swal.fire({
-    //         title: "¿Está seguro que deseas guardar esta compra?",
-    //         text: "Al guardar no podrás editar!!",
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonColor: "#28a745",
-    //         cancelButtonColor: "#d33",
-    //         confirmButtonText: "Si, Guardar!",
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             $("#submit-form-compras").submit();
-    //         }
-    //     });
-    // });
-
     // guardar el registro de la compra
     $("#guardar_registro_compras").on("click", function (e) {
         $("#submit-form-compras").submit();
@@ -908,6 +892,7 @@ function ver_modal_factura(imagen) {
 }
 //mostrar
 function mostrar_factura(idfacturacompra) {
+    limpiar_factura();
     $("#modal-agregar-factura").modal("show");
 
     $.post("../ajax/compra.php?op=mostrar_factura", { idfacturacompra: idfacturacompra }, function (data, status) {
@@ -1284,6 +1269,7 @@ function limpiar_c_pagos() {
 
 //mostrar datos proveedor pago
 function most_datos_prov_pago(idcompra_proyecto) {
+   // limpiar_c_pagos();
     $("#h4_mostrar_beneficiario").html("");
     $("#idproyecto_pago").val("");
 
@@ -1442,6 +1428,7 @@ function total_pagos_detracc(idcompra_proyecto) {
 }
 //mostrar
 function mostrar_pagos(idpago_compras) {
+    limpiar_c_pagos();
    // console.log("___________ " + idpago_compras);
     $("#h4_mostrar_beneficiario").html("");
     $("#idproveedor_pago").val("");
