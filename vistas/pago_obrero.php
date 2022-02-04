@@ -61,133 +61,202 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="card card-primary card-outline">
-                      <div class="card-header">
+                      <div class="card-header">                       
+
                         <!-- regresar -->
-                        <h3 class="card-title mr-3 hidden" id="button-regresar" style="padding-left: 2px;">
-                          <button type="button" class="btn bg-gradient-warning" onclick="show_hide_tablas(1);" ><i class="fas fa-arrow-left"></i> Regresar</button>
+                        <h3 class="card-title mr-3" id="btn-regresar" style="display: none; padding-left: 2px;" >
+                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(1);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                         </h3>
 
-                        <!-- Agregar pagos -->
-                        <h3 class="card-title hidden" id="button-agregar-pago" >
-                          <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proyecto" onclick="limpiar();">
-                          <i class="fas fa-plus-circle"></i> Agregar
-                          </button>
-                          Pagos de Trabajadores                        
+                        <!-- regresar todo -->
+                        <h3 class="card-title mr-3" id="btn-regresar-todo" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
+                          <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i></button>
+                        </h3>
+                        <!-- regresar 1 -->
+                        <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
+                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                        </h3>
+                        <!-- agregar pago  -->
+                        <h3 class="card-title " id="btn-agregar" style="display: none; padding-left: 2px;" >
+                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar();">
+                          <i class="fas fa-plus-circle"></i> Agregar pago 
+                          </button>                     
                         </h3> 
-                                             
+                        
+                        <h3 class="  " id="btn-nombre-mes" style="display: none; padding-left: 2px;" >&nbsp; - Enero </h3> 
+
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <div class="table-responsive disenio-scroll" id="card-tabla-pago">                           
-                          <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
-                              <thead>                                  
-                                <tr>
-                                  <th rowspan="2" class="stile-celda">Nombres</th>
-                                  <th rowspan="2" class="stile-celda">Tipo/Cargo</th>
-                                  <th colspan="5" class="stile-celda">
-                                    <button class="btn btn-info btn-block" onclick="ver_detalle_quincena_semana(1);"  style="padding:0px 12px 0px 12px !important;">Quincena 1</button>                                      
-                                  </th>
-                                  <th colspan="5" class="stile-celda">
-                                    <button class="btn btn-info btn-block" onclick="ver_detalle_quincena_semana(1);" style="padding:0px 12px 0px 12px !important;">Quincena 2</button>
-                                  </th>
-                                  <th rowspan="2" class="stile-celda">Total</th>
-                                  <th rowspan="2" class="stile-celda">Pagado</th>
-                                  <th rowspan="2" class="stile-celda">Saldo</th>
-                                </tr>
 
-                                <tr>                                    
-                                  <th class="stile-celda p-x-10px">Hr.</th>
-                                  <th class="stile-celda p-x-10px">Día</th> 
-                                  <th class="stile-celda p-x-10px">Sa</th>
-                                  <th class="stile-celda p-x-10px">Adicional</th> 
-                                  <th class="stile-celda p-x-10px">Pago Quincena</th>  
-                                  
-                                  <th class="stile-celda p-x-10px">Hr.</th>
-                                  <th class="stile-celda p-x-10px">Día</th> 
-                                  <th class="stile-celda p-x-10px">Sa</th>
-                                  <th class="stile-celda p-x-10px">Adicional</th> 
-                                  <th class="stile-celda p-x-10px">Pago Quincena</th>                                 
-                                </tr>   
-                                    
-                              </thead>
-                              <tbody class="tcuerpo nameappend">
-                                <tr>
-                                  <td>POOL STIWART BRIONES SÁNCHEZ</td>
-                                  <td>Técnico/Ing. residente</td>
-                                  <td>44 h</td>
-                                  <td>6 D</td>
-                                  <td>1 Sa</td>
-                                  <td>S/. 40.00</td>
-                                  <td> S/. 440.0 <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Asignar pago" onclick="modal_agregar_pago( '', '1', '2021-09-01');"><i class="fas fa-dollar-sign fa-2x"></i></span>
-                                  </td>
-                                  <td>44 h</td>
-                                  <td>6 D</td>
-                                  <td>1 Sa</td> 
-                                  <td>S/. 40.00</td>                                   
-                                  <td>S/. 440.00 <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Asignar pago" onclick="modal_agregar_pago( '', '1', '2021-09-01');"><i class="fas fa-dollar-sign fa-2x"></i></span>
-                                  </td>
-                                  <td>S/. 880</td>
-                                  <td>S/. 400</td>
-                                  <td>S/. 480</td>
-                                  <td>
-                                    <button class="btn btn-info" onclick="ver_detalle_pagos(1);">Detalle</button>
-                                  </td>                                   
-
-                                </tr>
-                                <tr>
-                                  <td>PEDRO JUAN CARRASCO GARCÍA </td>
-                                  <td>Técnico/Asistente Admin.</td>
-                                  <td>44 h</td>
-                                  <td>6 D</td>
-                                  <td>1 Sa</td>
-                                  <td>S/. 40.00</td>
-                                  <td> S/. 440.0 <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Asignar pago" onclick="modal_agregar_pago( '', '1', '2021-09-01');"><i class="fas fa-dollar-sign fa-2x"></i></span>
-                                  </td>
-                                  <td>44 h</td>
-                                  <td>6 D</td>
-                                  <td>1 Sa</td>
-                                  <td>S/. 40.00</td>
-                                  <td>S/. 440.00<span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Asignar pago" onclick="modal_agregar_pago( '', '1', '2021-09-01');"><i class="fas fa-dollar-sign fa-2x"></i></span>
-                                  </td>
-                                  <td>S/. 880</td>
-                                  <td>S/. 400</td>
-                                  <td>S/. 480</td>
-                                  <td>
-                                    <button class="btn btn-info" onclick="ver_detalle_pagos(1);">Detalle</button>
-                                  </td>                                   
-
-                                </tr>                                 
-                              </tbody>
-                          </table>                           
-                        </div> 
-                        
-                        <div class="hidden" id="card-tabla-detalle-pago"> 
-                          <table id="tabla-detalle-pago" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <!-- tabla principal -->
+                        <div class="row row-horizon disenio-scroll pb-3" id="tbl-principal">
+                          <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
-                              <tr>
-                                <th class="">Aciones</th>
-                                <th>Nombres</th>
-                                <th>Cargo</th>
-                                <th>Telefono</th>
-                                <th>Pago</th>                                
-                                <th>Estado</th>
+                              <tr> 
+                                <th>Trabajdor</th> 
+                                <th>Fecha inicio</th>
+                                <th>Hoy</th>
+                                <th class="text-center">Fecha <br> culminacion</th>
+                                <th class="text-center">Tiempo <br> trabajado (dias)</th>
+                                <th>Ultimo pago</th>
+                                <th class="text-center">Pago <br> Siguiente</th>
+                                <th>Sueldo Mensual</th>
+                                <th class="text-center">Pago <br> acumulado</th>
+                                <th class="text-center">Pago <br> realizado</th>
+                                <th>Saldo</th>
+                                <th>Cel:</th>                         
                               </tr>
                             </thead>
                             <tbody>                         
                               
                             </tbody>
                             <tfoot>
-                              <tr>
-                                <th class="">Aciones</th>
-                                <th>Nombres</th>
-                                <th>Cargo</th>
-                                <th>Telefono</th>
-                                <th>Pago</th>                                
-                                <th>Estado</th>
+                              <tr> 
+                                <th class="text-gray">Trabajdor</th> 
+                                <th class="text-gray">Fecha inicio</th>
+                                <th class="text-gray">Hoy</th>
+                                <th class="text-center text-gray">Fecha <br> culminacion</th>
+                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>
+                                <th class="text-gray">Ultimo pago</th>
+                                <th class="text-gray">Siguiente pago</th>
+                                <th class="text-primary">S/. 9,030.00</th>
+                                <th class="text-primary">S/. 900.00</th>
+                                <th class="text-primary">S/. 13,500.00</th>
+                                <th class="text-gray">Saldo</th>  
+                                <th>Cel:</th>                            
                               </tr>
                             </tfoot>
                           </table>
-                        </div>
+                        </div>                       
+
+                        <!-- tabla fecha -->
+                        <div class="table-responsive" id="tbl-fechas" style="display: none;">
+                          <div class="table-responsive-lg" >
+                            <table class="table styletabla" style="border: black 1px solid;">
+                              <thead>                                  
+                                <tr class="bg-gradient-info">
+                                  <th class="stile-celda">N°</th>
+                                  <th class="stile-celda">Mes</th>
+                                  <th colspan="2" class="stile-celda">Fechas Inicial/Final</th>
+                                  <th class="stile-celda text-center">Días/Mes</th>
+                                  <th class="stile-celda text-center">Sueldo</th>
+                                  <th class="stile-celda">Monto</th>
+                                  <th class="stile-celda">Pagar/Acumulado</th> 
+                                </tr>
+                              </thead>
+                              <tbody class="tcuerpo data-fechas-mes">
+                                <tr>
+                                  <td>1</td>
+                                  <td>Enero </td>
+                                  <td>12-01-2022</td>
+                                  <td>31-01-2022</td>
+                                  <td>19</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 2696.77</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>Febrero </td>
+                                  <td>01-02-2022</td>
+                                  <td>28-02-2022</td>
+                                  <td>28</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 4400.00</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>  
+                                <tr>
+                                  <td>3</td>
+                                  <td>Marzo </td>
+                                  <td>01-03-2022</td>
+                                  <td>31-03-2022</td>
+                                  <td>31</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 4400.00</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>Abril </td>
+                                  <td>01-04-2022</td>
+                                  <td>30-04-2022</td>
+                                  <td>30</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 4400.00</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>  
+                                <tr>
+                                  <td>5</td>
+                                  <td>Mayo </td>
+                                  <td>01-05-2022</td>
+                                  <td>27-05-2022</td>
+                                  <td>27</td>
+                                  <td> S/. 4400.00</td>
+                                  <td> S/. 3832.26</td>
+                                  <td>
+                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                  </td>
+                                </tr>                              
+                              </tbody>
+                              <tfoot>
+                                <tr> 
+                                   
+                                  <th colspan="4" class="text-right " >Total dias</th> 
+                                  <th class="stile-celda dias_x_mes_total"></th>
+                                  <th class="stile-celda ">Total monto</th>
+                                  <th class="stile-celda monto_x_mes_total">S/. 19,729.03</th> 
+                                  <th class="stile-celda monto_x_mes_pagado_total">S/. 4,500.00</th>                           
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>      
+                        
+                        <!-- tabla ingresos de pagos -->
+                        <div class=" " id="tbl-ingreso-pagos" style="display: none !important;">
+                          <table id="tabla-ingreso-pagos" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr> 
+                                <th>Cuenta depósito</th> 
+                                <th>Forma de pago</th>
+                                <th>Cantidad</th>
+                                <th>Baucher</th>
+                                <th>Recibos por honorarios</th>
+                                <th>Descripcion</th> 
+                                <th>Estado</th>                                                        
+                              </tr>
+                            </thead>
+                            <tbody>                         
+                              
+                            </tbody>
+                            <tfoot>
+                              <tr> 
+                                <th>Cuenta depósito</th>
+                                <th>Forma de pago</th>
+                                <th>S/. 900</th>
+                                <th>Baucher</th>
+                                <th>Recibos por honorarios</th>
+                                <th>Descripcion</th> 
+                                <th>Estado</th>                           
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>    
+
                       </div>
                       <!-- /.card-body -->
                     </div>
@@ -199,12 +268,12 @@
               </div>
               <!-- /.container-fluid -->
 
-              <!-- Modal agregar pago -->
-              <div class="modal fade" id="modal-agregar-pago">
-                <div class="modal-dialog  modal-dialog-scrollable modal-sm">
+              <!-- Modal agregar usuario -->
+              <div class="modal fade" id="modal-agregar-pago-trabajdor">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h4 class="modal-title">Agregar pago</h4>
+                      <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> MELVA LOURDES MEDINA MARCHENA </b></h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
                       </button>
@@ -212,45 +281,125 @@
                     
                     <div class="modal-body">
                       <!-- form start -->
-                      <form id="form-pago" name="form-pago"  method="POST" >                      
-                         
-                        <div class="row" id="cargando-1-fomulario">
-                          <!-- id proyecto -->
-                          <input type="hidden" name="idproyecto" id="idproyecto" />      
+                      <form id="form-proyecto" name="form-proyecto"  method="POST" >                      
+                        <div class="card-body">
+                          <div class="row" id="cargando-1-fomulario">
+                            <!-- id proyecto -->
+                            <input type="hidden" name="idproyecto" id="idproyecto" />
 
-                          <!-- Trabajador -->
-                          <div class="col-lg-12">
-                            <div class="form-group">
-                              <span id="trabajador"> POOL STIWART BRIONES SÁNCHEZ </span>
-                            </div>                                                        
-                          </div>
+                            <!-- Empresa -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
+                                <input type="text"   name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Empresa">  
+                              </div>                                                        
+                            </div>
 
-                          <!-- Pago -->
-                          <div class="col-lg-12">
-                            <div class="form-group">
-                              <label for="pago_q_s">Pago <small>(pago de semana o quincena)</small> </label>                               
-                              <input type="number" name="pago_q_s" id="pago_q_s" class="form-control"  placeholder="Pago">  
-                            </div>                                                        
-                          </div>
+                            <!-- Nombre del proyecto -->
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                <label for="forma_pago">Forma Pago</label>
+                                <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                </select>
+                                </div>
+                            </div>
 
-                          <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                            <div class="progress" id="div_barra_progress">
-                              <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                0%
+                            <!-- Ubicación (de la obra) -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="monto">Cantidad <small> (cantidad a depositado) </small> </label>                               
+                                <input type="text" name="monto" id="monto" class="form-control"  placeholder="Ubicación"> 
+                              </div>                                                        
+                            </div>
+
+                            <!-- Actividad del trabajo -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="nombre_mes">Mes </label>
+                                <input type="text"  disabled name="nombre_mes" id="nombre_mes" class="form-control" placeholder="Actividad del trabajo">
                               </div>
                             </div>
-                          </div>                                          
 
-                        </div>  
+                            <!-- Descripcion-->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label for="descripcion">Descripción </label> <br>
+                                <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                              </div>                                                        
+                            </div>
+                             
+                            <!-- Pdf 1 -->
+                            <div class="col-md-6" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="cip" class="control-label" > Baucher de deposito </label>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                    <i class="fas fa-file-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                    <i class="fa fa-eye"></i> PDF.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc1_ver" class="text-center mt-4">
+                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div> 
 
-                        <div class="row" id="cargando-2-fomulario" style="display: none;">
-                          <div class="col-lg-12 text-center">
-                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                            <h4>Cargando...</h4>
+                            <!-- Pdf 2 -->
+                            <div class="col-md-6" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="cip" class="control-label" > Recibo x honorarios</label>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                    <i class="fas fa-file-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                  <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="PreviewImage();">
+                                    <i class="fa fa-eye"></i> PDF.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc2_ver" class="text-center mt-4">
+                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
+                            <!-- barprogress -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                              <div class="progress" id="div_barra_progress">
+                                <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
+                                </div>
+                              </div>
+                            </div>                                          
+
+                          </div>  
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                              <h4>Cargando...</h4>
+                            </div>
                           </div>
-                        </div>                          
-                         
+                          
+                        </div>
                         <!-- /.card-body -->                      
                         <button type="submit" style="display: none;" id="submit-form-proyecto">Submit</button>                      
                       </form>
@@ -262,337 +411,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Modal detalle: quincena, semana -->
-              <div class="modal fade" id="modal-ver-quincena-semana">
-                <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Documentos subidos</h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="text-danger" aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    
-                    <div class="modal-body">
-                      <div class="table-responsive disenio-scroll">
-                        <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
-                          <thead>
-                            <tr>
-                              <th rowspan="4" class="stile">#</th>
-                              <th rowspan="4" class="stile">Nombre del trabajador</th>
-                              <th rowspan="4" class="stile">Cargo</th>
-                              <th colspan="14" id="dias_asistidos_s_q" style="text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
-                              <th rowspan="3" class="stile">
-                                Horas<br />
-                                normal/extras
-                              </th>
-                              <th rowspan="3" class="stile">
-                                Días<br />
-                                asistidos
-                              </th>
-                              <th rowspan="3" class="stile">Sueldo Mensual</th>
-                              <th rowspan="3" class="stile">Jornal</th>
-                              <th rowspan="3" class="stile">Sueldo hora</th>
-                              <th rowspan="3" class="stile">Sabatical</th>
-                              <th rowspan="3" class="stile">
-                                Pago <br />
-                                parcial
-                              </th>
-                              <th rowspan="3" class="stile">
-                                Adicional <br />
-                                descuento
-                              </th>
-                              <th rowspan="3" class="stile">Pago quincenal</th>
-                            </tr>
-                            <tr class="table-dias data-dia-semana">
-                              <th class="p-x-10px">
-                                12 <br />
-                                do
-                              </th>
-                              <th class="p-x-10px">
-                                13 <br />
-                                lu
-                              </th>
-                              <th class="p-x-10px">
-                                14 <br />
-                                ma
-                              </th>
-                              <th class="p-x-10px">
-                                15 <br />
-                                mi
-                              </th>
-                              <th class="p-x-10px">
-                                16 <br />
-                                ju
-                              </th>
-                              <th class="p-x-10px">
-                                17 <br />
-                                vi
-                              </th>
-                              <th class="p-x-10px bg-color-acc3c7">
-                                18 <br />
-                                sa
-                              </th>
-                              <th class="p-x-10px">
-                                19 <br />
-                                do
-                              </th>
-                              <th class="p-x-10px">
-                                20 <br />
-                                lu
-                              </th>
-                              <th class="p-x-10px">
-                                21 <br />
-                                ma
-                              </th>
-                              <th class="p-x-10px">
-                                22 <br />
-                                mi
-                              </th>
-                              <th class="p-x-10px">
-                                23 <br />
-                                ju
-                              </th>
-                              <th class="p-x-10px">
-                                24 <br />
-                                vi
-                              </th>
-                              <th class="p-x-10px bg-color-acc3c7">
-                                25 <br />
-                                sa
-                              </th>
-                            </tr>
-                            <tr class="table-dias data-numero-semana">
-                              <th class="p-x-10px">1</th>
-                              <th class="p-x-10px">2</th>
-                              <th class="p-x-10px">3</th>
-                              <th class="p-x-10px">4</th>
-                              <th class="p-x-10px">5</th>
-                              <th class="p-x-10px">6</th>
-                              <td class="p-x-10px bg-color-acc3c7">7</td>
-                              <th class="p-x-10px">8</th>
-                              <th class="p-x-10px">9</th>
-                              <th class="p-x-10px">10</th>
-                              <th class="p-x-10px">11</th>
-                              <th class="p-x-10px">12</th>
-                              <th class="p-x-10px">13</th>
-                              <td class="p-x-10px bg-color-acc3c7">14</td>
-                            </tr>
-                          </thead>
-                          <tbody class="tcuerpo data_table_body">
-                            <tr>
-                              <td>H/N</td>
-                              <td rowspan="2" class="center-vertical">POOL STIWART BRIONES SÁNCHEZ</td>
-                              <td rowspan="2" class="center-vertical">Operario</td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_12-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_1 input_HN_1_12-09-2021 hidden"
-                                  id="input_HN_1_12-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('12-09-2021', 'span_HE_1_12-09-2021', 'input_HN_1_12-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_13-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_2 input_HN_1_13-09-2021 hidden"
-                                  id="input_HN_1_13-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('13-09-2021', 'span_HE_1_13-09-2021', 'input_HN_1_13-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_14-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_3 input_HN_1_14-09-2021 hidden"
-                                  id="input_HN_1_14-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('14-09-2021', 'span_HE_1_14-09-2021', 'input_HN_1_14-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_15-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_4 input_HN_1_15-09-2021 hidden"
-                                  id="input_HN_1_15-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('15-09-2021', 'span_HE_1_15-09-2021', 'input_HN_1_15-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_16-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_5 input_HN_1_16-09-2021 hidden"
-                                  id="input_HN_1_16-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('16-09-2021', 'span_HE_1_16-09-2021', 'input_HN_1_16-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_17-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_6 input_HN_1_17-09-2021 hidden"
-                                  id="input_HN_1_17-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('17-09-2021', 'span_HE_1_17-09-2021', 'input_HN_1_17-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"><input class="w-xy-20" type="checkbox" /></td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_19-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_8 input_HN_1_19-09-2021 hidden"
-                                  id="input_HN_1_19-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('19-09-2021', 'span_HE_1_19-09-2021', 'input_HN_1_19-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_20-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_9 input_HN_1_20-09-2021 hidden"
-                                  id="input_HN_1_20-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('20-09-2021', 'span_HE_1_20-09-2021', 'input_HN_1_20-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_21-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_10 input_HN_1_21-09-2021 hidden"
-                                  id="input_HN_1_21-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('21-09-2021', 'span_HE_1_21-09-2021', 'input_HN_1_21-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_22-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_11 input_HN_1_22-09-2021 hidden"
-                                  id="input_HN_1_22-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('22-09-2021', 'span_HE_1_22-09-2021', 'input_HN_1_22-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_23-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_12 input_HN_1_23-09-2021 hidden"
-                                  id="input_HN_1_23-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('23-09-2021', 'span_HE_1_23-09-2021', 'input_HN_1_23-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td class="text-center">
-                                <span class="span_asist span_HN_1_24-09-2021">-</span>
-                                <input
-                                  class="w-px-30 input_asist input_HN_1_13 input_HN_1_24-09-2021 hidden"
-                                  id="input_HN_1_24-09-2021"
-                                  onkeyup="delay(function(){ calcular_he('24-09-2021', 'span_HE_1_24-09-2021', 'input_HN_1_24-09-2021', '1', '14', '58.33', '1') }, 300 );"
-                                  type="text"
-                                  value=""
-                                  autocomplete="off"
-                                />
-                              </td>
-                              <td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"><input class="w-xy-20" type="checkbox" /></td>
-                              <td class="text-center center-vertical"><span class="total_HN_1">0</span></td>
-                              <td class="text-center center-vertical" rowspan="2"><span class="dias_asistidos_1">0</span></td>
-                              <td class="text-center center-vertical" rowspan="2">14,000.00</td>
-                              <td class="text-center center-vertical" rowspan="2">466.67</td>
-                              <td class="text-center center-vertical" rowspan="2">58.33</td>
-                              <td class="text-center center-vertical" rowspan="2"><span class="sabatical_1">0</span></td>
-                              <td class="text-center center-vertical"><span class="pago_parcial_HN_1"> 0.00</span></td>
-                              <td rowspan="2" class="text-center center-vertical">
-                                <span class="span_asist">0</span> <input class="w-px-45 input_asist hidden adicional_descuento_1" onkeyup="delay(function(){ adicional_descuento('1', '1') }, 300 );" type="text" value="0" autocomplete="off" />
-                                <span class="badge badge-info float-right cursor-pointer" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '', '1', '2021-09-12');"><i class="far fa-eye"></i></span>
-                              </td>
-                              <td rowspan="2" class="text-center center-vertical"><span class="val_pago_quincenal_1 pago_quincenal_1"> 0.00 </span></td>
-                              
-                            </tr>
-                            <tr>
-                              <td>H/E</td>
-                              <td class="text-center"><span class="span_HE_1_12-09-2021">-</span> <input class="w-px-30 input_HE_1_1 input_HE_1_12-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_13-09-2021">-</span> <input class="w-px-30 input_HE_1_2 input_HE_1_13-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_14-09-2021">-</span> <input class="w-px-30 input_HE_1_3 input_HE_1_14-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_15-09-2021">-</span> <input class="w-px-30 input_HE_1_4 input_HE_1_15-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_16-09-2021">-</span> <input class="w-px-30 input_HE_1_5 input_HE_1_16-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_17-09-2021">-</span> <input class="w-px-30 input_HE_1_6 input_HE_1_17-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_19-09-2021">-</span> <input class="w-px-30 input_HE_1_8 input_HE_1_19-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_20-09-2021">-</span> <input class="w-px-30 input_HE_1_9 input_HE_1_20-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_21-09-2021">-</span> <input class="w-px-30 input_HE_1_10 input_HE_1_21-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_22-09-2021">-</span> <input class="w-px-30 input_HE_1_11 input_HE_1_22-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_23-09-2021">-</span> <input class="w-px-30 input_HE_1_12 input_HE_1_23-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="span_HE_1_24-09-2021">-</span> <input class="w-px-30 input_HE_1_13 input_HE_1_24-09-2021 hidden" type="text" value="" /></td>
-                              <td class="text-center"><span class="total_HE_1">0</span></td>
-                              <td class="text-center"><span class="pago_parcial_HE_1"> 0.00</span></td>
-                            </tr>
-                            <tr>
-                              <td class="text-center" colspan="24"></td>
-                              <td class="text-center"><b>TOTAL</b></td>
-                              <td class="text-center"><span class="pago_total_quincenal"> 0.00</span></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>                    
-                    </div>
-
-                    <div class="modal-footer justify-content-end">
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>                  
-                  </div>
-                </div>
-              </div>
-
-              <!-- Modal ver detalle del proyecto -->
-              <div class="modal fade" id="modal-ver-detalle">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title" id="detalle_titl">Detalle del proyecto</h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="text-danger" aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    
-                    <div class="modal-body">
-                      <div class="row" id="cargando-detalle-proyecto">
-                        <div class="col-lg-12 text-center">
-                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                          <h4>Cargando...</h4>
-                        </div>
-                      </div>
-                      <!-- /.card-body -->
-                    </div>
-                                       
-                  </div>
-                </div>
-              </div>
-
-
             </section>
             <!-- /.content -->
           </div>
@@ -610,7 +428,7 @@
         ?>
          
 
-        <script type="text/javascript" src="scripts/pago_obrero.js"></script>
+        <script type="text/javascript" src="scripts/pago_administrador.js"></script>
         <!-- previzualizamos el pdf cargado -->
         <script type="text/javascript">
           function PreviewImage() {

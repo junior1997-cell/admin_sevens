@@ -301,17 +301,17 @@
             if ($reg->estado == '2') {
 
               $estado = '<span class="text-center badge badge-danger">No empezado</span>';
-              $acciones = '<button class="btn btn-success" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
+              $acciones = '<button class="btn btn-success btn-sm" onclick="empezar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
             } else {
 
               if ($reg->estado == '1') {
 
                 $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                $acciones = '<button class="btn btn-danger" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
+                $acciones = '<button class="btn btn-danger btn-sm" onclick="terminar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
               } else {
 
                 $estado = '<span class="text-center badge badge-success">Terminado</span>';
-                $acciones = '<button class="btn btn-primary" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
+                $acciones = '<button class="btn btn-primary btn-sm" onclick="reiniciar_proyecto('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';
               }                
             }
 
@@ -329,14 +329,14 @@
 
             $data[]=array(
               "0"=>'<div class="asignar_paint_'.$reg->idproyecto.'"> 
-                  <button class="btn bg-secondary"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
+                  <button class="btn bg-secondary btn-sm"  onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$reg->idproyecto.'">
                     <i class="fas fa-folder"></i>
                   </button> 
-                  <button class="btn btn-warning" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
+                  <button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Editar" /*style="margin-right: 3px !important;"*/>
                     <i class="fas fa-pencil-alt"></i> 
                   </button>
                   '.$acciones.'
-                  <button class="btn bg-info" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
+                  <button class="btn bg-info btn-sm" onclick="mostrar_detalle('.$reg->idproyecto.')" data-toggle="tooltip" data-original-title="Ver detalle proyecto">
                     <i class="fas fa-eye"></i>
                   </button> 
               </div>',

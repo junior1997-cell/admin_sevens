@@ -33,7 +33,7 @@ Class ResumenInsumos
 
 	public function suma_total_compras($idproyecto)	{
 
-		$sql = "SELECT SUM( dc.subtotal ) AS suma_total_compras
+		$sql = "SELECT SUM( dc.subtotal ) AS suma_total_compras, SUM( dc.cantidad ) AS suma_total_productos
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1';";
 		return ejecutarConsultaSimpleFila($sql);

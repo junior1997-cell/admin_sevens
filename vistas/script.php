@@ -60,6 +60,9 @@
 <!-- Print PDF -->
 <script src="../plugins/Print.js-1.5.0/print.min.js"></script>
 
+<!-- Consola alerta -->
+<script src="../dist/js/consola_alerta.js"></script>
+
 <?php          
     require 'contacto_desarrollador.php';
 ?>

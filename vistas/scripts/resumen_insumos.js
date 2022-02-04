@@ -47,15 +47,34 @@ function listar_tbla_principal(id_proyecto)
 
     data = JSON.parse(data);  console.log(data); 
 
-    $(".suma_total_de_compras").html( 'S/. '+ formato_miles(data.suma_total_compras));
+    if (data.length === 0) {
+
+      $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+      $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+    } else {
+      if (data.suma_total_compras == null || data.suma_total_compras == '') {
+        $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $(".suma_total_de_compras").html( 'S/. '+ formato_miles(data.suma_total_compras));
+      }
+
+      if (data.suma_total_productos == null || data.suma_total_productos == '') {
+        $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $('.suma_total_productos').html(data.suma_total_productos);
+      }
+    }    
   });
 }
 
-function ver_precios_y_mas( idproyecto, idproducto, nombre_producto, precio_promedio ) {
+function ver_precios_y_mas( idproyecto, idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) {
 
   $(".nombre-producto-modal-titel").html('Producto: <b>'+ nombre_producto +'</b>');
 	$("#modal-ver-precios").modal("show");
   $(".precio_promedio").html(precio_promedio);
+  $(".subtotal_x_producto").html(subtotal_x_producto);
 
 	tabla2 = $('#tabla-precios').dataTable({
 		"responsive": true,

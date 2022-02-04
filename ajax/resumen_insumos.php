@@ -45,7 +45,7 @@
                </div>',
               "1"=>$reg->nombre_medida,
               "2"=>$reg->cantidad_total,
-              "3"=>'<span> S/. '. number_format($reg->promedio_precio, 2, ".", ",") . '</span>  <button class="btn btn-info btn-sm" onclick="ver_precios_y_mas('.$reg->idproyecto.', '.$reg->idproducto .', \'' . $reg->nombre_producto . '\', \''. $precio_promedio.'\')"><i class="far fa-eye"></i></button>' ,
+              "3"=>'<span> S/. '. number_format($reg->promedio_precio, 2, ".", ",") . '</span>  <button class="btn btn-info btn-sm" onclick="ver_precios_y_mas('.$reg->idproyecto.', '.$reg->idproducto .', \'' . $reg->nombre_producto . '\', \''. $precio_promedio . '\', \''. number_format($reg->precio_total, 2, ".", ",") .'\')"><i class="far fa-eye"></i></button>' ,
               "4"=>'S/. '.number_format($reg->precio_actual, 2, ".", ","),
               "5"=>'S/. '. number_format($reg->precio_total, 2, ".", ",") ,
               // "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':

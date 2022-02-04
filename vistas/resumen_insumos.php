@@ -82,10 +82,10 @@
                             <tr>
                               <th class="">Producto</th>
                               <th>Unidad de medida</th>
-                              <th>Cantidad</th> 
+                              <th class="text-center"> <h5 class="suma_total_productos"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
                               <th>Precio promedio</th>
                               <th>Precio actual</th>   
-                              <th><h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                              <th class="text-center"> <h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                             </tr>
                           </tfoot>
                         </table>
@@ -137,7 +137,7 @@
                                   <th >Cantidad</th>
                                   <th > <h4 class="precio_promedio"> S/. --</h4> </th>  
                                   <th>Descuento</th> 
-                                  <th>SubTotal</th>
+                                  <th><h4 class="subtotal_x_producto"> S/. --</h4></th>
                                   <th>Ficha técnica</th>                        
                                 </tr>
                               </tfoot>

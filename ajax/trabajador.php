@@ -100,19 +100,19 @@
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm mb-1" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
+                '<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm mb-1" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=>'<b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : $reg->fecha_inicio ). '<br> 
-                <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : $reg->fecha_fin ) ,
+              "2"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : $reg->fecha_inicio ). '<br> 
+                <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : $reg->fecha_fin ) . '</div>',
               "3"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
               "4"=>$reg->sueldo_mensual,
               "5"=>$reg->nombre_tipo.' / '.$reg->cargo,

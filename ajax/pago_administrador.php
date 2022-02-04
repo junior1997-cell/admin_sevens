@@ -95,7 +95,7 @@
               "6"=>'30-12-2022',
               "7"=>'S/.' . $reg->sueldo_mensual,
               "8"=>'S/. 300.00',
-              "9" =>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="detalle_fechas_mes_trabajador('.$reg->idtrabajador_por_proyecto.', \'' . $reg->nombres . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$reg->sueldo_mensual.'\')">
+              "9" =>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="detalle_fechas_mes_trabajador('.$reg->idtrabajador_por_proyecto.', \'' . $reg->nombres . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$reg->sueldo_mensual .'\', \''. $reg->cuenta_bancaria .'\')">
               <i class="far fa-eye"></i> Detalle
               </button> 
               <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 4,500.00</button></div>',
@@ -120,31 +120,35 @@
         break;
         
         case 'listar_tbla_pagos_x_mes':
-          $nube_idproyecto = $_GET["nube_idproyecto"];
+          $idfechas_mes_pagos = $_GET["idfechas_mes_pagos"];
 
-          $rspta=$pago_administrador->listar_tbla_principal($nube_idproyecto);
+          $rspta=$pago_administrador->listar_pagos_x_mes($idfechas_mes_pagos);
           //Vamos a declarar un array
           $data= Array();
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
           while ($reg=$rspta->fetch_object()){
-            !empty($reg->estado)
+            !empty($reg->baucher)
               ? ($baucher_deposito = '<center><a target="_blank" href="../dist/pago_administrador/pago_obrero.pdf"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
-            !empty($reg->estado)
+            !empty($reg->recibos_x_honorarios)
               ? ($recibo_x_h = '<center><a target="_blank" href="../dist/pago_administrador/pago_obrero.pdf"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
               : ($recibo_x_h = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
-            $data[]=array(               
-              "0"=>'0989-768568756-568',
-              "1"=>'efectivo',
-              "2"=>'S/. 300',
-              "3"=>$baucher_deposito,
-              "4"=>$recibo_x_h,
-              "5"=>'el pago es por la efciencia del trabajdor',
-              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+            $data[]=array(    
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idpagos_x_mes_administrador .')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idpagos_x_mes_administrador .')"><i class="far fa-trash-alt"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-check"></i></button>',           
+              "1"=>$reg->cuenta_deposito	,
+              "2"=>$reg->forma_de_pago	,
+              "3"=>'S/. '. number_format($reg->monto, 2, ".", ","),
+              "4"=>$baucher_deposito,
+              "5"=>$recibo_x_h,
+              "6"=>$reg->descripcion,
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
           $results = array(

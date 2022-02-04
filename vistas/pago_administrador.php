@@ -113,17 +113,17 @@
                             </tbody>
                             <tfoot>
                               <tr> 
-                                <th>Trabajdor</th> 
-                                <th>Fecha inicio</th>
-                                <th>Hoy</th>
-                                <th class="text-center">Fecha <br> culminacion</th>
-                                <th class="text-center">Tiempo <br> trabajado (dias)</th>
-                                <th>Ultimo pago</th>
-                                <th>Siguiente pago</th>
+                                <th class="text-gray">Trabajdor</th> 
+                                <th class="text-gray">Fecha inicio</th>
+                                <th class="text-gray">Hoy</th>
+                                <th class="text-center text-gray">Fecha <br> culminacion</th>
+                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>
+                                <th class="text-gray">Ultimo pago</th>
+                                <th class="text-gray">Siguiente pago</th>
                                 <th class="text-primary">S/. 9,030.00</th>
                                 <th class="text-primary">S/. 900.00</th>
                                 <th class="text-primary">S/. 13,500.00</th>
-                                <th>Saldo</th>  
+                                <th class="text-gray">Saldo</th>  
                                 <th>Cel:</th>                            
                               </tr>
                             </tfoot>
@@ -139,7 +139,7 @@
                                   <th class="stile-celda">N°</th>
                                   <th class="stile-celda">Mes</th>
                                   <th colspan="2" class="stile-celda">Fechas Inicial/Final</th>
-                                  <th class="stile-celda text-center">Días</th>
+                                  <th class="stile-celda text-center">Días/Mes</th>
                                   <th class="stile-celda text-center">Sueldo</th>
                                   <th class="stile-celda">Monto</th>
                                   <th class="stile-celda">Pagar/Acumulado</th> 
@@ -215,7 +215,9 @@
                               <tfoot>
                                 <tr> 
                                    
-                                  <th colspan="6" class="text-right" >Total</th> 
+                                  <th colspan="4" class="text-right " >Total dias</th> 
+                                  <th class="stile-celda dias_x_mes_total"></th>
+                                  <th class="stile-celda ">Total monto</th>
                                   <th class="stile-celda monto_x_mes_total">S/. 19,729.03</th> 
                                   <th class="stile-celda monto_x_mes_pagado_total">S/. 4,500.00</th>                           
                                 </tr>
@@ -271,7 +273,7 @@
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h4 class="modal-title">Agregar pago: <b> MELVA LOURDES MEDINA MARCHENA </b></h4>
+                      <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> MELVA LOURDES MEDINA MARCHENA </b></h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
                       </button>
@@ -288,8 +290,8 @@
                             <!-- Empresa -->
                             <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="empresa">Cuenta deposito <small>(del trabajdor)</small> </label>                               
-                                <input type="text" value="0989-768568756-568" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
+                                <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
+                                <input type="text"   name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Empresa">  
                               </div>                                                        
                             </div>
 
@@ -308,16 +310,16 @@
                             <!-- Ubicación (de la obra) -->
                             <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="ubicacion">Cantidad <small> (cantidad a depositado) </small> </label>                               
-                                <input type="text" name="ubicacion" id="ubicacion" class="form-control"  placeholder="Ubicación"> 
+                                <label for="monto">Cantidad <small> (cantidad a depositado) </small> </label>                               
+                                <input type="text" name="monto" id="monto" class="form-control"  placeholder="Ubicación"> 
                               </div>                                                        
                             </div>
 
                             <!-- Actividad del trabajo -->
                             <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="actividad_trabajo">Mes </label>
-                                <input type="text" value="Enero" name="actividad_trabajo" id="actividad_trabajo" class="form-control" placeholder="Actividad del trabajo">
+                                <label for="nombre_mes">Mes </label>
+                                <input type="text"  disabled name="nombre_mes" id="nombre_mes" class="form-control" placeholder="Actividad del trabajo">
                               </div>
                             </div>
 

@@ -429,8 +429,8 @@ switch ($_GET["op"]) {
             $datas[] = [
                 "0" =>
                     '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . 
-                    ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->precio_sin_igv . '\',
-                    \'' . $reg->precio_igv. '\', \'' . $reg->precio_total.  '\', \'' . $img . '\', \'' .$reg->ficha_tecnica .'\')" 
+                    ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->precio_sin_igv . '\', \'' .
+                     $reg->precio_igv. '\', \'' . $reg->precio_total.  '\', \'' . $img . '\', \'' .$reg->ficha_tecnica .'\')" 
                     data-toggle="tooltip" data-original-title="Agregar Planta"><span class="fa fa-plus"></span></button>',
                 "1" =>
                     '<div class="user-block w-px-200">

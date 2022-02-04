@@ -107,7 +107,7 @@ Class Trabajador
 	//Implementar un método para listar los registros
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria, t.imagen_perfil as imagen, 
+		$sql="SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.cuenta_bancaria_format AS cuenta_bancaria, t.imagen_perfil as imagen, 
 		tp.idcargo_trabajador , tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.fecha_inicio, tp.fecha_fin, tp.estado, tp.idtrabajador_por_proyecto, 
 		tp.estado, b.nombre as banco, ct.nombre as cargo, ct.idtipo_trabjador as idtipo_trabjador, tt.nombre as nombre_tipo
 		FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p, bancos AS b, cargo_trabajador as ct, tipo_trabajador as tt
