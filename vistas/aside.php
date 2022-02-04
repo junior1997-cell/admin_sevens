@@ -319,6 +319,17 @@
             </a>
           </li>
         <?php  }  ?>
+        <?php if ($_SESSION['otro_servicio']==1) {  ?>
+          <!-- OTROS SERVICIOS -->       
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="resumen_general.php" class="nav-link" id="mOtroServicio">
+              <i class="nav-icon fas fa-map-marked-alt"></i>
+              <p>
+              Resumen general               
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
         
         <?php if ($_SESSION['viatico']==1) {  ?>
           <!-- BIÁTICOS -->

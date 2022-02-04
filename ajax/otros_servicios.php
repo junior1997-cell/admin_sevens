@@ -19,8 +19,8 @@ $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion
 $forma_pago = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
 $tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
-/*$subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
-$igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";*/
+$subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
+$igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
 
 $foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 
@@ -32,7 +32,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 
 				// Comprobante
@@ -53,7 +53,7 @@ switch ($_GET["op"]){
 
 				if (empty($idotro_servicio)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$otro_servicio->insertar($idproyecto,$fecha_o_s,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
+					$rspta=$otro_servicio->insertar($idproyecto,$fecha_o_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -70,7 +70,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$otro_servicio->editar($idotro_servicio,$idproyecto,$fecha_o_s,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
+					$rspta=$otro_servicio->editar($idotro_servicio,$idproyecto,$fecha_o_s,$precio_parcial,$subtotal,$igv ,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
 					//var_dump($idotro_servicio,$idproveedor);
 					echo $rspta ? "ok" : "No se pudo actualizar";
 				}
@@ -90,7 +90,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 				$rspta=$otro_servicio->desactivar($idotro_servicio);
  				echo $rspta ? "material Desactivado" : "material no se puede desactivar";
@@ -111,7 +111,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 				$rspta=$otro_servicio->activar($idotro_servicio);
  				echo $rspta ? "Material activado" : "material no se puede activar";
@@ -132,7 +132,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 				//$idotro_servicio='1';
 				$rspta=$otro_servicio->mostrar($idotro_servicio);
@@ -154,7 +154,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 				//$idotro_servicio='1';
 				$rspta=$otro_servicio->mostrar($idotro_servicio);
@@ -176,7 +176,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 
 				$rspta=$otro_servicio->total($idproyecto);
@@ -199,7 +199,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['otro_servicio']==1)
 			{
 				$idproyecto= $_GET["idproyecto"];
 				$rspta=$otro_servicio->listar($idproyecto);
@@ -223,10 +223,12 @@ switch ($_GET["op"]){
 						"2"=>$reg->tipo_comprobante, 
 						"3"=> empty($reg->numero_comprobante)?' - ':$reg->numero_comprobante, 
 						"4"=> date("d/m/Y", strtotime($reg->fecha_o_s)), 
-						"5"=>number_format($reg->costo, 2, '.', ','),
-					   	"6"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
-						"7"=>$comprobante,
-		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+						"5"=>number_format($reg->subtotal, 2, '.', ','),
+						"6"=>number_format($reg->igv, 2, '.', ','),
+						"7"=>number_format($reg->costo_parcial, 2, '.', ','),
+					   	"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+						"9"=>$comprobante,
+		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
 						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 		 		}
@@ -243,6 +245,29 @@ switch ($_GET["op"]){
 		  	require 'noacceso.php';
 			}
 		}
+	break;
+	
+	case 'total':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['planilla_seguro']==1)
+			{
+
+				$rspta=$planillas_seguros->total($idproyecto);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
 	break;
 
 	case 'salir':

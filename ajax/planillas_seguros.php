@@ -19,11 +19,11 @@ $descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion
 $forma_pago = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
 $tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
-/*$subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
-$igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";*/
+$subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
+$igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
 
 $foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
-
+//$subtotal,$igv  
 switch ($_GET["op"]){
 	case 'guardaryeditar':
 		if (!isset($_SESSION["nombre"])) {
@@ -32,7 +32,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 
 				// Comprobante
@@ -53,7 +53,7 @@ switch ($_GET["op"]){
 
 				if (empty($idplanilla_seguro)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$planillas_seguros->insertar($idproyecto,$fecha_p_s,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
+					$rspta=$planillas_seguros->insertar($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -70,7 +70,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$planillas_seguros->editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
+					$rspta=$planillas_seguros->editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
 					//var_dump($idplanilla_seguro,$idproveedor);
 					echo $rspta ? "ok" : "No se pudo actualizar";
 				}
@@ -90,7 +90,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 				$rspta=$planillas_seguros->desactivar($idplanilla_seguro);
  				echo $rspta ? "material Desactivado" : "material no se puede desactivar";
@@ -111,7 +111,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 				$rspta=$planillas_seguros->activar($idplanilla_seguro);
  				echo $rspta ? "Material activado" : "material no se puede activar";
@@ -132,7 +132,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 				//$idplanilla_seguro='1';
 				$rspta=$planillas_seguros->mostrar($idplanilla_seguro);
@@ -154,7 +154,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 				//$idplanilla_seguro='1';
 				$rspta=$planillas_seguros->mostrar($idplanilla_seguro);
@@ -176,7 +176,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 
 				$rspta=$planillas_seguros->total($idproyecto);
@@ -199,7 +199,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['planilla_seguro']==1)
 			{
 				$idproyecto= $_GET["idproyecto"];
 				$rspta=$planillas_seguros->listar($idproyecto);
@@ -223,10 +223,12 @@ switch ($_GET["op"]){
 						"2"=>$reg->tipo_comprobante, 
 						"3"=> empty($reg->numero_comprobante)?' - ':$reg->numero_comprobante, 
 						"4"=> date("d/m/Y", strtotime($reg->fecha_p_s)), 
-						"5"=>number_format($reg->costo, 2, '.', ','),
-					   	"6"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
-						"7"=>$comprobante,
-		 				"8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
+						"5"=>number_format($reg->subtotal, 2, '.', ','),
+						"6"=>number_format($reg->igv, 2, '.', ','),
+						"7"=>number_format($reg->costo_parcial, 2, '.', ','),
+					   	"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+						"9"=>$comprobante,
+		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
 						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
 		 				);
 		 		}

@@ -141,11 +141,11 @@ function limpiar() {
 
   $("#nro_comprobante").val("");
 
- /* $(".subtotal").val("");
+  $(".subtotal").val("");
   $("#subtotal").val("");
 
   $(".igv").val("");
-  $("#igv").val("");*/
+  $("#igv").val("");
 
   $("#descripcion").val("");
 
@@ -171,15 +171,15 @@ function comprob_factura() {
 
  // console.log('monto '+ monto +' cantidad '+ cantidad +' precio_unitario '+ precio_unitario);
 
- /*if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' ) {
+  if ($("#tipo_comprobante").select2("val") =="Factura" && $("#precio_parcial").val()!='' ) {
 
     var subtotal=0; var igv=0;
 
     $("#subtotal").val("");
     $("#igv").val(""); 
 
-    subtotal= monto/1.18;
-    igv= monto-subtotal;
+    subtotal= precio_parcial/1.18;
+    igv= precio_parcial-subtotal;
 
     $(".subtotal").val(subtotal.toFixed(2));
     $("#subtotal").val(subtotal.toFixed(4));
@@ -189,12 +189,12 @@ function comprob_factura() {
 
   } else {
 
-    $(".subtotal").val(monto.toFixed(2));
-    $("#subtotal").val(monto);
+    $(".subtotal").val( parseFloat(precio_parcial).toFixed(2));
+    $("#subtotal").val(precio_parcial);
 
     $(".igv").val("0.00");
     $("#igv").val("0.00");
-  }*/
+  }
   
   
 }
@@ -313,8 +313,6 @@ function mostrar(idotro_servicio) {
 
     data = JSON.parse(data);  console.log(data);  
 
-    precio_p=parseFloat(data.precio_parcial);
-
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
@@ -325,17 +323,15 @@ function mostrar(idotro_servicio) {
     $("#fecha_o_s").val(data.fecha_o_s); 
     $("#nro_comprobante").val(data.numero_comprobante);
 
-    $("#precio_parcial").val(parseFloat(data.costo).toFixed(2)); 
-    $(".precio_parcial").val(data.costo); 
-
-    /*$(".precio_parcial").val(precio_p.toFixed(2));
-    $("#precio_parcial").val(precio_p);
+    $("#precio_parcial").val(parseFloat(data.costo_parcial).toFixed(2)); 
+    $(".precio_parcial").val(data.costo_parcial); 
   
     $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
     $("#subtotal").val(parseFloat(data.subtotal));
 
     $(".igv").val(parseFloat(data.igv).toFixed(2));
-    $("#igv").val(data.igv);*/
+    $("#igv").val(data.igv);
+
     $("#descripcion").val(data.descripcion);
     /**-------------------------*/
   if (data.comprobante != "") {
@@ -516,7 +512,7 @@ $(function () {
       tipo_comprobante: { required: true },
       fecha_o_s: { required: true },
       cantidad:{required: true},
-      precio_parcial:{required: true},
+      monto_validar:{required: true},
       descripcion:{required: true}
       // terms: { required: true },
     },
@@ -530,8 +526,8 @@ $(function () {
       fecha_o_s: {
         required: "Por favor ingrese una fecha", 
       },
-      precio_parcial:  {
-        required: "Ingresar precio", 
+      monto_validar:  {
+        required: "Ingresar monto", 
       },
       descripcion:  {
         required: "Es necesario rellenar el campo descripción", 

@@ -11,22 +11,24 @@ Class Otros_servicios
 	}
 	//$idotro_servicio,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_o_s,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
+	public function insertar($idproyecto,$fecha_o_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
 	{
 	
-		$sql="INSERT INTO otro_servicio (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_o_s, costo, descripcion, comprobante) 
-		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_o_s','$precio_parcial','$descripcion','$comprobante')";
+		$sql="INSERT INTO otro_servicio (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_o_s, costo_parcial,subtotal,igv,descripcion, comprobante) 
+		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_o_s','$precio_parcial','$subtotal','$igv','$descripcion','$comprobante')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idotro_servicio,$idproyecto,$fecha_o_s,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
+	public function editar($idotro_servicio,$idproyecto,$fecha_o_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
 	{
 		$sql="UPDATE otro_servicio SET 
 		idproyecto='$idproyecto',
 		fecha_o_s='$fecha_o_s',
-		costo='$precio_parcial',
+		costo_parcial='$precio_parcial',
+		subtotal='$subtotal',
+		igv='$igv',
 		descripcion='$descripcion',
 		forma_de_pago='$forma_pago',
 		tipo_comprobante='$tipo_comprobante',
@@ -74,7 +76,7 @@ Class Otros_servicios
 	}
 	//total
 	public function total($idproyecto){
-		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM otro_servicio WHERE idproyecto='$idproyecto' AND estado=1";
+		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM otro_servicio WHERE idproyecto='$idproyecto' AND estado=1";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

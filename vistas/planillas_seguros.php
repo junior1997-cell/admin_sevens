@@ -25,7 +25,7 @@
             <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['viatico']==1){
+          if ($_SESSION['planilla_seguro']==1){
           ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -70,6 +70,8 @@
                                                     <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                                     <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
+                                                    <th>Subtotal</th>
+                                                    <th>IGV</th>
                                                     <th>Monto Total </th>
                                                     <th>Descripción </th>
                                                     <th>Comprobante</th>
@@ -84,8 +86,10 @@
                                                     <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
                                                     <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
                                                     <th>Fecha</th>
-                                                    <th>Monto Total </th>
-                                                    <th>Descripción </th>
+                                                    <th>Subtotal</th>
+                                                    <th>IGV</th>
+                                                    <th id="total_monto"></th>
+                                                    <th>Descripción</th>
                                                     <th>Comprobante</th>
                                                     <th>Estado</th>                                            
                                                 </tr>
@@ -137,7 +141,7 @@
                                                 <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
                                                     <label for="tipo_comprobante">Tipo Comprobante</label>
-                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
                                                         <option value="Ninguno">Ninguno</option>
                                                         <option value="Boleta">Boleta</option>
                                                         <option value="Factura">Factura</option>
@@ -146,7 +150,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- Código-->
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-6">
                                                     <div class="form-group">
                                                         <label for="codigo">Núm. comprobante </label>                               
                                                         <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
@@ -154,50 +158,34 @@
                                                 </div>
 
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                                                <div class="col-lg-4 class_pading">
+                                                <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha Emisión</label>
                                                         <input type="date" name="fecha_p_s" class="form-control" id="fecha_p_s" />
                                                     </div>
 
                                                 </div>
-                                                <!-- Cantidad  -->
-                                               <!-- <div class="col-lg-6 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="cantidad">Cantidad</label>
-                                                        <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="comprob_factura();" onkeyup="comprob_factura();" />
-                                                    </div>
-
-                                                </div>-->
-                                                <!--Precio Unitario-->
-                                                <!--<div class="col-lg-6 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="marca">Precio Unitario</label>
-                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
-                                                    </div>                                                  
-
-                                                </div>-->
-                                                <!-- Sub total -->
-                                                <!--<div class="col-lg-4">
+                                                 <!-- Sub total -->
+                                                <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="subtotal">Sub total</label>
                                                         <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
                                                         <input class="form-control" type="hidden"  id="subtotal" name="subtotal"/>
                                                     </div>
-                                                </div>-->
-                                                <!-- Fecha Emisión -->
-                                               <!-- <div class="col-lg-4">
+                                                </div>
+                                                <!-- IGV -->
+                                                <div class="col-lg-4">
                                                     <div class="form-group">
                                                         <label for="igv">IGV</label>
                                                         <input class="form-control igv" type="number" placeholder="IGV"  readonly />
                                                         <input class="form-control" type="hidden"  id="igv" name="igv"/>
                                                     </div>
-                                                </div>-->
+                                                </div>
                                                 <!--Precio Parcial-->
                                                 <div class="col-lg-4 class_pading">
                                                     <div class="form-group">
                                                         <label for="marca">Monto total </label>
-                                                        <input type="number" class="form-control precio_parcial" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
+                                                        <input type="number" name="monto_validar" class="form-control precio_parcial" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
                                                         <input type="hidden" name="precio_parcial" id="precio_parcial"/>
                                                        
                                                     </div>                                                  
