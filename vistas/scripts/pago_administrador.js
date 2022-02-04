@@ -238,7 +238,7 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
 
   table_show_hide(3);
 
-  $('#btn-nombre-mes').html(`&nbsp; - ${mes_nombre}`);
+  $('#btn-nombre-mes').html(`&nbsp; - ${mes_nombre} - S/. ${ formato_miles(monto_x_mes)}`);
 
   $('.nombre_de_trabajador_modal').html(nombre_trabajador);
 
