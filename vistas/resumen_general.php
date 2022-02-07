@@ -75,105 +75,78 @@
                                                         <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Compras</th>
                                                      </tr>
                                                     <tr>
-                                                        <th class="text-center w-px-300 clas_pading">#</th>
-                                                        <th class="text-center  w-px-135 clas_pading"> <span class="colorf0f8ff00">----------------------</span>EMPRESA <span class="colorf0f8ff00">----------------------</span></th>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center  w-px-300 clas_pading">EMPRESA</th>
                                                         <th class="text-center clas_pading">FECHA</th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">----------</span>DESCRIPCIÓN<span class="colorf0f8ff00">----------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>MONTO<span class="colorf0f8ff00">------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>PAGOS<span class="colorf0f8ff00">------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>SALDO<span class="colorf0f8ff00">------</span></th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody  id="compras">
                                                     <!--aqui va el listado de los días-->
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
                                                 </tbody>
                                                 <tfoot>
                                                     <th colspan="3" class="clas_pading"></th>
                                                     <th  class="clas_pading">Total</th>
-                                                    <th  class="clas_pading"></th>
-                                                    <th  class="clas_pading"></th>
-                                                    <th  class="clas_pading"></th>
+                                                    <th  class="clas_pading" id="monto_compras" ></th>
+                                                    <th  class="clas_pading" id="pago_compras" ></th>
+                                                    <th  class="clas_pading" id="saldo_compras" ></th>
                                                 </tfoot>
                                             </table>
 
                                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                                                 <thead style="background-color: #408c98; color: white;" >
                                                     <tr>
-                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Servicios</th>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Servicios-Maquinaria</th>
                                                      </tr>
                                                     <tr>
-                                                        <th class="text-center w-px-300 clas_pading">#</th>
-                                                        <th class="text-center  w-px-135 clas_pading"> <span class="colorf0f8ff00">----------------------</span>EMPRESA <span class="colorf0f8ff00">----------------------</span></th>
-                                                        <th class="text-center clas_pading">FECHA</th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">----------</span>DESCRIPCIÓN<span class="colorf0f8ff00">----------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>MONTO<span class="colorf0f8ff00">------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>PAGOS<span class="colorf0f8ff00">------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>SALDO<span class="colorf0f8ff00">------</span></th>
+                                                        <th class="text-center  clas_pading">#</th>
+                                                        <th class="text-center  w-px-300 clas_pading">MAQUINA</th>
+                                                        <th class="text-center clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="serv_maquinas">
                                                     <!--aqui va el listado de los días-->
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
                                                 </tbody>
                                                 <tfoot >
                                                     <th colspan="3" class="clas_pading"></th>
                                                     <th class="clas_pading">Total</th>
-                                                    <th class="clas_pading"></th>
-                                                    <th class="clas_pading"></th>
-                                                    <th class="clas_pading"></th>
+                                                    <th class="clas_pading" id="monto_serv_maq"></th>
+                                                    <th class="clas_pading" id="pago_serv_maq"></th>
+                                                    <th class="clas_pading" id="saldo_serv_maq"></th>
+                                                </tfoot>
+                                            </table>
+
+                                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                                                <thead style="background-color: #408c98; color: white;" >
+                                                    <tr>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Servicios-Equipo</th>
+                                                     </tr>
+                                                    <tr>
+                                                        <th class="text-center  clas_pading">#</th>
+                                                        <th class="text-center  w-px-300 clas_pading">MAQUINA</th>
+                                                        <th class="text-center clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="serv_equipos">
+                                                    <!--aqui va el listado de los días-->
+                                                </tbody>
+                                                <tfoot >
+                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th class="clas_pading">Total</th>
+                                                    <th class="clas_pading" id="monto_serv_equi"></th>
+                                                    <th class="clas_pading" id="pago_serv_equi"></th>
+                                                    <th class="clas_pading" id="saldo_serv_equi"></th>
                                                 </tfoot>
                                             </table>
 
@@ -183,20 +156,20 @@
                                                         <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Personal</th>
                                                      </tr>
                                                     <tr>
-                                                        <th class="text-center w-px-300 clas_pading">#</th>
-                                                        <th class="text-center  w-px-135 clas_pading"> <span class="colorf0f8ff00">----------------------</span>EMPRESA <span class="colorf0f8ff00">----------------------</span></th>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center  w-px-300 clas_pading">EMPRESA</th>
                                                         <th class="text-center clas_pading">FECHA</th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">----------</span>DESCRIPCIÓN<span class="colorf0f8ff00">----------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>MONTO<span class="colorf0f8ff00">------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>PAGOS<span class="colorf0f8ff00">------</span></th>
-                                                        <th class="text-center clas_pading"><span class="colorf0f8ff00">------</span>SALDO<span class="colorf0f8ff00">------</span></th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <!--aqui va el listado de los días-->
                                                     <tr>
                                                         <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
+                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C yyyyyyyyyyyyyyyy yyyyyyyyyyyy yyyyyyyyyyyyyyyyyy  yyyyyyyyyyyyyyyyyyyyyy. </span></td>
                                                         <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
                                                         <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
                                                         <td class="bg-color-b4bdbe47  clas_pading">6000</td>
@@ -243,142 +216,50 @@
                     <!-- /.container-fluid -->
 
                     <!-- Modal agregar proveedores -->
-                    <div class="modal fade" id="modal-agregar-otro_servicio">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal fade" id="modal_ver_detalle_maq_equ">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title"> <b>Agregar:</b> comprobante otros servicios </h4>
+                                    <h4 class="modal-title"> <b>Maquinas - Equipos:</b></h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
 
                                 <div class="modal-body">
-                                    <!-- form start -->
-                                    <form id="form-otro_servicio" name="form-otro_servicio" method="POST">
-                                        <div class="card-body">
-                                            <div class="row" id="cargando-1-fomulario">
-                                                <!-- id proyecto -->
-                                                <input type="hidden" name="idproyecto" id="idproyecto" />
-                                                <!-- id hospedaje -->
-                                                <input type="hidden" name="idotro_servicio" id="idotro_servicio" />
-                                                <!-- Tipo de comprobante -->
-                                                <!--forma pago-->
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                    <label for="forma_pago">Forma Pago</label>
-                                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                                        <option value="Transferencia">Transferencia</option>
-                                                        <option value="Efectivo">Efectivo</option>
-                                                        <option value="Crédito">Crédito</option>
-                                                    </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6" id="content-t-comprob">
-                                                    <div class="form-group">
-                                                    <label for="tipo_comprobante">Tipo Comprobante</label>
-                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
-                                                        <option value="Ninguno">Ninguno</option>
-                                                        <option value="Boleta">Boleta</option>
-                                                        <option value="Factura">Factura</option>
-                                                        <option value="Nota_de_venta">Nota de venta</option>
-                                                    </select>
-                                                    </div>
-                                                </div>
-                                                <!-- Código-->
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="codigo">Núm. comprobante </label>                               
-                                                        <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
-                                                    </div>                                                        
-                                                </div>
-
-                                                <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                                                <div class="col-lg-4 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="fecha">Fecha Emisión</label>
-                                                        <input type="date" name="fecha_o_s" class="form-control" id="fecha_o_s" />
-                                                    </div>
-
-                                                </div>
-                                                <!-- Cantidad  -->
-                                               <!-- <div class="col-lg-6 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="cantidad">Cantidad</label>
-                                                        <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="comprob_factura();" onkeyup="comprob_factura();" />
-                                                    </div>
-
-                                                </div>-->
-                                                <!--Precio Unitario-->
-                                                <!--<div class="col-lg-6 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="marca">Precio Unitario</label>
-                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
-                                                    </div>                                                  
-
-                                                </div>-->
-                                                <!-- Sub total -->
-                                                <!--<div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="subtotal">Sub total</label>
-                                                        <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
-                                                        <input class="form-control" type="hidden"  id="subtotal" name="subtotal"/>
-                                                    </div>
-                                                </div>-->
-                                                <!-- Fecha Emisión -->
-                                               <!-- <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="igv">IGV</label>
-                                                        <input class="form-control igv" type="number" placeholder="IGV"  readonly />
-                                                        <input class="form-control" type="hidden"  id="igv" name="igv"/>
-                                                    </div>
-                                                </div>-->
-                                                <!--Precio Parcial-->
-                                                <div class="col-lg-4 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="marca">Monto total </label>
-                                                        <input type="number" class="form-control precio_parcial" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
-                                                        <input type="hidden" name="precio_parcial" id="precio_parcial"/>
-                                                       
-                                                    </div>                                                  
-                                                </div>
-
-                                                <!--Descripcion-->
-                                                <div class="col-lg-12 class_pading">
-                                                    <div class="form-group">
-                                                        <label for="descripcion_pago">Descripción</label> <br>
-                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                                                    </div>                                              
-                                                </div>
-                                                <!-- Factura -->
-                                                <div class="col-md-6 col-lg-6">
-                                                    <label for="foto2">Factura <b style="color: red;">(Imagen o PDF)</b></label> <br>
-                                                      <div class="text-center">
-                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
-                                                          <div id="ver_pdf"></div>
-                                                      </div>
-                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
-
-                                                </div> 
-                                            </div>
-
-                                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                                <div class="col-lg-12 text-center">
-                                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                                    <br />
-                                                    <h4>Cargando...</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- /.card-body -->
-                                        <button type="submit" style="display: none;" id="submit-form-otro_servicio">Submit</button>
-                                    </form>
+                                    <!--la tabla-->
+                                    <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Horometro Inicial</th>
+                                                <th>Horometro Final</th>
+                                                <th>Total Horas </th>
+                                                <th>Costo Unitario</th>
+                                                <th>Unidad M.</th>
+                                                <th>Cantidad</th>
+                                                <th>Costo Parcial</th>
+                                                <th>Descripción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Horometro Inicial</th>
+                                                <th>Horometro Final</th>
+                                                <th id="horas-total">Total Horas </th>
+                                                <th>Costo Unitario</th>
+                                                <th>Unidad M.</th>
+                                                <th>Cantidad</th>
+                                                <th>Costo Parcial</th>
+                                                <th>Descripción</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                                 <div class="modal-footer justify-content-between">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
-                                    <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -465,7 +346,7 @@
         <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
        <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
-        <script type="text/javascript" src="scripts/otros_servicios.js"></script>
+        <script type="text/javascript" src="scripts/resumen_general.js"></script>
 
         <script>
             $(function () {

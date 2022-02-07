@@ -1,0 +1,175 @@
+<?php
+ob_start();
+if (strlen(session_id()) < 1){
+	session_start();//Validamos si existe o no la sesión
+}
+require_once "../modelos/Resumen_general.php";
+require_once "../modelos/Fechas.php";
+
+$otro_servicio=new Resumen_general();
+
+switch ($_GET["op"]){
+
+	case 'listar_r_compras':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['otro_servicio']==1)
+			{
+				$rspta=$otro_servicio->r_compras($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'listar_r_serv_maquinaria':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['otro_servicio']==1)
+			{
+				$tipo='1';
+				$rspta=$otro_servicio->r_serv_maquinaria_equipos($_POST['idproyecto'],$tipo);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+	case 'listar_r_serv_equipos':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['otro_servicio']==1)
+			{
+				$tipo='2';
+				$rspta=$otro_servicio->r_serv_maquinaria_equipos
+				($_POST['idproyecto'],$tipo);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+			
+	case 'ver_detalle_maquina':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['trabajador']==1)
+			{
+				$idmaquinaria=$_GET["idmaquinaria"];
+				$idproyecto=$_GET["idproyecto"];
+
+				$rspta=$otro_servicio->ver_detalle_maq_equ($idmaquinaria,$idproyecto);
+				$fecha_entreg='';
+				$fecha_recoj='';
+				$fecha='';
+				//Vamos a declarar un array
+					$data= Array();
+					
+					while ($reg=$rspta->fetch_object()){
+
+						if (empty($reg->fecha_recojo) || $reg->fecha_recojo=='0000-00-00') {
+							$fechas=new FechaEs($reg->fecha_entrega);
+							$dia=$fechas->getDDDD().PHP_EOL;
+							$mun_dia=$fechas->getdd().PHP_EOL;
+							$mes=$fechas->getMMMM().PHP_EOL;
+							$anio=$fechas->getYYYY().PHP_EOL;
+							$fecha_entreg="$dia, $mun_dia de $mes del $anio";
+							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg</b>";
+						}else{
+							$fechas=new FechaEs($reg->fecha_entrega);
+							//----------
+							$dia=$fechas->getDDDD().PHP_EOL;
+							$mun_dia=$fechas->getdd().PHP_EOL;
+							$mes=$fechas->getMMMM().PHP_EOL;
+							$anio=$fechas->getYYYY().PHP_EOL;
+							$fecha_entreg="$dia, $mun_dia de $mes del $anio";
+							//----------
+							$fechas=new FechaEs($reg->fecha_recojo);
+							$dia2=$fechas->getDDDD().PHP_EOL;
+							$mun_dia2=$fechas->getdd().PHP_EOL;
+							$mes2=$fechas->getMMMM().PHP_EOL;
+							$anio2=$fechas->getYYYY().PHP_EOL;
+							$fecha_recoj="$dia2, $mun_dia2 de $mes2 del $anio2";
+							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg </b> / <br> <b  style=".'color:#ff0000;'.">$fecha_recoj<b>";
+
+						}
+						if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+						
+						$tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
+						
+						$data[]=array(
+							"0"=>$fecha,
+							"1"=>empty($reg->horometro_inicial) || $reg->horometro_inicial=='0.00'?'-':$reg->horometro_inicial,
+							"2"=>empty($reg->horometro_final) || $reg->horometro_final=='0.00'?'-':$reg->horometro_final,
+							"3"=>empty($reg->horas)|| $reg->horas=='0.00'?'-':$reg->horas,
+							"4"=>empty($reg->costo_unitario) || $reg->costo_unitario=='0.00'?'-':number_format($reg->costo_unitario, 2, '.', ','),
+							"5"=>empty($reg->unidad_medida)?'-':$reg->unidad_medida,
+							"6"=>empty($reg->cantidad)?'-':$reg->cantidad,
+							"7"=>empty($reg->costo_parcial)?'-':number_format($reg->costo_parcial, 2, '.', ','),
+							"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+							);
+					}
+					$results = array(
+						"sEcho"=>1, //Información para el datatables
+						"iTotalRecords"=>count($data), //enviamos el total registros al datatable
+						"iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+						"data"=>$data);
+					echo json_encode($results);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+
+	case 'salir':
+		//Limpiamos las variables de sesión   
+        session_unset();
+        //Destruìmos la sesión
+        session_destroy();
+        //Redireccionamos al login
+        header("Location: ../index.php");
+
+	break;
+}
+ob_end_flush();
+?>
