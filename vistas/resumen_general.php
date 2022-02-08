@@ -34,14 +34,8 @@
                 <section class="content-header">
                     <div class="container-fluid">
                         <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1>Otros servicios</h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Otros servicios</li>
-                                </ol>
+                            <div class="col-sm-12 tex-center" style="text-align: center;font-weight: bold;">
+                                <h1  style="font-weight: bold;">RESUMEN GENERAL</h1>
                             </div>
                         </div>
                     </div>
@@ -54,12 +48,6 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="card card-primary card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title">
-                                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otro_servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                            Admnistra de manera eficiente otros servicios.
-                                        </h3>
-                                    </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
                                         <style>
@@ -232,6 +220,34 @@
                                                     <th class="clas_pading text-right" id="saldo_cextra"></th>
                                                 </tfoot>
                                             </table>
+                                            
+                                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                                                <thead style="background-color: #408c98; color: white;" >
+                                                    <tr>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Breaks</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center clas_pading">SEMANA</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading" data-toggle="tooltip" data-original-title="Comprobante">COMP</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="breaks">
+                                                    <!--aqui va el listado de los días-->
+                                                </tbody>
+                                                <tfoot>
+                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th class="clas_pading">Total</th>
+                                                    <th class="clas_pading text-right" id="monto_break"></th>
+                                                    <th class="clas_pading text-right" id="pago_break"></th>
+                                                    <th class="clas_pading text-right" id="saldo_break"></th>
+                                                </tfoot>
+                                            </table>
+
                                        </div>
                                     </div>
                                     <a class="btn btn-info" target="_blank" href=""></a>
@@ -388,6 +404,55 @@
                                                 <th>Costo Parcial</th>
                                                 <th>Descripción</th>
                                             </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal ver detalle maquina equipos -->
+                    <div class="modal fade" id="modal_ver_breaks">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title"> <b>BREAKS:</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span class="text-danger" aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <!--la tabla-->
+                                    <table id="t-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                        <thead>
+                                            <tr>
+                                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                <th data-toggle="tooltip" data-original-title="Fecha Emisión">Fecha</th>
+                                                <th>Sub total</th>
+                                                <th>IGV</th>
+                                                <th>Monto</th>
+                                                <th>Descripción</th>
+                                                <th>Comprobante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
+                                                <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                <th data-toggle="tooltip" data-original-title="Fecha Emisión">Fecha</th>
+                                                <th>Sub total</th>
+                                                <th>IGV</th>
+                                                <th>Monto</th>
+                                                <th>Descripción</th>                                                   
+                                                <th>Comprobante</th>
+                                            </tr> 
                                         </tfoot>
                                     </table>
                                 </div>

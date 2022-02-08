@@ -198,8 +198,6 @@
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['viatico']==1)
             {	
-              $idsemana_break ='5';
-              //$_GET['idsemana_break']
               $rspta=$breaks->listar_comprobantes($_GET['idsemana_break']);
 
               //Vamos a declarar un array

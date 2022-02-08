@@ -277,6 +277,86 @@ switch ($_GET["op"]){
 		}		
 	break;
 
+	case 'listar_r_breaks':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				$rspta=$resumen_general->r_breaks($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'listar_comprobantes_breaks':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+		  //Validamos el acceso solo al usuario logueado y autorizado.
+		  if ($_SESSION['resumen_general']==1)
+		  {	
+			$rspta=$resumen_general->listar_comprobantes_breaks($_GET['idsemana_break']);
+
+			//Vamos a declarar un array
+			$data= Array();
+			$comprobante='';
+			$subtotal=0;
+			$igv=0;
+			$monto=0;
+
+			while ($reg=$rspta->fetch_object()){
+			  $subtotal=round($reg->subtotal, 2);
+			  $igv=round($reg->igv, 2);
+			  $monto=round($reg->monto, 2 );
+			  if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+			  empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" target="_blank" href="../dist/img/comprob_breaks/'.$reg->comprobante.'"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
+			  $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
+			  $data[]=array(		
+				"0"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,	 				
+				"1"=> empty($reg->tipo_comprobante)?' - ':$reg->tipo_comprobante,	 				
+				"2"=> empty($reg->nro_comprobante)?' - ':$reg->nro_comprobante,	 				
+				"3"=>date("d/m/Y", strtotime($reg->fecha_emision)),
+				"4"=>number_format($subtotal, 2, '.', ','), 
+				"5"=>number_format($igv, 2, '.', ','),
+				"6"=>number_format($monto, 2, '.', ','),
+				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+				"8"=>$comprobante
+				);
+
+			}
+			$results = array(
+			  "sEcho"=>1, //Información para el datatables
+			  "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+			  "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+			  "data"=>$data
+			 );
+			echo json_encode($results);
+		  //Fin de las validaciones de acceso
+		  }
+		  else
+		  {
+			require 'noacceso.php';
+		  }
+		}
+	  break;
+	
+
 
 	case 'salir':
 		//Limpiamos las variables de sesión   

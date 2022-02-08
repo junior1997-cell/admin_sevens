@@ -163,12 +163,28 @@ Class Resumen_general
 		FROM hospedaje as h, proyecto as p WHERE h.idproyecto=p.idproyecto AND h.idproyecto='$idproyecto' AND h.estado=1 ORDER BY h.idhospedaje DESC";
 		return ejecutarConsultaArray($sql);
 	}
-	
+
 	public function r_comidas_extras($idproyecto)
 	{
 		$sql="SELECT ce.idcomida_extra, ce.idproyecto, ce.fecha_comida, ce.descripcion, ce.costo_parcial, ce.comprobante 
 		FROM comida_extra as ce, proyecto as p WHERE ce.estado=1 AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto'";
 		return ejecutarConsultaArray($sql);
+	}
+
+	public function r_breaks($idproyecto)
+	{
+		$sql="SELECT sb.idsemana_break, sb.idproyecto, sb.numero_semana, sb.fecha_inicial, sb.fecha_final, sb.total
+			FROM semana_break as sb, proyecto as p
+			WHERE sb.idproyecto ='$idproyecto' AND sb.estado=1 AND sb.idproyecto=p.idproyecto";
+		return ejecutarConsultaArray($sql);
+	}
+
+	public function listar_comprobantes_breaks($idsemana_break)
+	{
+
+		$sql="SELECT * FROM factura_break 
+		WHERE idsemana_break  ='$idsemana_break'";
+		return ejecutarConsulta($sql);
 	}
 }
 
