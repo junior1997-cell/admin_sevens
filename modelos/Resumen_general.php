@@ -28,11 +28,11 @@ Class Resumen_general
 				$sql_2="SELECT SUM(pc.monto) as total_p FROM pago_compras as pc WHERE pc.idcompra_proyecto='$idcompra' AND pc.estado='1' GROUP BY idcompra_proyecto";
 				$t_monto= ejecutarConsultaSimpleFila($sql_2);
 
-				/*if (empty($t_monto['total_p'])) {
+				if (empty($t_monto)) {
 					$pago_total=0;
 				}else{
-					$pago_total=$t_monto;
-				}*/
+					$pago_total=$t_monto['total_p'];
+				}
 
 				$Arraycompras[]= array(
 					"idcompra_proyecto"     => $value['idcompra_proyecto'],
@@ -43,7 +43,7 @@ Class Resumen_general
 					"proveedor"    => $value['razon_social'],
 					"descripcion"    => $value['descripcion'],
 
-					"monto_pago_total"       =>$t_monto['total_p']
+					"monto_pago_total"       =>$pago_total
 
 				);
 
