@@ -133,7 +133,7 @@
                         <!-- tabla fecha -->
                         <div class="table-responsive" id="tbl-fechas" style="display: none;">
                           <div class="table-responsive-lg" >
-                            <table class="table styletabla table-hover" style="border: black 1px solid;">
+                            <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
                               <thead>                                  
                                 <tr class="bg-gradient-info">
                                   <th class="stile-celda">N°</th>
@@ -171,7 +171,8 @@
                                   <th class="stile-celda "> </th>
                                   <th class="stile-celda monto_x_mes_total">S/. 0.00</th> 
                                   <th class="stile-celda monto_x_mes_pagado_total">S/. 0.00</th>
-                                  <th class="stile-celda saldo_total">S/. 0.00</th>                           
+                                  <th class="stile-celda saldo_total">S/. 0.00</th> 
+                                  <th class="stile-celda rh_total">S/. 0.00</th>                          
                                 </tr>
                               </tfoot>
                             </table>
@@ -237,7 +238,7 @@
                         <div class="card-body">
                           <div class="row" id="cargando-1-fomulario">
 
-                            <!-- id idfechas_mes_pagos_administrador -->
+                            <!-- id idpagos_x_mes_administrador -->
                             <input type="hidden" name="idpagos_x_mes_administrador" id="idpagos_x_mes_administrador" />
 
                             <!-- id idfechas_mes_pagos_administrador -->

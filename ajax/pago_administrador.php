@@ -173,7 +173,7 @@
             $deshabilitado = "";
             // validamos antes de sacar la diferencia
             if (validar_fecha_espanol(format_d_m_a($reg->fecha_inicio))) {
-              $count_dia = diferencia_de_fechas($reg->fecha_inicio); 
+              $count_dia = cantidad_dias_trabajado($reg->fecha_inicio, $reg->fecha_fin); 
               $fecha_inicio = format_d_m_a($reg->fecha_inicio);
             } else {
               $count_dia = "-"; $fecha_inicio = "- - -";
@@ -290,25 +290,33 @@
 
   function quitar_guion($numero){ return str_replace("-", "", $numero); }
 
-  function diferencia_de_fechas($fecha_pasada){
+  function cantidad_dias_trabajado($fecha_inicio, $fecha_fin){
     $Object_fecha = new DateTime();
     $Object_fecha->setTimezone(new DateTimeZone('America/Lima'));
     $date_actual = $Object_fecha->format("Y-m-d"); 
 
-    $fecha_1 = strtotime( format_a_m_d($date_actual) );
-    $fecha_2 = strtotime( format_a_m_d($fecha_pasada) );
+    $fecha_hoy = strtotime( $date_actual );
+    $fecha_1 = strtotime( $fecha_inicio );
+    $fecha_2 = strtotime( $fecha_fin );
 
     $diferencia = "";
-
-    if ($fecha_1 > $fecha_2) {
-      $datetime1 = date_create($fecha_pasada);
-      $datetime2 = date_create($date_actual);
+    if ($fecha_hoy >= $fecha_2) {
+      $datetime1 = date_create($fecha_inicio);
+      $datetime2 = date_create($fecha_fin);
       $contador = date_diff($datetime1, $datetime2);
       $differenceFormat = '%a';
       $diferencia = ($contador->format($differenceFormat))+1;
     } else {
-      $diferencia = "En espera...";
-    }
+      if ($fecha_hoy >= $fecha_1) {
+        $datetime1 = date_create($fecha_inicio);
+        $datetime2 = date_create($date_actual);
+        $contador = date_diff($datetime1, $datetime2);
+        $differenceFormat = '%a';
+        $diferencia = ($contador->format($differenceFormat))+1;
+      } else {
+        $diferencia = "En espera...";
+      }
+    }   
     
     return $diferencia;
     

@@ -1640,7 +1640,7 @@ function modificarSubtotales() {
         var subtotal_producto = 0;
 
         // Calculamos: IGV
-        var precio_sin_igv = 0;
+        var precio_sin_igv = precio_con_igv;
         $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
 
         // Calculamos: precio + IGV
@@ -1696,7 +1696,7 @@ function modificarSubtotales() {
           var subtotal_producto = 0;
 
           // Calculamos: IGV
-          var precio_sin_igv = 0;
+          var precio_sin_igv = precio_con_igv;
           $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
 
           // Calculamos: precio + IGV
