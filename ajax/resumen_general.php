@@ -33,6 +33,54 @@ switch ($_GET["op"]){
 		}		
 	break;
 
+	case 'ver_detalle_compras':
+
+		$rspta  =  $resumen_general->detalles_compras($_GET['id_compra']);
+		$rspta2 =  $resumen_general->ver_compras($_GET['id_compra']);
+
+		$subtotal=0;
+		$ficha='';
+		echo '<thead style="background-color:#A9D0F5">
+				<th>Ficha técnica</th>
+				<th>Material</th>
+				<th>Cantidad</th>
+				<th>Precio Compra</th>
+				<th>Descuento</th>
+				<th>Subtotal</th>
+		</thead>';
+
+		while ($reg = $rspta->fetch_object())
+		{
+			$subtotal = ($reg->cantidad*$reg->precio_venta)-$reg->descuento;
+			
+			empty($reg->ficha_tecnica)
+			? ($ficha = '<a ><i class="far fa-file-pdf fa-2x" style="color:#000000c4"></i></a>')
+			: ($ficha = '<a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>');
+			echo '<tr class="filas">
+					<td>'.$ficha.'</td>
+					<td>'.$reg->nombre.'</td>
+					<td>'.$reg->cantidad.'</td>
+					<td>'.$reg->precio_venta.'</td>
+					<td>'.$reg->descuento.'</td>
+					<td>'.$subtotal.'</td></tr>';
+		}
+		echo '<tfoot>
+				<td colspan="4"></td>
+				<th class="text-center">
+					<h5>Subtotal</h5>
+					<h5>IGV</h5>
+					<h5>TOTAL</h5>
+				</th>
+				<th>
+					<h5 class="text-right subtotal"  style="font-weight: bold;">S/'.$rspta2['subtotal_compras'].'</h5>
+					<h5 class="text-right igv_comp" style="font-weight: bold;">S/'.$rspta2['igv_compras_proyect'].'</h5>
+					<b>
+						<h4 class="text-right total"  style="font-weight: bold;">S/'.$rspta2['monto_total'].'</h4>
+					</b>
+			</tfoot>';
+
+    break;
+
 	case 'listar_r_serv_maquinaria':
 
 		if (!isset($_SESSION["nombre"]))
@@ -56,6 +104,7 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+
 	case 'listar_r_serv_equipos':
 
 		if (!isset($_SESSION["nombre"]))
@@ -151,6 +200,74 @@ switch ($_GET["op"]){
 						"iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
 						"data"=>$data);
 					echo json_encode($results);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+	case 'listar_r_transportes':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				$rspta=$resumen_general->r_transportes($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'listar_r_hospedajes':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				$rspta=$resumen_general->r_hospedajes($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'listar_r_comidas_extras':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				$rspta=$resumen_general->r_comidas_extras($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
 			}
 			else

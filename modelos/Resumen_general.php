@@ -55,11 +55,48 @@ Class Resumen_general
 
 		
 	}
+	//lismatamos los detalles compras
+	public function detalles_compras($id_compra)
+	{
+		$sql = "SELECT 
+		dp.idproducto as idproducto,
+		dp.ficha_tecnica_producto as ficha_tecnica,
+		dp.cantidad as cantidad,
+		dp.precio_venta as precio_venta,
+		dp.descuento as descuento,
+		p.nombre as nombre
+		FROM detalle_compra  dp, producto as p
+		WHERE idcompra_proyecto='$id_compra' AND  dp.idproducto=p.idproducto";
+
+		return ejecutarConsulta($sql);
+	}
+	//mostrar detalles uno a uno de la factura
+	public function ver_compras($idcompra_proyecto)
+	{
+		$sql = "SELECT  
+		cpp.idcompra_proyecto as idcompra_proyecto, 
+		cpp.idproyecto as idproyecto, 
+		cpp.idproveedor as idproveedor, 
+		p.razon_social as razon_social, 
+		cpp.fecha_compra as fecha_compra, 
+		cpp.tipo_comprovante as tipo_comprovante, 
+		cpp.serie_comprovante as serie_comprovante, 
+		cpp.descripcion as descripcion, 
+		cpp.subtotal_compras_proyect as subtotal_compras, 
+		cpp.igv_compras_proyect as igv_compras_proyect, 
+		cpp.monto_total as monto_total,
+		cpp.fecha as fecha, 
+		cpp.estado as estado
+		FROM compra_por_proyecto as cpp, proveedor as p 
+		WHERE idcompra_proyecto='$idcompra_proyecto'  AND cpp.idproveedor = p.idproveedor";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
 
 	public function r_serv_maquinaria_equipos($idproyecto,$tipo)
 	{
 		$serv_maquinaria= Array();
-
+		$pago_total=0;
 		$sql="SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, COUNT(s.idmaquinaria) as cantidad_veces, SUM(s.costo_parcial) as costo_parcial 
 		FROM servicio as s, maquinaria as m, proveedor as p 
 		WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
@@ -76,6 +113,12 @@ Class Resumen_general
 				$sql_2="SELECT SUM(ps.monto) as monto_pag_ser_maq FROM pago_servicio ps WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado=1 GROUP by id_maquinaria";
 				$ser_maq_monto= ejecutarConsultaSimpleFila($sql_2);
 
+				if (empty($t_monto)) {
+					$pago_total=0;
+				}else{
+					$pago_total=$ser_maq_monto['monto_pag_ser_maq'];
+				}
+
 				$serv_maquinaria[]= array(
 
 					"idmaquinaria"      => $value['idmaquinaria'],
@@ -85,7 +128,7 @@ Class Resumen_general
 					"costo_parcial"     => $value['costo_parcial'],
 					"proveedor"         => $value['razon_social'],
 
-					"monto_pag_ser_maq"       =>$ser_maq_monto['monto_pag_ser_maq']
+					"monto_pag_ser_maq"       =>$pago_total
 
 				);
 
@@ -105,6 +148,27 @@ Class Resumen_general
 
 		return ejecutarConsulta($sql);	
 
+	}
+
+	public function r_transportes($idproyecto)
+	{
+		$sql="SELECT t.idtransporte,t.idproyecto,t.fecha_viaje,t.descripcion,t.precio_parcial, t.comprobante 
+		FROM transporte as t, proyecto as p WHERE t.idproyecto='$idproyecto' AND t.idproyecto=p.idproyecto AND t.estado='1' ORDER BY idtransporte DESC";
+		return ejecutarConsultaArray($sql);
+	}
+
+	public function r_hospedajes($idproyecto)
+	{
+		$sql="SELECT h.idhospedaje,h.idproyecto,h.fecha_comprobante,h.descripcion,h.precio_parcial, h.comprobante 
+		FROM hospedaje as h, proyecto as p WHERE h.idproyecto=p.idproyecto AND h.idproyecto='$idproyecto' AND h.estado=1 ORDER BY h.idhospedaje DESC";
+		return ejecutarConsultaArray($sql);
+	}
+	
+	public function r_comidas_extras($idproyecto)
+	{
+		$sql="SELECT ce.idcomida_extra, ce.idproyecto, ce.fecha_comida, ce.descripcion, ce.costo_parcial, ce.comprobante 
+		FROM comida_extra as ce, proyecto as p WHERE ce.estado=1 AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto'";
+		return ejecutarConsultaArray($sql);
 	}
 }
 

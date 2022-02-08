@@ -69,15 +69,17 @@
                                            .colorf0f8ff00{color: #f0f8ff00;}
                                         </style>
                                         <div class="container table-responsive disenio-scroll">
+
                                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                                                 <thead style="background-color: #408c98; color: white;" >
                                                     <tr>
-                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Compras</th>
+                                                        <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Compras</th>
                                                      </tr>
                                                     <tr>
                                                         <th class="text-center clas_pading">#</th>
                                                         <th class="text-center  w-px-300 clas_pading">EMPRESA</th>
                                                         <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading"><i class="fas fa-cogs"></i></th>
                                                         <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                                         <th class="text-center clas_pading">MONTO</th>
                                                         <th class="text-center clas_pading">PAGOS</th>
@@ -88,11 +90,11 @@
                                                     <!--aqui va el listado de los días-->
                                                 </tbody>
                                                 <tfoot>
-                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th colspan="4" class="clas_pading"></th>
                                                     <th  class="clas_pading">Total</th>
-                                                    <th  class="clas_pading" id="monto_compras" ></th>
-                                                    <th  class="clas_pading" id="pago_compras" ></th>
-                                                    <th  class="clas_pading" id="saldo_compras" ></th>
+                                                    <th  class="clas_pading text-right" id="monto_compras" ></th>
+                                                    <th  class="clas_pading text-right" id="pago_compras" ></th>
+                                                    <th  class="clas_pading text-right" id="saldo_compras" ></th>
                                                 </tfoot>
                                             </table>
 
@@ -117,9 +119,9 @@
                                                 <tfoot >
                                                     <th colspan="3" class="clas_pading"></th>
                                                     <th class="clas_pading">Total</th>
-                                                    <th class="clas_pading" id="monto_serv_maq"></th>
-                                                    <th class="clas_pading" id="pago_serv_maq"></th>
-                                                    <th class="clas_pading" id="saldo_serv_maq"></th>
+                                                    <th class="clas_pading text-right" id="monto_serv_maq"></th>
+                                                    <th class="clas_pading text-right" id="pago_serv_maq"></th>
+                                                    <th class="clas_pading text-right" id="saldo_serv_maq"></th>
                                                 </tfoot>
                                             </table>
 
@@ -144,67 +146,95 @@
                                                 <tfoot >
                                                     <th colspan="3" class="clas_pading"></th>
                                                     <th class="clas_pading">Total</th>
-                                                    <th class="clas_pading" id="monto_serv_equi"></th>
-                                                    <th class="clas_pading" id="pago_serv_equi"></th>
-                                                    <th class="clas_pading" id="saldo_serv_equi"></th>
+                                                    <th class="clas_pading text-right" id="monto_serv_equi"></th>
+                                                    <th class="clas_pading text-right" id="pago_serv_equi"></th>
+                                                    <th class="clas_pading text-right" id="saldo_serv_equi"></th>
                                                 </tfoot>
                                             </table>
 
                                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                                                 <thead style="background-color: #408c98; color: white;" >
                                                     <tr>
-                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Personal</th>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Transporte</th>
                                                      </tr>
                                                     <tr>
                                                         <th class="text-center clas_pading">#</th>
-                                                        <th class="text-center  w-px-300 clas_pading">EMPRESA</th>
                                                         <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading" data-toggle="tooltip" data-original-title="Comprobante">COMP</th>
                                                         <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                                         <th class="text-center clas_pading">MONTO</th>
                                                         <th class="text-center clas_pading">PAGOS</th>
                                                         <th class="text-center clas_pading">SALDO</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="transportes">
                                                     <!--aqui va el listado de los días-->
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C yyyyyyyyyyyyyyyy yyyyyyyyyyyy yyyyyyyyyyyyyyyyyy  yyyyyyyyyyyyyyyyyyyyyy. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">1</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>SEVEN´S INGENIEROS S.A.C. </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading"><span>20/09/2021 </span></td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">MADERA</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">6000</td>
-                                                        <td class="bg-color-b4bdbe47  clas_pading">0.00</td>
-                                                    </tr>
                                                 </tbody>
                                                 <tfoot>
                                                     <th colspan="3" class="clas_pading"></th>
                                                     <th class="clas_pading">Total</th>
-                                                    <th class="clas_pading"></th>
-                                                    <th class="clas_pading"></th>
-                                                    <th class="clas_pading"></th>
+                                                    <th class="clas_pading text-right" id="monto_transp"></th>
+                                                    <th class="clas_pading text-right" id="pago_transp"></th>
+                                                    <th class="clas_pading text-right" id="saldo_transp"></th>
+                                                </tfoot>
+                                            </table>
+
+                                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                                                <thead style="background-color: #408c98; color: white;" >
+                                                    <tr>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Hospedaje</th>
+                                                     </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading" data-toggle="tooltip" data-original-title="Comprobante">COMP</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="hospedaje">
+                                                    <!--aqui va el listado de los días-->
+                                                </tbody>
+                                                <tfoot>
+                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th class="clas_pading">Total</th>
+                                                    <th class="clas_pading text-right" id="monto_hosped"></th>
+                                                    <th class="clas_pading text-right" id="pago_hosped"></th>
+                                                    <th class="clas_pading text-right" id="saldo_hosped"></th>
+                                                </tfoot>
+                                            </table>
+
+                                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                                                <thead style="background-color: #408c98; color: white;" >
+                                                    <tr>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Comidas extras</th>
+                                                     </tr>
+                                                    <tr><!--<i class="far fa-file-pdf fa-2x" style="color:#ffffff"></i>-->
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading" data-toggle="tooltip" data-original-title="Comprobante">COMP</th>
+                                                        <th class="text-center w-px-300 clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="comida_extra">
+                                                    <!--aqui va el listado de los días-->
+                                                </tbody>
+                                                <tfoot>
+                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th class="clas_pading">Total</th>
+                                                    <th class="clas_pading text-right" id="monto_cextra"></th>
+                                                    <th class="clas_pading text-right" id="pago_cextra"></th>
+                                                    <th class="clas_pading text-right" id="saldo_cextra"></th>
                                                 </tfoot>
                                             </table>
                                        </div>
                                     </div>
+                                    <a class="btn btn-info" target="_blank" href=""></a>
                                     <!-- /.card-body -->
                                 </div>
                                 <!-- /.card -->
@@ -215,7 +245,110 @@
                     </div>
                     <!-- /.container-fluid -->
 
-                    <!-- Modal agregar proveedores -->
+                    <!--Modal ver detalles compras-->
+                    <div class="modal fade" id="modal-ver-compras">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Detalle Compra</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row" id="cargando-1-fomulario">
+                                <!-- Tipo de Empresa -->
+                                <div class="col-lg-7">
+                                    <div class="form-group">
+                                    <label for="idproveedor">Proveedor</label>
+
+                                    <h5 class="idproveedor" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem;"></h5>
+                                    </div>
+                                </div>
+                                <!-- fecha -->
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                    <label for="fecha_compra">Fecha </label>
+                                    <input type="date" class="form-control fecha_compra" placeholder="Fecha" />
+                                    </div>
+                                </div>
+                                <!-- Tipo de comprobante -->
+                                <div class="col-lg-4 content-t-comprob">
+                                    <div class="form-group">
+                                    <label for="tipo_comprovante">Tipo Comprobante</label>
+                                    <h5 class="tipo_comprovante" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem;"></h5>
+                                    </div>
+                                </div>
+                                <!-- serie_comprovante-->
+                                <div class="col-lg-2 content-comprob">
+                                    <div class="form-group">
+                                    <label for="serie_comprovante">N° de Comprobante</label>
+                                    <input type="text" class="form-control serie_comprovante" placeholder="N° de Comprobante" />
+                                    </div>
+                                </div>
+                                <!-- IGV-->
+                                <div class="col-lg-1 content-igv" style="display: none;">
+                                    <div class="form-group">
+                                    <label for="igv">IGV</label>
+                                    <input type="text" class="form-control igv" readonly value="0.18" />
+                                    </div>
+                                </div>
+                                <!-- Descripcion-->
+                                <div class="col-lg-5 content-descrp">
+                                    <div class="form-group">
+                                    <label for="descripcion">Descripción </label> <br />
+                                    <textarea class="form-control descripcion" rows="1"></textarea>
+                                    </div>
+                                </div>
+                                <!--tabla detalles plantas-->
+                                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+                                    <br />
+                                    <table id="detalles_compra" class="table table-striped table-bordered table-condensed table-hover">
+                                    <thead style="background-color: #ff6c046b;">
+                                        <th>Opciones</th>
+                                        <th>Material</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Compra</th>
+                                        <th>Descuento</th>
+                                        <th>Subtotal</th>
+                                    </thead>
+                                    <tfoot>
+                                        <td colspan="4"></td>
+                                        <th class="text-center">
+                                        <h5>Subtotal</h5>
+                                        <h5>IGV</h5>
+                                        <h5>TOTAL</h5>
+                                        </th>
+                                        <!--idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,igv,descripcion, igv_comp, total-->
+                                        <th>
+                                        <h5 class="text-right subtotal" style="font-weight: bold;">S/. 0.00</h5>
+                                        <h5 class="text-right igv_comp" style="font-weight: bold;">S/. 0.00</h5>
+                                        <b>
+                                            <h4 class="text-right total" style="font-weight: bold;">S/. 0.00</h4>
+                                        </b>
+                                        </th>
+                                    </tfoot>
+                                    <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                    <div class="col-lg-12 text-center">
+                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                    <br />
+                                    <h4>Cargando...</h4>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal ver detalle maquina equipos -->
                     <div class="modal fade" id="modal_ver_detalle_maq_equ">
                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
                             <div class="modal-content">
@@ -265,46 +398,6 @@
                         </div>
                     </div>
 
-                    <!--===============Modal-ver-comprobante =========-->
-                    <div class="modal fade" id="modal-ver-comprobante">
-                          <div class="modal-dialog modal-dialog-scrollable modal-xl ">
-                              <div class="modal-content">
-                                  <div class="modal-header">
-                                      <h4 class="modal-title">Comprobante otro servicio</h4>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span class="text-danger" aria-hidden="true">&times;</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                      <div  class="class-style" style="text-align: center;"> 
-                                      <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download=" Comprobante otro_servicio" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                                        <br>
-                                        <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                    </div>
-                    <!--Modal ver datos-->
-                    <div class="modal fade" id="modal-ver-otro_servicio">
-                        <div class="modal-dialog modal-dialog-scrollable modal-xm">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Datos otro servicio</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span class="text-danger" aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-
-                            <div class="modal-body">
-                                <div id="datosotro_servicio" class="class-style">
-                                <!-- vemos los datos del trabajador -->
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </section>
                 <!-- /.content -->
