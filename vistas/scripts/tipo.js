@@ -23,6 +23,10 @@ function limpiar_tipo() {
   //Mostramos los Materiales
   $("#idtipo_trabajador").val("");
   $("#nombre_tipo").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

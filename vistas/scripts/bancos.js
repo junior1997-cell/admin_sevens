@@ -27,6 +27,10 @@ function limpiar() {
   $("#nombre").val(""); 
   $("#formato_cta").val("0000"); 
   $("#formato_cci").val("0000"); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

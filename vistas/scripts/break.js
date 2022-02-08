@@ -733,6 +733,10 @@ function limpiar_comprobante() {
 	$("#foto2_actual").val("");  
   $("#foto2_nombre").html(""); 
 
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
+
 }
 //Guardar y editar
 function guardaryeditar_factura(e) {

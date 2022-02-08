@@ -241,12 +241,12 @@
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
@@ -279,12 +279,12 @@
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
               "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>

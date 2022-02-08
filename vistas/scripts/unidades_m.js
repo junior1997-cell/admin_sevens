@@ -26,6 +26,10 @@ function limpiar_unidades_m() {
   $("#idunidad_medida").val("");
   $("#nombre_medida").val(""); 
   $("#abreviacion").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

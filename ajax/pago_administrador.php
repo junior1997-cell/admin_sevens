@@ -19,35 +19,136 @@
 
       $pago_administrador = new PagoAdministrador();
 
-      //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
-      $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-      $idtrabajador_por_proyecto		= isset($_POST["idtrabajador_por_proyecto"])? limpiarCadena($_POST["idtrabajador_por_proyecto"]):"";
-      $trabajador		  = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
+      // DATA - agregar pago x mes
+      $idpagos_x_mes_administrador = isset($_POST["idpagos_x_mes_administrador"])? limpiarCadena($_POST["idpagos_x_mes_administrador"]):"";
 
-      $tipo_trabajador= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
-      $desempenio	    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";      
-      $cargo			    = isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
+      $idfechas_mes_pagos_administrador_pxm = isset($_POST["idfechas_mes_pagos_administrador_pxm"])? limpiarCadena($_POST["idfechas_mes_pagos_administrador_pxm"]):"";
+      $id_tabajador_x_proyecto_pxm	        = isset($_POST["id_tabajador_x_proyecto_pxm"])? limpiarCadena($_POST["id_tabajador_x_proyecto_pxm"]):"";      
+      $fecha_inicial_pxm	= isset($_POST["fecha_inicial_pxm"])? limpiarCadena($_POST["fecha_inicial_pxm"]):"";      
+      $fecha_final_pxm	  = isset($_POST["fecha_final_pxm"])? limpiarCadena($_POST["fecha_final_pxm"]):"";
+      $mes_nombre_pxm     = isset($_POST['mes_nombre_pxm'])? $_POST['mes_nombre_pxm']:"";
+      $dias_mes_pxm 		  = isset($_POST['dias_mes_pxm'])? $_POST['dias_mes_pxm']:"";
+      $dias_regular_pxm   = isset($_POST['dias_regular_pxm'])? $_POST['dias_regular_pxm']:"";
+      $sueldo_mensual_pxm = isset($_POST['sueldo_mensual_pxm'])? $_POST['sueldo_mensual_pxm']:"";
+      $monto_x_mes_pxm 	  = isset($_POST['monto_x_mes_pxm'])? $_POST['monto_x_mes_pxm']:"";
       
-      $sueldo_diario	= isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
-      $sueldo_mensual = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
-      $sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
+      $forma_pago	= isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
+      $cuenta_deposito = isset($_POST['cuenta_deposito'])? $_POST['cuenta_deposito']:"";
+      $monto 		= isset($_POST['monto'])? $_POST['monto']:"";
+      $descripcion 		= isset($_POST['descripcion'])? $_POST['descripcion']:"";
+      $doc_old_1 		= isset($_POST['doc_old_1'])? $_POST['doc_old_1']:"";
+      $doc1 		= isset($_POST['doc1'])? $_POST['doc1']:"";
+      
+      // DATA - recibos por honorarios
+      $idfechas_mes_pagos_administrador_rh  = isset($_POST["idfechas_mes_pagos_administrador_rh"])? limpiarCadena($_POST["idfechas_mes_pagos_administrador_rh"]):"";
+      $id_tabajador_x_proyecto_rh	          = isset($_POST["id_tabajador_x_proyecto_rh"])? limpiarCadena($_POST["id_tabajador_x_proyecto_rh"]):"";      
+      $fecha_inicial_rh	= isset($_POST["fecha_inicial_rh"])? limpiarCadena($_POST["fecha_inicial_rh"]):"";      
+      $fecha_final_rh	  = isset($_POST["fecha_final_rh"])? limpiarCadena($_POST["fecha_final_rh"]):"";
+      $mes_nombre_rh    = isset($_POST['mes_nombre_rh'])? $_POST['mes_nombre_rh']:"";
+      $dias_mes_rh 		  = isset($_POST['dias_mes_rh'])? $_POST['dias_mes_rh']:"";
+      $dias_regular_rh  = isset($_POST['dias_regular_rh'])? $_POST['dias_regular_rh']:"";
+      $sueldo_mensual_rh= isset($_POST['sueldo_mensual_rh'])? $_POST['sueldo_mensual_rh']:"";
+      $monto_x_mes_rh 	= isset($_POST['monto_x_mes_rh'])? $_POST['monto_x_mes_rh']:"";
+      $doc_old_2        = isset($_POST['doc_old_2'])? $_POST['doc_old_2']:"";
+      $doc2 	          = isset($_POST['doc2'])? $_POST['doc2']:"";
 
       switch ($_GET["op"]){
 
-        case 'guardaryeditar':
-          	
-          // registramos un nuevo trabajador
-          if (empty($idtrabajador_por_proyecto)){
+        case 'guardar_y_editar_pagos_x_mes':
+          
+          //*DOC 1*//
+          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
-            $rspta=$pago_administrador->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $flat_doc1 = false;  $doc1 = $_POST["doc_old_1"];
+
+          } else {
+
+            $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);            
+              
+            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pago_administrador/baucher_deposito/" . $doc1);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+          }	
+
+          // registramos un nuevo: pago x mes
+          if (empty($idpagos_x_mes_administrador)){
+
+            $rspta=$pago_administrador->insertar_pagos_x_mes( $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, 
+            $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
+            
+            echo $rspta ;
 
           }else {
-            // editamos un trabajador existente
-            $rspta=$pago_administrador->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+
+            // validamos si existe el "baucher" para eliminarlo
+            if ($flat_doc1 == true) {
+
+              $datos_f1 = $pago_administrador->obtenerDocs($idfechas_mes_pagos_administrador_pxm);
+
+              $doc1_ant = $datos_f1->fetch_object()->baucher;
+
+              if ($doc1_ant != "") {
+
+                unlink("../dist/pago_administrador/baucher_deposito/" . $doc1_ant);
+              }
+            }
+
+            // editamos un pago x mes existente
+            $rspta=$pago_administrador->editar_pagos_x_mes($idpagos_x_mes_administrador, $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, 
+            $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
             
-            echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+            echo $rspta;
+          }
+
+        break;
+
+        case 'guardar_y_editar_recibo_x_honorario':
+          	
+          //*DOC 2*//
+          if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
+
+            $flat_doc2 = false;
+
+            $doc2      = $_POST["doc_old_2"];
+
+          } else {
+
+            $flat_doc2 = true;
+
+            $ext_doc2  = explode(".", $_FILES["doc2"]["name"]);
+              
+            $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
+
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pago_administrador/recibos_x_honorarios/" . $doc2);
+            
+          }	
+
+          // registramos un nuevo: recibo x honorario
+          if (empty($idfechas_mes_pagos_administrador_rh)){
+
+            $rspta=$pago_administrador->insertar_recibo_x_honorario($id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $doc2);
+            
+            echo $rspta ? "ok" : "No se pudieron registrar el Recibo por Honorario";
+
+          }else {
+
+            if ($flat_doc2 == true) {
+
+              $datos_f2 = $pago_administrador->obtenerDocs2($idfechas_mes_pagos_administrador_rh);
+
+              $doc2_ant = $datos_f2->fetch_object()->recibos_x_honorarios;
+
+              if ($doc2_ant != "") {
+
+                unlink("../dist/pago_administrador/recibos_x_honorarios/" . $doc2_ant);
+              }
+            }
+
+            // editamos un recibo x honorario existente
+            $rspta=$pago_administrador->editar_recibo_x_honorario($idfechas_mes_pagos_administrador_rh, $id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $doc2);
+            
+            echo $rspta ? "ok" : "Recibo por Honorario no se pudo actualizar";
           }
 
         break;
@@ -69,6 +170,7 @@
 
           while ($reg=$rspta->fetch_object()){
 
+            $deshabilitado = "";
             // validamos antes de sacar la diferencia
             if (validar_fecha_espanol(format_d_m_a($reg->fecha_inicio))) {
               $count_dia = diferencia_de_fechas($reg->fecha_inicio); 
@@ -79,6 +181,13 @@
 
             // validamos la fecha antes de imprimir
             validar_fecha_espanol(format_d_m_a($reg->fecha_fin)) ? $fecha_fin = format_d_m_a($reg->fecha_fin) : $fecha_fin = "- - -" ;
+
+            if (validar_fecha_espanol(format_d_m_a($reg->fecha_fin)) == false || validar_fecha_espanol(format_d_m_a($reg->fecha_inicio)) == false) {
+              $deshabilitado = "disabled";
+            } else {
+              $deshabilitado = "";
+            }
+            
             
             $data[]=array(               
               "0"=>'<div class="user-block">
@@ -95,7 +204,7 @@
               "6"=>'30-12-2022',
               "7"=>'S/.' . $reg->sueldo_mensual,
               "8"=>'S/. 300.00',
-              "9" =>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="detalle_fechas_mes_trabajador('.$reg->idtrabajador_por_proyecto.', \'' . $reg->nombres . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$reg->sueldo_mensual .'\', \''. $reg->cuenta_bancaria .'\')">
+              "9" =>'<div class="text-center"> <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$reg->idtrabajador_por_proyecto.', \'' . $reg->nombres . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$reg->sueldo_mensual .'\', \''. $reg->cuenta_bancaria .'\', \''. $count_dia .'\')">
               <i class="far fa-eye"></i> Detalle
               </button> 
               <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 4,500.00</button></div>',
@@ -113,7 +222,7 @@
 
         case 'mostrar_fechas_mes':
 
-          $rspta=$pago_administrador->mostrar_fechas_mes($idtrabajador_por_proyecto);
+          $rspta=$pago_administrador->mostrar_fechas_mes($_POST["id_tabajador_x_proyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -130,25 +239,20 @@
           
           while ($reg=$rspta->fetch_object()){
             !empty($reg->baucher)
-              ? ($baucher_deposito = '<center><a target="_blank" href="../dist/pago_administrador/pago_obrero.pdf"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              ? ($baucher_deposito = '<center><a target="_blank" href="../dist/pago_administrador/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
-            !empty($reg->recibos_x_honorarios)
-              ? ($recibo_x_h = '<center><a target="_blank" href="../dist/pago_administrador/pago_obrero.pdf"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
-              : ($recibo_x_h = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
-
             $data[]=array(    
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idpagos_x_mes_administrador .')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idpagos_x_mes_administrador .')"><i class="far fa-trash-alt"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-check"></i></button>',           
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="far fa-trash-alt"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-check"></i></button>',           
               "1"=>$reg->cuenta_deposito	,
               "2"=>$reg->forma_de_pago	,
               "3"=>'S/. '. number_format($reg->monto, 2, ".", ","),
               "4"=>$baucher_deposito,
-              "5"=>$recibo_x_h,
-              "6"=>$reg->descripcion,
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              "5"=>$reg->descripcion,
+              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
           $results = array(
@@ -158,7 +262,24 @@
             "data"=>$data);
           echo json_encode($results);
         break;
-        
+
+        case 'mostrar_pagos_x_mes':
+
+          $rspta=$pago_administrador->mostrar_pagos_x_mes($_POST["idpagos_x_mes_administrador"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
+        break;
+
+        case 'desactivar_pago_x_mes':
+          $rspta=$pago_administrador->desactivar_pago_x_mes($_POST["idpagos_x_mes_administrador"]);
+          echo $rspta ? "ok" : "NO se puede anular";
+        break;
+      
+        case 'activar_pago_x_mes':
+          $rspta=$pago_administrador->activar_pago_x_mes($_POST["idpagos_x_mes_administrador"]);
+          echo $rspta ? "ok" : "NO se puede ReActivar";
+        break;        
       }
 
     } else {
@@ -184,7 +305,7 @@
       $datetime2 = date_create($date_actual);
       $contador = date_diff($datetime1, $datetime2);
       $differenceFormat = '%a';
-      $diferencia = $contador->format($differenceFormat);
+      $diferencia = ($contador->format($differenceFormat))+1;
     } else {
       $diferencia = "En espera...";
     }

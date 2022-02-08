@@ -25,6 +25,10 @@ function limpiar() {
   //Mostramos los Materiales
   $("#idcolor").val("");
   $("#nombre_color").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

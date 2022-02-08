@@ -23,6 +23,10 @@ function limpiar_ocupacion() {
   //Mostramos los Materiales
   $("#idocupacion").val("");
   $("#nombre_ocupacion").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar

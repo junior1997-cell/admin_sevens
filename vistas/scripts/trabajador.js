@@ -448,7 +448,7 @@ function calcular_dias_trabajo() {
     cantida_dias = diferencia_de_dias(format_a_m_d( fecha_i), format_a_m_d(fecha_f) );
 
     $('#cantidad_dias').addClass('input-valido').removeClass('input-no-valido');
-    $('#cantidad_dias').val(cantida_dias);
+    $('#cantidad_dias').val((cantida_dias + 1));
 
   } else {
     $('#cantidad_dias').removeClass('input-valido').addClass('input-no-valido');
