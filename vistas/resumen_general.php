@@ -25,7 +25,7 @@
             <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['otro_servicio']==1){
+          if ($_SESSION['resumen_general']==1){
           ?>
 
             <!-- Content Wrapper. Contains page content -->

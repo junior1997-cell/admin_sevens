@@ -6,7 +6,7 @@ if (strlen(session_id()) < 1){
 require_once "../modelos/Resumen_general.php";
 require_once "../modelos/Fechas.php";
 
-$otro_servicio=new Resumen_general();
+$resumen_general=new Resumen_general();
 
 switch ($_GET["op"]){
 
@@ -19,9 +19,9 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['otro_servicio']==1)
+			if ($_SESSION['resumen_general']==1)
 			{
-				$rspta=$otro_servicio->r_compras($_POST['idproyecto']);
+				$rspta=$resumen_general->r_compras($_POST['idproyecto']);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -42,10 +42,10 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['otro_servicio']==1)
+			if ($_SESSION['resumen_general']==1)
 			{
 				$tipo='1';
-				$rspta=$otro_servicio->r_serv_maquinaria_equipos($_POST['idproyecto'],$tipo);
+				$rspta=$resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'],$tipo);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -65,10 +65,10 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['otro_servicio']==1)
+			if ($_SESSION['resumen_general']==1)
 			{
 				$tipo='2';
-				$rspta=$otro_servicio->r_serv_maquinaria_equipos
+				$rspta=$resumen_general->r_serv_maquinaria_equipos
 				($_POST['idproyecto'],$tipo);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
@@ -89,12 +89,12 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al usuario logueado y autorizado.
-			if ($_SESSION['trabajador']==1)
+			if ($_SESSION['resumen_general']==1)
 			{
 				$idmaquinaria=$_GET["idmaquinaria"];
 				$idproyecto=$_GET["idproyecto"];
 
-				$rspta=$otro_servicio->ver_detalle_maq_equ($idmaquinaria,$idproyecto);
+				$rspta=$resumen_general->ver_detalle_maq_equ($idmaquinaria,$idproyecto);
 				$fecha_entreg='';
 				$fecha_recoj='';
 				$fecha='';
