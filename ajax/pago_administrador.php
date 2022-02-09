@@ -177,13 +177,14 @@
            
           foreach (json_decode($rspta, true) as $key => $value) {
 
-            $deshabilitado = ""; $btn_depositos = ""; $ultimo_mes_pago = ""; $siguiente_mes_pago = "";
+            $deshabilitado = ""; $btn_depositos = ""; $ultimo_mes_pago = ""; $siguiente_mes_pago = ""; 
+            $pago_acumulado_hasta_hoy = 0; $pago_total = 0;
 
             // validamos: "FECHA INICIO", "CANTIDAD DIAS HASTA HOY", 
             if (validar_fecha_espanol(format_d_m_a($value['fecha_inicio']))) {
               $count_dia = cantidad_dias_trabajado($value['fecha_inicio'], $value['fecha_fin']); 
               $fecha_inicio = format_d_m_a($value['fecha_inicio']);
-              $fecha_inicio_nombre = nombre_mes($value['fecha_inicio']);
+              $fecha_inicio_nombre = nombre_dia_mes_anio($value['fecha_inicio']);
             } else {
               $count_dia = "-"; $fecha_inicio = "- - -"; $fecha_inicio_nombre = "- - -";
             }
@@ -191,7 +192,7 @@
             // validamos: "FECHA FIN"
             if ( validar_fecha_espanol(format_d_m_a($value['fecha_fin'])) ) {
               $fecha_fin = format_d_m_a($value['fecha_fin']);
-              $fecha_fin_nombre = nombre_mes($value['fecha_fin']);
+              $fecha_fin_nombre = nombre_dia_mes_anio($value['fecha_fin']);
             } else {
               $fecha_fin = "- - -"; $fecha_fin_nombre = "- - -";
             }
@@ -206,6 +207,11 @@
               $ultimo_mes_pago = calcular_ultimo_pago($value['fecha_inicio'], $value['fecha_fin']);
 
               $siguiente_mes_pago = calcular_siguiente_pago($value['fecha_inicio'], $value['fecha_fin']);
+
+              $pagos_por_trabajador = calcular_pagos_x_trabajdor($value['fecha_inicio'], $value['fecha_fin'], $value['sueldo_mensual']);
+
+              $pago_acumulado_hasta_hoy = $pagos_por_trabajador['monto_hasta_hoy'];
+              $pago_total =  $pagos_por_trabajador['monto_total'];
 
               $deshabilitado = "";
             }
@@ -235,15 +241,16 @@
               "5"=>$ultimo_mes_pago,
               "6"=>$siguiente_mes_pago,
               "7"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
-              "8"=>'S/. 300.00',
-              "9" =>'<div class="justify-content-between "> 
+              "8" =>'S/. ' . number_format( $pago_total , 2, '.', ',') ,
+              "9"=>'S/. '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
+              "10" =>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/. '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
               </div>',
-              "10"=>'S/. 10',
-              "11"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
+              "11"=>'S/. ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
+              "12"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
             );
           }
 
@@ -473,9 +480,9 @@
         $siguiente_pago =  date("Y-m-t", strtotime($date_actual)) ;
   
         if (strtotime($siguiente_pago) >= $fecha_1 && strtotime($siguiente_pago) <= $fecha_2) {
-          $siguiente_pago = nombre_mes($siguiente_pago);
+          $siguiente_pago = nombre_dia_mes_anio($siguiente_pago);
         } else {
-          $siguiente_pago = nombre_mes($fecha_fin);
+          $siguiente_pago = nombre_dia_mes_anio($fecha_fin);
         }
   
       } else {
@@ -486,7 +493,7 @@
     return $siguiente_pago;
   }
 
-  function nombre_mes( $fecha_entrada ) {
+  function nombre_dia_mes_anio( $fecha_entrada ) {
 
     $fecha_parse = new FechaEs($fecha_entrada);
     $dia = $fecha_parse->getDDDD().PHP_EOL;
@@ -496,6 +503,92 @@
     $fecha_nombre_completo = "$dia, <br> $mun_dia de <b>$mes</b>  del $anio";
 
     return $fecha_nombre_completo;
+  }
+
+  function nombre_mes( $fecha_entrada ) {
+
+    $fecha_parse = new FechaEs($fecha_entrada);
+    
+    $mes_nombre = $fecha_parse->getMMMM().PHP_EOL;
+
+    return $mes_nombre;
+  }
+
+  function sumar_dias( $cant, $fecha )  {
+    
+    return date("Y-m-d",strtotime( "$cant days" , strtotime( $fecha ) ) ); 
+  }
+
+  function validar_fecha_menor_que($fecha_menor, $fecha_mayor) {
+    $fecha_1 = strtotime( $fecha_menor );
+    $fecha_2 = strtotime( $fecha_mayor );
+
+    if ($fecha_1 < $fecha_2) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  function calcular_pagos_x_trabajdor($fecha_inicio, $fecha_fin, $sueldo_mensual) {
+    // ontenemos la fecha actual segun la zona horaria - "America/Lima"
+    $Object_fecha = new DateTime();
+    $Object_fecha->setTimezone(new DateTimeZone('America/Lima'));
+    $date_actual = $Object_fecha->format("Y-m-d");
+
+    $estado_fin_bucle = false; $dias_mes = 0; $fecha_i = $fecha_inicio; $fecha_f = $fecha_fin;
+
+    $fechas_array = array();
+
+    while ($estado_fin_bucle == false) {
+
+      $dias_mes = date( 't', strtotime( $fecha_i ) );
+
+      $dias_regular =  (floatval($dias_mes) - floatval( date("d", strtotime( $fecha_i )) )) + 1;
+
+      $fecha_f = sumar_dias(($dias_regular-1), $fecha_i );
+
+      // validamos para terminar el bucle
+      if (validar_fecha_menor_que( $fecha_f, $fecha_fin) == false ) {
+        $fecha_f = $fecha_fin;
+        $dias_regular = date("d", strtotime( $fecha_fin ));
+        $estado_fin_bucle = true;
+      }
+
+      // asignamos las fechas a un array
+      $fechas_array[] = array(
+        'fecha_i'=> $fecha_i, 
+        'dias_regular'=> $dias_regular, 
+        'fecha_f'=> $fecha_f, 
+        'mes_nombre'=> nombre_mes($fecha_i),
+        'dias_mes'=> floatval( $dias_mes )
+      );
+      
+      $fecha_i = sumar_dias(1, $fecha_f );
+    }
+
+    $monto_total = 0; $monto_hasta_hoy = 0;
+
+    // calculamos: "monto total de pagos x mes", "monto total hasta hoy"
+    foreach ($fechas_array as $key => $value) {
+
+      $monto_total += ($sueldo_mensual / $value['dias_mes']) * $value['dias_regular'];
+
+      $fecha_hoy = strtotime( $date_actual );
+      $fecha_1 = strtotime( $value['fecha_i'] );
+      $fecha_2 = strtotime( $value['fecha_f'] );
+
+      if ($fecha_hoy >= $fecha_1 && $fecha_hoy >= $fecha_2) {
+        $monto_hasta_hoy += ($sueldo_mensual / $value['dias_mes']) * $value['dias_regular'];
+      } else {
+        if ($fecha_hoy >= $fecha_1 && $fecha_hoy <= $fecha_2) {
+          $dias_trabajo = (floatval( date("d", strtotime( $date_actual )) ) - floatval( date("d", strtotime( $value['fecha_i'] )) )) + 1;
+          $monto_hasta_hoy += ($sueldo_mensual / $value['dias_mes']) * $dias_trabajo ;
+        }
+      }     
+    }
+
+    return $enviar = array( 'monto_total' => $monto_total, 'monto_hasta_hoy' => $monto_hasta_hoy);
   }
 
 	ob_end_flush();

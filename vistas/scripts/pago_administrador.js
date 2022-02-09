@@ -155,6 +155,8 @@ function listar_tbla_principal(nube_idproyecto) {
   $('.sueldo_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.deposito_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
+  var total_pago_acumulado_hoy = 0; var pago_total_x_proyecto = 0; var saldo_total = 0;
+
   tabla_principal=$('#tabla-principal').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
@@ -172,6 +174,13 @@ function listar_tbla_principal(nube_idproyecto) {
     },
     createdRow: function (row, data, ixdex) {
 
+      // columna: sueldo mensual
+      if (data[4] != '') {
+        $("td", row).eq(4).css({
+          "text-align": "center"
+        });
+      }
+
       // Validamos la comlumna: "Anterior pago"
       if (data[5] == "En espera...") {
         $("td", row).eq(5).css({
@@ -179,16 +188,30 @@ function listar_tbla_principal(nube_idproyecto) {
           "color": "black",
         });
       }else if (data[5] == "Terminó") {        
-        $("td", row).eq(5).addClass('bg-success bg-gradient').css({
-          "color": "white",
-          "font-size": "18px"
-        });        
+        // $("td", row).eq(5).addClass('bg-success bg-gradient').css({ "color": "white",  "font-size": "18px" });        
       } else {
         $("td", row).eq(5).css({
           "background-color": "#28a745",
           "color": "white",
         });
       } 
+
+      // validamos si el trbajdor temino sus dias de trabajo #6e00e77a
+      if ( data[5] == "Terminó" && data[6] == "Terminó" ) {
+        $("td", row).eq(0).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(1).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(2).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(3).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(4).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(5).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(6).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(7).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(8).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(9).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(10).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(11).css({ "background-color": "#58955a7a"});
+        $("td", row).eq(12).css({ "background-color": "#58955a7a"});
+      }
 
       // Validamos la comlumna: "Siguiente pago"
       if (data[6] == "En espera...") {
@@ -197,10 +220,7 @@ function listar_tbla_principal(nube_idproyecto) {
           "color": "black",
         });
       } else if (data[6] == "Terminó") {        
-        $("td", row).eq(6).addClass('bg-success bg-gradient').css({
-          "color": "white",
-          "font-size": "18px"
-        });        
+        // $("td", row).eq(6).addClass('bg-success bg-gradient').css({ "color": "white", "font-size": "18px" });        
       } else{
         $("td", row).eq(6).css({
           "background-color": "#ffc107",
@@ -215,11 +235,37 @@ function listar_tbla_principal(nube_idproyecto) {
         });
       }
 
-      // columna: pago acumuldo
+      // columna: pago total
       if (data[8] != '') {
         $("td", row).eq(8).css({
           "text-align": "right"
         });
+        // acumulamos el pago acumulado hasta hoy
+        var split = data[8].split(' '); console.log(split);
+        var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
+        pago_total_x_proyecto += parseFloat(quitar_format_mil);
+      }
+
+      // columna: pago acumuldo       
+      if (data[9] != '') {
+        $("td", row).eq(9).css({
+          "text-align": "right"
+        });
+        // acumulamos el pago acumulado hasta hoy
+        var split = data[9].split(' '); console.log(split);
+        var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
+        total_pago_acumulado_hoy += parseFloat(quitar_format_mil);
+      }
+
+      // columna: saldo
+      if (data[11] != '') {
+        $("td", row).eq(11).css({
+          "text-align": "right"
+        });
+        // acumulamos el pago acumulado hasta hoy
+        var split = data[11].split(' '); console.log(split);
+        var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
+        saldo_total += parseFloat(quitar_format_mil);
       }
       
     },
@@ -241,8 +287,13 @@ function listar_tbla_principal(nube_idproyecto) {
   $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
     data = JSON.parse(data);  console.log(data); 
     $('.sueldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
-    $('.deposito_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);
-  });
+    $('.pago_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
+    $('.pago_hoy_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
+    $('.deposito_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);  
+    $('.saldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(saldo_total)}</b>`);   
+  }); 
+
+  
 }
   
 //Función para ver detalle de fechas por  trabajador
