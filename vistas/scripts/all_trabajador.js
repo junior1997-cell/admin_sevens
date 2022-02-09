@@ -1219,29 +1219,38 @@ function buscar_sunat_reniec() {
 
       $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
 
-        data = JSON.parse(data);
+        data = JSON.parse(data);  console.log(data);
 
-        console.log(data);
-
-        if (data.success == false) {
+        if (data == null) {
 
           $("#search").show();
-
+  
           $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
+  
+          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+          
         } else {
+          if (data.success == false) {
 
-          $("#search").show();
+            $("#search").show();
 
-          $("#charge").hide();
+            $("#charge").hide();
 
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-          $("#titular_cuenta").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
 
-          toastr.success("Cliente encontrado!!!!");
+          } else {
+
+            $("#search").show();
+
+            $("#charge").hide();
+
+            $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            $("#titular_cuenta").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+            toastr.success("Cliente encontrado!!!!");
+          }
         }
+        
       });
     } else {
 
@@ -1257,51 +1266,60 @@ function buscar_sunat_reniec() {
       if (dni_ruc.length == "11") {
         $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
 
-          data = JSON.parse(data);
+          data = JSON.parse(data);    console.log(data);
 
-          console.log(data);
-          if (data.success == false) {
-
+          if (data == null) {
             $("#search").show();
-
+    
             $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
+    
+            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
             
           } else {
 
-            if (data.estado == "ACTIVO") {
+            if (data.success == false) {
 
               $("#search").show();
 
               $("#charge").hide();
 
-              data.razonSocial == null ? $("#nombre").val("-") : $("#nombre").val(data.razonSocial);
-
-              data.razonSocial == null ? $("#titular_cuenta").val("-") : $("#titular_cuenta").val(data.razonSocial);
+              toastr.error("Datos no encontrados en la SUNAT!!!");
               
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-              toastr.success("Cliente encontrado");
-
             } else {
 
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+              if (data.estado == "ACTIVO") {
 
-              $("#search").show();
+                $("#search").show();
 
-              $("#charge").hide();
+                $("#charge").hide();
 
-              $("#nombre").val(data.razonSocial);
+                data.razonSocial == null ? $("#nombre").val("-") : $("#nombre").val(data.razonSocial);
 
-              data.razonSocial == null ? $("#nombre").val("-") : $("#nombre").val(data.razonSocial);
+                data.razonSocial == null ? $("#titular_cuenta").val("-") : $("#titular_cuenta").val(data.razonSocial);
+                
+                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
 
-              data.razonSocial == null ? $("#titular_cuenta").val("-") : $("#titular_cuenta").val(data.razonSocial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                toastr.success("Cliente encontrado");
 
+              } else {
+
+                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+
+                $("#search").show();
+
+                $("#charge").hide();
+
+                $("#nombre").val(data.razonSocial);
+
+                data.razonSocial == null ? $("#nombre").val("-") : $("#nombre").val(data.razonSocial);
+
+                data.razonSocial == null ? $("#titular_cuenta").val("-") : $("#titular_cuenta").val(data.razonSocial);
+                
+                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+
+              }
             }
-          }
+          }          
         });
       } else {
         $("#search").show();

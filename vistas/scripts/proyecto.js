@@ -609,25 +609,33 @@ function buscar_sunat_reniec() {
       $.post("../ajax/proyecto.php?op=reniec", { dni: dni_ruc }, function (data, status) {
 
         data = JSON.parse(data);  //console.log(data);
-
-        if (data.success == false) {
-
+        if (data == null) {
           $("#search").show();
-
+  
           $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
+  
+          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
         } else {
+          if (data.success == false) {
 
-          $("#search").show();
-
-          $("#charge").hide();
-
-          $("#empresa").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-          toastr.success("Cliente encontrado!!!!");
+            $("#search").show();
+  
+            $("#charge").hide();
+  
+            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+  
+          } else {
+  
+            $("#search").show();
+  
+            $("#charge").hide();
+  
+            $("#empresa").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+  
+            toastr.success("Cliente encontrado!!!!");
+          }
         }
+        
       });
     } else {
 
@@ -643,48 +651,57 @@ function buscar_sunat_reniec() {
       if (dni_ruc.length == "11") {
         $.post("../ajax/proyecto.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
 
-          data = JSON.parse(data);  //console.log(data);
-          
-          if (data.success == false) {
+          data = JSON.parse(data);  console.log(data);
 
-            $("#search").show();
+          if (data == null) {
 
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
+            $("#search").show();  
+            $("#charge").hide();  
+            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
             
           } else {
-
-            if (data.estado == "ACTIVO") {
+            if (data.success == false) {
 
               $("#search").show();
-
+  
               $("#charge").hide();
-
-              $("#empresa").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+  
+              toastr.error("Datos no encontrados en la SUNAT!!!");
               
-              data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
             } else {
-
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#empresa").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
-
-              // $("#direccion").val(data.direccion);
+  
+              if (data.estado == "ACTIVO") {
+  
+                $("#search").show();
+  
+                $("#charge").hide();
+  
+                $("#empresa").val(data.razonSocial);
+  
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                
+                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
+                // $("#direccion").val(data.direccion);
+                toastr.success("Cliente encontrado");
+              } else {
+  
+                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+  
+                $("#search").show();
+  
+                $("#charge").hide();
+  
+                $("#empresa").val(data.razonSocial);
+  
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                
+                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
+  
+                // $("#direccion").val(data.direccion);
+              }
             }
           }
+          
         });
       } else {
         $("#search").show();

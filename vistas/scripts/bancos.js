@@ -27,6 +27,7 @@ function limpiar() {
   $("#nombre").val(""); 
   $("#formato_cta").val("0000"); 
   $("#formato_cci").val("0000"); 
+  $("#formato_detracciones").val("0000");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -116,6 +117,7 @@ function mostrar_bancos(idbancos) {
     $("#nombre").val(data.nombre); 
     $("#formato_cta").val(data.formato_cta); 
     $("#formato_cci").val(data.formato_cci); 
+    $("#formato_detracciones").val(data.formato_detracciones); 
   });
 }
 
@@ -183,6 +185,7 @@ $(function () {
       nombre: { required: true },    
       formato_cta: { required: true, minlength:8 },
       formato_cci: { required: true, minlength:8 },
+      formato_detracciones: { required: true, minlength:8 },
     },
     messages: {
       nombre: {
@@ -194,6 +197,9 @@ $(function () {
       formato_cci: {
         required: "Campo requerido", minlength:"Ingrese almenos 8 dígitos"
       },
+      formato_detracciones: {
+        required: "Campo requerido", minlength:"Ingrese almenos 8 dígitos"
+      }
     },
         
     errorElement: "span",

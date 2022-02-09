@@ -327,7 +327,7 @@
                   </section>
                   <!-- /.content -->
                 </div>
-                
+
                 <!--====Cargo==-->
                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <!-- Content Header (Page header) -->
@@ -432,6 +432,14 @@
                               <div class="form-group">
                                 <label for="formato_cci">Formato CCI</label>
                                 <input type="text" name="formato_cci" id="formato_cci" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
+                              </div>
+                            </div>
+
+                            <!-- Formato CCI -->
+                            <div class="col-lg-12 class_pading">
+                              <div class="form-group">
+                                <label for="formato_detracciones">Formato Detracción</label>
+                                <input type="text" name="formato_detracciones" id="formato_detracciones" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
                               </div>
                             </div>
                           </div>

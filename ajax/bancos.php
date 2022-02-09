@@ -11,16 +11,17 @@
 		$nombre =					isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 
 		$formato_cci =				isset($_POST["formato_cci"])? limpiarCadena($_POST["formato_cci"]):"";
-		$formato_cta =	isset($_POST["formato_cta"])? limpiarCadena($_POST["formato_cta"]):"";
+		$formato_cta =	isset($_POST["formato_cta"])? limpiarCadena($_POST["formato_cta"]):""; 
+		$formato_detracciones =	isset($_POST["formato_detracciones"])? limpiarCadena($_POST["formato_detracciones"]):"";
 
 		switch ($_GET["op"]){
 			case 'guardaryeditar_bancos':
 				if (empty($idbancos)){
-					$rspta=$bancos->insertar($nombre, $formato_cta, $formato_cci);
+					$rspta=$bancos->insertar($nombre, $formato_cta, $formato_cci, $formato_detracciones);
 					echo $rspta ? "ok" : "Bancos no se pudo registrar";
 				}
 				else {
-					$rspta=$bancos->editar($idbancos,$nombre, $formato_cta, $formato_cci);
+					$rspta=$bancos->editar($idbancos,$nombre, $formato_cta, $formato_cci, $formato_detracciones);
 					echo $rspta ? "ok" : "Bancos no se pudo actualizar";
 				}
 			break;
@@ -46,7 +47,7 @@
 				//Vamos a declarar un array
 				$data= Array();
 
-				$cta = "00000000000000000000000000000"; $cci = "00000000000000000000000000000";
+				$cta = "00000000000000000000000000000"; $cci = "00000000000000000000000000000"; $detraccion = "00000000000000000000000000000";
 
 				while ($reg=$rspta->fetch_object()){
 					$data[]=array(
@@ -55,7 +56,12 @@
 							'<button class="btn btn-warning btn-sm" onclick="mostrar_bancos('.$reg->idbancos.')"><i class="fas fa-pencil-alt"></i></button>'.
 							' <button class="btn btn-primary btn-sm" onclick="activar_bancos('.$reg->idbancos.')"><i class="fa fa-check"></i></button>',
 						"1"=>$reg->nombre,
-						"2"=>'<span> <b>Formato CTA :</b>'.$reg->formato_cta.'<br> <b>Ej. cta: </b>'.darFormatoBanco($cta, $reg->formato_cta).'</span> <br> <span> <b>Formato CCI :</b>'.$reg->formato_cci.'<br>  <b>Ej. cci: </b>'.darFormatoBanco($cci, $reg->formato_cci).'</span>',
+						"2"=>'<span> <b>Formato CTA :</b>'.$reg->formato_cta.'<br> 
+						<b>Ej. cta: </b>'.darFormatoBanco($cta, $reg->formato_cta).'</span> 
+						<br> <span> <b>Formato CCI :</b>'.$reg->formato_cci.'<br>  
+						<b>Ej. cci: </b>'.darFormatoBanco($cci, $reg->formato_cci).'</span>
+						<br> <span> <b>Formato Detrac. :</b>'.$reg->formato_detracciones.'<br>  
+						<b>Ej. cci: </b>'.darFormatoBanco($detraccion, $reg->formato_detracciones).'</span>',
 						"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 						'<span class="text-center badge badge-danger">Desactivado</span>'
 						);

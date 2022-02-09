@@ -250,8 +250,8 @@ $(function () {
       nombre: { required: true, minlength: 6, maxlength: 100 },
       direccion: { minlength: 5, maxlength: 70 },
       telefono: { minlength: 8 },
-      c_detracciones: { minlength: 14, maxlength: 14 },
-      c_bancaria: { minlength: 14, maxlength: 14 },
+      c_detracciones: { minlength: 6,  },
+      c_bancaria: { minlength: 6,  },
       banco: { required: true },
       titular_cuenta: { minlength: 4 },
 
@@ -324,21 +324,31 @@ function buscar_sunat_reniec() {
 
         console.log(data);
 
-        if (data.success == false) {
+        if (data == null) {
           $("#search").show();
-
+  
           $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+  
+          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+          
         } else {
-          $("#search").show();
+          if (data.success == false) {
+            $("#search").show();
 
-          $("#charge").hide();
+            $("#charge").hide();
 
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+          } else {
+            $("#search").show();
 
-          toastr.success("Cliente encontrado!!!!");
+            $("#charge").hide();
+
+            $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+            toastr.success("Cliente encontrado!!!!");
+          }
         }
+        
       });
     } else {
       $("#search").show();
@@ -351,44 +361,53 @@ function buscar_sunat_reniec() {
     if (tipo_doc == "RUC") {
       if (dni_ruc.length == "11") {
         $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-          data = JSON.parse(data);
+          data = JSON.parse(data);  console.log(data);
 
-          console.log(data);
-          if (data.success == false) {
+          if (data == null) {
             $("#search").show();
-
+    
             $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
+    
+            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+            
           } else {
-            if (data.estado == "ACTIVO") {
+            if (data.success == false) {
               $("#search").show();
 
               $("#charge").hide();
 
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
+              toastr.error("Datos no encontrados en la SUNAT!!!");
             } else {
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+              if (data.estado == "ACTIVO") {
+                $("#search").show();
 
-              $("#search").show();
+                $("#charge").hide();
 
-              $("#charge").hide();
+                $("#nombre").val(data.razonSocial);
 
-              $("#nombre").val(data.razonSocial);
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
 
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                // $("#direccion").val(data.direccion);
+                toastr.success("Cliente encontrado");
+              } else {
+                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
 
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                $("#search").show();
 
-              // $("#direccion").val(data.direccion);
+                $("#charge").hide();
+
+                $("#nombre").val(data.razonSocial);
+
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+
+                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+
+                // $("#direccion").val(data.direccion);
+              }
             }
           }
+          
         });
       } else {
         $("#search").show();

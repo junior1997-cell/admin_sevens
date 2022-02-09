@@ -10,16 +10,17 @@ Class Bancos
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre, $formato_cta, $formato_cci)
+	public function insertar($nombre, $formato_cta, $formato_cci, $formato_detracciones)
 	{
-		$sql="INSERT INTO bancos (nombre, formato_cta, formato_cci)VALUES ('$nombre', '$formato_cta', '$formato_cci')";
+		$sql="INSERT INTO bancos (nombre, formato_cta, formato_cci, formato_detracciones)VALUES ('$nombre', '$formato_cta', '$formato_cci', '$formato_detracciones')";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idbancos, $nombre, $formato_cta, $formato_cci)
+	public function editar($idbancos, $nombre, $formato_cta, $formato_cci, $formato_detracciones)
 	{
-		$sql="UPDATE bancos SET nombre='$nombre', formato_cta='$formato_cta', formato_cci='$formato_cci' WHERE idbancos='$idbancos'";
+		$sql="UPDATE bancos SET nombre='$nombre', formato_cta='$formato_cta', formato_cci='$formato_cci', formato_detracciones='$formato_detracciones'  
+		WHERE idbancos='$idbancos'";
 		return ejecutarConsulta($sql);
 	}
 
