@@ -354,7 +354,16 @@ switch ($_GET["op"]){
 			require 'noacceso.php';
 		  }
 		}
-	  break;
+	break;
+
+	
+	case 'listar_r_pensiones':
+
+		$rspta=$resumen_general->r_pensiones($_POST['idproyecto']);
+		//Codificar el resultado utilizando json
+		echo json_encode($rspta);
+	  
+	break;
 	
 
 

@@ -54,9 +54,17 @@
                                             table.colapsado {border-collapse: collapse;} 
                                             .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;}
                                             .backgff9100{background-color: #ff9100;}
-                                           .colorf0f8ff00{color: #f0f8ff00;}
+                                            .colorf0f8ff00{color: #f0f8ff00;}
+                                            .text_area_clss{
+                                                width: 300px;
+                                                background: rgb(215, 224, 225);
+                                                border-block-color: inherit;
+                                                border-bottom: aliceblue;
+                                                border-left: aliceblue;
+                                                border-right: aliceblue;
+                                                }
                                         </style>
-                                        <div class="container table-responsive disenio-scroll">
+                                       <div class="container table-responsive disenio-scroll">
 
                                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
                                                 <thead style="background-color: #408c98; color: white;" >
@@ -237,6 +245,33 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="breaks">
+                                                    <!--aqui va el listado de los días-->
+                                                </tbody>
+                                                <tfoot>
+                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th class="clas_pading">Total</th>
+                                                    <th class="clas_pading text-right" id="monto_break"></th>
+                                                    <th class="clas_pading text-right" id="pago_break"></th>
+                                                    <th class="clas_pading text-right" id="saldo_break"></th>
+                                                </tfoot>
+                                            </table>
+
+                                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                                                <thead style="background-color: #408c98; color: white;" >
+                                                    <tr>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Pensión</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center clas_pading">SEMANA</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading" data-toggle="tooltip" data-original-title="Detalle-Comprobante">DETALL-COMP</th>
+                                                        <th class="text-center clas_pading">MONTO</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="pension">
                                                     <!--aqui va el listado de los días-->
                                                 </tbody>
                                                 <tfoot>

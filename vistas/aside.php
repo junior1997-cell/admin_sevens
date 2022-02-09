@@ -319,11 +319,12 @@
             </a>
           </li>
         <?php  }  ?>
-        <?php if ($_SESSION['otro_servicio']==1) {  ?>
+        <?php if ($_SESSION['resumen_general']==1) {  ?>
           <!-- OTROS SERVICIOS -->       
           <li class="nav-item ver-otros-modulos-1">
-            <a href="resumen_general.php" class="nav-link" id="mOtroServicio">
-              <i class="nav-icon fas fa-map-marked-alt"></i>
+            <a href="resumen_general.php" class="nav-link" id="mresumen_general">
+              
+            <i class="nav-icon fas fa-list-ul"></i>
               <p>
               Resumen general               
               </p>

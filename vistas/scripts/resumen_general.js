@@ -12,8 +12,9 @@ function init() {
   listar_r_hospedajes(localStorage.getItem('nube_idproyecto'));
   listar_r_comidas_extras(localStorage.getItem('nube_idproyecto'));
   listar_r_breaks(localStorage.getItem('nube_idproyecto'));
+  listar_r_pensiones(localStorage.getItem('nube_idproyecto'));
   //Activamos el "aside"
-  $("#mOtroServicio").addClass("active");
+  $("#mresumen_general").addClass("active");
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -424,7 +425,7 @@ function listar_r_comidas_extras(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comida)}</span></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" style="width: 300px;" readonly >${value.descripcion}</textarea> </td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion}</textarea> </td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -531,6 +532,60 @@ function listar_comprobantes_breaks(idsemana_break) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+}
+
+function listar_r_pensiones(idproyecto) {  
+  var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
+
+  $("#breaks").html("");
+  $("#monto_break").html("");  
+  $("#pago_break").html("");  
+  $("#saldo_break").html("");
+
+  $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { idproyecto: idproyecto }, function (data, status) {
+    console.log('.^^.');
+    data = JSON.parse(data);  console.log(data);  
+
+    data.forEach((value,index)=>{
+
+      if (value.total!=null) {
+        calculando_sldo=parseFloat(value.total)-parseFloat(value.total);
+        validando_pago=parseFloat(value.total);
+      } else {
+        calculando_sldo=0;
+        validando_pago=0;
+      }
+      if (value.idsemana_break!="") {
+        comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="fas fa-file-invoice-dollar" style="font-size: 23px;"></i></a>`;
+      }else{
+        comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
+      }
+
+      breaks=`<tr>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.numero_semana}</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - ${format_d_m_a(value.fecha_final)} </span></td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading">
+            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+          </td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total).toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+      </tr>`;
+      
+      t_monto=t_monto+parseFloat(value.total);
+      t_pagos=t_pagos+parseFloat(validando_pago);
+      t_saldo=t_saldo+parseFloat(calculando_sldo);
+
+      $("#breaks").append(breaks);
+
+    });
+
+      $("#monto_break").html(formato_miles(t_monto.toFixed(2)));  
+      $("#pago_break").html(formato_miles(t_pagos.toFixed(2)));  
+      $("#saldo_break").html(formato_miles(t_saldo.toFixed(2)));  
+     
+  });
 }
 
 init();

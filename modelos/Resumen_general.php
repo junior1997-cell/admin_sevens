@@ -186,6 +186,63 @@ Class Resumen_general
 		WHERE idsemana_break  ='$idsemana_break'";
 		return ejecutarConsulta($sql);
 	}
+    //-------------------------------------------------------------------
+	public function r_pensiones($idproyecto)
+	{
+		$serv_pension= Array();
+		$pago_total=0;
+
+		$sql="SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
+		FROM pension as p, proyecto as py, proveedor as pr_v
+		WHERE p.estado=1 AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor";
+		$pension=ejecutarConsultaArray($sql);
+
+		if (!empty($pension)) {
+			
+			foreach ($pension as $key => $value) {
+
+				$idpension=$value['idpension'];
+
+				$total_m=0;
+
+				$sql_2="SELECT sp.idservicio_pension FROM servicio_pension As sp, pension AS p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
+				$obt_servicio_pen=ejecutarConsulta($sql_2);
+				
+				foreach ($obt_servicio_pen as $key => $valor) {
+
+					$idservicio_p= $valor['idservicio_pension'];
+
+					$sql_3="SELECT SUM(total) as total FROM semana_pension as sp, servicio_pension as serv_p WHERE sp.idservicio_pension='$idservicio_p' AND sp.idservicio_pension=serv_p.idservicio_pension";
+					$return_pension = ejecutarConsultaSimpleFila($sql_3);
+
+					$total_m=$total_m+$return_pension['total'];
+				}
+
+				if (empty($total_m)) {
+					$pago_total=0;
+				}else{
+					$pago_total=$total_m;
+				}
+
+				$serv_pension[]= array(
+
+					"idpension"         => $value['idpension'],
+					"idproyecto"        => $value['idproyecto'],
+					"idproveedor"     	=> $value['idproveedor'],
+					"proveedor"    		=> $value['razon_social'],
+					"direccion"     	=> $value['direccion'],
+
+					"pago_total_pension"       =>$pago_total
+
+				);
+
+			}
+			
+		}
+		return $serv_pension;
+	}
+
 }
 
 ?>
+
