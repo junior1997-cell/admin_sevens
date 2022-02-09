@@ -353,7 +353,7 @@ function listar_r_hospedajes(idproyecto) {
 
   $.post("../ajax/resumen_general.php?op=listar_r_hospedajes", { idproyecto: idproyecto }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);  
+    data = JSON.parse(data);  //console.log(data);  
 
     data.forEach((value,index)=>{
 
@@ -404,7 +404,7 @@ function listar_r_comidas_extras(idproyecto) {
 
   $.post("../ajax/resumen_general.php?op=listar_r_comidas_extras", { idproyecto: idproyecto }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);  
+    data = JSON.parse(data);  //console.log(data);  
 
     data.forEach((value,index)=>{
 
@@ -544,7 +544,7 @@ function listar_r_pensiones(idproyecto) {
 
   $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { idproyecto: idproyecto }, function (data, status) {
     console.log('.^^.');
-    data = JSON.parse(data);  console.log(data);  
+    data = JSON.parse(data); // console.log(data);  
 
     data.forEach((value,index)=>{
 
