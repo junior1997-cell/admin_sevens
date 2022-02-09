@@ -16,8 +16,11 @@
     if ($_SESSION['pago_trabajador'] == 1) {
 
       require_once "../modelos/Pago_administrador.php";
+      require_once "../modelos/Fechas.php";
 
       $pago_administrador = new PagoAdministrador();
+
+      // setlocale(LC_TIME, "spanish");
 
       // DATA - agregar pago x mes
       $idpagos_x_mes_administrador = isset($_POST["idpagos_x_mes_administrador"])? limpiarCadena($_POST["idpagos_x_mes_administrador"]):"";
@@ -154,9 +157,13 @@
         break;
 
         case 'listar_tbla_principal':
-          $nube_idproyecto = $_GET["nube_idproyecto"];
+          $nube_idproyecto = $_GET["nube_idproyecto"]; 
+          // $nube_idproyecto = 1;          
 
           $rspta=$pago_administrador->listar_tbla_principal($nube_idproyecto);
+
+          // echo $rspta;
+
           //Vamos a declarar un array
           $data= Array();
 
@@ -166,58 +173,96 @@
           $Object->setTimezone(new DateTimeZone('America/Lima'));
           $date_actual = $Object->format("d-m-Y"); 
 
-          $count_dia = ""; $fecha_inicio = ""; $fecha_fin = "";
+          $count_dia = ""; $fecha_inicio = ""; $fecha_fin = "";         
+           
+          foreach (json_decode($rspta, true) as $key => $value) {
 
-          while ($reg=$rspta->fetch_object()){
+            $deshabilitado = ""; $btn_depositos = ""; $ultimo_mes_pago = ""; $siguiente_mes_pago = "";
 
-            $deshabilitado = "";
-            // validamos antes de sacar la diferencia
-            if (validar_fecha_espanol(format_d_m_a($reg->fecha_inicio))) {
-              $count_dia = cantidad_dias_trabajado($reg->fecha_inicio, $reg->fecha_fin); 
-              $fecha_inicio = format_d_m_a($reg->fecha_inicio);
+            // validamos: "FECHA INICIO", "CANTIDAD DIAS HASTA HOY", 
+            if (validar_fecha_espanol(format_d_m_a($value['fecha_inicio']))) {
+              $count_dia = cantidad_dias_trabajado($value['fecha_inicio'], $value['fecha_fin']); 
+              $fecha_inicio = format_d_m_a($value['fecha_inicio']);
+              $fecha_inicio_nombre = nombre_mes($value['fecha_inicio']);
             } else {
-              $count_dia = "-"; $fecha_inicio = "- - -";
+              $count_dia = "-"; $fecha_inicio = "- - -"; $fecha_inicio_nombre = "- - -";
             }
 
-            // validamos la fecha antes de imprimir
-            validar_fecha_espanol(format_d_m_a($reg->fecha_fin)) ? $fecha_fin = format_d_m_a($reg->fecha_fin) : $fecha_fin = "- - -" ;
-
-            if (validar_fecha_espanol(format_d_m_a($reg->fecha_fin)) == false || validar_fecha_espanol(format_d_m_a($reg->fecha_inicio)) == false) {
-              $deshabilitado = "disabled";
+            // validamos: "FECHA FIN"
+            if ( validar_fecha_espanol(format_d_m_a($value['fecha_fin'])) ) {
+              $fecha_fin = format_d_m_a($value['fecha_fin']);
+              $fecha_fin_nombre = nombre_mes($value['fecha_fin']);
             } else {
+              $fecha_fin = "- - -"; $fecha_fin_nombre = "- - -";
+            }
+
+            // validamos: "ULTIMO PAGO", "SIGUIENTE PAGO", "BOTONES DE DETALLE"
+            if (validar_fecha_espanol(format_d_m_a($value['fecha_fin'])) == false || validar_fecha_espanol(format_d_m_a($value['fecha_inicio'])) == false) {
+              
+              $deshabilitado = "disabled";            
+
+            } else {
+
+              $ultimo_mes_pago = calcular_ultimo_pago($value['fecha_inicio'], $value['fecha_fin']);
+
+              $siguiente_mes_pago = calcular_siguiente_pago($value['fecha_inicio'], $value['fecha_fin']);
+
               $deshabilitado = "";
             }
             
+            // Pintamos el bonton depositos segun las cantidades            
+            if ( floatval($value['cantidad_deposito']) == 0) {
+              $btn_depositos = "btn-danger";
+            } else {
+              if ( floatval($value['cantidad_deposito']) > 0) {
+                $btn_depositos = "btn-warning";
+              } else {
+                # code...
+              }              
+            }
             
             $data[]=array(               
               "0"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                <span class="description">'. $reg->tipo.' / '.$reg->cargo .' </span>
-                </div>',
-              "1"=>$fecha_inicio,
+                <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
+                <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                <span class="description">'. $value['tipo'].' / '.$value['cargo'] .' </span>
+              </div>',
+              "1"=>$fecha_inicio_nombre,
               "2"=>$date_actual,
-              "3"=>$fecha_fin,
+              "3"=>$fecha_fin_nombre,
               "4"=>$count_dia,
-              "5"=>'31-02-2022',
-              "6"=>'30-12-2022',
-              "7"=>'S/.' . $reg->sueldo_mensual,
+              "5"=>$ultimo_mes_pago,
+              "6"=>$siguiente_mes_pago,
+              "7"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
               "8"=>'S/. 300.00',
-              "9" =>'<div class="text-center"> <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$reg->idtrabajador_por_proyecto.', \'' . $reg->nombres . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$reg->sueldo_mensual .'\', \''. $reg->cuenta_bancaria .'\', \''. $count_dia .'\')">
-              <i class="far fa-eye"></i> Detalle
-              </button> 
-              <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 4,500.00</button></div>',
+              "9" =>'<div class="justify-content-between "> 
+                <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
+                  <i class="far fa-eye"></i> Detalle
+                </button> 
+                <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/. '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
+              </div>',
               "10"=>'S/. 10',
-              "11"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>'
-              );
+              "11"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
+            );
           }
+
           $results = array(
             "sEcho"=>1, //Información para el datatables
             "iTotalRecords"=>count($data), //enviamos el total registros al datatable
             "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
+            "data"=>$data
+          );
+
           echo json_encode($results);
+        break;
+
+        case 'mostrar_total_tbla_principal':
+
+          $rspta=$pago_administrador->mostrar_total_tbla_principal($_POST["nube_idproyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
         break;
 
         case 'mostrar_fechas_mes':
@@ -291,6 +336,8 @@
   function quitar_guion($numero){ return str_replace("-", "", $numero); }
 
   function cantidad_dias_trabajado($fecha_inicio, $fecha_fin){
+
+    // ontenemos la fecha actual segun la zona horaria - "America/Lima"
     $Object_fecha = new DateTime();
     $Object_fecha->setTimezone(new DateTimeZone('America/Lima'));
     $date_actual = $Object_fecha->format("Y-m-d"); 
@@ -362,6 +409,93 @@
     }   
 
     return $fecha_convert;
+  }
+
+  // calculamos el "ULTIMO PAGO"
+  function calcular_ultimo_pago($fecha_inicio, $fecha_fin) {
+
+    // ontenemos la fecha actual segun la zona horaria - "America/Lima"
+    $Object_fecha = new DateTime();
+    $Object_fecha->setTimezone(new DateTimeZone('America/Lima'));
+    $date_actual = $Object_fecha->format("Y-m-d"); 
+
+    $fecha_hoy = strtotime( $date_actual );
+    $fecha_1 = strtotime( $fecha_inicio );
+    $fecha_2 = strtotime( $fecha_fin );
+
+    $ultimo_pago = "";
+
+    if ($fecha_hoy > $fecha_2) {
+      $ultimo_pago = "Terminó";
+    } else {
+      if ($fecha_hoy >= $fecha_1 && $fecha_hoy <= $fecha_2) {
+
+        $mes_anterior = date("Y-m-d",strtotime( '-1 month' , strtotime ( $date_actual ) ) );      
+  
+        $ultimo_pago =  date("Y-m-t", strtotime($mes_anterior)) ;
+  
+        if (strtotime($ultimo_pago) >= $fecha_1 && strtotime($ultimo_pago) <= $fecha_2) {
+          $ultimo_pago = format_d_m_a( $ultimo_pago );
+        } else {
+          $ultimo_pago = "En espera...";
+        }      
+  
+      } else {
+        $ultimo_pago = "En espera...";
+      }
+    }  
+    
+    return $ultimo_pago ;
+  }
+
+  // calcular el "PAGO SIGUIENTE"
+  function calcular_siguiente_pago($fecha_inicio, $fecha_fin) {
+
+    // ontenemos la fecha actual segun la zona horaria - "America/Lima"
+    $Object_fecha = new DateTime();
+    $Object_fecha->setTimezone(new DateTimeZone('America/Lima'));
+    $date_actual = $Object_fecha->format("Y-m-d"); 
+
+    $fecha_hoy = strtotime( $date_actual );
+    $fecha_1 = strtotime( $fecha_inicio );
+    $fecha_2 = strtotime( $fecha_fin );
+
+    $siguiente_pago = "";
+
+    if ($fecha_hoy > $fecha_2) {
+      $siguiente_pago = "Terminó";
+    } else {
+      if ($fecha_hoy >= $fecha_1 && $fecha_hoy <= $fecha_2) {
+         
+        //  "fecha - pago " despues del primer mes
+        // $mes_posterior = date("Y-m-d",strtotime( '+1 month' , strtotime ( $date_actual ) ) );      
+
+        $siguiente_pago =  date("Y-m-t", strtotime($date_actual)) ;
+  
+        if (strtotime($siguiente_pago) >= $fecha_1 && strtotime($siguiente_pago) <= $fecha_2) {
+          $siguiente_pago = nombre_mes($siguiente_pago);
+        } else {
+          $siguiente_pago = nombre_mes($fecha_fin);
+        }
+  
+      } else {
+        $siguiente_pago = "En espera...";
+      }
+    }
+
+    return $siguiente_pago;
+  }
+
+  function nombre_mes( $fecha_entrada ) {
+
+    $fecha_parse = new FechaEs($fecha_entrada);
+    $dia = $fecha_parse->getDDDD().PHP_EOL;
+    $mun_dia = $fecha_parse->getdd().PHP_EOL;
+    $mes = $fecha_parse->getMMMM().PHP_EOL;
+    $anio = $fecha_parse->getYYYY().PHP_EOL;
+    $fecha_nombre_completo = "$dia, <br> $mun_dia de <b>$mes</b>  del $anio";
+
+    return $fecha_nombre_completo;
   }
 
 	ob_end_flush();

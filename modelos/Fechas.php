@@ -4,7 +4,7 @@ class FechaEs {
     private $objFecha;
     private $M_es = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
     private $M_en = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-    private $D_es = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernas", "Sábado", "Domingo");
+    private $D_es = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
     private $D_en = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 
 

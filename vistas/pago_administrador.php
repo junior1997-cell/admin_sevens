@@ -99,7 +99,7 @@
                                 <th>Hoy</th>
                                 <th class="text-center">Fecha <br> culminacion</th>
                                 <th class="text-center">Tiempo <br> trabajado (dias)</th>
-                                <th>Ultimo pago</th>
+                                <th class="text-center">Último <br> pago</th>
                                 <th class="text-center">Pago <br> Siguiente</th>
                                 <th>Sueldo Mensual</th>
                                 <th class="text-center">Pago <br> acumulado</th>
@@ -115,14 +115,14 @@
                               <tr> 
                                 <th class="text-gray">Trabajdor</th> 
                                 <th class="text-gray">Fecha inicio</th>
-                                <th class="text-gray">Hoy</th>
+                                <th class="text-center text-gray">Hoy</th>
                                 <th class="text-center text-gray">Fecha <br> culminacion</th>
                                 <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>
-                                <th class="text-gray">Ultimo pago</th>
-                                <th class="text-gray">Siguiente pago</th>
-                                <th class="text-primary">S/. 9,030.00</th>
-                                <th class="text-primary">S/. 900.00</th>
-                                <th class="text-primary">S/. 13,500.00</th>
+                                <th class="text-center text-gray">Último <br> pago</th>
+                                <th class="text-center text-gray">Siguiente <br> pago</th>
+                                <th class="text-right text-primary "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                <th class="text-right text-primary">S/. 900.00</th>
+                                <th class="text-right text-primary "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
                                 <th class="text-gray">Saldo</th>  
                                 <th>Cel:</th>                            
                               </tr>
