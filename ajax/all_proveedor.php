@@ -162,6 +162,14 @@ switch ($_GET["op"]){
 		}
 	break;
 
+	case 'formato_banco':
+           
+		$rspta=$proveedor->formato_banco($_POST["idbanco"]);
+		//Codificar el resultado utilizando json
+		echo json_encode($rspta);
+		 
+	break;
+
 	case 'salir':
 		//Limpiamos las variables de sesión   
         session_unset();
