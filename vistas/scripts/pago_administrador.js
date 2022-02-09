@@ -340,7 +340,7 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
             <td>${element.dias_regular}/${element.dias_mes}</td>
             <td> S/. ${formato_miles(sueldo_mensual)}</td>
             <td> S/. ${formato_miles(monto_x_mes)}</td>
-            <td>
+            <td class="justify-content-between">
               <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}','${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
               <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 0.00</button></div>
             </td>
@@ -437,9 +437,11 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
               <td>${cant_dias_laborables_e}/${cant_dias_mes_e}</td>
               <td> S/. ${formato_miles(sueldo_mensual_e)}</td>
               <td> S/. ${formato_miles(monto_x_mes_e)}</td>
-              <td>
-                <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('${idfechas_mes_pagos_administrador_e}', '${idtrabajador_por_proyecto_e}', '${format_d_m_a(fecha_inicial_e)}', '${format_d_m_a(fecha_final_e)}', '${nombre_mes_e}', '${cant_dias_mes_e}', '${cant_dias_laborables_e}', '${sueldo_mensual_e}', '${monto_x_mes_e}', '${nombre_trabajador}', '${cuenta_bancaria}', '${saldo_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">S/. ${formato_miles(suma_monto_depositado_e)}</button></div>
+              <td >
+                <div class="justify-content-between">
+                  <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('${idfechas_mes_pagos_administrador_e}', '${idtrabajador_por_proyecto_e}', '${format_d_m_a(fecha_inicial_e)}', '${format_d_m_a(fecha_final_e)}', '${nombre_mes_e}', '${cant_dias_mes_e}', '${cant_dias_laborables_e}', '${sueldo_mensual_e}', '${monto_x_mes_e}', '${nombre_trabajador}', '${cuenta_bancaria}', '${saldo_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                  <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">S/. ${formato_miles(suma_monto_depositado_e)}</button>
+                </div>
               </td>
               <td class="${bg_saldo}"> S/. ${formato_miles(saldo_x_mes)}</td>
               <td> 
@@ -474,9 +476,11 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
               <td>${element.dias_regular}/${element.dias_mes}</td>
               <td> S/. ${formato_miles(sueldo_mensual)}</td>
               <td> S/. ${formato_miles(monto_x_mes)}</td>
-              <td>
-                <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}', '${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 0.00</button></div>
+              <td >
+                <div class="justify-content-between">
+                  <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}', '${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                  <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 0.00</button>
+                </div>
               </td>
               <td> S/. ${formato_miles(monto_x_mes)}</td>
               <td> 
