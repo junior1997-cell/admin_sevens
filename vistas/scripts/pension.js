@@ -27,7 +27,6 @@ function init() {
 
   listar_botoness( localStorage.getItem('nube_idproyecto') );
   listar( localStorage.getItem('nube_idproyecto'));
-  total_pension(localStorage.getItem('nube_idproyecto'));
   //Activamos el "aside"
   $("#bloc_Viaticos").addClass("menu-open");
   $("#mViatico").addClass("active");
