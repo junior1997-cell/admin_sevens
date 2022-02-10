@@ -369,7 +369,7 @@ function mostrar(idproducto) {
     $("#idproducto").val(data.idproducto);
     $("#nombre").val(data.nombre);
     $("#marca").val(data.marca);
-    $("#precio_unitario").val(data.precio_unitario);
+    $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2));
     $("#descripcion").val(data.descripcion);
 
     $("#estado_igv").val(data.estado_igv);
@@ -379,11 +379,11 @@ function mostrar(idproducto) {
     $("#unid_medida").val(data.idunidad_medida).trigger("change");
     $("#color").val(data.idcolor).trigger("change");
 
-    $("#total_precio").val(data.precio_total);
+    $("#total_precio").val(parseFloat(data.precio_total).toFixed(2));
 
-    $(".precio_real").val(data.precio_sin_igv);
-    $(".total").val(data.precio_total);
-    $(".monto_igv").val(data.precio_igv);
+    $(".precio_real").val(parseFloat(data.precio_sin_igv).toFixed(2));
+    $(".total").val(parseFloat(data.precio_total).toFixed(2));
+    $(".monto_igv").val(parseFloat(data.precio_igv).toFixed(2));
     //------------
 
     if (data.estado_igv == "1") {

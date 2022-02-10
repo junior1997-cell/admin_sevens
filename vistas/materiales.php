@@ -167,6 +167,7 @@
                                                     <div class="form-group">
                                                         <label for="precio_unitario">Precio</label>
                                                         <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                                    
                                                     </div>                                                      
 
                                                 </div>

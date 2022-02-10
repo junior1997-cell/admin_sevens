@@ -15,6 +15,7 @@ function init() {
   listar_r_comidas_extras(localStorage.getItem('nube_idproyecto'));
   listar_r_breaks(localStorage.getItem('nube_idproyecto'));
   listar_r_pensiones(localStorage.getItem('nube_idproyecto'));
+  listar_r_trab_administrativo(localStorage.getItem('nube_idproyecto'));
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
 
@@ -657,6 +658,61 @@ function listar_comprobantes_pension(idpension) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+}
+
+function listar_r_trab_administrativo(idproyecto) {  
+  var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
+
+  $("#pension").html("");
+  $("#monto_pension").html("");  
+  $("#pago_pension").html("");  
+  $("#saldo_pension").html("");
+
+  $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { idproyecto: idproyecto }, function (data, status) {
+    console.log('.^^.');
+    data = JSON.parse(data);  console.log(data);  
+
+    data.forEach((value,index)=>{
+
+      if (value.monto_total_pension!=null) {
+        calculando_sldo=parseFloat(value.monto_total_pension)-parseFloat(value.pago_total_pension);
+        validando_pago=parseFloat(value.pago_total_pension);
+      } else {
+        calculando_sldo=0;
+        validando_pago=0;
+      }
+      if (value.idsemana_break!="") {
+        comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="fas fa-file-invoice-dollar" style="font-size: 23px;"></i></a>`;
+      }else{
+        comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
+      }
+
+      pension=`<tr>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.direccion}} </span></td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading">
+            <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
+          </td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+      </tr>`;
+      
+      t_monto=t_monto+parseFloat(value.monto_total_pension);
+      t_pagos=t_pagos+parseFloat(validando_pago);
+      t_saldo=t_saldo+parseFloat(calculando_sldo);
+
+      $("#pension").append(pension);
+
+    });
+
+      $("#monto_pension").html(formato_miles(t_monto.toFixed(2)));  
+      $("#pago_pension").html(formato_miles(t_pagos.toFixed(2)));  
+      $("#saldo_pension").html(formato_miles(t_saldo.toFixed(2)));  
+     
+  });
 }
 
 init();

@@ -210,10 +210,10 @@ switch ($_GET["op"]){
 							 </div>',
 		 				"2"=>$reg->nombre_medida,
 		 				"3"=>$reg->marca,
-		 				"4"=>round($reg->precio_unitario, 2),
-		 				"5"=>round($reg->precio_sin_igv, 2),
-		 				"6"=>round($monto_igv, 2),
-		 				"7"=>round($reg->precio_total, 2),
+		 				"4"=> number_format($reg->precio_unitario, 2, '.', ','),
+		 				"5"=>number_format($reg->precio_sin_igv, 2, '.', ','),
+		 				"6"=>number_format($monto_igv, 2, '.', ','),
+		 				"7"=>number_format($reg->precio_total, 2, '.', ','),
 		 				"8"=>$ficha_tecnica,
 		 				"9"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
 		 				'<span class="text-center badge badge-danger">Desactivado</span>'

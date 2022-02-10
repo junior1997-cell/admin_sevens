@@ -273,9 +273,11 @@ Class Resumen_general
 
 	public function r_trab_administrativo($idproyecto)
 	{
+		$administrativo= Array(); $monto_total=0; $pago_monto_total=0;
+
 		$sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idproyecto, t.nombres, ct.nombre as cargo 
 		FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tt 
-		WHERE tpp.idproyecto=1 AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador AND ct.idtipo_trabjador =tt.idtipo_trabajador";
+		WHERE tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador AND ct.idtipo_trabjador =tt.idtipo_trabajador";
 		
 		$traba_adm=ejecutarConsultaArray($sql);
 
@@ -286,20 +288,48 @@ Class Resumen_general
 				$idtrabajador_por_proyecto=$value['idtrabajador_por_proyecto'];
 
 				$sql_2 = "SELECT idfechas_mes_pagos_administrador, monto_x_mes FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
-				$idfechas_mes_pagos_administrador=ejecutarConsultaArray($sql_2);
+				$fechas_mes_pagos_administrador=ejecutarConsultaArray($sql_2);
 
-				foreach ($idfechas_mes_pagos_administrador as $key => $valor) {
+				$sql_3 = "SELECT SUM(monto_x_mes) as total_montos_x_meses FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
+				$total_montos_x_meses=ejecutarConsultaSimpleFila($sql_3);
+
+				foreach ($fechas_mes_pagos_administrador as $key => $valor) {
 
 					$idfechas_mes_pagos_administrador= $valor['idfechas_mes_pagos_administrador'];
 
-					$sql_3="SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador=7 AND estado=1";
+					$sql_4="SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_administrador' AND estado=1";
+					
+					$return_monto_pago = ejecutarConsultaSimpleFila($sql_4);
+
+					$pago_monto_total=$pago_monto_total+$return_monto_pago['total_monto_pago'];
 				}
+				
+				if (empty($return_monto_pago)) {
+					$monto_total=0;
+				}else{
+					$monto_total=$return_monto_pago;
+				}
+
+				$administrativo[]= array(
+
+					"idtrabajador_por_proyecto"  => $value['idtrabajador_por_proyecto'],
+					"idproyecto"        		 => $value['idproyecto'],
+					"nombres"     	             => $value['nombres'],
+					"cargo"    		             => $value['cargo'],
+					
+					"total_montos_x_meses"       =>$total_montos_x_meses['total_montos_x_meses'],
+					"pago_total_adm"             =>$pago_monto_total
+
+				);
 
 			}
 			
 		}
+		return $administrativo;
 	
 	}
+
+
 
 }
 
