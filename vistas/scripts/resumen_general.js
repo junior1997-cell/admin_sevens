@@ -550,8 +550,8 @@ function listar_r_pensiones(idproyecto) {
 
     data.forEach((value,index)=>{
 
-      if (value.pago_total_pension!=null) {
-        calculando_sldo=parseFloat(value.pago_total_pension)-parseFloat(value.pago_total_pension);
+      if (value.monto_total_pension!=null) {
+        calculando_sldo=parseFloat(value.monto_total_pension)-parseFloat(value.pago_total_pension);
         validando_pago=parseFloat(value.pago_total_pension);
       } else {
         calculando_sldo=0;
@@ -571,12 +571,12 @@ function listar_r_pensiones(idproyecto) {
             <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
             <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
           </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.pago_total_pension).toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
-      t_monto=t_monto+parseFloat(value.pago_total_pension);
+      t_monto=t_monto+parseFloat(value.monto_total_pension);
       t_pagos=t_pagos+parseFloat(validando_pago);
       t_saldo=t_saldo+parseFloat(calculando_sldo);
 

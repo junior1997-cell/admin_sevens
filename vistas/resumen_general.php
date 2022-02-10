@@ -283,6 +283,34 @@
                                                 </tfoot>
                                             </table>
 
+                                            <!--totales-->
+                                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;" >
+                                                <thead style="background-color: #408c98; color: white;" >
+                                                    <tr>
+                                                        <th colspan="7" class="text-center w-px-300 clas_pading backgff9100">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="total">
+                                                    <!--aqui va el listado de los días-->
+                                                    <tr>
+                                                        <th class="clas_pading"></th>
+                                                        <th class="clas_pading" style="border-left: hidden; border-right: hidden;"></th>
+                                                        <th class="clas_pading" style="border-left: hidden;  border-right: hidden;"></th>
+                                                        <th class="clas_pading"></th>
+                                                        <th class="bg-color-b4bdbe47 text-right  clas_pading">MONTO</th>
+                                                        <th class="bg-color-b4bdbe47 text-right  clas_pading">PAGOS</th>
+                                                        <th class="bg-color-b4bdbe47 text-right clas_pading">SALDO</th>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <th colspan="3" class="clas_pading"></th>
+                                                    <th class="clas_pading">Total</th>
+                                                    <th class="clas_pading text-right" id="monto_pension"></th>
+                                                    <th class="clas_pading text-right" id="pago_pension"></th>
+                                                    <th class="clas_pading text-right" id="saldo_pension"></th>
+                                                </tfoot>
+                                            </table>
+
                                        </div>
                                     </div>
                                     <a class="btn btn-info" target="_blank" href=""></a>

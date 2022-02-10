@@ -9,7 +9,8 @@ Class Resumen_general
 	{
 
 	}
-	public function r_compras($idproyecto){
+	public function r_compras($idproyecto)
+	{
 		$pago_total=0; 
 		$Arraycompras= Array(); 
 
@@ -190,7 +191,7 @@ Class Resumen_general
 	public function r_pensiones($idproyecto)
 	{
 		$serv_pension= Array();
-		$pago_total=0;
+		$pago_total=0; $monto_total=0;
 
 		$sql="SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
 		FROM pension as p, proyecto as py, proveedor as pr_v
@@ -207,21 +208,30 @@ Class Resumen_general
 
 				$sql_2="SELECT sp.idservicio_pension FROM servicio_pension As sp, pension AS p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
 				$obt_servicio_pen=ejecutarConsulta($sql_2);
-				
+
+				$sql_3 = "SELECT SUM(monto) as total_pago FROM factura_pension WHERE estado=1 AND idpension='$idpension'";
+				$return_pago = ejecutarConsultaSimpleFila($sql_3);
+
+				if (empty($return_pago['total_pago'])) {
+					$pago_total=0;
+				}else{
+					$pago_total=$return_pago['total_pago'];
+				}
+
 				foreach ($obt_servicio_pen as $key => $valor) {
 
 					$idservicio_p= $valor['idservicio_pension'];
 
-					$sql_3="SELECT SUM(total) as total FROM semana_pension as sp, servicio_pension as serv_p WHERE sp.idservicio_pension='$idservicio_p' AND sp.idservicio_pension=serv_p.idservicio_pension";
-					$return_pension = ejecutarConsultaSimpleFila($sql_3);
+					$sql_4="SELECT SUM(total) as total FROM semana_pension as sp, servicio_pension as serv_p WHERE sp.idservicio_pension='$idservicio_p' AND sp.idservicio_pension=serv_p.idservicio_pension";
+					$return_pension = ejecutarConsultaSimpleFila($sql_4);
 
 					$total_m=$total_m+$return_pension['total'];
 				}
 
 				if (empty($total_m)) {
-					$pago_total=0;
+					$monto_total=0;
 				}else{
-					$pago_total=$total_m;
+					$monto_total=$total_m;
 				}
 
 				$serv_pension[]= array(
@@ -232,6 +242,7 @@ Class Resumen_general
 					"proveedor"    		=> $value['razon_social'],
 					"direccion"     	=> $value['direccion'],
 
+					"monto_total_pension"       =>$monto_total,
 					"pago_total_pension"       =>$pago_total
 
 				);
@@ -251,12 +262,43 @@ Class Resumen_general
 		
 	
 	}
+
 	public function listar_comprobantes_pension($idpension)
 	{
 
 		$sql="SELECT * FROM factura_pension 
 		WHERE idpension  ='$idpension'";
 		return ejecutarConsulta($sql);
+	}
+
+	public function r_trab_administrativo($idproyecto)
+	{
+		$sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idproyecto, t.nombres, ct.nombre as cargo 
+		FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tt 
+		WHERE tpp.idproyecto=1 AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador AND ct.idtipo_trabjador =tt.idtipo_trabajador";
+		
+		$traba_adm=ejecutarConsultaArray($sql);
+
+		if (!empty($traba_adm)) {
+
+			foreach ($traba_adm as $key => $value) {
+
+				$idtrabajador_por_proyecto=$value['idtrabajador_por_proyecto'];
+
+				$sql_2 = "SELECT idfechas_mes_pagos_administrador, monto_x_mes FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
+				$idfechas_mes_pagos_administrador=ejecutarConsultaArray($sql_2);
+
+				foreach ($idfechas_mes_pagos_administrador as $key => $valor) {
+
+					$idfechas_mes_pagos_administrador= $valor['idfechas_mes_pagos_administrador'];
+
+					$sql_3="SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador=7 AND estado=1";
+				}
+
+			}
+			
+		}
+	
 	}
 
 }

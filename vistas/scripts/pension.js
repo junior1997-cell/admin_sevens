@@ -358,7 +358,7 @@ function guardaryeditar_semana_pension() {
       "precio_comida":$(`.input_precio_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_precio_${element.idservicio_pension}`).val(),
       "cantidad_total_platos":$(`.span_cantidad_${element.idservicio_pension}`).text(),
       "adicional_descuento":$(`.input_adicional_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_adicional_${element.idservicio_pension}`).val(),
-      "total":$(`.span_parcial_${element.idservicio_pension}`).text()=='' ?'0.00' : $(`.span_parcial_${element.idservicio_pension}`).text(),
+      "total":$(`.span_parcial_${element.idservicio_pension}`).text()=='' ?'0.00' : quitar_formato_miles($(`.span_parcial_${element.idservicio_pension}`).text()),
       "descripcion":$(`.textarea_descrip_${element.idservicio_pension}`).val(),
 
     });
@@ -663,7 +663,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
      // var tabla_bloc_dia_3 =`<td> <span class="text-center span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>`;
       var tabla_bloc_cantidad_4 =`<td class="text-center"> <span class="span_cantidad_${value.idservicio_pension}">${value.cantidad_total_platos}</span> </td>`;
       var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(adicional_descuento).toFixed(2)}" onchange="calcular_adicional(${value.idservicio_pension},${data.length})" onkeyup="calcular_adicional(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_adicional_${value.idservicio_pension}"> </td>`;
-      var tabla_bloc_parcial_6 =`<td> <span class="span_parcial_${value.idservicio_pension} calcular_total_parcial_${index+1}">${parseFloat(total).toFixed(2)}</span></td>`;
+      var tabla_bloc_parcial_6 =`<td> <span class="span_parcial_${value.idservicio_pension} calcular_total_parcial_${index+1}">${formato_miles(parseFloat(total).toFixed(2))}</span></td>`;
       var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center textarea-visible textarea_descrip_${value.idservicio_pension}" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
 
       var tabla_bloc_HN_1 = `<tr>
