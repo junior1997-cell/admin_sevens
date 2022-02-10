@@ -390,7 +390,7 @@
                 </div>',
               "2"=>'<b>'.number_format($total, 2, '.', ',').'</b>', 
               "3"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
-              "4"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs m-t-2px" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
+              "4"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-sm m-t-2px" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
               <button class="btn btn-'.$cc.' btn-sm">'.number_format($total_pagos, 2, '.', ',').'</button></div>',
               "5"=>number_format($saldo, 2, '.', ',')
                 

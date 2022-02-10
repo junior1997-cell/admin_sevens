@@ -894,13 +894,13 @@ function listar(nube_idproyecto) {
           
         }
         //console.log(data);
-        if (data[5] > 0) {
+        if (quitar_formato_miles(data[5]) > 0) {
           $("td", row).eq(5).css({
             "background-color": "#ffc107",
             color: "black",
           });
           
-        } else if (data[5] == 0) {
+        } else if (quitar_formato_miles(data[5]) == 0) {
           $("td", row).eq(5).css({
             "background-color": "#28a745",
             color: "white",
