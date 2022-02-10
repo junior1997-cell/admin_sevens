@@ -184,6 +184,22 @@ function disable_cargo() {
 //Función limpiar
 function limpiar() {  
 
+  var fecha_incial_proyecto = "" ;
+  
+  var fecha_final_proyecto = "" ;
+
+  if (localStorage.getItem('nube_fecha_inicial_proyecto') == "" || localStorage.getItem('nube_fecha_inicial_proyecto') === undefined || localStorage.getItem('nube_fecha_inicial_proyecto') == null) {
+    fecha_incial_proyecto = ""
+  } else {
+    fecha_incial_proyecto = format_d_m_a(localStorage.getItem('nube_fecha_inicial_proyecto'));
+  }
+
+  if (localStorage.getItem('nube_fecha_final_proyecto') == "" || localStorage.getItem('nube_fecha_final_proyecto') === undefined || localStorage.getItem('nube_fecha_final_proyecto') == null) {
+    fecha_final_proyecto = ""
+  } else {
+    fecha_final_proyecto = format_d_m_a(localStorage.getItem('nube_fecha_final_proyecto')) ;
+  }
+
   $("#trabajador").val("").trigger("change");
 
   $("#tipo_trabajador").val("").trigger("change");
@@ -195,11 +211,13 @@ function limpiar() {
   $("#sueldo_diario").val("");   
   $("#sueldo_hora").val("");
 
-  $("#fecha_inicio").val("");  $("#fecha_fin").val(""); $('#cantidad_dias').val('')
+  $("#fecha_inicio").val(fecha_incial_proyecto);  $("#fecha_fin").val(fecha_final_proyecto); $('#cantidad_dias').val('')
   $('#cantidad_dias').removeClass('input-no-valido input-valido');
 
+  // limpiamos las validaciones del FORM
   $(".form-control").removeClass('is-valid');
   $(".is-invalid").removeClass("error is-invalid");
+  calcular_dias_trabajo();
 }
 
 //Función Listar
@@ -213,13 +231,25 @@ function listar( nube_idproyecto ) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/trabajador.php?op=listar&nube_idproyecto='+nube_idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
+      url: '../ajax/trabajador.php?op=listar&nube_idproyecto='+nube_idproyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {  
+
+      // columna: sueldo mensual
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-nowrap" );
+      }
+      // columna: sueldo mensual
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-right" );
+      }
+
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {

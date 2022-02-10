@@ -165,7 +165,7 @@
                               </div>
 
                               <!-- FECHA INICIO -->
-                              <div class="col-lg-2">
+                              <div class="col-lg-2 ">
                                 <div class="form-group">
                                   <label>Fecha Inicio:</label>
                                   <div class="input-group date"  data-target-input="nearest">

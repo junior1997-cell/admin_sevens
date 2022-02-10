@@ -2031,9 +2031,9 @@ function tablero() {
   });
 }
 
-function abrir_proyecto(idproyecto,nombre_proyecto) {
+function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
 
-  if ($( "#foo" ).hasClass('className')) {
+  if ($("#foo" ).hasClass('className')) {
 
     $( "#foo" ).removeClass( 'className');
 
@@ -2051,6 +2051,9 @@ function abrir_proyecto(idproyecto,nombre_proyecto) {
   $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
 
   localStorage.setItem('nube_idproyecto', idproyecto);
+
+  localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
+  localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
 
   localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
 

@@ -321,7 +321,7 @@
 
             if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
               
-            $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
+            $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo', '$reg->fecha_inicio', '$reg->fecha_fin'";
 
             $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
             
@@ -401,7 +401,7 @@
 
             if (strlen($reg->nombre_proyecto) >= 21 ) { $nombre_proyecto = substr($reg->nombre_proyecto, 0, 21).'...'; } else { $nombre_proyecto = $reg->nombre_proyecto; }
               
-              $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo'";
+              $abrir_proyecto = "'$reg->idproyecto', '$reg->nombre_codigo', '$reg->fecha_inicio', '$reg->fecha_fin'";
 
               $docs= "'$reg->doc1_contrato_obra', '$reg->doc2_entrega_terreno', '$reg->doc3_inicio_obra', '$reg->doc4_presupuesto', '$reg->doc5_analisis_costos_unitarios', '$reg->doc6_insumos'";
               
