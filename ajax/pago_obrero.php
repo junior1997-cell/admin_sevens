@@ -16,6 +16,7 @@
     if ($_SESSION['pago_trabajador'] == 1) {
 
       require_once "../modelos/Pago_obrero.php";
+      require_once "../modelos/Fechas.php";
 
       $pagoobrero = new PagoObrero();
 
@@ -75,19 +76,11 @@
           echo json_encode($rspta);
 
         break;
-        
-        case 'verdatos':
 
-          $rspta=$pagoobrero->verdatos($idtrabajador_por_proyecto);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+        case 'listar_tbla_principal':
+          $nube_idproyecto = $_GET["nube_idproyecto"];         
 
-        break;
-
-        case 'listar':
-          $nube_idproyecto = $_GET["nube_idproyecto"];
-
-          $rspta=$pagoobrero->listar($nube_idproyecto);
+          $rspta=$pagoobrero->listar_tbla_principal($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array();
 
@@ -95,23 +88,29 @@
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning" onclick="mostrar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
-              "1"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
+              "0"=>'<div class="user-block">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres_trabajador .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                </div>',
-              "2"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "3"=>$reg->sueldo_mensual,
-              "4"=>$reg->tipo_trabajador.' / '.$reg->cargo,
-              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
-              );
+                <span class="description">'. $reg->nombre_tipo.' / '.$reg->nombre_cargo .' </span>
+              </div>',
+              "1"=>nombre_dia_mes_anio($reg->fecha_inicio),
+              "2"=>'hoy',
+              "3"=>nombre_dia_mes_anio($reg->fecha_fin),
+              "4"=>$reg->total_hn.' / '. $reg->total_he,
+              "5"=>$reg->sabatical,              
+              "6"=>'S/. '.  number_format($reg->sueldo_mensual, 2, '.', ','), 
+              "7"=>$reg->sum_estado_envio_contador, 
+              "8"=>'S/. '.  number_format($reg->pago_quincenal, 2, '.', ','),
+              "9"=>'<div class="justify-content-between "> 
+                <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( )">
+                  <i class="far fa-eye"></i> Detalle
+                </button> 
+                <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 0.00</button>
+              </div>',
+              "10"=>'S./ 0.00',
+              "11"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>'
+            );
           }
           $results = array(
             "sEcho"=>1, //Información para el datatables
@@ -138,6 +137,29 @@
 
       require 'noacceso.php';
     }
+  }
+
+  function quitar_guion($numero){ return str_replace("-", "", $numero); }
+
+  function nombre_dia_mes_anio( $fecha_entrada ) {
+
+    $fecha_parse = new FechaEs($fecha_entrada);
+    $dia = $fecha_parse->getDDDD().PHP_EOL;
+    $mun_dia = $fecha_parse->getdd().PHP_EOL;
+    $mes = $fecha_parse->getMMMM().PHP_EOL;
+    $anio = $fecha_parse->getYYYY().PHP_EOL;
+    $fecha_nombre_completo = "$dia, <br> $mun_dia de <b>$mes</b>  del $anio";
+
+    return $fecha_nombre_completo;
+  }
+
+  function nombre_mes( $fecha_entrada ) {
+
+    $fecha_parse = new FechaEs($fecha_entrada);
+    
+    $mes_nombre = $fecha_parse->getMMMM().PHP_EOL;
+
+    return $mes_nombre;
   }
 
 	ob_end_flush();

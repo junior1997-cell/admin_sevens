@@ -63,22 +63,22 @@
                     <div class="card card-primary card-outline">
                       <div class="card-header">                       
 
-                        <!-- regresar -->
+                        <!-- regresar "tabla principal" -->
                         <h3 class="card-title mr-3" id="btn-regresar" style="display: none; padding-left: 2px;" >
                           <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(1);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                         </h3>
 
-                        <!-- regresar todo -->
+                        <!-- regresar "tabla principal" -->
                         <h3 class="card-title mr-3" id="btn-regresar-todo" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
                           <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i></button>
                         </h3>
-                        <!-- regresar 1 -->
+                        <!-- regresar "tabla fechas" -->
                         <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
-                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2); reload_table_fechas_mes();"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                         </h3>
                         <!-- agregar pago  -->
                         <h3 class="card-title " id="btn-agregar" style="display: none; padding-left: 2px;" >
-                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar();">
+                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_x_mes();">
                           <i class="fas fa-plus-circle"></i> Agregar pago 
                           </button>                     
                         </h3> 
@@ -86,6 +86,7 @@
                         <h3 class="  " id="btn-nombre-mes" style="display: none; padding-left: 2px;" >&nbsp; - Enero </h3> 
 
                       </div>
+
                       <!-- /.card-header -->
                       <div class="card-body">
 
@@ -98,10 +99,10 @@
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
                                 <th class="text-center">Fecha <br> culminacion</th>
-                                <th class="text-center">Tiempo <br> trabajado (dias)</th>
-                                <th>Ultimo pago</th>
-                                <th class="text-center">Pago <br> Siguiente</th>
+                                <th class="text-center">Horas <br> Normal/Extra</th>
+                                <th>Sabaticales</th>                               
                                 <th>Sueldo Mensual</th>
+                                <th class="text-center">Cant <br> Semana/Quincena</th>
                                 <th class="text-center">Pago <br> acumulado</th>
                                 <th class="text-center">Pago <br> realizado</th>
                                 <th>Saldo</th>
@@ -113,36 +114,36 @@
                             </tbody>
                             <tfoot>
                               <tr> 
-                                <th class="text-gray">Trabajdor</th> 
-                                <th class="text-gray">Fecha inicio</th>
-                                <th class="text-gray">Hoy</th>
-                                <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>
-                                <th class="text-gray">Ultimo pago</th>
-                                <th class="text-gray">Siguiente pago</th>
-                                <th class="text-primary">S/. 9,030.00</th>
-                                <th class="text-primary">S/. 900.00</th>
-                                <th class="text-primary">S/. 13,500.00</th>
-                                <th class="text-gray">Saldo</th>  
+                                <th>Trabajdor</th> 
+                                <th>Fecha inicio</th>
+                                <th>Hoy</th>
+                                <th class="text-center">Fecha <br> culminacion</th>
+                                <th class="text-center">Horas Normal / Hora Extra</th>
+                                <th>Sabaticales</th>                               
+                                <th>Sueldo Mensual</th>
+                                <th>Cant Semana/Quincena</th>
+                                <th class="text-center">Pago <br> acumulado</th>
+                                <th class="text-center">Pago <br> realizado</th>
+                                <th>Saldo</th>
                                 <th>Cel:</th>                            
                               </tr>
                             </tfoot>
                           </table>
                         </div>                       
 
-                        <!-- tabla fecha -->
+                        <!-- tabla: quincena - semana -->
                         <div class="table-responsive" id="tbl-fechas" style="display: none;">
                           <div class="table-responsive-lg" >
                             <table class="table styletabla" style="border: black 1px solid;">
                               <thead>                                  
                                 <tr class="bg-gradient-info">
                                   <th class="stile-celda">N°</th>
-                                  <th class="stile-celda">Mes</th>
+                                  <th class="stile-celda">N° Quincena/semana</th>
                                   <th colspan="2" class="stile-celda">Fechas Inicial/Final</th>
                                   <th class="stile-celda text-center">Días/Mes</th>
                                   <th class="stile-celda text-center">Sueldo</th>
                                   <th class="stile-celda">Monto</th>
-                                  <th class="stile-celda">Pagar/Acumulado</th> 
+                                  <th class="stile-celda ">Pagar/Acumulado</th> 
                                 </tr>
                               </thead>
                               <tbody class="tcuerpo data-fechas-mes">
@@ -428,44 +429,8 @@
         ?>
          
 
-        <script type="text/javascript" src="scripts/pago_administrador.js"></script>
-        <!-- previzualizamos el pdf cargado -->
-        <script type="text/javascript">
-          function PreviewImage() {
-
-            pdffile=document.getElementById("doc").files[0];
-
-            antiguopdf=$("#docActual").val();
-
-            if(pdffile === undefined){
-
-              var dr = antiguopdf;
-
-              if (dr == "") {
-
-                $("#ver_pdf").html(''+
-                  '<div class="alert alert-danger alert-dismissible">'+
-                      '<button style="color: white !important;" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
-                      '<h4><i class="icon fa fa-warning"></i> Alerta!</h4>'+
-                      'Seleciona un documento y luego PULSE el boton AMARILLO.'+
-                  '</div>'
-                );
-
-              } else {
-
-                $("#ver_pdf").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-              }
-              // console.log('hola'+dr);
-            }else{
-
-              pdffile_url=URL.createObjectURL(pdffile);
-
-              $("#ver_pdf").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-              console.log('hola');
-            }
-          }
-        </script>
+        <script type="text/javascript" src="scripts/pago_obrero.js"></script>        
+         
         <script>
           $(function () {
             $('[data-toggle="tooltip"]').tooltip();

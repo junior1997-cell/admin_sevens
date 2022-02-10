@@ -4,7 +4,7 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
   
-  listar();
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
   //Activamos el "aside"
   $("#bloc_PagosTrabajador").addClass("menu-open");
@@ -40,32 +40,53 @@ function limpiar() {
   $("#password-old").val("");  
 }
 
-function show_hide_tablas(flag) {
+function table_show_hide(flag) {
   if (flag == 1) {
-    $("#button-regresar").hide();
-    $("#button-agregar-pago").hide();
-    $("#card-tabla-pago").show();
-    $("#card-tabla-detalle-pago").hide();
+    $("#btn-regresar").hide();
+    $("#btn-regresar-todo").hide();
+    $("#btn-regresar-bloque").hide();
+    $("#btn-agregar").hide(); 
+    $("#btn-nombre-mes").hide();
+
+    $(".nombre-trabajador").html("Pagos de Administradores");
+
+    $("#tbl-principal").show();
+    $("#tbl-fechas").hide();
+    $("#tbl-ingreso-pagos").hide();
   } else {
     if (flag == 2) {
-      $("#button-regresar").show();
-      $("#button-agregar-pago").show();
-      $("#card-tabla-pago").hide();
-      $("#card-tabla-detalle-pago").show();
+      $("#btn-regresar").show();
+      $("#btn-regresar-todo").hide();
+      $("#btn-regresar-bloque").hide();
+      $("#btn-agregar").hide();
+      $("#btn-nombre-mes").hide();
+
+      $("#tbl-principal").hide();
+      $("#tbl-fechas").show();
+      $("#tbl-ingreso-pagos").hide();
+    }else{
+      if (flag == 3) {
+        $("#btn-regresar").hide();
+        $("#btn-regresar-todo").show();
+        $("#btn-regresar-bloque").show();
+        $("#btn-agregar").show();
+        $("#btn-nombre-mes").show();
+
+        $("#tbl-principal").hide();
+        $("#tbl-fechas").hide();
+        $("#tbl-ingreso-pagos").show();
+        
+      }
     }
   }
 }
 
-function listar() {
-  
-}
-
 // ver detalle de todos los pagos de un trabajador
-function ver_detalle_pagos(params) {
+function listar_tbla_principal(id_proyecto) {
 
-  show_hide_tablas(2);
+  table_show_hide(1);
 
-  tabla=$('#tabla-detalle-pago').dataTable({
+  tabla=$('#tabla-principal').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -73,13 +94,57 @@ function ver_detalle_pagos(params) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/usuario.php?op=listar',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
+      url: `../ajax/pago_obrero.php?op=listar_tbla_principal&nube_idproyecto=${id_proyecto}`,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: pago total
+      if (data[4] != '') {
+        $("td", row).eq(4).css({
+          "text-align": "center"
+        });         
+      }   
+      
+      // columna: sueldo mensual
+      if (data[5] != '') {
+        $("td", row).eq(5).css({
+          "text-align": "center"
+        });
+      }
+
+      // columna: sueldo mensual
+      if (data[6] != '') {
+        $("td", row).eq(6).css({
+          "text-align": "right"
+        });
+      }
+      // columna: sueldo mensual
+      if (data[7] != '') {
+        $("td", row).eq(7).css({
+          "text-align": "center"
+        });
+      }
+
+      // columna: sueldo mensual
+      if (data[8] != '') {
+        $("td", row).eq(8).css({
+          "text-align": "right"
+        });
+      }
+
+      // columna: sueldo mensual
+      if (data[9] != '') {
+        $("td", row).eq(9).css({
+          "text-align": "right"
+        });
+      }
+      
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -94,10 +159,6 @@ function ver_detalle_pagos(params) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
-}
-
-function ver_detalle_quincena_semana(params) {
-  $("#modal-ver-quincena-semana").modal("show")
 }
 
 //Función para guardar o editar
@@ -132,40 +193,18 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idusuario) {
-  limpiar();
-  $("#trabajador").val("").trigger("change"); 
-  $("#trabajador_c").html("(Nuevo) Trabajador");
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
+function detalle_q_s_trabajador() {
 
-  $("#modal-agregar-usuario").modal("show")
+  table_show_hide(2)
 
-  $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
+  // $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
+  //   data = JSON.parse(data);  //console.log(data);   
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-    
-    $("#trabajador_old").val(data.idtrabajador); 
-    $("#cargo").val(data.cargo).trigger("change"); 
-    $("#login").val(data.login);
-    $("#password-old").val(data.password);
-    $("#idusuario").val(data.idusuario);
+     
+  // });
 
-    if (data.imagen != "") {
-
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen);
-
-			$("#foto2_actual").val(data.imagen);
-		}
-  });
-
-  $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-
-    $("#permisos").html(r);
-  });
+   
 }
 
 //Función para desactivar registros
@@ -230,10 +269,6 @@ function activar(idusuario) {
   });      
 }
 
-// Agregar pago: semana, quincena
-function modal_agregar_pago() {
-  $("#modal-agregar-pago").modal('show');
-}
 
 init();
 
@@ -241,18 +276,9 @@ $(function () {
 
   $.validator.setDefaults({
 
-    submitHandler: function (e) {
+    submitHandler: function (e) {     
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-        
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-
-        guardaryeditar(e);
-      }
+      guardaryeditar(e);
     },
   });
 

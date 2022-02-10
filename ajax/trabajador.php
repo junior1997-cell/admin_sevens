@@ -111,10 +111,10 @@
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : $reg->fecha_inicio ). '<br> 
-                <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : $reg->fecha_fin ) . '</div>',
+              "2"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : format_d_m_a($reg->fecha_inicio) ). '<br> 
+                <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : format_d_m_a($reg->fecha_fin) ) . '</div>',
               "3"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "4"=>$reg->sueldo_mensual,
+              "4"=>'S/. '.number_format( $reg->sueldo_mensual, 2, '.', ','),
               "5"=>$reg->nombre_tipo.' / '.$reg->cargo,
               "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
@@ -170,6 +170,23 @@
 
   // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
   function format_a_m_d( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
+  }
+
+  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+  function format_d_m_a( $fecha ) {
 
     if (!empty($fecha)) {
 
