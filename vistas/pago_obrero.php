@@ -38,7 +38,7 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0">Pagos de Obreros</h1>
+                    <h1 class="m-0 nombre-trabajador">Pagos de Obreros</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
@@ -133,94 +133,38 @@
 
                         <!-- tabla: quincena - semana -->
                         <div class="table-responsive" id="tbl-fechas" style="display: none;">
-                          <div class="table-responsive-lg" >
-                            <table class="table styletabla" style="border: black 1px solid;">
+                          <div class="table-responsive-lg disenio-scroll" >
+                            <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
                               <thead>                                  
                                 <tr class="bg-gradient-info">
-                                  <th class="stile-celda">N°</th>
-                                  <th class="stile-celda">N° Quincena/semana</th>
-                                  <th colspan="2" class="stile-celda">Fechas Inicial/Final</th>
-                                  <th class="stile-celda text-center">Días/Mes</th>
-                                  <th class="stile-celda text-center">Sueldo</th>
-                                  <th class="stile-celda">Monto</th>
-                                  <th class="stile-celda ">Pagar/Acumulado</th> 
+                                  <th rowspan="2" class="stile-celda">N°</th>                                   
+                                  <th colspan="3" class="stile-celda pt-0 pb-0 nombre-bloque-asistencia">Semana </th>
+                                  <th rowspan="2" class="stile-celda text-center">Sueldo Hora</th>
+                                  <th rowspan="2" class="stile-celda text-center">Horas Normal/Extra</th>
+                                  <th rowspan="2" class="stile-celda">Monto Normal/Extra</th>
+                                  <th rowspan="2" class="stile-celda text-center">Descuento</th>                                  
+                                  <th rowspan="2" class="stile-celda">Monto total</th>
+                                  <th rowspan="2" class="stile-celda ">Pagar/Acumulado</th> 
+                                  <th rowspan="2" class="stile-celda ">Saldo</th>
+                                </tr>
+                                <tr class="bg-gradient-info">                                                                     
+                                  <th class="stile-celda pt-0 pb-0">N°</th>
+                                  <th class="stile-celda pt-0 pb-0">Inicial</th>
+                                  <th class="stile-celda pt-0 pb-0">Final</th>
                                 </tr>
                               </thead>
-                              <tbody class="tcuerpo data-fechas-mes">
-                                <tr>
-                                  <td>1</td>
-                                  <td>Enero </td>
-                                  <td>12-01-2022</td>
-                                  <td>31-01-2022</td>
-                                  <td>19</td>
-                                  <td> S/. 4400.00</td>
-                                  <td> S/. 2696.77</td>
-                                  <td>
-                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>2</td>
-                                  <td>Febrero </td>
-                                  <td>01-02-2022</td>
-                                  <td>28-02-2022</td>
-                                  <td>28</td>
-                                  <td> S/. 4400.00</td>
-                                  <td> S/. 4400.00</td>
-                                  <td>
-                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
-                                  </td>
-                                </tr>  
-                                <tr>
-                                  <td>3</td>
-                                  <td>Marzo </td>
-                                  <td>01-03-2022</td>
-                                  <td>31-03-2022</td>
-                                  <td>31</td>
-                                  <td> S/. 4400.00</td>
-                                  <td> S/. 4400.00</td>
-                                  <td>
-                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>4</td>
-                                  <td>Abril </td>
-                                  <td>01-04-2022</td>
-                                  <td>30-04-2022</td>
-                                  <td>30</td>
-                                  <td> S/. 4400.00</td>
-                                  <td> S/. 4400.00</td>
-                                  <td>
-                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
-                                  </td>
-                                </tr>  
-                                <tr>
-                                  <td>5</td>
-                                  <td>Mayo </td>
-                                  <td>01-05-2022</td>
-                                  <td>27-05-2022</td>
-                                  <td>27</td>
-                                  <td> S/. 4400.00</td>
-                                  <td> S/. 3832.26</td>
-                                  <td>
-                                    <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
-                                  </td>
-                                </tr>                              
+                              <tbody class="tcuerpo data-q-s">                                  
+                                                              
                               </tbody>
                               <tfoot>
-                                <tr> 
-                                   
-                                  <th colspan="4" class="text-right " >Total dias</th> 
-                                  <th class="stile-celda dias_x_mes_total"></th>
-                                  <th class="stile-celda ">Total monto</th>
-                                  <th class="stile-celda monto_x_mes_total">S/. 19,729.03</th> 
-                                  <th class="stile-celda monto_x_mes_pagado_total">S/. 4,500.00</th>                           
+                                <tr>                                    
+                                  <th colspan="5" class="text-right " ></th> 
+                                  <th class="stile-celda total_hn_he"></th>
+                                  <th class="stile-celda total_monto_hn_he">S/. 0.00</th> 
+                                  <th class="stile-celda total_descuento">S/. 0.00</th>
+                                  <th class="stile-celda total_quincena">S/. 0.00</th> 
+                                  <th class="stile-celda total_deposito">S/. 0.00</th>                           
+                                  <th class="stile-celda total_saldo">S/. 0.00</th> 
                                 </tr>
                               </tfoot>
                             </table>

@@ -99,7 +99,7 @@
                                 <th>Sueldo diario</th>                                
                                 <th>Sueldo mensual</th>                                
                                 <th>Sabatical</th>
-                                <th > <h5 id="total_acumulado_trabjadores">  S/. 0.00 </h5></th>
+                                <th > <h5 id="total_acumulado_trabjadores">  S/. <i class="fas fa-spinner fa-pulse fa-sm"></i><br><br></h5></th>
                               </tr>
                             </tfoot>
                           </table>

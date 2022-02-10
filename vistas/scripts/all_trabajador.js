@@ -509,19 +509,27 @@ function listar() {
 
   tabla=$('#tabla-trabajador').dataTable({
     "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "lengthMenu": [ 5, 10, 25, 75, 100, 200, 500],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/all_trabajador.php?op=listar',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
+      url: '../ajax/all_trabajador.php?op=listar',
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: pago total
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-nowrap');         
+      }         
+      
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -1247,7 +1255,7 @@ function buscar_sunat_reniec() {
             $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
             $("#titular_cuenta").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
 
-            toastr.success("Cliente encontrado!!!!");
+            toastr.success("Persona encontrada!!!!");
           }
         }
         
@@ -1299,7 +1307,7 @@ function buscar_sunat_reniec() {
                 
                 data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
 
-                toastr.success("Cliente encontrado");
+                toastr.success("Persona encontrada!!");
 
               } else {
 

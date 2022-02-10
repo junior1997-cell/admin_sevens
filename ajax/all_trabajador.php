@@ -255,7 +255,7 @@
               "2"=> $reg->nombre_tipo,
               "3"=> $reg->nombre_ocupacion,
               "4"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
-              "5"=>$reg->fecha_nacimiento.' : '.$reg->edad,
+              "5"=>format_d_m_a($reg->fecha_nacimiento).'<b>: </b>'.$reg->edad,
               "6"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria_format .' <br> <b>CCI: </b>'.$reg->cci_format,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
@@ -288,7 +288,7 @@
               "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .'<br>'.$reg->fecha_nacimiento.' : '.$reg->edad.' años</span>
+                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .'<br>'.format_d_m_a($reg->fecha_nacimiento).' : '.$reg->edad.' años</span>
                 </div>',
               "2"=> '<div class="center-vertical">'. $reg->nombre_tipo .'</div>',
               "3"=> $reg->nombre_ocupacion,
@@ -340,6 +340,40 @@
   }
 
   function quitar_guion($numero){ return str_replace("-", "", $numero); } 
+
+   // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
+   function format_a_m_d( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[0]."-".$fecha_expl[1]."-".$fecha_expl[2];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
+  }
+
+  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+  function format_d_m_a( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
+  }
 
   ob_end_flush();
 
