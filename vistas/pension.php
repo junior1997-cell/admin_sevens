@@ -123,10 +123,10 @@
                             <tr>
                               <th><i class="fas fa-cogs"></i></th>
                               <th>Pension</th>
-                              <th id="total_pension" class="text-right"></th>
+                              <th id="total_pension" class="text-right">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                               <th>Servicios</th>
                               <th>Comprobantes</th>
-                              <th id="total_saldo" class="text-right"></th>
+                              <th id="total_saldo" class="text-right">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                             </tr>
                           </tfoot>
                         </table>

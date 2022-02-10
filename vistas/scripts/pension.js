@@ -381,7 +381,6 @@ function guardaryeditar_semana_pension() {
         datos_semana( f1_reload, f2_reload ,cont_reload, i_reload,id_pen=id_pension);
        
         listar( localStorage.getItem('nube_idproyecto'));
-        total_pension(localStorage.getItem('nube_idproyecto'));
         
         $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
 
@@ -924,21 +923,16 @@ function listar(nube_idproyecto) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
-  console.log('---');
-  console.log(sumatotal+'--'+totalsaldo);
-  $("#total_pension").html(formato_miles(sumatotal));
-  $("#total_saldo").html(formato_miles(totalsaldo));
-}
 
-function total_pension(idproyecto) {
-  $("#total_pension").html("");
-  $.post("../ajax/pension.php?op=total_pension", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/pension.php?op=total_pension", { idproyecto: nube_idproyecto }, function (data, status) {
 
     data = JSON.parse(data); //console.log(data);   
     $("#total_pension").html(formato_miles(data.total));
+    $("#total_saldo").html(formato_miles(totalsaldo));
   });
-
+  
 }
+
 
 //Función ver detalles Detalles
 function ver_detalle_x_servicio(idpension) {
