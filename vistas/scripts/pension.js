@@ -899,7 +899,7 @@ function listar(nube_idproyecto) {
             "background-color": "#ffc107",
             color: "black",
           });
-          totalsaldo += parseFloat(data[5]);
+          
         } else if (data[5] == 0) {
           $("td", row).eq(5).css({
             "background-color": "#28a745",
@@ -910,7 +910,12 @@ function listar(nube_idproyecto) {
             "background-color": "#ff5252",
             color: "white",
           });
+          
         }
+        if (data[5]!="") {
+          var saldo=quitar_formato_miles(data[5]);
+        }
+        totalsaldo += parseFloat(saldo);
       },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
