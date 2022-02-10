@@ -66,7 +66,7 @@
                                 <th class="">Aciones</th>
                                 <th>Proveedor</th>
                                 <th>Dirección</th>
-                                <th>C. bancaria / C. detracciones</th>
+                                <th>Cta. bancaria / CCI / Cta. detracciones</th>
                                 <th>Titular cuenta</th>
                                 <th>Estado</th>
                               </tr>
@@ -77,7 +77,7 @@
                                 <th>Aciones</th>
                                 <th>Proveedor</th>
                                 <th>Dirección</th>
-                                <th>C. bancaria / C. detracciones</th>
+                                <th>C. bancaria / CCI / C. detracciones</th>
                                 <th>Titular cuenta</th>
                                 <th>Estado</th>
                               </tr>
@@ -175,7 +175,7 @@
                               </div>
 
                               <!-- banco -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="banco">Banco</label>
                                   <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
@@ -186,18 +186,26 @@
                               </div>
 
                               <!-- Cuenta bancaria -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="c_bancaria" class="chargue-format-1">Cuenta Bancaria</label>
                                   <input type="text" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
                                 </div>
                               </div>
 
-                              <!-- Cuenta de detracciones -->
-                              <div class="col-lg-4">
+                              <!-- CCI -->
+                              <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="fecha_nacimiento" class="chargue-format-2">Cuenta Detracciones</label>
-                                  <input type="text" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                                  <label for="cci" class="chargue-format-2">CCI</label>
+                                  <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- Cuenta de detracciones -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="c_detracciones" class="chargue-format-3">Cuenta Detracciones</label>
+                                  <input type="text" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
                                 </div>
                               </div>
                               

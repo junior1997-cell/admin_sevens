@@ -41,6 +41,7 @@ function limpiar() {
   $("#direccion").val("");
   $("#telefono").val("");
   $("#c_bancaria").val("");
+  $("#cci").val("");
   $("#c_detracciones").val("");
   //$("#banco").val("");
   // $("#banco option[value='BCP']").attr("selected", true);
@@ -138,6 +139,7 @@ function mostrar(idproveedor) {
     // $("#banco option[value='"+data.idbancos+"']").attr("selected", true);
     $("#banco").val(data.idbancos).trigger("change");
     $("#c_bancaria").val(data.cuenta_bancaria);
+    $("#cci").val(data.cci);
     $("#c_detracciones").val(data.cuenta_detracciones);
     $("#titular_cuenta").val(data.titular_cuenta);
     $("#idproveedor").val(data.idproveedor);
@@ -190,27 +192,34 @@ function activar(idproveedor) {
 function formato_banco() {
   if ($("#banco").select2("val") == null || $("#banco").select2("val") == "") {
     $("#c_bancaria").prop("readonly", true);
+    $("#cci").prop("readonly", true);
     $("#c_detracciones").prop("readonly", true);
   } else {
     $(".chargue-format-1").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
 
-    $("#c_bancaria").prop("readonly", false);
-    $("#c_detracciones").prop("readonly", false);
+    
 
     $.post("../ajax/all_proveedor.php?op=formato_banco", { 'idbanco': $("#banco").select2("val") }, function (data, status) {
       data = JSON.parse(data);
       // console.log(data);
 
       $(".chargue-format-1").html("Cuenta Bancaria");
-      $(".chargue-format-2").html("Cuenta Detracciones");
+      $(".chargue-format-2").html("CCI");
+      $(".chargue-format-3").html("Cuenta Detracciones");
+
+      $("#c_bancaria").prop("readonly", false);
+      $("#cci").prop("readonly", false);
+      $("#c_detracciones").prop("readonly", false);
 
       var format_cta = decifrar_format_banco(data.formato_cta);
+      var format_cci = decifrar_format_banco(data.formato_cci);
       var formato_detracciones = decifrar_format_banco(data.formato_detracciones);
       // console.log(format_cta, formato_detracciones);
 
       $("#c_bancaria").inputmask(`${format_cta}`);
-
+      $("#cci").inputmask(`${format_cci}`);
       $("#c_detracciones").inputmask(`${formato_detracciones}`);
     });
   }
@@ -325,6 +334,7 @@ function buscar_sunat_reniec() {
         console.log(data);
 
         if (data == null) {
+
           $("#search").show();
   
           $("#charge").hide();
@@ -333,17 +343,21 @@ function buscar_sunat_reniec() {
           
         } else {
           if (data.success == false) {
+
             $("#search").show();
 
             $("#charge").hide();
 
             toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
           } else {
+
             $("#search").show();
 
             $("#charge").hide();
 
             $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+            $("#titular_cuenta").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
 
             toastr.success("Cliente encontrado!!!!");
           }
@@ -383,9 +397,24 @@ function buscar_sunat_reniec() {
 
                 $("#charge").hide();
 
-                $("#nombre").val(data.razonSocial);
+                if (data.razonSocial == ""  || data.razonSocial == null) {
 
-                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                  if (data.nombreComercial == ""  || data.nombreComercial == null) {
+
+                    $("#apellidos_nombre_comercial").val("-");
+
+                  } else {
+
+                    $("#apellidos_nombre_comercial").val(data.nombreComercial);
+
+                    $("#titular_cuenta").val(data.nombreComercial);
+                  }
+                } else {
+
+                  $("#apellidos_nombre_comercial").val(data.razonSocial)
+
+                  $("#titular_cuenta").val(data.razonSocial);
+                }                
 
                 data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
                 // $("#direccion").val(data.direccion);
@@ -397,9 +426,20 @@ function buscar_sunat_reniec() {
 
                 $("#charge").hide();
 
-                $("#nombre").val(data.razonSocial);
+                if (data.razonSocial == ""  || data.razonSocial == null) {
 
-                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                  if (data.nombreComercial == ""  || data.nombreComercial == null) {
+
+                    $("#apellidos_nombre_comercial").val("-");
+
+                  } else {
+
+                    $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                  }
+                } else {
+
+                  $("#apellidos_nombre_comercial").val(data.razonSocial)
+                } 
 
                 data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
 
