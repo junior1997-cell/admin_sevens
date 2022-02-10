@@ -364,6 +364,95 @@ switch ($_GET["op"]){
 		echo json_encode($rspta);
 	  
 	break;
+
+	case 'ver_detalle_x_servicio':
+
+		$rspta=$resumen_general->ver_detalle_x_servicio($_GET['idpension']);
+		//Vamos a declarar un array
+		$data= Array();
+		$cont=1;
+		while ($reg=$rspta->fetch_object()){ 
+		  $data[]=array(
+			"0"=>'<div class="user-block">
+			  <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$cont.'. '.$reg->nombre_servicio .'</p></span></div>',
+			"1"=>'<b>'.number_format($reg->precio, 2, '.', ',').'</b>', 
+			"2"=>'<b>'.$reg->cantidad_total_platos.'</b>', 
+			"3"=>'<b>'.number_format($reg->adicional_descuento, 2, '.', ',').'</b>', 
+			"4"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>'
+		  );
+		  $cont++;
+		}
+		$results = array(
+		  "sEcho"=>1, //Información para el datatables
+		  "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+		  "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+		  "aaData"=>$data);
+		echo json_encode($results);
+		
+	break;
+	        
+	case 'listar_comprobantes_pension':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+		  //Validamos el acceso solo al usuario logueado y autorizado.
+		  if ($_SESSION['resumen_general']==1)
+		  {	
+			//$idpension_f ='5';
+			//$_GET['idpension_f']
+			$rspta=$resumen_general->listar_comprobantes_pension($_GET['idpension']);
+
+			//Vamos a declarar un array
+			$data= Array();
+			$comprobante='';
+			$subtotal=0;
+			$igv=0;
+			$monto=0;
+
+			while ($reg=$rspta->fetch_object()){
+			  $subtotal=round($reg->subtotal, 2);
+			  $igv=round($reg->igv, 2);
+			  $monto=round($reg->monto, 2 );
+			 
+			  if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
+
+			  empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" target="_blank"  href="../dist/img/comprob_pension/'.$reg->comprobante.'" ><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
+			  
+			  $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
+			 
+			  $data[]=array(
+				"0"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,	 				
+				"1"=> empty($reg->tipo_comprobante)?' - ':$reg->tipo_comprobante,	 				
+				"2"=> empty($reg->nro_comprobante)?' - ':$reg->nro_comprobante,	 				
+				"3"=>date("d/m/Y", strtotime($reg->fecha_emision)),
+				"4"=>number_format($subtotal, 2, '.', ','), 
+				"5"=>number_format($igv, 2, '.', ','),
+				"6"=>number_format($monto, 2, '.', ','),
+				"7"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+				"8"=>$comprobante,
+				);
+
+			}
+			//$suma=array_sum($rspta->fetch_object()->monto);
+			$results = array(
+			  "sEcho"=>1, //Información para el datatables
+			  "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+			  "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+			  "data"=>$data
+			 );
+			echo json_encode($results);
+		  //Fin de las validaciones de acceso
+		  }
+		  else
+		  {
+			require 'noacceso.php';
+		  }
+		}
+	break;
 	
 
 

@@ -242,6 +242,23 @@ Class Resumen_general
 		return $serv_pension;
 	}
 
+	public function ver_detalle_x_servicio($idpension)
+	{
+		$sql="SELECT SUM(se_p.total) as total,sp.nombre_servicio,SUM(se_p.adicional_descuento) as adicional_descuento,SUM(se_p.cantidad_total_platos) as cantidad_total_platos, sp.precio
+		FROM servicio_pension as sp, pension as p, semana_pension as se_p 
+		WHERE p.idpension='$idpension' AND sp.idpension=p.idpension AND se_p.idservicio_pension=sp.idservicio_pension GROUP BY se_p.idservicio_pension";
+		return ejecutarConsulta($sql);
+		
+	
+	}
+	public function listar_comprobantes_pension($idpension)
+	{
+
+		$sql="SELECT * FROM factura_pension 
+		WHERE idpension  ='$idpension'";
+		return ejecutarConsulta($sql);
+	}
+
 }
 
 ?>

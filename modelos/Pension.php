@@ -342,6 +342,11 @@ Class Pension
 
 		return $total_m;
 	}
+	public function total_pago_x_pension($idpension)
+	{
+		$sql="SELECT SUM(fp.monto) AS total_pago FROM factura_pension fp, pension as p WHERE fp.idpension=p.idpension AND fp.idpension='$idpension' AND fp.estado=1";
+		return ejecutarConsultaSimpleFila($sql);
+	}
 	public function ver_detalle_x_servicio($idpension)
 	{
 		$sql="SELECT SUM(se_p.total) as total,sp.nombre_servicio,SUM(se_p.adicional_descuento) as adicional_descuento,SUM(se_p.cantidad_total_platos) as cantidad_total_platos, sp.precio
@@ -381,6 +386,14 @@ Class Pension
 		return $datos_edit_pension;
 		
 	}
+	public function total_pension($idproyecto)
+	{
+		$sql="SELECT SUM(sp.total) as total
+		FROM semana_pension as sp, servicio_pension as se_p, pension as p, proyecto as py
+		WHERE sp.idservicio_pension=se_p.idservicio_pension AND se_p.idpension=p.idpension AND p.idproyecto=py.idproyecto AND p.idproyecto='$idproyecto'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
 	public function select_proveedor()
 	{
 		$sql = "SELECT `idproveedor`,`razon_social`, `direccion` FROM `proveedor` WHERE estado =1 AND idproveedor>1";

@@ -1,5 +1,7 @@
 var tabla;
 var tabla1;
+var tabla2;
+
 
 //Función que se ejecuta al inicio
 function init() {
@@ -314,7 +316,7 @@ function listar_r_transportes(idproyecto) {
         validando_pago=0;
       }
       if (value.comprobante!="") {
-        comprobante=`<a target="_blank"  href="../dist/img/comprob_transporte/${value.comprobante}"> <i class="fas fa-file-invoice-dollar"  style="font-size: 23px;"></i></a>`;
+        comprobante=`<a target="_blank"  href="../dist/img/comprob_transporte/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
       }else{
         comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
       }
@@ -365,7 +367,7 @@ function listar_r_hospedajes(idproyecto) {
         validando_pago=0;
       }
       if (value.comprobante!="") {
-        comprobante=`<a target="_blank"  href="../dist/img/comprob_hospedajes/${value.comprobante}"> <i class="fas fa-file-invoice-dollar"  style="font-size: 23px;"></i></a>`;
+        comprobante=`<a target="_blank"  href="../dist/img/comprob_hospedajes/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
       }else{
         comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
       }
@@ -416,7 +418,7 @@ function listar_r_comidas_extras(idproyecto) {
         validando_pago=0;
       }
       if (value.comprobante!="") {
-        comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.comprobante}"> <i class="fas fa-file-invoice-dollar" style="font-size: 23px;"></i></a>`;
+        comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.comprobante}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
       }else{
         comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
       }
@@ -468,7 +470,7 @@ function listar_r_breaks(idproyecto) {
         validando_pago=0;
       }
       if (value.idsemana_break!="") {
-        comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="fas fa-file-invoice-dollar" style="font-size: 23px;"></i></a>`;
+        comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
       }else{
         comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
       }
@@ -537,20 +539,20 @@ function listar_comprobantes_breaks(idsemana_break) {
 function listar_r_pensiones(idproyecto) {  
   var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
 
-  $("#breaks").html("");
-  $("#monto_break").html("");  
-  $("#pago_break").html("");  
-  $("#saldo_break").html("");
+  $("#pension").html("");
+  $("#monto_pension").html("");  
+  $("#pago_pension").html("");  
+  $("#saldo_pension").html("");
 
   $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { idproyecto: idproyecto }, function (data, status) {
     console.log('.^^.');
-    data = JSON.parse(data); // console.log(data);  
+    data = JSON.parse(data);  console.log(data);  
 
     data.forEach((value,index)=>{
 
-      if (value.total!=null) {
-        calculando_sldo=parseFloat(value.total)-parseFloat(value.total);
-        validando_pago=parseFloat(value.total);
+      if (value.pago_total_pension!=null) {
+        calculando_sldo=parseFloat(value.pago_total_pension)-parseFloat(value.pago_total_pension);
+        validando_pago=parseFloat(value.pago_total_pension);
       } else {
         calculando_sldo=0;
         validando_pago=0;
@@ -561,31 +563,100 @@ function listar_r_pensiones(idproyecto) {
         comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
       }
 
-      breaks=`<tr>
+      pension=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.numero_semana}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - ${format_d_m_a(value.fecha_final)} </span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.direccion}} </span></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+            <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
           </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total).toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.pago_total_pension).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
-      t_monto=t_monto+parseFloat(value.total);
+      t_monto=t_monto+parseFloat(value.pago_total_pension);
       t_pagos=t_pagos+parseFloat(validando_pago);
       t_saldo=t_saldo+parseFloat(calculando_sldo);
 
-      $("#breaks").append(breaks);
+      $("#pension").append(pension);
 
     });
 
-      $("#monto_break").html(formato_miles(t_monto.toFixed(2)));  
-      $("#pago_break").html(formato_miles(t_pagos.toFixed(2)));  
-      $("#saldo_break").html(formato_miles(t_saldo.toFixed(2)));  
+      $("#monto_pension").html(formato_miles(t_monto.toFixed(2)));  
+      $("#pago_pension").html(formato_miles(t_pagos.toFixed(2)));  
+      $("#saldo_pension").html(formato_miles(t_saldo.toFixed(2)));  
      
   });
+}
+//Función ver detalles Detalles
+function ver_detalle_x_servicio_p(idpension) {
+  //console.log(numero_semana,nube_idproyecto);
+  $("#modal-ver-detalle-semana").modal("show");
+  tabla_detalle_s=$('#tabla-detalles-semanal').dataTable({
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/resumen_general.php?op=ver_detalle_x_servicio&idpension='+idpension,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+}
+
+function listar_comprobantes_pension(idpension) {
+  $("#modal-ver-comprobantes_pension").modal("show");
+  
+  tabla2=$('#t-comprobantes-pension').dataTable({  
+    "responsive": true,
+    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/resumen_general.php?op=listar_comprobantes_pension&idpension='+idpension,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
 }
 
 init();

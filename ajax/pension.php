@@ -335,10 +335,50 @@
           $rspta=$pension->listar_pensiones($_GET['nube_idproyecto']);
           //Vamos a declarar un array
           $data= Array();
-     
+          $total=0;
+          $total_pagos=0;
+          $Saldo=0;
+
+          $c="";
+          $nombre="";
+          $icon="";
+          $cc="";
+
           while ($reg=$rspta->fetch_object()){ 
 
             $total=$pension->total_x_pension($reg->idpension);
+            $rspta2=$pension->total_pago_x_pension($reg->idpension);
+
+            $total_pagos =$rspta2['total_pago'];
+            $saldo = $total-$total_pagos;
+            if($saldo==$total){
+              $c="danger";
+              $nombre=" Pagar";
+              $icon="dollar-sign";
+              $cc="danger";
+
+            }else{
+                              		
+              if ($saldo<$total && $saldo>"0" ) {
+
+                $c="warning";
+                $nombre=" Pagar";
+                $icon="dollar-sign";
+                $cc="warning";
+
+                } else {
+                    if ($saldo<="0" || $saldo=="0") {
+
+                        $c="success";
+                        $nombre=" Ver";
+                        $info="info";
+                        $icon="eye";
+                        $cc="success";
+                    }else{
+                    }
+                    //$estado = '<span class="text-center badge badge-success">Terminado</span>';
+                }  
+            }
 
             $data[]=array(
 
@@ -350,7 +390,9 @@
                 </div>',
               "2"=>'<b>'.number_format($total, 2, '.', ',').'</b>', 
               "3"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
-              "4"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
+              "4"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-xs m-t-2px" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
+              <button class="btn btn-'.$cc.' btn-sm">'.number_format($total_pagos, 2, '.', ',').'</button></div>',
+              "5"=>number_format($saldo, 2, '.', ',')
                 
             );
 
@@ -377,6 +419,29 @@
             {
               //$idpago_Comprobante='1';
               $rspta=$pension->mostrar_pension($idpension);
+               //Codificar el resultado utilizando json
+               echo json_encode($rspta);
+            //Fin de las validaciones de acceso
+            }
+            else
+            {
+              require 'noacceso.php';
+            }
+          }		
+        break;
+        
+        case 'total_pension':
+          if (!isset($_SESSION["nombre"]))
+          {
+            header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+          }
+          else
+          {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['viatico']==1)
+            {
+              //$idpago_Comprobante='1';
+              $rspta=$pension->total_pension($_POST['idproyecto']);
                //Codificar el resultado utilizando json
                echo json_encode($rspta);
             //Fin de las validaciones de acceso

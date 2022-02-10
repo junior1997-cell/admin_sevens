@@ -27,7 +27,7 @@ function init() {
 
   listar_botoness( localStorage.getItem('nube_idproyecto') );
   listar( localStorage.getItem('nube_idproyecto'));
-
+  total_pension(localStorage.getItem('nube_idproyecto'));
   //Activamos el "aside"
   $("#bloc_Viaticos").addClass("menu-open");
   $("#mViatico").addClass("active");
@@ -381,6 +381,7 @@ function guardaryeditar_semana_pension() {
         datos_semana( f1_reload, f2_reload ,cont_reload, i_reload,id_pen=id_pension);
        
         listar( localStorage.getItem('nube_idproyecto'));
+        total_pension(localStorage.getItem('nube_idproyecto'));
         
         $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
 
@@ -865,7 +866,9 @@ function guardaryeditar_pension(e) {
 
 //Función Listar
 function listar(nube_idproyecto) {
-
+  var sumatotal=0; var totalsaldo=0; 
+ // $("#total_pension").html("");
+  //$("#total_saldo").html("");
   tabla=$('#tabla-resumen-break-semanal').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
@@ -879,6 +882,32 @@ function listar(nube_idproyecto) {
         dataType : "json",						
         error: function(e){
           console.log(e.responseText);	
+        }
+      },
+      createdRow: function (row, data, ixdex) {
+        if (data[2]!="") {
+          $("td", row).eq(2).addClass('text-right');
+          sumatotal += parseFloat(data[2]);
+        } else {
+          sumatotal +=0;
+        }
+        //console.log(data);
+        if (data[5] > 0) {
+          $("td", row).eq(5).css({
+            "background-color": "#ffc107",
+            color: "black",
+          });
+          totalsaldo += parseFloat(data[5]);
+        } else if (data[5] == 0) {
+          $("td", row).eq(5).css({
+            "background-color": "#28a745",
+            color: "white",
+          });
+        } else {
+          $("td", row).eq(5).css({
+            "background-color": "#ff5252",
+            color: "white",
+          });
         }
       },
     "language": {
@@ -895,6 +924,20 @@ function listar(nube_idproyecto) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+  console.log('---');
+  console.log(sumatotal+'--'+totalsaldo);
+  $("#total_pension").html(formato_miles(sumatotal));
+  $("#total_saldo").html(formato_miles(totalsaldo));
+}
+
+function total_pension(idproyecto) {
+  $("#total_pension").html("");
+  $.post("../ajax/pension.php?op=total_pension", { idproyecto: idproyecto }, function (data, status) {
+
+    data = JSON.parse(data); //console.log(data);   
+    $("#total_pension").html(formato_miles(data.total));
+  });
+
 }
 
 //Función ver detalles Detalles
@@ -1445,7 +1488,7 @@ function despintar_btn_select() {
 }
 //coma por miles
 function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
+  if (!num || num == "NaN") return "0.00";
   if (num == "Infinity") return "&#x221e;";
   num = num.toString().replace(/\$|\,/g, "");
   if (isNaN(num)) num = "0";

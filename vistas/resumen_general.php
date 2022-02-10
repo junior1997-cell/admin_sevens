@@ -263,8 +263,8 @@
                                                     </tr>
                                                     <tr>
                                                         <th class="text-center clas_pading">#</th>
-                                                        <th class="text-center clas_pading">SEMANA</th>
-                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">DIRECCIÓN</th>
                                                         <th class="text-center clas_pading" data-toggle="tooltip" data-original-title="Detalle-Comprobante">DETALL-COMP</th>
                                                         <th class="text-center clas_pading">MONTO</th>
                                                         <th class="text-center clas_pading">PAGOS</th>
@@ -277,9 +277,9 @@
                                                 <tfoot>
                                                     <th colspan="3" class="clas_pading"></th>
                                                     <th class="clas_pading">Total</th>
-                                                    <th class="clas_pading text-right" id="monto_break"></th>
-                                                    <th class="clas_pading text-right" id="pago_break"></th>
-                                                    <th class="clas_pading text-right" id="saldo_break"></th>
+                                                    <th class="clas_pading text-right" id="monto_pension"></th>
+                                                    <th class="clas_pading text-right" id="pago_pension"></th>
+                                                    <th class="clas_pading text-right" id="saldo_pension"></th>
                                                 </tfoot>
                                             </table>
 
@@ -398,7 +398,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Modal ver detalle maquina equipos -->
                     <div class="modal fade" id="modal_ver_detalle_maq_equ">
                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -494,6 +493,92 @@
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--modal-ver-detalle-semana pension-->
+                    <div class="modal fade" id="modal-ver-detalle-semana">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Detalles por semana</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div  class="class-style" style="text-align: center;"> 
+                                <table id="tabla-detalles-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                    <thead>
+                                    <tr>
+                                        <th class="">Tipo comida</th>
+                                        <th class="">Precio</th>
+                                        <th>Total platos</th>
+                                        <th>Adicional</th>
+                                        <th>total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th class="">Tipo comida</th>
+                                        <th class="">Precio</th>
+                                        <th>Total platos</th>
+                                        <th>Adicional</th>
+                                        <th>total</th>
+                                    </tr>
+                                    </tfoot>
+                                </table> 
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--modal-ver-detalle-semana pension-->
+                    <div class="modal fade" id="modal-ver-comprobantes_pension">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Comprobantes</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div  class="class-style" style="text-align: center;"> 
+
+                                    <table id="t-comprobantes-pension" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                        <thead>
+                                            <tr>
+                                                <th data-toggle="tooltip" data-original-title="Forma de pago">Forma </th>
+                                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo </th>
+                                                <th data-toggle="tooltip" data-original-title="Número Comprobante">Número </th>
+                                                <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
+                                                <th>Sub total</th>
+                                                <th>IGV</th>
+                                                <th>Monto</th>
+                                                <th>Descripción</th>
+                                                <th>Comprobante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th data-toggle="tooltip" data-original-title="Forma de pago">Forma </th>
+                                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo </th>
+                                                <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
+                                                <th>Sub total</th>
+                                                <th>IGV</th>
+                                                <th>Monto</th>
+                                                <th>Descripción</th>                                                   
+                                                <th>Comprobante</th>
+                                            </tr> 
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>

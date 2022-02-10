@@ -114,6 +114,7 @@
                               <th>Total</th>
                               <th>Servicios</th>
                               <th>Comprobantes</th>
+                              <th>Saldo</th>
 
                             </tr>
                           </thead>
@@ -122,9 +123,10 @@
                             <tr>
                               <th><i class="fas fa-cogs"></i></th>
                               <th>Pension</th>
-                              <th>Total</th>
+                              <th id="total_pension" class="text-right"></th>
                               <th>Servicios</th>
                               <th>Comprobantes</th>
+                              <th id="total_saldo" class="text-right"></th>
                             </tr>
                           </tfoot>
                         </table>
