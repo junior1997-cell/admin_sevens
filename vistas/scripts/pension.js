@@ -889,6 +889,10 @@ function listar(nube_idproyecto) {
         } else {
           sumatotal +=0;
         }
+        if (data[4]) {
+          $("td", row).eq(4).addClass('text-nowrap');
+          
+        }
         //console.log(data);
         if (data[5] > 0) {
           $("td", row).eq(5).css({
@@ -1074,8 +1078,9 @@ function guardaryeditar_factura(e) {
         tabla.ajax.reload();
 
         $("#modal-agregar-comprobante").modal("hide");
-       listar_comprobantes(localStorage.getItem('idpension_f_nube'))
-       total_monto(localStorage.getItem('idpension_f_nube'))
+       listar_comprobantes(localStorage.getItem('idpension_f_nube'));
+       total_monto(localStorage.getItem('idpension_f_nube'));
+       listar( localStorage.getItem('nube_idproyecto'));
         limpiar_comprobante();
 			}else{
 
@@ -1241,6 +1246,7 @@ console.log(idfactura_pension);
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
         tabla.ajax.reload();
+        listar( localStorage.getItem('nube_idproyecto'));
       });      
     }
   });  
@@ -1263,6 +1269,7 @@ function activar_comprobante(idfactura_pension ) {
         Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
         tabla.ajax.reload();
+        listar(localStorage.getItem('nube_idproyecto'));
       });
       
     }
