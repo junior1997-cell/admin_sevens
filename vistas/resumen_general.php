@@ -47,10 +47,10 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <div class="card card-primary card-outline">
+                                <div class="card card-primary card-outline" style="border: 2px solid #f60c;">
                                     <div class="row">
                                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="card-header">
+                                        <div class="card-header" style="border: 1px solid #f60c !important; background-color: #f60c; color: #ffffff;">
                                             <div class="row">
                                                 <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                                     <label for="filtros">Filtar por Fecha </label>                               
@@ -407,7 +407,6 @@
 
                                        </div>
                                     </div>
-                                    <a class="btn btn-info" target="_blank" href=""></a>
                                     <!-- /.card-body -->
                                 </div>
                                 <!-- /.card -->
