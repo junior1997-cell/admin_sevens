@@ -20,18 +20,14 @@
 
       $pagoobrero = new PagoObrero();
 
-      //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
+      // DATA - agregar pago x quincena o semana	
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idtrabajador_por_proyecto		= isset($_POST["idtrabajador_por_proyecto"])? limpiarCadena($_POST["idtrabajador_por_proyecto"]):"";
       $trabajador		  = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
 
-      $tipo_trabajador= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
-      $desempenio	    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";      
-      $cargo			    = isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
-      
-      $sueldo_diario	= isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
-      $sueldo_mensual = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
-      $sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
+      // DATA - recibos por honorarios
+      $idresumen_q_s_asistencia_rh		= isset($_POST["idresumen_q_s_asistencia_rh"])? limpiarCadena($_POST["idresumen_q_s_asistencia_rh"]):"";
+      $doc2 	          = isset($_POST['doc2'])? $_POST['doc2']:"";
 
       switch ($_GET["op"]){
 
@@ -51,7 +47,58 @@
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
 
-        break;              
+        break;   
+        
+        case 'guardar_y_editar_recibo_x_honorario':
+          	
+          //*DOC 2*//
+          if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
+
+            $flat_doc2 = false;
+
+            $doc2      = $_POST["doc_old_2"];
+
+          } else {
+
+            $flat_doc2 = true;
+
+            $ext_doc2  = explode(".", $_FILES["doc2"]["name"]);
+              
+            $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
+
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pago_obrero/recibos_x_honorarios/" . $doc2);
+            
+          }	
+
+          // registramos un nuevo: recibo x honorario
+          if (empty($idresumen_q_s_asistencia_rh)){
+
+            $rspta="0";
+            
+            echo $rspta ? "ok" : "No se pudieron registrar el Recibo por Honorario";
+
+          }else {
+
+            // eliminados si existe el "doc en la BD"
+            if ($flat_doc2 == true) {
+
+              $datos_f2 = $pagoobrero->obtenerDocs2($idresumen_q_s_asistencia_rh);
+
+              $doc2_ant = $datos_f2->fetch_object()->recibos_x_honorarios;
+
+              if ( !empty($doc2_ant) ) {
+
+                unlink("../dist/pago_obrero/recibos_x_honorarios/" . $doc2_ant);
+              }
+            }
+
+            // editamos un recibo x honorario existente
+            $rspta=$pagoobrero->editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $doc2);
+            
+            echo $rspta ? "ok" : "Recibo por Honorario no se pudo actualizar";
+          }
+
+        break;
 
         case 'listar_tbla_principal':
           $nube_idproyecto = $_GET["nube_idproyecto"];         
@@ -74,21 +121,22 @@
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 <span class="description">'. $reg->nombre_tipo.' / '.$reg->nombre_cargo .' </span>
               </div>',
-              "1"=>nombre_dia_mes_anio($reg->fecha_inicio),
-              "2"=> $date_actual,
-              "3"=>nombre_dia_mes_anio($reg->fecha_fin),
-              "4"=>$reg->total_hn.' / '. $reg->total_he,
-              "5"=>$reg->sabatical,              
-              "6"=>'S/. '.  number_format($reg->sueldo_mensual, 2, '.', ','), 
-              "7"=>$reg->sum_estado_envio_contador, 
-              "8"=>'S/. '.  number_format($reg->pago_quincenal, 2, '.', ','),
-              "9"=>'<div class="justify-content-between "> 
+              
+              "1"=>$reg->total_hn.' / '. $reg->total_he,
+              "2"=>$reg->sabatical,              
+              "3"=>'S/. '.  number_format($reg->sueldo_mensual, 2, '.', ','), 
+              "4"=>$reg->sum_estado_envio_contador, 
+              "5"=>'S/. '.  number_format($reg->pago_quincenal, 2, '.', ','),
+              "6"=>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$reg->idtrabajador_por_proyecto.', \'' . $reg->fecha_pago_obrero .  '\', \'' . $reg->nombres_trabajador. '\' )">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 0.00</button>
               </div>',
-              "10"=>'S./ 0.00',
+              "7"=>'S./ 0.00',
+              "8"=>format_d_m_a($reg->fecha_inicio),
+              "9"=> $date_actual,
+              "10"=>format_d_m_a($reg->fecha_fin),
               "11"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>'
             );
           }

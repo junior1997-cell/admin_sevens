@@ -3,6 +3,9 @@ var form_validate_proyecto;
 //Función que se ejecuta al inicio
 function init(){  
 
+  // Formato para telefono
+  $("[data-mask]").inputmask();
+
   listar(); listar2();
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });
@@ -62,10 +65,26 @@ function init(){
       "11-10-2021",
       "11-05-2021"
     ],     
-  });   
+  });  
+  
+  // $('#costo').inputmask('999,999,999.99', { reverse: true });
 }
 
 init();
+
+// input con comas de miles
+$("#costo").on({
+  focus: function (event) {
+    $(event.target).select();
+  },
+  keyup: function (event) {
+    $(event.target).val(function (index, value) {
+      return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+    });
+  },
+});
+
+
 
 function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == null) {  $("#definiendo").prop('checked', false); } }
 
@@ -1554,7 +1573,7 @@ function mostrar(idproyecto) {
        
     $("#dias_habiles").val(parseInt( data.dias_habiles)); 
     $("#plazo").val(data.plazo); 
-    $("#costo").val(data.costo); 
+    $("#costo").val(formato_miles(data.costo)); 
     $("#empresa_acargo").val(data.empresa_acargo); 
 
     $("#fecha_pago_obrero").val(data.fecha_pago_obrero).trigger("change");
@@ -2281,25 +2300,25 @@ function cuentaSabado(fi, ff){
 
 // input decimal letra
 $(function() {
-  $("#costo").bind("change keyup input", function() {
-    var position = this.selectionStart - 1;
-    //remove all but number and .
-    var fixed = this.value.replace(/[^0-9\.]/g, "");
-    if (fixed.charAt(0) === ".")
-      //can't start with .
-      fixed = fixed.slice(1);
+  // $("#costo").bind("change keyup input", function() {
+  //   var position = this.selectionStart - 1;
+  //   //remove all but number and .
+  //   var fixed = this.value.replace(/[^0-9\.]/g, "");
+  //   if (fixed.charAt(0) === ".")
+  //     //can't start with .
+  //     fixed = fixed.slice(1);
 
-    var pos = fixed.indexOf(".") + 1;
-    if (pos >= 0)
-      //avoid more than one .
-      fixed = fixed.substr(0, pos) + fixed.slice(pos).replace(".", "");
+  //   var pos = fixed.indexOf(".") + 1;
+  //   if (pos >= 0)
+  //     //avoid more than one .
+  //     fixed = fixed.substr(0, pos) + fixed.slice(pos).replace(".", "");
 
-    if (this.value !== fixed) {
-      this.value = fixed;
-      this.selectionStart = position;
-      this.selectionEnd = position;
-    }
-  });
+  //   if (this.value !== fixed) {
+  //     this.value = fixed;
+  //     this.selectionStart = position;
+  //     this.selectionEnd = position;
+  //   }
+  // });
 
   $("#dias_habilees").bind("change keyup input", function() {
     var position = this.selectionStart - 1;
@@ -2313,3 +2332,18 @@ $(function() {
     }
   });
 });
+
+// damos formato de miles a un numero
+function formato_miles(num) {
+  if (!num || num == "NaN") return "0.00";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
+}

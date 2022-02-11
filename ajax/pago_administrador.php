@@ -184,7 +184,7 @@
             if (validar_fecha_espanol(format_d_m_a($value['fecha_inicio']))) {
               $count_dia = cantidad_dias_trabajado($value['fecha_inicio'], $value['fecha_fin']); 
               $fecha_inicio = format_d_m_a($value['fecha_inicio']);
-              $fecha_inicio_nombre = nombre_dia_mes_anio($value['fecha_inicio']);
+              $fecha_inicio_nombre = format_d_m_a($value['fecha_inicio']);
             } else {
               $count_dia = "-"; $fecha_inicio = "- - -"; $fecha_inicio_nombre = "- - -";
             }
@@ -192,7 +192,7 @@
             // validamos: "FECHA FIN"
             if ( validar_fecha_espanol(format_d_m_a($value['fecha_fin'])) ) {
               $fecha_fin = format_d_m_a($value['fecha_fin']);
-              $fecha_fin_nombre = nombre_dia_mes_anio($value['fecha_fin']);
+              $fecha_fin_nombre = format_d_m_a($value['fecha_fin']);
             } else {
               $fecha_fin = "- - -"; $fecha_fin_nombre = "- - -";
             }
@@ -234,22 +234,23 @@
                 <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 <span class="description">'. $value['tipo'].' / '.$value['cargo'] .' </span>
               </div>',
-              "1"=>$fecha_inicio_nombre,
+              "1"=> $fecha_inicio_nombre,
               "2"=>$date_actual,
               "3"=>$fecha_fin_nombre,
               "4"=>$count_dia,
-              "5"=>$ultimo_mes_pago,
-              "6"=>$siguiente_mes_pago,
-              "7"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
-              "8" =>'S/. ' . number_format( $pago_total , 2, '.', ',') ,
-              "9"=>'S/. '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
-              "10" =>'<div class="justify-content-between "> 
+              
+              "5"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
+              "6" =>'S/. ' . number_format( $pago_total , 2, '.', ',') ,
+              "7"=>'S/. '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
+              "8" =>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/. '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
               </div>',
-              "11"=>'S/. ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
+              "9"=>'S/. ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
+              "10"=>$ultimo_mes_pago,
+              "11"=>$siguiente_mes_pago,
               "12"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
             );
           }
@@ -480,9 +481,9 @@
         $siguiente_pago =  date("Y-m-t", strtotime($date_actual)) ;
   
         if (strtotime($siguiente_pago) >= $fecha_1 && strtotime($siguiente_pago) <= $fecha_2) {
-          $siguiente_pago = nombre_dia_mes_anio($siguiente_pago);
+          $siguiente_pago = format_d_m_a($siguiente_pago);
         } else {
-          $siguiente_pago = nombre_dia_mes_anio($fecha_fin);
+          $siguiente_pago = format_d_m_a($fecha_fin);
         }
   
       } else {

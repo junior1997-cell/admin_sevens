@@ -98,14 +98,14 @@
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
                                 <th class="text-center">Fecha <br> culminacion</th>
-                                <th class="text-center">Tiempo <br> trabajado (dias)</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
+                                <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
                                 <th>Sueldo Mensual</th>
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
                                 <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
                                 <th>Cel:</th>                         
                               </tr>
                             </thead>
@@ -118,14 +118,14 @@
                                 <th class="text-gray">Fecha inicio</th>
                                 <th class="text-center text-gray">Hoy</th>
                                 <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>
-                                <th class="text-center text-gray">Último <br> pago</th>
-                                <th class="text-center text-gray">Siguiente <br> pago</th>                                
+                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
                                 <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
                                 <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
                                 <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
                                 <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
+                                <th class="text-center text-gray">Último <br> pago</th>
+                                <th class="text-center text-gray">Siguiente <br> pago</th>
                                 <th>Cel:</th>                            
                               </tr>
                             </tfoot>

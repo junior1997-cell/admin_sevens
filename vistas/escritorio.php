@@ -355,7 +355,7 @@
                                   <div class="input-group-prepend">
                                     <span class="input-group-text">S/. </span>
                                   </div>
-                                  <input type="number"  name="costo" id="costo" class="form-control"  placeholder="Costo"  >
+                                  <input type="text"  name="costo" id="costo" class="form-control"  placeholder="Costo" >
                                 </div>
                               </div>
                             </div> 
@@ -926,6 +926,8 @@
           require 'script.php';
         ?>
 
+        <!-- InputMask -->
+        <script src="../plugins/moment/moment.min.js"></script>
         
         <script src="../plugins/moment/locales.js"></script>
         <script type="text/javascript" src="scripts/proyecto.js"></script>        

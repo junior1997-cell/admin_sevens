@@ -29,6 +29,14 @@ Class PagoObrero
 		
 		return ejecutarConsulta($sql);
 		
+	}	
+
+	//Implementamos un método para editar registros
+	public function editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $doc2)
+	{
+		$sql="UPDATE resumen_q_s_asistencia SET recibos_x_honorarios = '$doc2' WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia_rh'";	
+		
+		return ejecutarConsulta($sql);		
 	}
 
 	//Implementar un método para listar los registros
@@ -49,7 +57,7 @@ Class PagoObrero
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar_q_s($idtrabajador_x_proyecto)
 	{
-		$sql="SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, rqsa.estado_envio_contador
+		$sql="SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto;";
 		return ejecutarConsultaArray($sql);
@@ -68,6 +76,22 @@ Class PagoObrero
 		$sql="UPDATE trabajador_por_proyecto SET estado='1' WHERE idtrabajador_por_proyecto='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
+
+	// obtebnemos los "BAUCHER DE DEPOSITOS" para eliminar
+	public function obtenerDocs($id) {
+
+        $sql = "SELECT baucher FROM pagos_x_mes_administrador WHERE idpagos_x_mes_administrador = '$id'";
+
+        return ejecutarConsulta($sql);
+    }
+
+	// obtebnemos los "RECIBO X HONORARIO" para eliminar
+	public function obtenerDocs2($id) {
+
+        $sql = "SELECT recibos_x_honorarios FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$id'";
+
+        return ejecutarConsulta($sql);
+    }
 
   	//Seleccionar Trabajador Select2
 	public function select2_trabajador()
