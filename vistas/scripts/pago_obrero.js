@@ -48,7 +48,7 @@ function table_show_hide(flag) {
     $("#btn-agregar").hide(); 
     $("#btn-nombre-mes").hide();
 
-    $(".nombre-trabajador").html("Pagos de Administradores");
+    $(".nombre-trabajador").html("Pagos de Obreros");
 
     $("#tbl-principal").show();
     $("#tbl-fechas").hide();
@@ -161,6 +161,87 @@ function listar_tbla_principal(id_proyecto) {
   }).DataTable();
 }
 
+
+
+function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_trabajador) {
+
+  $('.data-q-s').html(`<tr>
+    <td colspan="10" >
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+          <h4>Cargando...</h4>
+        </div>
+      </div>
+    </td>                                   
+  </tr>`);
+
+  $(".nombre-trabajador").html(`Pagos - <b> ${nombre_trabajador} </b>`);
+
+  if (tipo_pago == "quincenal") {
+    $(".nombre-bloque-asistencia").html(`<b> Quincena </b>`);
+  } else {
+    if (tipo_pago == "semanal") {
+      $(".nombre-bloque-asistencia").html(`<b> Semana </b>`);
+    }
+  }
+  
+  table_show_hide(2);
+
+  $.post("../ajax/pago_obrero.php?op=mostrar_q_s", { 'id_trabajdor_x_proyecto': id_trabajdor_x_proyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);
+
+    if (data.length === 0) {
+      
+    } else {
+
+      var data_s_q = ""; var total_hn = 0; var total_he = 0; var total_monto_hn = 0; var total_monto_he = 0; var total_descuento = 0;
+      var total_quincena = 0; var total_saldo = 0; var total_deposito = 0;
+
+      data.forEach((element, indice) => {
+        var saldo = 0;
+        data_s_q = data_s_q.concat(`<tr>
+          <td>${indice + 1}</td>
+          <td> ${element.numero_q_s}</td>
+          <td>${element.fecha_q_s_inicio}</td>
+          <td>${element.fecha_q_s_fin}</td>
+          <td><sup>S/. </sup>${element.sueldo_hora}</td>
+          <td>${formato_miles(element.total_hn)}<b> / </b>${formato_miles(element.total_he)}</td>          
+          <td><sup>S/. </sup>${formato_miles(element.pago_parcial_hn)}<b> / </b><sup>S/. </sup>${formato_miles(element.pago_parcial_he)}</td>
+          <td><sup>S/. </sup>${formato_miles(element.adicional_descuento)}</td>
+          <td><sup>S/. </sup>${formato_miles(element.pago_quincenal)}</td>
+          <td>
+            <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
+            <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+          </td>
+          <td><sup>S/. </sup>${formato_miles(saldo)}</td>
+        </tr>`);
+        
+        total_hn += parseFloat(element.total_hn);
+        total_he += parseFloat(element.total_he);
+
+        total_monto_hn += parseFloat(element.pago_parcial_hn);
+        total_monto_he += parseFloat(element.pago_parcial_he);
+        total_descuento += parseFloat(element.adicional_descuento);
+        total_quincena += parseFloat(element.pago_quincenal);
+      });
+
+      $('.data-q-s').html(data_s_q);
+      $('.total_hn_he').html(`${formato_miles(total_hn)} / ${formato_miles(total_he)}`);
+      $('.total_monto_hn_he').html(`${formato_miles(total_monto_hn)} / ${formato_miles(total_monto_he)}`);
+      $('.total_descuento').html(`${formato_miles(total_descuento)}`);
+      $('.total_quincena').html(`${formato_miles(total_quincena)}`);
+      $('.total_deposito').html(`${formato_miles(total_deposito)}`); 
+      $('.total_saldo').html(`${formato_miles(total_saldo)}`); 
+    }     
+  });   
+}
+
+function listar_tbla_pagos_x_q_s(params) {
+  table_show_hide(3);
+}
+
 //Función para guardar o editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -191,20 +272,6 @@ function guardaryeditar(e) {
 			}
     },
   });
-}
-
-function detalle_q_s_trabajador() {
-
-  table_show_hide(2)
-
-  // $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
-
-  //   data = JSON.parse(data);  //console.log(data);   
-
-     
-  // });
-
-   
 }
 
 //Función para desactivar registros
@@ -330,3 +397,44 @@ $(function () {
   });
 });
 
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+
+// Función que suma o resta días a la fecha indicada
+sumaFecha = function(d, fecha){
+  var Fecha = new Date();
+  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+  var aFecha = sFecha.split(sep);
+  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+  fecha= new Date(fecha);
+  fecha.setDate(fecha.getDate()+parseInt(d));
+  var anno=fecha.getFullYear();
+  var mes= fecha.getMonth()+1;
+  var dia= fecha.getDate();
+  mes = (mes < 10) ? ("0" + mes) : mes;
+  dia = (dia < 10) ? ("0" + dia) : dia;
+  var fechaFinal = dia+sep+mes+sep+anno;
+  return (fechaFinal);
+}
+
+// quitamos las comas de miles de un numero
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, '');
+  return inVal;
+}
+
+// damos formato de miles a un numero
+function formato_miles(num) {
+  if (!num || num == "NaN") return "0.00";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
+}

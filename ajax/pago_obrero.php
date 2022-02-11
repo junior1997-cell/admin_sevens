@@ -51,6 +51,61 @@
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
 
+        break;              
+
+        case 'listar_tbla_principal':
+          $nube_idproyecto = $_GET["nube_idproyecto"];         
+
+          $rspta=$pagoobrero->listar_tbla_principal($nube_idproyecto);
+          //Vamos a declarar un array
+          $data= Array();
+
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+
+          $Object = new DateTime();
+          $Object->setTimezone(new DateTimeZone('America/Lima'));
+          $date_actual = $Object->format("d-m-Y");
+          
+          while ($reg=$rspta->fetch_object()){
+            $data[]=array(
+              "0"=>'<div class="user-block">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres_trabajador .'</p></span>
+                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
+                <span class="description">'. $reg->nombre_tipo.' / '.$reg->nombre_cargo .' </span>
+              </div>',
+              "1"=>nombre_dia_mes_anio($reg->fecha_inicio),
+              "2"=> $date_actual,
+              "3"=>nombre_dia_mes_anio($reg->fecha_fin),
+              "4"=>$reg->total_hn.' / '. $reg->total_he,
+              "5"=>$reg->sabatical,              
+              "6"=>'S/. '.  number_format($reg->sueldo_mensual, 2, '.', ','), 
+              "7"=>$reg->sum_estado_envio_contador, 
+              "8"=>'S/. '.  number_format($reg->pago_quincenal, 2, '.', ','),
+              "9"=>'<div class="justify-content-between "> 
+                <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$reg->idtrabajador_por_proyecto.', \'' . $reg->fecha_pago_obrero .  '\', \'' . $reg->nombres_trabajador. '\' )">
+                  <i class="far fa-eye"></i> Detalle
+                </button> 
+                <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 0.00</button>
+              </div>',
+              "10"=>'S./ 0.00',
+              "11"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>'
+            );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);
+        break;
+
+        case 'mostrar_q_s':
+
+          $rspta=$pagoobrero->mostrar_q_s( $_POST["id_trabajdor_x_proyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
         break;
 
         case 'desactivar':
@@ -67,57 +122,6 @@
 
           echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 
-        break;
-
-        case 'mostrar':
-
-          $rspta=$pagoobrero->mostrar($idtrabajador_por_proyecto);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-
-        break;
-
-        case 'listar_tbla_principal':
-          $nube_idproyecto = $_GET["nube_idproyecto"];         
-
-          $rspta=$pagoobrero->listar_tbla_principal($nube_idproyecto);
-          //Vamos a declarar un array
-          $data= Array();
-
-          $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
-          while ($reg=$rspta->fetch_object()){
-            $data[]=array(
-              "0"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres_trabajador .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                <span class="description">'. $reg->nombre_tipo.' / '.$reg->nombre_cargo .' </span>
-              </div>',
-              "1"=>nombre_dia_mes_anio($reg->fecha_inicio),
-              "2"=>'hoy',
-              "3"=>nombre_dia_mes_anio($reg->fecha_fin),
-              "4"=>$reg->total_hn.' / '. $reg->total_he,
-              "5"=>$reg->sabatical,              
-              "6"=>'S/. '.  number_format($reg->sueldo_mensual, 2, '.', ','), 
-              "7"=>$reg->sum_estado_envio_contador, 
-              "8"=>'S/. '.  number_format($reg->pago_quincenal, 2, '.', ','),
-              "9"=>'<div class="justify-content-between "> 
-                <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( )">
-                  <i class="far fa-eye"></i> Detalle
-                </button> 
-                <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 0.00</button>
-              </div>',
-              "10"=>'S./ 0.00',
-              "11"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>'
-            );
-          }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
-          echo json_encode($results);
         break;
 
         case 'select2Trabajador': 
@@ -160,6 +164,40 @@
     $mes_nombre = $fecha_parse->getMMMM().PHP_EOL;
 
     return $mes_nombre;
+  }
+
+  // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
+  function format_a_m_d( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[0]."-".$fecha_expl[1]."-".$fecha_expl[2];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
+  }
+
+  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+  function format_d_m_a( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
   }
 
 	ob_end_flush();

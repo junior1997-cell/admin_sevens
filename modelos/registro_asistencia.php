@@ -146,7 +146,7 @@ Class Asistencia_trabajador
 			if (empty($buscar_extras)) {
 				# insertamos un nuevo registro
 				$sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, pago_quincenal) 
-				VALUES ('".$keys['id_trabajador']."', '".$keys['num_semana']."', '".$keys['fecha_q_s_inicio']."', '".$keys['fecha_q_s_fin']."', '".$keys['total_hn']."', '".$keys['total_he']."', '".$keys['dias_asistidos']."', '".$keys['sabatical']."', '".$keys['pago_parcial_hn']."', '".$keys['pago_parcial_hn']."', '".$keys['adicional_descuento']."', '".$keys['pago_quincenal']."')";
+				VALUES ('".$keys['id_trabajador']."', '".$keys['num_semana']."', '".$keys['fecha_q_s_inicio']."', '".$keys['fecha_q_s_fin']."', '".$keys['total_hn']."', '".$keys['total_he']."', '".$keys['dias_asistidos']."', '".$keys['sabatical']."', '".$keys['pago_parcial_hn']."', '".$keys['pago_parcial_he']."', '".$keys['adicional_descuento']."', '".$keys['pago_quincenal']."')";
 				
 				ejecutarConsulta($sql_5) or $sw = false;
 			} else {

@@ -1610,20 +1610,20 @@ function guardar_fechas_asistencia() {
       'fecha_q_s_inicio':format_a_m_d(f1_r),
       'fecha_q_s_fin':format_a_m_d(f2_r),
       'num_semana': (parseInt(i_r) + 1),
-      'total_hn':$(`.total_HN_${element.id_trabajador}`).text(),
-      'total_he':$(`.total_HE_${element.id_trabajador}`).text(),
+      'total_hn':quitar_formato_miles($(`.total_HN_${element.id_trabajador}`).text()),
+      'total_he':quitar_formato_miles($(`.total_HE_${element.id_trabajador}`).text()),
       'dias_asistidos':$(`.dias_asistidos_${element.id_trabajador}`).text(),
       'sabatical':$(`.sabatical_${element.id_trabajador}`).text(),
-      'pago_parcial_hn':$(`.pago_parcial_HN_${element.id_trabajador}`).text(),
-      'pago_parcial_he':$(`.pago_parcial_HE_${element.id_trabajador}`).text(),
+      'pago_parcial_hn':quitar_formato_miles($(`.pago_parcial_HN_${element.id_trabajador}`).text()),
+      'pago_parcial_he':quitar_formato_miles($(`.pago_parcial_HE_${element.id_trabajador}`).text()),
       'adicional_descuento':$(`.adicional_descuento_${element.id_trabajador}`).val(),
-      'pago_quincenal':$(`.pago_quincenal_${element.id_trabajador}`).text()
+      'pago_quincenal':quitar_formato_miles($(`.pago_quincenal_${element.id_trabajador}`).text())
     }
     array_extras.push( data_array_extras );
   }); 
 
   // console.log(array_trabajador);
-  //console.log(array_extras);
+  console.log(array_extras);
   //console.log(array_datos_asistencia);
 
   editar_fechas_asistencia(2);
@@ -1695,7 +1695,7 @@ function l_m(){
 
 /**formato_miles */
 function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
+  if (!num || num == "NaN") return "0.00";
   if (num == "Infinity") return "&#x221e;";
   num = num.toString().replace(/\$|\,/g, "");
   if (isNaN(num)) num = "0";

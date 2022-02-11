@@ -134,7 +134,7 @@
 
                         <!-- tabla fecha -->
                         <div class="table-responsive" id="tbl-fechas" style="display: none;">
-                          <div class="table-responsive-lg" >
+                          <div class="table-responsive-lg disenio-scroll" >
                             <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
                               <thead>                                  
                                 <tr class="bg-gradient-info">
