@@ -67,6 +67,28 @@ function listar_r_compras(idproyecto) {
       $("#monto_compras").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_compras").html(formato_miles(t_pagos.toFixed(2)));  
       $("#saldo_compras").html(formato_miles(t_saldo.toFixed(2)));  
+
+      $('#tabla1_compras').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
      
   });
 }
@@ -179,6 +201,29 @@ function listar_r_serv_maquinaria(idproyecto) {
       $("#monto_serv_maq").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_serv_maq").html(formato_miles(t_pagos.toFixed(2)));  
       $("#saldo_serv_maq").html(formato_miles(t_saldo.toFixed(2)));  
+
+      $('#tabla2_maquinaria').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
+
      
   });
 }
@@ -225,7 +270,29 @@ function listar_r_serv_equipos(idproyecto) {
 
       $("#monto_serv_equi").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_serv_equi").html(formato_miles(t_pagos.toFixed(2)));  
-      $("#saldo_serv_equi").html(formato_miles(t_saldo.toFixed(2)));  
+      $("#saldo_serv_equi").html(formato_miles(t_saldo.toFixed(2))); 
+      
+      $('#tabla3_equipo').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
      
   });
 }
@@ -345,6 +412,28 @@ function listar_r_transportes(idproyecto) {
       $("#monto_transp").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_transp").html(formato_miles(t_pagos.toFixed(2)));  
       $("#saldo_transp").html(formato_miles(t_saldo.toFixed(2)));  
+
+      $('#tabla4_transporte').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
      
   });
 }
@@ -397,6 +486,28 @@ function listar_r_hospedajes(idproyecto) {
       $("#monto_hosped").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_hosped").html(formato_miles(t_pagos.toFixed(2)));  
       $("#saldo_hosped").html(formato_miles(t_saldo.toFixed(2)));  
+
+      $('#tabla5_hospedaje').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
      
   });
 }
@@ -452,6 +563,28 @@ function listar_r_comidas_extras(idproyecto) {
       $("#pago_cextra").html(formato_miles(t_pagos.toFixed(2)));  
       $("#saldo_cextra").html(formato_miles(t_saldo.toFixed(2)));  
      
+      $('#tabla6_comidas_ex').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
+
   });
 }
 
@@ -505,7 +638,30 @@ function listar_r_breaks(idproyecto) {
 
       $("#monto_break").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_break").html(formato_miles(t_pagos.toFixed(2)));  
-      $("#saldo_break").html(formato_miles(t_saldo.toFixed(2)));  
+      $("#saldo_break").html(formato_miles(t_saldo.toFixed(2))); 
+      
+           
+      $('#tabla7_breaks').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
      
   });
 }
@@ -540,7 +696,7 @@ function listar_comprobantes_breaks(idsemana_break) {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -596,6 +752,28 @@ function listar_r_pensiones(idproyecto) {
       $("#monto_pension").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_pension").html(formato_miles(t_pagos.toFixed(2)));  
       $("#saldo_pension").html(formato_miles(t_saldo.toFixed(2)));  
+
+      $('#tabla8_pension').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
      
   });
 }
@@ -718,8 +896,29 @@ function listar_r_trab_administrativo(idproyecto) {
 
       $("#monto_adm").html(formato_miles(t_monto.toFixed(2)));  
       $("#pago_adm").html(formato_miles(t_pagos.toFixed(2)));  
-      $("#saldo_adm").html(formato_miles(t_saldo.toFixed(2)));  
-     
+      $("#saldo_adm").html(formato_miles(t_saldo.toFixed(2)));
+
+      $('#tabla9_per_adm').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
   });
 }
 //DETALLES DE PAGOS ADMINISTRADORES
@@ -752,10 +951,6 @@ function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto) {
   });
   
 }
-
-$(document).ready(function() {
-  $('#example').DataTable();
-} );
 
 init();
 

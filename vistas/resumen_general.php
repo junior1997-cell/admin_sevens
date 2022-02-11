@@ -62,11 +62,12 @@
                                                 border-bottom: aliceblue;
                                                 border-left: aliceblue;
                                                 border-right: aliceblue;
+                                                border-top: hidden;
                                                 }
                                         </style>
                                        <div class="container table-responsive disenio-scroll">
-
-                                            <table id="example" class="display" style="width: 100%;">
+                                            <!--Compras-->
+                                            <table id="tabla1_compras" class="display" style="width: 100%;">
                                                 <thead>
                                                     <tr>
                                                     <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Compras</th>
@@ -83,18 +84,6 @@
                                                     </tr>
                                                 </thead>
                                                 
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Compras</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
                                                 <tbody  id="compras"></tbody>
 
                                                 <tbody>
@@ -105,17 +94,29 @@
                                                         <th  class="clas_pading text-right" id="pago_compras" ></th>
                                                         <th  class="clas_pading text-right" id="saldo_compras" ></th>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Servicios-Maquinaria</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
                                                 </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Servicios-Maquinaria-->
+                                            <table id="tabla2_maquinaria" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Servicios-Maquinaria</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
 
                                                 <tbody  id="serv_maquinas"></tbody>
 
@@ -127,154 +128,17 @@
                                                         <th class="clas_pading text-right" id="pago_serv_maq"></th>
                                                         <th class="clas_pading text-right" id="saldo_serv_maq"></th>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Servicios-Equipo</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
                                                 </tbody>
+                                                <tfoot> </tfoot>
 
-                                                <tbody  id="serv_equipos"></tbody>
-                                                
-                                                <tbody>
+                                            </table>
+                                            <br>
+                                            <!--Servicios-Equipo-->
+                                            <table id="tabla3_equipo" class="display" style="width: 100%;">
+                                                <thead>
                                                     <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                        <th class="clas_pading text-right" id="monto_serv_equi"></th>
-                                                        <th class="clas_pading text-right" id="pago_serv_equi"></th>
-                                                        <th class="clas_pading text-right" id="saldo_serv_equi"></th>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Servicios-Equipo</th>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Transporte</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody  id="transportes"></tbody>
-
-                                                <tbody>
-                                                    <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                        <th class="clas_pading text-right" id="monto_transp"></th>
-                                                        <th class="clas_pading text-right" id="pago_transp"></th>
-                                                        <th class="clas_pading text-right" id="saldo_transp"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Hospedaje</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody id="hospedaje"></tbody>
-
-                                                <tbody>
-                                                    <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                        <th class="clas_pading text-right" id="monto_hosped"></th>
-                                                        <th class="clas_pading text-right" id="pago_hosped"></th>
-                                                        <th class="clas_pading text-right" id="saldo_hosped"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Comidas extras</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody id="comida_extra"></tbody>
-                                                <tbody>
-                                                    <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                        <th class="clas_pading text-right" id="monto_cextra"></th>
-                                                        <th class="clas_pading text-right" id="pago_cextra"></th>
-                                                        <th class="clas_pading text-right" id="saldo_cextra"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Breaks</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody id="breaks"></tbody>
-                                                <tbody>
-                                                    <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                        <th class="clas_pading text-right" id="monto_break"></th>
-                                                        <th class="clas_pading text-right" id="pago_break"></th>
-                                                        <th class="clas_pading text-right" id="saldo_break"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Pensión</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody id="pension"></tbody>
-                                                <tbody>
-                                                    <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                    <th class="clas_pading text-right" id="monto_pension"></th>
-                                                    <th class="clas_pading text-right" id="pago_pension"></th>
-                                                    <th class="clas_pading text-right" id="saldo_pension"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-center w-px-300 clas_pading backgff9100" colspan="8">Personal Administrativo</td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                        <td class="hidden"></td>
-                                                    </tr>
-                                                </tbody>
-                                                
-                                                <tbody id="administrativo"></tbody>
-                                                <tbody>
-                                                    <tr>
-                                                        <th colspan="4" class="clas_pading"></th>
-                                                        <th class="clas_pading text-right">Total</th>
-                                                        <th class="clas_pading text-right" id="monto_adm"></th>
-                                                        <th class="clas_pading text-right" id="pago_adm"></th>
-                                                        <th class="clas_pading text-right" id="saldo_adm"></th>
-                                                    </tr>
-                                                </tbody>
-
-                                                <tfoot>
                                                     <tr>
                                                         <th class="text-center clas_pading">#</th>
                                                         <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
@@ -285,7 +149,225 @@
                                                         <th class="text-center clas_pading">PAGOS</th>
                                                         <th class="text-center clas_pading">SALDOS</th>
                                                     </tr>
-                                                </tfoot>
+                                                </thead>
+                                                
+                                                <tbody  id="serv_equipos"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_serv_equi"></th>
+                                                        <th class="clas_pading text-right" id="pago_serv_equi"></th>
+                                                        <th class="clas_pading text-right" id="saldo_serv_equi"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Transporte-->
+                                            <table id="tabla4_transporte" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Transporte</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody  id="transportes"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_transp"></th>
+                                                        <th class="clas_pading text-right" id="pago_transp"></th>
+                                                        <th class="clas_pading text-right" id="saldo_transp"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Hospedaje-->
+                                            <table id="tabla5_hospedaje" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Hospedaje</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody id="hospedaje"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_hosped"></th>
+                                                        <th class="clas_pading text-right" id="pago_hosped"></th>
+                                                        <th class="clas_pading text-right" id="saldo_hosped"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Comidas extras-->
+                                            <table id="tabla6_comidas_ex" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Comidas extras</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                                                            
+                                                <tbody id="comida_extra"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_cextra"></th>
+                                                        <th class="clas_pading text-right" id="pago_cextra"></th>
+                                                        <th class="clas_pading text-right" id="saldo_cextra"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Breaks-->
+                                            <table id="tabla7_breaks" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Breaks</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                   
+                                                <tbody id="breaks"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_break"></th>
+                                                        <th class="clas_pading text-right" id="pago_break"></th>
+                                                        <th class="clas_pading text-right" id="saldo_break"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Pensión-->
+                                            <table id="tabla8_pension" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Pensión</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                   
+                                                <tbody id="pension"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                    <th class="clas_pading text-right" id="monto_pension"></th>
+                                                    <th class="clas_pading text-right" id="pago_pension"></th>
+                                                    <th class="clas_pading text-right" id="saldo_pension"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
+                                            <br>
+                                            <!--Personal Administrativo-->
+                                            <table id="tabla9_per_adm" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Personal Administrativo</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                   
+                                                <tbody id="administrativo"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_adm"></th>
+                                                        <th class="clas_pading text-right" id="pago_adm"></th>
+                                                        <th class="clas_pading text-right" id="saldo_adm"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
 
                                             </table>
 
