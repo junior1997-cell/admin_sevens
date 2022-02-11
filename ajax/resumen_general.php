@@ -184,14 +184,11 @@ switch ($_GET["op"]){
 						
 						$data[]=array(
 							"0"=>$fecha,
-							"1"=>empty($reg->horometro_inicial) || $reg->horometro_inicial=='0.00'?'-':$reg->horometro_inicial,
-							"2"=>empty($reg->horometro_final) || $reg->horometro_final=='0.00'?'-':$reg->horometro_final,
-							"3"=>empty($reg->horas)|| $reg->horas=='0.00'?'-':$reg->horas,
-							"4"=>empty($reg->costo_unitario) || $reg->costo_unitario=='0.00'?'-':number_format($reg->costo_unitario, 2, '.', ','),
-							"5"=>empty($reg->unidad_medida)?'-':$reg->unidad_medida,
-							"6"=>empty($reg->cantidad)?'-':$reg->cantidad,
-							"7"=>empty($reg->costo_parcial)?'-':number_format($reg->costo_parcial, 2, '.', ','),
-							"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+							"1"=>empty($reg->unidad_medida)?'-':$reg->unidad_medida,
+							"2"=>empty($reg->cantidad)?'-':$reg->cantidad,
+							"3"=>empty($reg->costo_unitario) || $reg->costo_unitario=='0.00'?'-':number_format($reg->costo_unitario, 2, '.', ','),
+							"4"=>empty($reg->costo_parcial)?'-':number_format($reg->costo_parcial, 2, '.', ','),
+							"5"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
 							);
 					}
 					$results = array(

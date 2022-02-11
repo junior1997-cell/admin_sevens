@@ -243,7 +243,7 @@ function listar_r_serv_maquinaria(idproyecto) {
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Maquinaria:','${value.proveedor}')"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -319,7 +319,7 @@ function listar_r_serv_equipos(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${value.proveedor}</td>
           <td class="bg-color-b4bdbe47  clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Equipo:','${value.proveedor}')"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -361,40 +361,16 @@ function listar_r_serv_equipos(idproyecto) {
   });
 }
 //Función detalles por maquina-equipo
-function ver_detalle(idmaquinaria,idproyecto,unidad_medida) {
+function ver_detalle(idmaquinaria,idproyecto,servicio,proveedor) {
+
+  $("#nombre_proveedor_").html("");
+  
 
   $("#modal_ver_detalle_maq_equ").modal('show');
-  var hideen_colums;
-  //console.log('lis_deta '+idproyecto,idmaquinaria,unidad_medida);
-  $("#tabla_principal").hide();
-  $("#tabla_detalles").show();
-  $("#btn-agregar").hide();
-  $("#btn-regresar").show();
-  $("#btn-pagar").hide();
-  if (unidad_medida=='Hora') {
-    hideen_colums=[];
-    
-  }else{
-    hideen_colums=[
-      {
-          "targets": [ 3 ],
-          "visible": false,
-          "searchable": false
-      },
-      {
-          "targets": [ 4 ],
-          "visible": false,
-          "searchable": false
-      },
-      {
-          "targets": [ 5 ],
-          "visible": false,
-          "searchable": false
-      }
-  ]
 
-  }
- // console.log(hideen_colums);
+  $("#detalle_").html(servicio);
+  $("#nombre_proveedor_").html(proveedor);
+ 
   tabla2=$('#tabla-detalle-m').dataTable({
     "responsive": true,
     "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
@@ -423,7 +399,6 @@ function ver_detalle(idmaquinaria,idproyecto,unidad_medida) {
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
-    "columnDefs": hideen_colums
   }).DataTable();
   
 }

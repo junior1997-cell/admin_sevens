@@ -525,7 +525,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title"> <b>Maquinas - Equipos:</b></h4>
+                                    <h4 class="modal-title"> <span id="detalle_"></span> <b id="nombre_proveedor_"></b></h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span class="text-danger" aria-hidden="true">&times;</span>
                                     </button>
@@ -537,12 +537,9 @@
                                         <thead>
                                             <tr>
                                                 <th>Fecha</th>
-                                                <th>Horometro Inicial</th>
-                                                <th>Horometro Final</th>
-                                                <th>Total Horas </th>
-                                                <th>Costo Unitario</th>
                                                 <th>Unidad M.</th>
                                                 <th>Cantidad</th>
+                                                <th>Costo Unitario</th>
                                                 <th>Costo Parcial</th>
                                                 <th>Descripción</th>
                                             </tr>
@@ -551,12 +548,9 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Fecha</th>
-                                                <th>Horometro Inicial</th>
-                                                <th>Horometro Final</th>
-                                                <th id="horas-total">Total Horas </th>
-                                                <th>Costo Unitario</th>
                                                 <th>Unidad M.</th>
                                                 <th>Cantidad</th>
+                                                <th>Costo Unitario</th>
                                                 <th>Costo Parcial</th>
                                                 <th>Descripción</th>
                                             </tr>
