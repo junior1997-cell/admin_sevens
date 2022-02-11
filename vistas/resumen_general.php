@@ -34,8 +34,17 @@
                 <section class="content-header">
                     <div class="container-fluid">
                         <div class="row mb-2">
-                            <div class="col-sm-12 tex-center" style="text-align: center;font-weight: bold;">
+                            <div class="col-sm-12 tex-center" style="font-weight: bold;">
+                            <div class="row">
+                                <div class="col-6 text-right">
                                 <h1  style="font-weight: bold;">RESUMEN GENERAL</h1>
+                                </div>
+                                <div class="col-6">
+                                <button class="btn btn-success btn-md" style="font-weight: bold;">Exportar <i class="fas fa-file-excel"></i></button>
+                                </div>
+                            </div>
+                               
+                                
                             </div>
                         </div>
                     </div>
