@@ -50,7 +50,9 @@ function listar_r_compras(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_compra)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.descripcion==""?'---':value.descripcion}</td>
+          <td class="bg-color-b4bdbe47  clas_pading">         
+          <textarea cols="30" rows="1" class="text_area_clss" readonly > ${value.descripcion==""?'---':value.descripcion}</textarea>
+          </td>
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle_compras(${value.idcompra_proyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.monto_total).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -184,7 +186,7 @@ function listar_r_serv_maquinaria(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading">--</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -254,7 +256,7 @@ function listar_r_serv_equipos(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${value.proveedor}</td>
           <td class="bg-color-b4bdbe47  clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading">--</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -395,7 +397,7 @@ function listar_r_transportes(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_viaje)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.descripcion}</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion==""?'---':value.descripcion}</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -469,7 +471,7 @@ function listar_r_hospedajes(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comprobante)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.descripcion}</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion==""?'---':value.descripcion}</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -544,7 +546,8 @@ function listar_r_comidas_extras(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comida)}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading">
-          <textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion}</textarea> </td>
+            <textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion==""?'---':value.descripcion}</textarea> 
+          </td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -619,7 +622,7 @@ function listar_r_breaks(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - ${format_d_m_a(value.fecha_final)} </span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
             <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
           </td>
@@ -731,7 +734,7 @@ function listar_r_pensiones(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
             <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
             <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
@@ -855,8 +858,8 @@ function listar_r_trab_administrativo(idproyecto) {
   $("#saldo_adm").html("");
 
   $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { idproyecto: idproyecto }, function (data, status) {
-    console.log('.^.....^.');
-    data = JSON.parse(data);  console.log(data);  
+
+    data = JSON.parse(data); // console.log(data);  
 
     data.forEach((value,index)=>{
 
@@ -875,9 +878,9 @@ function listar_r_trab_administrativo(idproyecto) {
 
       administrativo=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.nombres}</textarea></td>
+          <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
             <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
           </td>
