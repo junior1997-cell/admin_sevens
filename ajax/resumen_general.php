@@ -489,7 +489,7 @@ switch ($_GET["op"]){
 			if ($_SESSION['resumen_general']==1)
 			{
 				//$_POST['idtrabajador_por_proyecto']
-				$rspta=$resumen_general->r_detalle_trab_administrativo(1);
+				$rspta=$resumen_general->r_detalle_trab_administrativo($_POST['idtrabajador_por_proyecto']);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso
@@ -506,8 +506,13 @@ switch ($_GET["op"]){
 	case 'select_proveedores':
 
 		$rspta=$resumen_general->select_proveedores();
-
+		$estado=true;
 		while ($reg = $rspta->fetch_object())  {
+			
+			if ($estado) {
+				echo '<option>Seleccionar proveedor</option>';
+				$estado=false;
+			}
 
 		  echo '<option  value='.$reg->idproveedor. '>' . $reg->razon_social .'-'. $reg->ruc.'</option>';
 		}
@@ -516,10 +521,14 @@ switch ($_GET["op"]){
 	case 'selecct_trabajadores':
 
 		$rspta=$resumen_general->selecct_trabajadores($_GET['idproyecto']);
-
+		$estado=true;
 		while ($reg = $rspta->fetch_object())  {
 
-		  echo '<option  value=' . $reg->idtrabajador_por_proyecto  . '>' . $reg->nombres .'-'.$reg->numero_documento.'</option>';
+			if ($estado) {
+				echo '<option>Seleccionar trabajador</option>';
+				$estado=false;
+			}
+			  echo '<option  value=' . $reg->idtrabajador_por_proyecto  . '>' . $reg->nombres .'-'.$reg->numero_documento.'</option>';
 		}
 
 	break;

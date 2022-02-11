@@ -711,7 +711,7 @@
                             </div>
                             <div class="modal-body">
 
-                                <div  class="class-style" style="text-align: center;"> 
+                                <div  class="class-style tabla" style="text-align: center;"> 
                                     <div class="table-responsive" id="tbl-fechas" >
                                         <div class="table-responsive-lg">
                                             <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
@@ -732,6 +732,12 @@
                                                 </tfoot>
                                             </table>
                                         </div>
+                                    </div>
+                                </div>
+                                <div style="display: none;" class="alerta">
+                                    <div class="alert alert-warning alert-dismissible">
+                                        <h5><i class="icon fas fa-exclamation-triangle fa-3x text-white"></i> <b>No hay pagos!</b> </h5>
+                                        No hay detalles de pagos para mostrar, puede registrar pagos en el módulo <b>pagos trabajador.</b> 
                                     </div>
                                 </div>
                             </div>

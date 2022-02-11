@@ -273,7 +273,7 @@ Class Resumen_general
 
 	public function r_trab_administrativo($idproyecto)
 	{
-		$administrativo= Array(); $monto_total=0; $pago_monto_total=0;
+		$administrativo= Array(); $m_total_x_meses=0; $pago_monto_total=0;
 
 		$sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idproyecto, t.nombres, ct.nombre as cargo 
 		FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tt 
@@ -285,6 +285,8 @@ Class Resumen_general
 
 			foreach ($traba_adm as $key => $value) {
 
+				$pago_monto_total=0;
+
 				$idtrabajador_por_proyecto=$value['idtrabajador_por_proyecto'];
 
 				$sql_2 = "SELECT idfechas_mes_pagos_administrador, monto_x_mes FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
@@ -292,6 +294,7 @@ Class Resumen_general
 
 				$sql_3 = "SELECT SUM(monto_x_mes) as total_montos_x_meses FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
 				$total_montos_x_meses=ejecutarConsultaSimpleFila($sql_3);
+
 
 				foreach ($fechas_mes_pagos_administrador as $key => $valor) {
 
@@ -303,11 +306,12 @@ Class Resumen_general
 
 					$pago_monto_total=$pago_monto_total+$return_monto_pago['total_monto_pago'];
 				}
-				
-				if (empty($return_monto_pago)) {
-					$monto_total=0;
+
+				if (empty($total_montos_x_meses['total_montos_x_meses']) || $total_montos_x_meses['total_montos_x_meses']==null ) {
+
+					$m_total_x_meses=0;
 				}else{
-					$monto_total=$return_monto_pago;
+					$m_total_x_meses=$total_montos_x_meses['total_montos_x_meses'];
 				}
 
 				$administrativo[]= array(
@@ -317,7 +321,8 @@ Class Resumen_general
 					"nombres"     	             => $value['nombres'],
 					"cargo"    		             => $value['cargo'],
 
-					"total_montos_x_meses"       =>$total_montos_x_meses['total_montos_x_meses'],
+					"total_montos_x_meses"       =>$m_total_x_meses,
+
 					"pago_total_adm"             =>$pago_monto_total
 
 				);
