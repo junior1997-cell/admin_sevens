@@ -465,7 +465,31 @@ switch ($_GET["op"]){
 			//Validamos el acceso solo al material logueado y autorizado.
 			if ($_SESSION['resumen_general']==1)
 			{
-				$rspta=$resumen_general->r_trab_administrativo(1);
+				$rspta=$resumen_general->r_trab_administrativo($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}	
+
+	break;
+	case 'ver_detalle_pagos_x_trab_adms':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				//$_POST['idtrabajador_por_proyecto']
+				$rspta=$resumen_general->r_detalle_trab_administrativo(1);
 		 		//Codificar el resultado utilizando json
 		 		echo json_encode($rspta);
 			//Fin de las validaciones de acceso

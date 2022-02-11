@@ -316,7 +316,7 @@ Class Resumen_general
 					"idproyecto"        		 => $value['idproyecto'],
 					"nombres"     	             => $value['nombres'],
 					"cargo"    		             => $value['cargo'],
-					
+
 					"total_montos_x_meses"       =>$total_montos_x_meses['total_montos_x_meses'],
 					"pago_total_adm"             =>$pago_monto_total
 
@@ -327,6 +327,49 @@ Class Resumen_general
 		}
 		return $administrativo;
 	
+	}
+
+	public function r_detalle_trab_administrativo($idtrabajador_por_proyecto)
+	{
+		$detalle_pagos_adm= Array(); $monto_total=0;
+
+		$sql="SELECT idfechas_mes_pagos_administrador,idtrabajador_por_proyecto,fecha_inicial,fecha_final,nombre_mes,cant_dias_laborables,monto_x_mes 
+				FROM fechas_mes_pagos_administrador	WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
+
+		$fechas_mes_pagos_adm=ejecutarConsultaArray($sql);
+
+		if(!empty($fechas_mes_pagos_adm)){
+
+			foreach ($fechas_mes_pagos_adm as $key => $value) {
+				$idfechas_mes_pagos_adm=$value['idfechas_mes_pagos_administrador'];
+	
+				$sql_2="SELECT SUM(monto) as monto_total_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_adm' AND estado=1";
+						
+				$return_monto_pago = ejecutarConsultaSimpleFila($sql_2);
+
+				if (empty($return_monto_pago)) {
+					$monto_total=0;
+				}else{
+					$monto_total=$return_monto_pago['monto_total_pago'];
+				}
+	
+				$detalle_pagos_adm[]= array(
+	
+					"fecha_inicial"  => $value['fecha_inicial'],
+					"fecha_final"  => $value['fecha_final'],
+					"nombre_mes"  => $value['nombre_mes'],
+					"cant_dias_laborables"  => $value['cant_dias_laborables'],
+					"monto_x_mes"  => $value['monto_x_mes'],
+
+					'return_monto_pago' =>$monto_total
+				);
+				
+			}
+
+		}
+
+
+		return $detalle_pagos_adm;
 	}
 
 

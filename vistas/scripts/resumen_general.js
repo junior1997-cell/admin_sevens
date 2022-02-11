@@ -50,8 +50,8 @@ function listar_r_compras(idproyecto) {
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_compra)}</span></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle_compras(${value.idcompra_proyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47  clas_pading">${value.descripcion==""?'---':value.descripcion}</td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle_compras(${value.idcompra_proyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.monto_total).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -160,8 +160,9 @@ function listar_r_serv_maquinaria(idproyecto) {
 
       compras=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.maquina}<span style="font-size: 13px; color: red;"> ${value.cantidad_veces} veces</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading">--</td>
+          <td class="bg-color-b4bdbe47  clas_pading">--</td>
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -206,8 +207,9 @@ function listar_r_serv_equipos(idproyecto) {
 
       compras=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.maquina}<span style="font-size: 13px; color: red;"> ${value.cantidad_veces} veces</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">${value.proveedor}</td>
+          <td class="bg-color-b4bdbe47  clas_pading">--</td>
+          <td class="bg-color-b4bdbe47  clas_pading">--</td>
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
@@ -324,9 +326,10 @@ function listar_r_transportes(idproyecto) {
 
       compras=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_viaje)}</span></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47  clas_pading">${value.descripcion}</td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -375,9 +378,10 @@ function listar_r_hospedajes(idproyecto) {
 
       compras=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comprobante)}</span></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47  clas_pading">${value.descripcion}</td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -426,9 +430,11 @@ function listar_r_comidas_extras(idproyecto) {
 
       compras=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comida)}</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading">
+          <textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion}</textarea> </td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion}</textarea> </td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
@@ -478,8 +484,9 @@ function listar_r_breaks(idproyecto) {
 
       breaks=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.numero_semana}</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - ${format_d_m_a(value.fecha_final)} </span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
             <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
           </td>
@@ -567,7 +574,8 @@ function listar_r_pensiones(idproyecto) {
       pension=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.direccion}} </span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
             <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
             <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
@@ -663,20 +671,20 @@ function listar_comprobantes_pension(idpension) {
 function listar_r_trab_administrativo(idproyecto) {  
   var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
 
-  $("#pension").html("");
-  $("#monto_pension").html("");  
-  $("#pago_pension").html("");  
-  $("#saldo_pension").html("");
+  $("#administrativo").html("");
+  $("#monto_adm").html("");  
+  $("#pago_adm").html("");  
+  $("#saldo_adm").html("");
 
   $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { idproyecto: idproyecto }, function (data, status) {
-    console.log('.^^.');
+    console.log('.^.....^.');
     data = JSON.parse(data);  console.log(data);  
 
     data.forEach((value,index)=>{
 
-      if (value.monto_total_pension!=null) {
-        calculando_sldo=parseFloat(value.monto_total_pension)-parseFloat(value.pago_total_pension);
-        validando_pago=parseFloat(value.pago_total_pension);
+      if (value.total_montos_x_meses!=null) {
+        calculando_sldo=parseFloat(value.total_montos_x_meses)-parseFloat(value.pago_total_adm);
+        validando_pago=parseFloat(value.pago_total_adm);
       } else {
         calculando_sldo=0;
         validando_pago=0;
@@ -687,33 +695,67 @@ function listar_r_trab_administrativo(idproyecto) {
         comprobante=`<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
       }
 
-      pension=`<tr>
+      administrativo=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.direccion}} </span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.nombres}</textarea></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
+            <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
           </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total_montos_x_meses).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
-      t_monto=t_monto+parseFloat(value.monto_total_pension);
+      t_monto=t_monto+parseFloat(value.total_montos_x_meses);
       t_pagos=t_pagos+parseFloat(validando_pago);
       t_saldo=t_saldo+parseFloat(calculando_sldo);
 
-      $("#pension").append(pension);
+      $("#administrativo").append(administrativo);
 
     });
 
-      $("#monto_pension").html(formato_miles(t_monto.toFixed(2)));  
-      $("#pago_pension").html(formato_miles(t_pagos.toFixed(2)));  
-      $("#saldo_pension").html(formato_miles(t_saldo.toFixed(2)));  
+      $("#monto_adm").html(formato_miles(t_monto.toFixed(2)));  
+      $("#pago_adm").html(formato_miles(t_pagos.toFixed(2)));  
+      $("#saldo_adm").html(formato_miles(t_saldo.toFixed(2)));  
      
   });
 }
+//DETALLES DE PAGOS ADMINISTRADORES
+function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto) {
+
+  $("#modal-ver-detalle-t-administ").modal('show');
+
+  $(".data-detalle-pagos-administador").html("");
+
+  $.post("../ajax/resumen_general.php?op=ver_detalle_pagos_x_trab_adms", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);  
+    
+    data.forEach((value,index)=>{
+
+      detalle=`<tr>
+                <td>${index+1}</td>
+                <td>${value.nombre_mes}</td>
+                <td>${format_d_m_a(value.fecha_inicial)}</td>
+                <td>${format_d_m_a(value.fecha_final)}</td>
+                <td>${value.cant_dias_laborables}</td>
+                <td>S/. ${ formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
+                <td>S/. ${ formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
+            </tr>`;
+
+      $(".data-detalle-pagos-administador").append(detalle);
+
+    });
+
+  });
+  
+}
+
+$(document).ready(function() {
+  $('#example').DataTable();
+} );
 
 init();
 
