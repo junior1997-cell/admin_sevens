@@ -509,7 +509,7 @@ switch ($_GET["op"]){
 
 		while ($reg = $rspta->fetch_object())  {
 
-		  echo '<option  value=' . $reg->idproveedor  . '>' . $reg->razon_social .'</option>';
+		  echo '<option  value='.$reg->idproveedor. '>' . $reg->razon_social .'-'. $reg->ruc.'</option>';
 		}
 
 	break;
@@ -519,7 +519,7 @@ switch ($_GET["op"]){
 
 		while ($reg = $rspta->fetch_object())  {
 
-		  echo '<option  value=' . $reg->idtrabajador  . '>' . $reg->nombres .'</option>';
+		  echo '<option  value=' . $reg->idtrabajador_por_proyecto  . '>' . $reg->nombres .'-'.$reg->numero_documento.'</option>';
 		}
 
 	break;

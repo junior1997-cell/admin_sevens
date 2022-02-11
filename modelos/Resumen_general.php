@@ -374,13 +374,13 @@ Class Resumen_general
 
 	public function select_proveedores()
 	{
-		$sql="SELECT idproveedor, razon_social FROM proveedor";
+		$sql="SELECT idproveedor, razon_social, ruc FROM proveedor";
 		return ejecutarConsulta($sql);
 	}
 
 	public function selecct_trabajadores($idproyecto)
 	{
-		$sql="SELECT tpp.idtrabajador, t.nombres FROM trabajador_por_proyecto as tpp, trabajador as t
+		$sql="SELECT tpp.idtrabajador_por_proyecto, t.nombres, t.numero_documento FROM trabajador_por_proyecto as tpp, trabajador as t
 			WHERE tpp.idtrabajador= t.idtrabajador AND tpp.idproyecto='$idproyecto'";
 		return ejecutarConsulta($sql);
 	}
