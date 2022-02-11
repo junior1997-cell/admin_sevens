@@ -501,6 +501,28 @@ switch ($_GET["op"]){
 		}	
 
 	break;
+
+	
+	case 'select_proveedores':
+
+		$rspta=$resumen_general->select_proveedores();
+
+		while ($reg = $rspta->fetch_object())  {
+
+		  echo '<option  value=' . $reg->idproveedor  . '>' . $reg->razon_social .'</option>';
+		}
+
+	break;
+	case 'selecct_trabajadores':
+
+		$rspta=$resumen_general->selecct_trabajadores($_GET['idproyecto']);
+
+		while ($reg = $rspta->fetch_object())  {
+
+		  echo '<option  value=' . $reg->idtrabajador  . '>' . $reg->nombres .'</option>';
+		}
+
+	break;
 	
 
 

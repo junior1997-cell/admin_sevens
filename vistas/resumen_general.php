@@ -48,6 +48,35 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="card card-primary card-outline">
+                                    <div class="row">
+                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                                                    <label for="filtros">Filtar por Fecha </label>                               
+                                                    <input type="date"  class="form-control"  placeholder="Seleccionar fecha" > 
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                                    <label for="filtros">Trabajador </label>
+                                                    <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" > 
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                                    <label for="filtros">Proveedor </label>  
+                                                    <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;" > 
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                                    <label for="filtros">Filtrar por.</label>
+                                                    <select name="filtrar_por" id="filtrar_por" class="form-control select2" style="width: 100%;" > 
+                                                        <option value="proveedor_sindeuda">proveedor sin deuda</option>
+                                                        <option value="proveedor_condeuda">proveedor con deuda</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
                                         <style>

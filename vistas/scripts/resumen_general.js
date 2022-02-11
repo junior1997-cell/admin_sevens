@@ -19,6 +19,39 @@ function init() {
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
 
+  
+    //Mostramos los trabajadores
+    $.post('../ajax/resumen_general.php?op=selecct_trabajadores&idproyecto='+localStorage.getItem('nube_idproyecto'), function (r) { $("#trabajador").html(r); });
+
+    //Mostramos los proveedores
+    $.post("../ajax/resumen_general.php?op=select_proveedores", function (r) { $("#proveedor").html(r); });
+
+    //Initialize Select2 filtrar_por
+    $("#filtrar_por").select2({
+      theme: "bootstrap4",
+      placeholder: "Selecionar",
+      allowClear: true,
+    });
+
+    //Initialize Select2 trabajador
+    $("#trabajador").select2({
+      theme: "bootstrap4",
+      placeholder: "Selecionar trabajador",
+      allowClear: true,
+    });
+    
+    //Initialize Select2 proveedor
+    $("#proveedor").select2({
+      theme: "bootstrap4",
+      placeholder: "Selecionar proveedor",
+      allowClear: true,
+    });
+  
+    //============borramos los valores================
+    $("#filtrar_por").val("null").trigger("change");
+    $("#trabajador").val("null").trigger("change");
+    $("#proveedor").val("null").trigger("change");
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 
@@ -621,7 +654,7 @@ function listar_r_breaks(idproyecto) {
       breaks=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - ${format_d_m_a(value.fecha_final)} </span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - <br> ${format_d_m_a(value.fecha_final)} </span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
             <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>

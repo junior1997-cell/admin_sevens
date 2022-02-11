@@ -34,7 +34,7 @@ function init() {
 
   $("#lPension").addClass("active");
 
-    //Mostramos los trabajadores
+    //Mostramos los proveedor
     $.post("../ajax/pension.php?op=select_proveedor", function (r) { $("#proveedor").html(r); });
 
     

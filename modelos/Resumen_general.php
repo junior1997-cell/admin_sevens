@@ -372,6 +372,19 @@ Class Resumen_general
 		return $detalle_pagos_adm;
 	}
 
+	public function select_proveedores()
+	{
+		$sql="SELECT idproveedor, razon_social FROM proveedor";
+		return ejecutarConsulta($sql);
+	}
+
+	public function selecct_trabajadores($idproyecto)
+	{
+		$sql="SELECT tpp.idtrabajador, t.nombres FROM trabajador_por_proyecto as tpp, trabajador as t
+			WHERE tpp.idtrabajador= t.idtrabajador AND tpp.idproyecto='$idproyecto'";
+		return ejecutarConsulta($sql);
+	}
+
 
 
 }
