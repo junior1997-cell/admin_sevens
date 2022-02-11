@@ -82,7 +82,7 @@
                                         <style>
                                             table.colapsado {border-collapse: collapse;} 
                                             .clas_pading{ padding: 0.20rem  0.75rem  0.20rem  0.75rem !important;}
-                                            .backgff9100{background-color: #ff9100;}
+                                            .backgff9100{background-color: #ffe300;}
                                             .colorf0f8ff00{color: #f0f8ff00;}
                                             .text_area_clss{
                                                 width: 280px;
@@ -92,7 +92,12 @@
                                                 border-left: aliceblue;
                                                 border-right: aliceblue;
                                                 border-top: hidden;
-                                                }
+                                            }
+                                            .bg-red-resumen {
+                                                background-color: #ff2036 !important;
+                                                color: #ffffff !important;
+                                            }
+                                            
                                         </style>
                                        <div class="container table-responsive disenio-scroll">
                                             <!--Compras-->
@@ -704,7 +709,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Detalles</h4>
+                                <h4 class="modal-title">Detalles: <b id="nombre_trabajador_detalle"></b> </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span class="text-danger" aria-hidden="true">&times;</span>
                                 </button>
@@ -721,14 +726,32 @@
                                                         <th class="stile-celda">Mes</th>
                                                         <th colspan="2" class="stile-celda">Fechas Inicial/Final</th>
                                                         <th class="stile-celda text-center">Días laborables</th>
-                                                        <th class="stile-celda text-center">Sueldo</th>
-                                                        <th class="stile-celda">Pago Acumulado</th>
+                                                        <th class="stile-celda text-center">Sueldo estimado</th>
+                                                        <th class="stile-celda">Depósitos</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="tcuerpo data-detalle-pagos-administador">
                                                     <!--deatlle de los pagos adm-->
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="text-right sueldo_estimado"></td>
+                                                        <td class="text-right depositos"></td>
+                                                    </tr>
                                                 </tbody>
-                                                <tfoot>
+                                                <tfoot class="">
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th class="stile-celda-right sueldo_estimado"></th>
+                                                        <th class="stile-celda-right depositos"></th>
+                                                    </tr>
                                                 </tfoot>
                                             </table>
                                         </div>

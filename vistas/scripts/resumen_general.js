@@ -68,7 +68,7 @@ $( document ).ready(function() {
 
 function listar_r_compras(idproyecto) {
   var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0;
-
+  var  pintar_celda='';
   $("#compras").html("");
   $("#monto_compras").html("");  
   $("#pago_compras").html("");  
@@ -88,6 +88,13 @@ function listar_r_compras(idproyecto) {
         validando_pago=0;
       }
 
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
+
       compras=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
@@ -98,7 +105,7 @@ function listar_r_compras(idproyecto) {
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle_compras(${value.idcompra_proyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.monto_total).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       t_monto=t_monto+parseFloat(value.monto_total);
       t_pagos=t_pagos+parseFloat(validando_pago);
@@ -204,7 +211,7 @@ function ver_detalle_compras(idcompra_proyecto) {
 
 function listar_r_serv_maquinaria(idproyecto) {
   var serv_maquinaria=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0;
-
+  var  pintar_celda='';
   $("#serv_maquinas").html("");
   $("#monto_serv_maq").html("");  
   $("#pago_serv_maq").html("");  
@@ -224,6 +231,13 @@ function listar_r_serv_maquinaria(idproyecto) {
         validando_pago=0;
       }
 
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
+
       serv_maquinaria=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
@@ -232,7 +246,7 @@ function listar_r_serv_maquinaria(idproyecto) {
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       t_monto=t_monto+parseFloat(value.costo_parcial);
       t_pagos=t_pagos+parseFloat(validando_pago);
@@ -274,7 +288,7 @@ function listar_r_serv_maquinaria(idproyecto) {
 
 function listar_r_serv_equipos(idproyecto) {
   var serv_equipos=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0;
-
+  var  pintar_celda='';
   $("#serv_equipos").html("");
   $("#monto_serv_equi").html("");  
   $("#pago_serv_equi").html("");  
@@ -293,6 +307,12 @@ function listar_r_serv_equipos(idproyecto) {
         calculando_sldo=0;
         validando_pago=0;
       }
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
 
       serv_equipos=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
@@ -302,7 +322,7 @@ function listar_r_serv_equipos(idproyecto) {
           <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto})"><i class="fa fa-eye"></i></button></td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       t_monto=t_monto+parseFloat(value.costo_parcial);
       t_pagos=t_pagos+parseFloat(validando_pago);
@@ -410,7 +430,7 @@ function ver_detalle(idmaquinaria,idproyecto,unidad_medida) {
 
 function listar_r_transportes(idproyecto) {
   var transportes=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
-
+  var  pintar_celda='';
   $("#transportes").html("");
   $("#monto_transp").html("");  
   $("#pago_transp").html("");  
@@ -429,6 +449,13 @@ function listar_r_transportes(idproyecto) {
         calculando_sldo=0;
         validando_pago=0;
       }
+
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
       if (value.comprobante!="") {
         comprobante=`<a target="_blank"  href="../dist/img/comprob_transporte/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
       }else{
@@ -443,7 +470,7 @@ function listar_r_transportes(idproyecto) {
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       t_monto=t_monto+parseFloat(value.precio_parcial);
       t_pagos=t_pagos+parseFloat(validando_pago);
@@ -484,7 +511,7 @@ function listar_r_transportes(idproyecto) {
 
 function listar_r_hospedajes(idproyecto) {  
   var hospedajes=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
-
+  var  pintar_celda='';
   $("#hospedaje").html("");
   $("#monto_hosped").html("");  
   $("#pago_hosped").html("");  
@@ -503,6 +530,13 @@ function listar_r_hospedajes(idproyecto) {
         calculando_sldo=0;
         validando_pago=0;
       }
+
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
       if (value.comprobante!="") {
         comprobante=`<a target="_blank"  href="../dist/img/comprob_hospedajes/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
       }else{
@@ -517,7 +551,7 @@ function listar_r_hospedajes(idproyecto) {
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       t_monto=t_monto+parseFloat(value.precio_parcial);
       t_pagos=t_pagos+parseFloat(validando_pago);
@@ -558,7 +592,7 @@ function listar_r_hospedajes(idproyecto) {
 
 function listar_r_comidas_extras(idproyecto) {  
   var comidas_extras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
-
+  var pintar_celda='';
   $("#comida_extra").html("");
   $("#monto_cextra").html("");  
   $("#pago_cextra").html("");  
@@ -577,6 +611,13 @@ function listar_r_comidas_extras(idproyecto) {
         calculando_sldo=0;
         validando_pago=0;
       }
+
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
       if (value.comprobante!="") {
         comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.comprobante}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
       }else{
@@ -593,7 +634,7 @@ function listar_r_comidas_extras(idproyecto) {
           <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
       t_monto=t_monto+parseFloat(value.costo_parcial);
@@ -635,7 +676,7 @@ function listar_r_comidas_extras(idproyecto) {
 
 function listar_r_breaks(idproyecto) {  
   var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
-
+  var pintar_celda='';
   $("#breaks").html("");
   $("#monto_break").html("");  
   $("#pago_break").html("");  
@@ -654,6 +695,12 @@ function listar_r_breaks(idproyecto) {
         calculando_sldo=0;
         validando_pago=0;
       }
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
       if (value.idsemana_break!="") {
         comprobante=`<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
       }else{
@@ -670,7 +717,7 @@ function listar_r_breaks(idproyecto) {
           </td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
       t_monto=t_monto+parseFloat(value.total);
@@ -747,7 +794,7 @@ function listar_comprobantes_breaks(idsemana_break) {
 
 function listar_r_pensiones(idproyecto) {  
   var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var comprobante="";
-
+  var pintar_celda='';
   $("#pension").html("");
   $("#monto_pension").html("");  
   $("#pago_pension").html("");  
@@ -766,6 +813,11 @@ function listar_r_pensiones(idproyecto) {
         calculando_sldo=0;
         validando_pago=0;
       }
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
 
       pension=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
@@ -778,7 +830,7 @@ function listar_r_pensiones(idproyecto) {
           </td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
       t_monto=t_monto+parseFloat(value.monto_total_pension);
@@ -888,7 +940,7 @@ function listar_comprobantes_pension(idpension) {
 
 function listar_r_trab_administrativo(idproyecto) {  
   var compras=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var total_montos_x_meses="";
-
+  var pintar_celda='';
   $("#administrativo").html("");
   $("#monto_adm").html("");  
   $("#pago_adm").html("");  
@@ -911,6 +963,11 @@ function listar_r_trab_administrativo(idproyecto) {
         validando_pago=0;
         total_montos_x_meses=0;
       }
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
 
       administrativo=`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
@@ -918,11 +975,11 @@ function listar_r_trab_administrativo(idproyecto) {
           <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
           <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+            <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
           </td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(total_montos_x_meses.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(calculando_sldo.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
       </tr>`;
       
       t_monto=t_monto+parseFloat(total_montos_x_meses);
@@ -961,17 +1018,20 @@ function listar_r_trab_administrativo(idproyecto) {
   });
 }
 //DETALLES DE PAGOS ADMINISTRADORES
-function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto) {
+function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto,nombres) {
 
-  detalle='';
+  detalle='';  var sueldo_estimado=0; var depositos=0;
 
   $("#modal-ver-detalle-t-administ").modal('show');
 
   $(".data-detalle-pagos-administador").html("");
+  $("#nombre_trabajador_detalle").html(nombres);
 
   $.post("../ajax/resumen_general.php?op=ver_detalle_pagos_x_trab_adms", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
+    $(".sueldo_estimado").html("");
+    $(".depositos").html("");
 
     if (data.length!=0) {
       $(".alerta").hide();
@@ -984,13 +1044,17 @@ function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto) {
                   <td>${format_d_m_a(value.fecha_inicial)}</td>
                   <td>${format_d_m_a(value.fecha_final)}</td>
                   <td>${value.cant_dias_laborables}</td>
-                  <td>S/. ${ formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
-                  <td>S/. ${ formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
+                  <td style="text-align: end !important;">S/. ${ formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
+                  <td style="text-align: end !important;">S/. ${ formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
               </tr>`;
   
         $(".data-detalle-pagos-administador").append(detalle);
-  
+        sueldo_estimado += parseFloat(value.monto_x_mes);
+        depositos += parseFloat(value.return_monto_pago);
       });
+
+      $(".sueldo_estimado").html('S/. '+ formato_miles(sueldo_estimado));
+      $(".depositos").html('S/. '+ formato_miles(depositos));
      
       
     }else{
