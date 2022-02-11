@@ -21,9 +21,14 @@
       $pagoobrero = new PagoObrero();
 
       // DATA - agregar pago x quincena o semana	
-      $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-      $idtrabajador_por_proyecto		= isset($_POST["idtrabajador_por_proyecto"])? limpiarCadena($_POST["idtrabajador_por_proyecto"]):"";
-      $trabajador		  = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
+      $idpagos_q_s_obrero 		  = isset($_POST["idpagos_q_s_obrero "])? limpiarCadena($_POST["idpagos_q_s_obrero "]):"";
+      $idresumen_q_s_asistencia = isset($_POST["idresumen_q_s_asistencia"])? limpiarCadena($_POST["idresumen_q_s_asistencia"]):"";
+      $forma_pago	      = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
+      $cuenta_deposito  = isset($_POST['cuenta_deposito'])? $_POST['cuenta_deposito']:"";
+      $monto 		        = isset($_POST['monto'])? $_POST['monto']:"";
+      $descripcion 		  = isset($_POST['descripcion'])? $_POST['descripcion']:"";
+      $doc_old_1 		    = isset($_POST['doc_old_1'])? $_POST['doc_old_1']:"";
+      $doc1 		        = isset($_POST['doc1'])? $_POST['doc1']:"";
 
       // DATA - recibos por honorarios
       $idresumen_q_s_asistencia_rh		= isset($_POST["idresumen_q_s_asistencia_rh"])? limpiarCadena($_POST["idresumen_q_s_asistencia_rh"]):"";
@@ -31,20 +36,49 @@
 
       switch ($_GET["op"]){
 
-        case 'guardaryeditar':
+        case 'guardar_y_editar_pagos_x_q_s':
           	
-          // registramos un nuevo trabajador
-          if (empty($idtrabajador_por_proyecto)){
+          //*DOC 1*//
+          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
-            $rspta=$pagoobrero->insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+            $flat_doc1 = false;  $doc1 = $_POST["doc_old_1"];
+
+          } else {
+
+            $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);            
+              
+            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pago_obrero/baucher_deposito/" . $doc1);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+          }	
+
+          // registramos un nuevo: pago x mes
+          if (empty($idpagos_q_s_obrero)){
+
+            $rspta=$pagoobrero->insertar_pagos_x_q_s( $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
+            
+            echo $rspta ? "ok" : "No se pudo registrar el Depósito";
 
           }else {
-            // editamos un trabajador existente
-            $rspta=$pagoobrero->editar($idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora);
+
+            // validamos si existe el "baucher" para eliminarlo
+            if ($flat_doc1 == true) {
+
+              $datos_f1 = $pagoobrero->obtenerDocs($idfechas_mes_pagos_administrador_pxm);
+
+              $doc1_ant = $datos_f1->fetch_object()->baucher;
+
+              if ($doc1_ant != "") {
+
+                unlink("../dist/pago_obrero/baucher_deposito/" . $doc1_ant);
+              }
+            }
+
+            // editamos un pago x mes existente
+            $rspta=$pagoobrero->editar_pagos_x_q_s( $idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
             
-            echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+            echo $rspta ? "ok" : "No se pudo Actualizar el Depósito";
           }
 
         break;   
@@ -151,6 +185,50 @@
         case 'mostrar_q_s':
 
           $rspta=$pagoobrero->mostrar_q_s( $_POST["id_trabajdor_x_proyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
+        break;
+
+        case 'listar_tbla_pagos_x_q_s':
+
+          $idresumen_q_s_asistencia = $_GET["idresumen_q_s_asistencia"];
+
+          $rspta=$pagoobrero->listar_pagos_x_q_s($idresumen_q_s_asistencia);
+          //Vamos a declarar un array
+          $data= Array();
+
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
+          while ($reg=$rspta->fetch_object()){
+            !empty($reg->baucher)
+              ? ($baucher_deposito = '<center><a target="_blank" href="../dist/pago_obrero/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+
+            $data[]=array(    
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
+              "1"=>$reg->cuenta_deposito	,
+              "2"=>$reg->forma_de_pago	,
+              "3"=>'S/. '. number_format($reg->monto_deposito, 2, ".", ","),
+              "4"=>$baucher_deposito,
+              "5"=>$reg->descripcion,
+              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);
+        break;
+
+        case 'mostrar_pagos_x_q_s':
+
+          $rspta=$pago_administrador->mostrar_pagos_x_mes($_POST["idpagos_x_mes_administrador"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 

@@ -78,7 +78,7 @@
                         </h3>
                         <!-- agregar pago  -->
                         <h3 class="card-title " id="btn-agregar" style="display: none; padding-left: 2px;" >
-                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_x_mes();">
+                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_q_s();">
                           <i class="fas fa-plus-circle"></i> Agregar pago 
                           </button>                     
                         </h3> 
@@ -230,31 +230,15 @@
                     
                     <div class="modal-body">
                       <!-- form start -->
-                      <form id="form-pagos-x-mes" name="form-pagos-x-mes"  method="POST" >                      
+                      <form id="form-pagos-x-q-s" name="form-pagos-x-q-s"  method="POST" >                      
                         <div class="card-body">
                           <div class="row" id="cargando-1-fomulario">
 
-                            <!-- id idpagos_x_mes_administrador -->
-                            <input type="hidden" name="idpagos_x_mes_administrador" id="idpagos_x_mes_administrador" />
-
-                            <!-- id idfechas_mes_pagos_administrador -->
-                            <input type="hidden" name="idfechas_mes_pagos_administrador_pxm" id="idfechas_mes_pagos_administrador_pxm" />
-                            <!-- id_tabajador_x_proyecto -->
-                            <input type="hidden" name="id_tabajador_x_proyecto_pxm" id="id_tabajador_x_proyecto_pxm" />
-                            <!-- fecha inicial -->
-                            <input type="hidden" name="fecha_inicial_pxm" id="fecha_inicial_pxm" />
-                            <!-- fecha final -->
-                            <input type="hidden" name="fecha_final_pxm" id="fecha_final_pxm" />
-                            <!-- nombre del mes -->
-                            <input type="hidden" name="mes_nombre_pxm" id="mes_nombre_pxm" />
-                            <!-- dias del mes -->
-                            <input type="hidden" name="dias_mes_pxm" id="dias_mes_pxm" />
-                            <!-- dias_regular -->
-                            <input type="hidden" name="dias_regular_pxm" id="dias_regular_pxm" />
-                            <!-- sueldo_mensual -->
-                            <input type="hidden" name="sueldo_mensual_pxm" id="sueldo_mensual_pxm" />
-                            <!-- monto_x_mes -->
-                            <input type="hidden" name="monto_x_mes_pxm" id="monto_x_mes_pxm" />                            
+                            <!-- id idpagos_q_s_obrero  -->
+                            <input type="hidden" name="idpagos_q_s_obrero " id="idpagos_q_s_obrero " />
+                            
+                            <!-- id idresumen_q_s_asistencia -->
+                            <input type="hidden" name="idresumen_q_s_asistencia" id="idresumen_q_s_asistencia" />         
 
                             <!-- Forma de pago hacia el trabajdor -->
                             <div class="col-lg-6">
@@ -286,8 +270,8 @@
                             <!-- Mes del pago -->
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label for="nombre_mes" class="text-gray">Mes </label>
-                                <span class="nombre_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                <label for="nombre_mes" class="text-gray nombre_q_s">-- </label>
+                                <span class="numero_q_s text-gray form-control"> <sup>S/.</sup> 0.00</span>
                               </div>
                             </div>
 

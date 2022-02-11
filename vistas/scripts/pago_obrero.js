@@ -14,9 +14,19 @@ function init() {
 
   $("#lPagosObrero").addClass("active");
 
+  // efectuamos SUBMIT  registro de: PAGOS POR MES
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-pagos-x-mes").submit(); });
+
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_2").on("click", function (e) { $("#submit-form-recibo-x-honorario").submit(); });
   $("#form-recibos_x_honorarios").on("submit", function (e) { guardar_y_editar_recibos_x_honorarios(e); });  
+
+  //Initialize Select2 unidad
+  $("#forma_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar una forma de pago",
+    allowClear: true,
+  });
 
   // Formato para telefono
   $("[data-mask]").inputmask();   
@@ -50,16 +60,22 @@ function doc2_eliminar() {
 }
 
 //Función limpiar
-function limpiar() {
+function limpiar_pago_q_s() {
 
-  $("#idusuario").val("");
-  $("#trabajador_c").html("Trabajador");
-  $("#trabajador").val("null").trigger("change"); 
-  $("#trabajador_old").val(""); 
-  $("#cargo").val("Administrador").trigger("change"); 
-  $("#login").val("");
-  $("#password").val("");
-  $("#password-old").val("");  
+  $("#idpagos_q_s_obrero").val("");
+
+  $("#monto").val("");
+  $("#forma_pago").val("").trigger("change"); 
+  $("#descripcion").val(""); 
+
+  $("#doc_old_1").val("");
+  $("#doc1").val("");  
+  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc1_nombre').html("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función limpiar
@@ -262,10 +278,10 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
           <td><sup>S/. </sup>${element.sueldo_hora}</td>
           <td>${formato_miles(element.total_hn)}<b> / </b>${formato_miles(element.total_he)}</td>          
           <td><sup>S/. </sup>${formato_miles(element.pago_parcial_hn)}<b> / </b><sup>S/. </sup>${formato_miles(element.pago_parcial_he)}</td>
-          <td><sup>S/. </sup>${formato_miles(element.adicional_descuento)}</td>
-          <td><sup>S/. </sup>${formato_miles(element.pago_quincenal)}</td>
+          <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(element.adicional_descuento)}</td>
+          <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(element.pago_quincenal)}</td>
           <td>
-            <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s('${element.idresumen_q_s_asistencia}','${formato_miles(element.pago_quincenal)}', '${element.numero_q_s}', '${tipo_pago}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+            <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s('${element.idresumen_q_s_asistencia}', '${format_d_m_a(element.fecha_q_s_inicio)}', '${format_d_m_a(element.fecha_q_s_fin)}', '${formato_miles(element.pago_quincenal)}', '${element.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
             <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
           </td>
           <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(saldo)}</td>
@@ -297,23 +313,28 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
   });   
 }
 
-function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, ) {
+function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_final, pago_q_s, numero_q_s, tipo_pago, nombre_trabajador ) {
 
   table_show_hide(3);
 
-  $('#btn-nombre-mes').html(`&nbsp; &nbsp; <b>${mes_nombre}</b> - <sup>S/.</sup><b>${formato_miles(monto_x_mes)}</b>`);
+  $('#btn-nombre-mes').html(`&nbsp; &nbsp; <i class="fas fa-calendar-check text-gray-50"></i> <b>${fecha_inicio}  <i class="fas fa-arrow-right"></i>  ${fecha_final}</b> - <sup>S/.</sup><b>${formato_miles(pago_q_s)}</b>`);
 
-  $('.faltante_mes_modal').html(`<sup>S/.</sup><b>${formato_miles(saldo_x_mes)}</b>`);
+  // $('.faltante_mes_modal').html(`<sup>S/.</sup><b>${formato_miles(saldo_x_mes)}</b>`);
 
   $('.nombre_de_trabajador_modal').html(`${nombre_trabajador}` );
 
-  $('#cuenta_deposito').val(cuenta_bancaria);
+  // $('#cuenta_deposito').val(cuenta_bancaria);
+  
+  if (tipo_pago == 'quincenal') {
+    $('.nombre_q_s').html(`<b>Quincena</b>`);
+    $('.numero_q_s').html(`<b>${numero_q_s}</b>`);
+  } else {
+    $('.nombre_q_s').html(`<b>Semana</b>`);
+    $('.numero_q_s').html(`<b>${numero_q_s}</b>`);
+  }
+  
 
-  $('.nombre_mes_modal').html(`<b>${mes_nombre}</b>`);
-
-  $('#idfechas_mes_pagos_administrador_pxm').val(idfechas_mes_pagos_administrador);
-  $('#id_tabajador_x_proyecto_pxm').val(id_tabajador_x_proyecto);
-  $('#fecha_inicial_pxm').val(format_a_m_d(fecha_inicial));
+  $('#idresumen_q_s_asistencia').val(idresumen_q_s_asistencia);
 
   tabla_ingreso_pagos=$('#tabla-ingreso-pagos').dataTable({
     "responsive": true,
@@ -323,7 +344,7 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, ) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/pago_administrador.php?op=listar_tbla_pagos_x_mes&idresumen_q_s_asistencia='+idresumen_q_s_asistencia,
+        url: '../ajax/pago_obrero.php?op=listar_tbla_pagos_x_q_s&idresumen_q_s_asistencia='+idresumen_q_s_asistencia,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -470,34 +491,61 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 }
 
 //Función para guardar o editar
-function guardaryeditar(e) {
+function guardar_y_editar_pagos_x_q_s(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-usuario")[0]);
+  var formData = new FormData($("#form-pagos-x-q-s")[0]);
 
   $.ajax({
-    url: "../ajax/usuario.php?op=guardaryeditar",
+    url: "../ajax/pago_obrero.php?op=guardar_y_editar_pagos_x_q_s",
     type: "POST",
     data: formData,
     contentType: false,
     processData: false,
 
     success: function (datos) {
-             
+       
+
       if (datos == 'ok') {
 
-				toastr.success('Usuario registrado correctamente')				 
+        // tabla_ingreso_pagos.ajax.reload(); 
+        // reload_table_pagos_x_mes(datos.id_tabla);        
 
-	      tabla_principal.ajax.reload();
+        // tabla_principal.ajax.reload();     
+        // listar_tbla_principal(localStorage.getItem('nube_idproyecto'));    
+
+        Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      
          
-				limpiar();
+				limpiar_pago_q_s();
 
-        $("#modal-agregar-usuario").modal("hide");
+        $("#modal-agregar-pago-trabajdor").modal("hide");        
 
 			}else{
 
-				toastr.error(datos)
+        Swal.fire("Error!", datos, "error");				 
 			}
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+          if (percentComplete === 100) {
+
+            setTimeout(l_m, 600);
+          }
+        }
+      }, false);
+      return xhr;
+    }
   });
 }
 
@@ -578,29 +626,24 @@ init();
 
 $(function () {
 
-  $.validator.setDefaults({
+  $.validator.setDefaults({ submitHandler: function (e) { guardar_y_editar_pagos_x_q_s(e); }, });
 
-    submitHandler: function (e) {     
-
-      guardaryeditar(e);
-    },
-  });
-
-  $("#form-usuario").validate({
+  $("#form-pagos-x-q-s").validate({
     rules: {
-      login: { required: true, minlength: 3, maxlength: 20 },
-      password: {minlength: 4, maxlength: 20 },
-      // terms: { required: true },
+      forma_pago: { required: true},
+      monto: {required: true, minlength: 1 },
+      descripcion: { minlength: 4 },
     },
     messages: {
-      login: {
-        required: "Por favor ingrese un login.",
-        minlength: "El login debe tener MÍNIMO 4 caracteres.",
-        maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
+      forma_pago: {
+        required: "Campo requerido."
       },
-      password: {
-        minlength: "La contraseña debe tener MÍNIMO 4 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 20 caracteres.",
+      monto: {
+        required: "Campo requerido.",
+        minlength: "MINIMO 1 dígito.",
+      },
+      descripcion: {
+        minlength: "MINIMO 4 caracteres.",
       },
     },
     
@@ -621,15 +664,7 @@ $(function () {
     unhighlight: function (element, errorClass, validClass) {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
-
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-      }       
+             
     },
   });
 });

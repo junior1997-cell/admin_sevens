@@ -11,21 +11,21 @@ Class PagoObrero
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora)
+	public function insertar_pagos_x_q_s($idresumen_q_s_asistencia, $forma_de_pago, $cuenta_deposito, $monto, $descripcion, $doc1)
 	{
-		$sql="INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, tipo_trabajador, cargo, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora)
-		VALUES ('$idproyecto', '$trabajador', '$tipo_trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora')";
+		$sql="INSERT INTO  pagos_q_s_obrero( idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion) 
+		VALUES ('$idresumen_q_s_asistencia', '$cuenta_deposito', '$forma_de_pago', '$monto', '$doc1', '$descripcion');";
 		
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar( $idtrabajador_por_proyecto,$trabajador, $tipo_trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora )
+	public function editar_pagos_x_q_s( $idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1 )
 	{
-		$sql="UPDATE trabajador_por_proyecto SET  idtrabajador='$trabajador', 
-    tipo_trabajador='$tipo_trabajador', cargo='$cargo', desempenio='$desempenio', sueldo_mensual='$sueldo_mensual', 
-    sueldo_diario='$sueldo_diario',	sueldo_hora='$sueldo_hora' WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";	
+		$sql="UPDATE pagos_q_s_obrero SET idresumen_q_s_asistencia='$idresumen_q_s_asistencia', cuenta_deposito='$cuenta_deposito', 
+		forma_de_pago='$forma_pago', monto_deposito='$monto', baucher='$doc1', descripcion='$descripcion'
+		WHERE idpagos_q_s_obrero = '$idpagos_q_s_obrero,'";	
 		
 		return ejecutarConsulta($sql);
 		
@@ -61,6 +61,16 @@ Class PagoObrero
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto;";
 		return ejecutarConsultaArray($sql);
+	}
+
+	//Implementar un método para mostrar los datos de un registro a modificar
+	public function listar_pagos_x_q_s($idresumen_q_s_asistencia)
+	{
+		$sql="SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion, estado 
+		FROM pagos_q_s_obrero
+		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
+
+		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para desactivar categorías
