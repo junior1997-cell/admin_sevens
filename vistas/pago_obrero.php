@@ -74,7 +74,7 @@
                         </h3>
                         <!-- regresar "tabla fechas" -->
                         <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
-                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2); reload_table_fechas_mes();"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                          <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2); reload_table_detalle_x_q_s();"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                         </h3>
                         <!-- agregar pago  -->
                         <h3 class="card-title " id="btn-agregar" style="display: none; padding-left: 2px;" >
@@ -99,11 +99,11 @@
                                
                                 <th class="text-center">Horas <br> Normal/Extra</th>
                                 <th>Sabaticales</th>                               
-                                <th>Sueldo Mensual</th>
-                                <th class="text-center">Cant <br> Semana/Quincena</th>
-                                <th class="text-center">Pago <br> acumulado</th>
-                                <th class="text-center">Pago <br> realizado</th>
+                                <th>Sueldo Mensual</th>                                
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Pagos que a estado acumulando con sus dias de asistencia.">Pago <br> acumulado</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Despositos que se ha estado enviando a trabajador.">Pago <br> realizado</th>
                                 <th>Saldo</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Cantidad de semanas enviadas a pagar.">Cant <br> S/Q</th>
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
                                 <th class="text-center">Fecha <br> culminacion</th>
@@ -117,13 +117,14 @@
                               <tr> 
                                 <th>Trabajdor</th> 
                                 
-                                <th class="text-center">Horas Normal / Hora Extra</th>
+                                <th class="text-center">Horas Nrm/Extr</th>
                                 <th>Sabaticales</th>                               
                                 <th>Sueldo Mensual</th>
-                                <th>Cant Semana/Quincena</th>
+                                
                                 <th class="text-center">Pago <br> acumulado</th>
                                 <th class="text-center">Pago <br> realizado</th>
                                 <th>Saldo</th>
+                                <th>Cant S/Q</th>
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
                                 <th class="text-center">Fecha <br> culminacion</th>
@@ -143,8 +144,9 @@
                                   <th colspan="3" class="stile-celda pt-0 pb-0 nombre-bloque-asistencia">Semana </th>
                                   <th rowspan="2" class="stile-celda text-center">Sueldo Hora</th>
                                   <th rowspan="2" class="stile-celda text-center">Horas Normal/Extra</th>
+                                  <th rowspan="2" class="stile-celda text-center">Sabatical</th>
                                   <th rowspan="2" class="stile-celda">Monto Normal/Extra</th>
-                                  <th rowspan="2" class="stile-celda text-center">Descuento</th>                                  
+                                  <th rowspan="2" class="stile-celda text-center">Adicional</th>                                  
                                   <th rowspan="2" class="stile-celda">Monto total</th>
                                   <th rowspan="2" class="stile-celda ">Pagar/Acumulado</th> 
                                   <th rowspan="2" class="stile-celda ">Saldo</th>
@@ -163,6 +165,7 @@
                                 <tr>                                    
                                   <th colspan="5" ></th> 
                                   <th class="stile-celda total_hn_he"></th>
+                                  <th class="stile-celda total_sabatical"></th>
                                   <th class="stile-celda total_monto_hn_he"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
                                   <th class="stile-celda-right total_descuento">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="stile-celda-right total_quincena">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
@@ -180,11 +183,11 @@
                           <table id="tabla-ingreso-pagos" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr> 
+                                <th>Op.</th> 
                                 <th>Cuenta depósito</th> 
                                 <th>Forma de pago</th>
-                                <th>Cantidad</th>
+                                <th>Monto</th>
                                 <th>Baucher</th>
-                                <th>Recibos por honorarios</th>
                                 <th>Descripcion</th> 
                                 <th>Estado</th>                                                        
                               </tr>
@@ -194,11 +197,11 @@
                             </tbody>
                             <tfoot>
                               <tr> 
+                                <th>Op.</th> 
                                 <th>Cuenta depósito</th>
                                 <th>Forma de pago</th>
-                                <th>S/. 900</th>
+                                <th>Monto</th>
                                 <th>Baucher</th>
-                                <th>Recibos por honorarios</th>
                                 <th>Descripcion</th> 
                                 <th>Estado</th>                           
                               </tr>
@@ -235,7 +238,7 @@
                           <div class="row" id="cargando-1-fomulario">
 
                             <!-- id idpagos_q_s_obrero  -->
-                            <input type="hidden" name="idpagos_q_s_obrero " id="idpagos_q_s_obrero " />
+                            <input type="hidden" name="idpagos_q_s_obrero" id="idpagos_q_s_obrero" />
                             
                             <!-- id idresumen_q_s_asistencia -->
                             <input type="hidden" name="idresumen_q_s_asistencia" id="idresumen_q_s_asistencia" />         
@@ -279,7 +282,7 @@
                             <div class="col-lg-3">
                               <div class="form-group">
                                 <label for="nombre_mes" class="text-gray">Faltante </label>
-                                <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                <span class="faltante_mes_modal form-control"> <sup>S/.</sup> 0.00</span>
                               </div>
                             </div>
                              

@@ -1,6 +1,6 @@
 var tabla_principal; var tabla_ingreso_pagos;
 
-var id_trabajdor_x_proyecto_r = "", tipo_pago_r = "", nombre_trabajador_r = "";
+var id_trabajdor_x_proyecto_r = "", tipo_pago_r = "", nombre_trabajador_r = "", cuenta_bancaria_r = "";
           
 //Función que se ejecuta al inicio
 function init() {
@@ -146,10 +146,10 @@ function table_show_hide(flag) {
   }
 }
 
-// ver detalle de todos los pagos de un trabajador
+// LISATAR TABLA PRINCIPAL
 function listar_tbla_principal(id_proyecto) {
 
-  table_show_hide(1);
+  // table_show_hide(1);
 
   tabla_principal=$('#tabla-principal').dataTable({
     "responsive": true,
@@ -188,24 +188,26 @@ function listar_tbla_principal(id_proyecto) {
           "text-align": "right"
         });
       }
-      // columna: Cantidad Semana/Quincena
+      
+
+      // columna: Pago acumulado Semana/Quincena
       if (data[4] != '') {
         $("td", row).eq(4).css({
-          "text-align": "center"
+          "text-align": "right"
         });
       }
 
-      // columna: Pago acumulado Semana/Quincena
+      // columna: Depositos
       if (data[5] != '') {
         $("td", row).eq(5).css({
           "text-align": "right"
         });
       }
 
-      // columna: Depositos
-      if (data[6] != '') {
-        $("td", row).eq(6).css({
-          "text-align": "right"
+      // columna: Cantidad Semana/Quincena
+      if (data[7] != '') {
+        $("td", row).eq(7).css({
+          "text-align": "center"
         });
       }
       
@@ -226,9 +228,12 @@ function listar_tbla_principal(id_proyecto) {
   }).DataTable();
 }
 
-// mostramos: QUINCENAS O SEMANAS A PAGAR
-function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_trabajador) {
-  id_trabajdor_x_proyecto_r = id_trabajdor_x_proyecto; tipo_pago_r = tipo_pago; nombre_trabajador_r =nombre_trabajador;
+// Listar: QUINCENAS O SEMANAS
+function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_trabajador, cuenta_bancaria) {
+
+  id_trabajdor_x_proyecto_r = id_trabajdor_x_proyecto; tipo_pago_r = tipo_pago; 
+  nombre_trabajador_r =nombre_trabajador; cuenta_bancaria_r = cuenta_bancaria;
+  
   $('.data-q-s').html(`<tr>
     <td colspan="10" >
       <div class="row">
@@ -252,7 +257,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
   
   table_show_hide(2);
 
-  $.post("../ajax/pago_obrero.php?op=mostrar_q_s", { 'id_trabajdor_x_proyecto': id_trabajdor_x_proyecto }, function (data, status) {
+  $.post("../ajax/pago_obrero.php?op=listar_tbla_q_s", { 'id_trabajdor_x_proyecto': id_trabajdor_x_proyecto }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);
 
@@ -261,30 +266,49 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
     } else {
 
       var data_s_q = ""; var total_hn = 0, total_he = 0, total_monto_hn = 0, total_monto_he = 0, total_descuento = 0;
-      var total_quincena = 0, total_saldo = 0, total_deposito = 0, rh_total = 0;
+      var total_quincena = 0, total_saldo = 0, total_deposito = 0, rh_total = 0, total_sabatical = 0;
 
       data.forEach((element, indice) => {
 
-        var saldo = 0; var btn_tipo = "";
+        var saldo = 0; var btn_tipo = "", bg_saldo = "", btn_tipo_deposito = "";
 
         // Validamos el tipo de boton para los "recibos por honorarios"
         if (element.recibos_x_honorarios == '' || element.recibos_x_honorarios == null) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += 1; }
-      
+        
+        saldo = parseFloat(element.pago_quincenal) - parseFloat(element.deposito);
+
+        // background-color al saldo
+        if (saldo < 0) { bg_saldo = 'bg-danger'; } else { bg_saldo = ''; }
+
+        // background-color btn depositos
+        if ( parseFloat(element.deposito) == 0 ) {
+          btn_tipo_deposito = "btn-danger";
+        } else {
+          if ( parseFloat(element.deposito) > 0 &&  parseFloat(element.deposito) < parseFloat(element.pago_quincenal) ) {
+            btn_tipo_deposito = "btn-warning";
+          } else {
+            if ( parseFloat(element.deposito) >= parseFloat(element.pago_quincenal) ) {
+              btn_tipo_deposito = "btn-success";
+            }
+          }              
+        }
+
         data_s_q = data_s_q.concat(`<tr>
           <td>${indice + 1}</td>
           <td> ${element.numero_q_s}</td>
           <td>${format_d_m_a(element.fecha_q_s_inicio)}</td>
           <td>${format_d_m_a(element.fecha_q_s_fin)}</td>
           <td><sup>S/. </sup>${element.sueldo_hora}</td>
-          <td>${formato_miles(element.total_hn)}<b> / </b>${formato_miles(element.total_he)}</td>          
+          <td>${formato_miles(element.total_hn)}<b> / </b>${formato_miles(element.total_he)}</td>
+          <td>${element.sabatical}</td>          
           <td><sup>S/. </sup>${formato_miles(element.pago_parcial_hn)}<b> / </b><sup>S/. </sup>${formato_miles(element.pago_parcial_he)}</td>
           <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(element.adicional_descuento)}</td>
           <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(element.pago_quincenal)}</td>
           <td>
-            <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s('${element.idresumen_q_s_asistencia}', '${format_d_m_a(element.fecha_q_s_inicio)}', '${format_d_m_a(element.fecha_q_s_fin)}', '${formato_miles(element.pago_quincenal)}', '${element.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-            <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+            <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s('${element.idresumen_q_s_asistencia}', '${format_d_m_a(element.fecha_q_s_inicio)}', '${format_d_m_a(element.fecha_q_s_fin)}', '${element.pago_quincenal}', '${element.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}','${cuenta_bancaria}', '${saldo}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+            <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(element.deposito)}</button></div>
           </td>
-          <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(saldo)}</td>
+          <td style="text-align: right !important;" class="${bg_saldo}"><sup>S/. </sup>${formato_miles(saldo)}</td>
           <td> 
             <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${element.idresumen_q_s_asistencia}', '${element.fecha_q_s_inicio}', '${element.fecha_q_s_fin}', '${element.numero_q_s}', '${element.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
               <i class="fas fa-file-invoice fa-lg"></i>
@@ -295,14 +319,19 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
         total_hn += parseFloat(element.total_hn);
         total_he += parseFloat(element.total_he);
 
+        total_sabatical += parseFloat(element.sabatical);
+
         total_monto_hn += parseFloat(element.pago_parcial_hn);
         total_monto_he += parseFloat(element.pago_parcial_he);
         total_descuento += parseFloat(element.adicional_descuento);
         total_quincena += parseFloat(element.pago_quincenal);
+        total_deposito += parseFloat(element.deposito);
+        total_saldo += parseFloat(saldo);
       });
 
       $('.data-q-s').html(data_s_q);
       $('.total_hn_he').html(`${formato_miles(total_hn)} / ${formato_miles(total_he)}`);
+      $('.total_sabatical').html(`${formato_miles(total_sabatical)} `);
       $('.total_monto_hn_he').html(`${formato_miles(total_monto_hn)} / ${formato_miles(total_monto_he)}`);
       $('.total_descuento').html(`<sup>S/. </sup>${formato_miles(total_descuento)}`);
       $('.total_quincena').html(`<sup>S/. </sup>${formato_miles(total_quincena)}`);
@@ -313,17 +342,29 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
   });   
 }
 
-function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_final, pago_q_s, numero_q_s, tipo_pago, nombre_trabajador ) {
+// Listar: los PAGOS de un QUINCENA O SEMANA
+function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_final, pago_q_s, numero_q_s, tipo_pago, nombre_trabajador, cuenta_bancaria, saldo_q_s ) {
 
   table_show_hide(3);
 
   $('#btn-nombre-mes').html(`&nbsp; &nbsp; <i class="fas fa-calendar-check text-gray-50"></i> <b>${fecha_inicio}  <i class="fas fa-arrow-right"></i>  ${fecha_final}</b> - <sup>S/.</sup><b>${formato_miles(pago_q_s)}</b>`);
-
-  // $('.faltante_mes_modal').html(`<sup>S/.</sup><b>${formato_miles(saldo_x_mes)}</b>`);
+  
+  if ( parseFloat(saldo_q_s) < 0) {
+    $('.faltante_mes_modal').css({'background-color' : 'red', 'color':'white'});
+    $('.faltante_mes_modal').html(`<sup>S/. </sup>${formato_miles(saldo_q_s)}`);
+  } else {
+    if (parseFloat(saldo_q_s) == 0) {
+      $('.faltante_mes_modal').css({'background-color' : 'green', 'color':'white'});
+      $('.faltante_mes_modal').html(`<sup>S/. </sup><b>${formato_miles(saldo_q_s)}</b>`);  
+    } else {
+      $('.faltante_mes_modal').css({'background-color' : '#ffc107', 'color':'black'});
+      $('.faltante_mes_modal').html(`<sup>S/. </sup><b>${formato_miles(saldo_q_s)}</b>`);
+    }    
+  }  
 
   $('.nombre_de_trabajador_modal').html(`${nombre_trabajador}` );
 
-  // $('#cuenta_deposito').val(cuenta_bancaria);
+  $('#cuenta_deposito').val(cuenta_bancaria);
   
   if (tipo_pago == 'quincenal') {
     $('.nombre_q_s').html(`<b>Quincena</b>`);
@@ -344,13 +385,28 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/pago_obrero.php?op=listar_tbla_pagos_x_q_s&idresumen_q_s_asistencia='+idresumen_q_s_asistencia,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
+      url: '../ajax/pago_obrero.php?op=listar_tbla_pagos_x_q_s&idresumen_q_s_asistencia='+idresumen_q_s_asistencia,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+
+      // columna: opciones
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-nowrap');
+      }
+      // columna: cuenta deposito
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass('text-nowrap');
+      }
+      // columna: deposito
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-nowrap');
+      }
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -433,7 +489,7 @@ function modal_recibos_x_honorarios(idresumen_q_s_asistencia, fecha_inicial, fec
   }
 }
 
-//Función para guardar o editar
+//Guardar o editar - R H
 function guardar_y_editar_recibos_x_honorarios(e) {
 
   e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -450,7 +506,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
              
       if (datos == 'ok') {
 
-        detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r);
+        detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
 
         tabla_principal.ajax.reload();
 
@@ -490,7 +546,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
   });
 }
 
-//Función para guardar o editar
+//Guardar o editar - PAGOS Q S
 function guardar_y_editar_pagos_x_q_s(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-pagos-x-q-s")[0]);
@@ -502,16 +558,13 @@ function guardar_y_editar_pagos_x_q_s(e) {
     contentType: false,
     processData: false,
 
-    success: function (datos) {
-       
+    success: function (datos) {       
 
       if (datos == 'ok') {
 
-        // tabla_ingreso_pagos.ajax.reload(); 
-        // reload_table_pagos_x_mes(datos.id_tabla);        
-
-        // tabla_principal.ajax.reload();     
-        // listar_tbla_principal(localStorage.getItem('nube_idproyecto'));    
+        tabla_ingreso_pagos.ajax.reload(); 
+          
+        listar_tbla_principal(localStorage.getItem('nube_idproyecto'));    
 
         Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      
          
@@ -557,6 +610,65 @@ function l_m(){
 
   $("#barra_progress2").css({"width":'0%'});
   $("#barra_progress2").text("0%");  
+}
+
+// Mostramos "PAGOS Q S" para editar
+function mostrar_pagos_x_q_s(id) {
+
+  limpiar_pago_q_s();
+
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  $("#modal-agregar-pago-trabajdor").modal('show');
+
+  $.post("../ajax/pago_obrero.php?op=mostrar_pagos_x_q_s", { 'idpagos_q_s_obrero': id }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+    
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+
+    $('#idpagos_q_s_obrero').val(data.idpagos_q_s_obrero);
+    $("#monto").val(data.monto_deposito);
+    $("#cuenta_deposito").val(data.cuenta_deposito);
+    $("#forma_pago").val(data.forma_de_pago).trigger("change"); 
+    $("#descripcion").val(data.descripcion); 
+
+    //validamoos BAUCHER - DOC 1
+    if (data.baucher == "" || data.baucher == null  ) {
+
+      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+      $("#doc1_nombre").html('');
+
+      $("#doc_old_1").val(""); $("#doc1").val("");
+
+    } else {
+
+      $("#doc_old_1").val(data.baucher); 
+
+      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.baucher)}</i></div></div>`);
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.baucher) == "pdf" ) {
+
+        $("#doc1_ver").html('<iframe src="../dist/pago_obrero/baucher_deposito/'+data.baucher+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+      }else{
+        if (
+          extrae_extencion(data.baucher) == "jpeg" || extrae_extencion(data.baucher) == "jpg" || extrae_extencion(data.baucher) == "jpe" ||
+          extrae_extencion(data.baucher) == "jfif" || extrae_extencion(data.baucher) == "gif" || extrae_extencion(data.baucher) == "png" ||
+          extrae_extencion(data.baucher) == "tiff" || extrae_extencion(data.baucher) == "tif" || extrae_extencion(data.baucher) == "webp" ||
+          extrae_extencion(data.baucher) == "bmp" || extrae_extencion(data.baucher) == "svg" ) {
+
+          $("#doc1_ver").html(`<img src="../dist/pago_obrero/baucher_deposito/${data.baucher}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          
+        } else {
+          $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+        }        
+      }      
+    }     
+  });
 }
 
 //Función para desactivar registros
@@ -621,6 +733,9 @@ function activar(idusuario) {
   });      
 }
 
+function reload_table_detalle_x_q_s() {
+  detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
+}
 
 init();
 

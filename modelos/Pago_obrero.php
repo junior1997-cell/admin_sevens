@@ -10,7 +10,7 @@ Class PagoObrero
 
 	}
 
-	//Implementamos un método para insertar registros
+	//INSERTAR - DEPOSTOS
 	public function insertar_pagos_x_q_s($idresumen_q_s_asistencia, $forma_de_pago, $cuenta_deposito, $monto, $descripcion, $doc1)
 	{
 		$sql="INSERT INTO  pagos_q_s_obrero( idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion) 
@@ -20,7 +20,7 @@ Class PagoObrero
 			
 	}
 
-	//Implementamos un método para editar registros
+	//EDITAR - DEPOSTOS
 	public function editar_pagos_x_q_s( $idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1 )
 	{
 		$sql="UPDATE pagos_q_s_obrero SET idresumen_q_s_asistencia='$idresumen_q_s_asistencia', cuenta_deposito='$cuenta_deposito', 
@@ -31,7 +31,7 @@ Class PagoObrero
 		
 	}	
 
-	//Implementamos un método para editar registros
+	//EDITAR - RECIBO X HONORARIO
 	public function editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $doc2)
 	{
 		$sql="UPDATE resumen_q_s_asistencia SET recibos_x_honorarios = '$doc2' WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia_rh'";	
@@ -39,32 +39,121 @@ Class PagoObrero
 		return ejecutarConsulta($sql);		
 	}
 
-	//Implementar un método para listar los registros
+	//TABLA PRINCIPAL
 	public function listar_tbla_principal($nube_idproyecto)
 	{
-		$sql="SELECT t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento, tt.nombre AS nombre_tipo, 
-		ct.nombre AS nombre_cargo, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, 
-		SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.sabatical) AS sabatical, SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, 
-		SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, SUM(rqsa.pago_parcial_he) AS pago_parcial_he, 
-		SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
+		$data = Array();
+
+		$sql_1="SELECT t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento, t.cuenta_bancaria_format AS cuenta_bancaria, 
+		tt.nombre AS nombre_tipo, ct.nombre AS nombre_cargo, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
+		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.sabatical) AS sabatical, 
+		SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, 
+		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct
 		WHERE rqsa.estado_envio_contador = '1' AND tpp.idproyecto = '$nube_idproyecto' AND  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  AND p.idproyecto = tpp.idproyecto
 		GROUP BY rqsa.idtrabajador_por_proyecto;";
-		return ejecutarConsulta($sql);		
+		$trabajdor = ejecutarConsultaArray($sql_1);
+
+		if ( !empty($trabajdor) ) {
+
+			foreach ($trabajdor as $key => $value) {
+
+				$id = $value['idtrabajador_por_proyecto'];
+
+				$sql_2 = "SELECT SUM(pqso.monto_deposito) AS total_deposito
+				FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
+				WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$id';";
+				$depositos = ejecutarConsultaSimpleFila($sql_2);
+
+				$data[] = array(
+					'nombres_trabajador'=> $value['nombres_trabajador'],
+					'fecha_pago_obrero' => $value['fecha_pago_obrero'],
+					'telefono' 			=> $value['telefono'],
+					'imagen_perfil' 	=> $value['imagen_perfil'],
+					'tipo_documento' 	=> $value['tipo_documento'],
+					'numero_documento' 	=> $value['numero_documento'],
+					'cuenta_bancaria' 	=> $value['cuenta_bancaria'],
+					'nombre_tipo' 		=> $value['nombre_tipo'],
+					'nombre_cargo' 		=> $value['nombre_cargo'],
+					'idtrabajador_por_proyecto' => $value['idtrabajador_por_proyecto'],
+					'fecha_inicio' 		=> $value['fecha_inicio'],
+					'fecha_fin' 		=> $value['fecha_fin'],
+					'sueldo_mensual' 	=> $retVal_1 = (empty($value['sueldo_mensual'])) ? 0 : $value['sueldo_mensual'],
+					'total_hn' 			=> $retVal_2 = (empty($value['total_hn'])) ? 0 : $value['total_hn'],
+					'total_he' 			=> $retVal_3 = (empty($value['total_he'])) ? 0 : $value['total_he'],
+					'total_dias_asistidos' => $retVal_4 = (empty($value['total_dias_asistidos'])) ? 0 : $value['total_dias_asistidos'],
+					'sabatical' 		=> $retVal_5 = (empty($value['sabatical'])) ? 0 : $value['sabatical'],
+					'sabatical_manual_1'=> $value['sabatical_manual_1'],
+					'sabatical_manual_2'=> $value['sabatical_manual_2'],
+					'pago_parcial_hn' 	=> $retVal_7 = (empty($value['pago_parcial_hn'])) ? 0 : $value['pago_parcial_hn'],
+					'pago_parcial_he' 	=> $retVal_8 = (empty($value['pago_parcial_he'])) ? 0 : $value['pago_parcial_he'],
+					'adicional_descuento' => $retVal_9 = (empty($value['adicional_descuento'])) ? 0 : $value['adicional_descuento'],
+					'pago_quincenal' 	=> $retVal_10 = (empty($value['pago_quincenal'])) ? 0 : $value['pago_quincenal'],
+					'sum_estado_envio_contador' => $retVal_11 = (empty($value['sum_estado_envio_contador'])) ? 0 : $value['sum_estado_envio_contador'],
+
+					'total_deposito' 	=> $retVal_12 = (empty($depositos)) ? 0 : $retVal_12 = (empty($depositos['total_deposito'])) ? 0 : $depositos['total_deposito']
+				);
+			}
+			
+		}		
+
+		return json_encode($data, true);		
 	}
 
-	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar_q_s($idtrabajador_x_proyecto)
+	//TABLA de quincenas enviadas al CONTADOR
+	public function listar_tbla_q_s($idtrabajador_x_proyecto)
 	{
-		$sql="SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
+		$data = Array();
+
+		$sql_1="SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
+		rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, 
+		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
+		rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto;";
-		return ejecutarConsultaArray($sql);
+		$q_s = ejecutarConsultaArray($sql_1);
+
+		if ( !empty($q_s) ) {
+
+			foreach ($q_s as $key => $q_s) {
+				
+				$id = $q_s['idresumen_q_s_asistencia'];
+
+				$sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND idresumen_q_s_asistencia = '$id';";
+				$depositos = ejecutarConsultaSimpleFila($sql_2);
+
+				$data[] = array(
+					'sueldo_hora' => $retVal_1 = (empty($q_s['sueldo_hora'])) ? 0 : $q_s['sueldo_hora'],
+					'idresumen_q_s_asistencia' => $q_s['idresumen_q_s_asistencia'],
+					'idtrabajador_por_proyecto' => $q_s['idtrabajador_por_proyecto'],
+					'numero_q_s' => $retVal_2 = (empty($q_s['numero_q_s'])) ? 0 : $q_s['numero_q_s'],
+					'fecha_q_s_inicio' => $q_s['fecha_q_s_inicio'],
+					'fecha_q_s_fin' => $q_s['fecha_q_s_fin'],
+					'total_hn' => $retVal_3 = (empty($q_s['total_hn'])) ? 0 : $q_s['total_hn'],
+					'total_he' => $retVal_4 = (empty($q_s['total_he'])) ? 0 : $q_s['total_he'],
+					'total_dias_asistidos' => $retVal_5 = (empty($q_s['total_dias_asistidos'])) ? 0 : $q_s['total_dias_asistidos'],
+					'sabatical' => $retVal_6 = (empty($q_s['sabatical'])) ? 0 : $q_s['sabatical'],
+					'sabatical_manual_1' => $q_s['sabatical_manual_1'],
+					'sabatical_manual_2' => $q_s['sabatical_manual_2'],
+					'pago_parcial_hn' => $retVal_7 = (empty($q_s['pago_parcial_hn'])) ? 0 : $q_s['pago_parcial_hn'] ,
+					'pago_parcial_he' => $retVal_8 = (empty($q_s['pago_parcial_he'])) ? 0 : $q_s['pago_parcial_he'],
+					'adicional_descuento' => $retVal_9 = (empty($q_s['adicional_descuento'])) ? 0 : $q_s['adicional_descuento'],
+					'descripcion_descuento' => $q_s['descripcion_descuento'],
+					'pago_quincenal' => $retVal_10 = (empty($q_s['pago_quincenal'])) ? 0 : $q_s['pago_quincenal'],
+					'estado_envio_contador' => $q_s['estado_envio_contador'],
+					'recibos_x_honorarios' => $q_s['recibos_x_honorarios'],
+
+					'deposito' => $retVal_11 = (empty($depositos)) ? 0 : $retVal_12 = (empty($depositos['deposito'])) ? 0 : $depositos['deposito'] 
+				);				
+			}
+		}
+		
+		return $data;
 	}
 
-	//Implementar un método para mostrar los datos de un registro a modificar
-	public function listar_pagos_x_q_s($idresumen_q_s_asistencia)
+	//TABLA DE PAGOS
+	public function listar_tbla_pagos_x_q_s($idresumen_q_s_asistencia)
 	{
 		$sql="SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion, estado 
 		FROM pagos_q_s_obrero
@@ -73,14 +162,22 @@ Class PagoObrero
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para desactivar categorías
+	//MOSTRAR para editar
+	public function mostrar_pagos_x_mes($idpagos_q_s_obrero)
+	{
+		$sql="SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion
+		FROM pagos_q_s_obrero WHERE idpagos_q_s_obrero = '$idpagos_q_s_obrero';";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//Desactivar deposito
 	public function desactivar($idtrabajador)
 	{
 		$sql="UPDATE trabajador_por_proyecto SET estado='0' WHERE idtrabajador_por_proyecto='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para activar categorías
+	//Activar deposito
 	public function activar($idtrabajador)
 	{
 		$sql="UPDATE trabajador_por_proyecto SET estado='1' WHERE idtrabajador_por_proyecto='$idtrabajador'";
@@ -90,7 +187,7 @@ Class PagoObrero
 	// obtebnemos los "BAUCHER DE DEPOSITOS" para eliminar
 	public function obtenerDocs($id) {
 
-        $sql = "SELECT baucher FROM pagos_x_mes_administrador WHERE idpagos_x_mes_administrador = '$id'";
+        $sql = "SELECT baucher FROM pagos_q_s_obrero WHERE idpagos_q_s_obrero = '$id'";
 
         return ejecutarConsulta($sql);
     }

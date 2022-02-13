@@ -296,7 +296,7 @@ function listar_tbla_principal(nube_idproyecto) {
   
 }
   
-//Función para ver detalle de fechas por  trabajador
+//Función Listar - TABLA DETALLE MES
 function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajador, fecha_inicial, fecha_hoy, fecha_final, sueldo_mensual, cuenta_bancaria, cant_dias_trabajando) {
 
   id_tabajador_x_proyecto_r = id_tabajador_x_proyecto; nombre_trabajador_r = nombre_trabajador; fecha_inicial_r = fecha_inicial; fecha_hoy_r = fecha_hoy; 
@@ -621,6 +621,7 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
   }).DataTable();  
 }
 
+// MODAL- AGREGAR RECIBO X HONORARIO
 function modal_recibos_x_honorarios(idfechas_mes_pagos_administrador, id_tabajador_x_proyecto, fecha_inicial, fecha_final, mes_nombre, dias_mes, dias_regular, sueldo_mensual, monto_x_mes, recibos_x_honorarios, nombre_trabajador, cuenta_bancaria) {
   
   // borramos los campos cargados con anterioridad

@@ -21,7 +21,7 @@
       $pagoobrero = new PagoObrero();
 
       // DATA - agregar pago x quincena o semana	
-      $idpagos_q_s_obrero 		  = isset($_POST["idpagos_q_s_obrero "])? limpiarCadena($_POST["idpagos_q_s_obrero "]):"";
+      $idpagos_q_s_obrero 		  = isset($_POST["idpagos_q_s_obrero"])? limpiarCadena($_POST["idpagos_q_s_obrero"]):"";
       $idresumen_q_s_asistencia = isset($_POST["idresumen_q_s_asistencia"])? limpiarCadena($_POST["idresumen_q_s_asistencia"]):"";
       $forma_pago	      = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
       $cuenta_deposito  = isset($_POST['cuenta_deposito'])? $_POST['cuenta_deposito']:"";
@@ -65,7 +65,7 @@
             // validamos si existe el "baucher" para eliminarlo
             if ($flat_doc1 == true) {
 
-              $datos_f1 = $pagoobrero->obtenerDocs($idfechas_mes_pagos_administrador_pxm);
+              $datos_f1 = $pagoobrero->obtenerDocs($idpagos_q_s_obrero);
 
               $doc1_ant = $datos_f1->fetch_object()->baucher;
 
@@ -145,33 +145,36 @@
 
           $Object = new DateTime();
           $Object->setTimezone(new DateTimeZone('America/Lima'));
-          $date_actual = $Object->format("d-m-Y");
-          
-          while ($reg=$rspta->fetch_object()){
+          $date_actual = $Object->format("d-m-Y");           
+
+          foreach ( json_decode($rspta, true) as $key => $value) {
+
+            $saldo = floatval($value['pago_quincenal']) - floatval($value['total_deposito']);
+
             $data[]=array(
               "0"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres_trabajador .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                <span class="description">'. $reg->nombre_tipo.' / '.$reg->nombre_cargo .' </span>
+                <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres_trabajador'] .'</p></span>
+                <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                <span class="description">'. $value['nombre_tipo'].' / '.$value['nombre_cargo'] .' </span>
               </div>',
               
-              "1"=>$reg->total_hn.' / '. $reg->total_he,
-              "2"=>$reg->sabatical,              
-              "3"=>'S/. '.  number_format($reg->sueldo_mensual, 2, '.', ','), 
-              "4"=>$reg->sum_estado_envio_contador, 
-              "5"=>'S/. '.  number_format($reg->pago_quincenal, 2, '.', ','),
-              "6"=>'<div class="justify-content-between "> 
-                <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$reg->idtrabajador_por_proyecto.', \'' . $reg->fecha_pago_obrero .  '\', \'' . $reg->nombres_trabajador. '\' )">
+              "1"=>$value['total_hn'].' / '. $value['total_he'],
+              "2"=>$value['sabatical'],              
+              "3"=>'S/. '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
+              "4"=>'S/. '.  number_format($value['pago_quincenal'], 2, '.', ','),
+              "5"=>'<div class="justify-content-between "> 
+                <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' )">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
-                <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. 0.00</button>
+                <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. '.number_format($value['total_deposito'], 2, '.', ',').'</button>
               </div>',
-              "7"=>'S./ 0.00',
-              "8"=>format_d_m_a($reg->fecha_inicio),
+              "6"=>'S./ ' . number_format($saldo, 2, '.', ','),
+              "7"=>$value['sum_estado_envio_contador'], 
+              "8"=>format_d_m_a($value['fecha_inicio']),
               "9"=> $date_actual,
-              "10"=>format_d_m_a($reg->fecha_fin),
-              "11"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>'
+              "10"=>format_d_m_a($value['fecha_fin']),
+              "11"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
             );
           }
           $results = array(
@@ -182,9 +185,9 @@
           echo json_encode($results);
         break;
 
-        case 'mostrar_q_s':
+        case 'listar_tbla_q_s':
 
-          $rspta=$pagoobrero->mostrar_q_s( $_POST["id_trabajdor_x_proyecto"]);
+          $rspta=$pagoobrero->listar_tbla_q_s( $_POST["id_trabajdor_x_proyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -194,7 +197,7 @@
 
           $idresumen_q_s_asistencia = $_GET["idresumen_q_s_asistencia"];
 
-          $rspta=$pagoobrero->listar_pagos_x_q_s($idresumen_q_s_asistencia);
+          $rspta=$pagoobrero->listar_tbla_pagos_x_q_s($idresumen_q_s_asistencia);
           //Vamos a declarar un array
           $data= Array();
 
@@ -206,9 +209,9 @@
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
             $data[]=array(    
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
               "1"=>$reg->cuenta_deposito	,
               "2"=>$reg->forma_de_pago	,
@@ -228,7 +231,7 @@
 
         case 'mostrar_pagos_x_q_s':
 
-          $rspta=$pago_administrador->mostrar_pagos_x_mes($_POST["idpagos_x_mes_administrador"]);
+          $rspta=$pagoobrero->mostrar_pagos_x_mes($_POST["idpagos_q_s_obrero"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
