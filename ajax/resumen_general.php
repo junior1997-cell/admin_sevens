@@ -529,6 +529,30 @@ switch ($_GET["op"]){
 		}
 
 	break;
+
+	case 'listar_r_trabajador_obrero':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				$rspta=$resumen_general->r_trabajador_obrero($_POST['idproyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}	
+
+	break;
 	
 
 

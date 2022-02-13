@@ -390,6 +390,52 @@ Class Resumen_general
 		return ejecutarConsulta($sql);
 	}
 
+	public function r_trabajador_obrero($idproyecto)
+	{
+		$obrero= Array(); $total_deposito_obrero=0;
+
+		$sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
+		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
+		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' AND tpp.idtrabajador=t.idtrabajador 
+		GROUP by tpp.idtrabajador_por_proyecto";
+		
+		$trabaj_obrero=ejecutarConsultaArray($sql);
+
+		if (!empty($trabaj_obrero)) {
+
+			foreach ($trabaj_obrero as $key => $value) {
+
+				$idresumen_q_s_asistencia = $value['idresumen_q_s_asistencia'];
+
+				$sql_2="SELECT SUM(monto_deposito) as deposito FROM pagos_q_s_obrero WHERE idresumen_q_s_asistencia='$idresumen_q_s_asistencia'";
+
+				$total_deposito=ejecutarConsultaSimpleFila($sql_2);
+
+				
+				if (empty($total_deposito['deposito']) || $total_deposito['deposito']==null ) {
+
+					$total_deposito_obrero=0;
+				}else{
+					$total_deposito_obrero=$total_deposito['deposito'];
+				}
+
+				$obrero[]= array(
+
+					"idresumen_q_s_asistencia"   => $value['idresumen_q_s_asistencia'],
+					"idtrabajador_por_proyecto"  => $value['idtrabajador_por_proyecto'],
+					"nombres"     	             => $value['nombres'],
+					"pago_quincenal"    		 => $value['pago_quincenal'],
+
+					"total_deposito_obrero"       =>$total_deposito_obrero
+
+				);
+				
+			}
+			return $obrero;
+				
+		}
+	}
+
 
 
 }
