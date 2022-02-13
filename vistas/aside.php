@@ -312,7 +312,7 @@
           <!-- OTROS SERVICIOS -->       
           <li class="nav-item ver-otros-modulos-1">
             <a href="otros_servicios.php" class="nav-link" id="mOtroServicio">
-              <i class="nav-icon fas fa-map-marked-alt"></i>
+              <i class="nav-icon fas fa-network-wired"></i>
               <p>
                 Otros servicios                
               </p>

@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css" /> --> 
  
 <link rel="stylesheet" type="text/css" href="../plugins/datatables2/jquery.dataTables.min.css">    
-<link href="../plugins/datatables2/buttons.dataTables.min.css" rel="stylesheet"/>
-<link href="../plugins/datatables2/responsive.dataTables.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="../plugins/datatables2/buttons.dataTables.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="../plugins/datatables2/responsive.dataTables.min.css" rel="stylesheet"/>
 
 
 <!-- Select2 -->
