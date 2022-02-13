@@ -115,20 +115,19 @@
                             </tbody>
                             <tfoot>
                               <tr> 
-                                <th>Trabajdor</th> 
+                                <th>Trabajdor</th>  
                                 
-                                <th class="text-center">Horas Nrm/Extr</th>
-                                <th>Sabaticales</th>                               
-                                <th>Sueldo Mensual</th>
-                                
-                                <th class="text-center">Pago <br> acumulado</th>
-                                <th class="text-center">Pago <br> realizado</th>
-                                <th>Saldo</th>
-                                <th>Cant S/Q</th>
-                                <th>Fecha inicio</th>
-                                <th>Hoy</th>
-                                <th class="text-center">Fecha <br> culminacion</th>
-                                <th>Cel:</th>                            
+                                <th class="text-center text-gray">Horas Nrm/Extr</th>
+                                <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                                <th class="text-center"><h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
+                                <th class="text-right"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                <th class="text-right"><h5 class="deposito_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                <th class="text-right"><h5 class="saldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                <th class="text-right"><h5 class="cant_s_q_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                <th class="text-center text-gray">Fecha inicio</th>
+                                <th class="text-center text-gray">Hoy</th>
+                                <th class="text-center text-gray">Fecha fin</th>
+                                <th class="text-center text-gray" >Cel:</th>                            
                               </tr>
                             </tfoot>
                           </table>

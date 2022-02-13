@@ -146,10 +146,10 @@ function table_show_hide(flag) {
   }
 }
 
-// LISATAR TABLA PRINCIPAL
+// LISTAR TABLA PRINCIPAL
 function listar_tbla_principal(id_proyecto) {
 
-  // table_show_hide(1);
+  var sabatical_total = 0, pago_acumulado_total = 0, saldo_total = 0, cant_q_s_total = 0;
 
   tabla_principal=$('#tabla-principal').dataTable({
     "responsive": true,
@@ -175,23 +175,28 @@ function listar_tbla_principal(id_proyecto) {
         });         
       }   
       
-      // columna: Sabaticales
+      // columna: Sabaticales  
       if (data[2] != '') {
-        $("td", row).eq(2).css({
-          "text-align": "center"
-        });
-      }
+        sabatical_total += parseFloat(data[2]);
+      }     
+      $("td", row).eq(2).css({
+        "text-align": "center"
+      });       
 
       // columna: Sueldo Mensual
       if (data[3] != '') {
         $("td", row).eq(3).css({
           "text-align": "right"
         });
-      }
-      
+      }      
 
       // columna: Pago acumulado Semana/Quincena
       if (data[4] != '') {
+
+        var split = data[4].split(' '); console.log(split);
+        var quitar_format_mil = quitar_formato_miles( split[1]);
+        pago_acumulado_total += parseFloat(quitar_format_mil);
+          
         $("td", row).eq(4).css({
           "text-align": "right"
         });
@@ -204,8 +209,27 @@ function listar_tbla_principal(id_proyecto) {
         });
       }
 
+      // columna: Saldo
+      if (data[6] != '') {
+
+        var split = data[6].split(' '); console.log(split);
+        var quitar_format_mil = quitar_formato_miles( split[1]);
+        saldo_total += parseFloat(quitar_format_mil);
+
+        if (parseFloat(quitar_format_mil) < 0) {
+          $("td", row).eq(6).css({
+            "text-align": "right"            
+          }).addClass('bg-danger');
+        }else{
+          $("td", row).eq(6).css({
+            "text-align": "right"
+          });
+        }        
+      }
+
       // columna: Cantidad Semana/Quincena
       if (data[7] != '') {
+        cant_q_s_total += parseFloat(data[7]);
         $("td", row).eq(7).css({
           "text-align": "center"
         });
@@ -226,6 +250,20 @@ function listar_tbla_principal(id_proyecto) {
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
+
+  // suma totales x proyecto
+  $.post("../ajax/pago_obrero.php?op=mostrar_deposito_total_tbla_principal", { 'id_proyecto': id_proyecto }, function (data, status) {
+
+    data = JSON.parse(data); console.log(data); 
+
+    $(".deposito_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.total_deposito_x_proyecto}</b>`);
+    $(".sueldo_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.sueldo_mesual_x_proyecto}</b>`);
+
+    $('.sabatical_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(sabatical_total)}</b>`);
+    $('.pago_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(pago_acumulado_total)}</b>`);
+    $('.saldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(saldo_total)}</b>`);  
+    $('.cant_s_q_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(cant_q_s_total)}</b>`);
+  });
 }
 
 // Listar: QUINCENAS O SEMANAS
@@ -332,7 +370,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
       $('.data-q-s').html(data_s_q);
       $('.total_hn_he').html(`${formato_miles(total_hn)} / ${formato_miles(total_he)}`);
       $('.total_sabatical').html(`${formato_miles(total_sabatical)} `);
-      $('.total_monto_hn_he').html(`${formato_miles(total_monto_hn)} / ${formato_miles(total_monto_he)}`);
+      $('.total_monto_hn_he').html(`<sup>S/. </sup>${formato_miles(total_monto_hn)} / <sup>S/. </sup>${formato_miles(total_monto_he)}`);
       $('.total_descuento').html(`<sup>S/. </sup>${formato_miles(total_descuento)}`);
       $('.total_quincena').html(`<sup>S/. </sup>${formato_miles(total_quincena)}`);
       $('.total_deposito').html(`<sup>S/. </sup>${formato_miles(total_deposito)}`); 
@@ -671,11 +709,11 @@ function mostrar_pagos_x_q_s(id) {
   });
 }
 
-//Función para desactivar registros
-function desactivar(idusuario) {
+function desactivar_pago_x_q_s(id) {  
+
   Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el Usuario?",
-    text: "Este usuario no podrá ingresar al sistema!",
+    title: "¿Está Seguro de ANULAR el pago?",
+    text: "Al anularlo este pago, el monto NO se contara como un deposito realizado.",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -683,54 +721,52 @@ function desactivar(idusuario) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
-        if (e == 'ok') {
+      $.post("../ajax/pago_obrero.php?op=desactivar_pago_x_q_s", { 'idpagos_q_s_obrero': id }, function (e) {
 
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
-  
-          tabla_principal.ajax.reload();
-          
-        }else{
-  
+        if (e == "ok") {
+
+          tabla_ingreso_pagos.ajax.reload(); 
+
+          listar_tbla_principal(localStorage.getItem('nube_idproyecto')); 
+
+          Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
+        } else {
+
           Swal.fire("Error!", e, "error");
-        }
+        }        
       });      
     }
-  });   
+  });  
 }
 
-//Función para activar registros
-function activar(idusuario) {
+function activar_pago_x_q_s(id) {
 
   Swal.fire({
-
-    title: "¿Está Seguro de  Activar  el Usuario?",
-    text: "Este usuario tendra acceso al sistema",
+    title: "¿Está Seguro de ReActivar el pago?",
+    text: "Al ReActivarlo este pago, el monto contara como un deposito realizado.",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, activar!",
-
   }).then((result) => {
-
     if (result.isConfirmed) {
+      $.post("../ajax/pago_obrero.php?op=activar_pago_x_q_s", { 'idpagos_q_s_obrero': id }, function (e) {
 
-      $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
+        if (e == "ok") {
 
-        if (e == 'ok') {
+          tabla_ingreso_pagos.ajax.reload(); 
 
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
-  
-          tabla_principal.ajax.reload();
-          
-        }else{
-  
+          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+
+          Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
+        } else {
+
           Swal.fire("Error!", e, "error");
-        }
+        }        
       });      
     }
-  });      
+  });
 }
 
 function reload_table_detalle_x_q_s() {

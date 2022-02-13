@@ -101,6 +101,27 @@ Class PagoObrero
 		return json_encode($data, true);		
 	}
 
+	// Obtenemos los totales - TABLA PRINCIPAL
+	public function mostrar_total_tbla_principal($id)
+	{
+		$sql_1 = "SELECT SUM(pqso.monto_deposito) AS total_deposito_x_proyecto
+		FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
+		WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idproyecto = '$id';";
+		$monto_1 = ejecutarConsultaSimpleFila($sql_1);
+		
+		$sql_2 = "SELECT SUM(tpp.sueldo_mensual) AS sueldo_mesual_x_proyecto
+		FROM trabajador_por_proyecto AS tpp,  cargo_trabajador AS ct, tipo_trabajador AS tt
+        WHERE tpp.idproyecto = '$id' AND  tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador AND tt.nombre = 'Obrero';";
+		$monto_2 = ejecutarConsultaSimpleFila($sql_2);
+
+		$data = array(
+			'total_deposito_x_proyecto' => $n1 = (empty($monto_1)) ? 0 : $retVal_1 = (empty($monto_1['total_deposito_x_proyecto'])) ? 0 : $monto_1['total_deposito_x_proyecto'] ,
+			'sueldo_mesual_x_proyecto' => $n2 = (empty($monto_2)) ? 0 : $retVal_2 = (empty($monto_2['sueldo_mesual_x_proyecto'])) ? 0 : $monto_2['sueldo_mesual_x_proyecto'] 
+		);
+
+		return $data ;
+	}
+
 	//TABLA de quincenas enviadas al CONTADOR
 	public function listar_tbla_q_s($idtrabajador_x_proyecto)
 	{
@@ -170,17 +191,17 @@ Class PagoObrero
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	//Desactivar deposito
-	public function desactivar($idtrabajador)
+	//Desactivar DEPOSITO
+	public function desactivar_pago_q_s($idtrabajador)
 	{
-		$sql="UPDATE trabajador_por_proyecto SET estado='0' WHERE idtrabajador_por_proyecto='$idtrabajador'";
+		$sql="UPDATE pagos_q_s_obrero SET estado='0' WHERE idpagos_q_s_obrero='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Activar deposito
-	public function activar($idtrabajador)
+	//Activar DEPOSITO
+	public function activar_pago_q_s($idtrabajador)
 	{
-		$sql="UPDATE trabajador_por_proyecto SET estado='1' WHERE idtrabajador_por_proyecto='$idtrabajador'";
+		$sql="UPDATE pagos_q_s_obrero SET estado='1' WHERE idpagos_q_s_obrero='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
 

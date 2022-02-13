@@ -155,7 +155,7 @@ function listar_tbla_principal(nube_idproyecto) {
   $('.sueldo_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.deposito_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
-  var total_pago_acumulado_hoy = 0; var pago_total_x_proyecto = 0; var saldo_total = 0;
+  var total_pago_acumulado_hoy = 0, pago_total_x_proyecto = 0, saldo_total = 0;
 
   tabla_principal=$('#tabla-principal').dataTable({
     "responsive": true,

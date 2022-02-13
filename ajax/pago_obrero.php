@@ -148,8 +148,21 @@
           $date_actual = $Object->format("d-m-Y");           
 
           foreach ( json_decode($rspta, true) as $key => $value) {
-
+            $btn_depositos = "";
             $saldo = floatval($value['pago_quincenal']) - floatval($value['total_deposito']);
+
+            // Pintamos el bonton depositos segun las cantidades            
+            if ( floatval($value['total_deposito']) == 0) {
+              $btn_depositos = "btn-danger";
+            } else {
+              if ( floatval($value['total_deposito']) > 0 && floatval($value['total_deposito'])  < floatval($value['pago_quincenal'])) {
+                $btn_depositos = "btn-warning";
+              } else {
+                if ( floatval($value['total_deposito']) >= floatval($value['pago_quincenal'])) {
+                  $btn_depositos = "btn-success";
+                }
+              }              
+            }
 
             $data[]=array(
               "0"=>'<div class="user-block">
@@ -167,7 +180,7 @@
                 <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' )">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
-                <button style="font-size: 14px;" class="btn btn-danger btn-xs">S/. '.number_format($value['total_deposito'], 2, '.', ',').'</button>
+                <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/. '.number_format($value['total_deposito'], 2, '.', ',').'</button>
               </div>',
               "6"=>'S./ ' . number_format($saldo, 2, '.', ','),
               "7"=>$value['sum_estado_envio_contador'], 
@@ -183,6 +196,12 @@
             "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
             "data"=>$data);
           echo json_encode($results);
+        break;
+
+        case 'mostrar_deposito_total_tbla_principal':
+          $rspta=$pagoobrero->mostrar_total_tbla_principal($_POST["id_proyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
         break;
 
         case 'listar_tbla_q_s':
@@ -210,9 +229,9 @@
 
             $data[]=array(    
               "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
               "1"=>$reg->cuenta_deposito	,
               "2"=>$reg->forma_de_pago	,
               "3"=>'S/. '. number_format($reg->monto_deposito, 2, ".", ","),
@@ -237,19 +256,19 @@
 
         break;
 
-        case 'desactivar':
+        case 'desactivar_pago_x_q_s':
 
-          $rspta=$pagoobrero->desactivar($idtrabajador_por_proyecto);
+          $rspta=$pagoobrero->desactivar_pago_q_s( $_POST['idpagos_q_s_obrero'] );
 
-          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
+          echo $rspta ? "ok" : "NO se puede anular";
 
         break;
 
-        case 'activar':
+        case 'activar_pago_x_q_s':
 
-          $rspta=$pagoobrero->activar($idtrabajador_por_proyecto);
+          $rspta=$pagoobrero->activar_pago_q_s( $_POST['idpagos_q_s_obrero'] );
 
-          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+          echo $rspta ? "ok" : "NO se puede ReActivar";
 
         break;
 
