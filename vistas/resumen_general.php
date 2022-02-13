@@ -413,6 +413,39 @@
                                                 <tfoot></tfoot>
 
                                             </table>
+                                            <!--Personal obrero-->
+                                            <table id="tabla10_per_obr" class="display" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Personal Obrero</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-center clas_pading">#</th>
+                                                        <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                                        <th class="text-center clas_pading">FECHA</th>
+                                                        <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                                        <th class="text-center clas_pading" >DETALLE</th>
+                                                        <th class="text-center clas_pading">MONTOS</th>
+                                                        <th class="text-center clas_pading">PAGOS</th>
+                                                        <th class="text-center clas_pading">SALDOS</th>
+                                                    </tr>
+                                                </thead>
+                                                   
+                                                <tbody id="obrero"></tbody>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <th colspan="4" class="clas_pading"></th>
+                                                        <th  class="clas_pading text-right">Total</th>
+                                                        <th class="clas_pading text-right" id="monto_obrero"></th>
+                                                        <th class="clas_pading text-right" id="pago_obrero"></th>
+                                                        <th class="clas_pading text-right" id="saldo_obrero"></th>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tfoot></tfoot>
+
+                                            </table>
 
                                        </div>
                                     </div>

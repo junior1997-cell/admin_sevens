@@ -16,6 +16,7 @@ function init() {
   listar_r_breaks(localStorage.getItem('nube_idproyecto'));
   listar_r_pensiones(localStorage.getItem('nube_idproyecto'));
   listar_r_trab_administrativo(localStorage.getItem('nube_idproyecto'));
+  listar_r_trabajador_obrero(localStorage.getItem('nube_idproyecto'));
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
 
@@ -1041,6 +1042,86 @@ function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto,nombres) {
 
   });
   
+}
+
+function listar_r_trabajador_obrero(idproyecto) {  
+  var obrero=''; var t_monto=0; var t_pagos=0; var t_saldo=0; var calculando_sldo=0; var validando_pago=0; var pago_quincenal="";
+  var pintar_celda='';
+  $("#obrero").html("");
+  $("#monto_obrero").html("");  
+  $("#pago_obrero").html("");  
+  $("#saldo_obrero").html("");
+
+  $.post("../ajax/resumen_general.php?op=listar_r_trabajador_obrero", { idproyecto: idproyecto }, function (data, status) {
+    console.log('obrero');
+    data = JSON.parse(data); console.log(data);  
+
+    data.forEach((value,index)=>{
+
+      if (value.pago_quincenal!=null) {
+
+          calculando_sldo=parseFloat(value.pago_quincenal)-parseFloat(value.total_deposito_obrero);
+          validando_pago=parseFloat(value.total_deposito_obrero);
+          pago_quincenal=parseFloat(value.pago_quincenal);
+
+      } else {
+        calculando_sldo=0;
+        validando_pago=0;
+        pago_quincenal=0;
+      }
+      if (calculando_sldo==0) {
+        pintar_celda='';
+      } else {
+        pintar_celda='bg-red-resumen';
+      }
+
+      obrero=`<tr>
+          <td class="bg-color-b4bdbe47  text-center clas_pading">${index+1}</td>
+          <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
+          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+          <td class="bg-color-b4bdbe47 text-center clas_pading">
+            <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+          </td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(pago_quincenal.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+      </tr>`;
+      
+      t_monto=t_monto+parseFloat(pago_quincenal);
+      t_pagos=t_pagos+parseFloat(validando_pago);
+      t_saldo=t_saldo+parseFloat(calculando_sldo);
+
+      $("#obrero").append(obrero);
+
+    });
+
+      $("#monto_obrero").html(formato_miles(t_monto.toFixed(2)));  
+      $("#pago_obrero").html(formato_miles(t_pagos.toFixed(2)));  
+      $("#saldo_obrero").html(formato_miles(t_saldo.toFixed(2)));
+
+      $('#tabla10_per_obr').dataTable({  
+        "responsive": true,
+        "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+        "aProcessing": true,//Activamos el procesamiento del datatables
+        "aServerSide": true,//Paginación y filtrado realizados por el servidor
+        dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+        buttons: ['copyHtml5','excelHtml5','pdf'],
+        "language": {
+          "lengthMenu": "Mostrar : _MENU_ registros",
+          "buttons": {
+            "copyTitle": "Tabla Copiada",
+            "copySuccess": {
+              _: '%d líneas copiadas',
+              1: '1 línea copiada'
+            }
+          }
+        },
+        "bDestroy": true,
+        "iDisplayLength": 5,//Paginación
+        "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+      }).DataTable();
+  });
 }
 
 init();
