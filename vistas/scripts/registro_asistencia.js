@@ -7,7 +7,7 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar(localStorage.getItem('nube_idproyecto'));  
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));  
 
   // $("#bloc_Accesos").addClass("menu-open");
 
@@ -223,8 +223,8 @@ sumaFecha = function(d, fecha){
   return (fechaFinal);
 }
 
-//Función Listar
-function listar(nube_idproyecto) {
+//TBLA - PRINCIPAL
+function listar_tbla_principal(nube_idproyecto) {
 
   $('#Lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
 
@@ -236,13 +236,57 @@ function listar(nube_idproyecto) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/registro_asistencia.php?op=listar&nube_idproyecto='+nube_idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
+      url: '../ajax/registro_asistencia.php?op=listar&nube_idproyecto='+nube_idproyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: opciones
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-center');         
+      }
+
+      // columna: total Horas
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass('text-center');         
+      }
+
+      // columna: total Días
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-center');         
+      }
+
+      // columna: Sueldo diario
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-nowrap text-right');         
+      }
+
+      // columna: Sueldo diario
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-nowrap text-right');         
+      }
+
+      // columna: Sueldo mensual
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-nowrap text-right');         
+      }
+
+      // columna: sabatical
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-center');         
+      }
+
+      // columna: Pago acumulado
+      if (data[8] != '') {
+        $("td", row).eq(8).addClass('text-nowrap text-right');         
+      }
+
+      
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -266,7 +310,7 @@ function listar(nube_idproyecto) {
     if (data) {
       var normal = parseFloat(data.pagos_normal_dias); var extras = parseFloat(data.pagos_horas_extras);
       var total = normal + extras;
-      $("#total_acumulado_trabjadores").html('S/. ' +  formato_miles(total));
+      $("#total_acumulado_trabjadores").html(`S/. <b>${formato_miles(total)}</b> `);
     } else {
       $("#total_acumulado_trabjadores").html("S/. 0.00");
     }
@@ -1340,7 +1384,7 @@ function justificar(idasistencia,horas, estado) {
   } 
 }
 
-// ver_asistencias
+// TBLA - ASISTENCIA INDIVIDUAL
 function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proyect) {
 
   console.log(idtrabajador_por_proyecto,fecha_inicio_proyect);
@@ -1355,13 +1399,45 @@ function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proye
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
+      url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) { 
+
+      // columna: Horas normal
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-center');         
+      }
+
+      // columna: Horas normal
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass('text-center');         
+      }
+
+      // columna: Pago por horas normal
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-nowrap text-right');         
+      }
+
+      // columna: Horas normal
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-center');         
+      }
+
+      // columna: Pago por horas extras
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-right');         
+      }   
+
+      // columna: Pago por horas normal
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-nowrap');         
+      }
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {

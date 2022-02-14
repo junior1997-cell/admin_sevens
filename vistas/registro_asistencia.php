@@ -68,133 +68,132 @@
                           <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                         </div>                        
                       </div>
-
                       <!-- /.card-header -->
+
                       <div class="card-body">
-                        <div id="tabla-asistencia-trab">
-                          <table id="tabla-asistencia" class="table table-bordered table-striped display" style="width: 100% !important;">
+
+                        <!-- tabla principal -->
+                        <div id="tabla-asistencia-trab" >
+                          <table id="tabla-asistencia" class="table table-bordered table-striped display " style="width: 100% !important;">
                             <thead>
                               <tr>
-                                <th class="">Aciones</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Opciones.">Op.</th>
                                 <th>Nombre</th>
-                                <th>total Horas</th>
-                                <th>total Días</th>
-                                
-                                <th>Pago / hora</th>
-                                <th>Sueldo diario</th>
-                                <th>Sueldo mensual</th>                                
-                                <th>Sabatical</th>
-                                <th>Pago acumulado</th>
+                                <th class="text-center">Total Horas</th>
+                                <th class="text-center">Total Días</th>                                
+                                <th class="text-center">Pago / hora</th>
+                                <th class="text-center">Sueldo diario</th>
+                                <th class="text-center">Sueldo mensual</th>                                
+                                <th class="text-center">Sabatical</th>
+                                <th class="text-center">Pago acumulado</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
                               <tr>
-                                <th>Aciones</th>
-                                <th>Nombre</th>
-                                <th>total Horas</th>
-                                <th>total Días</th>
-                                
-                                <th>Pago / hora</th> 
-                                <th>Sueldo diario</th>                                
-                                <th>Sueldo mensual</th>                                
-                                <th>Sabatical</th>
-                                <th > <h5 id="total_acumulado_trabjadores">  S/. <i class="fas fa-spinner fa-pulse fa-sm"></i><br><br></h5></th>
+                                <th class="text-gray">Aciones</th>
+                                <th class="text-gray">Nombre</th>
+                                <th class="text-gray">total Horas</th>
+                                <th class="text-gray">total Días</th>                                
+                                <th class="text-gray">Pago / hora</th> 
+                                <th class="text-gray">Sueldo diario</th>                                
+                                <th class="text-gray">Sueldo mensual</th>                                
+                                <th class="text-gray">Sabatical</th>
+                                <th class="text-nowrap text-right"> <h5 id="total_acumulado_trabjadores">  S/. <i class="fas fa-spinner fa-pulse fa-sm"></i><br><br></h5></th>
                               </tr>
                             </tfoot>
                           </table>
                         </div>
-                        <!--registro-asistencia-->
-                        <div id="ver_asistencia" style="display: none;">
-                          <div class="table-responsive disenio-scroll">
-                              
-                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
-                              <thead>
-                                <tr>
-                                  <th rowspan="2" class="stile-celda">#</th>
-                                  <th rowspan="2" class="stile-celda">Nombre del trabajador</th>
-                                  <th rowspan="2" class="stile-celda">Cargo</th>
-                                  <th colspan="14" id="dias_asistidos_s_q" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
-                                  <th rowspan="2" class="stile-celda">Horas<br>normal/extras</th>
-                                  <th rowspan="2" class="stile-celda">Días<br>asistidos</th>
-                                  <th rowspan="2" class="stile-celda">Sueldo Mensual</th>
-                                  <th rowspan="2" class="stile-celda">Jornal</th>
-                                  <th rowspan="2" class="stile-celda">Sueldo <br> hora</th>
-                                  <th rowspan="2" class="stile-celda">Sabatical</th>
-                                  <th rowspan="2" class="stile-celda">Pago <br> parcial</th>
-                                  <th rowspan="2" class="stile-celda">Adicional <br> descuento</th>
-                                  <th rowspan="2" class="stile-celda">Pago quincenal</th> 
-                                  <th rowspan="2" class="stile-celda"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
-                                </tr>
-                                <tr class="table-dias data-dia-semana">
-                                  <!-- <th class=""> Lu </th>
-                                  <th class=""> Ma </th>
-                                  <th class=""> Mi </th>
-                                  <th class=""> Ju </th>
-                                  <th class=""> Vi </th>
-                                  <th class=" bg-color-acc3c7" >Sa </th>
-                                  <th class=""> Do </th>
-                                  <th class=""> Lu </th>
-                                  <th class=""> Ma </th>
-                                  <th class=""> Mi </th>
-                                  <th class=""> Ju </th>
-                                  <th class=""> Vi </th>
-                                  <th class=" bg-color-acc3c7"> Sa </th>
-                                  <th class=""> Do </th>
-                                  <th class=""> Lu </th> -->
-                                </tr>
-                                <!-- <tr class="table-dias data-numero-semana">
-                                  <th>1</th> <th>2</th> <th>3</th> <th>4</th> <th>5</th> <th>6</th> <th>7</th> 
-                                  <th>8</th> <th>9</th> <th>10</th> <th>11</th> <th>12</th> <th>13</th> <th>14</th> 
-                                </tr> -->
-                              </thead>
-                              <tbody class="tcuerpo data_table_body" >
-                                <!-- <tr>
-                                  <td>H/N</td>
-                                  <td>Maestro de obra</td>
-                                  <td>8</td>
-                                  <td>8</td>
-                                  <td>8</td>
-                                  <td>8</td>
-                                  <td>8</td>
-                                  <td>0</td>
-                                  <td>4</td>
-                                  <td>48</td>
-                                  <td>3000</td>
-                                  <td>107</td>
-                                  <td>13.39</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>750.00</td>
-                                </tr>
-                                <tr>
-                                  <td>H/E</td>
-                                  <td>Maestro de obra</td>
-                                  <td>0</td>
-                                  <td>2</td>
-                                  <td>1</td>
-                                  <td>0</td>
-                                  <td>0</td>
-                                  <td>0</td>
-                                  <td>1</td>
-                                  <td>4</td>
-                                  <td>300</td>
-                                  <td>107.00</td>
-                                  <td>13.39</td>
-                                  <td>0</td>
-                                  <td>0</td>
-                                  <td>53.56</td>
-                                </tr>
-                                <tr>
-                                  <td colspan="14"></td>
-                                  <td ><b>TOTAL</b></td>
-                                  <td>803.56</td>
-                                </tr> -->
-                              </tbody>
-                            </table>
-                              
-                          </div>
-                        </div>
+
+                        <!--registro-asistencia-->                         
+                        <div class="table-responsive disenio-scroll" id="ver_asistencia" style="display: none;">
+                            
+                          <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
+                            <thead>
+                              <tr>
+                                <th rowspan="2" class="stile-celda">#</th>
+                                <th rowspan="2" class="stile-celda">Nombre del trabajador</th>
+                                <th rowspan="2" class="stile-celda">Cargo</th>
+                                <th colspan="14" id="dias_asistidos_s_q" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
+                                <th rowspan="2" class="stile-celda">Horas<br>normal/extras</th>
+                                <th rowspan="2" class="stile-celda">Días<br>asistidos</th>
+                                <th rowspan="2" class="stile-celda">Sueldo Mensual</th>
+                                <th rowspan="2" class="stile-celda">Jornal</th>
+                                <th rowspan="2" class="stile-celda">Sueldo <br> hora</th>
+                                <th rowspan="2" class="stile-celda">Sabatical</th>
+                                <th rowspan="2" class="stile-celda">Pago <br> parcial</th>
+                                <th rowspan="2" class="stile-celda">Adicional <br> descuento</th>
+                                <th rowspan="2" class="stile-celda">Pago quincenal</th> 
+                                <th rowspan="2" class="stile-celda"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
+                              </tr>
+                              <tr class="table-dias data-dia-semana">
+                                <!-- <th class=""> Lu </th>
+                                <th class=""> Ma </th>
+                                <th class=""> Mi </th>
+                                <th class=""> Ju </th>
+                                <th class=""> Vi </th>
+                                <th class=" bg-color-acc3c7" >Sa </th>
+                                <th class=""> Do </th>
+                                <th class=""> Lu </th>
+                                <th class=""> Ma </th>
+                                <th class=""> Mi </th>
+                                <th class=""> Ju </th>
+                                <th class=""> Vi </th>
+                                <th class=" bg-color-acc3c7"> Sa </th>
+                                <th class=""> Do </th>
+                                <th class=""> Lu </th> -->
+                              </tr>
+                              <!-- <tr class="table-dias data-numero-semana">
+                                <th>1</th> <th>2</th> <th>3</th> <th>4</th> <th>5</th> <th>6</th> <th>7</th> 
+                                <th>8</th> <th>9</th> <th>10</th> <th>11</th> <th>12</th> <th>13</th> <th>14</th> 
+                              </tr> -->
+                            </thead>
+                            <tbody class="tcuerpo data_table_body" >
+                              <!-- <tr>
+                                <td>H/N</td>
+                                <td>Maestro de obra</td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td>0</td>
+                                <td>4</td>
+                                <td>48</td>
+                                <td>3000</td>
+                                <td>107</td>
+                                <td>13.39</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>750.00</td>
+                              </tr>
+                              <tr>
+                                <td>H/E</td>
+                                <td>Maestro de obra</td>
+                                <td>0</td>
+                                <td>2</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>4</td>
+                                <td>300</td>
+                                <td>107.00</td>
+                                <td>13.39</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>53.56</td>
+                              </tr>
+                              <tr>
+                                <td colspan="14"></td>
+                                <td ><b>TOTAL</b></td>
+                                <td>803.56</td>
+                              </tr> -->
+                            </tbody>
+                          </table>
+                            
+                        </div>                         
 
                         <!-- cargando tabla registro de asistencias -->
                         <div class="row" id="cargando-registro-asistencia" style="display: none;">
@@ -205,6 +204,7 @@
                           </div>
                         </div>
 
+                        <!-- Asistencia por Trabajdor -->
                         <div id="detalle_asistencia" style="display: none;">
                           <table id="tabla-detalle-asistencia-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
@@ -212,9 +212,9 @@
                                 <th class="">Aciones</th>
                                 <th>Nombre</th>
                                 <th>Horas Normal</th>
-                                <th>Pago Horas Normal</th>
+                                <th>Pago Hr. Normal</th>
                                 <th>Hora Extras</th>
-                                <th>Pago Hora Extras</th>
+                                <th>Pago Hr. Extras</th>
                                 <th>Fecha Asistencia</th>
                                 <th>Estado</th>
                               </tr>
@@ -225,9 +225,9 @@
                                 <th class="">Aciones</th>
                                 <th>Nombre</th>
                                 <th>Horas Normal</th>
-                                <th>Pago Horas Normal</th>
+                                <th>Pago Hr. Normal</th>
                                 <th>Hora Extras</th>
-                                <th>Pago Hora Extras</th>
+                                <th>Pago Hr. Extras</th>
                                 <th>Fecha Asistencia</th>
                                 <th>Estado</th>
                               </tr>

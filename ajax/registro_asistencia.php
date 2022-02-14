@@ -182,20 +182,20 @@ ob_start();
             $ver_asistencia="'".$value['idtrabajador_por_proyecto']."','".$value['fecha_inicio_proyect']."'";
 
             $data[]=array(
-              "0"=>'<button class="btn btn-info" onclick="ver_asistencias_individual('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
-              "1"=>'<div class="user-block">
-              <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username" style="/*margin-left: 0px !important;*/"><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
-                style="color: #000000 !important;">'. $value['cargo'] .' : </b> <br> '. $value['nombre'] .'</p></span>
-                <span class="description" style="/*margin-left: 0px !important;*/">'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
+              "0"=>'<button class="btn btn-info btn-sm" onclick="ver_asistencias_individual('.$ver_asistencia.')"><i class="far fa-eye"></i></button>',
+              "1"=>'<div class="user-block text-nowrap">
+                <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
+                style="color: #000000 !important;">'. $value['cargo'] .': </b> <br>'. $value['nombre'] .'</p></span>
+                <span class="description" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
               </div>',              
               "2"=> round($value['total_horas_normal'] + $value['total_horas_extras'], 2),
               "3"=> round(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 1),
-              "4"=> $value['sueldo_hora'],
-              "5"=> $jornal_diario,
-              "6"=> number_format($value['sueldo_mensual'], 2, '.', ','),              
+              "4"=> 'S/. '.$value['sueldo_hora'],
+              "5"=> 'S/. '.$jornal_diario,
+              "6"=> 'S/. '.number_format($value['sueldo_mensual'], 2, '.', ','),              
               "7"=> $value['total_sabatical'],
-              "8"=> number_format($sueldo_acumudado, 1, '.', ',') ,
+              "8"=> 'S/. '.number_format($sueldo_acumudado, 1, '.', ',') ,
             );
 
             $jornal_diario=0;
@@ -228,7 +228,9 @@ ob_start();
           
           $rspta=$asist_trabajador->listar_asis_individual($idtrabajador_x_proyecto);
           //Vamos a declarar un array
-          $data= Array();
+          $data= Array(); 
+          
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
           while ($reg=$rspta->fetch_object()){
 
@@ -237,18 +239,17 @@ ob_start();
             $justificacion = "$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
 
             $data[]=array(
-              "0"=> ($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Editar" ><i class="fas fa-pencil-alt"></i></button>'.
-              ' <button class="btn btn-danger" onclick="desactivar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Desactivar"><i class="far fa-trash-alt  "></i></button>'.
-              ' <button class="btn btn-info" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>':
-              '<button class="btn btn-warning" onclick="mostrar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>'.
-              ' <button class="btn btn-primary" onclick="activar('.$reg->idasistencia_trabajador.')" data-toggle="tooltip" data-original-title="Activar"><i class="fa fa-check"></i></button>'.
-              ' <button class="btn btn-info" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
-              "1"=> $reg->trabajador,
+              "0"=> ' <button class="btn btn-info" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
+              "1"=> '<div class="user-block text-nowrap">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > '.$reg->trabajador .'</p></span>
+                <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
+              </div>',
               "2"=> $reg->horas_normal_dia,
-              "3"=> $reg->pago_normal_dia,
+              "3"=> 'S/. '. $reg->pago_normal_dia,
               "4"=> $reg->horas_extras_dia,
-              "5"=> $reg->pago_horas_extras,
-              "6"=> '<b>Fecha: </b>'. $reg->fecha_asistencia ."<br> <b>Día: </b>". $reg->nombre_dia,
+              "5"=> 'S/. '. $reg->pago_horas_extras,
+              "6"=> '<b>Fecha: </b>'. format_d_m_a($reg->fecha_asistencia) ."<br> <b>Día: </b>". $reg->nombre_dia,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
             );
           }
@@ -312,6 +313,23 @@ ob_start();
 
       require 'noacceso.php';
     }
+  }
+
+  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+  function format_d_m_a( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
   }
 	ob_end_flush();
 

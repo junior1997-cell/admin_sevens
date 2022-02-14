@@ -204,9 +204,7 @@ function listar_tbla_principal(id_proyecto) {
 
       // columna: Depositos
       if (data[5] != '') {
-        $("td", row).eq(5).css({
-          "text-align": "right"
-        });
+        $("td", row).eq(5).addClass('justify-content-between');
       }
 
       // columna: Saldo

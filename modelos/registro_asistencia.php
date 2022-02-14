@@ -217,13 +217,12 @@ Class Asistencia_trabajador
 	{
 		$trabajdor_resumen = Array();
 		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, 
-		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc,
-		t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, tp.sueldo_mensual AS sueldo_mensual, 
-	   SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
+		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, 
+		tp.sueldo_mensual AS sueldo_mensual, SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
 		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
-	   FROM trabajador AS t, trabajador_por_proyecto AS tp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
-	   WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto' AND tp.idcargo_trabajador = c.idcargo_trabajador
-	   GROUP BY tp.idtrabajador;";
+		FROM trabajador AS t, trabajador_por_proyecto AS tp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
+		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto' AND tp.idcargo_trabajador = c.idcargo_trabajador
+		GROUP BY tp.idtrabajador;";
 		$agrupar_trabajdor = ejecutarConsultaArray($sql);
 
 		foreach ($agrupar_trabajdor as $key => $value) {
@@ -263,7 +262,8 @@ Class Asistencia_trabajador
 	//Implementar un método para listar asistencia
 	public function listar_asis_individual($idtrabajador_x_proyecto)
 	{
-		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador,  atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, atra.pago_horas_extras, atra.fecha_asistencia, atra.nombre_dia, atra.estado, t.nombres as trabajador
+		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador,  atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, 
+		atra.pago_horas_extras, atra.fecha_asistencia, atra.nombre_dia, atra.estado, t.nombres as trabajador, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil 
 		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t 
 		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ORDER BY  atra.estado DESC; ";
 		return ejecutarConsulta($sql);		
