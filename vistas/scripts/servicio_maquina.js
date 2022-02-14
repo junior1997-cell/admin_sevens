@@ -320,7 +320,7 @@ function costo_partcial() {
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
 }
-
+//funcion calcular dias 
 function calculardia() {
 
   if($("#fecha_inicio").val().length > 0){ 
@@ -342,35 +342,62 @@ function calculardia() {
       $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
 
     } else {
+      //Recogemos las fechas del input  fecha_inicio
 
-      var x = $("#fecha_inicio").val(); // día lunes
-      var y = $("#fecha_inicio").val(); // día lunes
-      //var x = document.getElementById("fecha");
-      let date = new Date(x.replace(/-+/g, '/'));
-      let date2 = new Date(y.replace(/-+/g, '/'));
-    
-      let options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      };
-      console.log(date.toLocaleDateString('es-MX', options));
-      //-----------
-      date2.setMonth(date2.getMonth()+1);
-      var fecha2=date2.getDate();
-      var mes2= date2.getMonth()+1;
+      var y = $("#fecha_inicio").val(); 
 
-      $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
+      //Recogemos la fecha inical y la cantidas de meses y calculamos la fecha final
+      var cantidad_meses= $("#cantidad").val();
 
-      $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+date2.toLocaleDateString('es-MX', options)+'</b>');
-      
-      $("#fecha_fin").val(date2.getFullYear()+"-"+mes2+"-"+fecha2); 
-      //console.log(fecha2+"-"+mes2+"-"+date2.getFullYear());
+      if ($("#fecha_inicio").val()!="" && $("#cantidad").val()!="") {
+
+        var x = $("#fecha_inicio").val(); 
+
+        var calculando_fecha=  moment(x).add(cantidad_meses, 'months').format('YYYY-MM-DD');
+
+        $("#fecha_fin").val(calculando_fecha); 
+                
+        var nombrefecha1 = diaSemana(x);
+        var nombrefecha2 = diaSemana(calculando_fecha);
+        
+        $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+nombrefecha1+'</b>');
+
+        $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+nombrefecha2+'</b>');
+
+      }else{
+
+        toastr.error('Seleccionar la fecha inicial o la cantidad!!!')
+
+        $("#fecha_fin").val(""); 
+
+        $("#fecha-i-tutulo").html("");
+        $("#fecha_fi").html("");
+      }
+
     }
   }else{
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
   }
+}
+//Funcion para los nombres de la día mes y año
+function diaSemana(fecha) {
+
+  if (fecha!="") {
+    let date = new Date(fecha.replace(/-+/g, '/'));
+
+    let options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+  
+    return date.toLocaleDateString('es-MX', options);
+
+  }else{
+    return "";
+  }
+  
 }
 //Función limpiar
 function limpiar() {

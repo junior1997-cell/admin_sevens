@@ -58,7 +58,7 @@
                                         <div class="card-header">
                                             <h3 class="card-title display" id="btn-agregar" >
                                                 <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                                Admnistra de manera eficiente a tus servicios.
+                                                Admnistra tus servicios.
                                             </h3>
                                             <button id="btn-regresar" type="button" class="btn bg-gradient-warning"  style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
                                             <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal"  style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();"><i class="fas fa-dollar-sign"></i> Agregar Pago</button>
@@ -367,7 +367,7 @@
                                                   <div class="col-lg-3" id="cantidad_ii">
                                                     <div class="form-group">
                                                       <label for="cantidad">Cantidad </label>                               
-                                                      <input type="number" step="0.01" name="cantidad" id="cantidad" class="form-control" placeholder="Horometro Inicial" onclick="costo_partcial();" onkeyup="costo_partcial();" > 
+                                                      <input type="number" step="0.01" name="cantidad" id="cantidad" class="form-control" onclick="costo_partcial();" onkeyup="costo_partcial(); calculardia();" onchange="calculardia();" > 
                                                     </div>                                                        
                                                   </div> 
 
@@ -375,7 +375,7 @@
                                                   <div class="col-lg-6" id="fecha_i">
                                                     <div class="form-group">
                                                       <label for="fecha_inicio" id="fecha-i-tutulo">Fecha Inicio </label>                               
-                                                      <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" onchange="calculardia();"> 
+                                                      <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" onchange="calculardia();" onkeyup="costo_partcial();"> 
                                                     </div>                                                        
                                                   </div> 
                                                   <!-- Fecha fin-->
