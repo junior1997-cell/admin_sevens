@@ -407,19 +407,16 @@ Class Resumen_general
 
 			foreach ($trabaj_obrero as $key => $value) {
 
-				$idresumen_q_s_asistencia = $value['idresumen_q_s_asistencia'];
+				$idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
 
-				$sql_2="SELECT SUM(monto_deposito) as deposito FROM pagos_q_s_obrero WHERE idresumen_q_s_asistencia='$idresumen_q_s_asistencia'";
+				$sql_2="SELECT SUM(pqso.monto_deposito) AS total_deposito 
+				FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
+				WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
 
 				$total_deposito=ejecutarConsultaSimpleFila($sql_2);
 
+				$total_deposito_obrero =(empty($total_deposito)) ? 0 : $retVal_1 = (empty($total_deposito['total_deposito'])) ? 0 : floatval($total_deposito['total_deposito']);
 				
-				if (empty($total_deposito['deposito']) || $total_deposito['deposito']==null ) {
-
-					$total_deposito_obrero=0;
-				}else{
-					$total_deposito_obrero=$total_deposito['deposito'];
-				}
 
 				$obrero[]= array(
 

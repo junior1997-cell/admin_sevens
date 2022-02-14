@@ -1139,8 +1139,14 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto,nombres) {
   $.post("../ajax/resumen_general.php?op=ver_detalle_pagos_x_trab_obrero", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
     //obrero
     data = JSON.parse(data);  console.log(data);  
-    $(".sueldo_estimado").html("");
-    $(".depositos").html("");
+
+    $(".total_hn_he").html("");
+    $(".total_sabatical").html("");
+    $(".total_monto_hn_he").html(""); 
+    $(".total_descuento").html("");
+    $(".total_quincena").html(""); 
+    $(".total_deposito").html("");                           
+    $(".total_saldo").html(""); 
 
     if (data.length!=0) {
       $(".alerta_obrero").hide();
@@ -1159,7 +1165,7 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto,nombres) {
                   <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.adicional_descuento)}</td>
                   <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.pago_quincenal)}</td>
                   <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.deposito)}</td>
-                  <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(parseFloat(value.pago_quincenal)- parseFloat(value.deposito))}</td>
+                  <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(parseFloat(value.pago_quincenal)-parseFloat(value.deposito))}</td>
               </tr>`;
   
         $(".detalle-data-q-s").append(detalle);
