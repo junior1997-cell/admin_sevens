@@ -413,6 +413,7 @@
                                                 <tfoot></tfoot>
 
                                             </table>
+                                            <br>
                                             <!--Personal obrero-->
                                             <table id="tabla10_per_obr" class="display" style="width: 100%;">
                                                 <thead>
@@ -739,7 +740,7 @@
                             </div>
                         </div>
                     </div>
-                    <!--modal-ver-detalle-semana pension-->
+                    <!--modal-ver-ver-detalle-t-administ-->
                     <div class="modal fade" id="modal-ver-detalle-t-administ">
                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
                             <div class="modal-content">
@@ -793,6 +794,69 @@
                                     </div>
                                 </div>
                                 <div style="display: none;" class="alerta">
+                                    <div class="alert alert-warning alert-dismissible">
+                                        <h5><i class="icon fas fa-exclamation-triangle fa-3x text-white"></i> <b>No hay pagos!</b> </h5>
+                                        No hay detalles de pagos para mostrar, puede registrar pagos en el módulo <b>pagos trabajador.</b> 
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--modal-ver-ver-detalle-t-obrero-->
+                    <div class="modal fade" id="modal-ver-detalle-t-obrero">
+                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Detalles: <b id="nombre_trabajador_ob_detalle"></b> </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div  class="class-style tabla_obrero" style="text-align: center;"> 
+                                    <div class="table-responsive" id="tbl-fechas">
+                                        <div class="table-responsive-lg disenio-scroll">
+                                            <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
+                                                <thead>                                  
+                                                    <tr class="bg-gradient-info">
+                                                    <th rowspan="2" class="stile-celda">N°</th>                                   
+                                                    <th colspan="3" class="stile-celda pt-0 pb-0 nombre-bloque-asistencia"><b> Quincena </b></th>
+                                                    <th rowspan="2" class="stile-celda text-center">Sueldo Hora</th>
+                                                    <th rowspan="2" class="stile-celda text-center">Horas Normal/Extra</th>
+                                                    <th rowspan="2" class="stile-celda text-center">Sabatical</th>
+                                                    <th rowspan="2" class="stile-celda">Monto Normal/Extra</th>
+                                                    <th rowspan="2" class="stile-celda text-center">Adicional</th>                                  
+                                                    <th rowspan="2" class="stile-celda">Monto total</th>
+                                                    <th rowspan="2" class="stile-celda ">Deposito</th> 
+                                                    <th rowspan="2" class="stile-celda ">Saldo</th>
+                                                    </tr>
+                                                    <tr class="bg-gradient-info">                                                                     
+                                                    <th class="stile-celda pt-0 pb-0">N°</th>
+                                                    <th class="stile-celda pt-0 pb-0">Inicial</th>
+                                                    <th class="stile-celda pt-0 pb-0">Final</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="tcuerpo detalle-data-q-s"></tbody>
+                                                <tfoot>
+                                                    <tr>                                    
+                                                    <th colspan="5"></th> 
+                                                    <th class="stile-celda total_hn_he"></th>
+                                                    <th class="stile-celda total_sabatical"></th>
+                                                    <th class="stile-celda total_monto_hn_he"></th> 
+                                                    <th class="stile-celda-right total_descuento"></th>
+                                                    <th class="stile-celda-right total_quincena"></th> 
+                                                    <th class="stile-celda-right total_deposito"></th>                           
+                                                    <th class="stile-celda-right total_saldo"></th> 
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: none;" class="alerta_obrero">
                                     <div class="alert alert-warning alert-dismissible">
                                         <h5><i class="icon fas fa-exclamation-triangle fa-3x text-white"></i> <b>No hay pagos!</b> </h5>
                                         No hay detalles de pagos para mostrar, puede registrar pagos en el módulo <b>pagos trabajador.</b> 

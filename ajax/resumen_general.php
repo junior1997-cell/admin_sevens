@@ -498,7 +498,6 @@ switch ($_GET["op"]){
 		}	
 
 	break;
-
 	
 	case 'select_proveedores':
 
@@ -515,6 +514,7 @@ switch ($_GET["op"]){
 		}
 
 	break;
+
 	case 'selecct_trabajadores':
 
 		$rspta=$resumen_general->selecct_trabajadores($_GET['idproyecto']);
@@ -553,6 +553,33 @@ switch ($_GET["op"]){
 		}	
 
 	break;
+
+	case 'ver_detalle_pagos_x_trab_obrero':
+
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['resumen_general']==1)
+			{
+				//$_POST['idtrabajador_por_proyecto']
+				$rspta=$resumen_general->r_detalle_x_obrero($_POST['idtrabajador_por_proyecto']);
+		 		//Codificar el resultado utilizando json
+		 		echo json_encode($rspta);
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}	
+
+	break;
+
+	
 	
 
 

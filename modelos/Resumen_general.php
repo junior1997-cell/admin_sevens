@@ -303,8 +303,11 @@ Class Resumen_general
 					$sql_4="SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_administrador' AND estado=1";
 					
 					$return_monto_pago = ejecutarConsultaSimpleFila($sql_4);
+					
 
-					$pago_monto_total=$pago_monto_total+$return_monto_pago['total_monto_pago'];
+					//$pago_monto_total=$pago_monto_total+$return_monto_pago['total_monto_pago'];
+					$pago_monto_total += (empty($return_monto_pago)) ? 0 : $retVal_1 = (empty($return_monto_pago['total_monto_pago'])) ? 0 : floatval($return_monto_pago['total_monto_pago']);
+				
 				}
 
 				if (empty($total_montos_x_meses['total_montos_x_meses']) || $total_montos_x_meses['total_montos_x_meses']==null ) {
@@ -313,6 +316,8 @@ Class Resumen_general
 				}else{
 					$m_total_x_meses=$total_montos_x_meses['total_montos_x_meses'];
 				}
+
+
 
 				$administrativo[]= array(
 
@@ -352,12 +357,9 @@ Class Resumen_general
 						
 				$return_monto_pago = ejecutarConsultaSimpleFila($sql_2);
 
-				if (empty($return_monto_pago)) {
-					$monto_total=0;
-				}else{
-					$monto_total=$return_monto_pago['monto_total_pago'];
-				}
-	
+				$monto_total=(empty($return_monto_pago)) ? 0 : $retVal_1 = (empty($return_monto_pago['monto_total_pago'])) ? 0 : floatval($return_monto_pago['monto_total_pago']);
+				
+				
 				$detalle_pagos_adm[]= array(
 	
 					"fecha_inicial"  => $value['fecha_inicial'],
@@ -434,6 +436,57 @@ Class Resumen_general
 			return $obrero;
 				
 		}
+	}
+
+	//TABLA detalle por cada obrero
+	public function r_detalle_x_obrero($idtrabajador_x_proyecto)
+	{
+		$data = Array();
+
+		$sql_1="SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
+		rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, 
+		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
+		rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
+		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto;";
+		$q_s = ejecutarConsultaArray($sql_1);
+
+		if ( !empty($q_s) ) {
+
+			foreach ($q_s as $key => $q_s) {
+				
+				$id = $q_s['idresumen_q_s_asistencia'];
+
+				$sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND idresumen_q_s_asistencia = '$id';";
+				$depositos = ejecutarConsultaSimpleFila($sql_2);
+
+				$data[] = array(
+					'sueldo_hora' => $retVal_1 = (empty($q_s['sueldo_hora'])) ? 0 : $q_s['sueldo_hora'],
+					'idresumen_q_s_asistencia' => $q_s['idresumen_q_s_asistencia'],
+					'idtrabajador_por_proyecto' => $q_s['idtrabajador_por_proyecto'],
+					'numero_q_s' => $retVal_2 = (empty($q_s['numero_q_s'])) ? 0 : $q_s['numero_q_s'],
+					'fecha_q_s_inicio' => $q_s['fecha_q_s_inicio'],
+					'fecha_q_s_fin' => $q_s['fecha_q_s_fin'],
+					'total_hn' => $retVal_3 = (empty($q_s['total_hn'])) ? 0 : $q_s['total_hn'],
+					'total_he' => $retVal_4 = (empty($q_s['total_he'])) ? 0 : $q_s['total_he'],
+					'total_dias_asistidos' => $retVal_5 = (empty($q_s['total_dias_asistidos'])) ? 0 : $q_s['total_dias_asistidos'],
+					'sabatical' => $retVal_6 = (empty($q_s['sabatical'])) ? 0 : $q_s['sabatical'],
+					'sabatical_manual_1' => $q_s['sabatical_manual_1'],
+					'sabatical_manual_2' => $q_s['sabatical_manual_2'],
+					'pago_parcial_hn' => $retVal_7 = (empty($q_s['pago_parcial_hn'])) ? 0 : $q_s['pago_parcial_hn'] ,
+					'pago_parcial_he' => $retVal_8 = (empty($q_s['pago_parcial_he'])) ? 0 : $q_s['pago_parcial_he'],
+					'adicional_descuento' => $retVal_9 = (empty($q_s['adicional_descuento'])) ? 0 : $q_s['adicional_descuento'],
+					'descripcion_descuento' => $q_s['descripcion_descuento'],
+					'pago_quincenal' => $retVal_10 = (empty($q_s['pago_quincenal'])) ? 0 : $q_s['pago_quincenal'],
+					'estado_envio_contador' => $q_s['estado_envio_contador'],
+					'recibos_x_honorarios' => $q_s['recibos_x_honorarios'],
+
+					'deposito' => $retVal_11 = (empty($depositos)) ? 0 : $retVal_12 = (empty($depositos['deposito'])) ? 0 : $depositos['deposito'] 
+				);				
+			}
+		}
+		
+		return $data;
 	}
 
 
