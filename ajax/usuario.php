@@ -247,7 +247,8 @@ switch ($_GET["op"]){
 			in_array(13,$valores)?$_SESSION['viatico']=1:$_SESSION['viatico']=0;
 			in_array(14,$valores)?$_SESSION['planilla_seguro']=1:$_SESSION['planilla_seguro']=0;
 			in_array(15,$valores)?$_SESSION['otro_servicio']=1:$_SESSION['otro_servicio']=0;
-			in_array(16,$valores)?$_SESSION['resumen_general']=1:$_SESSION['resumen_general']=0;
+			in_array(16,$valores)?$_SESSION['resumen_general']=1:$_SESSION['resumen_general']=0; 
+			in_array(17,$valores)?$_SESSION['activo_fijo']=1:$_SESSION['activo_fijo']=0;
 	    }
 	    echo json_encode($fetch);
 	break;
