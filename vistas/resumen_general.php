@@ -61,7 +61,7 @@
 
                                   <!-- filtro por: fecha -->
                                   <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros">Filtar por Fecha </label>
+                                    <label for="filtros" class="cargando_">Filtar por Fecha </label>
                                     <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control" placeholder="Seleccionar fecha" onchange="filtros()" />
                                   </div>
 
