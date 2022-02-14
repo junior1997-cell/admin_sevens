@@ -68,7 +68,14 @@ switch ($_GET["op"]){
         while ($reg = $rspta->fetch_object()) {
           echo '<option  value=' . $reg->idcolor . '>' . $reg->nombre_color . '</option>';
         }
-        break;
+    break;
+	case "selectcolor_2":
+        $rspta = $color->select();
+
+        while ($reg = $rspta->fetch_object()) {
+          echo '<option  value=' . $reg->nombre_color . '>' . $reg->nombre_color . '</option>';
+        }
+    break;
 	case 'salir':
 		//Limpiamos las variables de sesión   
         session_unset();

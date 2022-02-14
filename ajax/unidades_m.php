@@ -70,7 +70,14 @@ switch ($_GET["op"]){
         while ($reg = $rspta->fetch_object()) {
           echo '<option  value=' . $reg->idunidad_medida . '>' . $reg->nombre_medida . ' - '. $reg->abreviacion.'</option>';
         }
-        break;
+    break;
+	case "selectUnidad_2":
+        $rspta = $unidades_m->select();
+
+        while ($reg = $rspta->fetch_object()) {
+          echo '<option  value=' . $reg->nombre_medida . '>' . $reg->nombre_medida . ' - '. $reg->abreviacion.'</option>';
+        }
+    break;
 	case 'salir':
 		//Limpiamos las variables de sesión   
         session_unset();

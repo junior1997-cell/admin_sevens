@@ -77,6 +77,7 @@
           </li>
         <?php  }  ?>
 
+
         <?php if ($_SESSION['recurso']==1) {  ?>
           <!-- Recursos -->
           <li class="nav-item" id="bloc_Recurso">
@@ -117,6 +118,13 @@
                   <p>Materiales</p>
                 </a>
               </li>
+              <!-- Activos fijos -->
+              <li class="nav-item ">
+                <a href="activos_fijos.php" class="nav-link" id="lActivosfijos">
+                <i class="nav-icon fas fa-bars"></i>
+                  <p>Activos fijos</p>
+                </a>
+              </li>
               <!-- Calendario de la empresa -->
               <li class="nav-item ">
                 <a href="all_calendario.php" class="nav-link" id="lAllCalendario">
@@ -132,6 +140,16 @@
                 </a>
               </li>
             </ul>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['activo_fijo']==1) {  ?>
+          <!-- ESCRITORIO -->
+          <li class="nav-item">
+            <a href="all_activos_fijos.php" class="nav-link" id="mAllactivos_fijos">
+              <i class="nav-icon fas fa-hand-holding-usd"></i>
+              <p>All activos fijos</p>
+            </a>
           </li>
         <?php  }  ?>
         
