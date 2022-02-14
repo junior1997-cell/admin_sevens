@@ -6,7 +6,7 @@ var tabla2;
 function init() {
 
   // Tablas de resumen
-  listar_r_compras(localStorage.getItem("nube_idproyecto"));
+  listar_r_compras(localStorage.getItem("nube_idproyecto"), '');
   listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"));
   listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"));
   listar_r_transportes(localStorage.getItem("nube_idproyecto"));
@@ -23,33 +23,40 @@ function init() {
   //Mostramos los trabajadores
   $.post("../ajax/resumen_general.php?op=select2_trabajadores&idproyecto=" + localStorage.getItem("nube_idproyecto"), function (r) {
     $("#trabajador_filtro").html(r);
+    $(".cargando_trabajador").html('Trabajador');
   });
 
-  //Mostramos los proveedores
   $.post("../ajax/resumen_general.php?op=select2_proveedores", function (r) {
-    $("#proveedor_filtro").html(r);
-  });
+    $("#proveedor_filtro").html(r);    
+    $(".cargando_proveedor").html('Proveedor');
+  }); 
 
-  //Initialize Select2 filtrar_por
-  $("#deuda_filtro").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecionar",
-    allowClear: true,
-  });
-
-  //Initialize Select2 trabajador
+  //Initialize Select2 TRABAJDOR
   $("#trabajador_filtro").select2({
     theme: "bootstrap4",
     placeholder: "Selecionar trabajador",
     allowClear: true,
   });
 
-  //Initialize Select2 proveedor
+  //Initialize Select2 PROVEEDOR
   $("#proveedor_filtro").select2({
     theme: "bootstrap4",
     placeholder: "Selecionar proveedor",
     allowClear: true,
   });
+
+  //Initialize Select2 DEUDA
+  var filtro = $("#deuda_filtro").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecionar",
+    allowClear: true,
+  });
+
+  $( filtro ).ready(function() {
+    console.log( "ready!" );
+    $("#deuda_filtro").val("null").trigger("change");
+  });  
+  
 
   //============borramos los valores================
   // $("#filtrar_por").val("null").trigger("change");
@@ -59,9 +66,33 @@ function init() {
   // Formato para telefono
   // $("[data-mask]").inputmask();
 }
+//Initialize Select2 proveedor
 
-function listar_r_compras(idproyecto) {
-  var compras = "";
+//Mostramos los proveedores
+var tabla_1 = $("#tabla1_compras").dataTable({
+  responsive: true,
+  lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+  aProcessing: true, //Activamos el procesamiento del datatables
+  aServerSide: true, //Paginación y filtrado realizados por el servidor
+  dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+  buttons: ["copyHtml5", "excelHtml5", "pdf"],
+  language: {
+    lengthMenu: "Mostrar : _MENU_ registros",
+    buttons: {
+      copyTitle: "Tabla Copiada",
+      copySuccess: {
+        _: "%d líneas copiadas",
+        1: "1 línea copiada",
+      },
+    },
+  },
+  bDestroy: true,
+  iDisplayLength: 5, //Paginación
+  order: [[0, "asc"]], //Ordenar (columna,orden)
+}).DataTable();
+
+function listar_r_compras(idproyecto, fecha_filtro) {
+  
   var t_monto = 0;
   var t_pagos = 0;
   var t_saldo = 0;
@@ -73,8 +104,10 @@ function listar_r_compras(idproyecto) {
   $("#pago_compras").html("");
   $("#saldo_compras").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_compras", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_compras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro }, function (data, status) {
     data = JSON.parse(data); //console.log(data); console.log('........................');
+    
+    var compras = "";
 
     data.forEach((value, index) => {
       if (value.monto_pago_total != null) {
@@ -91,7 +124,7 @@ function listar_r_compras(idproyecto) {
         pintar_celda = "bg-red-resumen";
       }
 
-      compras = `<tr>
+      compras =  compras.concat(`<tr>
           <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
           <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_compra)}</span></td>
@@ -102,41 +135,22 @@ function listar_r_compras(idproyecto) {
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.monto_total).toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
           <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
+      </tr>`);
       t_monto = t_monto + parseFloat(value.monto_total);
       t_pagos = t_pagos + parseFloat(validando_pago);
       t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#compras").append(compras);
+      
     });
+
+    $("#compras").html(compras);
 
     $("#monto_compras").html(formato_miles(t_monto.toFixed(2)));
     $("#pago_compras").html(formato_miles(t_pagos.toFixed(2)));
     $("#saldo_compras").html(formato_miles(t_saldo.toFixed(2)));
 
-    $("#tabla1_compras")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
-          },
-        },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
+    
+    // tabla_1.ajax.reload();
   });
 }
 
@@ -1221,8 +1235,41 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto, nombres) {
 }
 
 function filtros() {
- var id_trabajador =  $("#trabajador_filtro").select2('val');
- console.log(id_trabajador);
+
+  var fecha          = $("#fecha_filtro").val();
+  var id_trabajador  =  $("#trabajador_filtro").select2('val');
+  var id_proveedor   =  $("#proveedor_filtro").select2('val');
+  var deuda          =  $("#deuda_filtro").select2('val');
+
+  // filtro de fechas
+  if (fecha == "" || fecha == null) {
+    // no ejecutamos nada
+  }else{
+    listar_r_compras(localStorage.getItem("nube_idproyecto"), fecha);
+  }
+
+  // filtro de trabajdor
+  if (fecha == "" || fecha == null) {
+    
+  }else{
+    
+  }
+
+  // filtro de proveedor
+  if (fecha == "" || fecha == null) {
+    
+  }else{
+    
+  }
+
+  // filtro deuda
+  if (fecha == "" || fecha == null) {
+    
+  }else{
+    
+  }
+
+ console.log(fecha, id_trabajador, id_proveedor, deuda);
 }
 
 init();

@@ -23,7 +23,8 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'listar_r_compras':
          
-        $rspta = $resumen_general->r_compras($_POST['idproyecto']);
+        $rspta = $resumen_general->r_compras($_POST['idproyecto'], $_POST['fecha_filtro']);
+
 
         //Codificar el resultado utilizando json
         echo json_encode($rspta);

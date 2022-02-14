@@ -9,14 +9,14 @@ Class Resumen_general
 	{
 
 	}
-	public function r_compras($idproyecto)
+	public function r_compras($idproyecto, $fecha_filtro)
 	{
 		$pago_total=0; 
 		$Arraycompras= Array(); 
 
 		$sql="SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.monto_total, p.razon_social, cpp.descripcion 
 		FROM compra_por_proyecto as cpp, proveedor as p
-		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado='1' ORDER by cpp.idcompra_proyecto ASC";
+		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.fecha_compra LIKE '%$fecha_filtro%' AND cpp.estado='1' ORDER by cpp.idcompra_proyecto ASC";
 
 		$compras=ejecutarConsultaArray($sql);
 

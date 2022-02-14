@@ -61,20 +61,20 @@
 
                                   <!-- filtro por: fecha -->
                                   <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros" class="cargando_">Filtar por Fecha </label>
+                                    <label for="filtros" >Filtar por Fecha </label>
                                     <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control" placeholder="Seleccionar fecha" onchange="filtros()" />
                                   </div>
 
                                   <!-- filtro por: trabajador -->
                                   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros">Trabajador </label>
+                                    <label for="filtros" class="cargando_trabajador">Trabajador &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
                                     <select name="trabajador_filtro" id="trabajador_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
                                     </select>
                                   </div>
 
                                   <!-- filtro por: proveedor -->
                                   <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros">Proveedor </label>
+                                    <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
                                     <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
                                     </select>
                                   </div>
