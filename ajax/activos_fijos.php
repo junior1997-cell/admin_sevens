@@ -193,17 +193,13 @@ switch ($_GET["op"]){
 				$igv = '';
 		 		while ($reg=$rspta->fetch_object()){
 					 if (empty($reg->imagen)) {
-						$imagen='img_material_defect.jpg';
+						$imagen='default_activos_fijos_empresa.png';
 					 } else {
 						$imagen=$reg->imagen;
 					 }
-					 //idactivos_fijos,idcolor,idunidad_medida,nombre,modelo,serie,marca,precio_compra,subtotal,igv,total,descripcion,imagen,ficha_tecnica,estado_igv,estado 
-
-					 	//'<a target="_blank" href="../dist/ficha_tecnica_activos_fijos/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>
-						 //'<div><center><a type="btn btn-danger" onclick="modal_ficha_tec('."'".$reg->ficha_tecnica."'".')"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center></div>'
 					 empty($reg->ficha_tecnica)?$ficha_tecnica='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$ficha_tecnica='<center><a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 					 empty($reg->igv)?$igv='-':$igv=$reg->igv;
-		 			$data[]=array(
+		 			 $data[]=array(
 		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idactivos_fijos.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idactivos_fijos.')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idactivos_fijos.')"><i class="fa fa-pencil-alt"></i></button>'.
