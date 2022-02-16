@@ -80,7 +80,14 @@
 				while ($reg = $rspta->fetch_object()) {
 				echo '<option  value=' . $reg->nombre . '>' . $reg->nombre . '</option>';
 				}
-				break;
+			break;
+			case "selectbancos_2":
+				$rspta = $bancos->select();
+
+				while ($reg = $rspta->fetch_object()) {
+				echo '<option  value=' . $reg->idbancos . '>' . $reg->nombre . '</option>';
+				}
+			break;
 			case 'salir':
 				//Limpiamos las variables de sesión   
 				session_unset();

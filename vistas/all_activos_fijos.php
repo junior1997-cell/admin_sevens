@@ -353,43 +353,6 @@
                             <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                           </div>
                         </div>
-
-                        <!-- tabla_facturas Facturas Compras-->
-                        <div id="factura_compras" style="display: none;">
-                          <h5><b>Lista de compras Por Facturas</b></h5>
-
-                          <!--<div style="text-align:center;"> <h4 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;"></b> </h5> </div>-->
-                          <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr>
-                                <th>Aciones</th>
-                                <th>Código</th>
-                                <th>Fecha Emisión</th>
-                                <th>Sub total</th>
-                                <th>IGV</th>
-                                <th>Monto</th>
-                                <th>Descripción</th>
-                                <th>Factura</th>
-                                <th>Estado</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th>Aciones</th>
-                                <th>Código</th>
-                                <th>Fecha Emisión</th>
-                                <th>Sub total</th>
-                                <th>IGV</th>
-                                <th id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
-                                <th>Descripción</th>
-                                <th>Factura</th>
-                                <th>Estado</th>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-
                         <!--Pagos sin detracciòn-->
                         <div id="pago_compras" style="display: none;">
                           <h5>pago Compras</h5>
@@ -437,139 +400,6 @@
                             </table>
                           </div>
                         </div>
-
-                        <!--=======================Pagos con Detracción ========================-->
-                        <div id="pagos_con_detraccion" style="display: none;">
-                          <h5>pagos con detracccion</h5>
-                          <div style="text-align: center;">
-                            <div>
-                              <h4>Total a pagar: <b id="ttl_monto_pgs_detracc"></b></h4>
-                            </div>
-                            <br />
-
-                            <div style="background-color: aliceblue;">
-                              <h5>
-                                Proveedor S/
-                                <b id="t_proveedor"></b>
-                                <input type="hidden" class="t_proveedor" />
-                                <i class="fas fa-arrow-right fa-xs"></i>
-                                <b id="t_provee_porc"></b>
-                                <b>%</b>
-                              </h5>
-                            </div>
-                          </div>
-                          <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
-                          <table id="tbl-pgs-detrac-prov-cmprs" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr>
-                                <th>Acciones</th>
-                                <th>Forma pago</th>
-                                <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th>Monto</th>
-                                <th>Vaucher</th>
-                                <th>Estado</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th>Aciones</th>
-                                <th>Forma pago</th>
-                                <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th style="color: #ff0000; background-color: #45c920;">
-                                  <b id="monto_total_prov"></b> <br />
-                                  <b id="porcnt_prove" style="color: black;"></b>
-                                </th>
-                                <th>Vaucher</th>
-                                <th>Estado</th>
-                              </tr>
-                              <tr>
-                                <td colspan="8"></td>
-                                <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th style="color: #ff0000; background-color: #f3e700;">
-                                  <b id="saldo_p"></b> <br />
-                                  <b id="porcnt_sald_p" style="color: black;"></b>
-                                </th>
-                                <td colspan="2"></td>
-                              </tr>
-                            </tfoot>
-                          </table>
-                          <!--Tabla 2-->
-                          <br />
-                          <div style="text-align: center;">
-                            <div style="background-color: aliceblue;">
-                              <h5>
-                                Detracción S/
-                                <b id="t_detaccion"></b>
-                                <input type="hidden" class="t_detaccion" />
-                                <i class="fas fa-arrow-right fa-xs"></i>
-                                <b id="t_detacc_porc"></b>
-                                <b>%</b>
-                              </h5>
-                            </div>
-                          </div>
-                          <table id="tbl-pgs-detrac-detracc-cmprs" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr>
-                                <th>Acciones</th>
-                                <th>Forma pago</th>
-                                <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th>Monto</th>
-                                <th>Vaucher</th>
-                                <th>Estado</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th>Aciones</th>
-                                <th>Forma pago</th>
-                                <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th style="color: #ff0000; background-color: #45c920;">
-                                  <b id="monto_total_detracc"></b> <br />
-                                  <b id="porcnt_detrcc" style="color: black;"></b>
-                                </th>
-                                <th>Vaucher</th>
-                                <th>Estado</th>
-                              </tr>
-                              <tr>
-                                <td colspan="8"></td>
-                                <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th style="color: #ff0000; background-color: #f3e700;">
-                                  <b id="saldo_d"></b> <br />
-                                  <!-- <input type="hidden" class="saldo_d">-->
-                                  <b id="porcnt_sald_d" style="color: black;"></b>
-                                </th>
-                                <td colspan="2"></td>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-
                         <!-- /.card-body -->
                       </div>
                       <!-- /.card -->
@@ -732,133 +562,6 @@
                     </div>
                   </div>
                 </div>
-                <!--===============Modal agregar factura =========-->
-                <div class="modal fade" id="modal-agregar-factura">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Agregar Factura</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-agregar-factura" name="form-agregar-factura" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
-                              <!-- id proyecto -->
-                              <input type="hidden" name="idproyectof" id="idproyectof" />
-                              <!-- id maquina -->
-                              <input type="hidden" name="idcomp_proyecto" id="idcomp_proyecto" />
-                              <!-- id idfacturacompra  -->
-                              <input type="text" name="idfacturacompra" id="idfacturacompra" />
-
-                              <!-- Código-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="codigo">Código </label>
-                                  <input type="text" name="codigo" id="codigo" class="form-control" placeholder="Código" />
-                                </div>
-                              </div>
-                              <!-- Monto-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="monto_compra">Monto</label>
-                                  <input type="number" name="monto_compraa" id="monto_compraa" class="form-control" placeholder="Monto" onchange="igv_subtotal();" onkeyup="igv_subtotal();" />
-                                </div>
-                              </div>
-
-                              <!-- Fecha Emisión -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="fecha_emision">Fecha Emisión</label>
-                                  <input class="form-control" type="date" id="fecha_emision" name="fecha_emision" />
-                                </div>
-                              </div>
-                              <!-- Sub total -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="subtotal_compra">Sub total</label>
-                                  <input class="form-control" type="number" id="subtotal_compraa" name="subtotal_compraa" placeholder="Sub total" />
-                                </div>
-                              </div>
-                              <!-- Fecha Emisión -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="igv_compraa">IGV</label>
-                                  <input class="form-control" type="number" id="igv_compraa" name="igv_compraa" placeholder="IGV" />
-                                </div>
-                              </div>
-                              <!-- Nota-->
-                              <div class="col-lg-6" style="display: none;">
-                                <div class="form-group">
-                                  <label for="nota">Nota </label> <br />
-                                  <textarea name="nota" id="nota" class="form-control" rows="2"></textarea>
-                                </div>
-                              </div>
-                              <!-- Descripcion-->
-                              <div class="col-lg-12">
-                                <div class="form-group">
-                                  <label for="descripcion_f">Descripción </label> <br />
-                                  <textarea name="descripcion_f" id="descripcion_f" class="form-control" rows="2"></textarea>
-                                </div>
-                              </div>
-                              <!--Factura-->
-                              <div class="col-md-6 col-lg-12">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
-                                <label for="foto2">Factura en <b style="color: red;">(Imagen o PDF)</b></label> <br />
-                                <div class="text-center">
-                                  <img onerror="this.src='../dist/img/default/img_defecto2.png';" src="../dist/img/default/img_defecto2.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
-                                  <div id="ver_pdf"></div>
-                                </div>
-                                <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                <input type="text" name="foto2_actual" id="foto2_actual" />
-                                <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
-                              </div>
-                            </div>
-
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-factura">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_factura()">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_factura">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--===============Modal-ver-factura =========-->
-                <div class="modal fade" id="modal-ver-factura">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title">Factura</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download="factura" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <!--===============Modal agregar Pagos =========-->
                 <div class="modal fade" id="modal-agregar-pago">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -880,14 +583,14 @@
                               <!-- idcompras_proyecto -->
                               <input type="hidden" name="idcompra_af_general_p" id="idcompra_af_general_p" />
                               <!-- id compras -->
-                              <input type="hidden" name="idpago_compras" id="idpago_compras" />
+                              <input type="hidden" name="idpago_af_general" id="idpago_af_general" />
                               <!-- Beneficiario -->
                               <div class="col-lg-12">
                                 <div class="form-group">
                                   <label for="beneficiario_pago">Beneficiario</label>
                                   <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
                                   <br />
-                                  <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"> Jheyfer Arevealo Velasco</b>
+                                  <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
                               <!--Forma de pago -->
@@ -915,7 +618,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="cuenta_destino_pago">Cuenta destino </label>
-                                  <input type="number" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" onchange="captura_op();" placeholder="Cuenta destino" />
+                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" onchange="captura_op();" placeholder="Cuenta destino" />
                                 </div>
                               </div>
                               <!-- banco -->
@@ -923,11 +626,6 @@
                                 <div class="form-group">
                                   <label for="banco_pago">Banco</label>
                                   <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
-                                    <option value="1">BCP</option>
-                                    <option value="2">BBVA</option>
-                                    <option value="3">SCOTIA BANK</option>
-                                    <option value="4">INTERBANK</option>
-                                    <option value="5">NACIÓN</option>
                                   </select>
                                   <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>-->
                                 </div>
@@ -1231,7 +929,6 @@
                     </div>
                   </div>
                 </div>
-
                 <!-- ============ Modal ver grande img producto -->
                 <div class="modal fade" id="modal-ver-img-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
@@ -1252,6 +949,7 @@
                     </div>
                   </div>
                 </div>
+
               </div>
             </section>
             <!-- /.content -->

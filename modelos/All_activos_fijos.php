@@ -221,11 +221,9 @@ class All_activos_fijos
     }
 
     //pago servicio
-    public function pago_servicio($idcompra_af_general)
+    public function total_pago_compras_af($idcompra_af_general)
     {
-        $sql = "SELECT SUM(monto) as total_pago_compras
-		FROM pago_compras 
-		WHERE idcompra_af_general='$idcompra_af_general' AND estado=1";
+        $sql = "SELECT SUM(monto) as total_pago_compras_af FROM pago_af_general WHERE idcompra_af_general='$idcompra_af_general' AND estado=1";
         return ejecutarConsultaSimpleFila($sql);
     }
 
@@ -244,324 +242,135 @@ class All_activos_fijos
 
         return ejecutarConsultaSimpleFila($sql);
     }
-
-    /**========================= */
-    /**seccion facturas */
-    /**========================= */
-    public function insertar_factura($idproyectof, $idcomp_proyecto, $codigo, $monto_compraa, $fecha_emision, $descripcion_f, $doc_img, $subtotal_compraa, $igv_compraa)
-    {
-        //var_dump($idproyectof,$idcomp_proyecto,$codigo,$monto_compraa,$fecha_emision,$descripcion_f,$doc_img,$subtotal_compraa,$igv_compraa);die();
-        $sql = "INSERT INTO facturas_compras(idproyecto,idcompra_af_general,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv) 
-		VALUES ('$idproyectof','$idcomp_proyecto','$codigo','$monto_compraa','$fecha_emision','$descripcion_f','$doc_img','$subtotal_compraa','$igv_compraa')";
-        return ejecutarConsulta($sql);
-    }
-    // obtebnemos los DOCS para eliminar
-    public function obtenerDoc($idfacturacompra)
-    {
-        $sql = "SELECT imagen FROM facturas_compras WHERE idfacturacompra ='$idfacturacompra '";
-
-        return ejecutarConsulta($sql);
-    }
-
-    //Implementamos un método para editar registros
-    public function editar_factura($idproyectof, $idfacturacompra, $idcomp_proyecto, $codigo, $monto_compraa, $fecha_emision, $descripcion_f, $doc_img, $subtotal_compraa, $igv_compraa)
-    {
-        //$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
-        $sql = "UPDATE facturas_compras SET
-		idproyecto='$idproyectof',
-		idcompra_af_general='$idcomp_proyecto',
-		codigo='$codigo',
-		monto='$monto_compraa',
-		fecha_emision='$fecha_emision',
-		descripcion='$descripcion_f',
-		subtotal='$subtotal_compraa',
-		igv='$igv_compraa',
-		imagen='$doc_img'
-		WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsulta($sql);
-        //return $vaa;
-    }
-    //Listar
-    public function listar_facturas($idcompra_af_general, $idproyecto)
-    {
-        //var_dump($idproyecto,$idmaquinaria);die();
-        $sql = "SELECT *
-		FROM facturas_compras
-		WHERE idcompra_af_general = '$idcompra_af_general' AND  idproyecto='$idproyecto'";
-        return ejecutarConsulta($sql);
-    }
-    public function total_monto_f($idcompra_af_general, $idproyecto)
-    {
-        //var_dump($idcompra_af_general,$idproyecto);die();
-
-        $sql = "SELECT SUM(fs.monto) as total_mont_f
-		FROM facturas_compras as fs
-		WHERE fs.idcompra_af_general='$idcompra_af_general' AND fs.idproyecto='$idproyecto' AND  fs.estado='1'";
-        return ejecutarConsultaSimpleFila($sql);
-    }
-    //mostrar_factura
-    public function mostrar_factura($idfacturacompra)
-    {
-        $sql = "SELECT * FROM facturas_compras WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsultaSimpleFila($sql);
-    }
-    //Implementamos un método para activar categorías
-    public function desactivar_factura($idfacturacompra)
-    {
-        //var_dump($idfacturacompra);die();
-        $sql = "UPDATE facturas_compras SET estado='0' WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsulta($sql);
-    }
-    //Implementamos un método para desactivar categorías
-    public function activar_factura($idfacturacompra)
-    {
-        //var_dump($idpago_compras);die();
-        $sql = "UPDATE facturas_compras SET estado='1' WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsulta($sql);
-    }
     /**=========================== */
     //SECCION PAGOS
     /**=========================== */
-    public function insertar_pago(
-        $idcompra_af_general_p,
-        $idproveedor_pago,
-        $beneficiario_pago,
-        $forma_pago,
-        $tipo_pago,
-        $cuenta_destino_pago,
-        $banco_pago,
-        $titular_cuenta_pago,
-        $fecha_pago,
-        $monto_pago,
-        $numero_op_pago,
-        $descripcion_pago,
-        $imagen1
-    ) {
-        /*var_dump($idcompra_af_general_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,
-         $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();*/
-        ///idproyecto
-        $sql = "INSERT INTO pago_compras (idcompra_af_general,idproveedor,beneficiario,forma_pago,tipo_pago,cuenta_destino,idbancos,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,imagen) 
-		VALUES ('$idcompra_af_general_p',
-			'$idproveedor_pago',
-			'$beneficiario_pago',
-			'$forma_pago',
-			'$tipo_pago',
-			'$cuenta_destino_pago',
-			'$banco_pago',
-			'$titular_cuenta_pago',
-			'$fecha_pago',
-			'$monto_pago',
-			'$numero_op_pago',
-			'$descripcion_pago',
-			'$imagen1')";
+    public function insertar_pago($idcompra_af_general_p,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,$titular_cuenta_pago,
+        $fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1) 
+    {
+            $sql = "INSERT INTO pago_af_general(idcompra_af_general,beneficiario,forma_pago,tipo_pago,cuenta_destino,idbancos,
+            titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,imagen) 
+            VALUES('$idcompra_af_general_p',
+                        '$beneficiario_pago',
+                        '$forma_pago',
+                        '$tipo_pago',
+                        '$cuenta_destino_pago',
+                        '$banco_pago',
+                        '$titular_cuenta_pago',
+                        '$fecha_pago',
+                        '$monto_pago',
+                        '$numero_op_pago',
+                        '$descripcion_pago',
+                        '$imagen1')";
         return ejecutarConsulta($sql);
     }
     //Implementamos un método para editar registros
-    public function editar_pago(
-        $idpago_compras,
-        $idcompra_af_general_p,
-        $idproveedor_pago,
-        $beneficiario_pago,
-        $forma_pago,
-        $tipo_pago,
-        $cuenta_destino_pago,
-        $banco_pago,
-        $titular_cuenta_pago,
-        $fecha_pago,
-        $monto_pago,
-        $numero_op_pago,
-        $descripcion_pago,
-        $imagen1
-    ) {
-        $sql = "UPDATE pago_compras SET
-		idcompra_af_general ='$idcompra_af_general_p',
-		idproveedor='$idproveedor_pago',
-		beneficiario='$beneficiario_pago',
-		forma_pago='$forma_pago',
-		tipo_pago='$tipo_pago',
-		cuenta_destino='$cuenta_destino_pago',
-		idbancos='$banco_pago',
-		titular_cuenta='$titular_cuenta_pago',
-		fecha_pago='$fecha_pago',
-		monto='$monto_pago',
-		numero_operacion='$numero_op_pago',
-		descripcion='$descripcion_pago',
-		imagen='$imagen1'
-		WHERE idpago_compras='$idpago_compras'";
+    public function editar_pago($idpago_af_general,$idcompra_af_general_p,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
+        $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1) 
+    {
+                
+        $sql = "UPDATE pago_af_general SET
+        idcompra_af_general ='$idcompra_af_general_p',
+        beneficiario='$beneficiario_pago',
+        forma_pago='$forma_pago',
+        tipo_pago='$tipo_pago',
+        cuenta_destino='$cuenta_destino_pago',
+        idbancos='$banco_pago',
+        titular_cuenta='$titular_cuenta_pago',
+        fecha_pago='$fecha_pago',
+        monto='$monto_pago',
+        numero_operacion='$numero_op_pago',
+        descripcion='$descripcion_pago',
+        imagen='$imagen1'
+        WHERE idpago_af_general='$idpago_af_general'";
         return ejecutarConsulta($sql);
     }
+
     //Listar pagos-normal
-    public function listar_pagos($idcompra_af_general)
+    public function listar_pagos_af_g($idcompra_af_general)
     {
-        //var_dump($idproyecto,$idmaquinaria);die();
+
         $sql = "SELECT
-		ps.idpago_compras  as idpago_compras,
-		ps.forma_pago as forma_pago,
-		ps.tipo_pago as tipo_pago,
-		ps.beneficiario as beneficiario,
-		ps.cuenta_destino as cuenta_destino,
-		ps.titular_cuenta as titular_cuenta,
-		ps.fecha_pago as fecha_pago,
-		ps.descripcion as descripcion,
-		ps.idbancos as id_banco,
-		bn.nombre as banco,
-		ps.numero_operacion as numero_operacion,
-		ps.monto as monto,
-		ps.imagen as imagen,
-		ps.estado as estado
-		FROM pago_compras ps, bancos as bn 
-		WHERE ps.idcompra_af_general='$idcompra_af_general' AND bn.idbancos=ps.idbancos";
+            pafg.idpago_af_general  as idpago_af_general,
+            pafg.forma_pago as forma_pago,
+            pafg.tipo_pago as tipo_pago,
+            pafg.beneficiario as beneficiario,
+            pafg.cuenta_destino as cuenta_destino,
+            pafg.titular_cuenta as titular_cuenta,
+            pafg.fecha_pago as fecha_pago,
+            pafg.descripcion as descripcion,
+            pafg.idbancos as id_banco,
+            bn.nombre as banco,
+            pafg.numero_operacion as numero_operacion,
+            pafg.monto as monto,
+            pafg.imagen as imagen,
+            pafg.estado as estado
+            FROM pago_af_general pafg, bancos as bn 
+            WHERE pafg.idcompra_af_general='$idcompra_af_general' AND bn.idbancos=pafg.idbancos";
         return ejecutarConsulta($sql);
     }
-        //Listar pagos1-con detraccion --tabla Proveedor
-    public function listar_pagos_compra_prov_con_dtracc($idcompra_af_general,$tipo_pago)
-    {
-        //var_dump($idproyecto,$idmaquinaria);die();
-        $sql = "SELECT
-        ps.idpago_compras  as idpago_compras,
-        ps.forma_pago as forma_pago,
-        ps.tipo_pago as tipo_pago,
-        ps.beneficiario as beneficiario,
-        ps.cuenta_destino as cuenta_destino,
-        ps.titular_cuenta as titular_cuenta,
-        ps.fecha_pago as fecha_pago,
-        ps.descripcion as descripcion,
-        ps.idbancos as id_banco,
-        bn.nombre as banco,
-        ps.numero_operacion as numero_operacion,
-        ps.monto as monto,
-        ps.imagen as imagen,
-        ps.estado as estado
-        FROM pago_compras ps, bancos as bn 
-        WHERE ps.idcompra_af_general='$idcompra_af_general' AND bn.idbancos=ps.idbancos AND ps.tipo_pago='$tipo_pago'";
-        return ejecutarConsulta($sql);
-    }
+
     //Implementamos un método para desactivar categorías
-    public function desactivar_pagos($idpago_compras)
+    public function desactivar_pagos($idcompra_af_general)
     {
         //var_dump($idpago_compras);die();
-        $sql = "UPDATE pago_compras SET estado='0' WHERE idpago_compras ='$idpago_compras'";
+        $sql = "UPDATE pago_af_general SET estado='0' WHERE idpago_af_general ='$idcompra_af_general'";
         return ejecutarConsulta($sql);
     }
     //Implementamos un método para activar categorías
-    public function activar_pagos($idpago_compras)
+    public function activar_pagos($idcompra_af_general)
     {
-        $sql = "UPDATE pago_compras SET estado='1' WHERE idpago_compras ='$idpago_compras'";
+        $sql = "UPDATE pago_af_general SET estado='1' WHERE idpago_af_general ='$idcompra_af_general'";
         return ejecutarConsulta($sql);
     }
     //Mostrar datos para editar Pago servicio.
-    public function mostrar_pagos($idpago_compras)
+    public function mostrar_pagos($idcompra_af_general)
     {
         $sql = "SELECT
-		ps.idpago_compras as idpago_compras,
-		ps.idcompra_af_general as idcompra_af_general,
-		ps.idproveedor as idproveedor,
-		ps.forma_pago as forma_pago,
-		ps.tipo_pago as tipo_pago,
-		ps.beneficiario as beneficiario,
-		ps.cuenta_destino as cuenta_destino,
-		ps.titular_cuenta as titular_cuenta,
-		ps.fecha_pago as fecha_pago,
-		ps.descripcion as descripcion,
-		ps.idbancos as id_banco,
-		bn.nombre as banco,
-		ps.numero_operacion as numero_operacion,
-		ps.monto as monto,
-		ps.imagen as imagen,
-		ps.estado as estado
-		FROM pago_compras ps, bancos as bn
-		WHERE idpago_compras='$idpago_compras' AND ps.idbancos = bn.idbancos";
+            pafg.idpago_af_general as idpago_af_general,
+            pafg.idcompra_af_general as idcompra_af_general,
+            pafg.forma_pago as forma_pago,
+            pafg.tipo_pago as tipo_pago,
+            pafg.beneficiario as beneficiario,
+            pafg.cuenta_destino as cuenta_destino,
+            pafg.titular_cuenta as titular_cuenta,
+            pafg.fecha_pago as fecha_pago,
+            pafg.descripcion as descripcion,
+            pafg.idbancos as idbancos,
+            bn.nombre as banco,
+            pafg.numero_operacion as numero_operacion,
+            pafg.monto as monto,
+            pafg.imagen as imagen,
+            pafg.estado as estado
+            FROM pago_af_general pafg, bancos as bn
+            WHERE pafg.idpago_af_general='$idcompra_af_general' AND pafg.idbancos = bn.idbancos";
+
         return ejecutarConsultaSimpleFila($sql);
     }
 
-    // consulta para totales sin detracion
+    // consulta para totales
     public function suma_total_pagos($idcompra_af_general)
     {
-        $sql = "SELECT SUM(ps.monto) as total_monto
-		FROM pago_compras as ps
-		WHERE  ps.idcompra_af_general='$idcompra_af_general' AND ps.estado='1'";
-        return ejecutarConsultaSimpleFila($sql);
-    }
-    //consultas para totales con detracion
-    public function suma_total_pagos_detraccion($idcompra_af_general,$tipopago)
-    {
-        $sql = "SELECT SUM(ps.monto) as total_montoo
-		FROM pago_compras as ps
-		WHERE  ps.idcompra_af_general='$idcompra_af_general' AND ps.tipo_pago='$tipopago' AND ps.estado='1'";
+        $sql = "SELECT SUM(pafg.monto) as total_monto
+		FROM pago_af_general as pafg
+		WHERE  pafg.idcompra_af_general='$idcompra_af_general' AND pafg.estado='1'";
         return ejecutarConsultaSimpleFila($sql);
     }
 
-    public function total_costo_parcial_pago($idmaquinaria, $idproyecto)
-    {
-        $sql = "SELECT
-		SUM(s.costo_parcial) as costo_parcial  
-		FROM servicio as s 
-		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1'";
-
-        return ejecutarConsultaSimpleFila($sql);
-    }
     // obtebnemos los DOCS para eliminar
-    public function obtenerImg($idpago_compras)
+    public function obtenerImg($idpago_af_general)
     {
-        $sql = "SELECT imagen FROM pago_compras WHERE idpago_compras='$idpago_compras'";
+        $sql = "SELECT imagen FROM pago_af_general WHERE idpago_af_general='$idpago_af_general'";
 
         return ejecutarConsulta($sql);
     }
     //mostrar datos del proveedor y maquina en form
     public function most_datos_prov_pago($idcompra_af_general)
     {
-        $sql = " SELECT * FROM compra_por_proyecto as cpp, proveedor as p  WHERE cpp.idproveedor=p.idproveedor AND cpp.idcompra_af_general='$idcompra_af_general'";
+        $sql = "SELECT * FROM compra_af_general as cafg, proveedor as p  WHERE cafg.idproveedor=p.idproveedor AND cafg.idcompra_af_general='$idcompra_af_general'";
         return ejecutarConsultaSimpleFila($sql);
     }
 
-    //CAPTURAR PERSONA  DE RENIEC 
-	public function datos_reniec($dni)
-	{ 
-		$url = "https://dniruc.apisperu.com/api/v1/dni/".$dni."?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";
-		//  Iniciamos curl
-		$curl = curl_init();
-		// Desactivamos verificación SSL
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0 );
-		// Devuelve respuesta aunque sea falsa
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-		// Especificamo los MIME-Type que son aceptables para la respuesta.
-		curl_setopt( $curl, CURLOPT_HTTPHEADER, [ 'Accept: application/json' ] );
-		// Establecemos la URL
-		curl_setopt( $curl, CURLOPT_URL, $url );
-		// Ejecutmos curl
-		$json = curl_exec( $curl );
-		// Cerramos curl
-		curl_close( $curl );
-  
-		$respuestas = json_decode( $json, true );
-  
-		return $respuestas;
-	}
-
-	//CAPTURAR PERSONA  DE RENIEC
-	public function datos_sunat($ruc)
-	{ 
-		$url = "https://dniruc.apisperu.com/api/v1/ruc/".$ruc."?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";
-		//  Iniciamos curl
-		$curl = curl_init();
-		// Desactivamos verificación SSL
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0 );
-		// Devuelve respuesta aunque sea falsa
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
-		// Especificamo los MIME-Type que son aceptables para la respuesta.
-		curl_setopt( $curl, CURLOPT_HTTPHEADER, [ 'Accept: application/json' ] );
-		// Establecemos la URL
-		curl_setopt( $curl, CURLOPT_URL, $url );
-		// Ejecutmos curl
-		$json = curl_exec( $curl );
-		// Cerramos curl
-		curl_close( $curl );
-  
-		$respuestas = json_decode( $json, true );
-  
-		return $respuestas;    	
-		
-	}
 }
 
 ?>

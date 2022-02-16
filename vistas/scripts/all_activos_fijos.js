@@ -1,12 +1,9 @@
-var reload_detraccion = "";
+
 var tabla;
 var tabla_comp_prov;
 var tablamateriales;
 var tabla_list_comp_prov;
-var tabla_facturas;
 var tabla_pagos1;
-var tabla_pagos2;
-var tabla_pagos3;
 
 var array_class_trabajador = [];
 //Requejo99@
@@ -61,6 +58,10 @@ function init() {
     allowClear: true,
   });
   //============pagoo================
+  //Cargamos los items al select bancos
+  $.post("../ajax/bancos.php?op=selectbancos_2", function (r) {
+    $("#banco_pago").html(r);
+  });
   //Initialize Select2 Elements
   $("#forma_pago").select2({
     theme: "bootstrap4",
@@ -73,8 +74,15 @@ function init() {
     placeholder: "Selecione un tipo de pago",
     allowClear: true,
   });
+  //Initialize Select2 Elements
+  $("#banco_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione un banco",
+    allowClear: true,
+  });
 
   $("#idproveedor").val("null").trigger("change");
+  $("#banco_pago").val("null").trigger("change");
 
   //===============Pago============
   $("#forma_pago").val("null").trigger("change");
@@ -86,14 +94,6 @@ function init() {
   });
   $("#foto1").change(function (e) {
     addImage(e, $("#foto1").attr("id"));
-  });
-
-  //Factura
-  $("#foto2_i").click(function () {
-    $("#foto2").trigger("click");
-  });
-  $("#foto2").change(function (e) {
-    addImage(e, $("#foto2").attr("id"));
   });
 
   //subir factura modal
@@ -135,12 +135,9 @@ function addImage(e, id) {
         function fileOnload(e) {
           var result = e.target.result;
           if (extrae_extencion(file.name) == "pdf") {
-            $("#foto2_i").hide();
-            console.log("pdf..." + result);
             $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
           } else {
             $("#" + id + "_i").attr("src", result);
-            $("#foto2_i").show();
           }
 
           $("#" + id + "_nombre").html(
@@ -191,17 +188,6 @@ function foto1_eliminar() {
 
   $("#foto1_nombre").html("");
 }
-
-function foto2_eliminar() {
-  $("#foto2").val("");
-  $("#ver_pdf").html("");
-
-  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-
-  $("#foto2_nombre").html("");
-  $("#foto2_i").show();
-}
-
 /* PREVISUALIZAR LAS DOCS */
 function addDocs(e, id) {
   $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
@@ -388,16 +374,12 @@ function limpiar() {
   $("#idcompra_af_general").val();
   $("#idproyecto").val();
 
-  //$("#idusuario").val("");
-  //$("#trabajador_c").html("Trabajador");
   $("#idproveedor").val("null").trigger("change");
   $("#tipo_comprovante").val("Ninguno").trigger("change");
 
-  // $("#fecha_compra").val("");
   $("#serie_comprovante").val("");
   $("#descripcion").val("");
 
-  //$("#total_compra_af_g").val("");
   $(".filas").remove();
   $("#total").html("0");
 
@@ -491,12 +473,12 @@ function listar() {
       },
       createdRow: function (row, data, ixdex) {
         //console.log(data);
-        if (data[6] > 0) {
+        if (quitar_formato_miles(data[6]) > 0) {
           $("td", row).eq(6).css({
             "background-color": "#ffc107",
             color: "black",
           });
-        } else if (data[6] == 0) {
+        } else if (quitar_formato_miles(data[6]) == 0) {
           $("td", row).eq(6).css({
             "background-color": "#28a745",
             color: "white",
@@ -726,270 +708,7 @@ function des_anular(idcompra_af_general) {
     }
   });
 }
-
-//=========================================
-//SECCION-facturas-compras
-//=========================================
-
-function facturas_compras(idcompra_af_general, idproyecto) {
-  total_monto_f(idcompra_af_general, idproyecto);
-  localStorage.setItem("idcompra_com_nube", idcompra_af_general);
-  localStorage.setItem("idproyecto_com_nube", idproyecto);
-
-  $("#idcomp_proyecto").val(idcompra_af_general);
-  $("#idproyectof").val(idproyecto);
-
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  // $("#agregar_compras").show();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-  $("#factura_compras").show();
-  $("#btn-factura").show();
-
-  tabla_facturas = $("#tabla_facturas")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_facturas&idcompra_af_general=" + idcompra_af_general + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-}
-
-//Calcular Igv y subtotal
-function igv_subtotal() {
-  var subtotall = 0;
-  var igvv = 0;
-  $("#subtotal_compraa").val("");
-  $("#igv_compraa").val("");
-
-  var mont = $("#monto_compraa").val();
-  var monto = parseFloat(mont);
-  console.log(monto);
-  // var subbbb= $('#subtotal_compra').val();
-  //console.log(subbbb);
-
-  subtotall = monto / 1.18;
-  console.log("subtotal " + subtotal);
-
-  igvv = monto - subtotall;
-  console.log("igvv " + igvv);
-  $("#subtotal_compraa").val(subtotall.toFixed(4));
-  //console.log(subtotall.toFixed(4));
-  $("#igv_compraa").val(igvv.toFixed(4));
-}
-
-//Función limpiar-factura
-function limpiar_factura() {
-  $("#codigo").val("");
-  $("#monto_compraa").val("");
-  $("#idfacturacompra").val("");
-  $("#fecha_emision").val("");
-  $("#descripcion_f").val("Por concepto de alquiler de maquinaria");
-  $("#subtotal_compraa").val("");
-  $("#igv_compraa").val("");
-  $("#nota").val("");
-  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-  $("#foto2_i").show();
-  $("#ver_pdf").html("");
-  $("#foto2").val("");
-  $("#foto2_actual").val("");
-  $("#foto2_nombre").html("");
-}
-
-function guardaryeditar_factura(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-agregar-factura")[0]);
-
-  $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_factura",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        toastr.success("servicio registrado correctamente");
-
-        tabla_facturas.ajax.reload();
-        tabla.ajax.reload();
-
-        $("#modal-agregar-factura").modal("hide");
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        limpiar_factura();
-      } else {
-        toastr.error(datos);
-      }
-    },
-  });
-}
-
-//-total montos facturas
-function total_monto_f(idcompra_af_general, idproyecto) {
-  $.post("../ajax/all_activos_fijos.php?op=total_monto_f", { idcompra_af_general: idcompra_af_general, idproyecto: idproyecto }, function (data, status) {
-    $("#monto_total_f").html("00.0");
-    data = JSON.parse(data);
-
-    $("#monto_total_f").html(formato_miles(data.total_mont_f));
-  });
-}
-
-function ver_modal_factura(imagen) {
-  var img = imagen;
-  var extencion = img.substr(img.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
-  $("#modal-ver-factura").modal("show");
-
-  if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-    $("#ver_fact_pdf").hide();
-    $("#img-factura").show();
-    $("#img-factura").attr("src", "../dist/img/facturas_compras/" + img);
-
-    $("#iddescargar").attr("href", "../dist/img/facturas_compras/" + img);
-  } else {
-    $("#img-factura").hide();
-    $("#ver_fact_pdf").show();
-    $("#ver_fact_pdf").html('<iframe src="../dist/img/facturas_compras/' + img + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href", "../dist/img/facturas_compras/" + img);
-  }
-}
-//mostrar
-function mostrar_factura(idfacturacompra) {
-  limpiar_factura();
-  $("#modal-agregar-factura").modal("show");
-
-  $.post("../ajax/all_activos_fijos.php?op=mostrar_factura", { idfacturacompra: idfacturacompra }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    $("#idfacturacompra").val(data.idfacturacompra);
-    $("#codigo").val(data.codigo);
-    $("#monto_compraa").val(data.monto);
-    $("#fecha_emision").val(data.fecha_emision);
-    $("#descripcion_f").val(data.descripcion);
-    $("#subtotal_compraa").val(data.subtotal);
-    $("#igv_compraa").val(data.igv);
-    console.log(data.imagen);
-
-    if (data.imagen != "") {
-      var img = data.imagen;
-
-      $("#foto2_i").attr("src", "../dist/img/facturas_compras/" + data.imagen);
-
-      var extencion = img.substr(img.length - 3); // => "1"
-      // console.log(extencion);
-      $("#ver_pdf").html("");
-      $("#foto2_i").attr("src", "");
-
-      if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-        $("#ver_pdf").hide();
-        $("#foto2_i").show();
-        $("#foto2_i").attr("src", "../dist/img/facturas_compras/" + img);
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      } else {
-        $("#foto2_i").hide();
-        $("#ver_pdf").show();
-        $("#ver_pdf").html('<iframe src="../dist/img/facturas_compras/' + img + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      }
-
-      $("#foto2_actual").val(data.imagen);
-    }
-  });
-}
-//Función para desactivar registros
-function desactivar_factura(idfacturacompra) {
-  console.log(idfacturacompra);
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el servicio?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=desactivar_factura", { idfacturacompra: idfacturacompra }, function (e) {
-        Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
-        // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        tabla_facturas.ajax.reload();
-      });
-    }
-  });
-}
-
-function activar_factura(idfacturacompra) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  Servicio?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=activar_factura", { idfacturacompra: idfacturacompra }, function (e) {
-        Swal.fire("Activado!", "Servicio ha sido activado.", "success");
-
-        //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        tabla_facturas.ajax.reload();
-      });
-    }
-  });
-}
-
+//comprobantes
 function comprobante_compra_af_g(idcompra_af_general, doc) {
   //console.log(idcompra_af_general,doc);
   $("#modal-comprobantes-af-g").modal("show");
@@ -1071,7 +790,7 @@ function comprobante_compra_af_g(idcompra_af_general, doc) {
     // $("#doc1_nombre").html("");
 
     $("#doc_old_1").val("");
-
+z
     $(".ver_completo").hide();
     $(".descargar").hide();
 
@@ -1084,8 +803,8 @@ function comprobante_compra_af_g(idcompra_af_general, doc) {
 //SECCION-Pago-compras
 //=========================================
 
-function listar_pagos(idcompra_af_general, idproyecto, monto_total, total_deposito) {
-  reload_detraccion = "no";
+function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
+
   most_datos_prov_pago(idcompra_af_general);
   localStorage.setItem("idcompra_pago_comp_nube", idcompra_af_general);
 
@@ -1141,99 +860,6 @@ function listar_pagos(idcompra_af_general, idproyecto, monto_total, total_deposi
   total_pagos(idcompra_af_general);
 }
 
-function listar_pagos_detraccion(idcompra_af_general, idproyecto, monto_total) {
-  var total = 0;
-  reload_detraccion = "si";
-  total_pagos_detracc(idcompra_af_general);
-
-  localStorage.setItem("idcompra_pago_detracc_nub", idcompra_af_general);
-  most_datos_prov_pago(idcompra_af_general);
-  $("#ttl_monto_pgs_detracc").html(formato_miles(monto_total));
-  //mostramos los montos del 90 y 10 %
-  $("#t_proveedor").html(formato_miles(monto_total * 0.9));
-  $(".t_proveedor").val(formato_miles(monto_total * 0.9));
-  $("#t_provee_porc").html("90");
-  $("#t_detaccion").html(formato_miles(monto_total * 0.1));
-  $(".t_detaccion").val(formato_miles(monto_total * 0.1));
-  $("#t_detacc_porc").html("10");
-  // t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  // $("#agregar_compras").show();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-
-  $("#pagos_con_detraccion").show();
-
-  $("#btn-pagar").show();
-
-  tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_af_general=" + idcompra_af_general,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-  //Tabla 3
-  tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_af_general=" + idcompra_af_general,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-}
-
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
@@ -1241,7 +867,7 @@ function limpiar_c_pagos() {
   $("#tipo_pago").val("");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
-  $("#idpago_compras").val("");
+  $("#idpago_af_general").val("");
   $("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_compra").val("");
@@ -1259,8 +885,7 @@ function most_datos_prov_pago(idcompra_af_general) {
 
   $("#banco_pago").val("").trigger("change");
   $.post("../ajax/all_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+    data = JSON.parse(data); //console.log(data);
 
     $("#idproyecto_pago").val(data.idproyecto);
     $("#idcompra_af_general_p").val(data.idcompra_af_general);
@@ -1312,15 +937,10 @@ function guardaryeditar_pago(e) {
         tabla.ajax.reload();
         $("#modal-agregar-pago").modal("hide");
 
-        if (reload_detraccion == "si") {
-          tabla_pagos2.ajax.reload();
-          tabla_pagos3.ajax.reload();
-        } else {
           tabla_pagos1.ajax.reload();
-        }
+        
         /**================================================== */
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
         limpiar_c_pagos();
       } else {
@@ -1341,89 +961,26 @@ function total_pagos(idcompra_af_general) {
   });
 }
 
-//-total pagos con detraccion
-function total_pagos_detracc(idcompra_af_general) {
-  //tabla 2 proveedor
-  $.post("../ajax/all_activos_fijos.php?op=suma_total_pagos_prov", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    $("#monto_total_prov").html("");
-    var inputValue = 0;
-    var x = 0;
-    var x_saldo = 0;
-    var diferencia = 0;
-    data = JSON.parse(data);
-    //console.log(data);
-    inputValue = $(".t_proveedor").val();
-
-    $("#monto_total_prov").html(formato_miles(data.total_montoo));
-    x = (data.total_montoo * 90) / inputValue;
-    $("#porcnt_prove").html(redondearExp(x, 2) + " %");
-
-    diferencia = 90 - x;
-
-    x_saldo = (diferencia * data.total_montoo) / x;
-
-    if (x_saldo == 0) {
-      $("#saldo_p").html("0.00");
-      $("#porcnt_sald_p").html("0.00" + " %");
-    } else {
-      $("#saldo_p").html(redondearExp(x_saldo, 2));
-      $("#porcnt_sald_p").html(redondearExp(diferencia, 2) + " %");
-    }
-  });
-
-  //tabla 2 detracion
-  $.post("../ajax/all_activos_fijos.php?op=suma_total_pagos_detracc", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    $("#monto_total_detracc").html("");
-    var valor_tt_detrcc = 0;
-    var x_detrcc = 0;
-    var x_saldo_detrcc = 0;
-    var diferencia_detrcc = 0;
-
-    data = JSON.parse(data);
-    console.log(data);
-
-    valor_tt_detrcc = $(".t_detaccion").val();
-
-    $("#monto_total_detracc").html(formato_miles(data.total_montoo));
-
-    x_detrcc = (data.total_montoo * 10) / valor_tt_detrcc;
-    $("#porcnt_detrcc").html(redondearExp(x_detrcc, 2) + " %");
-
-    diferencia_detrcc = 10 - x_detrcc;
-
-    x_saldo_detrcc = (diferencia_detrcc * data.total_montoo) / x_detrcc;
-
-    if (x_saldo_detrcc == 0) {
-      $("#saldo_d").html("0.00");
-      $("#porcnt_sald_d").html("0.00" + " %");
-    } else {
-      $("#saldo_d").html(redondearExp(x_saldo_detrcc, 2));
-      $("#porcnt_sald_d").html(redondearExp(diferencia_detrcc, 2) + " %");
-    }
-  });
-}
 //mostrar
-function mostrar_pagos(idpago_compras) {
+function mostrar_pagos(idpago_af_general) {
   limpiar_c_pagos();
-  // console.log("___________ " + idpago_compras);
+  // console.log("___________ " + idpago_af_general);
   $("#h4_mostrar_beneficiario").html("");
-  $("#idproveedor_pago").val("");
   $("#modal-agregar-pago").modal("show");
   $("#banco_pago").val("").trigger("change");
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
-  $.post("../ajax/all_activos_fijos.php?op=mostrar_pagos", { idpago_compras: idpago_compras }, function (data, status) {
+  $.post("../ajax/all_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
     data = JSON.parse(data);
     console.log(data);
 
-    $("#idproveedor_pago").val(data.idproveedor);
     $("#idcompra_af_general_p").val(data.idcompra_af_general);
     // $("#maquinaria_pago").html(data.nombre_maquina);
     $("#beneficiario_pago").val(data.beneficiario);
     $("#h4_mostrar_beneficiario").html(data.beneficiario);
     $("#cuenta_destino_pago").val(data.cuenta_destino);
-    $("#banco_pago").val(data.id_banco).trigger("change");
+    $("#banco_pago").val(data.idbancos).trigger("change");
     $("#titular_cuenta_pago").val(data.titular_cuenta);
     $("#forma_pago").val(data.forma_pago).trigger("change");
     $("#tipo_pago").val(data.tipo_pago).trigger("change");
@@ -1431,10 +988,10 @@ function mostrar_pagos(idpago_compras) {
     $("#monto_pago").val(data.monto);
     $("#numero_op_pago").val(data.numero_operacion);
     $("#descripcion_pago").val(data.descripcion);
-    $("#idpago_compras").val(data.idpago_compras);
+    $("#idpago_af_general").val(data.idpago_af_general);
 
     if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
+      $("#foto1_i").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + data.imagen);
 
       $("#foto1_actual").val(data.imagen);
     }
@@ -1442,7 +999,7 @@ function mostrar_pagos(idpago_compras) {
 }
 
 //Función para desactivar registros
-function desactivar_pagos(idpago_compras) {
+function desactivar_pagos(idpago_af_general) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar el pago?",
     text: "",
@@ -1453,25 +1010,19 @@ function desactivar_pagos(idpago_compras) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {
+      $.post("../ajax/all_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
-        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
-
-        if (reload_detraccion == "si") {
-          tabla_pagos2.ajax.reload();
-          tabla_pagos3.ajax.reload();
-        } else {
           tabla_pagos1.ajax.reload();
-        }
+        
       });
     }
   });
 }
 
-function activar_pagos(idpago_compras) {
+function activar_pagos(idpago_af_general) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Pago?",
     text: "",
@@ -1482,19 +1033,13 @@ function activar_pagos(idpago_compras) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=activar_pagos", { idpago_compras: idpago_compras }, function (e) {
+      $.post("../ajax/all_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Activado!", "Pago ha sido activado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
-        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
-
-        if (reload_detraccion == "si") {
-          tabla_pagos2.ajax.reload();
-          tabla_pagos3.ajax.reload();
-        } else {
           tabla_pagos1.ajax.reload();
-        }
+        
       });
     }
   });
@@ -1503,8 +1048,8 @@ function activar_pagos(idpago_compras) {
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");
-  $("#img-vaucher").attr("src", "../dist/img/vauchers_pagos/" + imagen);
-  $("#descargar").attr("href", "../dist/img/vauchers_pagos/" + imagen);
+  $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
+  $("#descargar").attr("href", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
 
   // $(".tooltip").hide();
 }
@@ -1861,9 +1406,7 @@ function editar_detalle_compras(idcompra_af_general) {
 
   $.post("../ajax/all_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     data = JSON.parse(data);
-    console.log("--------------------------------------");
-    console.log(data);
-
+    
     if (data) {
       $(".subtotal").html("");
       $(".igv_comp").html("");
@@ -2161,47 +1704,6 @@ $(function () {
     },
   });
 
-  $("#form-agregar-factura").validate({
-    rules: {
-      codigo: { required: true },
-      monto: { required: true },
-      fecha_emision: { required: true },
-      descripcion_f: { minlength: 1 },
-      foto2_i: { required: true },
-    },
-    messages: {
-      forma_pago: {
-        codigo: "Por favor ingresar el código",
-      },
-      monto: {
-        required: "Por favor ingresar el monto",
-      },
-      fecha_emision: {
-        required: "Por favor ingresar la fecha de emisión",
-      },
-    },
-
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass("is-invalid").addClass("is-valid");
-    },
-
-    submitHandler: function (e) {
-      guardaryeditar_factura(e);
-    },
-  });
-
   $("#form-servicios-pago").validate({
     rules: {
       forma_pago: { required: true },
@@ -2494,116 +1996,6 @@ function validando_excedentes() {
     toastr.error("ERROR monto excedido al total del monto a pagar!");
   } else {
     toastr.success("Monto Aceptado.");
-  }
-}
-
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#num_documento").val();
-
-  if (tipo_doc == "DNI") {
-    if (dni_ruc.length == "8") {
-      $.post("../ajax/all_activos_fijos.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-        data = JSON.parse(data);
-
-        console.log(data);
-
-        if (data.success == false) {
-          $("#search").show();
-
-          $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-        } else {
-          $("#search").show();
-
-          $("#charge").hide();
-
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-          toastr.success("Cliente encontrado!!!!");
-        }
-      });
-    } else {
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/all_activos_fijos.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-          data = JSON.parse(data);
-
-          console.log(data);
-          if (data.success == false) {
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
-          } else {
-            if (data.estado == "ACTIVO") {
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
-            } else {
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-              // $("#direccion").val(data.direccion);
-            }
-          }
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-      } else {
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
   }
 }
 
