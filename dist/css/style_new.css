@@ -338,8 +338,83 @@ table th {
   height: 20px !important;
 }
 
-.h-px-30{
+.h-10px{
+  height: 10px !important;
+}
+
+.h-15px{
+  height: 15px !important;
+}
+
+.h-20px{
+  height: 20px !important;
+}
+.h-30px{
   height: 30px !important;
+}
+
+.h-40px{
+  height: 40px !important;
+}
+
+.h-50px{
+  height: 50px !important;
+}
+
+.h-60px{
+  height: 60px !important;
+}
+
+.h-70px{
+  height: 70px !important;
+}
+
+.h-80px{
+  height: 80px !important;
+}
+
+.h-90px{
+  height: 90px !important;
+}
+
+.h-100px{
+  height: 100px !important;
+}
+
+.h-150px{
+  height: 150px !important;
+}
+
+.h-200px{
+  height: 200px !important;
+}
+
+.h-250px{
+  height: 250px !important;
+}
+
+.h-300px{
+  height: 300px !important;
+}
+
+.h-350px{
+  height: 350px !important;
+}
+
+.h-400px{
+  height: 400px !important;
+}
+
+.h-500px{
+  height: 500px !important;
+}
+
+.h-600px{
+  height: 600px !important;
+}
+
+.h-700px{
+  height: 700px !important;
 }
 
 .center-vertical{

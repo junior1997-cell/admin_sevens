@@ -83,8 +83,10 @@
                                   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <label for="filtros">Filtrar por.</label>
                                     <select name="deuda_filtro" id="deuda_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;">
+                                      <option value="todos">Todos</option>  
                                       <option value="sindeuda">Sin deuda</option>
                                       <option value="condeuda">Con deuda</option>
+                                      <option value="conexcedente">Con excedente</option>
                                     </select>
                                   </div>
 
@@ -93,9 +95,9 @@
                             </div>
                           </div>
                           <!-- /.card-header -->
-                          <div class="card-body">
+                          <div class="card-body row-vertica disenio-scroll h-500px">
                             
-                            <div class="container table-responsive disenio-scroll">
+                            <div class="/*container*/">
                               <!--Compras-->
                               <table id="tabla1_compras" class="display" style="width: 100%;">
                                 <thead>
@@ -120,15 +122,17 @@
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_compras"></th>
-                                    <th class="clas_pading text-right" id="pago_compras"></th>
-                                    <th class="clas_pading text-right" id="saldo_compras"></th>
+                                    <th class="clas_pading text-right" id="monto_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="clas_pading text-right" id="pago_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="clas_pading text-right" id="saldo_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   </tr>
                                 </tbody>
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Servicios-Maquinaria-->
                               <table id="tabla2_maquinaria" class="display" style="width: 100%;">
                                 <thead>
@@ -160,7 +164,9 @@
                                 </tbody>
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Servicios-Equipo-->
                               <table id="tabla3_equipo" class="display" style="width: 100%;">
                                 <thead>
@@ -193,7 +199,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Transporte-->
                               <table id="tabla4_transporte" class="display" style="width: 100%;">
                                 <thead>
@@ -226,7 +234,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Hospedaje-->
                               <table id="tabla5_hospedaje" class="display" style="width: 100%;">
                                 <thead>
@@ -259,7 +269,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Comidas extras-->
                               <table id="tabla6_comidas_ex" class="display" style="width: 100%;">
                                 <thead>
@@ -292,7 +304,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Breaks-->
                               <table id="tabla7_breaks" class="display" style="width: 100%;">
                                 <thead>
@@ -325,7 +339,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Pensión-->
                               <table id="tabla8_pension" class="display" style="width: 100%;">
                                 <thead>
@@ -358,7 +374,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Personal Administrativo-->
                               <table id="tabla9_per_adm" class="display" style="width: 100%;">
                                 <thead>
@@ -391,7 +409,9 @@
 
                                 <tfoot></tfoot>
                               </table>
+
                               <br />
+
                               <!--Personal obrero-->
                               <table id="tabla10_per_obr" class="display" style="width: 100%;">
                                 <thead>
@@ -868,7 +888,7 @@
           }
           .text_area_clss {
             width: 280px;
-            background: rgb(215, 224, 225);
+            background: rgb(215 224 225 / 22%);
             border-block-color: inherit;
             border-bottom: aliceblue;
             border-left: aliceblue;

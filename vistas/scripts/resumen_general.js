@@ -1,21 +1,29 @@
 var tabla;
-var tabla1;
-var tabla2;
+var tabla_1 = $("#tabla1_compras").DataTable();
+var tabla_2 = $("#tabla2_maquinaria").DataTable();
+var tabla_3 = $("#tabla3_equipo").DataTable();
+var tabla_4 = $("#tabla4_transporte").DataTable();
+var tabla_5 = $("#tabla5_hospedaje").DataTable();
+var tabla_6 = $("#tabla6_comidas_ex").DataTable();
+var tabla_7 = $("#tabla7_breaks").DataTable();
+var tabla_8 = $("#tabla8_pension").DataTable();
+var tabla_9 = $("#tabla9_per_adm").DataTable();
+var tabla_10 = $("#tabla10_per_obr").DataTable();
 
 //Función que se ejecuta al inicio
 function init() {
 
   // Tablas de resumen
-  listar_r_compras(localStorage.getItem("nube_idproyecto"), '');
-  listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"));
-  listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"));
-  listar_r_transportes(localStorage.getItem("nube_idproyecto"));
-  listar_r_hospedajes(localStorage.getItem("nube_idproyecto"));
-  listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"));
-  listar_r_breaks(localStorage.getItem("nube_idproyecto"));
-  listar_r_pensiones(localStorage.getItem("nube_idproyecto"));
-  listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"));
-  listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"));
+  listar_r_compras(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_transportes(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_hospedajes(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_breaks(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_pensiones(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), '', '', '');
+  listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), '', '', '');
 
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
@@ -31,32 +39,26 @@ function init() {
     $(".cargando_proveedor").html('Proveedor');
   }); 
 
-  //Initialize Select2 TRABAJDOR
+  //Initialize: Select2 TRABAJDOR
   $("#trabajador_filtro").select2({
     theme: "bootstrap4",
     placeholder: "Selecionar trabajador",
     allowClear: true,
   });
 
-  //Initialize Select2 PROVEEDOR
+  //Initialize: Select2 PROVEEDOR
   $("#proveedor_filtro").select2({
     theme: "bootstrap4",
     placeholder: "Selecionar proveedor",
     allowClear: true,
   });
 
-  //Initialize Select2 DEUDA
-  var filtro = $("#deuda_filtro").select2({
+  //Initialize: Select2 DEUDA
+  $("#deuda_filtro").select2({
     theme: "bootstrap4",
     placeholder: "Selecionar",
     allowClear: true,
   });
-
-  $( filtro ).ready(function() {
-    console.log( "ready!" );
-    $("#deuda_filtro").val("null").trigger("change");
-  });  
-  
 
   //============borramos los valores================
   // $("#filtrar_por").val("null").trigger("change");
@@ -68,93 +70,80 @@ function init() {
 }
 //Initialize Select2 proveedor
 
-//Mostramos los proveedores
-var tabla_1 = $("#tabla1_compras").dataTable({
-  responsive: true,
-  lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-  aProcessing: true, //Activamos el procesamiento del datatables
-  aServerSide: true, //Paginación y filtrado realizados por el servidor
-  dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-  buttons: ["copyHtml5", "excelHtml5", "pdf"],
-  language: {
-    lengthMenu: "Mostrar : _MENU_ registros",
-    buttons: {
-      copyTitle: "Tabla Copiada",
-      copySuccess: {
-        _: "%d líneas copiadas",
-        1: "1 línea copiada",
-      },
-    },
-  },
-  bDestroy: true,
-  iDisplayLength: 5, //Paginación
-  order: [[0, "asc"]], //Ordenar (columna,orden)
-}).DataTable();
+// TABLA - COMPRAS
+function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {   
 
-function listar_r_compras(idproyecto, fecha_filtro) {
+  $.post("../ajax/resumen_general.php?op=listar_r_compras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //console.log(data);    
+
+    $("#monto_compras").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_compras").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_compras").html(formato_miles(data.t_saldo.toFixed(2)));    
+    
+    tabla_1.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#compras').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_1 = $('#tabla1_compras').dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "pdf"],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: fecha
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
   
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var pintar_celda = "";
-  $("#compras").html("");
-  $("#monto_compras").html("");
-  $("#pago_compras").html("");
-  $("#saldo_compras").html("");
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
 
-  $.post("../ajax/resumen_general.php?op=listar_r_compras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro }, function (data, status) {
-    data = JSON.parse(data); //console.log(data); console.log('........................');
-    
-    var compras = "";
-
-    data.forEach((value, index) => {
-      if (value.monto_pago_total != null) {
-        calculando_sldo = parseFloat(value.monto_total) - parseFloat(value.monto_pago_total);
-        validando_pago = parseFloat(value.monto_pago_total);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
-
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
-
-      compras =  compras.concat(`<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_compra)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading">         
-          <textarea cols="30" rows="1" class="text_area_clss" readonly > ${value.descripcion == "" ? "---" : value.descripcion}</textarea>
-          </td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle_compras(${value.idcompra_proyecto})"><i class="fa fa-eye"></i></button></td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.monto_total).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`);
-      t_monto = t_monto + parseFloat(value.monto_total);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-      
-    });
-
-    $("#compras").html(compras);
-
-    $("#monto_compras").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_compras").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_compras").html(formato_miles(t_saldo.toFixed(2)));
-
-    
-    // tabla_1.ajax.reload();
   });
 }
 
-//mostramos el detalle del comprobante de la compras
+//MODAL - COMPRAS
 function ver_detalle_compras(idcompra_proyecto) {
   $("#modal-ver-compras").modal("show");
 
@@ -212,7 +201,8 @@ function ver_detalle_compras(idcompra_proyecto) {
   });
 }
 
-function listar_r_serv_maquinaria(idproyecto) {
+// TABLA - MAQUINARIA
+function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var serv_maquinaria = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -225,48 +215,53 @@ function listar_r_serv_maquinaria(idproyecto) {
   $("#pago_serv_maq").html("");
   $("#saldo_serv_maq").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_serv_maquinaria", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_serv_maquinaria", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
     data = JSON.parse(data); //console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.monto_pag_ser_maq != null) {
-        calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.monto_pag_ser_maq);
-        validando_pago = parseFloat(value.monto_pag_ser_maq);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
+    // data.forEach((value, index) => {
+    //   if (value.monto_pag_ser_maq != null) {
+    //     calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.monto_pag_ser_maq);
+    //     validando_pago = parseFloat(value.monto_pag_ser_maq);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
 
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      serv_maquinaria = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Maquinaria:','${
-        value.proveedor
-      }')"><i class="fa fa-eye"></i></button></td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
-      t_monto = t_monto + parseFloat(value.costo_parcial);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   serv_maquinaria = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading">--</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Maquinaria:','${
+    //     value.proveedor
+    //   }')"><i class="fa fa-eye"></i></button></td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
+    //   t_monto = t_monto + parseFloat(value.costo_parcial);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#serv_maquinas").append(serv_maquinaria);
-    });
+    //   $("#serv_maquinas").append(serv_maquinaria);
+    // });
 
-    $("#monto_serv_maq").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_serv_maq").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_serv_maq").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_serv_maq").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_serv_maq").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_serv_maq").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla2_maquinaria")
+    tabla_2.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#serv_maquinas').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_2 = $("#tabla2_maquinaria")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -274,6 +269,7 @@ function listar_r_serv_maquinaria(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -292,7 +288,8 @@ function listar_r_serv_maquinaria(idproyecto) {
   });
 }
 
-function listar_r_serv_equipos(idproyecto) {
+// TABLA - EQUIPO
+function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var serv_equipos = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -305,47 +302,51 @@ function listar_r_serv_equipos(idproyecto) {
   $("#pago_serv_equi").html("");
   $("#saldo_serv_equi").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_serv_equipos", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_serv_equipos", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.monto_pag_ser_maq != null) {
-        calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.monto_pag_ser_maq);
-        validando_pago = parseFloat(value.monto_pag_ser_maq);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    // data.forEach((value, index) => {
+    //   if (value.monto_pag_ser_maq != null) {
+    //     calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.monto_pag_ser_maq);
+    //     validando_pago = parseFloat(value.monto_pag_ser_maq);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      serv_equipos = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${value.proveedor}</td>
-          <td class="bg-color-b4bdbe47  clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Equipo:','${
-        value.proveedor
-      }')"><i class="fa fa-eye"></i></button></td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
-      t_monto = t_monto + parseFloat(value.costo_parcial);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   serv_equipos = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${value.proveedor}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading">--</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Equipo:','${
+    //     value.proveedor
+    //   }')"><i class="fa fa-eye"></i></button></td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
+    //   t_monto = t_monto + parseFloat(value.costo_parcial);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#serv_equipos").append(serv_equipos);
-    });
+    //   $("#serv_equipos").append(serv_equipos);
+    // });
 
-    $("#monto_serv_equi").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_serv_equi").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_serv_equi").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_serv_equi").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_serv_equi").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_serv_equi").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla3_equipo")
+    tabla_3.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#serv_equipos').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_3 = $("#tabla3_equipo")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -353,6 +354,7 @@ function listar_r_serv_equipos(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -370,7 +372,8 @@ function listar_r_serv_equipos(idproyecto) {
       .DataTable();
   });
 }
-//Función detalles por maquina-equipo
+
+//MODAL - MAQUINARIA y EQUIPO
 function ver_detalle(idmaquinaria, idproyecto, servicio, proveedor) {
   $("#nombre_proveedor_").html("");
 
@@ -412,7 +415,8 @@ function ver_detalle(idmaquinaria, idproyecto, servicio, proveedor) {
     .DataTable();
 }
 
-function listar_r_transportes(idproyecto) {
+// TABLA - TRANSPORTE
+function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var transportes = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -426,52 +430,56 @@ function listar_r_transportes(idproyecto) {
   $("#pago_transp").html("");
   $("#saldo_transp").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_transportes", { idproyecto: idproyecto }, function (data, status) {
-    data = JSON.parse(data); // console.log(data);
+  $.post("../ajax/resumen_general.php?op=listar_r_transportes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    data = JSON.parse(data); //console.log(data);
+     
+    // data.forEach((value, index) => {
+    //   if (value.precio_parcial != null) {
+    //     calculando_sldo = parseFloat(value.precio_parcial) - parseFloat(value.precio_parcial);
+    //     validando_pago = parseFloat(value.precio_parcial);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
 
-    data.forEach((value, index) => {
-      if (value.precio_parcial != null) {
-        calculando_sldo = parseFloat(value.precio_parcial) - parseFloat(value.precio_parcial);
-        validando_pago = parseFloat(value.precio_parcial);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    //   if (value.comprobante != "") {
+    //     comprobante = `<a target="_blank"  href="../dist/img/comprob_transporte/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
+    //   } else {
+    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
+    //   }
 
-      if (value.comprobante != "") {
-        comprobante = `<a target="_blank"  href="../dist/img/comprob_transporte/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
-      } else {
-        comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-      }
+    //   transportes = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_viaje)}</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
+    //   t_monto = t_monto + parseFloat(value.precio_parcial);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      transportes = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_viaje)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
-      t_monto = t_monto + parseFloat(value.precio_parcial);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   $("#transportes").append(transportes);
+    // });
 
-      $("#transportes").append(transportes);
-    });
+    $("#monto_transp").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_transp").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_transp").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#monto_transp").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_transp").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_transp").html(formato_miles(t_saldo.toFixed(2)));
+    tabla_4.destroy(); // Destruye las tablas de datos en el contexto actual.
 
-    $("#tabla4_transporte")
+    $('#transportes').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_4 = $("#tabla4_transporte")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -479,6 +487,7 @@ function listar_r_transportes(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -497,7 +506,8 @@ function listar_r_transportes(idproyecto) {
   });
 }
 
-function listar_r_hospedajes(idproyecto) {
+// TABLA - HOSPEDAJES
+function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var hospedajes = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -511,52 +521,56 @@ function listar_r_hospedajes(idproyecto) {
   $("#pago_hosped").html("");
   $("#saldo_hosped").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_hospedajes", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_hospedajes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.precio_parcial != null) {
-        calculando_sldo = parseFloat(value.precio_parcial) - parseFloat(value.precio_parcial);
-        validando_pago = parseFloat(value.precio_parcial);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
+    // data.forEach((value, index) => {
+    //   if (value.precio_parcial != null) {
+    //     calculando_sldo = parseFloat(value.precio_parcial) - parseFloat(value.precio_parcial);
+    //     validando_pago = parseFloat(value.precio_parcial);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
 
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      if (value.comprobante != "") {
-        comprobante = `<a target="_blank"  href="../dist/img/comprob_hospedajes/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
-      } else {
-        comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-      }
+    //   if (value.comprobante != "") {
+    //     comprobante = `<a target="_blank"  href="../dist/img/comprob_hospedajes/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
+    //   } else {
+    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
+    //   }
 
-      hospedajes = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comprobante)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
-      t_monto = t_monto + parseFloat(value.precio_parcial);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   hospedajes = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comprobante)}</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
+    //   t_monto = t_monto + parseFloat(value.precio_parcial);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#hospedaje").append(hospedajes);
-    });
+    //   $("#hospedaje").append(hospedajes);
+    // });
 
-    $("#monto_hosped").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_hosped").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_hosped").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_hosped").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_hosped").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_hosped").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla5_hospedaje")
+    tabla_5.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#hospedaje').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_5 = $("#tabla5_hospedaje")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -564,6 +578,7 @@ function listar_r_hospedajes(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -582,7 +597,8 @@ function listar_r_hospedajes(idproyecto) {
   });
 }
 
-function listar_r_comidas_extras(idproyecto) {
+// TABLA - COMIDAS EXTRAS
+function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var comidas_extras = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -596,81 +612,85 @@ function listar_r_comidas_extras(idproyecto) {
   $("#pago_cextra").html("");
   $("#saldo_cextra").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_comidas_extras", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.costo_parcial != null) {
-        calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.costo_parcial);
-        validando_pago = parseFloat(value.costo_parcial);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
+    // data.forEach((value, index) => {
+    //   if (value.costo_parcial != null) {
+    //     calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.costo_parcial);
+    //     validando_pago = parseFloat(value.costo_parcial);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
 
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      if (value.comprobante != "") {
-        comprobante = `<a target="_blank"  href="../dist/img/comidas_extras/${value.comprobante}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
-      } else {
-        comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-      }
+    //   if (value.comprobante != "") {
+    //     comprobante = `<a target="_blank"  href="../dist/img/comidas_extras/${value.comprobante}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
+    //   } else {
+    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
+    //   }
 
-      comidas_extras = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comida)}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading">
-            <textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea> 
-          </td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
+    //   comidas_extras = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comida)}</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading">
+    //         <textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea> 
+    //       </td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
 
-      t_monto = t_monto + parseFloat(value.costo_parcial);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   t_monto = t_monto + parseFloat(value.costo_parcial);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#comida_extra").append(comidas_extras);
-    });
+    //   $("#comida_extra").append(comidas_extras);
+    // });
 
-    $("#monto_cextra").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_cextra").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_cextra").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_cextra").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_cextra").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_cextra").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla6_comidas_ex")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
+    tabla_6.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#comida_extra').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_6 = $("#tabla6_comidas_ex").dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "pdf"],
+      data: data.datatable,
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
           },
         },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
   });
 }
 
-function listar_r_breaks(idproyecto) {
+// TABLA - BREAKS
+function listar_r_breaks(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var compras = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -684,52 +704,56 @@ function listar_r_breaks(idproyecto) {
   $("#pago_break").html("");
   $("#saldo_break").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_breaks", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_breaks", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.total != null) {
-        calculando_sldo = parseFloat(value.total) - parseFloat(value.total);
-        validando_pago = parseFloat(value.total);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    // data.forEach((value, index) => {
+    //   if (value.total != null) {
+    //     calculando_sldo = parseFloat(value.total) - parseFloat(value.total);
+    //     validando_pago = parseFloat(value.total);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      if (value.idsemana_break != "") {
-        comprobante = `<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
-      } else {
-        comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-      }
+    //   if (value.idsemana_break != "") {
+    //     comprobante = `<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
+    //   } else {
+    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
+    //   }
 
-      breaks = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - <br> ${format_d_m_a(value.fecha_final)} </span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-          </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
+    //   breaks = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - <br> ${format_d_m_a(value.fecha_final)} </span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
+    //         <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+    //       </td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
 
-      t_monto = t_monto + parseFloat(value.total);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   t_monto = t_monto + parseFloat(value.total);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#breaks").append(breaks);
-    });
+    //   $("#breaks").append(breaks);
+    // });
 
-    $("#monto_break").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_break").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_break").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_break").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_break").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_break").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    tabla_7.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#breaks').empty(); // Vacía en caso de que las columnas cambien
 
     $("#tabla7_breaks")
       .dataTable({
@@ -739,6 +763,7 @@ function listar_r_breaks(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -793,7 +818,8 @@ function listar_comprobantes_breaks(idsemana_break) {
     .DataTable();
 }
 
-function listar_r_pensiones(idproyecto) {
+// TABLA - PENSIONES
+function listar_r_pensiones(idproyecto, fecha_filtro, id_proveedor, deuda) {
   var compras = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -807,49 +833,53 @@ function listar_r_pensiones(idproyecto) {
   $("#pago_pension").html("");
   $("#saldo_pension").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.monto_total_pension != null) {
-        calculando_sldo = parseFloat(value.monto_total_pension) - parseFloat(value.pago_total_pension);
-        validando_pago = parseFloat(value.pago_total_pension);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-      }
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    // data.forEach((value, index) => {
+    //   if (value.monto_total_pension != null) {
+    //     calculando_sldo = parseFloat(value.monto_total_pension) - parseFloat(value.pago_total_pension);
+    //     validando_pago = parseFloat(value.pago_total_pension);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //   }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      pension = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
-          </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
+    //   pension = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
+    //         <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+    //         <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
+    //       </td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
 
-      t_monto = t_monto + parseFloat(value.monto_total_pension);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   t_monto = t_monto + parseFloat(value.monto_total_pension);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#pension").append(pension);
-    });
+    //   $("#pension").append(pension);
+    // });
 
-    $("#monto_pension").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_pension").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_pension").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_pension").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_pension").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_pension").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla8_pension")
+    tabla_8.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#pension').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_8 = $("#tabla8_pension")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -857,6 +887,7 @@ function listar_r_pensiones(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -947,7 +978,8 @@ function listar_comprobantes_pension(idpension) {
     .DataTable();
 }
 
-function listar_r_trab_administrativo(idproyecto) {
+// TABLA - ADMINISTRAIVOS
+function listar_r_trab_administrativo(idproyecto, fecha_filtro, id_trabajador, deuda) {
   var compras = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -961,51 +993,54 @@ function listar_r_trab_administrativo(idproyecto) {
   $("#pago_adm").html("");
   $("#saldo_adm").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { idproyecto: idproyecto }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+  $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
+    data = JSON.parse(data);  console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.total_montos_x_meses != null) {
-        calculando_sldo = parseFloat(value.total_montos_x_meses) - parseFloat(value.pago_total_adm);
-        validando_pago = parseFloat(value.pago_total_adm);
-        total_montos_x_meses = parseFloat(value.total_montos_x_meses);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-        total_montos_x_meses = 0;
-      }
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    // data.forEach((value, index) => {
+    //   if (value.total_montos_x_meses != null) {
+    //     calculando_sldo = parseFloat(value.total_montos_x_meses) - parseFloat(value.pago_total_adm);
+    //     validando_pago = parseFloat(value.pago_total_adm);
+    //     total_montos_x_meses = parseFloat(value.total_montos_x_meses);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //     total_montos_x_meses = 0;
+    //   }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      administrativo = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-          </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(total_montos_x_meses.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
+    //   administrativo = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
+    //         <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+    //       </td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(total_montos_x_meses.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
 
-      t_monto = t_monto + parseFloat(total_montos_x_meses);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   t_monto = t_monto + parseFloat(total_montos_x_meses);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#administrativo").append(administrativo);
-    });
+    //   $("#administrativo").append(administrativo);
+    // });
 
-    $("#monto_adm").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_adm").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_adm").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_adm").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_adm").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_adm").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla9_per_adm")
+    tabla_9.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#administrativo').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_9 = $("#tabla9_per_adm")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -1013,6 +1048,7 @@ function listar_r_trab_administrativo(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -1075,7 +1111,8 @@ function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto, nombres) {
   });
 }
 
-function listar_r_trabajador_obrero(idproyecto) {
+// TABLA - OBRERO
+function listar_r_trabajador_obrero(idproyecto, fecha_filtro, id_trabajador, deuda) {
   var obrero = "";
   var t_monto = 0;
   var t_pagos = 0;
@@ -1089,52 +1126,55 @@ function listar_r_trabajador_obrero(idproyecto) {
   $("#pago_obrero").html("");
   $("#saldo_obrero").html("");
 
-  $.post("../ajax/resumen_general.php?op=listar_r_trabajador_obrero", { idproyecto: idproyecto }, function (data, status) {
-    console.log("obrero");
-    data = JSON.parse(data);
-    console.log(data);
+  $.post("../ajax/resumen_general.php?op=listar_r_trabajador_obrero", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
+     
+    data = JSON.parse(data); //  console.log(data);
 
-    data.forEach((value, index) => {
-      if (value.pago_quincenal != null) {
-        calculando_sldo = parseFloat(value.pago_quincenal) - parseFloat(value.total_deposito_obrero);
-        validando_pago = parseFloat(value.total_deposito_obrero);
-        pago_quincenal = parseFloat(value.pago_quincenal);
-      } else {
-        calculando_sldo = 0;
-        validando_pago = 0;
-        pago_quincenal = 0;
-      }
-      if (calculando_sldo == 0) {
-        pintar_celda = "";
-      } else {
-        pintar_celda = "bg-red-resumen";
-      }
+    // data.forEach((value, index) => {
+    //   if (value.pago_quincenal != null) {
+    //     calculando_sldo = parseFloat(value.pago_quincenal) - parseFloat(value.total_deposito_obrero);
+    //     validando_pago = parseFloat(value.total_deposito_obrero);
+    //     pago_quincenal = parseFloat(value.pago_quincenal);
+    //   } else {
+    //     calculando_sldo = 0;
+    //     validando_pago = 0;
+    //     pago_quincenal = 0;
+    //   }
+    //   if (calculando_sldo == 0) {
+    //     pintar_celda = "";
+    //   } else {
+    //     pintar_celda = "bg-red-resumen";
+    //   }
 
-      obrero = `<tr>
-          <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-          <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
-          <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-          <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-          <td class="bg-color-b4bdbe47 text-center clas_pading">
-            <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-          </td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(pago_quincenal.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-          <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-      </tr>`;
+    //   obrero = `<tr>
+    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
+    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
+    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
+    //         <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+    //       </td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(pago_quincenal.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
+    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
+    //   </tr>`;
 
-      t_monto = t_monto + parseFloat(pago_quincenal);
-      t_pagos = t_pagos + parseFloat(validando_pago);
-      t_saldo = t_saldo + parseFloat(calculando_sldo);
+    //   t_monto = t_monto + parseFloat(pago_quincenal);
+    //   t_pagos = t_pagos + parseFloat(validando_pago);
+    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
 
-      $("#obrero").append(obrero);
-    });
+    //   $("#obrero").append(obrero);
+    // });
 
-    $("#monto_obrero").html(formato_miles(t_monto.toFixed(2)));
-    $("#pago_obrero").html(formato_miles(t_pagos.toFixed(2)));
-    $("#saldo_obrero").html(formato_miles(t_saldo.toFixed(2)));
+    $("#monto_obrero").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_obrero").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_obrero").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    $("#tabla10_per_obr")
+    tabla_10.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#obrero').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_10 = $("#tabla10_per_obr")
       .dataTable({
         responsive: true,
         lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -1142,6 +1182,7 @@ function listar_r_trabajador_obrero(idproyecto) {
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
         buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        data: data.datatable,
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -1237,39 +1278,38 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto, nombres) {
 function filtros() {
 
   var fecha          = $("#fecha_filtro").val();
-  var id_trabajador  =  $("#trabajador_filtro").select2('val');
-  var id_proveedor   =  $("#proveedor_filtro").select2('val');
-  var deuda          =  $("#deuda_filtro").select2('val');
+  var id_trabajador  = $("#trabajador_filtro").select2('val');
+  var id_proveedor   = $("#proveedor_filtro").select2('val');
+  var deuda          = $("#deuda_filtro").select2('val');
 
   // filtro de fechas
-  if (fecha == "" || fecha == null) {
-    // no ejecutamos nada
-  }else{
-    listar_r_compras(localStorage.getItem("nube_idproyecto"), fecha);
-  }
+  if (fecha == "" || fecha == null) { fecha = ""; }
 
   // filtro de trabajdor
-  if (fecha == "" || fecha == null) {
-    
-  }else{
-    
-  }
+  if (id_trabajador == '' || id_trabajador == 0 || id_trabajador == null) { id_trabajador = ""; }
 
   // filtro de proveedor
-  if (fecha == "" || fecha == null) {
-    
-  }else{
-    
-  }
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; }
 
   // filtro deuda
-  if (fecha == "" || fecha == null) {
-    
-  }else{
-    
-  }
+  if (deuda == "" || deuda == null) { deuda = ""; }
 
- console.log(fecha, id_trabajador, id_proveedor, deuda);
+  console.log(fecha, id_trabajador, id_proveedor, deuda);
+
+  // ejecutamos las funcioes a filtrar
+  listar_r_compras(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+
+  listar_r_transportes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  listar_r_hospedajes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  listar_r_breaks(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+
+  listar_r_pensiones(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
+  listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
+ 
 }
 
 init();

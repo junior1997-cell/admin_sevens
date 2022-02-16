@@ -22,12 +22,107 @@ if (!isset($_SESSION["nombre"])) {
     switch ($_GET["op"]) {
 
       case 'listar_r_compras':
-         
-        $rspta = $resumen_general->r_compras($_POST['idproyecto'], $_POST['fecha_filtro']);
 
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;     
+
+        $rspta = $resumen_general->r_compras($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = floatval($value['monto_total']) - floatval($value['monto_pago_total']);
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => $value['proveedor'],
+              '2' => format_d_m_a($value['fecha_compra']),
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+              '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+              '5' => number_format($value['monto_total'], 2, '.', ',' ),
+              '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['monto_total']);
+            $t_pagos += floatval($value['monto_pago_total']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+
+            if ($deuda == 'sindeuda') {
+              if ($saldo_x_fila == 0) {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['proveedor'],
+                  '2' => format_d_m_a($value['fecha_compra']),
+                  '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                  '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+                  '5' => number_format($value['monto_total'], 2, '.', ',' ),
+                  '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['monto_total']);
+                $t_pagos += floatval($value['monto_pago_total']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            } else {
+              if ($deuda == 'condeuda') {
+                if ($saldo_x_fila > 0) {
+                  $datatable[] = array(
+                    '0' => $key+1, 
+                    '1' => $value['proveedor'],
+                    '2' => format_d_m_a($value['fecha_compra']),
+                    '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                    '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+                    '5' => number_format($value['monto_total'], 2, '.', ',' ),
+                    '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
+                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                  );
+
+                  $t_monto += floatval($value['monto_total']);                  
+                  $t_pagos += floatval($value['monto_pago_total']);
+                  $t_saldo += floatval($saldo_x_fila);
+                }
+              } else {
+                if ($deuda == 'conexcedente') {
+                  if ($saldo_x_fila < 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['proveedor'],
+                      '2' => format_d_m_a($value['fecha_compra']),
+                      '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                      '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+                      '5' => number_format($value['monto_total'], 2, '.', ',' ),
+                      '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+  
+                    $t_monto += floatval($value['monto_total']);                  
+                    $t_pagos += floatval($value['monto_pago_total']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                } 
+              }
+            }            
+          }          
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
             
       break;
 
@@ -99,10 +194,105 @@ if (!isset($_SESSION["nombre"])) {
          
         $tipo = '1';
 
-        $rspta = $resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'], $tipo);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor'], $tipo);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = floatval($value['costo_parcial']) - floatval($value['deposito']);
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => $value['proveedor'],
+              '2' => '- - -',
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+              '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+              '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+              '6' => number_format($value['deposito'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['costo_parcial']);
+            $t_pagos += floatval($value['deposito']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              if ($saldo_x_fila == 0) {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['proveedor'],
+                  '2' => '- - -',
+                  '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                  '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                  '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                  '6' => number_format($value['deposito'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['costo_parcial']);
+                $t_pagos += floatval($value['deposito']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            } else {
+              if ($deuda == 'condeuda') {
+                if ($saldo_x_fila > 0) {
+                  $datatable[] = array(
+                    '0' => $key+1, 
+                    '1' => $value['proveedor'],
+                    '2' => '- - -',
+                    '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                    '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                    '6' => number_format($value['deposito'], 2, '.', ',' ),
+                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                  );
+        
+                  $t_monto += floatval($value['costo_parcial']);
+                  $t_pagos += floatval($value['deposito']);
+                  $t_saldo += floatval($saldo_x_fila);
+                }
+              } else {
+                if ($deuda == 'conexcedente') {
+                  if ($saldo_x_fila < 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['proveedor'],
+                      '2' => '- - -',
+                      '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                      '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                      '6' => number_format($value['deposito'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+          
+                    $t_monto += floatval($value['costo_parcial']);
+                    $t_pagos += floatval($value['deposito']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                }
+              }
+            }            
+          }          
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
              
       break;
 
@@ -110,10 +300,104 @@ if (!isset($_SESSION["nombre"])) {
 
         $tipo = '2';
 
-        $rspta = $resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'], $tipo);
+        $data = Array(); $datatable = Array();
 
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor'], $tipo);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = floatval($value['costo_parcial']) - floatval($value['deposito']);
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => $value['proveedor'],
+              '2' => '- - -',
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+              '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+              '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+              '6' => number_format($value['deposito'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['costo_parcial']);
+            $t_pagos += floatval($value['deposito']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              if ($saldo_x_fila == 0) {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['proveedor'],
+                  '2' => '- - -',
+                  '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                  '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                  '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                  '6' => number_format($value['deposito'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['costo_parcial']);
+                $t_pagos += floatval($value['deposito']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            } else {
+              if ($deuda == 'condeuda') {
+                if ($saldo_x_fila > 0) {
+                  $datatable[] = array(
+                    '0' => $key+1, 
+                    '1' => $value['proveedor'],
+                    '2' => '- - -',
+                    '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                    '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                    '6' => number_format($value['deposito'], 2, '.', ',' ),
+                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                  );
+        
+                  $t_monto += floatval($value['costo_parcial']);
+                  $t_pagos += floatval($value['deposito']);
+                  $t_saldo += floatval($saldo_x_fila);
+                }
+              } else {
+                if ($deuda == 'conexcedente') {
+                  if ($saldo_x_fila < 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['proveedor'],
+                      '2' => '- - -',
+                      '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                      '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                      '6' => number_format($value['deposito'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+          
+                    $t_monto += floatval($value['costo_parcial']);
+                    $t_pagos += floatval($value['deposito']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                }
+              }
+            }            
+          }
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
@@ -183,37 +467,275 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'listar_r_transportes':
 
-        $rspta = $resumen_general->r_transportes($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_transportes($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+        
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = 0; $comprobante ='';
+
+          if ( !empty($value['comprobante']) ) {
+            $comprobante = '<a target="_blank"  href="../dist/img/comprob_transporte/'.$value['comprobante'].'"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>';
+          } else {
+            $comprobante = '<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>';
+          }
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => '- - -',
+              '2' => format_d_m_a($value['fecha_viaje']),
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+              '4' =>  $comprobante,
+              '5' => number_format($value['precio_parcial'], 2, '.', ',' ),
+              '6' => number_format($value['precio_parcial'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['precio_parcial']);
+            $t_pagos += floatval($value['precio_parcial']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => '- - -',
+                '2' => format_d_m_a($value['fecha_viaje']),
+                '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                '4' =>  $comprobante,
+                '5' => number_format($value['precio_parcial'], 2, '.', ',' ),
+                '6' => number_format($value['precio_parcial'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['precio_parcial']);
+              $t_pagos += floatval($value['precio_parcial']);
+              $t_saldo += floatval($saldo_x_fila);
+            }
+          }                   
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
       case 'listar_r_hospedajes':
 
-        $rspta = $resumen_general->r_hospedajes($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_hospedajes($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = 0;
+          
+          if ( !empty($value['comprobante']) ) {
+            $comprobante = '<a target="_blank"  href="../dist/img/comprob_hospedajes/'.$value['comprobante'].'"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>';
+          } else {
+            $comprobante = '<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>';
+          }
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => '- - -', 
+              '2' => format_d_m_a($value['fecha_comprobante']),
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+              '4' => $comprobante,
+              '5' => number_format($value['precio_parcial'], 2, '.', ',' ),
+              '6' => number_format($value['precio_parcial'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['precio_parcial']);
+            $t_pagos += floatval($value['precio_parcial']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => '- - -', 
+                '2' => $value['fecha_comprobante'],
+                '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                '4' => $comprobante,
+                '5' => number_format($value['precio_parcial'], 2, '.', ',' ),
+                '6' => number_format($value['precio_parcial'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['precio_parcial']);
+              $t_pagos += floatval($value['precio_parcial']);
+              $t_saldo += floatval($saldo_x_fila);
+            }
+          }                    
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
       case 'listar_r_comidas_extras':
 
-        $rspta = $resumen_general->r_comidas_extras($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_comidas_extras($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = 0; $comprobante ='';
+
+          if ( !empty($value['comprobante']) ) {
+            $comprobante = '<a target="_blank"  href="../dist/img/comidas_extras/'.$value['comprobante'].'"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>';
+          } else {
+            $comprobante = '<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>';
+          }
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => '- - -',
+              '2' => format_d_m_a($value['fecha_comida']),
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+              '4' => $comprobante,
+              '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+              '6' => number_format($value['costo_parcial'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['costo_parcial']);
+            $t_pagos += floatval($value['costo_parcial']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => '- - -',
+                '2' => format_d_m_a($value['fecha_comida']),
+                '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                '4' => $comprobante,
+                '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                '6' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['costo_parcial']);
+              $t_pagos += floatval($value['costo_parcial']);
+              $t_saldo += floatval($saldo_x_fila);
+            }
+          }
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
       case 'listar_r_breaks':
 
-        $rspta = $resumen_general->r_breaks($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_breaks($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = 0;
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => '- - -',
+              '2' =>  format_d_m_a($value['fecha_inicial']) .' - '. format_d_m_a($value['fecha_final']),
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+              '4' => '<button class="btn btn-info btn-xs" onclick="listar_comprobantes_breaks('.$value['idsemana_break'] .')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+              '5' => number_format($value['total'], 2, '.', ',' ),
+              '6' => number_format($value['total'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['total']);
+            $t_pagos += floatval($value['total']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => '- - -',
+                '2' =>  format_d_m_a($value['fecha_inicial']) .' - '. format_d_m_a($value['fecha_final']),
+                '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                '4' => '<button class="btn btn-info btn-xs" onclick="listar_comprobantes_breaks('.$value['idsemana_break'] .')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                '5' => number_format($value['total'], 2, '.', ',' ),
+                '6' => number_format($value['total'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['total']);
+              $t_pagos += floatval($value['total']);
+              $t_saldo += floatval($saldo_x_fila);
+            }
+          }
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
@@ -263,9 +785,107 @@ if (!isset($_SESSION["nombre"])) {
       break;
 
       case 'listar_r_pensiones':
-        $rspta = $resumen_general->r_pensiones($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_pensiones($_POST['idproyecto'], $_POST['id_proveedor']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = floatval($value['monto_total_pension']) - floatval($value['deposito']);
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => $value['proveedor'],
+              '2' => '- - -',
+              '3' => '- - -',
+              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                      <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+              '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
+              '6' => number_format($value['deposito'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['monto_total_pension']);
+            $t_pagos += floatval($value['deposito']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              if ($saldo_x_fila == 0) {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['proveedor'],
+                  '2' => '- - -',
+                  '3' => '- - -',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                          <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+                  '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
+                  '6' => number_format($value['deposito'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['monto_total_pension']);
+                $t_pagos += floatval($value['deposito']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            } else {
+              if ($deuda == 'condeuda') {
+                if ($saldo_x_fila > 0) {
+                  $datatable[] = array(
+                    '0' => $key+1, 
+                    '1' => $value['proveedor'],
+                    '2' => '- - -',
+                    '3' => '- - -',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+                    '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
+                    '6' => number_format($value['deposito'], 2, '.', ',' ),
+                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                  );
+        
+                  $t_monto += floatval($value['monto_total_pension']);
+                  $t_pagos += floatval($value['deposito']);
+                  $t_saldo += floatval($saldo_x_fila);
+                }
+              }else{
+                if ($deuda == 'conexcedente') {
+                  if ($saldo_x_fila < 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['proveedor'],
+                      '2' => '- - -',
+                      '3' => '- - -',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                              <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+                      '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
+                      '6' => number_format($value['deposito'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+          
+                    $t_monto += floatval($value['monto_total_pension']);
+                    $t_pagos += floatval($value['deposito']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                }
+              }
+            }            
+          }
+        }
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
@@ -354,10 +974,103 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'listar_r_trab_administrativo':
 
-        $rspta = $resumen_general->r_trab_administrativo($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
 
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_trab_administrativo($_POST['idproyecto'], $_POST['id_trabajador']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = floatval($value['total_montos_x_meses']) - floatval($value['deposito']);
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => $value['nombres'],
+              '2' => '- - -',
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+              '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
+              '6' => number_format($value['deposito'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['total_montos_x_meses']);
+            $t_pagos += floatval($value['deposito']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              if ($saldo_x_fila == 0) {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['nombres'],
+                  '2' => '- - -',
+                  '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+                  '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
+                  '6' => number_format($value['deposito'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['total_montos_x_meses']);
+                $t_pagos += floatval($value['deposito']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            } else {
+              if ($deuda == 'condeuda') {
+                if ($saldo_x_fila > 0) {
+                  $datatable[] = array(
+                    '0' => $key+1, 
+                    '1' => $value['nombres'],
+                    '2' => '- - -',
+                    '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+                    '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
+                    '6' => number_format($value['deposito'], 2, '.', ',' ),
+                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                  );
+        
+                  $t_monto += floatval($value['total_montos_x_meses']);
+                  $t_pagos += floatval($value['deposito']);
+                  $t_saldo += floatval($saldo_x_fila);
+                }
+              }else{
+                if ($deuda == 'conexcedente') {
+                  if ($saldo_x_fila < 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['nombres'],
+                      '2' => '- - -',
+                      '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+                      '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
+                      '6' => number_format($value['deposito'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+          
+                    $t_monto += floatval($value['total_montos_x_meses']);
+                    $t_pagos += floatval($value['deposito']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                }
+              }
+            }            
+          }
+        }
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
@@ -372,10 +1085,104 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'listar_r_trabajador_obrero':
 
-        $rspta = $resumen_general->r_trabajador_obrero($_POST['idproyecto']);
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->r_trabajador_obrero($_POST['idproyecto'], $_POST['id_trabajador']);
+        
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = floatval($value['pago_quincenal']) - floatval($value['deposito']);
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => $value['nombres'],
+              '2' => '- - -',
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+              '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
+              '6' => number_format($value['deposito'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['pago_quincenal']);
+            $t_pagos += floatval($value['deposito']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              if ($saldo_x_fila == 0) {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['nombres'],
+                  '2' => '- - -',
+                  '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                  '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
+                  '6' => number_format($value['deposito'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['pago_quincenal']);
+                $t_pagos += floatval($value['deposito']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            } else {
+              if ($deuda == 'condeuda') {
+                if ($saldo_x_fila > 0) {
+                  $datatable[] = array(
+                    '0' => $key+1, 
+                    '1' => $value['nombres'],
+                    '2' => '- - -',
+                    '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                    '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
+                    '6' => number_format($value['deposito'], 2, '.', ',' ),
+                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                  );
+        
+                  $t_monto += floatval($value['pago_quincenal']);
+                  $t_pagos += floatval($value['deposito']);
+                  $t_saldo += floatval($saldo_x_fila);
+                }
+              }else{
+                if ($deuda == 'conexcedente') {
+                  if ($saldo_x_fila < 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['nombres'],
+                      '2' => '- - -',
+                      '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                      '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
+                      '6' => number_format($value['deposito'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+          
+                    $t_monto += floatval($value['pago_quincenal']);
+                    $t_pagos += floatval($value['deposito']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                }
+              }
+            }            
+          }
+        }
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
 
         //Codificar el resultado utilizando json
-        echo json_encode($rspta);
+        echo json_encode($data);
 
       break;
 
@@ -398,7 +1205,7 @@ if (!isset($_SESSION["nombre"])) {
         while ($reg = $rspta->fetch_object()) {
 
           if ($estado) {
-            echo '<option value="0" >Seleccionar proveedor</option>';
+            echo '<option value="0" >Todos</option>';
             $estado = false;
           }
 
@@ -417,7 +1224,7 @@ if (!isset($_SESSION["nombre"])) {
         while ($reg = $rspta->fetch_object()) {
 
           if ($estado) {
-            echo '<option value="0" >Seleccionar trabajador</option>';
+            echo '<option value="0" >Todos</option>';
             $estado = false;
           }
           echo '<option  value=' . $reg->idtrabajador_por_proyecto . '>' . $reg->nombres . ' - ' . $reg->numero_documento . '</option>';
