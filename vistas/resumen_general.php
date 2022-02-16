@@ -116,9 +116,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="compras"></tbody>
+                                <tbody id="compras"></tbody>                                
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -126,9 +126,7 @@
                                     <th class="clas_pading text-right" id="pago_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                     <th class="clas_pading text-right" id="saldo_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -153,7 +151,7 @@
 
                                 <tbody id="serv_maquinas"></tbody>
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -161,8 +159,7 @@
                                     <th class="clas_pading text-right" id="pago_serv_maq"></th>
                                     <th class="clas_pading text-right" id="saldo_serv_maq"></th>
                                   </tr>
-                                </tbody>
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -185,9 +182,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="serv_equipos"></tbody>
+                                <tbody id="serv_equipos"></tbody>                               
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -195,9 +192,7 @@
                                     <th class="clas_pading text-right" id="pago_serv_equi"></th>
                                     <th class="clas_pading text-right" id="saldo_serv_equi"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -220,9 +215,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="transportes"></tbody>
+                                <tbody id="transportes"></tbody>                               
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -230,9 +225,7 @@
                                     <th class="clas_pading text-right" id="pago_transp"></th>
                                     <th class="clas_pading text-right" id="saldo_transp"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -255,9 +248,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="hospedaje"></tbody>
+                                <tbody id="hospedaje"></tbody>                                 
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -265,9 +258,7 @@
                                     <th class="clas_pading text-right" id="pago_hosped"></th>
                                     <th class="clas_pading text-right" id="saldo_hosped"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -291,8 +282,8 @@
                                 </thead>
 
                                 <tbody id="comida_extra"></tbody>
-
-                                <tbody>
+ 
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -300,9 +291,7 @@
                                     <th class="clas_pading text-right" id="pago_cextra"></th>
                                     <th class="clas_pading text-right" id="saldo_cextra"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -325,9 +314,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="breaks"></tbody>
+                                <tbody id="breaks"></tbody>                               
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -335,9 +324,7 @@
                                     <th class="clas_pading text-right" id="pago_break"></th>
                                     <th class="clas_pading text-right" id="saldo_break"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -361,8 +348,8 @@
                                 </thead>
 
                                 <tbody id="pension"></tbody>
-
-                                <tbody>
+ 
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -370,9 +357,7 @@
                                     <th class="clas_pading text-right" id="pago_pension"></th>
                                     <th class="clas_pading text-right" id="saldo_pension"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -385,7 +370,7 @@
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-px-300 clas_pading">TRABAJADOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -397,7 +382,7 @@
 
                                 <tbody id="administrativo"></tbody>
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -405,9 +390,7 @@
                                     <th class="clas_pading text-right" id="pago_adm"></th>
                                     <th class="clas_pading text-right" id="saldo_adm"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
 
                               <br />
@@ -420,7 +403,7 @@
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-px-300 clas_pading">TRABAJADOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -432,7 +415,7 @@
 
                                 <tbody id="obrero"></tbody>
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -440,9 +423,7 @@
                                     <th class="clas_pading text-right" id="pago_obrero"></th>
                                     <th class="clas_pading text-right" id="saldo_obrero"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
                             </div>
                           </div>

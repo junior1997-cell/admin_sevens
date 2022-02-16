@@ -91,11 +91,11 @@ function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "pdf"],
+      buttons: [ { extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: data.datatable,
       createdRow: function (row, data, ixdex) {          
 
-        // columna: fecha
+        // columna: #
         if (data[0] != '') {
           $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
         }
@@ -268,8 +268,40 @@ function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda)
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -353,8 +385,40 @@ function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -486,8 +550,40 @@ function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -577,8 +673,40 @@ function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -670,8 +798,40 @@ function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) 
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "pdf"],
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+        }
+      },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
         buttons: {
@@ -762,8 +922,40 @@ function listar_r_breaks(idproyecto, fecha_filtro, id_proveedor, deuda) {
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -886,8 +1078,40 @@ function listar_r_pensiones(idproyecto, fecha_filtro, id_proveedor, deuda) {
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -1047,8 +1271,40 @@ function listar_r_trab_administrativo(idproyecto, fecha_filtro, id_trabajador, d
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {
@@ -1181,8 +1437,40 @@ function listar_r_trabajador_obrero(idproyecto, fecha_filtro, id_trabajador, deu
         aProcessing: true, //Activamos el procesamiento del datatables
         aServerSide: true, //Paginación y filtrado realizados por el servidor
         dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: ["copyHtml5", "excelHtml5", "pdf"],
+        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
         data: data.datatable,
+        createdRow: function (row, data, ixdex) {          
+
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          }
+  
+          // columna: fecha
+          if (data[2] != '') {
+            $("td", row).eq(2).addClass("text-nowrap");         
+          } 
+  
+          // columna: detalle
+          if (data[4] != '') {
+            $("td", row).eq(4).addClass("text-center");         
+          }  
+  
+          // columna: montos
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass("text-right");         
+          }   
+          
+          // columna: depositos  
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass("text-right");
+          }              
+    
+          // columna: saldos
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass("text-right");
+          }
+        },
         language: {
           lengthMenu: "Mostrar : _MENU_ registros",
           buttons: {

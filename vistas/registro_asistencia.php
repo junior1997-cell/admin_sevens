@@ -91,7 +91,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
-                                <th class="text-gray">Aciones</th>
+                                <th class="text-gray">Op</th>
                                 <th class="text-gray">Nombre</th>
                                 <th class="text-gray">total Horas</th>
                                 <th class="text-gray">total Días</th>                                
