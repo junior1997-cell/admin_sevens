@@ -137,7 +137,6 @@
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
-                                <th>Detracción</th>
                                 <th>Total</th>
                                 <th>Añadir pago</th>
                                 <th>Saldo</th>
@@ -153,7 +152,6 @@
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
-                                <th>Detracción</th>
                                 <th>Total</th>
                                 <th>Añadir pago</th>
                                 <th>Saldo</th>
@@ -218,12 +216,11 @@
                         <div id="agregar_compras" style="display: none;">
                           <div class="modal-body">
                             <!-- form start -->
-                            <form id="form-compras" name="form-compras" method="POST">
+                            <form id="form-compra-activos-f" name="form-compra-activos-f" method="POST">
                               <div class="card-body">
                                 <div class="row" id="cargando-1-fomulario">
                                   <!-- id proyecto -->
-                                  <input type="hidden" name="idproyecto" id="idproyecto" />
-                                  <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                  <input type="hidden" name="idcompra_af_general" id="idcompra_af_general" /> 
 
                                   <!-- Tipo de Empresa -->
                                   <div class="col-lg-7">
@@ -306,8 +303,8 @@
                                     <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
                                       <thead style="background-color: #ff6c046b;">
                                         <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                                        <th>Material</th>
-                                        <th>Unidad</th>
+                                        <th>Activo</th>
+                                        <th>Unidad medida</th>
                                         <th>Cantidad</th>
                                         <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
                                         <th class="hidden">IGV</th>
@@ -330,7 +327,7 @@
                                           <input type="hidden" name="igv_compra" id="igv_compra" />
                                           <b>
                                             <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
-                                            <input type="hidden" name="total_venta" id="total_venta" />
+                                            <input type="hidden" name="total_compra_af_g" id="total_compra_af_g" />
                                           </b>
                                         </th>
                                       </tfoot>
@@ -347,7 +344,7 @@
                                 </div>
                               </div>
                               <!-- /.card-body -->
-                              <button type="submit" style="display: none;" id="submit-form-compras">Submit</button>
+                              <button type="submit" style="display: none;" id="submit-form-compra-activos-f">Submit</button>
                             </form>
                           </div>
 
@@ -881,7 +878,7 @@
                               <!-- id proveedor -->
                               <input type="hidden" name="idproveedor_pago" id="idproveedor_pago" />
                               <!-- idcompras_proyecto -->
-                              <input type="hidden" name="idcompra_proyecto_p" id="idcompra_proyecto_p" />
+                              <input type="hidden" name="idcompra_af_general_p" id="idcompra_af_general_p" />
                               <!-- id compras -->
                               <input type="hidden" name="idpago_compras" id="idpago_compras" />
                               <!-- Beneficiario -->
@@ -1105,7 +1102,7 @@
                 </div>
                 <!--===============Modal agregar comprobantes =========-->
                 <!-- Modal agregar Comprobante -->
-                <div class="modal fade" id="modal-comprobantes-pago">
+                <div class="modal fade" id="modal-comprobantes-af-g">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -1121,7 +1118,7 @@
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
                               <!-- id Comprobante -->
-                              <input type="hidden" name="comprobante_c" id="comprobante_c" />
+                              <input type="hidden" name="idcompra_af_general_comprob" id="idcompra_af_general_comprob" />
 
                               <!-- Doc  -->
                               <div class="col-md-12 col-lg-12">
@@ -1141,7 +1138,7 @@
                                     <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob" style="padding: 0px 12px 0px 12px !important;" download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
                                   </div>
                                   <div class="col-md-4 text-center ver_completo" style="display: none;">
-                                    <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo" style="padding: 0px 12px 0px 12px !important;"> <i class="fas fa-expand"></i> Ver completo. </a>
+                                    <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo" style="padding: 0px 12px 0px 12px !important;"> <i class="fas fa-expand"></i> Completo. </a>
                                   </div>
                                 </div>
                                 <div id="doc1_ver" class="text-center mt-4">

@@ -193,9 +193,9 @@ switch ($_GET["op"]){
 				$igv = '';
 		 		while ($reg=$rspta->fetch_object()){
 					 if (empty($reg->imagen)) {
-						$imagen='default_activos_fijos_empresa.png';
+						$imagen='src="../dist/img/default/default_activos_fijos_empresa.png"';
 					 } else {
-						$imagen=$reg->imagen;
+						$imagen='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
 					 }
 					 empty($reg->ficha_tecnica)?$ficha_tecnica='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$ficha_tecnica='<center><a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 					 empty($reg->igv)?$igv='-':$igv=$reg->igv;
@@ -205,7 +205,7 @@ switch ($_GET["op"]){
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idactivos_fijos.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idactivos_fijos.')"><i class="fa fa-check"></i></button>',
 						"1"=>'<div class="user-block">
-								<img class="profile-user-img img-responsive img-circle" src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$imagen.'" alt="user image">
+								<img class="profile-user-img img-responsive img-circle" '.$imagen.' alt="user image">
 								<span class="username"><p style="margin-bottom: 0px !important;">'.$reg->nombre.'</p></span>
 								<span class="description">'.substr($reg->descripcion, 0, 30).'...</span>
 							 </div>',

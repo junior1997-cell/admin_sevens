@@ -71,6 +71,15 @@ Class Activos_fijos
 		$sql="SELECT*FROM activos_fijos ORDER BY idactivos_fijos DESC";
 		return ejecutarConsulta($sql);		
 	}
+	//Implementar un método para listar los registros
+	public function lista_para_compras()
+	{
+		$sql="SELECT af.idactivos_fijos,af.idcolor,af.idunidad_medida,af.nombre,af.modelo,af.serie,af.marca,af.precio_compra,af.subtotal,af.igv,af.total,af.descripcion,af.imagen,af.ficha_tecnica,af.estado_igv, c.nombre_color, um.nombre_medida
+		FROM activos_fijos as af, color as c, unidad_medida as um
+		WHERE af.idcolor= c.idcolor AND af.idunidad_medida=um.idunidad_medida AND af.estado=1  
+		ORDER BY `af`.`idactivos_fijos` ASC";
+		return ejecutarConsulta($sql);		
+	}
 	//Seleccionar Trabajador Select2
 	public function obtenerImg($idactivos_fijos)
 	{

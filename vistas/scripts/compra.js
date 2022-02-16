@@ -1000,7 +1000,8 @@ function comprobante_compras(idcompra_proyecto, doc) {
   //console.log(idcompra_proyecto,doc);
   $("#modal-comprobantes-pago").modal("show");
   $("#comprobante_c").val(idcompra_proyecto);
-
+  $("#doc1_nombre").html("");
+  $("#doc_old_1").val("doc");
   if (doc != "") {
     $("#doc_old_1").val(doc);
 
