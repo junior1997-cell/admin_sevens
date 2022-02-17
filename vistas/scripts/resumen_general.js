@@ -39,7 +39,8 @@ function init() {
   // listar_r_pensiones(localStorage.getItem("nube_idproyecto"), '', '', '');
   // listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), '', '', '');
   // listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // sumas_all_tablas(); 
+  // sumas_all_tablas();  
+
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
 
@@ -75,6 +76,8 @@ function init() {
     allowClear: true,
   });
 
+  filtros();
+
   //============borramos los valores================
   // $("#filtrar_por").val("null").trigger("change");
   // $("#trabajador").val("null").trigger("change");
@@ -83,7 +86,6 @@ function init() {
   // Formato para telefono
   // $("[data-mask]").inputmask();
 }
-//Initialize Select2 proveedor
 
 // TABLA - COMPRAS
 function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {   
@@ -96,6 +98,19 @@ function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {
     $("#pago_compras").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_compras").html(formato_miles(data.t_saldo.toFixed(2)));    
     
+    // acumulamos las sumas totales
+    $(".monto_compras_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_compras_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_compras_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
     tabla_1.destroy(); // Destruye las tablas de datos en el contexto actual.
 
     $('#compras').empty(); // Vacía en caso de que las columnas cambien
@@ -217,18 +232,7 @@ function ver_detalle_compras(idcompra_proyecto) {
 }
 
 // TABLA - MAQUINARIA
-function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var serv_maquinaria = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var pintar_celda = "";
-  $("#serv_maquinas").html("");
-  $("#monto_serv_maq").html("");
-  $("#pago_serv_maq").html("");
-  $("#saldo_serv_maq").html("");
+function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda) {   
 
   $.post("../ajax/resumen_general.php?op=listar_r_serv_maquinaria", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
@@ -271,6 +275,19 @@ function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda)
     $("#monto_serv_maq").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_serv_maq").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_serv_maq").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_serv_maq_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_serv_maq_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_serv_maq_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_2.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -336,18 +353,7 @@ function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda)
 }
 
 // TABLA - EQUIPO
-function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var serv_equipos = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var pintar_celda = "";
-  $("#serv_equipos").html("");
-  $("#monto_serv_equi").html("");
-  $("#pago_serv_equi").html("");
-  $("#saldo_serv_equi").html("");
+function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {   
 
   $.post("../ajax/resumen_general.php?op=listar_r_serv_equipos", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
@@ -388,6 +394,19 @@ function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {
     $("#monto_serv_equi").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_serv_equi").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_serv_equi").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_serv_equi_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_serv_equi_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_serv_equi_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_3.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -496,19 +515,7 @@ function ver_detalle(idmaquinaria, idproyecto, servicio, proveedor) {
 
 // TABLA - TRANSPORTE
 function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var transportes = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var comprobante = "";
-  var pintar_celda = "";
-  $("#transportes").html("");
-  $("#monto_transp").html("");
-  $("#pago_transp").html("");
-  $("#saldo_transp").html("");
-
+  
   $.post("../ajax/resumen_general.php?op=listar_r_transportes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
      
@@ -553,6 +560,19 @@ function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
     $("#monto_transp").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_transp").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_transp").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_transp_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_transp_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_transp_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_4.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -619,19 +639,7 @@ function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
 // TABLA - HOSPEDAJES
 function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var hospedajes = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var comprobante = "";
-  var pintar_celda = "";
-  $("#hospedaje").html("");
-  $("#monto_hosped").html("");
-  $("#pago_hosped").html("");
-  $("#saldo_hosped").html("");
-
+  
   $.post("../ajax/resumen_general.php?op=listar_r_hospedajes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
@@ -676,6 +684,19 @@ function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
     $("#monto_hosped").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_hosped").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_hosped").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_hosped_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_hosped_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_hosped_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_5.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -742,19 +763,7 @@ function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
 // TABLA - COMIDAS EXTRAS
 function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var comidas_extras = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var comprobante = "";
-  var pintar_celda = "";
-  $("#comida_extra").html("");
-  $("#monto_cextra").html("");
-  $("#pago_cextra").html("");
-  $("#saldo_cextra").html("");
-
+  
   $.post("../ajax/resumen_general.php?op=listar_r_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
@@ -802,6 +811,19 @@ function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) 
     $("#monto_cextra").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_cextra").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_cextra").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_cextra_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_cextra_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_cextra_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_6.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -866,19 +888,7 @@ function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) 
 
 // TABLA - BREAKS
 function listar_r_breaks(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var compras = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var comprobante = "";
-  var pintar_celda = "";
-  $("#breaks").html("");
-  $("#monto_break").html("");
-  $("#pago_break").html("");
-  $("#saldo_break").html("");
-
+ 
   $.post("../ajax/resumen_general.php?op=listar_r_breaks", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
@@ -925,6 +935,19 @@ function listar_r_breaks(idproyecto, fecha_filtro, id_proveedor, deuda) {
     $("#monto_break").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_break").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_break").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_break_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_break_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_break_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_7.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -1027,19 +1050,7 @@ function listar_comprobantes_breaks(idsemana_break) {
 
 // TABLA - PENSIONES
 function listar_r_pensiones(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  var compras = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var comprobante = "";
-  var pintar_celda = "";
-  $("#pension").html("");
-  $("#monto_pension").html("");
-  $("#pago_pension").html("");
-  $("#saldo_pension").html("");
-
+  
   $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
@@ -1078,9 +1089,22 @@ function listar_r_pensiones(idproyecto, fecha_filtro, id_proveedor, deuda) {
     //   $("#pension").append(pension);
     // });
 
-    $("#monto_pension").html(formato_miles(data.t_monto.toFixed(2)));
-    $("#pago_pension").html(formato_miles(data.t_pagos.toFixed(2)));
-    $("#saldo_pension").html(formato_miles(data.t_saldo.toFixed(2)));
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_pension_all").html(formato_miles(monto_all.toFixed(2)));
+    $(".pago_pension_all").html(formato_miles(deposito_all.toFixed(2)));
+    $(".saldo_pension_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(monto_all.toFixed(2));
+    $("#deposito_all").html(deposito_all.toFixed(2));
+    $("#saldo_all").html(saldo_all.toFixed(2));
 
     tabla_8.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -1219,19 +1243,7 @@ function listar_comprobantes_pension(idpension) {
 
 // TABLA - ADMINISTRAIVOS
 function listar_r_trab_administrativo(idproyecto, fecha_filtro, id_trabajador, deuda) {
-  var compras = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var total_montos_x_meses = "";
-  var pintar_celda = "";
-  $("#administrativo").html("");
-  $("#monto_adm").html("");
-  $("#pago_adm").html("");
-  $("#saldo_adm").html("");
-
+  
   $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data);  console.log(data);
 
@@ -1274,6 +1286,19 @@ function listar_r_trab_administrativo(idproyecto, fecha_filtro, id_trabajador, d
     $("#monto_adm").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_adm").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_adm").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_adm_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_adm_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_adm_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_9.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -1384,19 +1409,7 @@ function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto, nombres) {
 
 // TABLA - OBRERO
 function listar_r_trabajador_obrero(idproyecto, fecha_filtro, id_trabajador, deuda) {
-  var obrero = "";
-  var t_monto = 0;
-  var t_pagos = 0;
-  var t_saldo = 0;
-  var calculando_sldo = 0;
-  var validando_pago = 0;
-  var pago_quincenal = "";
-  var pintar_celda = "";
-  $("#obrero").html("");
-  $("#monto_obrero").html("");
-  $("#pago_obrero").html("");
-  $("#saldo_obrero").html("");
-
+  
   $.post("../ajax/resumen_general.php?op=listar_r_trabajador_obrero", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
      
     data = JSON.parse(data); //  console.log(data);
@@ -1440,6 +1453,19 @@ function listar_r_trabajador_obrero(idproyecto, fecha_filtro, id_trabajador, deu
     $("#monto_obrero").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_obrero").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_obrero").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    // acumulamos las sumas totales
+    $(".monto_obrero_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_obrero_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_obrero_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
     tabla_10.destroy(); // Destruye las tablas de datos en el contexto actual.
 
@@ -1579,7 +1605,7 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto, nombres) {
 }
 
 function filtros() {
-
+  console.log('--------------------------');
   var fecha          = $("#fecha_filtro").val();
   var id_trabajador  = $("#trabajador_filtro").select2('val');
   var id_proveedor   = $("#proveedor_filtro").select2('val');
@@ -1660,45 +1686,25 @@ function sumas_all_tablas() {
   var pago_compras = $("#pago_compras").text();
   var saldo_compras = $("#saldo_compras").text();
 
-  $(".monto_obrero_all").html(monto_obrero);
-  $(".pago_obrero_all").html(pago_obrero);
-  $(".saldo_obrero_all").html(saldo_obrero);
+  
 
-  $(".monto_adm_all").html(monto_adm);
-  $(".pago_adm_all").html(pago_adm);
-  $(".saldo_adm_all").html(saldo_adm);
+  
 
-  $(".monto_pension_all").html(monto_pension);
-  $(".pago_pension_all").html(pago_pension);
-  $(".saldo_pension_all").html(saldo_pension);
+  
 
-  $(".monto_break_all").html(monto_break);
-  $(".pago_break_all").html(pago_break);
-  $(".saldo_break_all").html(saldo_break);
+  
 
-  $(".monto_cextra_all").html(monto_cextra);
-  $(".pago_cextra_all").html(pago_cextra);
-  $(".saldo_cextra_all").html(saldo_cextra);
+  
 
-  $(".monto_hosped_all").html(monto_hosped);
-  $(".pago_hosped_all").html(pago_hosped);
-  $(".saldo_hosped_all").html(saldo_hosped);
+  
 
-  $(".monto_transp_all").html(monto_transp);
-  $(".pago_transp_all").html(pago_transp);
-  $(".saldo_transp_all").html(saldo_transp);
+  
 
-  $(".monto_serv_equi_all").html(monto_serv_equi);
-  $(".pago_serv_equi_all").html(pago_serv_equi);
-  $(".saldo_serv_equi_all").html(saldo_serv_equi);
+  
 
-  $(".monto_serv_maq_all").html(monto_serv_maq);
-  $(".pago_serv_maq_all").html(pago_serv_maq);
-  $(".saldo_serv_maq_all").html(saldo_serv_maq);
+  
 
-  $(".monto_compras_all").html(monto_compras);
-  $(".pago_compras_all").html(pago_compras);
-  $(".saldo_compras_all").html(saldo_compras);
+  
   
   // sumas totales
   // var monto_all = parseFloat(quitar_formato_miles(monto_obrero)) + parseFloat(quitar_formato_miles(monto_adm)) + parseFloat(quitar_formato_miles(monto_pension)) + parseFloat(quitar_formato_miles(monto_break)) + parseFloat(quitar_formato_miles(monto_cextra)) + parseFloat(quitar_formato_miles(monto_hosped)) + parseFloat(quitar_formato_miles(monto_transp)) + parseFloat(quitar_formato_miles(monto_serv_equi)) + parseFloat(quitar_formato_miles(monto_serv_maq)) + parseFloat(quitar_formato_miles(monto_compras));

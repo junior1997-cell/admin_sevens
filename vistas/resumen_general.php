@@ -62,8 +62,10 @@
                                   <!-- filtro por: fecha -->
                                   <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                     <label for="filtros" >Filtar por Fecha </label>
-                                    <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control" placeholder="Seleccionar fecha" onchange="filtros()" />
-                                  </div>
+                                    <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                    
+                                    <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                  </div>                                    
 
                                   <!-- filtro por: trabajador -->
                                   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
@@ -73,7 +75,7 @@
                                   </div>
 
                                   <!-- filtro por: proveedor -->
-                                  <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
                                     <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
                                     </select>
@@ -552,11 +554,11 @@
 
                                 <tfoot>
                                   <tr>
-                                    <th colspan="4" class="clas_pading"></th>
-                                    <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_all">500</th>
-                                    <th class="clas_pading text-right" id="deposito_all">800</th>
-                                    <th class="clas_pading text-right" id="saldo_all">9000</th>
+                                    <th colspan="4" class=""></th>
+                                    <th class="celda-b-t-1px text-right">Total</th>
+                                    <th class="celda-b-t-1px text-right" id="monto_all">500</th>
+                                    <th class="celda-b-t-1px text-right" id="deposito_all">800</th>
+                                    <th class="celda-b-t-1px text-right" id="saldo_all">9000</th>
                                   </tr>
                                 </tfoot>
                               </table>

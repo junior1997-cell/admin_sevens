@@ -173,6 +173,23 @@ table th {
   border: black 1px solid;
   text-align: center !important;
 }
+
+.celda-b-t-1px{
+  border-top: black 1px solid !important;
+}
+
+.celda-b-b-1px{
+  border-bottom: black 1px solid !important;
+}
+
+.celda-b-r-1px{
+  border-right: black 1px solid !important;
+}
+
+.celda-b-l-1px{
+  border-left: black 1px solid !important;
+}
+
 .row-horizon {
   overflow-x: scroll;
   overflow-y: hidden;
@@ -234,15 +251,36 @@ table th {
   }
 /* ::::::::::: END diseño del scroll ::::::::::: */
 
-.p-x-10px{
-  padding: 0px 10px 0px 10px !important;
-}
+
 .p-0px{
   padding: 0px !important;
 }
 
+.p-x-10px{
+  padding: 0px 10px 0px 10px !important;
+}
+
+.m-0px{
+  margin: 0px !important;
+}
+
+.m-b-1px{
+  margin-bottom: 1px !important;
+}
+.m-b-5px{
+  margin-bottom: 5px !important;
+}
+
+.m-t-1px{
+  margin-top: 1px !important;
+}
+
 .m-t-2px{
-  margin-bottom: 2px !important;
+  margin-top: 2px !important;
+}
+
+.m-t-5px{
+  margin-top: 5px !important;
 }
 
 .hidden{
