@@ -873,7 +873,7 @@ function limpiar_c_pagos() {
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
   $("#idpago_af_general").val("");
-  $("#cuenta_destino_pago").val("");
+ // $("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_compra").val("");
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -898,9 +898,12 @@ function most_datos_prov_pago(idcompra_af_general) {
     $("#beneficiario_pago").val(data.razon_social);
     $("#h4_mostrar_beneficiario").html(data.razon_social);
     $("#banco_pago").val(data.idbancos).trigger("change");
+    $("#tipo_pago").val('Proveedor').trigger("change");
     $("#titular_cuenta_pago").val(data.titular_cuenta);
     localStorage.setItem("nubecompra_c_b", data.cuenta_bancaria);
     localStorage.setItem("nubecompra_c_d", data.cuenta_detracciones);
+
+    if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(data.cuenta_bancaria);}
   });
 }
 

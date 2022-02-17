@@ -616,7 +616,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="cuenta_destino_pago">Cuenta destino </label>
-                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" onchange="captura_op();" placeholder="Cuenta destino" />
+                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                                 </div>
                               </div>
                               <!-- banco -->
