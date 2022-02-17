@@ -38,10 +38,6 @@ function init() {
     $("#submit-form-proveedor").submit();
     console.log("registrando");
   });
-  //=====Guardar factura=============
-  $("#guardar_registro_factura").on("click", function (e) {
-    $("#submit-form-factura").submit();
-  });
   //=====Guardar pago=============
   $("#guardar_registro_pago").on("click", function (e) {
     $("#submit-form-pago").submit();
@@ -50,6 +46,16 @@ function init() {
   $("#guardar_registro_2").on("click", function (e) {
     $("#submit-form-planootro").submit();
   });
+  $.post("../ajax/bancos.php?op=selectbancos_2", function (r) {
+    $("#banco_pago").html(r);
+  });
+  //Initialize Select2 Elements
+  $("#banco_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione un banco",
+    allowClear: true,
+  });
+  $("#banco_pago").val("null").trigger("change");
 
   //Initialize Select2 Elements
   $("#idproveedor").select2({
@@ -1256,7 +1262,7 @@ function limpiar_c_pagos() {
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
   $("#idpago_compras").val("");
-  $("#cuenta_destino_pago").val("");
+  //$("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_compra").val("");
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -1282,9 +1288,12 @@ function most_datos_prov_pago(idcompra_proyecto) {
     $("#beneficiario_pago").val(data.razon_social);
     $("#h4_mostrar_beneficiario").html(data.razon_social);
     $("#banco_pago").val(data.idbancos).trigger("change");
+    $("#tipo_pago").val('Proveedor').trigger("change");
     $("#titular_cuenta_pago").val(data.titular_cuenta);
     localStorage.setItem("nubecompra_c_b", data.cuenta_bancaria);
     localStorage.setItem("nubecompra_c_d", data.cuenta_detracciones);
+
+    if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(data.cuenta_bancaria);}
   });
 }
 

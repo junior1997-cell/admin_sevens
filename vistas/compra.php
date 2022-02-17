@@ -935,7 +935,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="cuenta_destino_pago">Cuenta destino </label>
-                                  <input type="number" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" onchange="captura_op();" placeholder="Cuenta destino" />
+                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                                 </div>
                               </div>
                               <!-- banco -->
@@ -943,13 +943,7 @@
                                 <div class="form-group">
                                   <label for="banco_pago">Banco</label>
                                   <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
-                                    <option value="1">BCP</option>
-                                    <option value="2">BBVA</option>
-                                    <option value="3">SCOTIA BANK</option>
-                                    <option value="4">INTERBANK</option>
-                                    <option value="5">NACIÓN</option>
                                   </select>
-                                  <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>-->
                                 </div>
                               </div>
                               <!-- Titular Cuenta-->
