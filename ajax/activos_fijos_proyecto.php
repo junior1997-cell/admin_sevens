@@ -64,248 +64,322 @@ $doc_old_1 = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "
 switch ($_GET["op"]) {
 
     case 'guardaryeditarcompra': 
-        if (empty($idcompra_af_proyecto)) {
-            $rspta = $ctivos_fijos_proy->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprobante,$serie_comprobante,$descripcion,$total_compra_af_p,$subtotal_compra,
-                $igv_compra,$_POST["idactivos_fijos"],$_POST["unidad_medida"],$_POST["nombre_color"],$_POST["cantidad"],$_POST["precio_sin_igv"],$_POST["precio_igv"],
-                $_POST["precio_con_igv"],$_POST["descuento"],$_POST["ficha_tecnica_activo"]
-            );
-            //precio_sin_igv,precio_igv,precio_total
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la compra";
-        } else {
-            $rspta=$ctivos_fijos_proy->editar(
-            $idcompra_af_proyecto, $idproyecto, 
-            $idproveedor, $fecha_compra, 
-            $tipo_comprobante,$serie_comprobante, 
-            $descripcion, $total_compra_af_p, 
-            $subtotal_compra,$igv_compra,
-            $_POST["idactivos_fijos"],$_POST["unidad_medida"],
-            $_POST["nombre_color"],  $_POST["cantidad"],
-            $_POST["precio_sin_igv"], $_POST["precio_igv"],
-            $_POST["precio_con_igv"], $_POST["descuento"],
-            $_POST["ficha_tecnica_activo"]);
 
-            echo $rspta ? "ok" : "Compra no se pudo actualizar";
-        }        
-             
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+
+                if (empty($idcompra_af_proyecto)) {
+                    $rspta = $ctivos_fijos_proy->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprobante,$serie_comprobante,$descripcion,$total_compra_af_p,$subtotal_compra,
+                        $igv_compra,$_POST["idactivos_fijos"],$_POST["unidad_medida"],$_POST["nombre_color"],$_POST["cantidad"],$_POST["precio_sin_igv"],$_POST["precio_igv"],
+                        $_POST["precio_con_igv"],$_POST["descuento"],$_POST["ficha_tecnica_activo"]
+                    );
+                    //precio_sin_igv,precio_igv,precio_total
+                    echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la compra";
+                } else {
+                    $rspta=$ctivos_fijos_proy->editar(
+                    $idcompra_af_proyecto, $idproyecto, 
+                    $idproveedor, $fecha_compra, 
+                    $tipo_comprobante,$serie_comprobante, 
+                    $descripcion, $total_compra_af_p, 
+                    $subtotal_compra,$igv_compra,
+                    $_POST["idactivos_fijos"],$_POST["unidad_medida"],
+                    $_POST["nombre_color"],  $_POST["cantidad"],
+                    $_POST["precio_sin_igv"], $_POST["precio_igv"],
+                    $_POST["precio_con_igv"], $_POST["descuento"],
+                    $_POST["ficha_tecnica_activo"]);
+
+                    echo $rspta ? "ok" : "Compra no se pudo actualizar";
+                } 
+
+            } else {
+                require 'noacceso.php';
+            }
+        }         
     break;
     
     case 'guardaryeditar_comprobante':
-        // imgen de comprobante
-        if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
-            $doc_comprobante = $_POST["doc_old_1"];
-            $flat_comprob = false;
+    
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
-            $ext1 = explode(".", $_FILES["doc1"]["name"]);
-            $flat_comprob = true;
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {    
+                // imgen de comprobante
+                if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
+                    $doc_comprobante = $_POST["doc_old_1"];
+                    $flat_comprob = false;
+                } else {
+                    $ext1 = explode(".", $_FILES["doc1"]["name"]);
+                    $flat_comprob = true;
 
-            $doc_comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+                    $doc_comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" . $doc_comprobante);
-        }
-        //Borramos el comprobante
-        if ($flat_comprob == true) {
-            $datos_f1 =  $ctivos_fijos_proy->obtener_comprobante_comprasa_af_p($comp_idcompra_af_proyecto);
+                    move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" . $doc_comprobante);
+                }
+                //Borramos el comprobante
+                if ($flat_comprob == true) {
+                    $datos_f1 =  $ctivos_fijos_proy->obtener_comprobante_comprasa_af_p($comp_idcompra_af_proyecto);
 
-            $doc1_ant = $datos_f1->fetch_object()->comprobante;
+                    $doc1_ant = $datos_f1->fetch_object()->comprobante;
 
-            if ($doc1_ant != "") {
-                unlink("../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" . $doc1_ant);
+                    if ($doc1_ant != "") {
+                        unlink("../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" . $doc1_ant);
+                    }
+                }
+
+                // editamos un documento existente
+                $rspta =  $ctivos_fijos_proy->editar_comprobante($comp_idcompra_af_proyecto,$doc_comprobante);
+
+                echo $rspta ? "ok" : "Documento no se pudo actualizar";
+            } else {
+                require 'noacceso.php';
             }
         }
-
-        // editamos un documento existente
-        $rspta =  $ctivos_fijos_proy->editar_comprobante($comp_idcompra_af_proyecto,$doc_comprobante);
-
-        echo $rspta ? "ok" : "Documento no se pudo actualizar";
-
     break;
 
     case 'anular':
-         
-        $rspta = $ctivos_fijos_proy->desactivar($idcompra_af_proyecto);
+        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->desactivar($idcompra_af_proyecto);
 
-        echo $rspta ? "ok" : "Compra no se puede Anular";
-        //Fin de las validaciones de acceso
-             
+                echo $rspta ? "ok" : "Compra no se puede Anular";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }       
     break;
 
     case 'des_anular':
         
-        $rspta = $ctivos_fijos_proy->activar($idcompra_af_proyecto);
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->activar($idcompra_af_proyecto);
 
-        echo $rspta ? "ok" : "Compra no se puede recuperar";
-        //Fin de las validaciones de acceso
-             
+                echo $rspta ? "ok" : "Compra no se puede recuperar";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }        
     break;
 
     case 'listar_compra':
+        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
 
-        $rspta = $ctivos_fijos_proy->listar_compra($_GET["nube_idproyecto"]);
-        //Vamos a declarar un array
-        $data = [];
-        $c = "";
-        $cc = "";
-        $nombre = "";
-        $info = "";
-        $icon = "";
-        $stdo_detraccion = "";
-        $serie_comprobante = "";
-        $function_tipo_comprob = "";
-        $list_segun_estado_detracc = "";
-        $tipo_comprobante1 = "";
-        $num_comprob = "";
-        $deposito_Actual = 0;
-
-        while ($reg = $rspta->fetch_object()) {
-            $rspta2 = $ctivos_fijos_proy->pago_servicio($reg->idcompra_af_proyecto);
-
-            empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->monto_total - $rspta2['total_pago_compras']);
-            $tipo_comprobante1 = $reg->tipo_comprobante;
-
-            if ($saldo == $reg->monto_total) {
-                $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
-                $c="danger";
-                $nombre="Pagar";
-                $icon="dollar-sign";
-                $cc="danger";
-            }else{
-                		
-                if ($saldo<$reg->monto_total && $saldo>"0" ) {
-
-                    $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                    $c="warning";
-                    $nombre="Pagar";
-                    $icon="dollar-sign";
-                    $cc="warning";
-                    } else {
-                        if ($saldo<="0" || $saldo=="0") {
-                            $estado = '<span class="text-center badge badge-success">Pagado</span>';
-                            $c="success";
-                            $nombre="Ver";
-                            $info="info";
-                            $icon="eye";
-                            $cc="success";
-                        }else{
-                            $estado = '<span class="text-center badge badge-success">Error</span>';
-                        }
-                        //$estado = '<span class="text-center badge badge-success">Terminado</span>';
-                    }  
-
-            }
-  
-            if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
+                $rspta = $ctivos_fijos_proy->listar_compra($_GET["nube_idproyecto"]);
+                //Vamos a declarar un array
+                $data = [];
+                $c = "";
+                $cc = "";
+                $nombre = "";
+                $info = "";
+                $icon = "";
+                $stdo_detraccion = "";
+                $serie_comprobante = "";
+                $function_tipo_comprob = "";
+                $list_segun_estado_detracc = "";
+                $tipo_comprobante1 = "";
+                $num_comprob = "";
                 $deposito_Actual = 0;
-            } else {
-                $deposito_Actual = $rspta2['total_pago_compras'];
-            }
-                
-            $list_segun_estado_detracc =
-                '<div class="text-center text-nowrap"> <button class="btn btn-' .
-                $c .
-                ' btn-xs m-t-2px" onclick="listar_pagos(' . $reg->idcompra_af_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .', '.$deposito_Actual.')">
-                <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
-                <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
-            
-            $vercomprobantes="'$reg->idcompra_af_proyecto','$reg->imagen_comprobante'";
-            //($reg->tipo_comprobante="Ninguno" || $reg->tipo_comprobante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
-            
-            empty($reg->serie_comprobante) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg->serie_comprobante);
-            $data[] = [
-                "0" =>
-                    ($reg->estado == '1'
-                        ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                            ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
-                            ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
-                        : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_af_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
-                        ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
-                "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-                "2" => '<div class="user-block">
-                    <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
-                    <span class="description" style="margin-left: 0px !important;"><b>Cel: </b><a class="text-body" href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al proveedor.">'. $reg->telefono . '</a> </span>
-                </div>',
-                "3" => '<div class="user-block">
-                    <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprobante1.'</p></span>
-                    <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
-                </div>',
-                "4" => number_format($reg->monto_total, 2, '.', ','),
-                "5" => $list_segun_estado_detracc,
-                "6" => number_format($saldo, 2, '.', ','),
-                "7" => '<center> <button class="btn btn-info" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-                "8" => $reg->descripcion,
-                "9" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
-            ];
-        }
-        $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "data" => $data,
-        ];
-        echo json_encode($results);
 
+                while ($reg = $rspta->fetch_object()) {
+                    $rspta2 = $ctivos_fijos_proy->pago_servicio($reg->idcompra_af_proyecto);
+
+                    empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->monto_total - $rspta2['total_pago_compras']);
+                    $tipo_comprobante1 = $reg->tipo_comprobante;
+
+                    if ($saldo == $reg->monto_total) {
+                        $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
+                        $c="danger";
+                        $nombre="Pagar";
+                        $icon="dollar-sign";
+                        $cc="danger";
+                    }else{
+                                
+                        if ($saldo<$reg->monto_total && $saldo>"0" ) {
+
+                            $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+                            $c="warning";
+                            $nombre="Pagar";
+                            $icon="dollar-sign";
+                            $cc="warning";
+                            } else {
+                                if ($saldo<="0" || $saldo=="0") {
+                                    $estado = '<span class="text-center badge badge-success">Pagado</span>';
+                                    $c="success";
+                                    $nombre="Ver";
+                                    $info="info";
+                                    $icon="eye";
+                                    $cc="success";
+                                }else{
+                                    $estado = '<span class="text-center badge badge-success">Error</span>';
+                                }
+                                //$estado = '<span class="text-center badge badge-success">Terminado</span>';
+                            }  
+
+                    }
+        
+                    if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
+                        $deposito_Actual = 0;
+                    } else {
+                        $deposito_Actual = $rspta2['total_pago_compras'];
+                    }
+                        
+                    $list_segun_estado_detracc =
+                        '<div class="text-center text-nowrap"> <button class="btn btn-' .
+                        $c .
+                        ' btn-xs m-t-2px" onclick="listar_pagos(' . $reg->idcompra_af_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .', '.$deposito_Actual.')">
+                        <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
+                        <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras'], 2, '.', ',').'</button></div>';
+                    
+                    $vercomprobantes="'$reg->idcompra_af_proyecto','$reg->imagen_comprobante'";
+                    //($reg->tipo_comprobante="Ninguno" || $reg->tipo_comprobante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
+                    
+                    empty($reg->serie_comprobante) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg->serie_comprobante);
+                    $data[] = [
+                        "0" =>
+                            ($reg->estado == '1'
+                                ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                                    ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
+                                    ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
+                                : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_af_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                                ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg->idcompra_af_proyecto.')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
+                        "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
+                        "2" => '<div class="user-block">
+                            <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
+                            <span class="description" style="margin-left: 0px !important;"><b>Cel: </b><a class="text-body" href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al proveedor.">'. $reg->telefono . '</a> </span>
+                        </div>',
+                        "3" => '<div class="user-block">
+                            <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprobante1.'</p></span>
+                            <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
+                        </div>',
+                        "4" => number_format($reg->monto_total, 2, '.', ','),
+                        "5" => $list_segun_estado_detracc,
+                        "6" => number_format($saldo, 2, '.', ','),
+                        "7" => '<center> <button class="btn btn-info" onclick="comprobante_compras(' .$vercomprobantes. ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+                        "8" => $reg->descripcion,
+                        "9" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+                    ];
+                }
+                $results = [
+                    "sEcho" => 1, //Información para el datatables
+                    "iTotalRecords" => count($data), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+                    "data" => $data,
+                ];
+                echo json_encode($results);
+            } else {
+                require 'noacceso.php';
+            }
+        }
     break;
 
     case 'listar_compraxporvee':
-        $nube_idproyecto = $_GET["nube_idproyecto"];
-        $rspta = $ctivos_fijos_proy->listar_compraxporvee($nube_idproyecto);
-        //Vamos a declarar un array
-        $data = [];
-        $c = "info";
-        $nombre = "Ver";
-        $info = "info";
-        $icon = "eye";
+        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
 
-        while ($reg = $rspta->fetch_object()) {
-            $data[] = [
-                "0" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
-                "1" => $reg->razon_social,
-                "2" => number_format($reg->total, 2, '.', ','),
-            ];
+                $nube_idproyecto = $_GET["nube_idproyecto"];
+                $rspta = $ctivos_fijos_proy->listar_compraxporvee($nube_idproyecto);
+                //Vamos a declarar un array
+                $data = [];
+                $c = "info";
+                $nombre = "Ver";
+                $info = "info";
+                $icon = "eye";
+
+                while ($reg = $rspta->fetch_object()) {
+                    $data[] = [
+                        "0" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
+                        "1" => $reg->razon_social,
+                        "2" => number_format($reg->total, 2, '.', ','),
+                    ];
+                }
+                $results = [
+                    "sEcho" => 1, //Información para el datatables
+                    "iTotalRecords" => count($data), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+                    "aaData" => $data,
+                ];
+                echo json_encode($results);
+
+            } else {
+                require 'noacceso.php';
+            }
         }
-        $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "aaData" => $data,
-        ];
-        echo json_encode($results);
-
     break;
 	
     case 'listar_detalle_compraxporvee':
+        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
 
-        $idproyecto = $_GET["idproyecto"];
-        $idproveedor = $_GET["idproveedor"];
-        /*$idproyecto= '2';
-         $idproveedor= '4';*/
-        $rspta = $ctivos_fijos_proy->listar_detalle_comprax_provee($idproyecto, $idproveedor);
-        //Vamos a declarar un array
-        $data = [];
+                $idproyecto = $_GET["idproyecto"];
+                $idproveedor = $_GET["idproveedor"];
+                /*$idproyecto= '2';
+                $idproveedor= '4';*/
+                $rspta = $ctivos_fijos_proy->listar_detalle_comprax_provee($idproyecto, $idproveedor);
+                //Vamos a declarar un array
+                $data = [];
 
-        while ($reg = $rspta->fetch_object()) {
-            $data[] = [
-                "0" =>
-                    '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .
-                    $reg->idcompra_af_proyecto .
-                    ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
-                "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-                "2" => $reg->tipo_comprobante,
-                "3" => $reg->serie_comprobante,
-                "4" => number_format($reg->total, 2, '.', ','),
-                "5" => $reg->descripcion,
-                "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
-            ];
+                while ($reg = $rspta->fetch_object()) {
+                    $data[] = [
+                        "0" =>
+                            '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .
+                            $reg->idcompra_af_proyecto .
+                            ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
+                        "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
+                        "2" => $reg->tipo_comprobante,
+                        "3" => $reg->serie_comprobante,
+                        "4" => number_format($reg->total, 2, '.', ','),
+                        "5" => $reg->descripcion,
+                        "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+                    ];
+                }
+                $results = [
+                    "sEcho" => 1, //Información para el datatables
+                    "iTotalRecords" => count($data), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+                    "aaData" => $data,
+                ];
+                echo json_encode($results);
+            } else {
+                require 'noacceso.php';
+            }
         }
-        $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "aaData" => $data,
-        ];
-        echo json_encode($results);
-
     break;
     case 'ver_detalle_compras':
+                
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+
 				$rspta  =  $ctivos_fijos_proy->listarDetalle($_GET['idcompra_af_proyecto']);
                 $rspta2 =  $ctivos_fijos_proy->ver_compra($_GET['idcompra_af_proyecto']);
 				$subtotal=0;
@@ -349,87 +423,129 @@ switch ($_GET["op"]) {
                             </b>
                     </tfoot>';
 
+            } else {
+                require 'noacceso.php';
+            }
+        }
     break;
 
     case 'ver_compra':
-        
-        //$idpago_af_proyecto ='1';
-        $rspta = $ctivos_fijos_proy->ver_compra($idcompra_af_proyecto);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta);
-        //Fin de las validaciones de acceso
-             
+                        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+
+                $rspta = $ctivos_fijos_proy->ver_compra($idcompra_af_proyecto);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }         
     break;
 
     case 'ver_compra_editar':
-        
-        $rspta = $ctivos_fijos_proy->mostrar_compra_para_editar($idcompra_af_proyecto);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta);
-                     
+                        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->mostrar_compra_para_editar($idcompra_af_proyecto);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+            } else {
+                require 'noacceso.php';
+            }
+        }                 
     break;
 
     case 'listarActivoscompra':
-		require_once "../modelos/Activos_fijos.php";
+                        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
 
-		$activos_fijos=new Activos_fijos();
+                require_once "../modelos/Activos_fijos.php";
 
-        $rspta =$activos_fijos->lista_para_compras();
-        //Vamos a declarar un array
-        $datas = [];
-        // echo json_encode($rspta);
-        $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/default_activos_fijos_empresa.png'";    $color_stock = "";   $ficha_tecnica = ""; 
-        
-        while ($reg = $rspta->fetch_object()) {
+                $activos_fijos=new Activos_fijos();
 
-            if (empty($reg->imagen)) {
-                $img='src="../dist/img/default/default_activos_fijos_empresa.png"';
-                $img_parametro="default_activos_fijos_empresa.png";
-             } else {
-                $img='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
-                $img_parametro=$reg->imagen;
-             }
+                $rspta =$activos_fijos->lista_para_compras();
+                //Vamos a declarar un array
+                $datas = [];
+                // echo json_encode($rspta);
+                $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/default_activos_fijos_empresa.png'";    $color_stock = "";   $ficha_tecnica = ""; 
+                
+                while ($reg = $rspta->fetch_object()) {
 
-            !empty($reg->ficha_tecnica)
-                ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
-                : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+                    if (empty($reg->imagen)) {
+                        $img='src="../dist/img/default/default_activos_fijos_empresa.png"';
+                        $img_parametro="default_activos_fijos_empresa.png";
+                    } else {
+                        $img='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
+                        $img_parametro=$reg->imagen;
+                    }
 
-            $datas[] = [
-                "0" =>
-                    '<button class="btn btn-warning" onclick="agregarDetalleCompraActivos(' . $reg->idactivos_fijos  . 
-                    ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->subtotal . '\', \'' .
-                     $reg->igv. '\', \'' . $reg->total.  '\', \'' . $img_parametro . '\', \'' .$reg->ficha_tecnica .'\')" 
-                    data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
-                "1" =>
-                    '<div class="user-block w-px-200">
-                        <img class="profile-user-img img-responsive img-circle" ' . $img .' alt="user image" onerror="'.$imagen_error.'">
-                        <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
-                        <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
-                    </div>',
-                "2" => $reg->marca,
-                "3" => number_format($reg->total, 2, '.', ','),
-                "4" => $reg->descripcion,
-                "5" => $ficha_tecnica,
-            ];
+                    !empty($reg->ficha_tecnica)
+                        ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+                        : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+
+                    $datas[] = [
+                        "0" =>
+                            '<button class="btn btn-warning" onclick="agregarDetalleCompraActivos(' . $reg->idactivos_fijos  . 
+                            ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->subtotal . '\', \'' .
+                            $reg->igv. '\', \'' . $reg->total.  '\', \'' . $img_parametro . '\', \'' .$reg->ficha_tecnica .'\')" 
+                            data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
+                        "1" =>
+                            '<div class="user-block w-px-200">
+                                <img class="profile-user-img img-responsive img-circle" ' . $img .' alt="user image" onerror="'.$imagen_error.'">
+                                <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                                <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
+                            </div>',
+                        "2" => $reg->marca,
+                        "3" => number_format($reg->total, 2, '.', ','),
+                        "4" => $reg->descripcion,
+                        "5" => $ficha_tecnica,
+                    ];
+                }
+
+                $results = [
+                    "sEcho" => 1, //Información para el datatables
+                    "iTotalRecords" => count($datas), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
+                    "aaData" => $datas,
+                ];
+                echo json_encode($results);
+                
+            } else {
+                require 'noacceso.php';
+            }
         }
-
-        $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($datas), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
-            "aaData" => $datas,
-        ];
-        echo json_encode($results);
     break;
 
     case 'selectProveedor':
-        require_once "../modelos/AllProveedor.php";
-        $proveedor = new Proveedor();
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+                require_once "../modelos/AllProveedor.php";
+                $proveedor = new Proveedor();
 
-        $rspta = $proveedor->listar_compra();
+                $rspta = $proveedor->listar_compra();
 
-        while ($reg = $rspta->fetch_object()) {
-            echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social . ' - ' . $reg->ruc . '</option>';
+                while ($reg = $rspta->fetch_object()) {
+                    echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social . ' - ' . $reg->ruc . '</option>';
+                }
+            } else {
+                require 'noacceso.php';
+            }
         }
     break;
     /**
@@ -442,8 +558,8 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
-                //$idservicioo='1';
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+
                 $idcompra_af_proyecto = $_POST["idcompra_af_proyecto"];
                 //$idcompra_af_proyecto='1';
                 $rspta = $ctivos_fijos_proy->most_datos_prov_pago($idcompra_af_proyecto);
@@ -461,7 +577,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
                 // imgen de perfil
                 if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
                     $imagen1 = $_POST["foto1_actual"];
@@ -510,7 +626,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
                 $rspta = $ctivos_fijos_proy->desactivar_pagos($idpago_af_proyecto);
                 echo $rspta ? "Pago Anulado" : "Pago no se puede Anular";
                 //Fin de las validaciones de acceso
@@ -525,7 +641,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
                 $rspta = $ctivos_fijos_proy->activar_pagos($idpago_af_proyecto);
                 echo $rspta ? "Pago Restablecido" : "Pago no se pudo Restablecido";
                 //Fin de las validaciones de acceso
@@ -540,7 +656,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
 
                 $rspta = $ctivos_fijos_proy->listar_pagos_af_p($_GET["idcompra_af_proyecto"]);
                 $data = [];
@@ -619,7 +735,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
                 //$idpago_af_proyecto ='1';
                 $rspta = $ctivos_fijos_proy->mostrar_pagos($idpago_af_proyecto);
                 //Codificar el resultado utilizando json

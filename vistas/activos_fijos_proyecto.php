@@ -31,7 +31,7 @@
         <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['compra']==1){
+          if ($_SESSION['activo_fijo_proyecto']==1){
           ?>
           <!--Contenido-->
           <div class="content-wrapper">
@@ -45,7 +45,7 @@
                   <!-- /.col -->
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item"><a href="compra.php">Home</a></li>
+                      <li class="breadcrumb-item"><a href="#">Home</a></li>
                       <li class="breadcrumb-item active">Activos fijos</li>
                     </ol>
                   </div>

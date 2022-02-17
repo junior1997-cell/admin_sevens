@@ -31,7 +31,7 @@
         <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['activo_fijo']==1){
+          if ($_SESSION['activo_fijo_general']==1){
           ?>
           <!--Contenido-->
           <div class="content-wrapper">

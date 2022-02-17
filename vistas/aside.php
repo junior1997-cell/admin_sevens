@@ -143,7 +143,7 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['activo_fijo']==1) {  ?>
+        <?php if ($_SESSION['activo_fijo_general']==1) {  ?>
           <!-- ESCRITORIO -->
           <li class="nav-item">
             <a href="all_activos_fijos.php" class="nav-link" id="mAllactivos_fijos">
@@ -262,7 +262,7 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['activo_fijo']==1) {  ?>
+        <?php if ($_SESSION['activo_fijo_proyecto']==1) {  ?>
           <!-- Activo fijo por proyecto -->
           <li class="nav-item">
             <a href="activos_fijos_proyecto.php" class="nav-link" id="mActivos_fijos_proyect">
