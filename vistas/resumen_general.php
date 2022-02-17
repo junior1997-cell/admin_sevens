@@ -83,8 +83,10 @@
                                   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <label for="filtros">Filtrar por.</label>
                                     <select name="deuda_filtro" id="deuda_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;">
+                                      <option value="todos">Todos</option>  
                                       <option value="sindeuda">Sin deuda</option>
                                       <option value="condeuda">Con deuda</option>
+                                      <option value="conexcedente">Con excedente</option>
                                     </select>
                                   </div>
 
@@ -93,9 +95,9 @@
                             </div>
                           </div>
                           <!-- /.card-header -->
-                          <div class="card-body">
+                          <div class="card-body row-vertica disenio-scroll h-500px">
                             
-                            <div class="container table-responsive disenio-scroll">
+                            <div class="/*container*/">
                               <!--Compras-->
                               <table id="tabla1_compras" class="display" style="width: 100%;">
                                 <thead>
@@ -114,21 +116,21 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="compras"></tbody>
+                                <tbody id="compras"></tbody>                                
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_compras"></th>
-                                    <th class="clas_pading text-right" id="pago_compras"></th>
-                                    <th class="clas_pading text-right" id="saldo_compras"></th>
+                                    <th class="clas_pading text-right" id="monto_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="clas_pading text-right" id="pago_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="clas_pading text-right" id="saldo_compras"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Servicios-Maquinaria-->
                               <table id="tabla2_maquinaria" class="display" style="width: 100%;">
                                 <thead>
@@ -149,7 +151,7 @@
 
                                 <tbody id="serv_maquinas"></tbody>
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -157,10 +159,11 @@
                                     <th class="clas_pading text-right" id="pago_serv_maq"></th>
                                     <th class="clas_pading text-right" id="saldo_serv_maq"></th>
                                   </tr>
-                                </tbody>
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Servicios-Equipo-->
                               <table id="tabla3_equipo" class="display" style="width: 100%;">
                                 <thead>
@@ -179,9 +182,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="serv_equipos"></tbody>
+                                <tbody id="serv_equipos"></tbody>                               
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -189,11 +192,11 @@
                                     <th class="clas_pading text-right" id="pago_serv_equi"></th>
                                     <th class="clas_pading text-right" id="saldo_serv_equi"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Transporte-->
                               <table id="tabla4_transporte" class="display" style="width: 100%;">
                                 <thead>
@@ -212,9 +215,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="transportes"></tbody>
+                                <tbody id="transportes"></tbody>                               
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -222,11 +225,11 @@
                                     <th class="clas_pading text-right" id="pago_transp"></th>
                                     <th class="clas_pading text-right" id="saldo_transp"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Hospedaje-->
                               <table id="tabla5_hospedaje" class="display" style="width: 100%;">
                                 <thead>
@@ -245,9 +248,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="hospedaje"></tbody>
+                                <tbody id="hospedaje"></tbody>                                 
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -255,11 +258,11 @@
                                     <th class="clas_pading text-right" id="pago_hosped"></th>
                                     <th class="clas_pading text-right" id="saldo_hosped"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Comidas extras-->
                               <table id="tabla6_comidas_ex" class="display" style="width: 100%;">
                                 <thead>
@@ -279,8 +282,8 @@
                                 </thead>
 
                                 <tbody id="comida_extra"></tbody>
-
-                                <tbody>
+ 
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -288,11 +291,11 @@
                                     <th class="clas_pading text-right" id="pago_cextra"></th>
                                     <th class="clas_pading text-right" id="saldo_cextra"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Breaks-->
                               <table id="tabla7_breaks" class="display" style="width: 100%;">
                                 <thead>
@@ -311,9 +314,9 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="breaks"></tbody>
+                                <tbody id="breaks"></tbody>                               
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -321,11 +324,11 @@
                                     <th class="clas_pading text-right" id="pago_break"></th>
                                     <th class="clas_pading text-right" id="saldo_break"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Pensión-->
                               <table id="tabla8_pension" class="display" style="width: 100%;">
                                 <thead>
@@ -345,8 +348,8 @@
                                 </thead>
 
                                 <tbody id="pension"></tbody>
-
-                                <tbody>
+ 
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -354,11 +357,11 @@
                                     <th class="clas_pading text-right" id="pago_pension"></th>
                                     <th class="clas_pading text-right" id="saldo_pension"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Personal Administrativo-->
                               <table id="tabla9_per_adm" class="display" style="width: 100%;">
                                 <thead>
@@ -367,7 +370,7 @@
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-px-300 clas_pading">TRABAJADOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -379,7 +382,7 @@
 
                                 <tbody id="administrativo"></tbody>
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -387,11 +390,11 @@
                                     <th class="clas_pading text-right" id="pago_adm"></th>
                                     <th class="clas_pading text-right" id="saldo_adm"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
+
                               <br />
+
                               <!--Personal obrero-->
                               <table id="tabla10_per_obr" class="display" style="width: 100%;">
                                 <thead>
@@ -400,7 +403,7 @@
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-px-300 clas_pading">TRABAJADOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -412,7 +415,7 @@
 
                                 <tbody id="obrero"></tbody>
 
-                                <tbody>
+                                <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
@@ -420,9 +423,7 @@
                                     <th class="clas_pading text-right" id="pago_obrero"></th>
                                     <th class="clas_pading text-right" id="saldo_obrero"></th>
                                   </tr>
-                                </tbody>
-
-                                <tfoot></tfoot>
+                                </tfoot>
                               </table>
                             </div>
                           </div>
@@ -868,7 +869,7 @@
           }
           .text_area_clss {
             width: 280px;
-            background: rgb(215, 224, 225);
+            background: rgb(215 224 225 / 22%);
             border-block-color: inherit;
             border-bottom: aliceblue;
             border-left: aliceblue;

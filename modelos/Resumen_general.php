@@ -9,14 +9,16 @@ Class Resumen_general
 	{
 
 	}
-	public function r_compras($idproyecto, $fecha_filtro)
+	public function r_compras($idproyecto, $fecha_filtro, $id_proveedor)
 	{
-		$pago_total=0; 
+		 
 		$Arraycompras= Array(); 
 
 		$sql="SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.monto_total, p.razon_social, cpp.descripcion 
 		FROM compra_por_proyecto as cpp, proveedor as p
-		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.fecha_compra LIKE '%$fecha_filtro%' AND cpp.estado='1' ORDER by cpp.idcompra_proyecto ASC";
+		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor 
+		AND cpp.fecha_compra LIKE '%$fecha_filtro%' AND cpp.idproveedor LIKE '%$id_proveedor%' AND cpp.estado='1' 
+		ORDER by cpp.idcompra_proyecto ASC";
 
 		$compras=ejecutarConsultaArray($sql);
 
@@ -27,35 +29,26 @@ Class Resumen_general
 				$idcompra=$value['idcompra_proyecto'];
 
 				$sql_2="SELECT SUM(pc.monto) as total_p FROM pago_compras as pc WHERE pc.idcompra_proyecto='$idcompra' AND pc.estado='1' GROUP BY idcompra_proyecto";
-				$t_monto= ejecutarConsultaSimpleFila($sql_2);
-
-				if (empty($t_monto)) {
-					$pago_total=0;
-				}else{
-					$pago_total=$t_monto['total_p'];
-				}
+				$t_monto= ejecutarConsultaSimpleFila($sql_2);				 
 
 				$Arraycompras[]= array(
-					"idcompra_proyecto"     => $value['idcompra_proyecto'],
-					"idproyecto"     	 => $value['idproyecto'],
-					"idproveedor"    => $value['idproveedor'],
-					"fecha_compra"    => $value['fecha_compra'],
-					"monto_total"    => $value['monto_total'],
-					"proveedor"    => $value['razon_social'],
-					"descripcion"    => $value['descripcion'],
+					"idcompra_proyecto"	=> $value['idcompra_proyecto'],
+					"idproyecto"     	=> $value['idproyecto'],
+					"idproveedor"    	=> $value['idproveedor'],
+					"fecha_compra"    	=> $value['fecha_compra'],
+					"monto_total"    	=> $retVal_1 = ( empty($value['monto_total']) ) ? 0 : $value['monto_total'],
+					"proveedor"    		=> $value['razon_social'],
+					"descripcion"    	=> $value['descripcion'],
 
-					"monto_pago_total"       =>$pago_total
+					"monto_pago_total"	=> $retVal_2 = ( empty($t_monto) ) ? 0 : $retVal_3 = (empty($t_monto['total_p'])) ? 0 : $t_monto['total_p']  
 
 				);
-
 			}
-
 		}
 
-		return $Arraycompras;
-
-		
+		return $Arraycompras;		
 	}
+
 	//lismatamos los detalles compras
 	public function detalles_compras($id_compra)
 	{
@@ -94,13 +87,14 @@ Class Resumen_general
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function r_serv_maquinaria_equipos($idproyecto,$tipo)
+	public function r_serv_maquinaria_equipos($idproyecto, $fecha_filtro, $id_proveedor, $tipo)
 	{
 		$serv_maquinaria= Array();
 		$pago_total=0;
 		$sql="SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, COUNT(s.idmaquinaria) as cantidad_veces, SUM(s.costo_parcial) as costo_parcial 
 		FROM servicio as s, maquinaria as m, proveedor as p 
-		WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
+		WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND m.idproveedor LIKE '%$id_proveedor%'
+		AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
 		GROUP BY s.idmaquinaria";
 
 		$maquinaria=ejecutarConsultaArray($sql);
@@ -111,34 +105,23 @@ Class Resumen_general
 
 				$idmaquinaria=$value['idmaquinaria'];
 
-				$sql_2="SELECT SUM(ps.monto) as monto_pag_ser_maq FROM pago_servicio ps WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado=1 GROUP by id_maquinaria";
-				$ser_maq_monto= ejecutarConsultaSimpleFila($sql_2);
-
-				if (empty($t_monto)) {
-					$pago_total=0;
-				}else{
-					$pago_total=$ser_maq_monto['monto_pag_ser_maq'];
-				}
+				$sql_2="SELECT SUM(ps.monto) as deposito FROM pago_servicio ps WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado=1 GROUP by id_maquinaria";
+				$ser_maq_monto= ejecutarConsultaSimpleFila($sql_2);				
 
 				$serv_maquinaria[]= array(
-
 					"idmaquinaria"      => $value['idmaquinaria'],
 					"idproyecto"      => $value['idproyecto'],
 					"maquina"     	 	=> $value['maquina'],
 					"cantidad_veces"    => $value['cantidad_veces'],
-					"costo_parcial"     => $value['costo_parcial'],
+					"costo_parcial"     => $retVal_1 = ( empty($value['costo_parcial'])) ? 0 : $value['costo_parcial'] ,
 					"proveedor"         => $value['razon_social'],
 
-					"monto_pag_ser_maq"       =>$pago_total
-
+					"deposito" => $retVal_2 = ( empty($ser_maq_monto) ) ? 0 : $retVal_3 = (empty($ser_maq_monto['deposito'])) ? 0 : $ser_maq_monto['deposito']
 				);
-
 			}
-
 		}
 
 		return $serv_maquinaria;
-
 	}
 
 	//ver detallete por maquina-equipo
@@ -151,32 +134,37 @@ Class Resumen_general
 
 	}
 
-	public function r_transportes($idproyecto)
+	public function r_transportes($idproyecto, $fecha_filtro)
 	{
-		$sql="SELECT t.idtransporte,t.idproyecto,t.fecha_viaje,t.descripcion,t.precio_parcial, t.comprobante 
-		FROM transporte as t, proyecto as p WHERE t.idproyecto='$idproyecto' AND t.idproyecto=p.idproyecto AND t.estado='1' ORDER BY idtransporte DESC";
+		$sql="SELECT t.idtransporte, t.idproyecto, t.fecha_viaje, t.descripcion, t.precio_parcial, t.comprobante 
+		FROM transporte as t, proyecto as p 
+		WHERE t.idproyecto='$idproyecto' AND t.idproyecto=p.idproyecto AND t.estado='1' AND t.fecha_viaje LIKE '%$fecha_filtro%'
+		ORDER BY idtransporte DESC";
 		return ejecutarConsultaArray($sql);
 	}
 
-	public function r_hospedajes($idproyecto)
+	public function r_hospedajes($idproyecto, $fecha_filtro)
 	{
-		$sql="SELECT h.idhospedaje,h.idproyecto,h.fecha_comprobante,h.descripcion,h.precio_parcial, h.comprobante 
-		FROM hospedaje as h, proyecto as p WHERE h.idproyecto=p.idproyecto AND h.idproyecto='$idproyecto' AND h.estado=1 ORDER BY h.idhospedaje DESC";
+		$sql="SELECT h.idhospedaje, h.idproyecto, h.fecha_comprobante, h.descripcion, h.precio_parcial, h.comprobante 
+		FROM hospedaje as h, proyecto as p 
+		WHERE h.idproyecto=p.idproyecto AND h.idproyecto='$idproyecto' AND h.estado=1 AND h.fecha_comprobante LIKE '%$fecha_filtro%'
+		ORDER BY h.idhospedaje DESC";
 		return ejecutarConsultaArray($sql);
 	}
 
-	public function r_comidas_extras($idproyecto)
+	public function r_comidas_extras($idproyecto, $fecha_filtro)
 	{
 		$sql="SELECT ce.idcomida_extra, ce.idproyecto, ce.fecha_comida, ce.descripcion, ce.costo_parcial, ce.comprobante 
-		FROM comida_extra as ce, proyecto as p WHERE ce.estado=1 AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto'";
+		FROM comida_extra as ce, proyecto as p 
+		WHERE ce.estado=1 AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto' AND ce.fecha_comida LIKE '%$fecha_filtro%'" ;
 		return ejecutarConsultaArray($sql);
 	}
 
-	public function r_breaks($idproyecto)
+	public function r_breaks($idproyecto, $fecha_filtro)
 	{
 		$sql="SELECT sb.idsemana_break, sb.idproyecto, sb.numero_semana, sb.fecha_inicial, sb.fecha_final, sb.total
 			FROM semana_break as sb, proyecto as p
-			WHERE sb.idproyecto ='$idproyecto' AND sb.estado=1 AND sb.idproyecto=p.idproyecto";
+			WHERE sb.idproyecto ='$idproyecto' AND sb.estado=1 AND sb.idproyecto=p.idproyecto AND sb.fecha_inicial LIKE '%$fecha_filtro%'";
 		return ejecutarConsultaArray($sql);
 	}
 
@@ -188,14 +176,15 @@ Class Resumen_general
 		return ejecutarConsulta($sql);
 	}
     //-------------------------------------------------------------------
-	public function r_pensiones($idproyecto)
+	public function r_pensiones($idproyecto, $id_proveedor)
 	{
 		$serv_pension= Array();
 		$pago_total=0; $monto_total=0;
 
 		$sql="SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
 		FROM pension as p, proyecto as py, proveedor as pr_v
-		WHERE p.estado=1 AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor";
+		WHERE p.estado=1 AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor 
+		AND p.idproveedor LIKE '%$id_proveedor%'";
 		$pension=ejecutarConsultaArray($sql);
 
 		if (!empty($pension)) {
@@ -243,12 +232,10 @@ Class Resumen_general
 					"direccion"     	=> $value['direccion'],
 
 					"monto_total_pension"       =>$monto_total,
-					"pago_total_pension"       =>$pago_total
+					"deposito"       =>$pago_total
 
 				);
-
-			}
-			
+			}			
 		}
 		return $serv_pension;
 	}
@@ -257,7 +244,8 @@ Class Resumen_general
 	{
 		$sql="SELECT SUM(se_p.total) as total,sp.nombre_servicio,SUM(se_p.adicional_descuento) as adicional_descuento,SUM(se_p.cantidad_total_platos) as cantidad_total_platos, sp.precio
 		FROM servicio_pension as sp, pension as p, semana_pension as se_p 
-		WHERE p.idpension='$idpension' AND sp.idpension=p.idpension AND se_p.idservicio_pension=sp.idservicio_pension GROUP BY se_p.idservicio_pension";
+		WHERE p.idpension='$idpension' AND sp.idpension=p.idpension AND se_p.idservicio_pension=sp.idservicio_pension 
+		GROUP BY se_p.idservicio_pension";
 		return ejecutarConsulta($sql);
 		
 	
@@ -271,13 +259,23 @@ Class Resumen_general
 		return ejecutarConsulta($sql);
 	}
 
-	public function r_trab_administrativo($idproyecto)
+	public function r_trab_administrativo($idproyecto, $id_trabajador)
 	{
 		$administrativo= Array(); $m_total_x_meses=0; $pago_monto_total=0;
 
+		$consulta_filtro = "";
+
+		if (empty($id_trabajador) || $id_trabajador == 0) {
+			$consulta_filtro = "";
+		} else {
+			$consulta_filtro = "AND tpp.idtrabajador_por_proyecto = '$id_trabajador'";
+		}
+
 		$sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idproyecto, t.nombres, ct.nombre as cargo 
 		FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tt 
-		WHERE tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador AND ct.idtipo_trabjador =tt.idtipo_trabajador";
+		WHERE tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador 
+		AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador 
+		AND ct.idtipo_trabjador =tt.idtipo_trabajador $consulta_filtro";
 		
 		$traba_adm=ejecutarConsultaArray($sql);
 
@@ -328,7 +326,7 @@ Class Resumen_general
 
 					"total_montos_x_meses"       =>$m_total_x_meses,
 
-					"pago_total_adm"             =>$pago_monto_total
+					"deposito"             =>$pago_monto_total
 
 				);
 
@@ -392,14 +390,22 @@ Class Resumen_general
 		return ejecutarConsulta($sql);
 	}
 
-	public function r_trabajador_obrero($idproyecto)
+	public function r_trabajador_obrero($idproyecto, $id_trabajador)
 	{
 		$obrero= Array(); $total_deposito_obrero=0;
 
+		$consulta_filtro = "";
+
+		if (empty($id_trabajador) || $id_trabajador == 0) {
+			$consulta_filtro = "GROUP by tpp.idtrabajador_por_proyecto";
+		} else {
+			$consulta_filtro = "AND ra.idtrabajador_por_proyecto = '$id_trabajador'";
+		}		
+
 		$sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
 		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
-		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' AND tpp.idtrabajador=t.idtrabajador 
-		GROUP by tpp.idtrabajador_por_proyecto";
+		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
+		AND tpp.idtrabajador=t.idtrabajador $consulta_filtro ";
 		
 		$trabaj_obrero=ejecutarConsultaArray($sql);
 
@@ -407,27 +413,30 @@ Class Resumen_general
 
 			foreach ($trabaj_obrero as $key => $value) {
 
-				$idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
+				if (!empty($value['idtrabajador_por_proyecto'])) {
+					$idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
 
-				$sql_2="SELECT SUM(pqso.monto_deposito) AS total_deposito 
-				FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
-				WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
+					$sql_2="SELECT SUM(pqso.monto_deposito) AS total_deposito 
+					FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
+					WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
 
-				$total_deposito=ejecutarConsultaSimpleFila($sql_2);
+					$total_deposito=ejecutarConsultaSimpleFila($sql_2);
 
-				$total_deposito_obrero =(empty($total_deposito)) ? 0 : $retVal_1 = (empty($total_deposito['total_deposito'])) ? 0 : floatval($total_deposito['total_deposito']);
+					$total_deposito_obrero =(empty($total_deposito)) ? 0 : $retVal_1 = (empty($total_deposito['total_deposito'])) ? 0 : floatval($total_deposito['total_deposito']);
+					
+
+					$obrero[]= array(
+
+						"idresumen_q_s_asistencia"   => $value['idresumen_q_s_asistencia'],
+						"idtrabajador_por_proyecto"  => $value['idtrabajador_por_proyecto'],
+						"nombres"     	             => $value['nombres'],
+						"pago_quincenal"    		 => $retVal = (empty($value['pago_quincenal'])) ? 0 : $value['pago_quincenal'] ,
+
+						"deposito"       =>$total_deposito_obrero
+
+					);
+				}
 				
-
-				$obrero[]= array(
-
-					"idresumen_q_s_asistencia"   => $value['idresumen_q_s_asistencia'],
-					"idtrabajador_por_proyecto"  => $value['idtrabajador_por_proyecto'],
-					"nombres"     	             => $value['nombres'],
-					"pago_quincenal"    		 => $value['pago_quincenal'],
-
-					"total_deposito_obrero"       =>$total_deposito_obrero
-
-				);
 				
 			}
 			return $obrero;

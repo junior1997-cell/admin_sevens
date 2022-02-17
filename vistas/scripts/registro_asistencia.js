@@ -234,7 +234,7 @@ function listar_tbla_principal(nube_idproyecto) {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'csvHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
     "ajax":{
       url: '../ajax/registro_asistencia.php?op=listar&nube_idproyecto='+nube_idproyecto,
       type : "get",
