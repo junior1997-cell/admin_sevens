@@ -190,7 +190,7 @@ class All_activos_fijos
                     "telefono"=>$value['telefono'],
                     "estado"=>$value['estado'],
                     "codigo_proyecto"=>'',
-                    "deposito"=> $reval=(empty($total_pago)) ? '0' :$dataelse= (empty($total_pago['total_pago_compras_af'])) ? '0' : $total_pago['total_pago_compras_af'] 
+                    "deposito"=> $reval1=(empty($total_pago)) ? '0' : $dataelse1= (empty($total_pago['total_pago_compras_af'])) ? '0' : $total_pago['total_pago_compras_af'] 
                 );
             }
         }
@@ -240,7 +240,7 @@ class All_activos_fijos
                     "telefono"=>$value['telefono'],
                     "estado"=>$value['estado'],
                     "codigo_proyecto"=>$value['nombre_codigo'],
-                    "deposito"=>$reval=(empty($total_pago)) ? '0' :$dataelse= (empty($total_pago['total_pago_compras'])) ? '0' : $total_pago['total_pago_compras']
+                    "deposito"=>$reval2=(empty($total_pago)) ? '0' :$dataelse2= (empty($total_pago['total_pago_compras'])) ? '0' : $total_pago['total_pago_compras']
 
                 );
             }
