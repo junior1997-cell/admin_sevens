@@ -83,7 +83,7 @@
                               </div>
                             </div>
                             <!-- Leyecnda pagos -->
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn leyecnda_pagos" style="background-color: aliceblue;">
                               <div class="text-slid-box">
                                 <div id="offer-box" class="contenedor">
                                   <div> <b>Leyenda-pago</b> </div>
@@ -101,9 +101,8 @@
                                 </div>
                               </div>
                             </div>
-
                             <!-- Leyecnda saldos -->
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn leyecnda_saldos" style="background-color: #f0f8ff7d;">
                               <div class="text-slid-box">
                                 <div id="offer-box" class="contenedorr">
                                   <div> <b>Leyenda-saldos</b> </div>

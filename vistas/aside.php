@@ -169,7 +169,6 @@
           <!-- VALORIZACIONES -->
           <li class="nav-item ver-otros-modulos-1">
             <a href="valorizacion.php" class="nav-link" id="mValorizacion">
-              <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
               <i class="nav-icon far fa-file-alt"></i>
               <p>
                 Valorizaciones
@@ -262,6 +261,17 @@
             </ul>
           </li>
         <?php  }  ?>
+
+        <?php if ($_SESSION['activo_fijo']==1) {  ?>
+          <!-- Activo fijo por proyecto -->
+          <li class="nav-item">
+            <a href="activos_fijos_proyecto.php" class="nav-link" id="mActivos_fijos_proyect">
+              <i class="nav-icon fas fa-hand-holding-usd"></i>
+              <p>Activos fijos proyecto</p>
+            </a>
+          </li>
+        <?php  }  ?>
+        
 
         <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
           <!-- SERVICIO -->       

@@ -447,7 +447,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo'] == 1) {
 
                 $rspta = $all_activos_fijos->most_datos_prov_pago($_POST["idcompra_af_general"]);
                 //Codificar el resultado utilizando json
@@ -464,7 +464,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo'] == 1) {
                 // imgen de perfil
                 if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
                     $imagen1 = $_POST["foto1_actual"];
@@ -536,7 +536,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo'] == 1) {
                 $rspta = $all_activos_fijos->desactivar_pagos($idpago_af_general);
                 echo $rspta ? "Pago Anulado" : "Pago no se puede Anular";
                 //Fin de las validaciones de acceso
@@ -551,7 +551,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo'] == 1) {
                 $rspta = $all_activos_fijos->activar_pagos($idpago_af_general);
                 echo $rspta ? "Pago Restablecido" : "Pago no se pudo Restablecido";
                 //Fin de las validaciones de acceso
@@ -567,7 +567,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo'] == 1) {
 
                 $rspta = $all_activos_fijos->listar_pagos_af_g( $_GET["idcompra_af_general"]);
                 //Vamos a declarar un array
@@ -649,7 +649,7 @@ switch ($_GET["op"]) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['servicio_maquina'] == 1) {
+            if ($_SESSION['activo_fijo'] == 1) {
 
                 $rspta = $all_activos_fijos->mostrar_pagos($idpago_af_general);
                 //Codificar el resultado utilizando json

@@ -426,6 +426,9 @@ function ver_form_add() {
   $("#guardar_registro_compras").hide();
   $("#div_tabla_compra").hide();
   $("#factura_compras").hide();
+
+  $(".leyecnda_pagos").hide();
+  $(".leyecnda_saldos").hide();
   listaractivos();
 }
 
@@ -437,9 +440,9 @@ function regresar() {
   $("#btn_agregar").show();
   $("#div_tabla_compra").show();
   $("#div_tabla_compra_proveedor").hide();
-  //----
-  $("#factura_compras").hide();
-  $("#btn-factura").hide();
+  //----leyecnda_pagos,leyecnda_saldos
+  $(".leyecnda_pagos").show();
+  $(".leyecnda_saldos").show();
   //-----
   $("#pago_compras").hide();
   $("#btn-pagar").hide();
@@ -820,6 +823,8 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
   $("#btn_agregar").hide();
   $("#guardar_registro_compras").hide();
   $("#div_tabla_compra").hide();
+  $(".leyecnda_pagos").hide();
+  $(".leyecnda_saldos").hide();
 
   $("#pago_compras").show();
   $("#btn-pagar").show();
