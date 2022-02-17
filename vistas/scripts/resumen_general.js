@@ -10,21 +10,36 @@ var tabla_8 = $("#tabla8_pension").DataTable();
 var tabla_9 = $("#tabla9_per_adm").DataTable();
 var tabla_10 = $("#tabla10_per_obr").DataTable();
 
+var monto_all = 0;
+var deposito_all = 0;
+var saldo_all = 0;
+
+$( ".export_all_table" ).click(function() {
+  $('#tabla1_compras').tableExport({type:'excel'});
+  // $("#tabla1_compras#tabla2_maquinaria#tabla3_equipo#tabla4_transporte").tableExport({
+  //   type: "excel",
+  //   mso: {
+  //     fileFormat:'xlsx',
+  //     worksheetName: ["a", "b", "c"],
+  //   },
+  // });
+});
+
 //Función que se ejecuta al inicio
 function init() {
 
   // Tablas de resumen
-  listar_r_compras(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_transportes(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_hospedajes(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_breaks(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_pensiones(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), '', '', '');
-  listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), '', '', '');
-
+  // listar_r_compras(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_transportes(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_hospedajes(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_breaks(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_pensiones(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), '', '', '');
+  // sumas_all_tablas(); 
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
 
@@ -1597,7 +1612,104 @@ function filtros() {
   listar_r_pensiones(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
   listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
   listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
+
  
+  sumas_all_tablas(); 
+  
+  
+}
+
+function sumas_all_tablas() {
+  var monto_obrero = $("#monto_obrero").text();
+  var pago_obrero = $("#pago_obrero").text();
+  var saldo_obrero = $("#saldo_obrero").text();
+
+  var monto_adm = $("#monto_adm").text();
+  var pago_adm = $("#pago_adm").text();
+  var saldo_adm = $("#saldo_adm").text();
+
+  var monto_pension = $("#monto_pension").text();
+  var pago_pension = $("#pago_pension").text();
+  var saldo_pension = $("#saldo_pension").text();
+
+  var monto_break = $("#monto_break").text();
+  var pago_break = $("#pago_break").text();
+  var saldo_break = $("#saldo_break").text();
+
+  var monto_cextra = $("#monto_cextra").text();
+  var pago_cextra = $("#pago_cextra").text();
+  var saldo_cextra = $("#saldo_cextra").text();
+
+  var monto_hosped = $("#monto_hosped").text();
+  var pago_hosped = $("#pago_hosped").text();
+  var saldo_hosped = $("#saldo_hosped").text();
+
+  var monto_transp = $("#monto_transp").text();
+  var pago_transp = $("#pago_transp").text();
+  var saldo_transp = $("#saldo_transp").text();
+
+  var monto_serv_equi = $("#monto_serv_equi").text();
+  var pago_serv_equi = $("#pago_serv_equi").text();
+  var saldo_serv_equi = $("#saldo_serv_equi").text();
+
+  var monto_serv_maq = $("#monto_serv_maq").text();
+  var pago_serv_maq = $("#pago_serv_maq").text();
+  var saldo_serv_maq = $("#saldo_serv_maq").text();
+
+  var monto_compras = $("#monto_compras").text();
+  var pago_compras = $("#pago_compras").text();
+  var saldo_compras = $("#saldo_compras").text();
+
+  $(".monto_obrero_all").html(monto_obrero);
+  $(".pago_obrero_all").html(pago_obrero);
+  $(".saldo_obrero_all").html(saldo_obrero);
+
+  $(".monto_adm_all").html(monto_adm);
+  $(".pago_adm_all").html(pago_adm);
+  $(".saldo_adm_all").html(saldo_adm);
+
+  $(".monto_pension_all").html(monto_pension);
+  $(".pago_pension_all").html(pago_pension);
+  $(".saldo_pension_all").html(saldo_pension);
+
+  $(".monto_break_all").html(monto_break);
+  $(".pago_break_all").html(pago_break);
+  $(".saldo_break_all").html(saldo_break);
+
+  $(".monto_cextra_all").html(monto_cextra);
+  $(".pago_cextra_all").html(pago_cextra);
+  $(".saldo_cextra_all").html(saldo_cextra);
+
+  $(".monto_hosped_all").html(monto_hosped);
+  $(".pago_hosped_all").html(pago_hosped);
+  $(".saldo_hosped_all").html(saldo_hosped);
+
+  $(".monto_transp_all").html(monto_transp);
+  $(".pago_transp_all").html(pago_transp);
+  $(".saldo_transp_all").html(saldo_transp);
+
+  $(".monto_serv_equi_all").html(monto_serv_equi);
+  $(".pago_serv_equi_all").html(pago_serv_equi);
+  $(".saldo_serv_equi_all").html(saldo_serv_equi);
+
+  $(".monto_serv_maq_all").html(monto_serv_maq);
+  $(".pago_serv_maq_all").html(pago_serv_maq);
+  $(".saldo_serv_maq_all").html(saldo_serv_maq);
+
+  $(".monto_compras_all").html(monto_compras);
+  $(".pago_compras_all").html(pago_compras);
+  $(".saldo_compras_all").html(saldo_compras);
+  
+  // sumas totales
+  // var monto_all = parseFloat(quitar_formato_miles(monto_obrero)) + parseFloat(quitar_formato_miles(monto_adm)) + parseFloat(quitar_formato_miles(monto_pension)) + parseFloat(quitar_formato_miles(monto_break)) + parseFloat(quitar_formato_miles(monto_cextra)) + parseFloat(quitar_formato_miles(monto_hosped)) + parseFloat(quitar_formato_miles(monto_transp)) + parseFloat(quitar_formato_miles(monto_serv_equi)) + parseFloat(quitar_formato_miles(monto_serv_maq)) + parseFloat(quitar_formato_miles(monto_compras));
+  
+  // var deposito_all = parseFloat(quitar_formato_miles(pago_obrero)) + parseFloat(quitar_formato_miles(pago_adm)) + parseFloat(quitar_formato_miles(pago_pension)) + parseFloat(quitar_formato_miles(pago_break)) + parseFloat(quitar_formato_miles(pago_cextra)) + parseFloat(quitar_formato_miles(pago_hosped)) + parseFloat(quitar_formato_miles(pago_transp)) + parseFloat(quitar_formato_miles(pago_serv_equi)) + parseFloat(quitar_formato_miles(pago_serv_maq)) + parseFloat(quitar_formato_miles(pago_compras));  
+   
+  // var saldo_all = parseFloat(quitar_formato_miles(saldo_obrero)) + parseFloat(quitar_formato_miles(saldo_adm)) + parseFloat(quitar_formato_miles(saldo_pension)) + parseFloat(quitar_formato_miles(saldo_break)) + parseFloat(quitar_formato_miles(saldo_cextra)) + parseFloat(quitar_formato_miles(saldo_hosped)) + parseFloat(quitar_formato_miles(saldo_transp)) + parseFloat(quitar_formato_miles(saldo_serv_equi)) + parseFloat(quitar_formato_miles(saldo_serv_maq)) + parseFloat(quitar_formato_miles(saldo_compras)) ;
+  
+  $("#monto_all").html(monto_all);
+  $("#deposito_all").html(deposito_all);
+  $("#saldo_all").html(saldo_all);
 }
 
 init();
@@ -1618,6 +1730,12 @@ function formato_miles(num) {
   if (cents < 10) cents = "0" + cents;
   for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
   return (sign ? "" : "-") + num + "." + cents;
+}
+
+// quitamos las comas de miles de un numero
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, '');
+  return inVal;
 }
 
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021

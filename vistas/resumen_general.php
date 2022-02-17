@@ -39,7 +39,7 @@
                             <h1 style="font-weight: bold;">RESUMEN GENERAL</h1>
                           </div>
                           <div class="col-6">
-                            <button class="btn btn-success btn-md" style="font-weight: bold;">Exportar <i class="fas fa-file-excel"></i></button>
+                            <button class="btn btn-success btn-md export_all_table" style="font-weight: bold;">Exportar <i class="fas fa-file-excel"></i></button>
                           </div>
                         </div>
                       </div>
@@ -422,6 +422,141 @@
                                     <th class="clas_pading text-right" id="monto_obrero"></th>
                                     <th class="clas_pading text-right" id="pago_obrero"></th>
                                     <th class="clas_pading text-right" id="saldo_obrero"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
+                              <br />
+
+                              <!--SUMAS TOTALES-->
+                              <table id="tabla11_all_sumas" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="text-center w-px-300 clas_pading backgff9100">Sumas totales</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-px-300 clas_pading">---</th>
+                                    <th class="text-center clas_pading">---</th>
+                                    <th class="text-center clas_pading">---</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="tbody11_all_sumas">
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Compras</td>
+                                  <td class="text-right monto_compras_all">61</td>
+                                  <td class="text-right pago_compras_all">60</td>
+                                  <td class="text-right saldo_compras_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Servicios-Maquinaria</td>
+                                  <td class="text-right monto_serv_maq_all">61</td>
+                                  <td class="text-right monto_serv_maq_all">60</td>
+                                  <td class="text-right saldo_serv_maq_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Servicios-Equipo</td>
+                                  <td class="text-right monto_serv_equi_all">61</td>
+                                  <td class="text-right pago_serv_equi_all">60</td>
+                                  <td class="text-right saldo_serv_equi_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Transporte</td>
+                                  <td class="text-right monto_transp_all">61</td>
+                                  <td class="text-right pago_transp_all">60</td>
+                                  <td class="text-right saldo_transp_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Hospedaje</td>
+                                  <td class="text-right monto_hosped_all">61</td>
+                                  <td class="text-right pago_hosped_all">60</td>
+                                  <td class="text-right saldo_hosped_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Comidas extras</td>
+                                  <td class="text-right monto_cextra_all">61</td>
+                                  <td class="text-right pago_cextra_all">60</td>
+                                  <td class="text-right saldo_cextra_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Breaks</td>
+                                  <td class="text-right monto_break_all">61</td>
+                                  <td class="text-right pago_break_all">60</td>
+                                  <td class="text-right saldo_break_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Pensión</td>
+                                  <td class="text-right monto_pension_all">61</td>
+                                  <td class="text-right pago_pension_all">60</td>
+                                  <td class="text-right saldo_pension_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Personal Administrativo</td>
+                                  <td class="text-right monto_adm_all">61</td>
+                                  <td class="text-right pago_adm_all">60</td>
+                                  <td class="text-right saldo_adm_all">320,800</td>
+                                </tr>
+                                <tr>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>--</td>
+                                  <td>Personal Obrero</td>
+                                  <td class="text-right monto_obrero_all">61</td>
+                                  <td class="text-right pago_obrero_all">60</td>
+                                  <td class="text-right saldo_obrero_all">320,800</td>
+                                </tr>
+
+                                </tbody>
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_all">500</th>
+                                    <th class="clas_pading text-right" id="deposito_all">800</th>
+                                    <th class="clas_pading text-right" id="saldo_all">9000</th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -847,7 +982,7 @@
             }else{
               require 'noacceso.php';
             }
-            require 'footer.php';
+            require 'footer.php';            
           ?>
         </div>
         <!-- /.content-wrapper -->
@@ -904,6 +1039,12 @@
         <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
         <!-- sweetalert2 -->
         <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+        <!-- table export -->
+        <script src="../plugins/table_export_jquery/libs/FileSaver/FileSaver.min.js"></script>
+        <script src="../plugins/table_export_jquery/libs/js-xlsx/xlsx.core.min.js"></script>
+        <script src="../plugins/table_export_jquery/libs/html2canvas/html2canvas.min.js"></script>
+        <script src="../plugins/table_export_jquery/tableExport.min.js"></script>
 
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
         <script type="text/javascript" src="scripts/resumen_general.js"></script>
