@@ -223,9 +223,7 @@ class Activos_fijos_proyecto
     //pago servicio
     public function pago_servicio($idcompra_af_proyecto)
     {
-        $sql = "SELECT SUM(monto) as total_pago_compras
-		FROM pago_af_proyecto 
-		WHERE idcompra_af_proyecto='$idcompra_af_proyecto' AND estado=1";
+        $sql = "SELECT SUM(monto) as total_pago_compras FROM pago_af_proyecto WHERE idcompra_af_proyecto='$idcompra_af_proyecto' AND estado=1";
         return ejecutarConsultaSimpleFila($sql);
     }
 

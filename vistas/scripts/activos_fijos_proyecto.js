@@ -920,8 +920,6 @@ function most_datos_prov_pago(idcompra_af_proyecto) {
   $("#banco_pago").val("").trigger("change");
   $.post("../ajax/activos_fijos_proyecto.php?op=most_datos_prov_pago", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
     data = JSON.parse(data);
-    console.log('--------------');
-    console.log(data);
 
     $("#idproyecto_pago").val(data.idproyecto);
     $("#idcompra_af_proyecto_p").val(data.idcompra_af_proyecto);
@@ -960,7 +958,7 @@ function captura_op() {
 
 //Guardar y editar PAGOS
 function guardaryeditar_pago(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
+
   var formData = new FormData($("#form-servicios-pago")[0]);
 
   $.ajax({
@@ -1004,7 +1002,7 @@ function total_pagos(idcompra_af_proyecto) {
 //mostrar
 function mostrar_pagos(idpago_af_proyecto) {
   limpiar_c_pagos();
-  // console.log("___________ " + idpago_af_proyecto);
+
   $("#h4_mostrar_beneficiario").html("");
   $("#idproveedor_pago").val("");
   $("#modal-agregar-pago").modal("show");
@@ -1014,11 +1012,9 @@ function mostrar_pagos(idpago_af_proyecto) {
 
   $.post("../ajax/activos_fijos_proyecto.php?op=mostrar_pagos", { idpago_af_proyecto: idpago_af_proyecto }, function (data, status) {
     data = JSON.parse(data);
-    console.log(data);
 
     $("#idproveedor_pago").val(data.idproveedor);
     $("#idcompra_af_proyecto_p").val(data.idcompra_af_proyecto);
-    // $("#maquinaria_pago").html(data.nombre_maquina);
     $("#beneficiario_pago").val(data.beneficiario);
     $("#h4_mostrar_beneficiario").html(data.beneficiario);
     $("#cuenta_destino_pago").val(data.cuenta_destino);
@@ -1143,7 +1139,7 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
   if (idactivos_fijos != "") {
     // $('.producto_'+idactivos_fijos).addClass('producto_selecionado');
     if ($(".producto_" + idactivos_fijos).hasClass("producto_selecionado")) {
-      toastr.success("Material: " + nombre + " agregado !!");
+      toastr.success("Activo: " + nombre + " agregado !!");
 
       var cant_producto = $(".producto_" + idactivos_fijos).val();
 

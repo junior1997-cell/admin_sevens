@@ -207,17 +207,14 @@ switch ($_GET["op"]) {
                 $serie_comprobante = "";
                 $tipo_comprobante1 = "";
                 $num_comprob = "";
-                $deposito_a_la_fecha = 0;
 
-                while ($reg = $rspta->fetch_object()) {
+                foreach ($rspta as $key => $reg) {
+                    
+                    $saldo= floatval($reg['total'])-floatval($reg['deposito']);
 
-                    $rspta2 = $all_activos_fijos->total_pago_compras_af($reg->idcompra_af_general);
-                    //$rspta2 = "100";
+                    $tipo_comprobante1 = $reg['tipo_comprobante'];
 
-                    empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->total-$rspta2['total_pago_compras_af']);
-                    $tipo_comprobante1 = $reg->tipo_comprobante;
-
-                    if ($saldo == $reg->total) {
+                    if ($saldo == $reg['total']) {
                         $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
                         $c="danger";
                         $nombre="Pagar";
@@ -225,7 +222,7 @@ switch ($_GET["op"]) {
                         $cc="danger";
                     }else{
                                 
-                        if ($saldo<$reg->total && $saldo>"0" ) {
+                        if ($saldo<$reg['total'] && $saldo>"0" ) {
 
                             $estado = '<span class="text-center badge badge-warning">En proceso</span>';
                             $c="warning";
@@ -246,44 +243,37 @@ switch ($_GET["op"]) {
                             }  
 
                     }
-                    
-                    if ($rspta2['total_pago_compras_af'] == null || empty($rspta2['total_pago_compras_af'])) {
-                        $deposito_a_la_fecha = 0;
-                    } else {
-                        $deposito_a_la_fecha = $rspta2['total_pago_compras_af'];
-                    }
 
-                    $vercomprobantes="'$reg->idcompra_af_general','$reg->imagen_comprobante'";
-                    //($reg->tipo_comprovante="Ninguno" || $reg->tipo_comprovante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
-                    
-                    empty($reg->serie_comprobante) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg->serie_comprobante);
+                    empty($reg['serie_comprobante']) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg['serie_comprobante']);
                     $data[] = [
                         "0" =>
-                            ($reg->estado == '1'
-                                ? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g('.$reg->idcompra_af_general.')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                                    ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg->idcompra_af_general.')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
-                                    ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg->idcompra_af_general.')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
-                                : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' . $reg->idcompra_af_general . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
-                                ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg->idcompra_af_general.')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
-                        "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
+                            ($reg['estado'] == '1'
+                                ? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                                    ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
+                                    ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
+                                : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                                ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
+                        "1" => date("d/m/Y", strtotime($reg['fecha_compra'])),
                         "2" => '<div class="user-block">
-                            <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
-                            <span class="description" style="margin-left: 0px !important;"><b>Cel: </b><a class="text-body" href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al proveedor.">'. $reg->telefono . '</a> </span>
-                        </div>',
+                                    <span class="description" style="margin-left: 0px !important;"><b>'.((empty($reg['idproyecto'])) ? 'General' : $reg['codigo_proyecto']).'</b></span>
+                                    <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg['razon_social'] .'</p></span>
+                                    <span class="description" style="margin-left: 0px !important;"><b>Cel: </b><a class="text-body" href="tel:+51'.quitar_guion($reg['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al proveedor.">'. $reg['telefono'] . '</a> </span>
+                                   
+                                </div>',
                         "3" => '<div class="user-block">
-                            <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprobante1.'</p></span>
-                            <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
-                        </div>',
-                        "4" => number_format($reg->total, 2, '.', ','),
+                                <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprobante1.'</p></span>
+                                <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
+                            </div>',
+                        "4" => number_format($reg['total'], 2, '.', ','),
                         "5" => '<div class="text-center text-nowrap"> <button class="btn btn-' .
-                        $c .
-                        ' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg->idcompra_af_general . ',' . $reg->total .',' .$deposito_a_la_fecha .')">
-                        <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
-                        <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format($rspta2['total_pago_compras_af'], 2, '.', ',').'</button></div>',
+                                $c .
+                                ' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
+                                <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
+                                <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
                         "6" => number_format($saldo, 2, '.', ','),
-                        "7" => '<center> <button class="btn btn-info" onclick="comprobante_compra_af_g(' .$vercomprobantes. ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-                        "8" => $reg->descripcion,
-                        "9" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+                        "7" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':'<center><button class="btn btn-info" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
+                        "8" => $reg['descripcion'],
+                        "9" => $reg['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
                     ];
                 }
                 $results = [

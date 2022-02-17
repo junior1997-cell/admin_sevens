@@ -145,8 +145,10 @@ class All_activos_fijos
     //Implementar un método para listar los registros
     public function listar_compra_activo_f_g()
     {
+        $a = array(); $b = array();
+
         // $idproyecto=2;
-        $sql = "SELECT
+        $sql_1 = "SELECT
             cafg.idcompra_af_general as idcompra_af_general,
             cafg.idproveedor as idproveedor,
             cafg.fecha_compra as fecha_compra,
@@ -160,7 +162,93 @@ class All_activos_fijos
             FROM compra_af_general as cafg, proveedor as p 
             WHERE cafg.idproveedor=p.idproveedor
             ORDER BY cafg.idcompra_af_general DESC";
-            return ejecutarConsulta($sql);
+
+        $general = ejecutarConsultaArray($sql_1);
+
+        if (!empty($general)) {
+
+            foreach ($general as $key => $value) {
+
+                $id_af_g=$value['idcompra_af_general'];
+
+                $sql_1_2 = "SELECT SUM(monto) as total_pago_compras_af FROM pago_af_general WHERE idcompra_af_general='$id_af_g' AND estado=1";
+                $total_pago= ejecutarConsultaSimpleFila($sql_1_2);
+                
+
+                $a[]=array(
+
+                    "idtabla"=>$value['idcompra_af_general'],
+                    "idproyecto"=>'',
+                    "idproveedor"=>$value['idproveedor'],
+                    "fecha_compra"=>$value['fecha_compra'],
+                    "tipo_comprobante"=>$value['tipo_comprobante'],
+                    "serie_comprobante"=>$value['serie_comprobante'],
+                    "descripcion"=>$value['descripcion'],
+                    "total"=>(empty($value['total'])) ? '0' :$value['total'],
+                    "imagen_comprobante"=>$value['imagen_comprobante'],
+                    "razon_social"=>$value['razon_social'],
+                    "telefono"=>$value['telefono'],
+                    "estado"=>$value['estado'],
+                    "codigo_proyecto"=>'',
+                    "deposito"=> (empty($total_pago)) ? '0' : (empty($total_pago['total_pago_compras_af'])) ? '0' : $total_pago['total_pago_compras_af'] 
+                );
+            }
+        }
+           
+        $sql_2="SELECT
+            cafp.idproyecto as idproyecto,
+            cafp.idcompra_af_proyecto as idcompra_af_proyecto,
+            cafp.idproveedor as idproveedor,
+            cafp.fecha_compra as fecha_compra,
+            cafp.tipo_comprobante as tipo_comprobante,
+            cafp.serie_comprobante as serie_comprobante,
+            cafp.descripcion as descripcion,
+            cafp.total as total,
+            cafp.comprobante as imagen_comprobante,
+            p.razon_social as razon_social, p.telefono,
+            cafp.estado as estado,
+            proy.nombre_proyecto as nombre_proyecto,
+            proy.nombre_codigo as nombre_codigo
+            FROM compra_af_proyecto as cafp, proveedor as p, proyecto as proy
+            WHERE cafp.idproveedor=p.idproveedor
+            AND cafp.idproyecto=proy.idproyecto 
+            ORDER BY cafp.idcompra_af_proyecto DESC";
+
+        $proyecto  = ejecutarConsultaArray($sql_2);
+
+        if (!empty($proyecto)) {
+
+            foreach ($proyecto as $key => $value) {
+
+                $id_af_p=$value['idcompra_af_proyecto'];
+
+                $sql_2_2 = "SELECT SUM(monto) as total_pago_compras FROM pago_af_proyecto WHERE idcompra_af_proyecto='$id_af_p' AND estado=1";
+                $total_pago= ejecutarConsultaSimpleFila($sql_2_2);
+
+                $b[]=array(
+
+                    "idtabla"=>$value['idcompra_af_proyecto'],
+                    "idproyecto"=>$value['idproyecto'],
+                    "idproveedor"=>$value['idproveedor'],
+                    "fecha_compra"=>$value['fecha_compra'],
+                    "tipo_comprobante"=>$value['tipo_comprobante'],
+                    "serie_comprobante"=>$value['serie_comprobante'],
+                    "descripcion"=>$value['descripcion'],
+                    "total"=>(empty($value['total'])) ? '0' :$value['total'],
+                    "imagen_comprobante"=>$value['imagen_comprobante'],
+                    "razon_social"=>$value['razon_social'],
+                    "telefono"=>$value['telefono'],
+                    "estado"=>$value['estado'],
+                    "codigo_proyecto"=>$value['nombre_codigo'],
+                    "deposito"=>(empty($total_pago)) ? '0' : (empty($total_pago['total_pago_compras'])) ? '0' : $total_pago['total_pago_compras']
+
+                );
+            }
+        }
+
+        $results = array_merge($a,$b);
+
+        return $results;
     }
 
     //Implementar un método para listar los registros x proveedor
