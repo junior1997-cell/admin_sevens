@@ -1125,7 +1125,7 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
           <input type="hidden" name="idactivos_fijos[]" value="${idactivos_fijos}">
           <input type="hidden" name="ficha_tecnica_activo[]" value="${ficha_tecnica_activo}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1465,7 +1465,7 @@ function editar_detalle_compras(idcompra_af_general) {
               <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
               <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/default_activos_fijos_empresa.png';" onclick="ver_img_material('${element.imagen}', '${element.nombre_activo}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/default_activos_fijos_empresa.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre_activo}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
@@ -2005,8 +2005,8 @@ function validando_excedentes() {
 }
 
 // ver imagen grande del producto agregado a la compra
-function ver_img_material(img, nombre) {
-  $("#ver_img_material").attr("src", `../dist/img/materiales/${img}`);
-  $(".nombre-img-material").html(nombre);
-  $("#modal-ver-img-material").modal("show");
+function ver_img_activo(img, nombre) {
+  $("#ver_img_activo").attr("src", `../dist/docs/activos_fijos_general/img_activos_fijos/${img}`);
+  $(".nombre-img-activo").html(nombre);
+  $("#modal-ver-img-activo").modal("show");
 }

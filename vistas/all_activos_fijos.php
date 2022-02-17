@@ -927,11 +927,11 @@
                   </div>
                 </div>
                 <!-- ============ Modal ver grande img producto -->
-                <div class="modal fade" id="modal-ver-img-material">
+                <div class="modal fade" id="modal-ver-img-activo">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
-                      <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title nombre-img-material">Img producto</h4>
+                      <div class="modal-header" style="background-color: #49a9ceb8;">
+                        <h4 class="modal-title nombre-img-activo">Img producto</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -939,7 +939,7 @@
                       <div class="modal-body">
                         <div class="class-style" style="text-align: center;">
                            
-                          <img onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
+                          <img onerror="this.src='../dist/img/default/default_activos_fijos_empresa.png';" src="" class="img-thumbnail " id="ver_img_activo" style="cursor: pointer !important;" width="auto" />
                            
                         </div>
                       </div>
