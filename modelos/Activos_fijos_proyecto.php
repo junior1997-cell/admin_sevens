@@ -245,100 +245,25 @@ class Activos_fijos_proyecto
         return ejecutarConsulta($sql);
     }
 
-    /**========================= */
-    /**seccion facturas */
-    /**========================= */
-    public function insertar_factura($idproyectof, $idcomp_proyecto, $codigo, $monto_compraa, $fecha_emision, $descripcion_f, $doc_img, $subtotal_compraa, $igv_compraa)
-    {
-        //var_dump($idproyectof,$idcomp_proyecto,$codigo,$monto_compraa,$fecha_emision,$descripcion_f,$doc_img,$subtotal_compraa,$igv_compraa);die();
-        $sql = "INSERT INTO facturas_compras(idproyecto,idcompra_proyecto,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv) 
-		VALUES ('$idproyectof','$idcomp_proyecto','$codigo','$monto_compraa','$fecha_emision','$descripcion_f','$doc_img','$subtotal_compraa','$igv_compraa')";
-        return ejecutarConsulta($sql);
-    }
-    // obtebnemos los DOCS para eliminar
-    public function obtenerDoc($idfacturacompra)
-    {
-        $sql = "SELECT imagen FROM facturas_compras WHERE idfacturacompra ='$idfacturacompra '";
-
-        return ejecutarConsulta($sql);
-    }
-
-    //Implementamos un método para editar registros
-    public function editar_factura($idproyectof, $idfacturacompra, $idcomp_proyecto, $codigo, $monto_compraa, $fecha_emision, $descripcion_f, $doc_img, $subtotal_compraa, $igv_compraa)
-    {
-        //$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
-        $sql = "UPDATE facturas_compras SET
-		idproyecto='$idproyectof',
-		idcompra_proyecto='$idcomp_proyecto',
-		codigo='$codigo',
-		monto='$monto_compraa',
-		fecha_emision='$fecha_emision',
-		descripcion='$descripcion_f',
-		subtotal='$subtotal_compraa',
-		igv='$igv_compraa',
-		imagen='$doc_img'
-		WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsulta($sql);
-        //return $vaa;
-    }
-    //Listar
-    public function listar_facturas($idcompra_proyecto, $idproyecto)
-    {
-        //var_dump($idproyecto,$idmaquinaria);die();
-        $sql = "SELECT *
-		FROM facturas_compras
-		WHERE idcompra_proyecto = '$idcompra_proyecto' AND  idproyecto='$idproyecto'";
-        return ejecutarConsulta($sql);
-    }
-    public function total_monto_f($idcompra_proyecto, $idproyecto)
-    {
-        //var_dump($idcompra_proyecto,$idproyecto);die();
-
-        $sql = "SELECT SUM(fs.monto) as total_mont_f
-		FROM facturas_compras as fs
-		WHERE fs.idcompra_proyecto='$idcompra_proyecto' AND fs.idproyecto='$idproyecto' AND  fs.estado='1'";
-        return ejecutarConsultaSimpleFila($sql);
-    }
-    //mostrar_factura
-    public function mostrar_factura($idfacturacompra)
-    {
-        $sql = "SELECT * FROM facturas_compras WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsultaSimpleFila($sql);
-    }
-    //Implementamos un método para activar categorías
-    public function desactivar_factura($idfacturacompra)
-    {
-        //var_dump($idfacturacompra);die();
-        $sql = "UPDATE facturas_compras SET estado='0' WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsulta($sql);
-    }
-    //Implementamos un método para desactivar categorías
-    public function activar_factura($idfacturacompra)
-    {
-        //var_dump($idpago_af_proyecto);die();
-        $sql = "UPDATE facturas_compras SET estado='1' WHERE idfacturacompra ='$idfacturacompra'";
-        return ejecutarConsulta($sql);
-    }
     /**=========================== */
     //SECCION PAGOS
     /**=========================== */
-    public function insertar_pago($idcompra_af_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
+    public function insertar_pago_af_p($idcompra_af_proyecto_p,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
     $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1) 
     {
 
-        $sql = "INSERT INTO pago_af_proyecto (idcompra_af_proyecto,idproveedor,beneficiario,forma_pago,tipo_pago,cuenta_destino,idbancos,titular_cuenta,
-        fecha_pago,monto,numero_operacion,descripcion,imagen) 
-		VALUES ('$idcompra_af_proyecto_p','$idproveedor_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago',
-			'$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$imagen1')";
+        $sql = "INSERT INTO pago_af_proyecto(idbancos,idcompra_af_proyecto,forma_pago,tipo_pago,beneficiario,cuenta_destino,titular_cuenta,
+        fecha_pago,descripcion,numero_operacion,monto,imagen) 
+        VALUES ('$banco_pago','$idcompra_af_proyecto_p','$forma_pago','$tipo_pago','$beneficiario_pago','$cuenta_destino_pago','$titular_cuenta_pago',
+        '$fecha_pago','$descripcion_pago','$numero_op_pago','$monto_pago','$imagen1')";
         return ejecutarConsulta($sql);
     }
     //Implementamos un método para editar registros
-    public function editar_pago($idpago_af_proyecto,$idcompra_af_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
+    public function editar_pago($idpago_af_proyecto,$idcompra_af_proyecto_p,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
     $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$idcompra_af_proyecto,$imagen1) 
     {
-        $sql = "UPDATE pago_compras SET
+        $sql = "UPDATE pago_af_proyecto SET
         idcompra_af_proyecto ='$idcompra_af_proyecto_p',
-        idproveedor='$idproveedor_pago',
         beneficiario='$beneficiario_pago',
         forma_pago='$forma_pago',
         tipo_pago='$tipo_pago',
@@ -354,123 +279,64 @@ class Activos_fijos_proyecto
         return ejecutarConsulta($sql);
     }
     //Listar pagos-normal
-    public function listar_pagos($idcompra_proyecto)
+    public function listar_pagos_af_p($idcompra_af_proyecto)
     {
         //var_dump($idproyecto,$idmaquinaria);die();
         $sql = "SELECT
-		ps.idpago_af_proyecto  as idpago_af_proyecto,
-		ps.forma_pago as forma_pago,
-		ps.tipo_pago as tipo_pago,
-		ps.beneficiario as beneficiario,
-		ps.cuenta_destino as cuenta_destino,
-		ps.titular_cuenta as titular_cuenta,
-		ps.fecha_pago as fecha_pago,
-		ps.descripcion as descripcion,
-		ps.idbancos as id_banco,
+		pafp.idpago_af_proyecto  as idpago_af_proyecto,
+		pafp.forma_pago as forma_pago,
+		pafp.tipo_pago as tipo_pago,
+		pafp.beneficiario as beneficiario,
+		pafp.cuenta_destino as cuenta_destino,
+		pafp.titular_cuenta as titular_cuenta,
+		pafp.fecha_pago as fecha_pago,
+		pafp.descripcion as descripcion,
+		pafp.idbancos as id_banco,
 		bn.nombre as banco,
-		ps.numero_operacion as numero_operacion,
-		ps.monto as monto,
-		ps.imagen as imagen,
-		ps.estado as estado
-		FROM pago_compras ps, bancos as bn 
-		WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos";
-        return ejecutarConsulta($sql);
-    }
-        //Listar pagos1-con detraccion --tabla Proveedor
-    public function listar_pagos_compra_prov_con_dtracc($idcompra_proyecto,$tipo_pago)
-    {
-        //var_dump($idproyecto,$idmaquinaria);die();
-        $sql = "SELECT
-        ps.idpago_af_proyecto  as idpago_af_proyecto,
-        ps.forma_pago as forma_pago,
-        ps.tipo_pago as tipo_pago,
-        ps.beneficiario as beneficiario,
-        ps.cuenta_destino as cuenta_destino,
-        ps.titular_cuenta as titular_cuenta,
-        ps.fecha_pago as fecha_pago,
-        ps.descripcion as descripcion,
-        ps.idbancos as id_banco,
-        bn.nombre as banco,
-        ps.numero_operacion as numero_operacion,
-        ps.monto as monto,
-        ps.imagen as imagen,
-        ps.estado as estado
-        FROM pago_compras ps, bancos as bn 
-        WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos AND ps.tipo_pago='$tipo_pago'";
+		pafp.numero_operacion as numero_operacion,
+		pafp.monto as monto,
+		pafp.imagen as imagen,
+		pafp.estado as estado
+		FROM pago_af_proyecto pafp, bancos as bn 
+		WHERE pafp.idcompra_af_proyecto='$idcompra_af_proyecto' AND bn.idbancos=pafp.idbancos";
         return ejecutarConsulta($sql);
     }
     //Implementamos un método para desactivar categorías
     public function desactivar_pagos($idpago_af_proyecto)
     {
         //var_dump($idpago_af_proyecto);die();
-        $sql = "UPDATE pago_compras SET estado='0' WHERE idpago_af_proyecto ='$idpago_af_proyecto'";
+        $sql = "UPDATE pago_af_proyecto SET estado='0' WHERE idpago_af_proyecto ='$idpago_af_proyecto'";
         return ejecutarConsulta($sql);
     }
     //Implementamos un método para activar categorías
     public function activar_pagos($idpago_af_proyecto)
     {
-        $sql = "UPDATE pago_compras SET estado='1' WHERE idpago_af_proyecto ='$idpago_af_proyecto'";
+        $sql = "UPDATE pago_af_proyecto SET estado='1' WHERE idpago_af_proyecto ='$idpago_af_proyecto'";
         return ejecutarConsulta($sql);
     }
     //Mostrar datos para editar Pago servicio.
     public function mostrar_pagos($idpago_af_proyecto)
     {
-        $sql = "SELECT
-		ps.idpago_af_proyecto as idpago_af_proyecto,
-		ps.idcompra_proyecto as idcompra_proyecto,
-		ps.idproveedor as idproveedor,
-		ps.forma_pago as forma_pago,
-		ps.tipo_pago as tipo_pago,
-		ps.beneficiario as beneficiario,
-		ps.cuenta_destino as cuenta_destino,
-		ps.titular_cuenta as titular_cuenta,
-		ps.fecha_pago as fecha_pago,
-		ps.descripcion as descripcion,
-		ps.idbancos as id_banco,
-		bn.nombre as banco,
-		ps.numero_operacion as numero_operacion,
-		ps.monto as monto,
-		ps.imagen as imagen,
-		ps.estado as estado
-		FROM pago_compras ps, bancos as bn
-		WHERE idpago_af_proyecto='$idpago_af_proyecto' AND ps.idbancos = bn.idbancos";
+        $sql = "SELECT*	FROM pago_af_proyecto WHERE idpago_af_proyecto='$idpago_af_proyecto'";
         return ejecutarConsultaSimpleFila($sql);
     }
 
-    // consulta para totales sin detracion
-    public function suma_total_pagos($idcompra_proyecto)
+    // consulta para totales sin detracion----------------------------------
+    public function suma_total_pagos($idcompra_af_proyecto)
     {
-        $sql = "SELECT SUM(ps.monto) as total_monto
-		FROM pago_compras as ps
-		WHERE  ps.idcompra_proyecto='$idcompra_proyecto' AND ps.estado='1'";
+        $sql = "SELECT SUM(monto) as total_monto
+		FROM pago_af_proyecto
+		WHERE  idcompra_af_proyecto='$idcompra_af_proyecto' AND estado='1'";
         return ejecutarConsultaSimpleFila($sql);
     }
-    //consultas para totales con detracion
-    public function suma_total_pagos_detraccion($idcompra_proyecto,$tipopago)
-    {
-        $sql = "SELECT SUM(ps.monto) as total_montoo
-		FROM pago_compras as ps
-		WHERE  ps.idcompra_proyecto='$idcompra_proyecto' AND ps.tipo_pago='$tipopago' AND ps.estado='1'";
-        return ejecutarConsultaSimpleFila($sql);
-    }
-
-    public function total_costo_parcial_pago($idmaquinaria, $idproyecto)
-    {
-        $sql = "SELECT
-		SUM(s.costo_parcial) as costo_parcial  
-		FROM servicio as s 
-		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1'";
-
-        return ejecutarConsultaSimpleFila($sql);
-    }
-    // obtebnemos los DOCS para eliminar
+    // obtebnemos los DOCS para eliminar-------------------------
     public function obtenerImg($idpago_af_proyecto)
     {
         $sql = "SELECT imagen FROM pago_af_proyecto WHERE idpago_af_proyecto='$idpago_af_proyecto'";
 
         return ejecutarConsulta($sql);
     }
-    //mostrar datos del proveedor y maquina en form
+    //mostrar datos del proveedor y maquina en form----------------
     public function most_datos_prov_pago($idcompra_af_proyecto)
     {
         $sql = "SELECT * FROM compra_af_proyecto as cafp, proveedor as p  WHERE cafp.idproveedor=p.idproveedor AND cafp.idcompra_af_proyecto='$idcompra_af_proyecto'";

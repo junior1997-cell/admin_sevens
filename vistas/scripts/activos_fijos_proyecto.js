@@ -477,7 +477,6 @@ function regresar() {
 
   $("#monto_total").html("");
   $("#ttl_monto_pgs_detracc").html("");
-  $("#pagos_con_detraccion").hide();
   limpiar();
   limpiardatosproveedor();
   tabla.ajax.reload();
@@ -510,7 +509,7 @@ function listar(nube_idproyecto) {
             color: "black",
           });
         } else if (quitar_formato_miles(data[6]) == 0) {
-          $("td", row).eq(7).css({
+          $("td", row).eq(6).css({
             "background-color": "#28a745",
             color: "white",
           });
@@ -743,269 +742,6 @@ function des_anular(idcompra_af_proyecto) {
   });
 }
 
-//=========================================
-//SECCION-facturas-compras
-//=========================================
-
-function facturas_compras(idcompra_af_proyecto, idproyecto) {
-  total_monto_f(idcompra_af_proyecto, idproyecto);
-  localStorage.setItem("idcompra_com_nube", idcompra_af_proyecto);
-  localStorage.setItem("idproyecto_com_nube", idproyecto);
-
-  $("#idcomp_proyecto").val(idcompra_af_proyecto);
-  $("#idproyectof").val(idproyecto);
-
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  // $("#agregar_compras").show();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-  $("#factura_compras").show();
-  $("#btn-factura").show();
-
-  tabla_facturas = $("#tabla_facturas")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/activos_fijos_proyecto.php?op=listar_facturas&idcompra_af_proyecto=" + idcompra_af_proyecto + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-}
-
-//Calcular Igv y subtotal
-function igv_subtotal() {
-  var subtotall = 0;
-  var igvv = 0;
-  $("#subtotal_compraa").val("");
-  $("#igv_compraa").val("");
-
-  var mont = $("#monto_compraa").val();
-  var monto = parseFloat(mont);
-  console.log(monto);
-  // var subbbb= $('#subtotal_compra').val();
-  //console.log(subbbb);
-
-  subtotall = monto / 1.18;
-  console.log("subtotal " + subtotal);
-
-  igvv = monto - subtotall;
-  console.log("igvv " + igvv);
-  $("#subtotal_compraa").val(subtotall.toFixed(4));
-  //console.log(subtotall.toFixed(4));
-  $("#igv_compraa").val(igvv.toFixed(4));
-}
-
-//Función limpiar-factura
-function limpiar_factura() {
-  $("#codigo").val("");
-  $("#monto_compraa").val("");
-  $("#idfacturacompra").val("");
-  $("#fecha_emision").val("");
-  $("#descripcion_f").val("Por concepto de alquiler de maquinaria");
-  $("#subtotal_compraa").val("");
-  $("#igv_compraa").val("");
-  $("#nota").val("");
-  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-  $("#foto2_i").show();
-  $("#ver_pdf").html("");
-  $("#foto2").val("");
-  $("#foto2_actual").val("");
-  $("#foto2_nombre").html("");
-}
-
-function guardaryeditar_factura(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-agregar-factura")[0]);
-
-  $.ajax({
-    url: "../ajax/activos_fijos_proyecto.php?op=guardaryeditar_factura",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        toastr.success("servicio registrado correctamente");
-
-        tabla_facturas.ajax.reload();
-        tabla.ajax.reload();
-
-        $("#modal-agregar-factura").modal("hide");
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        limpiar_factura();
-      } else {
-        toastr.error(datos);
-      }
-    },
-  });
-}
-
-//-total montos facturas
-function total_monto_f(idcompra_af_proyecto, idproyecto) {
-  $.post("../ajax/activos_fijos_proyecto.php?op=total_monto_f", { idcompra_af_proyecto: idcompra_af_proyecto, idproyecto: idproyecto }, function (data, status) {
-    $("#monto_total_f").html("00.0");
-    data = JSON.parse(data);
-
-    $("#monto_total_f").html(formato_miles(data.total_mont_f));
-  });
-}
-
-function ver_modal_factura(imagen) {
-  var img = imagen;
-  var extencion = img.substr(img.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
-  $("#modal-ver-factura").modal("show");
-
-  if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-    $("#ver_fact_pdf").hide();
-    $("#img-factura").show();
-    $("#img-factura").attr("src", "../dist/img/facturas_compras/" + img);
-
-    $("#iddescargar").attr("href", "../dist/img/facturas_compras/" + img);
-  } else {
-    $("#img-factura").hide();
-    $("#ver_fact_pdf").show();
-    $("#ver_fact_pdf").html('<iframe src="../dist/img/facturas_compras/' + img + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href", "../dist/img/facturas_compras/" + img);
-  }
-}
-//mostrar
-function mostrar_factura(idfacturacompra) {
-  limpiar_factura();
-  $("#modal-agregar-factura").modal("show");
-
-  $.post("../ajax/activos_fijos_proyecto.php?op=mostrar_factura", { idfacturacompra: idfacturacompra }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    $("#idfacturacompra").val(data.idfacturacompra);
-    $("#codigo").val(data.codigo);
-    $("#monto_compraa").val(data.monto);
-    $("#fecha_emision").val(data.fecha_emision);
-    $("#descripcion_f").val(data.descripcion);
-    $("#subtotal_compraa").val(data.subtotal);
-    $("#igv_compraa").val(data.igv);
-    console.log(data.imagen);
-
-    if (data.imagen != "") {
-      var img = data.imagen;
-
-      $("#foto2_i").attr("src", "../dist/img/facturas_compras/" + data.imagen);
-
-      var extencion = img.substr(img.length - 3); // => "1"
-      // console.log(extencion);
-      $("#ver_pdf").html("");
-      $("#foto2_i").attr("src", "");
-
-      if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-        $("#ver_pdf").hide();
-        $("#foto2_i").show();
-        $("#foto2_i").attr("src", "../dist/img/facturas_compras/" + img);
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      } else {
-        $("#foto2_i").hide();
-        $("#ver_pdf").show();
-        $("#ver_pdf").html('<iframe src="../dist/img/facturas_compras/' + img + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      }
-
-      $("#foto2_actual").val(data.imagen);
-    }
-  });
-}
-//Función para desactivar registros
-function desactivar_factura(idfacturacompra) {
-  console.log(idfacturacompra);
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el servicio?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/activos_fijos_proyecto.php?op=desactivar_factura", { idfacturacompra: idfacturacompra }, function (e) {
-        Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
-        // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        tabla_facturas.ajax.reload();
-      });
-    }
-  });
-}
-
-function activar_factura(idfacturacompra) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  Servicio?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/activos_fijos_proyecto.php?op=activar_factura", { idfacturacompra: idfacturacompra }, function (e) {
-        Swal.fire("Activado!", "Servicio ha sido activado.", "success");
-
-        //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        tabla_facturas.ajax.reload();
-      });
-    }
-  });
-}
-
 function comprobante_compras(idcompra_af_proyecto, doc) {
   //console.log(idcompra_af_proyecto,doc);
   $("#modal-comprobantes-pago").modal("show");
@@ -1122,7 +858,6 @@ function listar_pagos(idcompra_af_proyecto, idproyecto, monto_total, total_depos
 
   $("#pago_compras").show();
   $("#btn-pagar").show();
-  $("#pagos_con_detraccion").hide();
 
   tabla_pagos1 = $("#tabla-pagos-proveedor")
     .dataTable({
@@ -1133,7 +868,7 @@ function listar_pagos(idcompra_af_proyecto, idproyecto, monto_total, total_depos
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/activos_fijos_proyecto.php?op=listar_pagos_proveedor&idcompra_af_proyecto=" + idcompra_af_proyecto,
+        url: "../ajax/activos_fijos_proyecto.php?op=listar_pagos_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -1157,99 +892,6 @@ function listar_pagos(idcompra_af_proyecto, idproyecto, monto_total, total_depos
     .DataTable();
 
   total_pagos(idcompra_af_proyecto);
-}
-
-function listar_pagos_detraccion(idcompra_af_proyecto, idproyecto, monto_total) {
-  var total = 0;
-
-  total_pagos_detracc(idcompra_af_proyecto);
-
-  localStorage.setItem("idcompra_pago_detracc_nub", idcompra_af_proyecto);
-  most_datos_prov_pago(idcompra_af_proyecto);
-  $("#ttl_monto_pgs_detracc").html(formato_miles(monto_total));
-  //mostramos los montos del 90 y 10 %
-  $("#t_proveedor").html(formato_miles(monto_total * 0.9));
-  $(".t_proveedor").val(formato_miles(monto_total * 0.9));
-  $("#t_provee_porc").html("90");
-  $("#t_detaccion").html(formato_miles(monto_total * 0.1));
-  $(".t_detaccion").val(formato_miles(monto_total * 0.1));
-  $("#t_detacc_porc").html("10");
-  // t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  // $("#agregar_compras").show();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-
-  $("#pagos_con_detraccion").show();
-
-  $("#btn-pagar").show();
-
-  tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/activos_fijos_proyecto.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_af_proyecto=" + idcompra_af_proyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-  //Tabla 3
-  tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/activos_fijos_proyecto.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_af_proyecto=" + idcompra_af_proyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
 }
 
 //Función limpiar
@@ -1278,7 +920,6 @@ function most_datos_prov_pago(idcompra_af_proyecto) {
   $("#banco_pago").val("").trigger("change");
   $.post("../ajax/activos_fijos_proyecto.php?op=most_datos_prov_pago", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
     data = JSON.parse(data);
-    console.log(data);
 
     $("#idproyecto_pago").val(data.idproyecto);
     $("#idcompra_af_proyecto_p").val(data.idcompra_af_proyecto);
@@ -1354,67 +995,6 @@ function total_pagos(idcompra_af_proyecto) {
   });
 }
 
-//-total pagos con detraccion
-function total_pagos_detracc(idcompra_af_proyecto) {
-  //tabla 2 proveedor
-  $.post("../ajax/activos_fijos_proyecto.php?op=suma_total_pagos_prov", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
-    $("#monto_total_prov").html("");
-    var inputValue = 0;
-    var x = 0;
-    var x_saldo = 0;
-    var diferencia = 0;
-    data = JSON.parse(data);
-    //console.log(data);
-    inputValue = $(".t_proveedor").val();
-
-    $("#monto_total_prov").html(formato_miles(data.total_montoo));
-    x = (data.total_montoo * 90) / inputValue;
-    $("#porcnt_prove").html(redondearExp(x, 2) + " %");
-
-    diferencia = 90 - x;
-
-    x_saldo = (diferencia * data.total_montoo) / x;
-
-    if (x_saldo == 0) {
-      $("#saldo_p").html("0.00");
-      $("#porcnt_sald_p").html("0.00" + " %");
-    } else {
-      $("#saldo_p").html(redondearExp(x_saldo, 2));
-      $("#porcnt_sald_p").html(redondearExp(diferencia, 2) + " %");
-    }
-  });
-
-  //tabla 2 detracion
-  $.post("../ajax/activos_fijos_proyecto.php?op=suma_total_pagos_detracc", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
-    $("#monto_total_detracc").html("");
-    var valor_tt_detrcc = 0;
-    var x_detrcc = 0;
-    var x_saldo_detrcc = 0;
-    var diferencia_detrcc = 0;
-
-    data = JSON.parse(data);
-    console.log(data);
-
-    valor_tt_detrcc = $(".t_detaccion").val();
-
-    $("#monto_total_detracc").html(formato_miles(data.total_montoo));
-
-    x_detrcc = (data.total_montoo * 10) / valor_tt_detrcc;
-    $("#porcnt_detrcc").html(redondearExp(x_detrcc, 2) + " %");
-
-    diferencia_detrcc = 10 - x_detrcc;
-
-    x_saldo_detrcc = (diferencia_detrcc * data.total_montoo) / x_detrcc;
-
-    if (x_saldo_detrcc == 0) {
-      $("#saldo_d").html("0.00");
-      $("#porcnt_sald_d").html("0.00" + " %");
-    } else {
-      $("#saldo_d").html(redondearExp(x_saldo_detrcc, 2));
-      $("#porcnt_sald_d").html(redondearExp(diferencia_detrcc, 2) + " %");
-    }
-  });
-}
 //mostrar
 function mostrar_pagos(idpago_af_proyecto) {
   limpiar_c_pagos();
@@ -1436,7 +1016,7 @@ function mostrar_pagos(idpago_af_proyecto) {
     $("#beneficiario_pago").val(data.beneficiario);
     $("#h4_mostrar_beneficiario").html(data.beneficiario);
     $("#cuenta_destino_pago").val(data.cuenta_destino);
-    $("#banco_pago").val(data.id_banco).trigger("change");
+    $("#banco_pago").val(data.idbancos).trigger("change");
     $("#titular_cuenta_pago").val(data.titular_cuenta);
     $("#forma_pago").val(data.forma_pago).trigger("change");
     $("#tipo_pago").val(data.tipo_pago).trigger("change");
@@ -1447,7 +1027,7 @@ function mostrar_pagos(idpago_af_proyecto) {
     $("#idpago_af_proyecto").val(data.idpago_af_proyecto);
 
     if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
+      $("#foto1_i").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + data.imagen);
 
       $("#foto1_actual").val(data.imagen);
     }
@@ -1508,8 +1088,8 @@ function activar_pagos(idpago_af_proyecto) {
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");
-  $("#img-vaucher").attr("src", "../dist/img/vauchers_pagos/" + imagen);
-  $("#descargar").attr("href", "../dist/img/vauchers_pagos/" + imagen);
+  $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
+  $("#descargar").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
 
   // $(".tooltip").hide();
 }
@@ -1624,7 +1204,6 @@ function evaluar() {
 }
 
 function modificarSubtotales() {
-  console.log(array_class_trabajador);
 
   if ($("#tipo_comprobante").select2("val") == null) {
     $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
