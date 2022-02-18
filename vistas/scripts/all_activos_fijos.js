@@ -13,7 +13,9 @@ function init() {
   listar();
 
   fecha_actual();
+  fecha_actual_pago()
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
+  $("#idproyecto_pago").val(localStorage.getItem("nube_idproyecto"));
 
   //Cargamos los items al select cliente
   $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
@@ -32,14 +34,19 @@ function init() {
     $("#submit-form-proveedor").submit();
     
   });
-  //=====Guardar factura=============
-  $("#guardar_registro_factura").on("click", function (e) {
-    $("#submit-form-factura").submit();
-  });
+
   //=====Guardar pago=============
   $("#guardar_registro_pago").on("click", function (e) {
     $("#submit-form-pago").submit();
   });
+
+  //=====Guardar pago af proyecto=============
+  $("#guardar_registro_pago-af-p").on("click", function (e) {
+    $("#submit-form-pago-af-p").submit();
+    
+  });  
+
+
   //subir factura modal
   $("#guardar_registro_2").on("click", function (e) {
     $("#submit-form-planootro").submit();
@@ -99,6 +106,43 @@ function init() {
   });
   $("#foto1").change(function (e) {
     addImage(e, $("#foto1").attr("id"));
+  });
+    //============PAGO PROYECTO================
+  //Cargamos los items al select bancos
+  $.post("../ajax/bancos.php?op=selectbancos_2", function (r) {
+    $("#banco_pago_af_p").html(r);
+  });
+  //Initialize Select2 Elements
+  $("#forma_pago_af_p").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione una forma de pago",
+    allowClear: true,
+  });
+  //Initialize Select2 Elements
+  $("#tipo_pago_af_p").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione un tipo de pago",
+    allowClear: true,
+  });
+  //Initialize Select2 Elements
+  $("#banco_pago_af_p").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione un banco",
+    allowClear: true,
+  });
+
+  $("#idproveedor").val("null").trigger("change");
+  $("#banco_pago_af_p").val("null").trigger("change");
+
+  $("#forma_pago_af_p").val("null").trigger("change");
+  $("#tipo_pago_af_p").val("null").trigger("change");
+
+  //vaucher
+  $("#foto11_i").click(function () {
+    $("#foto11").trigger("click");
+  });
+  $("#foto11").change(function (e) {
+    addImage(e, $("#foto11").attr("id"));
   });
 
   //subir factura modal
@@ -200,6 +244,14 @@ function foto1_eliminar() {
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
 
   $("#foto1_nombre").html("");
+}
+
+function foto2_eliminar() {
+  $("#foto11").val("");
+
+  $("#foto11_i").attr("src", "../dist/img/default/img_defecto.png");
+
+  $("#foto11_nombre").html("");
 }
 /* PREVISUALIZAR LAS DOCS */
 function addDocs(e, id) {
@@ -467,6 +519,7 @@ function regresar() {
   //-----
   $("#pago_compras").hide();
   $("#btn-pagar").hide();
+  $("#btn-pagar-af-p").hide();
 
   $("#monto_total").html("");
   $("#ttl_monto_pgs_detracc").html("");
@@ -939,6 +992,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
 
   $("#pago_compras").show();
   $("#btn-pagar").show();
+  $("#btn-pagar-af-p").hide();
   $("#pagos_con_detraccion").hide();
 
   tabla_pagos1 = $("#tabla-pagos-proveedor")
@@ -997,13 +1051,11 @@ function limpiar_c_pagos() {
 function most_datos_prov_pago(idcompra_af_general) {
   // limpiar_c_pagos();
   $("#h4_mostrar_beneficiario").html("");
-  $("#idproyecto_pago").val("");
 
   $("#banco_pago").val("").trigger("change");
   $.post("../ajax/all_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
-    $("#idproyecto_pago").val(data.idproyecto);
     $("#idcompra_af_general_p").val(data.idcompra_af_general);
     $("#idproveedor_pago").val(data.idproveedor);
     $("#beneficiario_pago").val(data.razon_social);
@@ -1071,12 +1123,16 @@ function guardaryeditar_pago(e) {
 
 //-total Pagos-sin detraccion
 function total_pagos(idcompra_af_general) {
+  $(".tfoot_pago_general").show();
+  $(".tfoot_pago_proy").hide();
   $.post("../ajax/all_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    $("#monto_total").html("");
+    $("#monto_total_general").html("");
+    $("#monto_total_proy").html("");
 
     data = JSON.parse(data);
     //console.log(data);
-    $("#monto_total").html(formato_miles(data.total_monto));
+
+    $("#monto_total_general").html(formato_miles(data.total_monto));
   });
 }
 
@@ -1175,10 +1231,43 @@ function ver_modal_vaucher(imagen) {
 //=========================================
 //SECCION-Pago-compras-POR PROYECTO
 //=========================================
+//mostrar datos proveedor pago
+function fecha_actual_pago() {
+  //Obtenemos la fecha actual
+  var now = new Date();
+  var day = ("0" + now.getDate()).slice(-2);
+  var month = ("0" + (now.getMonth() + 1)).slice(-2);
+  var today = now.getFullYear() + "-" + month + "-" + day;
+  console.log(today);
+  $("#fecha_pago_af_p").val(today);
+}
+function most_datos_prov_pago_af_p(idcompra_af_proyecto) {
+  // limpiar_c_pagos();
+  $("#mostrar_beneficiario_af_p").html("");
+  $("#idproyecto_pago").val("");
 
+  $("#banco_pago").val("").trigger("change");
+  $.post("../ajax/all_activos_fijos.php?op=most_datos_prov_pago_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+    data = JSON.parse(data);
+
+    $("#idproyecto_pago").val(data.idproyecto);
+    $("#idcompra_af_proyecto").val(data.idcompra_af_proyecto);
+    $("#idproveedor_pago_af_p").val(data.idproveedor);
+    $("#beneficiario_pago_af_p").val(data.razon_social);
+    $("#mostrar_beneficiario_af_p").html(data.razon_social);
+    $("#banco_pago_af_p").val(data.idbancos).trigger("change");
+    $("#tipo_pago_af_p").val('Proveedor').trigger("change");
+    $("#titular_cuenta_pago_af_p").val(data.titular_cuenta);
+    localStorage.setItem("nubecompra_c_b_af_p", data.cuenta_bancaria);
+    localStorage.setItem("nubecompra_c_d_af_p", data.cuenta_detracciones);
+
+    if ($("#tipo_pago_af_p").select2("val") == "Proveedor") {$("#cuenta_destino_pago_af_p").val(data.cuenta_bancaria);}
+
+  });
+}
 function listar_pagos(idcompra_af_proyecto, monto_total, total_deposito) {
 
-  most_datos_prov_pago(idcompra_af_proyecto);
+  most_datos_prov_pago_af_p(idcompra_af_proyecto);
   localStorage.setItem("idcompra_af_proyecto_nube", idcompra_af_proyecto);
 
   localStorage.setItem("monto_total_p_af_p", monto_total);
@@ -1197,7 +1286,8 @@ function listar_pagos(idcompra_af_proyecto, monto_total, total_deposito) {
   $(".leyecnda_saldos").hide();
 
   $("#pago_compras").show();
-  $("#btn-pagar").show();
+  $("#btn-pagar").hide();
+  $("#btn-pagar-af-p").show();
 
   tabla_pagos_af_p = $("#tabla-pagos-proveedor")
     .dataTable({
@@ -1208,7 +1298,7 @@ function listar_pagos(idcompra_af_proyecto, monto_total, total_deposito) {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/activos_fijos_proyecto.php?op=listar_pagos_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto,
+        url: "../ajax/all_activos_fijos.php?op=listar_pagos_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -1231,8 +1321,170 @@ function listar_pagos(idcompra_af_proyecto, monto_total, total_deposito) {
     })
     .DataTable();
 
-  total_pagos(idcompra_af_proyecto);
+    suma_total_pagos_af_p(idcompra_af_proyecto);
 }
+function suma_total_pagos_af_p(idcompra_af_proyecto) {
+  $(".tfoot_pago_general").hide(); 
+  $(".tfoot_pago_proy").show();
+  $.post("../ajax/all_activos_fijos.php?op=suma_total_pagos_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+    $("#monto_total_general").html("");
+    $("#monto_total_proy").html("");
+
+    data = JSON.parse(data);
+    //console.log(data);
+
+    $("#monto_total_proy").html(formato_miles(data.total_monto));
+  });
+}
+function guardaryeditar_pago_af_p(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-servicios-pago-af-p")[0]);
+
+  $.ajax({
+    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_pago_af_p",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+      if (datos == "ok") {
+        toastr.success("servicio registrado correctamente");
+
+        tabla.ajax.reload();
+        $("#modal-agregar-pago-af-p").modal("hide");
+
+        tabla_pagos_af_p.ajax.reload();
+        
+        /**================================================== */
+        suma_total_pagos_af_p(localStorage.getItem("idcompra_af_proyecto_nube"));
+
+        limpiar_pagos_af_p();
+      } else {
+        toastr.error(datos);
+      }
+    },
+  });
+}
+function desactivar_pagos_af_p(idpago_af_proyecto) {
+  Swal.fire({
+    title: "¿Está Seguro de  Desactivar el pago?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_activos_fijos.php?op=desactivar_pagos_af_p", { idpago_af_proyecto: idpago_af_proyecto }, function (e) {
+        Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
+
+        suma_total_pagos_af_p(localStorage.getItem("idcompra_af_proyecto_nube"));
+
+        tabla_pagos_af_p.ajax.reload();
+        
+      });
+    }
+  });
+}
+function activar_pagos_af_p(idpago_af_proyecto) {
+  Swal.fire({
+    title: "¿Está Seguro de  Activar  Pago?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_activos_fijos.php?op=activar_pagos_af_p", { idpago_af_proyecto: idpago_af_proyecto }, function (e) {
+        Swal.fire("Activado!", "Pago ha sido activado.", "success");
+
+        suma_total_pagos_af_p(localStorage.getItem("idcompra_af_proyecto_nube"));
+
+        tabla_pagos_af_p.ajax.reload();
+        
+      });
+    }
+  });
+}
+function mostrar_pagos_af_p(idpago_af_proyecto) {
+  limpiar_pagos_af_p();
+
+  $("#h4_mostrar_beneficiario").html("");
+  $("#idproveedor_pago_af_p").val("");
+  $("#modal-agregar-pago-af-p").modal("show");
+  $("#banco_pago_af_p").val("").trigger("change");
+  $("#forma_pago_af_p").val("").trigger("change");
+  $("#tipo_pago_af_p").val("").trigger("change");
+
+  $.post("../ajax/all_activos_fijos.php?op=mostrar_pagos_af_p", { idpago_af_proyecto: idpago_af_proyecto }, function (data, status) {
+    data = JSON.parse(data);
+
+    $("#idproveedor_pago_af_p").val(data.idproveedor);
+    $("#idcompra_af_proyecto").val(data.idcompra_af_proyecto);
+    $("#beneficiario_pago_af_p").val(data.beneficiario);
+    $("#mostrar_beneficiario_af_p").html(data.beneficiario);
+    $("#cuenta_destino_pago_af_p").val(data.cuenta_destino);
+    $("#banco_pago_af_p").val(data.idbancos).trigger("change");
+    $("#titular_cuenta_pago_af_p").val(data.titular_cuenta);
+    $("#forma_pago_af_p").val(data.forma_pago).trigger("change");
+    $("#tipo_pago_af_p").val(data.tipo_pago).trigger("change");
+   // $("#forma_pago_af_p").val(data.fecha_pago);
+    $("#monto_pago_af_p").val(data.monto);
+    $("#numero_op_pago_af_p").val(data.numero_operacion);
+    $("#descripcion_pago_af_p").val(data.descripcion);
+    $("#idpago_af_proyecto").val(data.idpago_af_proyecto);
+
+    if (data.imagen != "") {
+      $("#foto11_i").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + data.imagen);
+
+      $("#foto11_actual").val(data.imagen);
+    }
+  });
+}
+function captura_op_af_p() {
+  cuenta_bancaria = localStorage.getItem("nubecompra_c_b_af_p");
+  cuenta_detracciones = localStorage.getItem("nubecompra_c_d_af_p");
+  //console.log(cuenta_bancaria,cuenta_detracciones);
+
+  $("#cuenta_destino_pago_af_p").val("");
+
+  if ($("#tipo_pago_af_p").select2("val") == "Proveedor") {
+    $("#cuenta_destino_pago_af_p").val("");
+    $("#cuenta_destino_pago_af_p").val(cuenta_bancaria);
+  }
+
+  if ($("#tipo_pago_af_p").select2("val") == "Detraccion") {
+    $("#cuenta_destino_pago_af_p").val("");
+    $("#cuenta_destino_pago_af_p").val(cuenta_detracciones);
+  }
+}
+function ver_modal_vaucher_af_p(imagen) {
+  $("#img-vaucher").attr("src", "");
+  $("#modal-ver-vaucher").modal("show");
+  $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
+  $("#descargar").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
+
+  // $(".tooltip").hide();
+}
+function limpiar_pagos_af_p() {
+  $("#forma_pago_af_p").val("").trigger("change");
+  $("#tipo_pago_af_p").val("").trigger("change");
+  $("#monto_pago_af_p").val("");
+  $("#numero_op_pago_af_p").val("");
+  $("#descripcion_pago_af_p").val("");
+  $("#descripcion_pago").val("");
+  $("#idpago_af_proyecto").val("");
+  $("#foto11_i").attr("src", "../dist/img/default/img_defecto.png");
+  $("#foto11").val("");
+  $("#foto11_actual").val("");
+  $("#foto11_nombre").html("");
+}
+
+
 
 /**===============================
  * ======================================
@@ -1982,6 +2234,56 @@ $(function () {
       guardaryeditar_pago(e);
     },
   });
+
+  $("#form-servicios-pago-af-p").validate({
+    rules: {
+      forma_pago_af_p: { required: true },
+      tipo_pago_af_p: { required: true },
+      banco_pago_af_p: { required: true },
+      fecha_pago_af_p: { required: true },
+      monto_pago_af_p: { required: true },
+      numero_op_pago_af_p: { minlength: 1 },
+      descripcion_pago_af_p: { minlength: 1 },
+      titular_cuenta_pago_af_p: { minlength: 1 },
+    },
+    messages: {
+      forma_pago_af_p: {
+        required: "Por favor selecione una forma de pago",
+      },
+      tipo_pago_af_p: {
+        required: "Por favor selecione un tipo de pago",
+      },
+      banco_pago_af_p: {
+        required: "Por favor selecione un banco",
+      },
+      fecha_pago_af_p: {
+        required: "Por favor ingresar una fecha",
+      },
+      monto_pago_af_p: {
+        required: "Por favor ingresar el monto a pagar",
+      },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      guardaryeditar_pago_af_p(e);
+    },
+  });
 });
 
 // validacion formulario COMPROBANTE
@@ -2018,6 +2320,7 @@ $(function () {
       guardaryeditar_comprobante_p(e);
     },
   });
+
   $("#form-comprobante_p").validate({
     rules: {
       nombre: { required: true },
@@ -2419,17 +2722,40 @@ function extrae_extencion(filename) {
 
 //validando excedentes
 function validando_excedentes() {
-  var totattotal = localStorage.getItem("monto_total_p");
-  var monto_total_dep = localStorage.getItem("monto_total_dep");
-  var monto_entrada = $("#monto_pago").val();
-  var total_suma = parseFloat(monto_total_dep) + parseFloat(monto_entrada);
-  var debe = totattotal - monto_total_dep;
-  console.log(typeof total_suma);
-  if (total_suma > totattotal) {
-    toastr.error("ERROR monto excedido al total del monto a pagar!");
-  } else {
-    toastr.success("Monto Aceptado.");
+
+  if ($("#monto_pago").val()!="") {
+
+    var totattotal = localStorage.getItem("monto_total_p");
+    var monto_total_dep = localStorage.getItem("monto_total_dep");
+    var monto_entrada = $("#monto_pago").val();
+
+    var total_suma = parseFloat(monto_total_dep) + parseFloat(monto_entrada);
+    var debe = totattotal - monto_total_dep;
+  
+    if (total_suma > totattotal) {
+      toastr.error("ERROR monto excedido al total del monto a pagar!");
+    } else {
+      toastr.success("Monto Aceptado.");
+    }
+
+  }else{
+
+    var totattotal = localStorage.getItem("monto_total_p_af_p");
+    var monto_total_dep = localStorage.getItem("monto_total_dep_p_af_p");
+    var monto_entrada = $("#monto_pago_af_p").val();
+
+    var total_suma = parseFloat(monto_total_dep) + parseFloat(monto_entrada);
+    var debe = totattotal - monto_total_dep;
+  
+    if (total_suma > totattotal) {
+      toastr.error("ERROR monto excedido al total del monto a pagar!");
+    } else {
+      toastr.success("Monto Aceptado.");
+    }
+
+
   }
+
 }
 
 // ver imagen grande del producto agregado a la compra

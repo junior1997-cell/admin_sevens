@@ -51,7 +51,6 @@ $numero_op_pago = isset($_POST["numero_op_pago"]) ? limpiarCadena($_POST["numero
 $descripcion_pago = isset($_POST["descripcion_pago"]) ? limpiarCadena($_POST["descripcion_pago"]) : "";
 $idcompra_af_proyecto_p = isset($_POST["idcompra_af_proyecto_p"]) ? limpiarCadena($_POST["idcompra_af_proyecto_p"]) : "";
 $idpago_af_proyecto = isset($_POST["idpago_af_proyecto"]) ? limpiarCadena($_POST["idpago_af_proyecto"]) : "";
-///$idpago_af_proyecto,$idcompra_af_proyecto_p,$descripcion_pago,$numero_op_pago,$monto_pago,$fecha_pago,$titular_cuenta_pago,$banco_pago,$cuenta_destino_pago,$tipo_pago,$forma_pago,$beneficiario_pago
 $idproveedor_pago = isset($_POST["idproveedor_pago"]) ? limpiarCadena($_POST["idproveedor_pago"]) : "";
 
 $imagen1 = isset($_POST["foto1"]) ? limpiarCadena($_POST["foto1"]) : "";
@@ -553,7 +552,7 @@ switch ($_GET["op"]) {
      */
 
     //MOSTRANDO DATOS DE PROVEEDOR
-    case 'most_datos_prov_pago':
+    case 'most_datos_prov_pago_af_p':
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
@@ -610,7 +609,7 @@ switch ($_GET["op"]) {
                     }
 
                     $rspta = $ctivos_fijos_proy->editar_pago($idpago_af_proyecto,$idcompra_af_proyecto_p,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
-                        $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);
+                        $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$idcompra_af_proyecto,$imagen1);
 
                     echo $rspta ? "ok" : "Servicio no se pudo actualizar";
                 }
@@ -723,7 +722,7 @@ switch ($_GET["op"]) {
         }
     break;
 
-    case 'suma_total_pagos':
+    case 'suma_total_pagos_af_proy':
         $idcompra_af_proyecto = $_POST["idcompra_af_proyecto"];
         $rspta = $ctivos_fijos_proy->suma_total_pagos($idcompra_af_proyecto);
         //Codificar el resultado utilizando json

@@ -788,16 +788,17 @@ switch ($_GET["op"]) {
                                 $reg->idpago_af_general.
                                 ')"><i class="fa fa-check"></i></button>',
                         "1" => $reg->forma_pago,
-                        "2" => $reg->beneficiario,
-                        "3" => $reg->cuenta_destino,
-                        "4" => $reg->banco,
-                        "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-                        "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-                        "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-                        "8" => $reg->numero_operacion,
-                        "9" => number_format($reg->monto, 2, '.', ','),
-                        "10" => $imagen,
-                        "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+                        "2" =>'<div class="user-block">
+                        <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario.'</p></span>
+                        <span class="description" style="margin-left: 0px !important;" data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '"><b>titular: </b>' . $titular_cuenta . '</span></div>',
+                        "3" => '<div class="user-block">
+                        <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$reg->banco.'</p></span>
+                        <span class="description" style="margin-left: 0px !important;" data-toggle="tooltip" data-original-title="' . $reg->cuenta_destino . '"><b>C: </b>' . $reg->cuenta_destino . '</span></div>',
+                        "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+                        "5" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+                        "6" => number_format($reg->monto, 2, '.', ','),
+                        "7" => $imagen,
+                        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
                     ];
                 }
                 //$suma=array_sum($rspta->fetch_object()->monto);
@@ -841,6 +842,22 @@ switch ($_GET["op"]) {
         }
     break;
     /**seccion pagos activos fijos por proyecto */
+    case 'most_datos_prov_pago_af_p':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+
+                $rspta = $ctivos_fijos_proy->most_datos_prov_pago($_POST["idcompra_af_proyecto"]);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
     case 'listar_pagos_af_p':
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -867,34 +884,27 @@ switch ($_GET["op"]) {
                     }
                     empty($reg->imagen)
                         ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
-                        : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+                        : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher_af_p(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
                     $tool = '"tooltip"';
                     $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
                     $data[] = [
                         "0" => $reg->estado
-                            ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                                $reg->idpago_af_proyecto .
-                                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
-                                $reg->idpago_af_proyecto .
-                                ')"><i class="far fa-trash-alt"></i></button>'
-                            : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                                $reg->idpago_af_proyecto .
-                                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                                $reg->idpago_af_proyecto .
-                                ')"><i class="fa fa-check"></i></button>',
+                            ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_af_p(' .$reg->idpago_af_proyecto .')"><i class="fas fa-pencil-alt"></i></button>' .
+                                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos_af_p(' .$reg->idpago_af_proyecto .')"><i class="far fa-trash-alt"></i></button>'
+                            : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_af_p(' .$reg->idpago_af_proyecto .')"><i class="fa fa-pencil-alt"></i></button>' .
+                             ' <button class="btn btn-primary btn-sm" onclick="activar_pagos_af_p(' .$reg->idpago_af_proyecto .')"><i class="fa fa-check"></i></button>',
                         "1" => $reg->forma_pago,
-                        "2" => $reg->beneficiario,
-                        "3" => $reg->cuenta_destino,
-                        "4" => $reg->banco,
-                        "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-                        "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-                        "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-                        "8" => $reg->numero_operacion,
-                        "9" => number_format($reg->monto, 2, '.', ','),
-                        "10" => $imagen,
-                        "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+                        "2" =>'<div class="user-block">
+                        <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario.'</p></span>
+                        <span class="description" style="margin-left: 0px !important;" data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '"><b>titular: </b>' . $titular_cuenta . '</span></div>',
+                        "3" => '<div class="user-block">
+                        <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$reg->banco.'</p></span>
+                        <span class="description" style="margin-left: 0px !important;" data-toggle="tooltip" data-original-title="' . $reg->cuenta_destino . '"><b>C: </b>' . $reg->cuenta_destino . '</span></div>',
+                        "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+                        "5" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+                        "6" => number_format($reg->monto, 2, '.', ','),
+                        "7" => $imagen,
+                        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
                     ];
                 }
                 //$suma=array_sum($rspta->fetch_object()->monto);
@@ -912,6 +922,127 @@ switch ($_GET["op"]) {
             }
         }
     break;
+
+    case 'suma_total_pagos_af_p':
+        $rspta = $ctivos_fijos_proy->suma_total_pagos($_POST["idcompra_af_proyecto"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta);
+    break;
+    case 'guardaryeditar_pago_af_p':
+
+        $beneficiario_pago_af_p = isset($_POST["beneficiario_pago_af_p"]) ? limpiarCadena($_POST["beneficiario_pago_af_p"]) : "";
+        $forma_pago_af_p = isset($_POST["forma_pago_af_p"]) ? limpiarCadena($_POST["forma_pago_af_p"]) : "";
+        $tipo_pago_af_p = isset($_POST["tipo_pago_af_p"]) ? limpiarCadena($_POST["tipo_pago_af_p"]) : "";
+        $cuenta_destino_pago_af_p = isset($_POST["cuenta_destino_pago_af_p"]) ? limpiarCadena($_POST["cuenta_destino_pago_af_p"]) : "";
+        $banco_pago_af_p = isset($_POST["banco_pago_af_p"]) ? limpiarCadena($_POST["banco_pago_af_p"]) : "";
+        $titular_cuenta_pago_af_p = isset($_POST["titular_cuenta_pago_af_p"]) ? limpiarCadena($_POST["titular_cuenta_pago_af_p"]) : "";
+        $fecha_pago_af_p = isset($_POST["fecha_pago_af_p"]) ? limpiarCadena($_POST["fecha_pago_af_p"]) : "";
+        $monto_pago_af_p = isset($_POST["monto_pago_af_p"]) ? limpiarCadena($_POST["monto_pago_af_p"]) : "";
+        $numero_op_pago_af_p = isset($_POST["numero_op_pago_af_p"]) ? limpiarCadena($_POST["numero_op_pago_af_p"]) : "";
+        $descripcion_pago_af_p = isset($_POST["descripcion_pago_af_p"]) ? limpiarCadena($_POST["descripcion_pago_af_p"]) : "";
+        $idcompra_af_proyecto_p = isset($_POST["idcompra_af_proyecto"]) ? limpiarCadena($_POST["idcompra_af_proyecto"]) : "";
+        
+        $idpago_af_proyecto = isset($_POST["idpago_af_proyecto"]) ? limpiarCadena($_POST["idpago_af_proyecto"]) : "";
+        
+        $idproveedor_pago = isset($_POST["idproveedor_pago_af_p"]) ? limpiarCadena($_POST["idproveedor_pago_af_p"]) : "";
+
+        $comrobante_af_p = isset($_POST["foto11"]) ? limpiarCadena($_POST["foto11"]) : "";
+
+       // $idpago_af_proyecto,$idcompra_af_proyecto_p,$beneficiario_pago_af_p,$forma_pago_af_p,$tipo_pago_af_p,$cuenta_destino_pago_af_p,
+        //$banco_pago_af_p,$titular_cuenta_pago_af_p,$fecha_pago_af_p,$monto_pago_af_p,$numero_op_pago_af_p,$descripcion_pago_af_p,$comrobante_af_p
+
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                // imgen de perfil
+                if (!file_exists($_FILES['foto11']['tmp_name']) || !is_uploaded_file($_FILES['foto11']['tmp_name'])) {
+                    $comrobante_af_p = $_POST["foto11_actual"];
+                    $flat_img1 = false;
+                } else {
+                    $ext1 = explode(".", $_FILES["foto11"]["name"]);
+                    $flat_img1 = true;
+
+                    $comrobante_af_p = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+                    move_uploaded_file($_FILES["foto11"]["tmp_name"], "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" . $comrobante_af_p);
+                }
+
+                if (empty($idpago_af_proyecto)) {
+                    //$idpago_af_proyecto,$idcompra_af_proyecto_p,$descripcion_pago,$numero_op_pago,$monto_pago,$fecha_pago,$titular_cuenta_pago,$banco_pago,$cuenta_destino_pago,$tipo_pago,$forma_pago,$beneficiario_pago
+
+                    $rspta = $ctivos_fijos_proy->insertar_pago_af_p($idcompra_af_proyecto_p,$beneficiario_pago_af_p,$forma_pago_af_p,$tipo_pago_af_p,$cuenta_destino_pago_af_p,
+                    $banco_pago_af_p,$titular_cuenta_pago_af_p,$fecha_pago_af_p,$monto_pago_af_p,$numero_op_pago_af_p,$descripcion_pago_af_p,$comrobante_af_p);
+                    echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+                } else {
+                    // validamos si existe LA IMG para eliminarlo
+                    if ($flat_img1 == true) {
+                        $datos_f1 = $ctivos_fijos_proy->obtenerImg($idpago_af_proyecto);
+
+                        $img1_ant = $datos_f1->fetch_object()->imagen;
+
+                        if ($img1_ant != "") {
+                            unlink("../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" . $img1_ant);
+                        }
+                    }
+
+                    $rspta = $ctivos_fijos_proy->editar_pago($idpago_af_proyecto,$idcompra_af_proyecto_p,$beneficiario_pago_af_p,$forma_pago_af_p,$tipo_pago_af_p,$cuenta_destino_pago_af_p,
+                    $banco_pago_af_p,$titular_cuenta_pago_af_p,$fecha_pago_af_p,$monto_pago_af_p,$numero_op_pago_af_p,$descripcion_pago_af_p,$comrobante_af_p);
+
+                    echo $rspta ? "ok" : "Servicio no se pudo actualizar";
+                }
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    case 'desactivar_pagos_af_p':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                $rspta = $ctivos_fijos_proy->desactivar_pagos($_POST['idpago_af_proyecto']);
+                echo $rspta ? "Pago Anulado" : "Pago no se puede Anular";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    case 'activar_pagos_af_p':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                $rspta = $ctivos_fijos_proy->activar_pagos($_POST['idpago_af_proyecto']);
+                echo $rspta ? "Pago Restablecido" : "Pago no se pudo Restablecido";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    case 'mostrar_pagos_af_p':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->mostrar_pagos($_POST['idpago_af_proyecto']);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    
 
     /**
      * ==============FIN SECCION PAGOS=====

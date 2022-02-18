@@ -76,6 +76,9 @@
                                   <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
                                     <i class="fas fa-dollar-sign"></i> Agregar Pago
                                   </button>
+                                  <button type="button" id="btn-pagar-af-p" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago-af-p" onclick="limpiar_c_pagos();">
+                                    <i class="fas fa-dollar-sign"></i> Agregar Pago
+                                  </button>
                                 </h3>
                               </div>
                             </div>
@@ -364,11 +367,8 @@
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
                                   <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
-                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                   <th>Monto</th>
                                   <th>Vaucher</th>
                                   <th>Estado</th>
@@ -381,11 +381,8 @@
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
                                   <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
-                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                   <th style="color: #ff0000; background-color: #45c920;">
                                     <b id="monto_total_general"></b>
                                   </th>
@@ -396,12 +393,9 @@
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
                                   <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                   <th style="color: #ff0000; background-color: #45c920;">
                                     <b id="monto_total_proy"></b>
                                   </th>
@@ -708,6 +702,142 @@
                     </div>
                   </div>
                 </div>
+                <!--===============Modal agregar Pagos =========-->
+                <div class="modal fade" id="modal-agregar-pago-af-p">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Agregar Pago</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-servicios-pago-af-p" name="form-servicios-pago-af-p" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-1-fomulario">
+                              <!-- id proyecto -->
+                              <input type="hidden" name="idproyecto_pago" id="idproyecto_pago" />
+                              <!-- id proveedor -->
+                              <input type="hidden" name="idproveedor_pago_af_p" id="idproveedor_pago_af_p" />
+                              <!-- idcompras_proyecto -->
+                              <input type="hidden" name="idcompra_af_proyecto" id="idcompra_af_proyecto" />
+                              <!-- id compras -->
+                              <input type="hidden" name="idpago_af_proyecto" id="idpago_af_proyecto" />
+                              <!-- Beneficiario -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="beneficiario_pago">Beneficiario</label>
+                                  <input class="form-control" type="hidden" id="beneficiario_pago_af_p" name="beneficiario_pago_af_p" />
+                                  <br />
+                                  <b id="mostrar_beneficiario_af_p" style="font-size: 16px; color: red;"></b>
+                                </div>
+                              </div>
+                              <!--Forma de pago -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="forma_pago">Forma Pago</label>
+                                  <select name="forma_pago_af_p" id="forma_pago_af_p" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <!--tipo de pago -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="tipo_pago">Tipo Pago</label>
+                                  <select name="tipo_pago_af_p" id="tipo_pago_af_p" class="form-control select2" style="width: 100%;" onchange="captura_op_af_p();">
+                                    <option value="Proveedor">Proveedor</option>
+                                    <option value="Detraccion">Detracción</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <!-- Cuenta de destino-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="cuenta_destino_pago">Cuenta destino </label>
+                                  <input type="text" name="cuenta_destino_pago_af_p" id="cuenta_destino_pago_af_p" class="form-control" placeholder="Cuenta destino" />
+                                </div>
+                              </div>
+                              <!-- banco -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="banco_pago">Banco</label>
+                                  <select name="banco_pago_af_p" id="banco_pago_af_p" class="form-control select2" style="width: 100%;">
+                                  </select>
+                                  <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>-->
+                                </div>
+                              </div>
+                              <!-- Titular Cuenta-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="titular_cuenta_pago">Titular Cuenta </label>
+                                  <input type="text" name="titular_cuenta_pago_af_p" id="titular_cuenta_pago_af_p" class="form-control" placeholder="Titular Cuenta" />
+                                </div>
+                              </div>
+
+                              <!-- Fecha Inicio-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_pago">Fecha Pago </label>
+                                  <input type="date" name="fecha_pago_af_p" id="fecha_pago_af_p" class="form-control" />
+                                </div>
+                              </div>
+                              <!-- Monto-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="monto_pago">Monto </label>
+                                  <input type="number" step="0.01" name="monto_pago_af_p" id="monto_pago_af_p" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
+                                </div>
+                              </div>
+                              <!-- Número de Operación-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="numero_op_pago">Número de operación </label>
+                                  <input type="number" name="numero_op_pago_af_p" id="numero_op_pago_af_p" class="form-control" placeholder="Número de operación" />
+                                </div>
+                              </div>
+                              <!-- Descripcion-->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="descripcion_pago">Descripción </label> <br />
+                                  <textarea name="descripcion_pago_af_p" id="descripcion_pago_af_p" class="form-control" rows="2"></textarea>
+                                </div>
+                              </div>
+                              <!--vaucher-->
+                              <div class="col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto11">Vaucher</label> <br />
+                                <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto11_i" style="cursor: pointer !important;" width="auto" />
+                                <input style="display: none;" type="file" name="foto11" id="foto11" accept="image/*" />
+                                <input type="hidden" name="foto11_actual" id="foto11_actual" />
+                                <div class="text-center" id="foto11_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                              </div>
+                            </div>
+
+                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-pago-af-p">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_c_pagos();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_pago-af-p">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <!--===============Modal Ver compras =========-->
                 <div class="modal fade" id="modal-ver-compras">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -810,6 +940,9 @@
                     </div>
                   </div>
                 </div>
+
+
+
                 <!--===============Modal agregar comprobantes general =========-->
                 <!-- Modal agregar Comprobante -->
                 <div class="modal fade" id="modal-comprobantes-af-g">
@@ -964,6 +1097,8 @@
                     </div>
                   </div>
                 </div>
+
+
                 <!-- Modal ver los documentos subidos -->
                 <div class="modal fade" id="modal-ver-docs">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">

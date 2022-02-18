@@ -965,7 +965,7 @@ function guardaryeditar_pago(e) {
     url: "../ajax/activos_fijos_proyecto.php?op=guardaryeditar_pago",
     type: "POST",
     data: formData,
-    contentType: false,
+    contentType: false,  
     processData: false,
 
     success: function (datos) {

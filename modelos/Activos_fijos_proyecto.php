@@ -258,7 +258,7 @@ class Activos_fijos_proyecto
     }
     //Implementamos un método para editar registros
     public function editar_pago($idpago_af_proyecto,$idcompra_af_proyecto_p,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,
-    $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$idcompra_af_proyecto,$imagen1) 
+    $banco_pago,$titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1) 
     {
         $sql = "UPDATE pago_af_proyecto SET
         idcompra_af_proyecto ='$idcompra_af_proyecto_p',
