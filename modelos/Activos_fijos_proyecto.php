@@ -231,7 +231,7 @@ class Activos_fijos_proyecto
 
     public function editar_comprobante($idcompra_af_proyecto, $doc_comprobante)
     {
-        //var_dump($idfacturacompra);die();
+        //var_dump($idcompra_af_proyecto, $doc_comprobante);die();
         $sql = "UPDATE compra_af_proyecto SET comprobante='$doc_comprobante' WHERE idcompra_af_proyecto ='$idcompra_af_proyecto'";
         return ejecutarConsulta($sql);
     }

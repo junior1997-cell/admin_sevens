@@ -7,6 +7,10 @@ require_once "../modelos/All_activos_fijos.php";
 
 $all_activos_fijos = new All_activos_fijos();
 
+require_once "../modelos/Activos_fijos_proyecto.php";
+
+$ctivos_fijos_proy = new Activos_fijos_proyecto();
+
 //$idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
 $idcompra_af_general = isset($_POST["idcompra_af_general"]) ? limpiarCadena($_POST["idcompra_af_general"]) : "";
 $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
@@ -52,11 +56,6 @@ $idpago_af_general= isset($_POST["idpago_af_general"]) ? limpiarCadena($_POST["i
 $idproveedor_pago = isset($_POST["idproveedor_pago"]) ? limpiarCadena($_POST["idproveedor_pago"]) : "";
 
 $imagen1 = isset($_POST["foto1"]) ?$_POST["foto1"]: "";
-
-//comprobante
-$idcompra_af_general_comprob = isset($_POST["idcompra_af_general_comprob"]) ? limpiarCadena($_POST["idcompra_af_general_comprob"]) : "";
-$doc1 = isset($_POST["doc1"]) ?$_POST["doc1"] : "";
-$doc_old_1 = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
 
 switch ($_GET["op"]) {
 
@@ -109,7 +108,13 @@ switch ($_GET["op"]) {
         }      
                 
     break;
+
     case 'guardaryeditar_comprobante_af_g':
+        //comprobante
+        $idcompra_af_g_o_p = isset($_POST["idcompra_af_g_o_p"]) ? limpiarCadena($_POST["idcompra_af_g_o_p"]) : "";
+        $doc1 = isset($_POST["doc1"]) ?$_POST["doc1"] : "";
+        $doc_old_1 = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
+
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
@@ -131,7 +136,7 @@ switch ($_GET["op"]) {
                 }
                 //Borramos el comprobante
                 if ($flat_comprob == true) {
-                    $datos_f1 =$all_activos_fijos->obtener_comprobante_af_g($idcompra_af_general_comprob);
+                    $datos_f1 =$all_activos_fijos->obtener_comprobante_af_g($idcompra_af_g_o_p);
 
                     $doc1_ant = $datos_f1['comprobante'];
 
@@ -141,7 +146,7 @@ switch ($_GET["op"]) {
                 }
 
                 // editamos un documento existente
-                $rspta =  $all_activos_fijos->editar_comprobante_af_g($idcompra_af_general_comprob,$doc1);
+                $rspta =  $all_activos_fijos->editar_comprobante_af_g($idcompra_af_g_o_p,$doc1);
 
                 echo $rspta ? "ok" : "Documento no se pudo actualizar";
                     //Fin de las validaciones de acceso
@@ -149,6 +154,52 @@ switch ($_GET["op"]) {
                 require 'noacceso.php';
             }
         }  
+    break;
+
+    case 'guardaryeditar_comprobante_af_p':
+
+        //comprobante
+        $comp_idcompra_af_proyecto = isset($_POST["comp_idcompra_af_proyecto"]) ? limpiarCadena($_POST["comp_idcompra_af_proyecto"]) : "";
+        $doc2 = isset($_POST["doc2"]) ?$_POST["doc2"] : "";
+        $doc_old_2 = isset($_POST["doc_old_2"]) ? limpiarCadena($_POST["doc_old_2"]) : "";
+    
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {    
+                // imgen de comprobante
+                if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
+                    $doc_comprobante = $_POST["doc_old_2"];
+                    $flat_comprob = false;
+                } else {
+                    $ext1 = explode(".", $_FILES["doc2"]["name"]);
+                    $flat_comprob = true;
+
+                    $doc_comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+                    move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" . $doc_comprobante);
+                }
+                //Borramos el comprobante
+                if ($flat_comprob == true) {
+                    $datos_f1 =  $ctivos_fijos_proy->obtener_comprobante_comprasa_af_p($comp_idcompra_af_proyecto);
+
+                    $doc2_ant = $datos_f1->fetch_object()->comprobante;
+
+                    if ($doc2_ant != "") {
+                        unlink("../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" . $doc2_ant);
+                    }
+                }
+
+                // editamos un documento existente
+                $rspta =  $ctivos_fijos_proy->editar_comprobante($comp_idcompra_af_proyecto,$doc_comprobante);
+
+                //echo $comp_idcompra_af_proyecto;
+                echo $rspta ? "ok" : "Documento no se pudo actualizar";
+            } else {
+                require 'noacceso.php';
+            }
+        }
     break;
 
     case 'anular':
@@ -271,7 +322,8 @@ switch ($_GET["op"]) {
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
                         "6" => number_format($saldo, 2, '.', ','),
-                        "7" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':'<center><button class="btn btn-info" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
+                        "7" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
+                        '<center><button class="btn btn-info" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
                         "8" => $reg['descripcion'],
                         "9" => $reg['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
                     ];

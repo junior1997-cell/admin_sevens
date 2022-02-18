@@ -795,7 +795,7 @@
                     </div>
                   </div>
                 </div>
-                <!--===============Modal agregar comprobantes =========-->
+                <!--===============Modal agregar comprobantes general =========-->
                 <!-- Modal agregar Comprobante -->
                 <div class="modal fade" id="modal-comprobantes-af-g">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -813,7 +813,7 @@
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
                               <!-- id Comprobante -->
-                              <input type="hidden" name="idcompra_af_general_comprob" id="idcompra_af_general_comprob" />
+                              <input type="hidden" name="idcompra_af_g_o_p" id="idcompra_af_g_o_p" />
 
                               <!-- Doc  -->
                               <div class="col-md-12 col-lg-12">
@@ -868,6 +868,83 @@
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--===============Modal agregar comprobantes proyecto=========-->
+                <!-- Modal agregar Comprobante -->
+                <div class="modal fade" id="modal-comprobantes-af-p">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Actualizar Comprobante</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-comprobante_p" name="form-comprobante_p" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-3-fomulario">
+                              <!-- id Comprobante -->
+                              <input type="hidden" name="comp_idcompra_af_proyecto" id="comp_idcompra_af_proyecto" />
+
+                              <!-- Doc  -->
+                              <div class="col-md-12 col-lg-12">
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label">Documento </label>
+                                  </div>
+                                  <div class="col-md-6 text-center subir_c">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                    <input style="display: none;" id="doc2" type="file" name="doc2" class="docpdf" />
+                                  </div>
+                                  <div class="col-md-6 text-center comprobante_c">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion2();"><i class="fa fa-eye"></i> Comprobante.</button>
+                                  </div>
+                                  <div class="col-md-4 text-center descargar_c" style="display: none;">
+                                    <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_c_comprob" style="padding: 0px 12px 0px 12px !important;" download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
+                                  </div>
+                                  <div class="col-md-4 text-center ver_c_completo" style="display: none;">
+                                    <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_c_completo" style="padding: 0px 12px 0px 12px !important;"> <i class="fas fa-expand"></i> Completo. </a>
+                                  </div>
+                                </div>
+                                <div id="doc2_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
+                                </div>
+                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- ver_completo descargar comprobante subir -->
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                <div class="progress" id="div_barra_progress2">
+                                  <div id="barra_progress2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row" id="cargando-4-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-comprobante-p">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_3">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>

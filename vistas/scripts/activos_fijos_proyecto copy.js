@@ -1,35 +1,35 @@
-
 var tabla;
 var tabla_comp_prov;
 var tablamateriales;
 var tabla_list_comp_prov;
+var tabla_facturas;
 var tabla_pagos1;
 
 var array_class_trabajador = [];
 //Requejo99@
 //Función que se ejecuta al inicio
 function init() {
-  listar();
+  listar(localStorage.getItem("nube_idproyecto"));
 
   fecha_actual();
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
   //Cargamos los items al select cliente
-  $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
+  $.post("../ajax/activos_fijos_proyecto.php?op=selectProveedor", function (r) {
     $("#idproveedor").html(r);
   });
 
-  $("#mAllactivos_fijos").addClass("active");
+  $("#mActivos_fijos_proyect").addClass("active");
 
   // guardar el registro de la compra
   $("#guardar_registro_compras").on("click", function (e) {
-    $("#submit-form-compra-activos-f").submit();
+    $("#submit-form-compras").submit();
   });
 
   //guardar registro proveedor
   $("#guardar_registro_proveedor").on("click", function (e) {
     $("#submit-form-proveedor").submit();
-    
+    console.log("registrando");
   });
   //=====Guardar factura=============
   $("#guardar_registro_factura").on("click", function (e) {
@@ -43,10 +43,6 @@ function init() {
   $("#guardar_registro_2").on("click", function (e) {
     $("#submit-form-planootro").submit();
   });
-  //subir factura modal
-  $("#guardar_registro_3").on("click", function (e) {
-    $("#submit-form-comprobante-p").submit();
-  });
 
   //Initialize Select2 Elements
   $("#idproveedor").select2({
@@ -56,7 +52,7 @@ function init() {
   });
 
   //Initialize Select2 Elements
-  $("#tipo_comprovante").select2({
+  $("#tipo_comprobante").select2({
     theme: "bootstrap4",
     placeholder: "Selecione Comprobante",
     allowClear: true,
@@ -100,21 +96,21 @@ function init() {
     addImage(e, $("#foto1").attr("id"));
   });
 
+  //Factura
+  $("#foto2_i").click(function () {
+    $("#foto2").trigger("click");
+  });
+  $("#foto2").change(function (e) {
+    addImage(e, $("#foto2").attr("id"));
+  });
+
   //subir factura modal
-  $("#doc1_i").click(function () {
-    $("#doc1").trigger("click");
-  });
-  $("#doc1").change(function (e) {
-    addDocs(e, $("#doc1").attr("id"));
-  });
-  //subir factura modal prorecto
   $("#doc2_i").click(function () {
     $("#doc2").trigger("click");
   });
   $("#doc2").change(function (e) {
     addDocs(e, $("#doc2").attr("id"));
   });
-  
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -147,9 +143,12 @@ function addImage(e, id) {
         function fileOnload(e) {
           var result = e.target.result;
           if (extrae_extencion(file.name) == "pdf") {
+            $("#foto2_i").hide();
+            console.log("pdf..." + result);
             $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
           } else {
             $("#" + id + "_i").attr("src", result);
+            $("#foto2_i").show();
           }
 
           $("#" + id + "_nombre").html(
@@ -200,6 +199,17 @@ function foto1_eliminar() {
 
   $("#foto1_nombre").html("");
 }
+
+function foto2_eliminar() {
+  $("#foto2").val("");
+  $("#ver_pdf").html("");
+
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
+
+  $("#foto2_nombre").html("");
+  $("#foto2_i").show();
+}
+
 /* PREVISUALIZAR LAS DOCS */
 function addDocs(e, id) {
   $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
@@ -356,14 +366,6 @@ function addDocs(e, id) {
 }
 
 // Eliminamos el doc comprobante
-function doc1_eliminar() {
-  $("#doc1").val("");
-
-  $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-  $("#doc1_nombre").html("");
-}
-// Eliminamos el doc comprobante proyecto
 function doc2_eliminar() {
   $("#doc2").val("");
 
@@ -387,22 +389,25 @@ function limpiar() {
   $(".tooltip").hide();
 
   //Mostramos los selectProveedor
-  $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
+  $.post("../ajax/activos_fijos_proyecto.php?op=selectProveedor", function (r) {
     $("#idproveedor").html(r);
   });
 
-  $("#idcompra_af_general").val();
+  $("#idcompra_af_proyecto").val();
   $("#idproyecto").val();
 
+  $("#idusuario").val("");
+  $("#trabajador_c").html("Trabajador");
   $("#idproveedor").val("null").trigger("change");
-  $("#tipo_comprovante").val("Ninguno").trigger("change");
+  $("#tipo_comprobante").val("Ninguno").trigger("change");
 
-  $("#serie_comprovante").val("");
+  // $("#fecha_compra").val("");
+  $("#serie_comprobante").val("");
   $("#descripcion").val("");
 
+  $("#total_compra_af_p").val("");
   $(".filas").remove();
   $("#total").html("0");
-
   $("#subtotal").html("");
   $("#subtotal_compra").val("");
 
@@ -410,7 +415,7 @@ function limpiar() {
   $("#igv_compra").val("");
 
   $("#total").html("");
-  $("#total_compra_af_g").val("");
+  $("#total_compra_af_p").val("");
 
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
@@ -460,23 +465,25 @@ function regresar() {
   $("#btn_agregar").show();
   $("#div_tabla_compra").show();
   $("#div_tabla_compra_proveedor").hide();
-  //----leyecnda_pagos,leyecnda_saldos
-  $(".leyecnda_pagos").show();
-  $(".leyecnda_saldos").show();
+  //----
+  $("#factura_compras").hide();
+  $("#btn-factura").hide();
   //-----
   $("#pago_compras").hide();
   $("#btn-pagar").hide();
 
+  $(".leyecnda_pagos").show();
+  $(".leyecnda_saldos").show();
+
   $("#monto_total").html("");
   $("#ttl_monto_pgs_detracc").html("");
-  $("#pagos_con_detraccion").hide();
   limpiar();
   limpiardatosproveedor();
   tabla.ajax.reload();
 }
 
 //Función Listar
-function listar() {
+function listar(nube_idproyecto) {
   //console.log(idproyecto);
   tabla = $("#tabla-compra")
     .dataTable({
@@ -487,7 +494,7 @@ function listar() {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_compra_activo_f_g",
+        url: "../ajax/activos_fijos_proyecto.php?op=listar_compra&nube_idproyecto=" + nube_idproyecto,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -528,7 +535,7 @@ function listar() {
       order: [[0, "desc"]], //Ordenar (columna,orden)
       columnDefs: [
         {
-          targets: [8],
+          targets: [9],
           visible: false,
           searchable: false,
         },
@@ -546,7 +553,7 @@ function listar() {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_compraxporvee_af_g",
+        url: "../ajax/activos_fijos_proyecto.php?op=listar_compraxporvee&nube_idproyecto=" + nube_idproyecto,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -570,7 +577,7 @@ function listar() {
     .DataTable();
 }
 //facturas agrupadas por proveedor.
-function listar_facuras_proveedor_af_g(idproveedor) {
+function listar_facuras_proveedor(idproveedor, idproyecto) {
   //console.log('idproyecto '+idproyecto, 'idproveedor '+idproveedor);
   $("#div_tabla_compra").hide();
   $("#agregar_compras").hide();
@@ -587,7 +594,7 @@ function listar_facuras_proveedor_af_g(idproveedor) {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_detalle_compraxporvee&idproveedor=" + idproveedor,
+        url: "../ajax/activos_fijos_proyecto.php?op=listar_detalle_compraxporvee&idproyecto=" + idproyecto + "&idproveedor=" + idproveedor,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -613,8 +620,10 @@ function listar_facuras_proveedor_af_g(idproveedor) {
 
 //Función para guardar o editar - COMPRAS
 function guardaryeditar_compras(e) {
-
-  var formData = new FormData($("#form-compra-activos-f")[0]);
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  // $("#tabla-compra").hide();
+  // $("#agregar_compras").show();
+  var formData = new FormData($("#form-compras")[0]);
 
   Swal.fire({
     title: "¿Está seguro que deseas guardar esta compra?",
@@ -627,7 +636,7 @@ function guardaryeditar_compras(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/all_activos_fijos.php?op=guardaryeditarcompraactivo",
+        url: "../ajax/activos_fijos_proyecto.php?op=guardaryeditarcompra",
         type: "POST",
         data: formData,
         contentType: false,
@@ -643,6 +652,7 @@ function guardaryeditar_compras(e) {
             limpiar();
             regresar();
             cont = 0;
+            $("#modal-agregar-usuario").modal("hide");
             tabla_comp_prov.ajax.reload();
           } else {
             // toastr.error(datos);
@@ -677,7 +687,7 @@ function guardarproveedor(e) {
         $("#modal-agregar-proveedor").modal("hide");
 
         //Cargamos los items al select cliente
-        $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
+        $.post("../ajax/activos_fijos_proyecto.php?op=selectProveedor", function (r) {
           $("#idproveedor").html(r);
         });
       } else {
@@ -689,7 +699,7 @@ function guardarproveedor(e) {
 }
 
 //Función para desactivar registros
-function anular(idcompra_af_general) {
+function anular(idcompra_af_proyecto) {
   Swal.fire({
     title: "¿Está Seguro de  Anular la compra?",
     text: "Anulando  compra!",
@@ -700,7 +710,7 @@ function anular(idcompra_af_general) {
     confirmButtonText: "Si, Anular!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/activos_fijos_proyecto.php?op=anular", { idcompra_af_proyecto: idcompra_af_proyecto }, function (e) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
@@ -713,7 +723,7 @@ function anular(idcompra_af_general) {
   });
 }
 
-function des_anular(idcompra_af_general) {
+function des_anular(idcompra_af_proyecto) {
   Swal.fire({
     title: "¿Está Seguro de ReActivar esta Compra?",
     text: "",
@@ -724,112 +734,22 @@ function des_anular(idcompra_af_general) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/activos_fijos_proyecto.php?op=des_anular", { idcompra_af_proyecto: idcompra_af_proyecto }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
         tabla.ajax.reload();
       });
     }
   });
 }
-//comprobantes-activos general
-function comprobante_compra_af_g(idcompra_af_general, doc) {
-  //console.log(idcompra_af_general,doc);
-  $("#modal-comprobantes-af-g").modal("show");
-  $("#idcompra_af_g_o_p").val(idcompra_af_general);
-  $("#doc1_nombre").html("");
-  $("#doc_old_1").val("");
-  if (doc != "") {
-    $("#doc_old_1").val(doc);
-
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(doc) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-    } else {
-      if (extrae_extencion(doc) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-      } else {
-        if (extrae_extencion(doc) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-        } else {
-          if (extrae_extencion(doc) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(doc) == "pdf") {
-              $("#doc1_ver").html('<iframe src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-            } else {
-              if (extrae_extencion(doc) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                } else {
-                  if (
-                    extrae_extencion(doc) == "jpeg" ||
-                    extrae_extencion(doc) == "jpg" ||
-                    extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" ||
-                    extrae_extencion(doc) == "gif" ||
-                    extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" ||
-                    extrae_extencion(doc) == "tif" ||
-                    extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + doc + '" alt="" width="50%" >');
-                  } else {
-                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                    } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    //ver_completo descargar comprobante subir
-
-    $(".ver_completo").val(doc);
-
-    //ver_completo descargar comprobante subir
-    // $(".subir").show();
-    $(".subir").removeClass("col-md-6").addClass("col-md-4");
-    $(".comprobante").removeClass("col-md-6").addClass("col-md-4");
-
-    $(".ver_completo").show();
-    $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
-
-    $(".descargar").show();
-    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
-
-    $("#ver_completo").attr("href", "../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/" + doc);
-    $("#descargar_comprob").attr("href", "../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/" + doc);
-  } else {
-    $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    // $("#doc1_nombre").html("");
-
-    $("#doc_old_1").val("");
-    $(".ver_completo").hide();
-    $(".descargar").hide();
-
-    $(".subir").removeClass("col-md-4").addClass("col-md-6");
-    $(".comprobante").removeClass("col-md-4").addClass("col-md-6");
-  }
-}
-//comprobantes-activos-por proyecto
 
 function comprobante_compras(idcompra_af_proyecto, doc) {
   //console.log(idcompra_af_proyecto,doc);
-  $("#modal-comprobantes-af-p").modal("show");
+  $("#modal-comprobantes-pago").modal("show");
   $("#comp_idcompra_af_proyecto").val(idcompra_af_proyecto);
   $("#doc2_nombre").html("");
-  $("#doc_old_2").val("doc");
+  $("#doc_old_1").val("doc");
   if (doc != "") {
-    $("#doc_old_2").val(doc);
+    $("#doc_old_1").val(doc);
 
     // cargamos la imagen adecuada par el archivo
     if (extrae_extencion(doc) == "xls") {
@@ -886,41 +806,40 @@ function comprobante_compras(idcompra_af_proyecto, doc) {
 
     //ver_completo descargar comprobante subir
     // $(".subir").show();
-    $(".subir_c").removeClass("col-md-6").addClass("col-md-4");
-    $(".comprobante_c").removeClass("col-md-6").addClass("col-md-4");
+    $(".subir").removeClass("col-md-6").addClass("col-md-4");
+    $(".comprobante").removeClass("col-md-6").addClass("col-md-4");
 
-    $(".ver_c_completo").show();
-    $(".ver_c_completo").removeClass("col-md-4").addClass("col-md-2");
+    $(".ver_completo").show();
+    $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
 
-    $(".descargar_c").show();
-    $(".descargar_c").removeClass("col-md-4").addClass("col-md-2");
+    $(".descargar").show();
+    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
 
-    $("#ver_c_completo").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" + doc);
-    $("#descargar_c_comprob").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" + doc);
+    $("#ver_completo").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" + doc);
+    $("#descargar_comprob").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" + doc);
   } else {
     $("#doc2_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
     // $("#doc2_nombre").html("");
 
-    $("#doc_old_2").val("");
+    $("#doc_old_1").val("");
 
-    $(".ver_c_completo").hide();
-    $(".descargar_c").hide();
+    $(".ver_completo").hide();
+    $(".descargar").hide();
 
-    $(".subir_c").removeClass("col-md-4").addClass("col-md-6");
-    $(".comprobante_c").removeClass("col-md-4").addClass("col-md-6");
+    $(".subir").removeClass("col-md-4").addClass("col-md-6");
+    $(".comprobante").removeClass("col-md-4").addClass("col-md-6");
   }
 }
-
 
 //=========================================
 //SECCION-Pago-compras
 //=========================================
 
-function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
+function listar_pagos(idcompra_af_proyecto, idproyecto, monto_total, total_deposito) {
 
-  most_datos_prov_pago(idcompra_af_general);
-  localStorage.setItem("idcompra_pago_comp_nube", idcompra_af_general);
+  most_datos_prov_pago(idcompra_af_proyecto);
+  localStorage.setItem("idcompra_pago_comp_nube", idcompra_af_proyecto);
 
   localStorage.setItem("monto_total_p", monto_total);
   localStorage.setItem("monto_total_dep", total_deposito);
@@ -939,7 +858,6 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
 
   $("#pago_compras").show();
   $("#btn-pagar").show();
-  $("#pagos_con_detraccion").hide();
 
   tabla_pagos1 = $("#tabla-pagos-proveedor")
     .dataTable({
@@ -950,7 +868,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_pagos_proveedor&idcompra_af_general=" + idcompra_af_general,
+        url: "../ajax/activos_fijos_proyecto.php?op=listar_pagos_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -973,7 +891,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
     })
     .DataTable();
 
-  total_pagos(idcompra_af_general);
+  total_pagos(idcompra_af_proyecto);
 }
 
 //Función limpiar
@@ -983,8 +901,8 @@ function limpiar_c_pagos() {
   $("#tipo_pago").val("");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
-  $("#idpago_af_general").val("");
- // $("#cuenta_destino_pago").val("");
+  $("#idpago_af_proyecto").val("");
+  //$("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_compra").val("");
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -994,17 +912,17 @@ function limpiar_c_pagos() {
 }
 
 //mostrar datos proveedor pago
-function most_datos_prov_pago(idcompra_af_general) {
+function most_datos_prov_pago(idcompra_af_proyecto) {
   // limpiar_c_pagos();
   $("#h4_mostrar_beneficiario").html("");
   $("#idproyecto_pago").val("");
 
   $("#banco_pago").val("").trigger("change");
-  $.post("../ajax/all_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+  $.post("../ajax/activos_fijos_proyecto.php?op=most_datos_prov_pago", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+    data = JSON.parse(data);
 
     $("#idproyecto_pago").val(data.idproyecto);
-    $("#idcompra_af_general_p").val(data.idcompra_af_general);
+    $("#idcompra_af_proyecto_p").val(data.idcompra_af_proyecto);
     $("#idproveedor_pago").val(data.idproveedor);
     $("#beneficiario_pago").val(data.razon_social);
     $("#h4_mostrar_beneficiario").html(data.razon_social);
@@ -1015,6 +933,7 @@ function most_datos_prov_pago(idcompra_af_general) {
     localStorage.setItem("nubecompra_c_d", data.cuenta_detracciones);
 
     if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(data.cuenta_bancaria);}
+
   });
 }
 
@@ -1024,7 +943,7 @@ function captura_op() {
   cuenta_detracciones = localStorage.getItem("nubecompra_c_d");
   //console.log(cuenta_bancaria,cuenta_detracciones);
 
-  $("#cuenta_destino_pago").val("");
+  //$("#cuenta_destino_pago").val("");
 
   if ($("#tipo_pago").select2("val") == "Proveedor") {
     $("#cuenta_destino_pago").val("");
@@ -1039,11 +958,11 @@ function captura_op() {
 
 //Guardar y editar PAGOS
 function guardaryeditar_pago(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
+
   var formData = new FormData($("#form-servicios-pago")[0]);
 
   $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_pago",
+    url: "../ajax/activos_fijos_proyecto.php?op=guardaryeditar_pago",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1057,9 +976,9 @@ function guardaryeditar_pago(e) {
         $("#modal-agregar-pago").modal("hide");
 
           tabla_pagos1.ajax.reload();
-        
         /**================================================== */
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
         limpiar_c_pagos();
       } else {
@@ -1070,8 +989,8 @@ function guardaryeditar_pago(e) {
 }
 
 //-total Pagos-sin detraccion
-function total_pagos(idcompra_af_general) {
-  $.post("../ajax/all_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+function total_pagos(idcompra_af_proyecto) {
+  $.post("../ajax/activos_fijos_proyecto.php?op=suma_total_pagos", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
     $("#monto_total").html("");
 
     data = JSON.parse(data);
@@ -1081,21 +1000,21 @@ function total_pagos(idcompra_af_general) {
 }
 
 //mostrar
-function mostrar_pagos(idpago_af_general) {
+function mostrar_pagos(idpago_af_proyecto) {
   limpiar_c_pagos();
-  // console.log("___________ " + idpago_af_general);
+
   $("#h4_mostrar_beneficiario").html("");
+  $("#idproveedor_pago").val("");
   $("#modal-agregar-pago").modal("show");
   $("#banco_pago").val("").trigger("change");
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
-  $.post("../ajax/all_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
+  $.post("../ajax/activos_fijos_proyecto.php?op=mostrar_pagos", { idpago_af_proyecto: idpago_af_proyecto }, function (data, status) {
     data = JSON.parse(data);
-    console.log(data);
 
-    $("#idcompra_af_general_p").val(data.idcompra_af_general);
-    // $("#maquinaria_pago").html(data.nombre_maquina);
+    $("#idproveedor_pago").val(data.idproveedor);
+    $("#idcompra_af_proyecto_p").val(data.idcompra_af_proyecto);
     $("#beneficiario_pago").val(data.beneficiario);
     $("#h4_mostrar_beneficiario").html(data.beneficiario);
     $("#cuenta_destino_pago").val(data.cuenta_destino);
@@ -1107,10 +1026,10 @@ function mostrar_pagos(idpago_af_general) {
     $("#monto_pago").val(data.monto);
     $("#numero_op_pago").val(data.numero_operacion);
     $("#descripcion_pago").val(data.descripcion);
-    $("#idpago_af_general").val(data.idpago_af_general);
+    $("#idpago_af_proyecto").val(data.idpago_af_proyecto);
 
     if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + data.imagen);
+      $("#foto1_i").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + data.imagen);
 
       $("#foto1_actual").val(data.imagen);
     }
@@ -1118,7 +1037,7 @@ function mostrar_pagos(idpago_af_general) {
 }
 
 //Función para desactivar registros
-function desactivar_pagos(idpago_af_general) {
+function desactivar_pagos(idpago_af_proyecto) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar el pago?",
     text: "",
@@ -1129,10 +1048,12 @@ function desactivar_pagos(idpago_af_general) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/activos_fijos_proyecto.php?op=desactivar_pagos", { idpago_af_proyecto: idpago_af_proyecto }, function (e) {
         Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+
+        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
           tabla_pagos1.ajax.reload();
         
@@ -1141,7 +1062,7 @@ function desactivar_pagos(idpago_af_general) {
   });
 }
 
-function activar_pagos(idpago_af_general) {
+function activar_pagos(idpago_af_proyecto) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Pago?",
     text: "",
@@ -1152,14 +1073,16 @@ function activar_pagos(idpago_af_general) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/activos_fijos_proyecto.php?op=activar_pagos", { idpago_af_proyecto: idpago_af_proyecto }, function (e) {
         Swal.fire("Activado!", "Pago ha sido activado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
+        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
+
+
           tabla_pagos1.ajax.reload();
-        
-      });
+        });
     }
   });
 }
@@ -1167,8 +1090,8 @@ function activar_pagos(idpago_af_general) {
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");
-  $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
-  $("#descargar").attr("href", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
+  $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
+  $("#descargar").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
 
   // $(".tooltip").hide();
 }
@@ -1188,7 +1111,7 @@ function listaractivos() {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [],
       ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listarActivoscompra",
+        url: "../ajax/activos_fijos_proyecto.php?op=listarActivoscompra",
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -1216,7 +1139,7 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
   if (idactivos_fijos != "") {
     // $('.producto_'+idactivos_fijos).addClass('producto_selecionado');
     if ($(".producto_" + idactivos_fijos).hasClass("producto_selecionado")) {
-      toastr.success("Material: " + nombre + " agregado !!");
+      toastr.success("Activo: " + nombre + " agregado !!");
 
       var cant_producto = $(".producto_" + idactivos_fijos).val();
 
@@ -1226,7 +1149,7 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
 
       modificarSubtotales();
     } else {
-      if ($("#tipo_comprovante").select2("val") == "Factura") {
+      if ($("#tipo_comprobante").select2("val") == "Factura") {
         var subtotal = cantidad * precio_total;
       } else {
         var subtotal = cantidad * precio_sin_igv;
@@ -1283,9 +1206,8 @@ function evaluar() {
 }
 
 function modificarSubtotales() {
-  console.log(array_class_trabajador);
 
-  if ($("#tipo_comprovante").select2("val") == null) {
+  if ($("#tipo_comprobante").select2("val") == null) {
     $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
 
     $("#colspan_subtotal").attr("colspan", 5); //cambiamos el: colspan
@@ -1313,7 +1235,7 @@ function modificarSubtotales() {
       calcularTotalesSinIgv();
     }
   } else {
-    if ($("#tipo_comprovante").select2("val") == "Factura") {
+    if ($("#tipo_comprobante").select2("val") == "Factura") {
       $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
 
       $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan
@@ -1392,7 +1314,7 @@ function calcularTotalesSinIgv() {
     $("#igv_compra").val(0.0);
 
     $("#total").html("S/. " + formato_miles(total.toFixed(2)));
-    $("#total_compra_af_g").val(redondearExp(total, 2));
+    $("#total_compra_af_p").val(redondearExp(total, 4));
   }
 }
 
@@ -1417,13 +1339,13 @@ function calcularTotalesConIgv() {
   $("#igv_compra").val(igv);
 
   $("#total").html("S/. " + formato_miles(total.toFixed(2)));
-  $("#total_compra_af_g").val(redondearExp(total, 2));
+  $("#total_compra_af_p").val(redondearExp(total, 4));
 
   total = 0.0;
 }
 
 function ocultar_comprob() {
-  if ($("#tipo_comprovante").select2("val") == "Ninguno") {
+  if ($("#tipo_comprobante").select2("val") == "Ninguno") {
     $("#content-comprob").hide();
 
     $("#content-comprob").val("");
@@ -1453,13 +1375,13 @@ function eliminarDetalle(indice) {
 
   toastr.warning("Activo removido.");
 }
-//guardar comprobante general
+
 function guardaryeditar_comprobante(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-comprobante")[0]);
 
   $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_comprobante_af_g",
+    url: "../ajax/activos_fijos_proyecto.php?op=guardaryeditar_comprobante",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1473,56 +1395,7 @@ function guardaryeditar_comprobante(e) {
 
         limpiar();
 
-        $("#modal-comprobantes-af-g").modal("hide");
-      } else {
-        Swal.fire("Error!", datos, "error");
-      }
-    },
-    xhr: function () {
-      var xhr = new window.XMLHttpRequest();
-
-      xhr.upload.addEventListener(
-        "progress",
-        function (evt) {
-          if (evt.lengthComputable) {
-            var percentComplete = (evt.loaded / evt.total) * 100;
-            /*console.log(percentComplete + '%');*/
-            $("#barra_progress2").css({ width: percentComplete + "%" });
-
-            $("#barra_progress2").text(percentComplete.toFixed(2) + " %");
-
-            if (percentComplete === 100) {
-              l_m();
-            }
-          }
-        },
-        false
-      );
-      return xhr;
-    },
-  });
-}
-//guardar comprobantes por proyecto
-function guardaryeditar_comprobante_p(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-comprobante_p")[0]);
-
-  $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_comprobante_af_p",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        Swal.fire("Correcto!", "Documento guardado correctamente", "success");
-
-        tabla.ajax.reload();
-
-        limpiar();
-
-        $("#modal-comprobantes-af-p").modal("hide");
+        $("#modal-comprobantes-pago").modal("hide");
       } else {
         Swal.fire("Error!", datos, "error");
       }
@@ -1564,7 +1437,7 @@ function l_m() {
 }
 
 //mostramos para editar el datalle del comprobante de la compras
-function editar_detalle_compras(idcompra_af_general) {
+function editar_detalle_compras(idcompra_af_proyecto) {
   limpiar();
   array_class_trabajador = [];
 
@@ -1572,28 +1445,29 @@ function editar_detalle_compras(idcompra_af_general) {
   detalles = 0;
   ver_form_add();
 
-  $.post("../ajax/all_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/activos_fijos_proyecto.php?op=ver_compra_editar", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
     data = JSON.parse(data);
-    
+    console.log(data);
+
     if (data) {
       $(".subtotal").html("");
       $(".igv_comp").html("");
       $(".total").html("");
 
-      if (data.tipo_comprovante == "Factura") {
+      if (data.tipo_comprobante == "Factura") {
         $(".igv").val("0.18");
         $(".content-igv").show();
         $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-comprob").show();
-      } else if (data.tipo_comprovante == "Boleta" || data.tipo_comprovante == "Nota_de_venta") {
+      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
         $(".igv").val("");
         $(".content-comprob").show();
         $(".content-igv").hide();
         $(".content-t-comprob").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
 
         $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-      } else if (data.tipo_comprovante == "Ninguno") {
+      } else if (data.tipo_comprobante == "Ninguno") {
         $(".content-comprob").hide();
         $(".content-comprob").val("");
         $(".content-igv").hide();
@@ -1604,11 +1478,12 @@ function editar_detalle_compras(idcompra_af_general) {
         //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
       }
 
-      $("#idcompra_af_general").val(data.idcompra_af_general);
+      $("#idproyecto").val(data.idproyecto);
+      $("#idcompra_af_proyecto").val(data.idcompra_af_proyecto);
       $("#idproveedor").val(data.idproveedor).trigger("change");
       $("#fecha_compra").val(data.fecha_compra);
-      $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
-      $("#serie_comprovante").val(data.serie_comprobante).trigger("change");
+      $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
+      $("#serie_comprobante").val(data.serie_comprobante).trigger("change");
       $("#descripcion").val(data.descripcion);
 
       if (data.activos) {
@@ -1628,7 +1503,7 @@ function editar_detalle_compras(idcompra_af_general) {
               <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
               <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/default_activos_fijos_empresa.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre_activo}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${element.nombre_activo}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
@@ -1665,12 +1540,12 @@ function editar_detalle_compras(idcompra_af_general) {
     }
   });
 }
-//mostramos el detalle del comprobante de la compras_af
-function ver_compras_af_g(idcompra_af_general) {
+//mostramos el detalle del comprobante de la compras
+function ver_detalle_compras(idcompra_af_proyecto) {
   $("#modal-ver-compras").modal("show");
 
-  $.post("../ajax/all_activos_fijos.php?op=ver_compra", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+  $.post("../ajax/activos_fijos_proyecto.php?op=ver_compra", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+    data = JSON.parse(data); //  console.log(data);
     $(".idproveedor").html("");
     $(".fecha_compra").val("");
     $(".tipo_comprobante").html("");
@@ -1705,11 +1580,11 @@ function ver_compras_af_g(idcompra_af_general) {
       //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
     }
 
-    //<!--idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,igv,descripcion, igv_comp, total-->
+    //<!--idproveedor,fecha_compra,tipo_comprobante,serie_comprobante,igv,descripcion, igv_comp, total-->
     $(".idproveedor").html(data.razon_social);
     $(".fecha_compra").val(data.fecha_compra);
-    $(".tipo_comprovante").html(data.tipo_comprobante);
-    $(".serie_comprovante").val(data.serie_comprobante);
+    $(".tipo_comprobante").html(data.tipo_comprobante);
+    $(".serie_comprobante").val(data.serie_comprobante);
     //$(".igv").val(data.descripcion);
     $(".descripcion").val(data.descripcion);
 
@@ -1717,9 +1592,9 @@ function ver_compras_af_g(idcompra_af_general) {
     $(".igv_comp").html(data.igv);
     $(".total").html(data.total);
   });
-
-  $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_af_g&idcompra_af_general=" + idcompra_af_general, function (r) {
-    $("#detalles_compra").html(r);
+  $("#detalles_compra_activos_proy").html("");
+  $.post("../ajax/activos_fijos_proyecto.php?op=ver_detalle_compras&idcompra_af_proyecto=" + idcompra_af_proyecto, function (r) {
+    $("#detalles_compra_activos_proy").html(r);
   });
 }
 
@@ -1761,11 +1636,11 @@ function redondearExp(numero, digitos) {
 }
 
 $(function () {
-  $("#form-compra-activos-f").validate({
+  $("#form-compras").validate({
     rules: {
       idproveedor: { required: true },
-      tipo_comprovante: { required: true },
-      serie_comprovante: { minlength: 2 },
+      tipo_comprobante: { required: true },
+      serie_comprobante: { minlength: 2 },
       descripcion: { minlength: 4 },
       fecha_compra: { required: true },
     },
@@ -1773,10 +1648,10 @@ $(function () {
       idproveedor: {
         required: "Por favor debe seleccionar un proveedor.",
       },
-      tipo_comprovante: {
+      tipo_comprobante: {
         required: "Por favor debe seleccionar tipo de comprobante.",
       },
-      serie_comprovante: {
+      serie_comprobante: {
         minlength: "mayor a 2 caracteres",
       },
       descripcion: {
@@ -1806,7 +1681,14 @@ $(function () {
       guardaryeditar_compras(form);
     },
   });
-  
+
+  //Validar formulario PROVEEDOR
+  // $.validator.setDefaults({
+  //     submitHandler: function (e) {
+  //         guardarproveedor(e);
+  //     },
+  // });
+
   $("#form-proveedor").validate({
     rules: {
       tipo_documento: { required: true },
@@ -1872,6 +1754,61 @@ $(function () {
     },
   });
 
+  // validar formulario FACTURA
+  // $.validator.setDefaults({
+  //     submitHandler: function (e) {
+  //         guardaryeditar_factura(e);
+  //     },
+  // });
+
+  $("#form-agregar-factura").validate({
+    rules: {
+      codigo: { required: true },
+      monto: { required: true },
+      fecha_emision: { required: true },
+      descripcion_f: { minlength: 1 },
+      foto2_i: { required: true },
+    },
+    messages: {
+      forma_pago: {
+        codigo: "Por favor ingresar el código",
+      },
+      monto: {
+        required: "Por favor ingresar el monto",
+      },
+      fecha_emision: {
+        required: "Por favor ingresar la fecha de emisión",
+      },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      guardaryeditar_factura(e);
+    },
+  });
+
+  // Validar formulario PAGOS
+  // $.validator.setDefaults({
+  //     submitHandler: function (e) {
+  //         guardaryeditar_pago(e);
+  //     },
+  // });
+
   $("#form-servicios-pago").validate({
     rules: {
       forma_pago: { required: true },
@@ -1925,6 +1862,12 @@ $(function () {
 
 // validacion formulario COMPROBANTE
 $(function () {
+  // $.validator.setDefaults({
+  //     submitHandler: function (e) {
+  //       guardaryeditar_comprobante(e);
+  //     },
+  // });
+
   $("#form-comprobante").validate({
     rules: {
       nombre: { required: true },
@@ -1954,230 +1897,19 @@ $(function () {
 
     submitHandler: function (e) {
       guardaryeditar_comprobante(e);
-      guardaryeditar_comprobante_p(e);
-    },
-  });
-  $("#form-comprobante_p").validate({
-    rules: {
-      nombre: { required: true },
-    },
-
-    messages: {
-      nombre: {
-        required: "Este campo es requerido",
-      },
-    },
-
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass("is-invalid").addClass("is-valid");
-    },
-
-    submitHandler: function (e) {
-      guardaryeditar_comprobante_p(e);
     },
   });
 });
 
 // recargar un doc para ver
 function re_visualizacion() {
-  $("#doc1_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+  $("#doc2_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 
-  pdffile = document.getElementById("doc1").files[0];
+  pdffile = document.getElementById("doc2").files[0];
 
   antiguopdf = $("#doc_old_1").val();
 
   if (pdffile === undefined) {
-    var dr = antiguopdf;
-
-    if (dr == "") {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Seleccione un documento",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-      $("#doc1_nombre").html("");
-    } else {
-      // cargamos la imagen adecuada par el archivo
-      if (extrae_extencion(dr) == "xls") {
-        $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-      } else {
-        if (extrae_extencion(dr) == "xlsx") {
-          $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(dr) == "csv") {
-            $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-          } else {
-            if (extrae_extencion(dr) == "xlsm") {
-              $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-              toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-            } else {
-              if (extrae_extencion(dr) == "pdf") {
-                $("#doc1_ver").html('<iframe src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-                toastr.success("Documento vizualizado correctamente!!!");
-              } else {
-                if (extrae_extencion(dr) == "dwg") {
-                  $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                } else {
-                  if (extrae_extencion(dr) == "zip" || extrae_extencion(dr) == "rar" || extrae_extencion(dr) == "iso") {
-                    $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                    toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                  } else {
-                    if (
-                      extrae_extencion(dr) == "jpeg" ||
-                      extrae_extencion(dr) == "jpg" ||
-                      extrae_extencion(dr) == "jpe" ||
-                      extrae_extencion(dr) == "jfif" ||
-                      extrae_extencion(dr) == "gif" ||
-                      extrae_extencion(dr) == "png" ||
-                      extrae_extencion(dr) == "tiff" ||
-                      extrae_extencion(dr) == "tif" ||
-                      extrae_extencion(dr) == "webp" ||
-                      extrae_extencion(dr) == "bmp"
-                    ) {
-                      $("#doc1_ver").html('<img src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + dr + '" alt="" width="50%" >');
-
-                      toastr.success("Documento vizualizado correctamente!!!");
-                    } else {
-                      if (extrae_extencion(dr) == "docx" || extrae_extencion(dr) == "docm" || extrae_extencion(dr) == "dotx" || extrae_extencion(dr) == "dotm" || extrae_extencion(dr) == "doc" || extrae_extencion(dr) == "dot") {
-                        $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                      } else {
-                        $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // console.log('hola'+dr);
-  } else {
-    pdffile_url = URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(pdffile.name) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-    } else {
-      if (extrae_extencion(pdffile.name) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-      } else {
-        if (extrae_extencion(pdffile.name) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(pdffile.name) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-          } else {
-            if (extrae_extencion(pdffile.name) == "pdf") {
-              $("#doc1_ver").html('<iframe src="' + pdffile_url + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-              toastr.success("Documento vizualizado correctamente!!!");
-            } else {
-              if (extrae_extencion(pdffile.name) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-              } else {
-                if (extrae_extencion(pdffile.name) == "zip" || extrae_extencion(pdffile.name) == "rar" || extrae_extencion(pdffile.name) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" ||
-                    extrae_extencion(pdffile.name) == "jpg" ||
-                    extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" ||
-                    extrae_extencion(pdffile.name) == "gif" ||
-                    extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" ||
-                    extrae_extencion(pdffile.name) == "tif" ||
-                    extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="' + pdffile_url + '" alt="" width="50%" >');
-
-                    toastr.success("Documento vizualizado correctamente!!!");
-                  } else {
-                    if (
-                      extrae_extencion(pdffile.name) == "docx" ||
-                      extrae_extencion(pdffile.name) == "docm" ||
-                      extrae_extencion(pdffile.name) == "dotx" ||
-                      extrae_extencion(pdffile.name) == "dotm" ||
-                      extrae_extencion(pdffile.name) == "doc" ||
-                      extrae_extencion(pdffile.name) == "dot"
-                    ) {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    console.log(pdffile);
-  }
-}
-// recargar un doc para ver comprobante proyecto
-function re_visualizacion2() {
-  $("#doc2_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  pdffile2 = document.getElementById("doc2").files[0];
-
-  antiguopdf = $("#doc_old_2").val();
-
-  if (pdffile2 === undefined) {
     var dr = antiguopdf;
 
     if (dr == "") {
@@ -2266,67 +1998,67 @@ function re_visualizacion2() {
 
     // console.log('hola'+dr);
   } else {
-    pdffile_url2 = URL.createObjectURL(pdffile2);
+    pdffile_url = URL.createObjectURL(pdffile);
 
     // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(pdffile2.name) == "xls") {
+    if (extrae_extencion(pdffile.name) == "xls") {
       $("#doc2_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
 
       toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
     } else {
-      if (extrae_extencion(pdffile2.name) == "xlsx") {
+      if (extrae_extencion(pdffile.name) == "xlsx") {
         $("#doc2_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
 
         toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
       } else {
-        if (extrae_extencion(pdffile2.name) == "csv") {
+        if (extrae_extencion(pdffile.name) == "csv") {
           $("#doc2_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
 
           toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
         } else {
-          if (extrae_extencion(pdffile2.name) == "xlsm") {
+          if (extrae_extencion(pdffile.name) == "xlsm") {
             $("#doc2_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
 
             toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
           } else {
-            if (extrae_extencion(pdffile2.name) == "pdf") {
-              $("#doc2_ver").html('<iframe src="' + pdffile_url2 + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+            if (extrae_extencion(pdffile.name) == "pdf") {
+              $("#doc2_ver").html('<iframe src="' + pdffile_url + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
               toastr.success("Documento vizualizado correctamente!!!");
             } else {
-              if (extrae_extencion(pdffile2.name) == "dwg") {
+              if (extrae_extencion(pdffile.name) == "dwg") {
                 $("#doc2_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
 
                 toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
               } else {
-                if (extrae_extencion(pdffile2.name) == "zip" || extrae_extencion(pdffile2.name) == "rar" || extrae_extencion(pdffile2.name) == "iso") {
+                if (extrae_extencion(pdffile.name) == "zip" || extrae_extencion(pdffile.name) == "rar" || extrae_extencion(pdffile.name) == "iso") {
                   $("#doc2_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
 
                   toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
                 } else {
                   if (
-                    extrae_extencion(pdffile2.name) == "jpeg" ||
-                    extrae_extencion(pdffile2.name) == "jpg" ||
-                    extrae_extencion(pdffile2.name) == "jpe" ||
-                    extrae_extencion(pdffile2.name) == "jfif" ||
-                    extrae_extencion(pdffile2.name) == "gif" ||
-                    extrae_extencion(pdffile2.name) == "png" ||
-                    extrae_extencion(pdffile2.name) == "tiff" ||
-                    extrae_extencion(pdffile2.name) == "tif" ||
-                    extrae_extencion(pdffile2.name) == "webp" ||
-                    extrae_extencion(pdffile2.name) == "bmp"
+                    extrae_extencion(pdffile.name) == "jpeg" ||
+                    extrae_extencion(pdffile.name) == "jpg" ||
+                    extrae_extencion(pdffile.name) == "jpe" ||
+                    extrae_extencion(pdffile.name) == "jfif" ||
+                    extrae_extencion(pdffile.name) == "gif" ||
+                    extrae_extencion(pdffile.name) == "png" ||
+                    extrae_extencion(pdffile.name) == "tiff" ||
+                    extrae_extencion(pdffile.name) == "tif" ||
+                    extrae_extencion(pdffile.name) == "webp" ||
+                    extrae_extencion(pdffile.name) == "bmp"
                   ) {
-                    $("#doc2_ver").html('<img src="' + pdffile_url2 + '" alt="" width="50%" >');
+                    $("#doc2_ver").html('<img src="' + pdffile_url + '" alt="" width="50%" >');
 
                     toastr.success("Documento vizualizado correctamente!!!");
                   } else {
                     if (
-                      extrae_extencion(pdffile2.name) == "docx" ||
-                      extrae_extencion(pdffile2.name) == "docm" ||
-                      extrae_extencion(pdffile2.name) == "dotx" ||
-                      extrae_extencion(pdffile2.name) == "dotm" ||
-                      extrae_extencion(pdffile2.name) == "doc" ||
-                      extrae_extencion(pdffile2.name) == "dot"
+                      extrae_extencion(pdffile.name) == "docx" ||
+                      extrae_extencion(pdffile.name) == "docm" ||
+                      extrae_extencion(pdffile.name) == "dotx" ||
+                      extrae_extencion(pdffile.name) == "dotm" ||
+                      extrae_extencion(pdffile.name) == "doc" ||
+                      extrae_extencion(pdffile.name) == "dot"
                     ) {
                       $("#doc2_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
 
@@ -2344,7 +2076,8 @@ function re_visualizacion2() {
         }
       }
     }
-   // console.log(pdffile2);
+
+    console.log(pdffile);
   }
 }
 
@@ -2368,6 +2101,116 @@ function validando_excedentes() {
     toastr.error("ERROR monto excedido al total del monto a pagar!");
   } else {
     toastr.success("Monto Aceptado.");
+  }
+}
+
+// Buscar Reniec SUNAT
+function buscar_sunat_reniec() {
+  $("#search").hide();
+
+  $("#charge").show();
+
+  let tipo_doc = $("#tipo_documento").val();
+
+  let dni_ruc = $("#num_documento").val();
+
+  if (tipo_doc == "DNI") {
+    if (dni_ruc.length == "8") {
+      $.post("../ajax/activos_fijos_proyecto.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+        data = JSON.parse(data);
+
+        console.log(data);
+
+        if (data.success == false) {
+          $("#search").show();
+
+          $("#charge").hide();
+
+          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+        } else {
+          $("#search").show();
+
+          $("#charge").hide();
+
+          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+          toastr.success("Cliente encontrado!!!!");
+        }
+      });
+    } else {
+      $("#search").show();
+
+      $("#charge").hide();
+
+      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
+    }
+  } else {
+    if (tipo_doc == "RUC") {
+      if (dni_ruc.length == "11") {
+        $.post("../ajax/activos_fijos_proyecto.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+          data = JSON.parse(data);
+
+          console.log(data);
+          if (data.success == false) {
+            $("#search").show();
+
+            $("#charge").hide();
+
+            toastr.error("Datos no encontrados en la SUNAT!!!");
+          } else {
+            if (data.estado == "ACTIVO") {
+              $("#search").show();
+
+              $("#charge").hide();
+
+              $("#nombre").val(data.razonSocial);
+
+              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+
+              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+              // $("#direccion").val(data.direccion);
+              toastr.success("Cliente encontrado");
+            } else {
+              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+
+              $("#search").show();
+
+              $("#charge").hide();
+
+              $("#nombre").val(data.razonSocial);
+
+              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+
+              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+
+              // $("#direccion").val(data.direccion);
+            }
+          }
+        });
+      } else {
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
+      }
+    } else {
+      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.info("No necesita hacer consulta");
+      } else {
+        $("#tipo_doc").addClass("is-invalid");
+
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.error("Selecione un tipo de documento");
+      }
+    }
   }
 }
 
