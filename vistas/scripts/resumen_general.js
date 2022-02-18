@@ -10,36 +10,27 @@ var tabla_8 = $("#tabla8_pension").DataTable();
 var tabla_9 = $("#tabla9_per_adm").DataTable();
 var tabla_10 = $("#tabla10_per_obr").DataTable();
 
+var tabla_11 = $("#tabla11_all_sumas").DataTable();
+
+var monto_compras = 0, pago_compras = 0, saldo_compras = 0;
+var monto_serv_maq = 0, pago_serv_maq = 0, saldo_serv_maq = 0;
+var monto_serv_equi = 0, pago_serv_equi = 0, saldo_serv_equi = 0;
+var monto_transp = 0, pago_transp = 0, saldo_transp = 0;
+var monto_hosped = 0, pago_hosped = 0, saldo_hosped = 0;
+var monto_cextra = 0, pago_cextra = 0, saldo_cextra = 0;
+var monto_break = 0, pago_break = 0, saldo_break = 0;
+var monto_pension = 0, pago_pension = 0, saldo_pension = 0;
+var monto_adm = 0, pago_adm = 0, saldo_adm = 0;
+var monto_obrero = 0, pago_obrero = 0, saldo_obrero = 0;
+
 var monto_all = 0;
 var deposito_all = 0;
 var saldo_all = 0;
 
-$( ".export_all_table" ).click(function() {
-  $('#tabla1_compras').tableExport({type:'excel'});
-  // $("#tabla1_compras#tabla2_maquinaria#tabla3_equipo#tabla4_transporte").tableExport({
-  //   type: "excel",
-  //   mso: {
-  //     fileFormat:'xlsx',
-  //     worksheetName: ["a", "b", "c"],
-  //   },
-  // });
-});
+$( ".export_all_table" ).click(function() { $('#tabla1_compras').tableExport({type:'excel'}); });
 
 //Función que se ejecuta al inicio
-function init() {
-
-  // Tablas de resumen
-  // listar_r_compras(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_transportes(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_hospedajes(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_breaks(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_pensiones(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), '', '', '');
-  // sumas_all_tablas();  
+function init() {   
 
   //Activamos el "aside"
   $("#mresumen_general").addClass("active");
@@ -87,17 +78,21 @@ function init() {
   // $("[data-mask]").inputmask();
 }
 
-// TABLA - COMPRAS
-function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {   
-
-  $.post("../ajax/resumen_general.php?op=listar_r_compras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+// TABLA - COMPRAS - -------------------------------------------------------
+function tbla_compras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {   
+  $('.cargando-compras').removeClass('backgff9100').addClass('bg-danger').html('Compras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_compras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
-
+     
     $("#monto_compras").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_compras").html(formato_miles(data.t_pagos.toFixed(2)));
-    $("#saldo_compras").html(formato_miles(data.t_saldo.toFixed(2)));    
-    
+    $("#saldo_compras").html(formato_miles(data.t_saldo.toFixed(2))); 
+
+    monto_compras = parseFloat(data.t_monto.toFixed(2));
+    pago_compras = parseFloat(data.t_pagos.toFixed(2));
+    saldo_compras = parseFloat(data.t_saldo.toFixed(2));
+
     // acumulamos las sumas totales
     $(".monto_compras_all").html(formato_miles(data.t_monto.toFixed(2)));
     $(".pago_compras_all").html(formato_miles(data.t_pagos.toFixed(2)));
@@ -153,6 +148,19 @@ function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
         }
       },
       language: {
@@ -169,112 +177,29 @@ function listar_r_compras(idproyecto, fecha_filtro, id_proveedor, deuda) {
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
+    
+    $('.cargando-compras').removeClass('bg-danger').addClass('backgff9100').html('Compras');
+    console.log(monto_compras, pago_compras, saldo_compras);
 
-  });
+    tbla_maquinaria(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+  });  
+   
 }
 
-//MODAL - COMPRAS
-function ver_detalle_compras(idcompra_proyecto) {
-  $("#modal-ver-compras").modal("show");
-
-  $.post("../ajax/compra.php?op=ver_compra", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
-    data = JSON.parse(data); //  console.log(data);
-    $(".idproveedor").html("");
-    $(".fecha_compra").val("");
-    $(".tipo_comprovante").html("");
-    $(".serie_comprovante").val("");
-    $(".descripcion").val("");
-
-    $(".subtotal").html("");
-    $(".igv_comp").html("");
-    $(".total").html("");
-
-    if (data.tipo_comprovante == "Factura") {
-      $(".igv").val("0.18");
-      $(".content-igv").show();
-      $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
-      $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-      $(".content-comprob").show();
-    } else if (data.tipo_comprovante == "Boleta" || data.tipo_comprovante == "Nota_de_venta") {
-      $(".igv").val("");
-      $(".content-comprob").show();
-      $(".content-igv").hide();
-      $(".content-t-comprob").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
-
-      $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-    } else if (data.tipo_comprovante == "Ninguno") {
-      $(".content-comprob").hide();
-      $(".content-comprob").val("");
-      $(".content-igv").hide();
-      $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
-      $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7").addClass("col-lg-8");
-    } else {
-      $(".content-comprob").show();
-      //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
-    }
-
-    //<!--idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,igv,descripcion, igv_comp, total-->
-    $(".idproveedor").html(data.razon_social);
-    $(".fecha_compra").val(format_d_m_a(data.fecha_compra));
-    $(".tipo_comprovante").html(data.tipo_comprovante);
-    $(".serie_comprovante").val(data.serie_comprovante);
-    //$(".igv").val(data.descripcion);
-    $(".descripcion").val(data.descripcion);
-
-    $(".subtotal").html(data.subtotal_compras);
-    $(".igv_comp").html(data.igv_compras_proyect);
-    $(".total").html(data.monto_total);
-  });
-
-  $.post("../ajax/compra.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
-    $("#detalles_compra").html(r);
-  });
-}
-
-// TABLA - MAQUINARIA
-function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda) {   
-
-  $.post("../ajax/resumen_general.php?op=listar_r_serv_maquinaria", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+// TABLA - MAQUINARIA - -----------------------------------------------------
+function tbla_maquinaria(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {   
+  $('.cargando-maquinas').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Maquinaria - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_maquinaria", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);
-
-    // data.forEach((value, index) => {
-    //   if (value.monto_pag_ser_maq != null) {
-    //     calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.monto_pag_ser_maq);
-    //     validando_pago = parseFloat(value.monto_pag_ser_maq);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   serv_maquinaria = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${value.proveedor}</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading">--</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Maquinaria:','${
-    //     value.proveedor
-    //   }')"><i class="fa fa-eye"></i></button></td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-    //   t_monto = t_monto + parseFloat(value.costo_parcial);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#serv_maquinas").append(serv_maquinaria);
-    // });
-
+    
     $("#monto_serv_maq").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_serv_maq").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_serv_maq").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_serv_maq = data.t_monto.toFixed(2);
+    pago_serv_maq = data.t_pagos.toFixed(2);
+    saldo_serv_maq = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
     $(".monto_serv_maq_all").html(formato_miles(data.t_monto.toFixed(2)));
@@ -293,107 +218,92 @@ function listar_r_serv_maquinaria(idproyecto, fecha_filtro, id_proveedor, deuda)
 
     $('#serv_maquinas').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_2 = $("#tabla2_maquinaria")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
+    tabla_2 = $("#tabla2_maquinaria").dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
 
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
   
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
           
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
           }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
           },
         },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    tbla_equipos(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
   });
+   
 }
 
 // TABLA - EQUIPO
-function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {   
-
-  $.post("../ajax/resumen_general.php?op=listar_r_serv_equipos", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    // data.forEach((value, index) => {
-    //   if (value.monto_pag_ser_maq != null) {
-    //     calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.monto_pag_ser_maq);
-    //     validando_pago = parseFloat(value.monto_pag_ser_maq);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   serv_equipos = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${value.proveedor}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading">--</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading"><button class="btn btn-info btn-xs" onclick="ver_detalle(${value.idmaquinaria},${value.idproyecto},'Servicio Equipo:','${
-    //     value.proveedor
-    //   }')"><i class="fa fa-eye"></i></button></td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-    //   t_monto = t_monto + parseFloat(value.costo_parcial);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#serv_equipos").append(serv_equipos);
-    // });
+function tbla_equipos(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {   
+  $('.cargando-equipos').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Equipo - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_equipos", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    data = JSON.parse(data); //console.log(data);    
 
     $("#monto_serv_equi").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_serv_equi").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_serv_equi").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_serv_equi = data.t_monto.toFixed(2);
+    pago_serv_equi = data.t_pagos.toFixed(2);
+    saldo_serv_equi = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
     $(".monto_serv_equi_all").html(formato_miles(data.t_monto.toFixed(2)));
@@ -412,89 +322,58 @@ function listar_r_serv_equipos(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
     $('#serv_equipos').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_3 = $("#tabla3_equipo")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
-
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
-  
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
-          
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
-          }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
-          },
-        },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
-  });
-}
-
-//MODAL - MAQUINARIA y EQUIPO
-function ver_detalle(idmaquinaria, idproyecto, servicio, proveedor) {
-  $("#nombre_proveedor_").html("");
-
-  $("#modal_ver_detalle_maq_equ").modal("show");
-
-  $("#detalle_").html(servicio);
-  $("#nombre_proveedor_").html(proveedor);
-
-  tabla2 = $("#tabla-detalle-m")
-    .dataTable({
+    tabla_3 = $("#tabla3_equipo").dataTable({
       responsive: true,
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/resumen_general.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
+        }
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -508,58 +387,28 @@ function ver_detalle(idmaquinaria, idproyecto, servicio, proveedor) {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    tbla_transportes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+  });
+  
 }
 
-// TABLA - TRANSPORTE
-function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  
-  $.post("../ajax/resumen_general.php?op=listar_r_transportes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-     
-    // data.forEach((value, index) => {
-    //   if (value.precio_parcial != null) {
-    //     calculando_sldo = parseFloat(value.precio_parcial) - parseFloat(value.precio_parcial);
-    //     validando_pago = parseFloat(value.precio_parcial);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   if (value.comprobante != "") {
-    //     comprobante = `<a target="_blank"  href="../dist/img/comprob_transporte/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
-    //   } else {
-    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-    //   }
-
-    //   transportes = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_viaje)}</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-    //   t_monto = t_monto + parseFloat(value.precio_parcial);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#transportes").append(transportes);
-    // });
+// TABLA - TRANSPORTE - -------------------------------------------------------
+function tbla_transportes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
+  $('.cargando-transporte').removeClass('backgff9100').addClass('bg-danger').html('Transporte - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_transportes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //console.log(data);   
 
     $("#monto_transp").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_transp").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_transp").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_transp = data.t_monto.toFixed(2); 
+    pago_transp = data.t_pagos.toFixed(2); 
+    saldo_transp = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
     $(".monto_transp_all").html(formato_miles(data.t_monto.toFixed(2)));
@@ -578,112 +427,93 @@ function listar_r_transportes(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
     $('#transportes').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_4 = $("#tabla4_transporte")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
+    tabla_4 = $("#tabla4_transporte").dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
 
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
   
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
           
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
           }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
           },
         },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    tbla_hospedajes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
   });
+  
 }
 
-// TABLA - HOSPEDAJES
-function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  
-  $.post("../ajax/resumen_general.php?op=listar_r_hospedajes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    // data.forEach((value, index) => {
-    //   if (value.precio_parcial != null) {
-    //     calculando_sldo = parseFloat(value.precio_parcial) - parseFloat(value.precio_parcial);
-    //     validando_pago = parseFloat(value.precio_parcial);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   if (value.comprobante != "") {
-    //     comprobante = `<a target="_blank"  href="../dist/img/comprob_hospedajes/${value.comprobante}"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>`;
-    //   } else {
-    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-    //   }
-
-    //   hospedajes = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comprobante)}</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.precio_parcial).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading  ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-    //   t_monto = t_monto + parseFloat(value.precio_parcial);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#hospedaje").append(hospedajes);
-    // });
+// TABLA - HOSPEDAJES - -------------------------------------------------------
+function tbla_hospedajes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
+  $('.cargando-hospedaje').removeClass('backgff9100').addClass('bg-danger').html('Hospedaje - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_hospedajes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //console.log(data);    
 
     $("#monto_hosped").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_hosped").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_hosped").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_hosped = data.t_monto.toFixed(2); 
+    pago_hosped = data.t_pagos.toFixed(2); 
+    saldo_hosped = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
     $(".monto_hosped_all").html(formato_miles(data.t_monto.toFixed(2)));
@@ -702,115 +532,94 @@ function listar_r_hospedajes(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
     $('#hospedaje').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_5 = $("#tabla5_hospedaje")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
+    tabla_5 = $("#tabla5_hospedaje").dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
 
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
   
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
           
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
           }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
           },
         },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    tbla_comidas_extras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+
   });
+  
 }
 
-// TABLA - COMIDAS EXTRAS
-function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  
-  $.post("../ajax/resumen_general.php?op=listar_r_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    // data.forEach((value, index) => {
-    //   if (value.costo_parcial != null) {
-    //     calculando_sldo = parseFloat(value.costo_parcial) - parseFloat(value.costo_parcial);
-    //     validando_pago = parseFloat(value.costo_parcial);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   if (value.comprobante != "") {
-    //     comprobante = `<a target="_blank"  href="../dist/img/comidas_extras/${value.comprobante}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
-    //   } else {
-    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-    //   }
-
-    //   comidas_extras = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">--</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_comida)}</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading">
-    //         <textarea cols="30" rows="1" class="text_area_clss" readonly >${value.descripcion == "" ? "---" : value.descripcion}</textarea> 
-    //       </td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">${comprobante}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.costo_parcial).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-
-    //   t_monto = t_monto + parseFloat(value.costo_parcial);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#comida_extra").append(comidas_extras);
-    // });
+// TABLA - COMIDAS EXTRAS - ----------------------------------------------------
+function tbla_comidas_extras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
+  $('.cargando-comida-extra').removeClass('backgff9100').addClass('bg-danger').html('Comidas extras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //console.log(data);    
 
     $("#monto_cextra").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_cextra").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_cextra").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_cextra = data.t_monto.toFixed(2); 
+    pago_cextra = data.t_pagos.toFixed(2); 
+    saldo_cextra = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
     $(".monto_cextra_all").html(formato_miles(data.t_monto.toFixed(2)));
@@ -867,6 +676,19 @@ function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) 
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
         }
       },
       language: {
@@ -883,58 +705,26 @@ function listar_r_comidas_extras(idproyecto, fecha_filtro, id_proveedor, deuda) 
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
+
+    tbla_breaks(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
   });
+   
 }
 
-// TABLA - BREAKS
-function listar_r_breaks(idproyecto, fecha_filtro, id_proveedor, deuda) {
- 
-  $.post("../ajax/resumen_general.php?op=listar_r_breaks", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    // data.forEach((value, index) => {
-    //   if (value.total != null) {
-    //     calculando_sldo = parseFloat(value.total) - parseFloat(value.total);
-    //     validando_pago = parseFloat(value.total);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   if (value.idsemana_break != "") {
-    //     comprobante = `<a target="_blank"  href="../dist/img/comidas_extras/${value.idsemana_break}"> <i class="far fa-file-pdf" style="font-size: 23px;"></i></a>`;
-    //   } else {
-    //     comprobante = `<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>`;
-    //   }
-
-    //   breaks = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>${format_d_m_a(value.fecha_inicial)} - <br> ${format_d_m_a(value.fecha_final)} </span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
-    //         <button class="btn btn-info btn-sm" onclick="listar_comprobantes_breaks(${value.idsemana_break})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-    //       </td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.total).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-
-    //   t_monto = t_monto + parseFloat(value.total);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#breaks").append(breaks);
-    // });
+// TABLA - BREAKS - -------------------------------------------------------------
+function tbla_breaks(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
+  $('.cargando-breaks').removeClass('backgff9100').addClass('bg-danger').html('Breaks - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_breaks", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //console.log(data);    
 
     $("#monto_break").html(formato_miles(data.t_monto.toFixed(2)));
     $("#pago_break").html(formato_miles(data.t_pagos.toFixed(2)));
     $("#saldo_break").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_break = data.t_monto.toFixed(2); 
+    pago_break = data.t_pagos.toFixed(2); 
+    saldo_break = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
     $(".monto_break_all").html(formato_miles(data.t_monto.toFixed(2)));
@@ -953,83 +743,58 @@ function listar_r_breaks(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
     $('#breaks').empty(); // Vacía en caso de que las columnas cambien
 
-    $("#tabla7_breaks")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
-
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
-  
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
-          
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
-          }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
-          },
-        },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
-  });
-}
-
-function listar_comprobantes_breaks(idsemana_break) {
-  $("#modal_ver_breaks").modal("show");
-
-  tabla1 = $("#t-comprobantes")
-    .dataTable({
+    $("#tabla7_breaks").dataTable({
       responsive: true,
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/resumen_general.php?op=listar_comprobantes_breaks&idsemana_break=" + idsemana_break,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
+        }
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -1044,59 +809,33 @@ function listar_comprobantes_breaks(idsemana_break) {
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    }).DataTable();
+
+    tbla_pensiones(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+
+  });
+   
 }
 
-// TABLA - PENSIONES
-function listar_r_pensiones(idproyecto, fecha_filtro, id_proveedor, deuda) {
-  
-  $.post("../ajax/resumen_general.php?op=listar_r_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+// TABLA - PENSIONES - -----------------------------------------------------------
+function tbla_pensiones(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
+  $('.cargando-pension').removeClass('backgff9100').addClass('bg-danger').html('Pensión - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $.post("../ajax/resumen_general.php?op=tbla_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //console.log(data);    
 
-    // data.forEach((value, index) => {
-    //   if (value.monto_total_pension != null) {
-    //     calculando_sldo = parseFloat(value.monto_total_pension) - parseFloat(value.pago_total_pension);
-    //     validando_pago = parseFloat(value.pago_total_pension);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //   }
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
+    $("#monto_pension").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_pension").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_pension").html(formato_miles(data.t_saldo.toFixed(2)));
 
-    //   pension = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>Semana ${value.proveedor}</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
-    //         <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p(${value.idpension})"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-    //         <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension(${value.idpension})"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>
-    //       </td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(parseFloat(value.monto_total_pension).toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-
-    //   t_monto = t_monto + parseFloat(value.monto_total_pension);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#pension").append(pension);
-    // });
-
-    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
-    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
-    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+    monto_pension = data.t_monto.toFixed(2); 
+    pago_pension = data.t_pagos.toFixed(2); 
+    saldo_pension = data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
-    $(".monto_pension_all").html(formato_miles(monto_all.toFixed(2)));
-    $(".pago_pension_all").html(formato_miles(deposito_all.toFixed(2)));
-    $(".saldo_pension_all").html(formato_miles(saldo_all.toFixed(2)));
+    $(".monto_pension_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_pension_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_pension_all").html(formato_miles(data.t_saldo.toFixed(2)));
 
     monto_all += parseFloat(data.t_monto);
     deposito_all += parseFloat(data.t_pagos);
@@ -1110,83 +849,58 @@ function listar_r_pensiones(idproyecto, fecha_filtro, id_proveedor, deuda) {
 
     $('#pension').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_8 = $("#tabla8_pension")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
-
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
-  
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
-          
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
-          }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
-          },
-        },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
-  });
-}
-//Función ver detalles Detalles
-function ver_detalle_x_servicio_p(idpension) {
-  //console.log(numero_semana,nube_idproyecto);
-  $("#modal-ver-detalle-semana").modal("show");
-  tabla_detalle_s = $("#tabla-detalles-semanal")
-    .dataTable({
+    tabla_8 = $("#tabla8_pension").dataTable({
       responsive: true,
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/resumen_general.php?op=ver_detalle_x_servicio&idpension=" + idpension,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
+        }
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -1201,14 +915,493 @@ function ver_detalle_x_servicio_p(idpension) {
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    }).DataTable();
+
+    tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda);
+  });
+   
 }
 
-function listar_comprobantes_pension(idpension) {
-  $("#modal-ver-comprobantes_pension").modal("show");
+// TABLA - ADMINISTRAIVOS - -------------------------------------------------------
+function tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda) {
+  
+  $.post("../ajax/resumen_general.php?op=tbla_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data);  //console.log(data);     
 
-  tabla2 = $("#t-comprobantes-pension")
+    $("#monto_adm").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_adm").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_adm").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_adm = data.t_monto.toFixed(2); 
+    pago_adm = data.t_pagos.toFixed(2); 
+    saldo_adm = data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_adm_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_adm_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_adm_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    // actualizamos el DATA-TABLE
+    tabla_9.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#administrativo').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_9 = $("#tabla9_per_adm").dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda);
+
+  });
+   
+}
+
+// TABLA - OBRERO - ----------------------------------------------------------------
+function tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda) {
+  
+  $.post("../ajax/resumen_general.php?op=tbla_obrero", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
+    
+    data = JSON.parse(data); //  console.log(data);
+    
+    $("#monto_obrero").html(formato_miles(data.t_monto.toFixed(2)));
+    $("#pago_obrero").html(formato_miles(data.t_pagos.toFixed(2)));
+    $("#saldo_obrero").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_obrero = data.t_monto.toFixed(2); 
+    pago_obrero = data.t_pagos.toFixed(2); 
+    saldo_obrero = data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_obrero_all").html(formato_miles(data.t_monto.toFixed(2)));
+    $(".pago_obrero_all").html(formato_miles(data.t_pagos.toFixed(2)));
+    $(".saldo_obrero_all").html(formato_miles(data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(data.t_monto);
+    deposito_all += parseFloat(data.t_pagos);
+    saldo_all += parseFloat(data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    // actualizamos el DATA-TABLE
+    tabla_10.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#obrero').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_10 = $("#tabla10_per_obr").dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+        }
+
+        // columna: fecha
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-nowrap");         
+        } 
+
+        // columna: detalle
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-center");         
+        }  
+
+        // columna: montos
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right");         
+        }   
+        
+        // columna: depositos  
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right");
+        }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    table_all_sumas();
+
+  });
+   
+}
+
+function table_all_sumas() {
+
+  console.log(monto_all ,  deposito_all   ,saldo_all );        
+   
+  var insert_table = [    
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Compras',
+      '5': formato_miles(monto_compras),
+      '6': formato_miles(pago_compras),
+      '7': formato_miles(saldo_compras),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Servicios Maquinaria',
+      '5': formato_miles(monto_serv_maq),
+      '6': formato_miles(pago_serv_maq),
+      '7': formato_miles(saldo_serv_maq),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Servicios Equipo',
+      '5': formato_miles(monto_serv_equi),
+      '6': formato_miles(pago_serv_equi),
+      '7': formato_miles(saldo_serv_equi),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Transporte',
+      '5': formato_miles(monto_transp),
+      '6': formato_miles(pago_transp),
+      '7': formato_miles(saldo_transp),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Hospedaje',
+      '5': formato_miles(monto_hosped),
+      '6': formato_miles(pago_hosped),
+      '7': formato_miles(saldo_hosped),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Comidas extras',
+      '5': formato_miles(monto_cextra),
+      '6': formato_miles(pago_cextra),
+      '7': formato_miles(saldo_cextra),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Breaks',
+      '5': formato_miles(monto_break),
+      '6': formato_miles(pago_break),
+      '7': formato_miles(saldo_break),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Pensión',
+      '5': formato_miles(monto_pension),
+      '6': formato_miles(pago_pension),
+      '7': formato_miles(saldo_pension),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Personal Administrativo',
+      '5': formato_miles(monto_adm),
+      '6': formato_miles(pago_adm),
+      '7': formato_miles(saldo_adm),
+    },
+    {
+      '0': '--', '1': '--', '2': '--', '3': '--',
+      '4': 'Personal Obrero',
+      '5': formato_miles(monto_obrero),
+      '6': formato_miles(pago_obrero),
+      '7': formato_miles(saldo_obrero),
+    },
+  ];
+
+  tabla_11.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+  $('#tbody11_all_sumas').empty(); // Vacía en caso de que las columnas cambien
+    
+  tabla_11 = $("#tabla11_all_sumas").dataTable({
+    responsive: true,
+    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+    data: insert_table,
+    createdRow: function (row, data, ixdex) {   
+
+      // columna: detalle
+      if (data[4] != '') {   
+
+        // console.log(data[4]);
+
+        if (data[4] == 'Compras') {
+          $("td", row).eq(5).removeClass('text-right monto_compras_all').addClass('text-right monto_compras_all');
+          $("td", row).eq(6).removeClass('text-right pago_compras_all').addClass('text-right pago_compras_all');
+          $("td", row).eq(7).removeClass('text-right saldo_compras_all').addClass('text-right saldo_compras_all');
+        }
+
+        if (data[4] == 'Servicios Maquinaria') {
+          $("td", row).eq(5).removeClass('text-right monto_serv_maq_all').addClass('text-right monto_serv_maq_all');
+          $("td", row).eq(6).removeClass('text-right monto_serv_maq_all').addClass('text-right monto_serv_maq_all');
+          $("td", row).eq(7).removeClass('text-right saldo_serv_maq_all').addClass('text-right saldo_serv_maq_all');
+        }
+
+        if (data[4] == 'Servicios Equipo') {
+          $("td", row).eq(5).removeClass('text-right monto_serv_equi_all').addClass('text-right monto_serv_equi_all');
+          $("td", row).eq(6).removeClass('text-right pago_serv_equi_all').addClass('text-right pago_serv_equi_all');
+          $("td", row).eq(7).removeClass('text-right saldo_serv_equi_all').addClass('text-right saldo_serv_equi_all');
+        }
+
+        if (data[4] == 'Transporte') {
+          $("td", row).eq(5).removeClass('text-right monto_transp_all').addClass('text-right monto_transp_all');
+          $("td", row).eq(6).removeClass('text-right pago_transp_all').addClass('text-right pago_transp_all');
+          $("td", row).eq(7).removeClass('text-right saldo_transp_all').addClass('text-right saldo_transp_all');
+        }
+
+        if (data[4] == 'Hospedaje') {
+          $("td", row).eq(5).removeClass('text-right monto_hosped_all').addClass('text-right monto_hosped_all');
+          $("td", row).eq(6).removeClass('text-right pago_hosped_all').addClass('text-right pago_hosped_all');
+          $("td", row).eq(7).removeClass('text-right saldo_hosped_all').addClass('text-right saldo_hosped_all');
+        }
+
+        if (data[4] == 'Comidas extras') {
+          $("td", row).eq(5).removeClass('text-right monto_cextra_all').addClass('text-right monto_cextra_all');
+          $("td", row).eq(6).removeClass('text-right pago_cextra_all').addClass('text-right pago_cextra_all');
+          $("td", row).eq(7).removeClass('text-right saldo_cextra_all').addClass('text-right saldo_cextra_all');
+        }
+
+        if (data[4] == 'Breaks') {
+          $("td", row).eq(5).removeClass('text-right monto_break_all').addClass('text-right monto_break_all');
+          $("td", row).eq(6).removeClass('text-right pago_break_all').addClass('text-right pago_break_all');
+          $("td", row).eq(7).removeClass('text-right saldo_break_all').addClass('text-right saldo_break_all');
+        }
+
+        if (data[4] == 'Pensión') {
+          $("td", row).eq(5).removeClass('text-right monto_pension_all ').addClass('text-right monto_pension_all ');
+          $("td", row).eq(6).removeClass('text-right pago_pension_all').addClass('text-right pago_pension_all');
+          $("td", row).eq(7).removeClass('text-right saldo_pension_all').addClass('text-right saldo_pension_all');
+        }
+
+        if (data[4] == 'Personal Administrativo') {
+          $("td", row).eq(5).removeClass('text-right monto_adm_all').addClass('text-right monto_adm_all');
+          $("td", row).eq(6).removeClass('text-right pago_adm_all').addClass('text-right pago_adm_all');
+          $("td", row).eq(7).removeClass('text-right saldo_adm_all').addClass('text-right saldo_adm_all');
+        }
+
+        if (data[4] == 'Personal Obrero') {
+          $("td", row).eq(5).removeClass('text-right monto_obrero_all').addClass('text-right monto_obrero_all');
+          $("td", row).eq(6).removeClass('text-right pago_obrero_all').addClass('text-right pago_obrero_all');
+          $("td", row).eq(7).removeClass('text-right saldo_obrero_all').addClass('text-right saldo_obrero_all');    
+        }   
+      }  
+
+      // columna: montos
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");         
+      }   
+      
+      // columna: depositos  
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass("text-right");
+      }              
+
+      // columna: saldos
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass("text-right");
+        var numero_deposito = quitar_formato_miles(data[6]);
+        var numero_saldo = quitar_formato_miles(data[7]);
+        // console.log(numero_saldo);
+        if ( parseFloat(numero_saldo) < 0 ) {
+          $("td", row).eq(7).addClass("text-right bg-danger");
+        }else{              
+          if ( parseFloat(numero_saldo) > 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else {            
+            if ( parseFloat(numero_saldo) == 0 && numero_deposito > 0) {
+              $("td", row).eq(7).addClass("text-right bg-success");
+            }else{
+              $("td", row).eq(7).removeClass("bg-success");
+            }
+          }
+        }
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
+        },
+      },
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();  
+}
+
+function filtros() {
+
+  monto_all = 0; deposito_all = 0; saldo_all = 0;
+
+  // console.log('--------------------------');
+  var fecha          = $("#fecha_filtro").val();
+  var id_trabajador  = $("#trabajador_filtro").select2('val');
+  var id_proveedor   = $("#proveedor_filtro").select2('val');
+  var deuda          = $("#deuda_filtro").select2('val');
+
+  // filtro de fechas
+  if (fecha == "" || fecha == null) { fecha = ""; }
+
+  // filtro de trabajdor
+  if (id_trabajador == '' || id_trabajador == 0 || id_trabajador == null) { id_trabajador = ""; }
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; }
+
+  // filtro deuda
+  if (deuda == "" || deuda == null) { deuda = ""; }
+
+  console.log(fecha, id_trabajador, id_proveedor, deuda);
+
+  // ejecutamos las funcioes a filtrar
+  tbla_compras(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, id_proveedor, deuda);
+  // tbla_maquinaria(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  // tbla_equipos(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+
+  // tbla_transportes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  // tbla_hospedajes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  // tbla_comidas_extras(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  // tbla_breaks(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+
+  // tbla_pensiones(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
+  // tbla_administrativo(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
+  // tbla_obrero(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);  
+
+  // table_all_sumas();
+}
+
+// ::::::::::::::::::::::: MODALS ::::::::::::::::::::::::::::::::
+//MODAL - COMPRAS
+function mostrar_detalle_compras(idcompra_proyecto) {
+
+  $("#modal-ver-compras").modal("show");  
+
+  $.post("../ajax/resumen_general.php?op=mostrar_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
+    $("#detalles_compra").html(r);
+  });
+}
+
+//MODAL - MAQUINARIA y EQUIPO
+function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, proveedor) {
+  $("#nombre_proveedor_").html("");
+
+  $("#modal_ver_detalle_maq_equ").modal("show");
+
+  $("#detalle_").html(servicio);
+  $("#nombre_proveedor_").html(proveedor);
+
+  tabla2 = $("#tabla-detalle-m")
     .dataTable({
       responsive: true,
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -1217,7 +1410,7 @@ function listar_comprobantes_pension(idpension) {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/resumen_general.php?op=listar_comprobantes_pension&idpension=" + idpension,
+        url: "../ajax/resumen_general.php?op=mostrar_detalle_maquinaria_equipo&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -1241,129 +1434,119 @@ function listar_comprobantes_pension(idpension) {
     .DataTable();
 }
 
-// TABLA - ADMINISTRAIVOS
-function listar_r_trab_administrativo(idproyecto, fecha_filtro, id_trabajador, deuda) {
-  
-  $.post("../ajax/resumen_general.php?op=listar_r_trab_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
-    data = JSON.parse(data);  console.log(data);
+// MODAL - BREAKS
+function mostrar_comprobantes_breaks(idsemana_break) {
+  $("#modal_ver_breaks").modal("show");
 
-    // data.forEach((value, index) => {
-    //   if (value.total_montos_x_meses != null) {
-    //     calculando_sldo = parseFloat(value.total_montos_x_meses) - parseFloat(value.pago_total_adm);
-    //     validando_pago = parseFloat(value.pago_total_adm);
-    //     total_montos_x_meses = parseFloat(value.total_montos_x_meses);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //     total_montos_x_meses = 0;
-    //   }
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   administrativo = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
-    //         <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-    //       </td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(total_montos_x_meses.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-
-    //   t_monto = t_monto + parseFloat(total_montos_x_meses);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#administrativo").append(administrativo);
-    // });
-
-    $("#monto_adm").html(formato_miles(data.t_monto.toFixed(2)));
-    $("#pago_adm").html(formato_miles(data.t_pagos.toFixed(2)));
-    $("#saldo_adm").html(formato_miles(data.t_saldo.toFixed(2)));
-
-    // acumulamos las sumas totales
-    $(".monto_adm_all").html(formato_miles(data.t_monto.toFixed(2)));
-    $(".pago_adm_all").html(formato_miles(data.t_pagos.toFixed(2)));
-    $(".saldo_adm_all").html(formato_miles(data.t_saldo.toFixed(2)));
-
-    monto_all += parseFloat(data.t_monto);
-    deposito_all += parseFloat(data.t_pagos);
-    saldo_all += parseFloat(data.t_saldo);
-
-    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
-    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
-    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
-
-    tabla_9.destroy(); // Destruye las tablas de datos en el contexto actual.
-
-    $('#administrativo').empty(); // Vacía en caso de que las columnas cambien
-
-    tabla_9 = $("#tabla9_per_adm")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
-
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
-  
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
-          
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
-          }
+  tabla1 = $("#t-comprobantes")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/resumen_general.php?op=mostrar_comprobantes_breaks&idsemana_break=" + idsemana_break,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
         },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
           },
         },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
-  });
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
 }
-//DETALLES DE PAGOS ADMINISTRADORES
-function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto, nombres) {
+
+// MODAL - PENSIONES
+function mostrar_detalle_pension(idpension) {
+  //console.log(numero_semana,nube_idproyecto);
+  $("#modal-ver-detalle-semana").modal("show");
+  tabla_detalle_s = $("#tabla-detalles-semanal")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/resumen_general.php?op=mostrar_detalle_pension&idpension=" + idpension,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
+}
+
+// MODAL - PENSIONES
+function mostrar_comprobantes_pension(idpension) {
+  $("#modal-ver-comprobantes_pension").modal("show");
+
+  tabla2 = $("#t-comprobantes-pension")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/resumen_general.php?op=mostrar_comprobantes_pension&idpension=" + idpension,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
+}
+
+// MODAL - ADMINISTRAIVOS
+function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
   detalle = "";
   var sueldo_estimado = 0;
   var depositos = 0;
@@ -1407,131 +1590,8 @@ function ver_detalle_pagos_x_trab_adm(idtrabajador_por_proyecto, nombres) {
   });
 }
 
-// TABLA - OBRERO
-function listar_r_trabajador_obrero(idproyecto, fecha_filtro, id_trabajador, deuda) {
-  
-  $.post("../ajax/resumen_general.php?op=listar_r_trabajador_obrero", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
-     
-    data = JSON.parse(data); //  console.log(data);
-
-    // data.forEach((value, index) => {
-    //   if (value.pago_quincenal != null) {
-    //     calculando_sldo = parseFloat(value.pago_quincenal) - parseFloat(value.total_deposito_obrero);
-    //     validando_pago = parseFloat(value.total_deposito_obrero);
-    //     pago_quincenal = parseFloat(value.pago_quincenal);
-    //   } else {
-    //     calculando_sldo = 0;
-    //     validando_pago = 0;
-    //     pago_quincenal = 0;
-    //   }
-    //   if (calculando_sldo == 0) {
-    //     pintar_celda = "";
-    //   } else {
-    //     pintar_celda = "bg-red-resumen";
-    //   }
-
-    //   obrero = `<tr>
-    //       <td class="bg-color-b4bdbe47  text-center clas_pading">${index + 1}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading">${value.nombres}</td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><span>--</span></td>
-    //       <td class="bg-color-b4bdbe47  clas_pading"><textarea cols="30" rows="1" class="text_area_clss" readonly >--</textarea></td>
-    //       <td class="bg-color-b4bdbe47 text-center clas_pading">
-    //         <button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero(${value.idtrabajador_por_proyecto},'${value.nombres}')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-    //       </td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(pago_quincenal.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right  clas_pading">${formato_miles(validando_pago.toFixed(2))}</td>
-    //       <td class="bg-color-b4bdbe47 text-right clas_pading ${pintar_celda}">${formato_miles(calculando_sldo.toFixed(2))}</td>
-    //   </tr>`;
-
-    //   t_monto = t_monto + parseFloat(pago_quincenal);
-    //   t_pagos = t_pagos + parseFloat(validando_pago);
-    //   t_saldo = t_saldo + parseFloat(calculando_sldo);
-
-    //   $("#obrero").append(obrero);
-    // });
-
-    $("#monto_obrero").html(formato_miles(data.t_monto.toFixed(2)));
-    $("#pago_obrero").html(formato_miles(data.t_pagos.toFixed(2)));
-    $("#saldo_obrero").html(formato_miles(data.t_saldo.toFixed(2)));
-
-    // acumulamos las sumas totales
-    $(".monto_obrero_all").html(formato_miles(data.t_monto.toFixed(2)));
-    $(".pago_obrero_all").html(formato_miles(data.t_pagos.toFixed(2)));
-    $(".saldo_obrero_all").html(formato_miles(data.t_saldo.toFixed(2)));
-
-    monto_all += parseFloat(data.t_monto);
-    deposito_all += parseFloat(data.t_pagos);
-    saldo_all += parseFloat(data.t_saldo);
-
-    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
-    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
-    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
-
-    tabla_10.destroy(); // Destruye las tablas de datos en el contexto actual.
-
-    $('#obrero').empty(); // Vacía en caso de que las columnas cambien
-
-    tabla_10 = $("#tabla10_per_obr")
-      .dataTable({
-        responsive: true,
-        lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-        aProcessing: true, //Activamos el procesamiento del datatables
-        aServerSide: true, //Paginación y filtrado realizados por el servidor
-        dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-        buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-        data: data.datatable,
-        createdRow: function (row, data, ixdex) {          
-
-          // columna: #
-          if (data[0] != '') {
-            $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-          }
-  
-          // columna: fecha
-          if (data[2] != '') {
-            $("td", row).eq(2).addClass("text-nowrap");         
-          } 
-  
-          // columna: detalle
-          if (data[4] != '') {
-            $("td", row).eq(4).addClass("text-center");         
-          }  
-  
-          // columna: montos
-          if (data[5] != '') {
-            $("td", row).eq(5).addClass("text-right");         
-          }   
-          
-          // columna: depositos  
-          if (data[6] != '') {
-            $("td", row).eq(6).addClass("text-right");
-          }              
-    
-          // columna: saldos
-          if (data[7] != '') {
-            $("td", row).eq(7).addClass("text-right");
-          }
-        },
-        language: {
-          lengthMenu: "Mostrar : _MENU_ registros",
-          buttons: {
-            copyTitle: "Tabla Copiada",
-            copySuccess: {
-              _: "%d líneas copiadas",
-              1: "1 línea copiada",
-            },
-          },
-        },
-        bDestroy: true,
-        iDisplayLength: 5, //Paginación
-        order: [[0, "asc"]], //Ordenar (columna,orden)
-      })
-      .DataTable();
-  });
-}
-
-//DETALLES DE PAGOS OBRERO
-function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto, nombres) {
+// MODAL - OBRERO
+function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
   detalle = "";
   var pago_parcial_hn = 0;
   var pago_parcial_he = 0;
@@ -1546,7 +1606,7 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto, nombres) {
   $(".detalle-data-q-s").html("");
   $("#nombre_trabajador_ob_detalle").html(nombres);
 
-  $.post("../ajax/resumen_general.php?op=ver_detalle_pagos_x_trab_obrero", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
+  $.post("../ajax/resumen_general.php?op=mostrar_detalle_obrero", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
     //obrero
     data = JSON.parse(data);
     console.log(data);
@@ -1602,120 +1662,6 @@ function ver_detalle_pagos_x_trab_obrero(idtrabajador_por_proyecto, nombres) {
       $(".alerta_obrero").show();
     }
   });
-}
-
-function filtros() {
-  console.log('--------------------------');
-  var fecha          = $("#fecha_filtro").val();
-  var id_trabajador  = $("#trabajador_filtro").select2('val');
-  var id_proveedor   = $("#proveedor_filtro").select2('val');
-  var deuda          = $("#deuda_filtro").select2('val');
-
-  // filtro de fechas
-  if (fecha == "" || fecha == null) { fecha = ""; }
-
-  // filtro de trabajdor
-  if (id_trabajador == '' || id_trabajador == 0 || id_trabajador == null) { id_trabajador = ""; }
-
-  // filtro de proveedor
-  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; }
-
-  // filtro deuda
-  if (deuda == "" || deuda == null) { deuda = ""; }
-
-  console.log(fecha, id_trabajador, id_proveedor, deuda);
-
-  // ejecutamos las funcioes a filtrar
-  listar_r_compras(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  listar_r_serv_maquinaria(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  listar_r_serv_equipos(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-
-  listar_r_transportes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  listar_r_hospedajes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  listar_r_comidas_extras(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  listar_r_breaks(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-
-  listar_r_pensiones(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  listar_r_trab_administrativo(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
-  listar_r_trabajador_obrero(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
-
- 
-  sumas_all_tablas(); 
-  
-  
-}
-
-function sumas_all_tablas() {
-  var monto_obrero = $("#monto_obrero").text();
-  var pago_obrero = $("#pago_obrero").text();
-  var saldo_obrero = $("#saldo_obrero").text();
-
-  var monto_adm = $("#monto_adm").text();
-  var pago_adm = $("#pago_adm").text();
-  var saldo_adm = $("#saldo_adm").text();
-
-  var monto_pension = $("#monto_pension").text();
-  var pago_pension = $("#pago_pension").text();
-  var saldo_pension = $("#saldo_pension").text();
-
-  var monto_break = $("#monto_break").text();
-  var pago_break = $("#pago_break").text();
-  var saldo_break = $("#saldo_break").text();
-
-  var monto_cextra = $("#monto_cextra").text();
-  var pago_cextra = $("#pago_cextra").text();
-  var saldo_cextra = $("#saldo_cextra").text();
-
-  var monto_hosped = $("#monto_hosped").text();
-  var pago_hosped = $("#pago_hosped").text();
-  var saldo_hosped = $("#saldo_hosped").text();
-
-  var monto_transp = $("#monto_transp").text();
-  var pago_transp = $("#pago_transp").text();
-  var saldo_transp = $("#saldo_transp").text();
-
-  var monto_serv_equi = $("#monto_serv_equi").text();
-  var pago_serv_equi = $("#pago_serv_equi").text();
-  var saldo_serv_equi = $("#saldo_serv_equi").text();
-
-  var monto_serv_maq = $("#monto_serv_maq").text();
-  var pago_serv_maq = $("#pago_serv_maq").text();
-  var saldo_serv_maq = $("#saldo_serv_maq").text();
-
-  var monto_compras = $("#monto_compras").text();
-  var pago_compras = $("#pago_compras").text();
-  var saldo_compras = $("#saldo_compras").text();
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-  // sumas totales
-  // var monto_all = parseFloat(quitar_formato_miles(monto_obrero)) + parseFloat(quitar_formato_miles(monto_adm)) + parseFloat(quitar_formato_miles(monto_pension)) + parseFloat(quitar_formato_miles(monto_break)) + parseFloat(quitar_formato_miles(monto_cextra)) + parseFloat(quitar_formato_miles(monto_hosped)) + parseFloat(quitar_formato_miles(monto_transp)) + parseFloat(quitar_formato_miles(monto_serv_equi)) + parseFloat(quitar_formato_miles(monto_serv_maq)) + parseFloat(quitar_formato_miles(monto_compras));
-  
-  // var deposito_all = parseFloat(quitar_formato_miles(pago_obrero)) + parseFloat(quitar_formato_miles(pago_adm)) + parseFloat(quitar_formato_miles(pago_pension)) + parseFloat(quitar_formato_miles(pago_break)) + parseFloat(quitar_formato_miles(pago_cextra)) + parseFloat(quitar_formato_miles(pago_hosped)) + parseFloat(quitar_formato_miles(pago_transp)) + parseFloat(quitar_formato_miles(pago_serv_equi)) + parseFloat(quitar_formato_miles(pago_serv_maq)) + parseFloat(quitar_formato_miles(pago_compras));  
-   
-  // var saldo_all = parseFloat(quitar_formato_miles(saldo_obrero)) + parseFloat(quitar_formato_miles(saldo_adm)) + parseFloat(quitar_formato_miles(saldo_pension)) + parseFloat(quitar_formato_miles(saldo_break)) + parseFloat(quitar_formato_miles(saldo_cextra)) + parseFloat(quitar_formato_miles(saldo_hosped)) + parseFloat(quitar_formato_miles(saldo_transp)) + parseFloat(quitar_formato_miles(saldo_serv_equi)) + parseFloat(quitar_formato_miles(saldo_serv_maq)) + parseFloat(quitar_formato_miles(saldo_compras)) ;
-  
-  $("#monto_all").html(monto_all);
-  $("#deposito_all").html(deposito_all);
-  $("#saldo_all").html(saldo_all);
 }
 
 init();

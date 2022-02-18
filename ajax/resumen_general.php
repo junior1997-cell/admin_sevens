@@ -21,7 +21,7 @@ if (!isset($_SESSION["nombre"])) {
 
     switch ($_GET["op"]) {
 
-      case 'listar_r_compras':
+      case 'tbla_compras':
 
         $data = Array(); $datatable = Array();
 
@@ -44,7 +44,7 @@ if (!isset($_SESSION["nombre"])) {
               '1' => $value['proveedor'],
               '2' => format_d_m_a($value['fecha_compra']),
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
-              '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
               '5' => number_format($value['monto_total'], 2, '.', ',' ),
               '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -62,7 +62,7 @@ if (!isset($_SESSION["nombre"])) {
                   '1' => $value['proveedor'],
                   '2' => format_d_m_a($value['fecha_compra']),
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
-                  '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
                   '5' => number_format($value['monto_total'], 2, '.', ',' ),
                   '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -80,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
                     '1' => $value['proveedor'],
                     '2' => format_d_m_a($value['fecha_compra']),
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
-                    '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['monto_total'], 2, '.', ',' ),
                     '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -98,7 +98,7 @@ if (!isset($_SESSION["nombre"])) {
                       '1' => $value['proveedor'],
                       '2' => format_d_m_a($value['fecha_compra']),
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
-                      '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_compras('.$value['idcompra_proyecto'].')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['monto_total'], 2, '.', ',' ),
                       '6' => number_format($value['monto_pago_total'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -126,7 +126,7 @@ if (!isset($_SESSION["nombre"])) {
             
       break;
 
-      case 'ver_detalle_compras':
+      case 'mostrar_detalle_compras':
         $rspta = $resumen_general->detalles_compras($_GET['id_compra']);
         $rspta2 = $resumen_general->ver_compras($_GET['id_compra']);
 
@@ -190,7 +190,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'listar_r_serv_maquinaria':
+      case 'tbla_maquinaria':
          
         $tipo = '1';
 
@@ -215,7 +215,7 @@ if (!isset($_SESSION["nombre"])) {
               '1' => $value['proveedor'],
               '2' => '- - -',
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
               '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -232,7 +232,7 @@ if (!isset($_SESSION["nombre"])) {
                   '1' => $value['proveedor'],
                   '2' => '- - -',
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                  '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
                   '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -250,7 +250,7 @@ if (!isset($_SESSION["nombre"])) {
                     '1' => $value['proveedor'],
                     '2' => '- - -',
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -268,7 +268,7 @@ if (!isset($_SESSION["nombre"])) {
                       '1' => $value['proveedor'],
                       '2' => '- - -',
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -296,7 +296,7 @@ if (!isset($_SESSION["nombre"])) {
              
       break;
 
-      case 'listar_r_serv_equipos':
+      case 'tbla_equipos':
 
         $tipo = '2';
 
@@ -321,7 +321,7 @@ if (!isset($_SESSION["nombre"])) {
               '1' => $value['proveedor'],
               '2' => '- - -',
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
               '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -338,7 +338,7 @@ if (!isset($_SESSION["nombre"])) {
                   '1' => $value['proveedor'],
                   '2' => '- - -',
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                  '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
                   '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -356,7 +356,7 @@ if (!isset($_SESSION["nombre"])) {
                     '1' => $value['proveedor'],
                     '2' => '- - -',
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -374,7 +374,7 @@ if (!isset($_SESSION["nombre"])) {
                       '1' => $value['proveedor'],
                       '2' => '- - -',
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-xs" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -401,7 +401,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'ver_detalle_maquina':
+      case 'mostrar_detalle_maquinaria_equipo':
         $idmaquinaria = $_GET["idmaquinaria"];
         $idproyecto = $_GET["idproyecto"];
 
@@ -465,7 +465,7 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($results);
       break;
 
-      case 'listar_r_transportes':
+      case 'tbla_transportes':
 
         $data = Array(); $datatable = Array();
 
@@ -535,7 +535,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'listar_r_hospedajes':
+      case 'tbla_hospedajes':
 
         $data = Array(); $datatable = Array();
 
@@ -605,7 +605,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'listar_r_comidas_extras':
+      case 'tbla_comidas_extras':
 
         $data = Array(); $datatable = Array();
 
@@ -675,7 +675,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'listar_r_breaks':
+      case 'tbla_breaks':
 
         $data = Array(); $datatable = Array();
 
@@ -698,7 +698,7 @@ if (!isset($_SESSION["nombre"])) {
               '1' => '- - -',
               '2' =>  format_d_m_a($value['fecha_inicial']) .' - '. format_d_m_a($value['fecha_final']),
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-xs" onclick="listar_comprobantes_breaks('.$value['idsemana_break'] .')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_breaks('.$value['idsemana_break'] .')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
               '5' => number_format($value['total'], 2, '.', ',' ),
               '6' => number_format($value['total'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -714,7 +714,7 @@ if (!isset($_SESSION["nombre"])) {
                 '1' => '- - -',
                 '2' =>  format_d_m_a($value['fecha_inicial']) .' - '. format_d_m_a($value['fecha_final']),
                 '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                '4' => '<button class="btn btn-info btn-xs" onclick="listar_comprobantes_breaks('.$value['idsemana_break'] .')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_breaks('.$value['idsemana_break'] .')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
                 '5' => number_format($value['total'], 2, '.', ',' ),
                 '6' => number_format($value['total'], 2, '.', ',' ),
                 '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -739,7 +739,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'listar_comprobantes_breaks':
+      case 'mostrar_comprobantes_breaks':
         $rspta = $resumen_general->listar_comprobantes_breaks($_GET['idsemana_break']);
 
         //Vamos a declarar un array
@@ -784,7 +784,7 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($results);
       break;
 
-      case 'listar_r_pensiones':
+      case 'tbla_pensiones':
         $data = Array(); $datatable = Array();
 
         $deuda = $_POST['deuda'];
@@ -806,8 +806,8 @@ if (!isset($_SESSION["nombre"])) {
               '1' => $value['proveedor'],
               '2' => '- - -',
               '3' => '- - -',
-              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-                      <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_pension('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                      <button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
               '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -824,8 +824,8 @@ if (!isset($_SESSION["nombre"])) {
                   '1' => $value['proveedor'],
                   '2' => '- - -',
                   '3' => '- - -',
-                  '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-                          <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_pension('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                          <button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
                   '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -843,8 +843,8 @@ if (!isset($_SESSION["nombre"])) {
                     '1' => $value['proveedor'],
                     '2' => '- - -',
                     '3' => '- - -',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-                            <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_pension('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                            <button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
                     '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -862,8 +862,8 @@ if (!isset($_SESSION["nombre"])) {
                       '1' => $value['proveedor'],
                       '2' => '- - -',
                       '3' => '- - -',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio_p('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
-                              <button class="btn btn-info btn-sm" onclick="listar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_pension('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                              <button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
                       '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -889,7 +889,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'ver_detalle_x_servicio':
+      case 'mostrar_detalle_pension':
         $rspta = $resumen_general->ver_detalle_x_servicio($_GET['idpension']);
         //Vamos a declarar un array
         $data = [];
@@ -920,7 +920,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'listar_comprobantes_pension':
+      case 'mostrar_comprobantes_pension':
         //$idpension_f ='5';
         //$_GET['idpension_f']
         $rspta = $resumen_general->listar_comprobantes_pension($_GET['idpension']);
@@ -972,7 +972,7 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($results);
       break;
 
-      case 'listar_r_trab_administrativo':
+      case 'tbla_administrativo':
 
         $data = Array(); $datatable = Array();
 
@@ -995,7 +995,7 @@ if (!isset($_SESSION["nombre"])) {
               '1' => $value['nombres'],
               '2' => '- - -',
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_administrativo('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
               '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1012,7 +1012,7 @@ if (!isset($_SESSION["nombre"])) {
                   '1' => $value['nombres'],
                   '2' => '- - -',
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                  '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_administrativo('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
                   '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1030,7 +1030,7 @@ if (!isset($_SESSION["nombre"])) {
                     '1' => $value['nombres'],
                     '2' => '- - -',
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_administrativo('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
                     '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1048,7 +1048,7 @@ if (!isset($_SESSION["nombre"])) {
                       '1' => $value['nombres'],
                       '2' => '- - -',
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_adm('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_administrativo('.$value['idtrabajador_por_proyecto'] .', \'' .$value['nombres'].  '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button',
                       '5' => number_format($value['total_montos_x_meses'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1074,7 +1074,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'ver_detalle_pagos_x_trab_adms':
+      case 'mostrar_detalle_administrativo':
 
         $rspta = $resumen_general->r_detalle_trab_administrativo($_POST['idtrabajador_por_proyecto']);
 
@@ -1083,7 +1083,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;     
 
-      case 'listar_r_trabajador_obrero':
+      case 'tbla_obrero':
 
         $data = Array(); $datatable = Array();
 
@@ -1106,7 +1106,7 @@ if (!isset($_SESSION["nombre"])) {
               '1' => $value['nombres'],
               '2' => '- - -',
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
               '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1123,7 +1123,7 @@ if (!isset($_SESSION["nombre"])) {
                   '1' => $value['nombres'],
                   '2' => '- - -',
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                  '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
                   '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1141,7 +1141,7 @@ if (!isset($_SESSION["nombre"])) {
                     '1' => $value['nombres'],
                     '2' => '- - -',
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
                     '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1159,7 +1159,7 @@ if (!isset($_SESSION["nombre"])) {
                       '1' => $value['nombres'],
                       '2' => '- - -',
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle_pagos_x_trab_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
                       '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -1186,7 +1186,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'ver_detalle_pagos_x_trab_obrero':
+      case 'mostrar_detalle_obrero':
 
         $rspta = $resumen_general->r_detalle_x_obrero($_POST['idtrabajador_por_proyecto']);
 

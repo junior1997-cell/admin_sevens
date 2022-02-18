@@ -2007,7 +2007,7 @@ function mostrar_detalle(idproyecto) {
                 '</tr>'+
                 '<tr data-widget="expandable-table" aria-expanded="false">'+
                   '<th>Fecha inicio/fin</th>'+
-                  '<td>'+data.fecha_inicio+' - ' + data.fecha_fin+'</td>'+
+                  '<td>'+format_d_m_a(data.fecha_inicio)+' / ' + format_d_m_a(data.fecha_fin)+'</td>'+
                 '</tr>'+
 
                 '<tr data-widget="expandable-table" aria-expanded="false">'+
@@ -2016,7 +2016,7 @@ function mostrar_detalle(idproyecto) {
                 '</tr>'+
                 '<tr data-widget="expandable-table" aria-expanded="false">'+
                   '<th>Costo total</th>'+
-                  '<td>'+data.costo+'</td>'+
+                  '<td>'+formato_miles(data.costo)+'</td>'+
                 '</tr>'+
                 '<tr data-widget="expandable-table" aria-expanded="false">'+
                   '<th>Empresa a cargo</th>'+
@@ -2261,20 +2261,34 @@ sumaFecha = function(d, fecha) {
   return (fechaFinal);
 }
 
-// formato año-mes-dia
-function format_a_m_d(fecha) {
-
-  let splits = fecha.split("-");   //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
-}
-
-// formato año-mes-dia
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
-  let splits = fecha.split("-");   //console.log(splits);
+  var format = "";
 
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
+  if (fecha == '' || fecha == null) {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
+}
+
+// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
+function format_a_m_d(fecha) {
+
+  var format = "";
+
+  if (fecha == '' || fecha == null) {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
 }
 
 function cuentaSabado(fi, ff){

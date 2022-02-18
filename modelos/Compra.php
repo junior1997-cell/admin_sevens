@@ -155,7 +155,7 @@ class Compra
 		cpp.estado as estado
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor
-		ORDER BY cpp.idcompra_proyecto DESC ";
+		ORDER BY cpp.fecha_compra ASC ";
         return ejecutarConsulta($sql);
     }
 

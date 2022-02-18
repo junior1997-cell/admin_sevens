@@ -260,6 +260,14 @@ table th {
   padding: 0px 10px 0px 10px !important;
 }
 
+.p-r-10px{
+  padding-right: 10px !important;
+}
+
+.p-l-10px{
+  padding-left: 10px !important;
+}
+
 .m-0px{
   margin: 0px !important;
 }
