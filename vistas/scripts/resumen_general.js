@@ -924,7 +924,7 @@ function tbla_pensiones(idproyecto, fecha_filtro, id_trabajador, id_proveedor, d
 
 // TABLA - ADMINISTRAIVOS - -------------------------------------------------------
 function tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda) {
-  
+  $('.cargando-administrativo').removeClass('backgff9100').addClass('bg-danger').html('Personal Administrativo - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $.post("../ajax/resumen_general.php?op=tbla_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data);  //console.log(data);     
@@ -1031,7 +1031,7 @@ function tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabaja
 
 // TABLA - OBRERO - ----------------------------------------------------------------
 function tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda) {
-  
+  $('.cargando-obrero').removeClass('backgff9100').addClass('bg-danger').html('Personal Obrero - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $.post("../ajax/resumen_general.php?op=tbla_obrero", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //  console.log(data);
@@ -1137,7 +1137,7 @@ function tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deu
 }
 
 function table_all_sumas() {
-
+  $('.cargando-sumas').removeClass('backgff9100').addClass('bg-danger').html('Sumas totales - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
   console.log(monto_all ,  deposito_all   ,saldo_all );        
    
   var insert_table = [    

@@ -927,9 +927,9 @@
         ?>
 
         <!-- InputMask -->
-        <script src="../plugins/moment/moment.min.js"></script>
-        
+        <!-- <script src="../plugins/moment/moment.min.js"></script> -->
         <script src="../plugins/moment/locales.js"></script>
+        <!-- <script src="../plugins/moment/locale/es.js"></script> -->
         <script type="text/javascript" src="scripts/proyecto.js"></script>        
         
         <script>

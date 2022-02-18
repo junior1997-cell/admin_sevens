@@ -299,7 +299,8 @@
     <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- InputMask -->
-    <script src="../plugins/moment/moment.min.js"></script>
+    <!-- <script src="../plugins/moment/moment.min.js"></script> -->
+    <script src="../plugins/moment/locales.js"></script>
     <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
     <!-- sweetalert2 -->
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>

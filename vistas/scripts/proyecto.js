@@ -29,7 +29,7 @@ function init(){
     $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
     // Inicializar - Date picker  
     $('#fecha_inicio').datetimepicker({
-      locale: 'es',
+      locale: 'es',       
       // format: 'L',
       format: 'DD-MM-YYYY',
       daysOfWeekDisabled: [6],     
@@ -54,7 +54,7 @@ function init(){
   $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
   // Inicializar - Date picker  
   $('#fecha_fin').datetimepicker({
-    locale: 'es',
+    locale: 'es',     
     // format: 'L',
     format: 'DD-MM-YYYY',
     daysOfWeekDisabled: [6],     
@@ -2237,7 +2237,7 @@ function calcular_plazo_fechafin() {
         toastr.error('Seleccione una fecha INICIO')
       }
     } else {
-      toastr.error('Agregar un PLAZO válido')
+      // toastr.error('Agregar un PLAZO válido')
     } 
   } 
 }

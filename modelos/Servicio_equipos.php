@@ -9,10 +9,10 @@ Class ServicioEquipos
 	{
 
 	}
-	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad )
+	public function insertar($idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario, $costo_adicional, $costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad )
 	{
-		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas,costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion,cantidad ) 
-		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas','$costo_parcial','$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m','$dias','$mes','$descripcion','$cantidad ')";
+		$sql="INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas, costo_adicional, costo_parcial,costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion,cantidad ) 
+		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final','$horas', '$costo_adicional', '$costo_parcial', '$costo_unitario','$fecha_inicio','$fecha_fin','$unidad_m','$dias','$mes','$descripcion','$cantidad ')";
 		return ejecutarConsulta($sql);
 			
 	}
@@ -78,7 +78,7 @@ Class ServicioEquipos
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario,$costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad)
+	public function editar($idservicio,$idproyecto,$maquinaria,$fecha_inicio,$fecha_fin,$horometro_inicial,$horometro_final,$horas,$costo_unitario, $costo_adicional, $costo_parcial,$unidad_m,$dias,$mes,$descripcion,$cantidad)
 		{
 		$sql="UPDATE servicio SET 
 		idproyecto='$idproyecto',
@@ -86,6 +86,7 @@ Class ServicioEquipos
 		horometro_inicial='$horometro_inicial',
 		horometro_final='$horometro_final',
 		horas='$horas',
+		costo_adicional = '$costo_adicional',
 		costo_parcial='$costo_parcial',
 		costo_unitario='$costo_unitario',
 		cantidad='$cantidad',
@@ -118,6 +119,7 @@ Class ServicioEquipos
 		s.horometro_inicial as horometro_inicial,
 		s.horometro_final as horometro_final,
 		s.horas as horas,
+		s.costo_adicional ,
 		s.costo_parcial as costo_parcial,
 		s.cantidad as cantidad,
 		s.costo_unitario as costo_unitario,
