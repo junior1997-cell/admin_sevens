@@ -634,7 +634,6 @@ switch ($_GET["op"]) {
             }
         }
     break;
-
     case 'activar_pagos':
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -643,6 +642,22 @@ switch ($_GET["op"]) {
             if ($_SESSION['activo_fijo_proyecto'] == 1) {
                 $rspta = $ctivos_fijos_proy->activar_pagos($idpago_af_proyecto);
                 echo $rspta ? "Pago Restablecido" : "Pago no se pudo Restablecido";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    case 'mostrar_pagos':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+                //$idpago_af_proyecto ='1';
+                $rspta = $ctivos_fijos_proy->mostrar_pagos($idpago_af_proyecto);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
                 //Fin de las validaciones de acceso
             } else {
                 require 'noacceso.php';
@@ -722,6 +737,7 @@ switch ($_GET["op"]) {
         }
     break;
 
+
     case 'suma_total_pagos_af_proy':
         $idcompra_af_proyecto = $_POST["idcompra_af_proyecto"];
         $rspta = $ctivos_fijos_proy->suma_total_pagos($idcompra_af_proyecto);
@@ -729,22 +745,7 @@ switch ($_GET["op"]) {
         echo json_encode($rspta);
     break;
 
-    case 'mostrar_pagos':
-        if (!isset($_SESSION["nombre"])) {
-            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-        } else {
-            //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['activo_fijo_proyecto'] == 1) {
-                //$idpago_af_proyecto ='1';
-                $rspta = $ctivos_fijos_proy->mostrar_pagos($idpago_af_proyecto);
-                //Codificar el resultado utilizando json
-                echo json_encode($rspta);
-                //Fin de las validaciones de acceso
-            } else {
-                require 'noacceso.php';
-            }
-        }
-    break;
+
 
     /**
      * ==============FIN SECCION PAGOS=====

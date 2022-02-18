@@ -922,7 +922,6 @@ switch ($_GET["op"]) {
             }
         }
     break;
-
     case 'suma_total_pagos_af_p':
         $rspta = $ctivos_fijos_proy->suma_total_pagos($_POST["idcompra_af_proyecto"]);
         //Codificar el resultado utilizando json
@@ -1032,7 +1031,7 @@ switch ($_GET["op"]) {
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['activo_fijo_general'] == 1) {
-                
+
                 $rspta = $ctivos_fijos_proy->mostrar_pagos($_POST['idpago_af_proyecto']);
                 //Codificar el resultado utilizando json
                 echo json_encode($rspta);
@@ -1041,6 +1040,43 @@ switch ($_GET["op"]) {
                 require 'noacceso.php';
             }
         }
+    break;
+    /**SECCION-EDITAR activos fijos por proyecto  */
+    case 'guardaryeditarcompra': 
+
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+
+                if (empty($idcompra_af_proyecto)) {
+                    $rspta = $ctivos_fijos_proy->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprobante,$serie_comprobante,$descripcion,$total_compra_af_p,$subtotal_compra,
+                        $igv_compra,$_POST["idactivos_fijos"],$_POST["unidad_medida"],$_POST["nombre_color"],$_POST["cantidad"],$_POST["precio_sin_igv"],$_POST["precio_igv"],
+                        $_POST["precio_con_igv"],$_POST["descuento"],$_POST["ficha_tecnica_activo"]
+                    );
+                    //precio_sin_igv,precio_igv,precio_total
+                    echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la compra";
+                } else {
+                    $rspta=$ctivos_fijos_proy->editar(
+                    $idcompra_af_proyecto, $idproyecto, 
+                    $idproveedor, $fecha_compra, 
+                    $tipo_comprobante,$serie_comprobante, 
+                    $descripcion, $total_compra_af_p, 
+                    $subtotal_compra,$igv_compra,
+                    $_POST["idactivos_fijos"],$_POST["unidad_medida"],
+                    $_POST["nombre_color"],  $_POST["cantidad"],
+                    $_POST["precio_sin_igv"], $_POST["precio_igv"],
+                    $_POST["precio_con_igv"], $_POST["descuento"],
+                    $_POST["ficha_tecnica_activo"]);
+
+                    echo $rspta ? "ok" : "Compra no se pudo actualizar";
+                } 
+
+            } else {
+                require 'noacceso.php';
+            }
+        }         
     break;
     
 

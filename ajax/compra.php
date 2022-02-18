@@ -173,11 +173,6 @@ switch ($_GET["op"]) {
             empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->monto_total - $rspta2['total_pago_compras']);
             $tipo_comprovante1 = $reg->tipo_comprovante;
 
-            /*if ($reg->tipo_comprovante == "Ninguno" || $reg->tipo_comprovante == "Nota_de_venta") {
-                $function_tipo_comprob = '<center> <button class="btn btn-info" onclick="comprobante_compras(' . $reg->idcompra_proyecto . ',' . $reg->imagen_comprobante . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>';
-            } else {
-                $function_tipo_comprob = '<center> <button class="btn btn-info" onclick="facturas_compras(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>';
-            }*/
             if ($saldo == $reg->monto_total) {
                 $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
                 $c="danger";
