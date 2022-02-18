@@ -131,8 +131,8 @@
                                                 <!-- Nombre -->
                                                 <div class="col-lg-12 class_pading">
                                                     <div class="form-group">
-                                                        <label for="nombre">Nombre</label>
-                                                        <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del material." />
+                                                        <label for="nombre_material">Nombre</label>
+                                                        <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del material." />
                                                     </div>
 
                                                 </div>
@@ -213,33 +213,33 @@
                                                         <input type="hidden"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                                     </div>                                                      
                                                 </div>
-                                                <!--Descripcion-->
+                                                <!--descripcion_material-->
                                                 <div class="col-lg-12 class_pading">
                                                     <div class="form-group">
-                                                        <label for="descripcion_pago">Descripción </label> <br>
-                                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                                        <label for="descripcion_material">Descripción </label> <br>
+                                                        <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
                                                 <!--iamgen-material-->
                                                 <div class="col-md-6 col-lg-6">
-                                                  <label for="foto1">Imagen</label>
+                                                  <label for="imagen1">Imagen</label>
                                                   <div style="text-align: center;" >
-                                                    <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important; height:300px!important;" width="auto" />
-                                                    <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
-                                                    <input type="hidden" name="foto1_actual" id="foto1_actual" />
-                                                    <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                                    <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="imagen1_i" style="cursor: pointer !important; height:300px!important;" width="auto" />
+                                                    <input style="display: none;" type="file" name="imagen1" id="imagen1" accept="image/*" />
+                                                    <input type="hidden" name="imagen1_actual" id="imagen1_actual" />
+                                                    <div class="text-center" id="imagen1_nombre"><!-- aqui va el nombre de la FOTO --></div>
                                                   </div>
                                                 </div>
                                                 <!-- Ficha tecnica -->
                                                 <div class="col-md-6 col-lg-6">
-                                                    <label for="foto2">Ficha técnica <b style="color: red;">(Imagen o PDF)</b></label> <br>
+                                                    <label for="imagen_ficha">Ficha técnica <b style="color: red;">(Imagen o PDF)</b></label> <br>
                                                       <div class="text-center">
-                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
+                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="imagen_ficha_i" style="cursor: pointer !important;" width="auto" height="150px" />
                                                           <div id="ver_pdf"></div>
                                                       </div>
-                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                                    <input style="display: none;" type="file" name="imagen_ficha" id="imagen_ficha" accept="image/*, .pdf" />
+                                                    <input type="hidden" name="imagen_ficha_actual" id="imagen_ficha_actual" />
+                                                    <div class="text-center" id="imagen_ficha_nombre"><!-- aqui va el nombre de la FOTO --></div>
 
                                                 </div> 
                                             </div>

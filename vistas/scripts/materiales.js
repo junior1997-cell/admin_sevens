@@ -13,18 +13,18 @@ function init() {
     $("#submit-form-materiales").submit();
   });
 
-  $("#foto1_i").click(function () {
-    $("#foto1").trigger("click");
+  $("#imagen1_i").click(function () {
+    $("#imagen1").trigger("click");
   });
-  $("#foto1").change(function (e) {
-    addImage(e, $("#foto1").attr("id"));
+  $("#imagen1").change(function (e) {
+    addImage(e, $("#imagen1").attr("id"));
   });
   //ficha tecnica
-  $("#foto2_i").click(function () {
-    $("#foto2").trigger("click");
+  $("#imagen_ficha_i").click(function () {
+    $("#imagen_ficha").trigger("click");
   });
-  $("#foto2").change(function (e) {
-    addficha(e, $("#foto2").attr("id"));
+  $("#imagen_ficha").change(function (e) {
+    addficha(e, $("#imagen_ficha").attr("id"));
   });
 
   //Mostramos colores
@@ -125,12 +125,12 @@ function addImage(e, id) {
   }
 }
 
-function foto1_eliminar() {
-  $("#foto1").val("");
+function imagen1_eliminar() {
+  $("#imagen1").val("");
 
-  $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
+  $("#imagen1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 
-  $("#foto1_nombre").html("");
+  $("#imagen1_nombre").html("");
 }
 /* PREVISUALIZAR LOS PDF */
 function addficha(e, id) {
@@ -159,11 +159,11 @@ function addficha(e, id) {
         function fileOnload(e) {
           var result = e.target.result;
           if (extrae_extencion(file.name) == "pdf") {
-            $("#foto2_i").hide();
+            $("#imagen_ficha_i").hide();
             $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
           } else {
             $("#" + id + "_i").attr("src", result);
-            $("#foto2_i").show();
+            $("#imagen_ficha_i").show();
           }
 
           $("#" + id + "_nombre").html(
@@ -207,23 +207,23 @@ function addficha(e, id) {
   }
 }
 
-function foto2_eliminar() {
-  $("#foto2").val("");
+function imagen_ficha_eliminar() {
+  $("#imagen_ficha").val("");
   $("#ver_pdf").html("");
 
-  $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
+  $("#imagen_ficha_i").attr("src", "../dist/img/default/pdf.png");
 
-  $("#foto2_nombre").html("");
-  $("#foto2_i").show();
+  $("#imagen_ficha_nombre").html("");
+  $("#imagen_ficha_i").show();
 }
 
 //Función limpiar
 function limpiar() {
   //Mostramos los Materiales
   $("#idproducto").val("");
-  $("#nombre").val("");
+  $("#nombre_material").val("");
   $("#marca").val("");
-  $("#descripcion").val("");
+  $("#descripcion_material").val("");
 
   $("#precio_unitario").val("");
   $("#estado_igv").val("");
@@ -235,17 +235,17 @@ function limpiar() {
   $("#unid_medida").val("");
   $("#total_precio").val("");
 
-  $("#foto1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
-  $("#foto1").val("");
-  $("#foto1_actual").val("");
-  $("#foto1_nombre").html("");
+  $("#imagen1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
+  $("#imagen1").val("");
+  $("#imagen1_actual").val("");
+  $("#imagen1_nombre").html("");
 
-  $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
-  $("#foto2").val("");
-  $("#foto2_actual").val("");
+  $("#imagen_ficha_i").attr("src", "../dist/img/default/pdf.png");
+  $("#imagen_ficha").val("");
+  $("#imagen_ficha_actual").val("");
   $("#ver_pdf").val("");
-  $("#foto2_nombre").html("");
-  $("#foto2_i").show();
+  $("#imagen_ficha_nombre").html("");
+  $("#imagen_ficha_i").show();
   $("#ver_pdf").hide();
   $("#unid_medida").val("null").trigger("change");
   $("#color").val("1").trigger("change");
@@ -367,10 +367,10 @@ function mostrar(idproducto) {
     $("#cargando-2-fomulario").hide();
 
     $("#idproducto").val(data.idproducto);
-    $("#nombre").val(data.nombre);
+    $("#nombre_material").val(data.nombre);
     $("#marca").val(data.marca);
     $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2));
-    $("#descripcion").val(data.descripcion);
+    $("#descripcion_material").val(data.descripcion);
 
     $("#estado_igv").val(data.estado_igv);
     $("#monto_igv").val(data.precio_igv);
@@ -394,34 +394,34 @@ function mostrar(idproducto) {
 
     //----------------------
     if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/img/materiales/" + data.imagen);
+      $("#imagen1_i").attr("src", "../dist/img/materiales/" + data.imagen);
 
-      $("#foto1_actual").val(data.imagen);
+      $("#imagen1_actual").val(data.imagen);
     }
 
     if (data.ficha_tecnica != "") {
-      $("#foto2_actual").val(data.ficha_tecnica);
+      $("#imagen_ficha_actual").val(data.ficha_tecnica);
       $("#ver_pdf").html("");
-      $("#foto2_i").attr("src", "");
+      $("#imagen_ficha_i").attr("src", "");
 
-      $("#foto2_i").hide();
+      $("#imagen_ficha_i").hide();
       $("#ver_pdf").show();
       $("#ver_pdf").html('<iframe src="../dist/ficha_tecnica_materiales/' + data.ficha_tecnica + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
 
-      $("#foto2_nombre").html(
+      $("#imagen_ficha_nombre").html(
         "" +
           '<div class="row">' +
           '<div class="col-md-12">.</div>' +
           '<div class="col-md-12">' +
-          '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
+          '<button  class="btn btn-danger  btn-block" onclick="imagen_ficha_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
           "</div>" +
           "</div>" +
           ""
       );
     } else {
-      $("#foto2_i").show();
+      $("#imagen_ficha_i").show();
       $("#ver_pdf").html("");
-      $("#foto2_nombre").html("");
+      $("#imagen_ficha_nombre").html("");
       $("#ver_pdf").hide();
     }
   });
@@ -571,13 +571,13 @@ $(function () {
 
   $("#form-materiales").validate({
     rules: {
-      nombre: { required: true },
-      descripcion: { minlength: 1 },
+      nombre_material: { required: true },
+      descripcion_material: { minlength: 1 },
       unid_medida: { required: true },
       color: { required: true },
     },
     messages: {
-      nombre: {
+      nombre_material: {
         required: "Por favor ingrese nombre",
       },
       unid_medida: {

@@ -8,13 +8,13 @@ require_once "../modelos/Materiales.php";
 $materiales=new Materiales();
 
 $idproducto       = isset($_POST["idproducto"])? limpiarCadena($_POST["idproducto"]):"";	
-$nombre			  = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
+$nombre			  = isset($_POST["nombre_material"])? limpiarCadena($_POST["nombre_material"]):"";
 $marca			  = isset($_POST["marca"])? limpiarCadena($_POST["marca"]):"";
 $precio_unitario  = isset($_POST["precio_unitario"])? limpiarCadena($_POST["precio_unitario"]):"";
-$descripcion	  = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
-$foto1		      = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
+$descripcion	  = isset($_POST["descripcion_material"])? limpiarCadena($_POST["descripcion_material"]):"";
+$imagen1		      = isset($_POST["imagen1"])? limpiarCadena($_POST["imagen1"]):"";
 
-$foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+$imagen_ficha		      = isset($_POST["imagen_ficha"])? limpiarCadena($_POST["imagen_ficha"]):"";
 
 $estado_igv		  = isset($_POST["estado_igv"])? limpiarCadena($_POST["estado_igv"]):"";
 $monto_igv		  = isset($_POST["monto_igv"])? limpiarCadena($_POST["monto_igv"]):"";
@@ -35,31 +35,31 @@ switch ($_GET["op"]){
 			if ($_SESSION['recurso']==1)
 			{
 				// imgen
-				if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
+				if (!file_exists($_FILES['imagen1']['tmp_name']) || !is_uploaded_file($_FILES['imagen1']['tmp_name'])) {
 
-					$imagen1=$_POST["foto1_actual"]; $flat_img1 = false;
+					$imagen1=$_POST["imagen1_actual"]; $flat_img1 = false;
 
 				} else {
 
-					$ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;						
+					$ext1 = explode(".", $_FILES["imagen1"]["name"]); $flat_img1 = true;						
 
 					$imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-					move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/img/materiales/" . $imagen1);
+					move_uploaded_file($_FILES["imagen1"]["tmp_name"], "../dist/img/materiales/" . $imagen1);
 				
 				}
 				// ficha técnica
-				if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
+				if (!file_exists($_FILES['imagen_ficha']['tmp_name']) || !is_uploaded_file($_FILES['imagen_ficha']['tmp_name'])) {
 
-					$ficha_tecnica=$_POST["foto2_actual"]; $flat_ficha1 = false;
+					$ficha_tecnica=$_POST["imagen_ficha_actual"]; $flat_ficha1 = false;
 
 				} else {
 
-					$ext1 = explode(".", $_FILES["foto2"]["name"]); $flat_ficha1 = true;						
+					$ext1 = explode(".", $_FILES["imagen_ficha"]["name"]); $flat_ficha1 = true;						
 
 					$ficha_tecnica = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-					move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/ficha_tecnica_materiales/" . $ficha_tecnica);
+					move_uploaded_file($_FILES["imagen_ficha"]["tmp_name"], "../dist/ficha_tecnica_materiales/" . $ficha_tecnica);
 				
 				}
 

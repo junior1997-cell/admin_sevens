@@ -292,19 +292,27 @@
 
                                   <!--Boton agregar material-->
                                   <div class="row col-lg-12 justify-content-between">
-                                    <div class="col-lg-3 xs-12">
-                                      <label for="" style="color: white;">.</label> <br />
-                                      <a data-toggle="modal" data-target="#modal-elegir-material">
-                                        <button id="btnAgregarArt" type="button" class="btn btn-success"><span class="fa fa-plus"></span> Agregar Material</button>
-                                      </a>
+                                    <div class="col-lg-4 col-xs-12">
+                                      <div class="row">
+                                        <div class="col-lg-6">
+                                            <label for="" style="color: white;">.</label> <br />
+                                            <a data-toggle="modal" data-target="#modal-elegir-material">
+                                              <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Material</button>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-6">
+                                          <label for="" style="color: white;">.</label> <br />
+                                          <a data-toggle="modal" data-target="#modal-agregar-material">
+                                            <button id="btnAgregarArt" type="button" class="btn btn-success btn-block"><span class="fa fa-plus"></span> Crear Material</button>
+                                          </a>
+                                        </div>
+                                      </div>
                                     </div>
-
                                     <!-- Rounded switch -->
-                                    <div class="col-lg-1 class_pading">
+                                    <div class="col-lg-1   col-xs-3 class_pading">
                                       <div class="form-group">
                                         <div id="switch_detracc">
-                                          <label for="">Detracción ?</label> <br />
-                                          <!-- <input type="checkbox" name="my-checkbox" id="my-checkbox"   data-bootstrap-switch data-off-color="danger" data-on-color="success" > -->
+                                          <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
                                           <div class="switch-holder" style="padding: 0px 0px !important;">
                                             <div class="switch-toggle">
                                               <input type="checkbox" id="my-switch_detracc" />
@@ -1266,7 +1274,162 @@
                     </div>
                   </div>
                 </div>
-              </div>
+                <!-- Modal agregar materiales -->
+                <div class="modal fade" id="modal-agregar-material">
+                    <link rel="stylesheet" href="../dist/css/switch_materiales.css">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Agregar Meterial</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span class="text-danger" aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <!-- form start -->
+                                <form id="form-materiales" name="form-materiales" method="POST">
+                                    <div class="card-body">
+                                        <div class="row" id="cargando-1-fomulario">
+                                            <!-- id proyecto -->
+                                            <input type="hidden" name="idproyecto" id="idproyecto" />
+                                            <!-- id proveedores -->
+                                            <input type="hidden" name="idproducto" id="idproducto" />
+                                            <!-- Nombre -->
+                                            <div class="col-lg-12 class_pading">
+                                                <div class="form-group">
+                                                    <label for="nombre">Nombre</label>
+                                                    <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del material." />
+                                                </div>
+
+                                            </div>
+                                            <!--Marca-->
+                                            <div class="col-lg-6 class_pading">
+                                                <div class="form-group">
+                                                    <label for="marca">Marca</label>
+                                                    <input type="text" name="marca" class="form-control" id="marca" placeholder="Marca" />
+                                                </div>                                                  
+
+                                            </div>
+                                            <!-- Color -->
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="color">Color</label>
+                                                    <select name="color" id="color" class="form-control select2" style="width: 100%;" >
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- Unnidad  onchange="mostrar_igv(); ocultar_comprob();"-->
+                                            <div class="col-lg-6" id="content-t-unidad">
+                                                <div class="form-group">
+                                                    <label for="Unidad-medida">Unidad-medida</label>
+                                                    <select name="unid_medida"  id="unid_medida" class="form-control select2"  style="width: 100%;">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!--Precio U-->
+                                            <div class="col-lg-4 class_pading">
+                                                <div class="form-group">
+                                                    <label for="precio_unitario">Precio</label>
+                                                    <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                                
+                                                </div>                                                      
+
+                                            </div>
+                                            <!-- Rounded switch -->
+                                            <div class="col-lg-2 class_pading">
+                                                <div class="form-group">
+                                                    <label for="" class="labelswitch">Sin o Con (Igv)</label>
+                                                    <div id="switch_igv">  
+                                                        <div class="switch-holder myestilo-switch">
+                                                            <div class="switch-toggle">
+                                                                <input type="checkbox" id="my-switch_igv" checked >
+                                                                <label for="my-switch_igv"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" name="estado_igv" id="estado_igv">
+                                                </div>
+                                            </div>
+                                            <!--Sub Total precio_real monto_igv total-->
+                                            <div class="col-lg-4 class_pading">
+                                                <div class="form-group">
+                                                    <label for="precio_real">Sub Total</label>
+                                                    <input type="number"  class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                                    <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
+                                                
+                                                </div>                                                      
+                                            </div>
+                                            <!--IGV-->
+                                            <div class="col-lg-4 class_pading">
+                                                <div class="form-group">
+                                                    <label for="monto_igv">IGV</label>
+                                                    <input type="number" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();"  readonly />
+                                                    <input type="hidden" name="monto_igv" class="form-control" id="monto_igv"/>
+                                                
+                                                </div>                                                      
+
+                                            </div>
+                                            <!--Total-->
+                                            <div class="col-lg-4 class_pading">
+                                                <div class="form-group">
+                                                    <label for="precio_real">Total</label>
+                                                    <input type="number" class="form-control total" placeholder="Precio real." readonly />
+                                                    <input type="hidden"  name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
+                                                </div>                                                      
+                                            </div>
+                                            <!--Descripcion-->
+                                            <div class="col-lg-12 class_pading">
+                                                <div class="form-group">
+                                                    <label for="descripcion_material">Descripción </label> <br>
+                                                    <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
+                                                </div>                                              
+                                            </div>
+                                            <!--iamgen-material-->
+                                            <div class="col-md-6 col-lg-6">
+                                              <label for="imagen1">Imagen</label>
+                                              <div style="text-align: center;" >
+                                                <img onerror="this.src='../dist/img/default/img_defecto_materiales.png';" src="../dist/img/default/img_defecto_materiales.png" class="img-thumbnail" id="imagen1_i" style="cursor: pointer !important; height:300px!important;" width="auto" />
+                                                <input style="display: none;" type="file" name="imagen1" id="imagen1" accept="image/*" />
+                                                <input type="hidden" name="imagen1_actual" id="imagen1_actual" />
+                                                <div class="text-center" id="imagen1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                              </div>
+                                            </div>
+                                            <!-- Ficha tecnica -->
+                                            <div class="col-md-6 col-lg-6">
+                                                <label for="imagen_ficha">Ficha técnica <b style="color: red;">(Imagen o PDF)</b></label> <br>
+                                                  <div class="text-center">
+                                                      <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="imagen_ficha_i" style="cursor: pointer !important;" width="auto" height="150px" />
+                                                      <div id="ver_pdf"></div>
+                                                  </div>
+                                                <input style="display: none;" type="file" name="imagen_ficha" id="imagen_ficha" accept="image/*, .pdf" />
+                                                <input type="hidden" name="imagen_ficha_actual" id="imagen_ficha_actual" />
+                                                <div class="text-center" id="imagen_ficha_nombre"><!-- aqui va el nombre de la FOTO --></div>
+
+                                            </div> 
+                                        </div>
+
+                                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                            <div class="col-lg-12 text-center">
+                                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                                <br />
+                                                <h4>Cargando...</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <button type="submit" style="display: none;" id="submit-form-materiales">Submit</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                                <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
             </section>
             <!-- /.content -->
           </div>
