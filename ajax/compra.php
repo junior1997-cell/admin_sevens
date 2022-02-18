@@ -289,7 +289,7 @@ switch ($_GET["op"]) {
             $data[] = [
                 "0" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
                 "1" => $reg->razon_social,
-                "2" => $reg->total,
+                "2" => number_format($reg->total, 2, '.', ','),
             ];
         }
         $results = [
@@ -320,7 +320,7 @@ switch ($_GET["op"]) {
                 "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
                 "2" => $reg->tipo_comprovante,
                 "3" => $reg->serie_comprovante,
-                "4" => $reg->monto_total,
+                "4" =>number_format($reg->monto_total, 2, '.', ','),
                 "5" => $reg->descripcion,
                 "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
             ];
@@ -364,9 +364,9 @@ switch ($_GET["op"]) {
                                     <td>'.$ficha.'</td>
                                     <td>'.$reg->nombre.'</td>
                                     <td>'.$reg->cantidad.'</td>
-                                    <td>'.$reg->precio_venta.'</td>
-                                    <td>'.$reg->descuento.'</td>
-                                    <td>'.$subtotal.'</td></tr>';
+                                    <td>'.number_format($reg->precio_venta, 2, '.', ',').'</td>
+                                    <td>'.number_format($reg->descuento, 2, '.', ',').'</td>
+                                    <td>'.number_format($subtotal, 2, '.', ',').'</td></tr>';
 						}
 				echo '<tfoot>
                         <td colspan="4"></td>
@@ -376,10 +376,10 @@ switch ($_GET["op"]) {
                             <h5>TOTAL</h5>
                         </th>
                         <th>
-                            <h5 class="text-right subtotal"  style="font-weight: bold;">S/'.$rspta2['subtotal_compras'].'</h5>
-                            <h5 class="text-right igv_comp" style="font-weight: bold;">S/'.$rspta2['igv_compras_proyect'].'</h5>
+                            <h5 class="text-right subtotal"  style="font-weight: bold;">S/'.number_format($rspta2['subtotal_compras'], 2, '.', ',').'</h5>
+                            <h5 class="text-right igv_comp" style="font-weight: bold;">S/'.number_format($rspta2['igv_compras_proyect'], 2, '.', ',').'</h5>
                             <b>
-                                <h4 class="text-right total"  style="font-weight: bold;">S/'.$rspta2['monto_total'].'</h4>
+                                <h4 class="text-right total"  style="font-weight: bold;">S/'.number_format($rspta2['monto_total'], 2, '.', ',').'</h4>
                             </b>
                     </tfoot>';
 

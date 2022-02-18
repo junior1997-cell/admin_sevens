@@ -2170,9 +2170,9 @@ function ver_detalle_compras(idcompra_proyecto) {
     //$(".igv").val(data.descripcion);
     $(".descripcion").val(data.descripcion);
 
-    $(".subtotal").html(data.subtotal_compras);
-    $(".igv_comp").html(data.igv_compras_proyect);
-    $(".total").html(data.monto_total);
+    $(".subtotal").html(formato_miles(data.subtotal_compras));
+    $(".igv_comp").html(formato_miles(data.igv_compras_proyect));
+    $(".total").html(formato_miles(data.monto_total));
   });
 
   $.post("../ajax/compra.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
@@ -2658,7 +2658,7 @@ $(function () {
 // .......:::::::::::::::::: -  FUNCIONES GENERALES ::::::::::::.......
 /**formato_miles */
 function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
+  if (!num || num == "NaN") return "0.00";
   if (num == "Infinity") return "&#x221e;";
   num = num.toString().replace(/\$|\,/g, "");
   if (isNaN(num)) num = "0";
