@@ -836,13 +836,13 @@ function comprobante_compras(idcompra_af_proyecto, doc) {
 //SECCION-Pago-compras
 //=========================================
 
-function listar_pagos(idcompra_af_proyecto, idproyecto, monto_total, total_deposito) {
+function listar_pagos(idcompra_af_proyecto, monto_total, total_deposito) {
 
   most_datos_prov_pago(idcompra_af_proyecto);
-  localStorage.setItem("idcompra_pago_comp_nube", idcompra_af_proyecto);
+  localStorage.setItem("idcompra_af_proyecto_nube", idcompra_af_proyecto);
 
-  localStorage.setItem("monto_total_p", monto_total);
-  localStorage.setItem("monto_total_dep", total_deposito);
+  localStorage.setItem("monto_total_p_af_p", monto_total);
+  localStorage.setItem("monto_total_dep_p_af_p", total_deposito);
 
   $("#total_compra").html(formato_miles(monto_total));
 
@@ -977,7 +977,7 @@ function guardaryeditar_pago(e) {
 
           tabla_pagos1.ajax.reload();
         /**================================================== */
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+        total_pagos(localStorage.getItem("idcompra_af_proyecto_nube"));
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
         limpiar_c_pagos();
@@ -1051,7 +1051,7 @@ function desactivar_pagos(idpago_af_proyecto) {
       $.post("../ajax/activos_fijos_proyecto.php?op=desactivar_pagos", { idpago_af_proyecto: idpago_af_proyecto }, function (e) {
         Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
 
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+        total_pagos(localStorage.getItem("idcompra_af_proyecto_nube"));
 
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
@@ -1076,7 +1076,7 @@ function activar_pagos(idpago_af_proyecto) {
       $.post("../ajax/activos_fijos_proyecto.php?op=activar_pagos", { idpago_af_proyecto: idpago_af_proyecto }, function (e) {
         Swal.fire("Activado!", "Pago ha sido activado.", "success");
 
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+        total_pagos(localStorage.getItem("idcompra_af_proyecto_nube"));
 
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
@@ -2091,11 +2091,11 @@ function extrae_extencion(filename) {
 
 //validando excedentes
 function validando_excedentes() {
-  var totattotal = localStorage.getItem("monto_total_p");
-  var monto_total_dep = localStorage.getItem("monto_total_dep");
+  var totattotal = localStorage.getItem("monto_total_p_af_p");
+  var monto_total_dep_p_af_p = localStorage.getItem("monto_total_dep_p_af_p");
   var monto_entrada = $("#monto_pago").val();
-  var total_suma = parseFloat(monto_total_dep) + parseFloat(monto_entrada);
-  var debe = totattotal - monto_total_dep;
+  var total_suma = parseFloat(monto_total_dep_p_af_p) + parseFloat(monto_entrada);
+  var debe = totattotal - monto_total_dep_p_af_p;
   console.log(typeof total_suma);
   if (total_suma > totattotal) {
     toastr.error("ERROR monto excedido al total del monto a pagar!");

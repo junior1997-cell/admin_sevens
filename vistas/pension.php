@@ -111,6 +111,7 @@
                             <tr>
                               <th><i class="fas fa-cogs"></i></th>
                               <th>Pension</th>
+                              <th>Descripción</th>
                               <th>Total</th>
                               <th>Servicios</th>
                               <th>Comprobantes</th>
@@ -123,6 +124,7 @@
                             <tr>
                               <th><i class="fas fa-cogs"></i></th>
                               <th>Pension</th>
+                              <th>Descripción</th>
                               <th id="total_pension" class="text-right">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                               <th>Servicios</th>
                               <th>Comprobantes</th>
@@ -304,6 +306,14 @@
                                       </div>                                                        
                                     </div>
 
+                                  </div>
+                                  
+                                  <!-- Descripcion pwnsion-->
+                                  <div class="col-lg-12">
+                                    <div class="form-group">
+                                      <label for="descripcion_pension">Descripción </label> <br>
+                                      <textarea name="descripcion_pension" id="descripcion_pension" class="form-control" rows="2"></textarea>
+                                    </div>                                                        
                                   </div>
 
                                   <div class="row" id="cargando-2-fomulario" style="display: none;">

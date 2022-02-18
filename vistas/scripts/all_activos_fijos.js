@@ -4,6 +4,7 @@ var tabla_comp_prov;
 var tablamateriales;
 var tabla_list_comp_prov;
 var tabla_pagos1;
+var tabla_pagos_af_p;
 
 var array_class_trabajador = [];
 //Requejo99@
@@ -914,7 +915,7 @@ function comprobante_compras(idcompra_af_proyecto, doc) {
 
 
 //=========================================
-//SECCION-Pago-compras
+//SECCION-Pago-compras-geneRAL
 //=========================================
 
 function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
@@ -929,7 +930,6 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
 
   $("#tabla-compra").hide();
   $("#tabla-compra-proveedor").hide();
-  // $("#agregar_compras").show();
   $("#regresar").show();
   $("#btn_agregar").hide();
   $("#guardar_registro_compras").hide();
@@ -1171,6 +1171,67 @@ function ver_modal_vaucher(imagen) {
   $("#descargar").attr("href", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
 
   // $(".tooltip").hide();
+}
+//=========================================
+//SECCION-Pago-compras-POR PROYECTO
+//=========================================
+
+function listar_pagos(idcompra_af_proyecto, monto_total, total_deposito) {
+
+  most_datos_prov_pago(idcompra_af_proyecto);
+  localStorage.setItem("idcompra_af_proyecto_nube", idcompra_af_proyecto);
+
+  localStorage.setItem("monto_total_p_af_p", monto_total);
+  localStorage.setItem("monto_total_dep_p_af_p", total_deposito);
+
+  $("#total_compra").html(formato_miles(monto_total));
+
+  $("#tabla-compra").hide();
+  $("#tabla-compra-proveedor").hide();
+  // $("#agregar_compras").show();
+  $("#regresar").show();
+  $("#btn_agregar").hide();
+  $("#guardar_registro_compras").hide();
+  $("#div_tabla_compra").hide();
+  $(".leyecnda_pagos").hide();
+  $(".leyecnda_saldos").hide();
+
+  $("#pago_compras").show();
+  $("#btn-pagar").show();
+
+  tabla_pagos_af_p = $("#tabla-pagos-proveedor")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/activos_fijos_proyecto.php?op=listar_pagos_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+      },
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
+
+  total_pagos(idcompra_af_proyecto);
 }
 
 /**===============================

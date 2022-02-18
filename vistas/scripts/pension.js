@@ -821,7 +821,8 @@ function limpiar_pension() {
   $("#idpension").val("");
   $("#p_desayuno").val("");
   $("#p_almuerzo").val("");
-  $("#p_cena").val("");   
+  $("#p_cena").val("");
+  $("#descripcion_pension").val("");
   $("#proveedor").val("null").trigger("change"); 
   $("#servicio_p").val("null").trigger("change");
 
@@ -883,37 +884,39 @@ function listar(nube_idproyecto) {
         }
       },
       createdRow: function (row, data, ixdex) {
-        if (data[2]!="") {
-          $("td", row).eq(2).addClass('text-right');
-          sumatotal += parseFloat(data[2]);
+        if (data[3]!="") {
+          $("td", row).eq(3).addClass('text-right');
+          sumatotal += parseFloat(data[3]);
         } else {
           sumatotal +=0;
         }
         if (data[4]) {
           $("td", row).eq(4).addClass('text-nowrap');
+          $("td", row).eq(5).addClass('text-nowrap');
           
         }
+        if (data[6]!="") {$("td", row).eq(6).addClass('text-right');}
         //console.log(data);
-        if (quitar_formato_miles(data[5]) > 0) {
-          $("td", row).eq(5).css({
+        if (quitar_formato_miles(data[6]) > 0) {
+          $("td", row).eq(6).css({
             "background-color": "#ffc107",
             color: "black",
           });
           
-        } else if (quitar_formato_miles(data[5]) == 0) {
-          $("td", row).eq(5).css({
+        } else if (quitar_formato_miles(data[6]) == 0) {
+          $("td", row).eq(6).css({
             "background-color": "#28a745",
             color: "white",
           });
         } else {
-          $("td", row).eq(5).css({
+          $("td", row).eq(6).css({
             "background-color": "#ff5252",
             color: "white",
           });
           
         }
-        if (data[5]!="") {
-          var saldo=quitar_formato_miles(data[5]);
+        if (data[6]!="") {
+          var saldo=quitar_formato_miles(data[6]);
         }
         totalsaldo += parseFloat(saldo);
       },
@@ -991,6 +994,7 @@ function mostrar_pension(idpension) {
     $("#proveedor").val(data.idproveedor).trigger("change"); 
     $("#idproyecto_p").val(data.idproyecto);
     $("#idpension").val(data.idpension);
+    $("#descripcion_pension").val(data.descripcion);
 
     data.servicio_pension.forEach( (value, item )=> {
 

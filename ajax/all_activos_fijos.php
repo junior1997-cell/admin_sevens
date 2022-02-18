@@ -280,18 +280,18 @@ switch ($_GET["op"]) {
                             $nombre="Pagar";
                             $icon="dollar-sign";
                             $cc="warning";
-                            } else {
-                                if ($saldo<="0" || $saldo=="0") {
-                                    $estado = '<span class="text-center badge badge-success">Pagado</span>';
-                                    $c="success";
-                                    $nombre="Ver";
-                                    $info="info";
-                                    $icon="eye";
-                                    $cc="success";
-                                }else{
-                                    $estado = '<span class="text-center badge badge-success">Error</span>';
-                                }
-                            }  
+                        } else {
+                            if ($saldo<="0" || $saldo=="0") {
+                                $estado = '<span class="text-center badge badge-success">Pagado</span>';
+                                $c="success";
+                                $nombre="Ver";
+                                $info="info";
+                                $icon="eye";
+                                $cc="success";
+                            }else{
+                                $estado = '<span class="text-center badge badge-success">Error</span>';
+                            }
+                        }  
 
                     }
 
@@ -316,9 +316,10 @@ switch ($_GET["op"]) {
                                 <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
                             </div>',
                         "4" => number_format($reg['total'], 2, '.', ','),
-                        "5" => '<div class="text-center text-nowrap"> <button class="btn btn-' .
-                                $c .
-                                ' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
+                        "5" => (empty($reg['idproyecto'])) ?'<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
+                                <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
+                                <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>':
+                                '<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
                         "6" => number_format($saldo, 2, '.', ','),
@@ -833,6 +834,78 @@ switch ($_GET["op"]) {
                 $rspta = $all_activos_fijos->mostrar_pagos($idpago_af_general);
                 //Codificar el resultado utilizando json
                 echo json_encode($rspta);
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    /**seccion pagos activos fijos por proyecto */
+    case 'listar_pagos_af_p':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+
+                $rspta = $ctivos_fijos_proy->listar_pagos_af_p($_GET["idcompra_af_proyecto"]);
+                $data = [];
+                $suma = 0;
+                $imagen = '';
+
+                while ($reg = $rspta->fetch_object()) {
+                    $suma = $suma + $reg->monto;
+                    if (strlen($reg->descripcion) >= 20) {
+                        $descripcion = substr($reg->descripcion, 0, 20) . '...';
+                    } else {
+                        $descripcion = $reg->descripcion;
+                    }
+                    if (strlen($reg->titular_cuenta) >= 20) {
+                        $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
+                    } else {
+                        $titular_cuenta = $reg->titular_cuenta;
+                    }
+                    empty($reg->imagen)
+                        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
+                        : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+                    $tool = '"tooltip"';
+                    $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+                    $data[] = [
+                        "0" => $reg->estado
+                            ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
+                                $reg->idpago_af_proyecto .
+                                ')"><i class="fas fa-pencil-alt"></i></button>' .
+                                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
+                                $reg->idpago_af_proyecto .
+                                ')"><i class="far fa-trash-alt"></i></button>'
+                            : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
+                                $reg->idpago_af_proyecto .
+                                ')"><i class="fa fa-pencil-alt"></i></button>' .
+                                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
+                                $reg->idpago_af_proyecto .
+                                ')"><i class="fa fa-check"></i></button>',
+                        "1" => $reg->forma_pago,
+                        "2" => $reg->beneficiario,
+                        "3" => $reg->cuenta_destino,
+                        "4" => $reg->banco,
+                        "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
+                        "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
+                        "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+                        "8" => $reg->numero_operacion,
+                        "9" => number_format($reg->monto, 2, '.', ','),
+                        "10" => $imagen,
+                        "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+                    ];
+                }
+                //$suma=array_sum($rspta->fetch_object()->monto);
+                $results = [
+                    "sEcho" => 1, //Información para el datatables
+                    "iTotalRecords" => count($data), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+                    "data" => $data,
+                    "suma" => $suma,
+                ];
+                echo json_encode($results);
                 //Fin de las validaciones de acceso
             } else {
                 require 'noacceso.php';

@@ -219,9 +219,9 @@ Class Pension
 
 	}
 	//---------------------------pension-----------------------------------
-	public function insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$servicio_p)
+	public function insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$descripcion_pension,$servicio_p)
 	{
-		$sql = "INSERT INTO pension(idproyecto, idproveedor) VALUES ('$idproyecto_p','$proveedor')";
+		$sql = "INSERT INTO pension(idproyecto, idproveedor,descripcion) VALUES ('$idproyecto_p','$proveedor','$descripcion_pension')";
 		$idpensionnew = ejecutarConsulta_retornarID($sql);
 		
         $num_elementos = 0;
@@ -249,10 +249,10 @@ Class Pension
 
         return $sw;
 	}
-	public function editar_pension($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$servicio_p)
+	public function editar_pension($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$descripcion_pension,$servicio_p)
 	{
 		//var_dump($idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$servicio_p); die();
-		$sql = "UPDATE pension SET idproyecto='$idproyecto_p',idproveedor='$proveedor' WHERE idpension='$idpension'";
+		$sql = "UPDATE pension SET idproyecto='$idproyecto_p',idproveedor='$proveedor',descripcion='$descripcion_pension' WHERE idpension='$idpension'";
 		 ejecutarConsulta($sql);
 		
         $num_elementos = 0;
@@ -318,7 +318,7 @@ Class Pension
 	}
 	public function listar_pensiones($nube_idproyecto)
 	{
-		$sql="SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
+		$sql="SELECT p.idpension, p.idproyecto, p.idproveedor,p.descripcion, pr_v.razon_social, pr_v.direccion, p.estado
 		FROM pension as p, proyecto as py, proveedor as pr_v
 		WHERE p.estado=1 AND p.idproyecto='$nube_idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor";
 		return ejecutarConsulta($sql);
@@ -360,7 +360,7 @@ Class Pension
 	{
 		$datos_edit_pension= Array(); 
 
-		$sql="SELECT p.idpension,p.idproyecto,p.idproveedor FROM pension as p, proyecto as py WHERE p.idpension ='$idpension'  AND py.idproyecto=p.idproyecto";
+		$sql="SELECT p.idpension,p.idproyecto,p.idproveedor, p.descripcion FROM pension as p, proyecto as py WHERE p.idpension ='$idpension'  AND py.idproyecto=p.idproyecto";
 		$return_pension = ejecutarConsultaSimpleFila($sql);
 
 		$sql_2="SELECT sp.idservicio_pension,sp.nombre_servicio,sp.precio FROM servicio_pension AS sp, pension as p 
@@ -377,6 +377,7 @@ Class Pension
 			"idpension"             =>$return_pension['idpension'],
 			"idproyecto"     		=>$return_pension['idproyecto'],
 			"idproveedor"         	=> $return_pension['idproveedor'],
+			"descripcion"         	=> $return_pension['descripcion'],
 
 			"servicio_pension"       =>$servicio_pension,
 			"select_s_pension"       =>$select_s_pension

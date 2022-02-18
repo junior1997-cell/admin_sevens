@@ -376,7 +376,7 @@
                               </thead>
                               <tbody></tbody>
                               <tfoot>
-                                <tr>
+                                <tr  class="tfoot_pago_general" >
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
@@ -387,8 +387,23 @@
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
                                   <th style="color: #ff0000; background-color: #45c920;">
-                                    <b id="monto_total"></b> <br />
-                                    <b id="porcentaje" style="color: black;"></b>
+                                    <b id="monto_total_general"></b>
+                                  </th>
+                                  <th>Vaucher</th>
+                                  <th>Estado</th>
+                                </tr>
+                                <tr style="display: none;" class="tfoot_pago_proy"  >
+                                  <th>Aciones</th>
+                                  <th>Forma pago</th>
+                                  <th>Beneficiario</th>
+                                  <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                  <th>Banco</th>
+                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                  <th>Descripción</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                  <th style="color: #ff0000; background-color: #45c920;">
+                                    <b id="monto_total_proy"></b>
                                   </th>
                                   <th>Vaucher</th>
                                   <th>Estado</th>
