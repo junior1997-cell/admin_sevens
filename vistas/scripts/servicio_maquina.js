@@ -289,33 +289,36 @@ function costo_partcial() {
   var horometro_inicial = $('#horometro_inicial').val();
   var horometro_final = $('#horometro_final').val();
   var costo_unitario = $('#costo_unitario').val();
+  var costo_adicional = $('#costo_adicional').val();
   var cantidad = $('#cantidad').val();
-
+  var costo_parcial = 0;
 
   if (cantidad==0) {
 
     if (horometro_final!=0) {
-      var horas=(horometro_final-horometro_inicial).toFixed(1);
-      var costo_parcial=(horas*costo_unitario);
+      var horas=(horometro_final-horometro_inicial).toFixed(2);
+      costo_parcial=parseFloat(horas*costo_unitario).toFixed(2);
       /*console.log('horas '+horas);
       console.log('costo_unitario '+costo_unitario);
       console.log('costo_parcial '+costo_parcial);*/
     }else{
-      var horas=(horometro_inicial-horometro_inicial).toFixed(1);
-      var costo_parcial=costo_unitario;
+      var horas=(horometro_inicial-horometro_inicial).toFixed(2);
+      costo_parcial=parseFloat(costo_unitario).toFixed(2);
     }
 
   }else{
 
     if (cantidad!=0) {
-      var costo_parcial=(cantidad*costo_unitario).toFixed(1);
+      costo_parcial=(cantidad*costo_unitario).toFixed(2);
   
     }else{
-      var costo_parcial=costo_unitario;
-  
+      costo_parcial=parseFloat(costo_unitario).toFixed(2);  
     }
-
   }
+
+  if ( costo_adicional != "" ) {
+    costo_parcial = (parseFloat(costo_parcial) + parseFloat(costo_adicional)).toFixed(2) ;
+  }  
   
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
@@ -417,6 +420,7 @@ function limpiar() {
   $("#mes").val(""); 
   $("#costo_unitario").val("");
   $("#costo_parcial").val("");
+  $("#costo_adicional").val("");
   $("#costo_unitario").attr('readonly',false);
   $("#sssss").val("");
   $("#nomb_maq").val("");
@@ -424,6 +428,10 @@ function limpiar() {
   $("#sssss").show();
   $("#nomb_maq").hide();
   $("#cantidad").val("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 
 }
 //Función limpiar
@@ -441,6 +449,10 @@ function limpiar_c_pagos() {
 	$("#foto1_actual").val("");  
   $("#foto1_nombre").html(""); 
  // $("#total_costo_secc_pagos").html("");
+
+ // Limpiamos las validaciones
+ $(".form-control").removeClass('is-valid');
+ $(".is-invalid").removeClass("error is-invalid");
 
 }
 //regresar_principal
@@ -684,7 +696,7 @@ function mostrar(idservicio) {
   $("#costo_unitario").attr('readonly',false);
   $.post("../ajax/servicio_maquina.php?op=mostrar", { idservicio: idservicio }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
+    data = JSON.parse(data);  console.log(data);   
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
@@ -702,6 +714,7 @@ function mostrar(idservicio) {
     $("#dias").val(data.dias_uso); 
     $("#mes").val(data.meses_uso); 
     $("#costo_unitario").val(data.costo_unitario); 
+    $("#costo_adicional").val(data.costo_adicional);
     $("#costo_parcial").val(data.costo_parcial); 
 
   });
