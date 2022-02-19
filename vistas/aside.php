@@ -276,7 +276,7 @@
         <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
           <!-- SERVICIO -->       
           <li class="nav-item ver-otros-modulos-1">
-            <a href="servicio_maquina.php" class="nav-link" id="mServicio">
+            <a href="servicio_maquina.php" class="nav-link" id="mMaquina">
               <!-- <i class="nav-icon fas fa-tractor"></i> -->
               <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
               <p>

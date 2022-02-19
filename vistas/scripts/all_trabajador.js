@@ -1301,11 +1301,15 @@ function buscar_sunat_reniec() {
 
                 $("#charge").hide();
 
-                data.razonSocial == null ? $("#nombre").val("-") : $("#nombre").val(data.razonSocial);
+                data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
 
-                data.razonSocial == null ? $("#titular_cuenta").val("-") : $("#titular_cuenta").val(data.razonSocial);
-                
-                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                data.razonSocial == null ? $("#titular_cuenta").val(data.nombreComercial) : $("#titular_cuenta").val(data.razonSocial);
+
+                var departamento = (data.departamento == null ? "" : data.departamento); 
+                var provincia = (data.provincia == null ? "" : data.provincia);
+                var distrito = (data.distrito == null ? "" : data.distrito);                
+
+                data.direccion == null ? $("#direccion").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion").val(data.direccion);
 
                 toastr.success("Persona encontrada!!");
 
@@ -1319,11 +1323,11 @@ function buscar_sunat_reniec() {
 
                 $("#nombre").val(data.razonSocial);
 
-                data.razonSocial == null ? $("#nombre").val("-") : $("#nombre").val(data.razonSocial);
+                data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
 
-                data.razonSocial == null ? $("#titular_cuenta").val("-") : $("#titular_cuenta").val(data.razonSocial);
+                data.razonSocial == null ? $("#titular_cuenta").val(data.nombreComercial) : $("#titular_cuenta").val(data.razonSocial);
                 
-                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                data.direccion == null ? $("#direccion").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion").val(data.direccion);
 
               }
             }

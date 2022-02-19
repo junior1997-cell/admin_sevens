@@ -11,7 +11,7 @@ function init() {
   $("#lAllProveedor").addClass("active");
 
   //Mostramos los BANCOS
-  $.post("../ajax/all_trabajador.php?op=select2Banco", function (r) {
+  $.post("../ajax/all_proveedor.php?op=select2Banco", function (r) {
     $("#banco").html(r);
   });
 
@@ -257,7 +257,7 @@ $(function () {
       tipo_documento: { required: true },
       num_documento: { required: true, minlength: 6, maxlength: 20 },
       nombre: { required: true, minlength: 6, maxlength: 100 },
-      direccion: { minlength: 5, maxlength: 70 },
+      direccion: { minlength: 5, maxlength: 150 },
       telefono: { minlength: 8 },
       c_detracciones: { minlength: 6,  },
       c_bancaria: { minlength: 6,  },
@@ -324,14 +324,15 @@ function buscar_sunat_reniec() {
 
   let tipo_doc = $("#tipo_documento").val();
 
-  let dni_ruc = $("#num_documento").val();
-
+  let dni_ruc = $("#num_documento").val(); 
+   
   if (tipo_doc == "DNI") {
-    if (dni_ruc.length == "8") {
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-        data = JSON.parse(data);
 
-        console.log(data);
+    if (dni_ruc.length == "8") {
+
+      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+
+        data = JSON.parse(data);  console.log(data);
 
         if (data == null) {
 
@@ -349,6 +350,7 @@ function buscar_sunat_reniec() {
             $("#charge").hide();
 
             toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+
           } else {
 
             $("#search").show();
@@ -356,15 +358,15 @@ function buscar_sunat_reniec() {
             $("#charge").hide();
 
             $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
             $("#titular_cuenta").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
 
-            toastr.success("Cliente encontrado!!!!");
+            toastr.success("Persona encontrada!!!!");
           }
         }
         
       });
     } else {
+
       $("#search").show();
 
       $("#charge").hide();
@@ -373,9 +375,11 @@ function buscar_sunat_reniec() {
     }
   } else {
     if (tipo_doc == "RUC") {
+
       if (dni_ruc.length == "11") {
         $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-          data = JSON.parse(data);  console.log(data);
+
+          data = JSON.parse(data);    console.log(data);
 
           if (data == null) {
             $("#search").show();
@@ -385,69 +389,54 @@ function buscar_sunat_reniec() {
             toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
             
           } else {
+
             if (data.success == false) {
+
               $("#search").show();
 
               $("#charge").hide();
 
               toastr.error("Datos no encontrados en la SUNAT!!!");
+              
             } else {
+
               if (data.estado == "ACTIVO") {
+
                 $("#search").show();
 
                 $("#charge").hide();
 
-                if (data.razonSocial == ""  || data.razonSocial == null) {
+                data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
 
-                  if (data.nombreComercial == ""  || data.nombreComercial == null) {
+                data.razonSocial == null ? $("#titular_cuenta").val(data.nombreComercial) : $("#titular_cuenta").val(data.razonSocial);
 
-                    $("#apellidos_nombre_comercial").val("-");
+                var departamento = (data.departamento == null ? "" : data.departamento); 
+                var provincia = (data.provincia == null ? "" : data.provincia);
+                var distrito = (data.distrito == null ? "" : data.distrito);                
 
-                  } else {
+                data.direccion == null ? $("#direccion").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion").val(data.direccion);
 
-                    $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                toastr.success("Persona encontrada!!");
 
-                    $("#titular_cuenta").val(data.nombreComercial);
-                  }
-                } else {
-
-                  $("#apellidos_nombre_comercial").val(data.razonSocial)
-
-                  $("#titular_cuenta").val(data.razonSocial);
-                }                
-
-                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-                // $("#direccion").val(data.direccion);
-                toastr.success("Cliente encontrado");
               } else {
+
                 toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
 
                 $("#search").show();
 
                 $("#charge").hide();
 
-                if (data.razonSocial == ""  || data.razonSocial == null) {
+                $("#nombre").val(data.razonSocial);
 
-                  if (data.nombreComercial == ""  || data.nombreComercial == null) {
+                data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
 
-                    $("#apellidos_nombre_comercial").val("-");
+                data.razonSocial == null ? $("#titular_cuenta").val(data.nombreComercial) : $("#titular_cuenta").val(data.razonSocial);
+                
+                data.direccion == null ? $("#direccion").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion").val(data.direccion);
 
-                  } else {
-
-                    $("#apellidos_nombre_comercial").val(data.nombreComercial);
-                  }
-                } else {
-
-                  $("#apellidos_nombre_comercial").val(data.razonSocial)
-                } 
-
-                data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-                // $("#direccion").val(data.direccion);
               }
             }
-          }
-          
+          }          
         });
       } else {
         $("#search").show();
@@ -458,12 +447,15 @@ function buscar_sunat_reniec() {
       }
     } else {
       if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
+
         $("#search").show();
 
         $("#charge").hide();
 
         toastr.info("No necesita hacer consulta");
+
       } else {
+
         $("#tipo_doc").addClass("is-invalid");
 
         $("#search").show();

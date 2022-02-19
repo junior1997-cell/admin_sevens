@@ -924,7 +924,24 @@ switch ($_GET["op"]){
 
 	break;
 
+	case 'select2Banco': 
 
+		$rspta = $servicioequipos->select2_banco();
+	
+		while ($reg = $rspta->fetch_object())  {
+
+		  echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
+		}
+
+	  break;
+
+	case 'formato_banco':
+           
+		$rspta=$servicioequipos->formato_banco($_POST["idbanco"]);
+		//Codificar el resultado utilizando json
+		echo json_encode($rspta);
+		 
+	break;
 
 
 	case 'salir':

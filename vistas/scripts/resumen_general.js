@@ -68,14 +68,6 @@ function init() {
   });
 
   filtros();
-
-  //============borramos los valores================
-  // $("#filtrar_por").val("null").trigger("change");
-  // $("#trabajador").val("null").trigger("change");
-  // $("#proveedor").val("null").trigger("change");
-
-  // Formato para telefono
-  // $("[data-mask]").inputmask();
 }
 
 // TABLA - COMPRAS - -------------------------------------------------------

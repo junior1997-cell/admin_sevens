@@ -59,7 +59,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-bancos" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-bancos" onclick="limpiar_banco();"><i class="fas fa-plus-circle"></i> Agregar</button>
                             Administrar Bancos.
                           </h3>
                         </div>
@@ -416,6 +416,14 @@
                               <div class="form-group">
                                 <label for="nombre">Nombre</label>
                                 <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del banco." />
+                              </div>
+                            </div>
+
+                            <!-- alias -->
+                            <div class="col-lg-12 class_pading">
+                              <div class="form-group">
+                                <label for="alias">Alias</label>
+                                <input type="text" name="alias" id="alias" class="form-control" placeholder="Alias del banco." />
                               </div>
                             </div>
 
