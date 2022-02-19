@@ -1865,17 +1865,6 @@ function guardaryeditar_comprobante_p(e) {
   });
 }
 
-function l_m() {
-  // limpiar();
-  $("#barra_progress").css({ width: "0%" });
-
-  $("#barra_progress").text("0%");
-
-  $("#barra_progress2").css({ width: "0%" });
-
-  $("#barra_progress2").text("0%");
-}
-
 //mostramos para editar el datalle del comprobante de la compras
 function editar_detalle_compras(idcompra_af_general) {
   limpiar();
@@ -1986,8 +1975,8 @@ function ver_compras_af_g(idcompra_af_general) {
     data = JSON.parse(data); //console.log(data);
     $(".idproveedor").html("");
     $(".fecha_compra").val("");
-    $(".tipo_comprobante").html("");
-    $(".serie_comprobante").val("");
+    $(".tipo_comprovante").html("");
+    $(".serie_comprovante").val("");
     $(".descripcion").val("");
 
     $(".subtotal").html("");
@@ -2026,9 +2015,9 @@ function ver_compras_af_g(idcompra_af_general) {
     //$(".igv").val(data.descripcion);
     $(".descripcion").val(data.descripcion);
 
-    $(".subtotal").html(data.subtotal);
-    $(".igv_comp").html(data.igv);
-    $(".total").html(data.total);
+    $(".subtotal").html(formato_miles(data.subtotal));
+    $(".igv_comp").html(formato_miles(data.igv));
+    $(".total").html(formato_miles(data.total));
   });
 
   $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_af_g&idcompra_af_general=" + idcompra_af_general, function (r) {
@@ -2036,42 +2025,263 @@ function ver_compras_af_g(idcompra_af_general) {
   });
 }
 
+// .......:::::::::::::::::: - COMPRAS POR PORYECTO ::::::::::::.......
+//Función para desactivar registros
+function anular_af_p(idcompra_af_proyecto) {
+  Swal.fire({
+    title: "¿Está Seguro de  Anular la compra?",
+    text: "Anulando  compra!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Anular!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_activos_fijos.php?op=anular_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (e) {
+        if (e == "ok") {
+          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
+
+          tabla.ajax.reload();
+        } else {
+          Swal.fire("Error!", e, "error");
+        }
+      });
+    }
+  });
+}
+
+function des_anular_af_p(idcompra_af_proyecto) {
+  Swal.fire({
+    title: "¿Está Seguro de ReActivar esta Compra?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_activos_fijos.php?op=des_anular_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (e) {
+        Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
+        tabla.ajax.reload();
+      });
+    }
+  });
+}
+
+//mostramos el detalle del comprobante de la compras
+function ver_compras_af_p(idcompra_af_proyecto) {
+  $("#modal-ver-compras").modal("show");
+
+  $.post("../ajax/all_activos_fijos.php?op=ver_compra_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+    data = JSON.parse(data); //  console.log(data);
+    $(".idproveedor").html("");
+    $(".fecha_compra").val("");
+    $(".tipo_comprovante").html("");
+    $(".serie_comprovante").val("");
+    $(".descripcion").val("");
+
+    $(".subtotal").html("");
+    $(".igv_comp").html("");
+    $(".total").html("");
+
+    if (data.tipo_comprobante == "Factura") {
+      $(".igv").val("0.18");
+      $(".content-igv").show();
+      $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
+      $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+      $(".content-comprob").show();
+    } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+      $(".igv").val("");
+      $(".content-comprob").show();
+      $(".content-igv").hide();
+      $(".content-t-comprob").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
+
+      $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+    } else if (data.tipo_comprobante == "Ninguno") {
+      $(".content-comprob").hide();
+      $(".content-comprob").val("");
+      $(".content-igv").hide();
+      $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
+      $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7").addClass("col-lg-8");
+    } else {
+      $(".content-comprob").show();
+      //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
+    }
+
+    //<!--idproveedor,fecha_compra,tipo_comprobante,serie_comprobante,igv,descripcion, igv_comp, total-->
+    $(".idproveedor").html(data.razon_social);
+    $(".fecha_compra").val(data.fecha_compra);
+    $(".tipo_comprovante").html(data.tipo_comprobante);
+    $(".serie_comprovante").val(data.serie_comprobante);
+    //$(".igv").val(data.descripcion);
+    $(".descripcion").val(data.descripcion);
+
+    $(".subtotal").html(formato_miles(data.subtotal));
+    $(".igv_comp").html(formato_miles(data.igv));
+    $(".total").html(formato_miles(data.total));
+  });
+  $("#detalles_compra").html("");
+  $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto, function (r) {
+    $("#detalles_compra").html(r);
+  });
+}
+
+//mostramos para editar el datalle del comprobante de la compras
+function editar_detalle_compras_af_p(idcompra_af_proyecto) {
+  limpiar();
+  array_class_trabajador = [];
+
+  cont = 0;
+  detalles = 0;
+  ver_form_add();
+
+  $.post("../ajax/all_activos_fijos.php?op=ver_compra_editar_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+    data = JSON.parse(data);
+    console.log(data);
+
+    if (data) {
+      $(".subtotal").html("");
+      $(".igv_comp").html("");
+      $(".total").html("");
+
+      if (data.tipo_comprobante == "Factura") {
+        $(".igv").val("0.18");
+        $(".content-igv").show();
+        $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
+        $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+        $(".content-comprob").show();
+      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+        $(".igv").val("");
+        $(".content-comprob").show();
+        $(".content-igv").hide();
+        $(".content-t-comprob").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
+
+        $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+      } else if (data.tipo_comprobante == "Ninguno") {
+        $(".content-comprob").hide();
+        $(".content-comprob").val("");
+        $(".content-igv").hide();
+        $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
+        $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7").addClass("col-lg-8");
+      } else {
+        $(".content-comprob").show();
+        //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
+      }
+
+      $("#idproyecto").val(data.idproyecto);
+      $("#idcompra_af_general").val(data.idcompra_af_proyecto);
+      $("#idproveedor").val(data.idproveedor).trigger("change");
+      $("#fecha_compra").val(data.fecha_compra);
+      $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
+      $("#serie_comprovante").val(data.serie_comprobante).trigger("change");
+      $("#descripcion").val(data.descripcion);
+
+      if (data.activos) {
+        data.activos.forEach((element, index) => {
+          var img = "";
+
+          if (element.imagen == "" || element.imagen == null) {
+            img = `../dist/img/default/default_activos_fijos_empresa.png`;
+          } else {
+            img =`../dist/docs/activos_fijos_general/img_activos_fijos/${element.imagen}`;
+          }
+
+          var fila = `
+          <tr class="filas" id="fila${cont}">
+            <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(${cont})">X</button></td>
+            <td>
+              <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
+              <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
+              <div class="user-block text-nowrap">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${element.nombre_activo}')">
+                <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
+                <span class="description"><b>Color: </b>${element.color}</span>
+              </div>
+            </td>
+            <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
+            <td class="form-group"><input class="producto_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
+            <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
+            <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
+            <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
+          </tr>`;
+
+          detalles = detalles + 1;
+
+          $("#detalles").append(fila);
+
+          array_class_trabajador.push({ id_cont: cont });
+
+          cont++;
+          evaluar();
+        });
+
+        modificarSubtotales();
+      } else {
+        toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");
+        $(".subtotal").html("S/. 0.00");
+        $(".igv_comp").html("S/. 0.00");
+        $(".total").html("S/. 0.00");
+      }
+    } else {
+      toastr.error("<h3>Error.</h3> <br> Este registro tiene errores, o esta vacio");
+    }
+  });
+}
+//Función para guardar o editar - COMPRAS
+function guardaryeditar_compras(e) {
+
+  var formData = new FormData($("#form-compra-activos-f")[0]);
+
+  Swal.fire({
+    title: "¿Está seguro que deseas guardar esta compra?",
+    html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Guardar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: "../ajax/all_activos_fijos.php?op=guardaryeditarcompraactivo",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+
+        success: function (datos) {
+          if (datos == "ok") {
+            // toastr.success("Usuario registrado correctamente");
+            Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+
+            tabla.ajax.reload();
+
+            limpiar();
+            regresar();
+            cont = 0;
+            tabla_comp_prov.ajax.reload();
+          } else {
+            // toastr.error(datos);
+            Swal.fire("Error!", datos, "error");
+          }
+        },
+      });
+    }
+  });
+}
+
+
+// .......:::::::::::::::::: - COMPRAS POR PORYECTO ::::::::::::.......
+
+
 // .......:::::::::::::::::: - FIN - AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
 
 init();
-
-/**formato_miles */
-function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
-
-function quitar_formato_miles(numero) {
-  let inVal = numero.replace(/,/g, "");
-  return inVal;
-}
-
-/**Redondear */
-function redondearExp(numero, digitos) {
-  function toExp(numero, digitos) {
-    let arr = numero.toString().split("e");
-    let mantisa = arr[0],
-      exponente = digitos;
-    if (arr[1]) exponente = Number(arr[1]) + digitos;
-    return Number(mantisa + "e" + exponente.toString());
-  }
-  let entero = Math.round(toExp(Math.abs(numero), digitos));
-  return Math.sign(numero) * toExp(entero, -digitos);
-}
 
 $(function () {
   $("#form-compra-activos-f").validate({
@@ -2712,12 +2922,56 @@ function re_visualizacion2() {
   }
 }
 
+
+function l_m() {
+  // limpiar();
+  $("#barra_progress").css({ width: "0%" });
+
+  $("#barra_progress").text("0%");
+
+  $("#barra_progress2").css({ width: "0%" });
+
+  $("#barra_progress2").text("0%");
+}
+
 function dowload_pdf() {
   toastr.success("El documento se descargara en breve!!");
 }
 
 function extrae_extencion(filename) {
   return filename.split(".").pop();
+}
+/**formato_miles */
+function formato_miles(num) {
+  if (!num || num == "NaN") return "-";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
+  num = Math.floor(num * 100 + 0.50000000001);
+  cents = num % 100;
+  num = Math.floor(num / 100).toString();
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
+}
+
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, "");
+  return inVal;
+}
+
+/**Redondear */
+function redondearExp(numero, digitos) {
+  function toExp(numero, digitos) {
+    let arr = numero.toString().split("e");
+    let mantisa = arr[0],
+      exponente = digitos;
+    if (arr[1]) exponente = Number(arr[1]) + digitos;
+    return Number(mantisa + "e" + exponente.toString());
+  }
+  let entero = Math.round(toExp(Math.abs(numero), digitos));
+  return Math.sign(numero) * toExp(entero, -digitos);
 }
 
 //validando excedentes

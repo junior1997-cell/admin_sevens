@@ -220,6 +220,8 @@
                               <div class="card-body">
                                 <div class="row" id="cargando-1-fomulario">
                                   <!-- id proyecto -->
+                                  <input type="hidden" name="idproyecto" id="idproyecto" /> 
+                                  <!-- id compras activo general o por proyecto -->
                                   <input type="hidden" name="idcompra_af_general" id="idcompra_af_general" /> 
 
                                   <!-- Tipo de Empresa -->
@@ -863,7 +865,7 @@
                           <div class="col-lg-5">
                             <div class="form-group">
                               <label for="fecha_compra">Fecha </label>
-                              <input type="date" class="form-control fecha_compra" placeholder="Fecha" />
+                              <input type="date" class="form-control fecha_compra" placeholder="Fecha" readonly />
                             </div>
                           </div>
                           <!-- Tipo de comprobante -->
@@ -877,7 +879,7 @@
                           <div class="col-lg-2 content-comprob">
                             <div class="form-group">
                               <label for="serie_comprovante">N° de Comprobante</label>
-                              <input type="text" class="form-control serie_comprovante" placeholder="N° de Comprobante" />
+                              <input type="text" class="form-control serie_comprovante" placeholder="N° de Comprobante" readonly />
                             </div>
                           </div>
                           <!-- IGV-->

@@ -297,13 +297,16 @@ switch ($_GET["op"]) {
 
                     empty($reg['serie_comprobante']) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg['serie_comprobante']);
                     $data[] = [
-                        "0" =>
-                            ($reg['estado'] == '1'
-                                ? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                        "0" =>(empty($reg['idproyecto'])) ?($reg['estado'] == '1'? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                                     ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
                                     ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
                                 : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
-                                ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
+                                ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>') :
+                                ($reg['estado'] == '1'? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                                    ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
+                                    ' <button class="btn btn-danger btn-sm" onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
+                                : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                                ' <button class="btn btn-success btn-sm" onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                         "1" => date("d/m/Y", strtotime($reg['fecha_compra'])),
                         "2" => '<div class="user-block">
                                     <span class="description" style="margin-left: 0px !important;"><b>'.((empty($reg['idproyecto'])) ? 'General' : $reg['codigo_proyecto']).'</b></span>
@@ -460,9 +463,9 @@ switch ($_GET["op"]) {
                                     <td>'.$ficha.'</td>
                                     <td>'.$reg->nombre.'</td>
                                     <td>'.$reg->cantidad.'</td>
-                                    <td>'.$reg->precio_con_igv.'</td>
-                                    <td>'.$reg->descuento.'</td>
-                                    <td>'.$subtotal.'</td></tr>';
+                                    <td>'.number_format($reg->precio_con_igv, 2, '.', ',').'</td>
+                                    <td>'.number_format($reg->descuento, 2, '.', ',').'</td>
+                                    <td>'.number_format($subtotal, 2, '.', ',').'</td></tr>';
 						}
 				echo '<tfoot>
                         <td colspan="4"></td>
@@ -472,10 +475,10 @@ switch ($_GET["op"]) {
                             <h5>TOTAL</h5>
                         </th>
                         <th>
-                            <h5 class="text-right subtotal"  style="font-weight: bold;">S/'.$rspta2['subtotal'].'</h5>
-                            <h5 class="text-right igv_comp" style="font-weight: bold;">S/'.$rspta2['igv'].'</h5>
+                            <h5 class="text-right subtotal"  style="font-weight: bold;">S/'.number_format($rspta2['subtotal'], 2, '.', ',').'</h5>
+                            <h5 class="text-right igv_comp" style="font-weight: bold;">S/'.number_format($rspta2['igv'], 2, '.', ',').'</h5>
                             <b>
-                                <h4 class="text-right total"  style="font-weight: bold;">S/'.$rspta2['total'].'</h4>
+                                <h4 class="text-right total"  style="font-weight: bold;">S/'.number_format($rspta2['total'], 2, '.', ',').'</h4>
                             </b>
                     </tfoot>';
             } else {
@@ -1041,14 +1044,44 @@ switch ($_GET["op"]) {
             }
         }
     break;
-    /**SECCION-EDITAR activos fijos por proyecto  */
+    
+    /**
+     * ==============FIN SECCION PAGOS=====
+     */
+
+    /**SECCION-ACTIVOS FIJOS POR PROYECTO*/
+
     case 'guardaryeditarcompra': 
+
+        /*$idcompra_af_general = isset($_POST["idcompra_af_general"]) ? limpiarCadena($_POST["idcompra_af_general"]) : "";
+        $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
+        $fecha_compra = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
+        $tipo_comprovante = isset($_POST["tipo_comprovante"]) ? limpiarCadena($_POST["tipo_comprovante"]) : "";
+        $serie_comprovante = isset($_POST["serie_comprovante"]) ? limpiarCadena($_POST["serie_comprovante"]) : "";
+        $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+
+        $subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
+        $igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
+        $total_compra_af_g = isset($_POST["total_compra_af_g"]) ? limpiarCadena($_POST["total_compra_af_g"]) : "";*/
+        //----------------------------
+
+        $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
+        $idcompra_af_proyecto = isset($_POST["idcompra_af_general"]) ? limpiarCadena($_POST["idcompra_af_general"]) : "";
+        $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
+        $fecha_compra = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
+        $tipo_comprobante = isset($_POST["tipo_comprovante"]) ? limpiarCadena($_POST["tipo_comprovante"]) : "";
+        $serie_comprobante = isset($_POST["serie_comprovante"]) ? limpiarCadena($_POST["serie_comprovante"]) : "";
+        $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+
+        $subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
+        $igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
+        $total_compra_af_p = isset($_POST["total_compra_af_g"]) ? limpiarCadena($_POST["total_compra_af_g"]) : "";
 
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['activo_fijo_proyecto'] == 1) {
+            if ($_SESSION['activo_fijo_general'] == 1) {
 
                 if (empty($idcompra_af_proyecto)) {
                     $rspta = $ctivos_fijos_proy->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprobante,$serie_comprobante,$descripcion,$total_compra_af_p,$subtotal_compra,
@@ -1078,11 +1111,129 @@ switch ($_GET["op"]) {
             }
         }         
     break;
-    
+    case 'anular_af_p':
+        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->desactivar($_POST['idcompra_af_proyecto']);
 
-    /**
-     * ==============FIN SECCION PAGOS=====
-     */
+                echo $rspta ? "ok" : "Compra no se puede Anular";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }       
+    break;
+    case 'des_anular_af_p':
+        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->activar($_POST['idcompra_af_proyecto']);
+
+                echo $rspta ? "ok" : "Compra no se puede recuperar";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }        
+    break;
+    case 'ver_detalle_compras_af_p':
+                
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+
+				$rspta  =  $ctivos_fijos_proy->listarDetalle($_GET['idcompra_af_proyecto']);
+                $rspta2 =  $ctivos_fijos_proy->ver_compra($_GET['idcompra_af_proyecto']);
+				$subtotal=0;
+                $ficha='';
+				echo '<thead style="background-color:#A9D0F5">
+                                                <th>Ficha técnica</th>
+                                                <th>Activo</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio Compra</th>
+                                                <th>Descuento</th>
+                                                <th>Subtotal</th>
+										</thead>';
+
+				while ($reg = $rspta->fetch_object())
+						{
+                           $subtotal = ($reg->cantidad*$reg->precio_con_igv)-$reg->descuento;
+                           
+                           empty($reg->ficha_tecnica)
+                           ? ($ficha = '<a ><i class="far fa-file-pdf fa-2x" style="color:#000000c4"></i></a>')
+                           : ($ficha = '<a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>');
+							echo '<tr class="filas">
+                                    <td>'.$ficha.'</td>
+                                    <td>'.$reg->nombre.'</td>
+                                    <td>'.$reg->cantidad.'</td>
+                                    <td>'.number_format($reg->precio_con_igv, 2, '.', ',').'</td>
+                                    <td>'.number_format($reg->descuento, 2, '.', ',').'</td>
+                                    <td>'.number_format($subtotal, 2, '.', ',').'</td></tr>';
+						}
+				echo '<tfoot>
+                        <td colspan="4"></td>
+                        <th class="text-center">
+                            <h5>Subtotal</h5>
+                            <h5>IGV</h5>
+                            <h5>TOTAL</h5>
+                        </th>
+                        <th>
+                            <h5 class="text-right subtotal"  style="font-weight: bold;">S/'.number_format($rspta2['subtotal'], 2, '.', ',').'</h5>
+                            <h5 class="text-right igv_comp" style="font-weight: bold;">S/'.number_format($rspta2['igv'], 2, '.', ',').'</h5>
+                            <b>
+                                <h4 class="text-right total"  style="font-weight: bold;">S/'.number_format($rspta2['total'], 2, '.', ',').'</h4>
+                            </b>
+                    </tfoot>';
+
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+    case 'ver_compra_af_p':
+                        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+
+                $rspta = $ctivos_fijos_proy->ver_compra($_POST['idcompra_af_proyecto']);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }         
+    break;
+    case 'ver_compra_editar_af_p':
+                        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                
+                $rspta = $ctivos_fijos_proy->mostrar_compra_para_editar($_POST['idcompra_af_proyecto']);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+            } else {
+                require 'noacceso.php';
+            }
+        }                 
+    break;
 
 
     case 'salir':
