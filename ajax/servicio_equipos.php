@@ -373,17 +373,15 @@ switch ($_GET["op"]){
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
 
-
 	break;
 
 	case 'select2_servicio': 
 
 		$rspta=$servicioequipos->select2_servicio();
 
-		while ($reg = $rspta->fetch_object())
-			{
+		while ($reg = $rspta->fetch_object()){
 			echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre .' : '. $reg->codigo_maquina .' ---> ' .$reg->nombre_proveedor.'</option>';
-			}
+		}
 	break;
 
 	/**

@@ -1177,8 +1177,13 @@ function validar_forma_de_pago() {
 
   if (forma_pago == null || forma_pago == "") {
     // no ejecutamos nada
+    $('.validar_fp').show();
   } else {
-    $('validar_fp').hide();
+    if (forma_pago == "Efectivo") {
+      $('.validar_fp').hide();
+    } else {
+      $('.validar_fp').show();
+    }    
   }
 }
 

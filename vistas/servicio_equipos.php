@@ -536,7 +536,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="forma_pago">Forma Pago</label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" onchange="validar_forma_de_pago();" style="width: 100%;">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
                                     <option value="Crédito">Crédito</option>

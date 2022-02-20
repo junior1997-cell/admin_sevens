@@ -61,7 +61,8 @@ Class ServicioMaquina
 	//ver detallete por maquina
 	public function ver_detalle_m($idmaquinaria,$idproyecto){
 
-		$sql="SELECT * FROM servicio as s WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' ORDER BY idservicio DESC";
+		$sql="SELECT * FROM servicio as s 
+		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND estado = '1' ORDER BY fecha_entrega ASC";
 
 		return ejecutarConsulta($sql);	
 
