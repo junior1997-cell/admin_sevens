@@ -84,8 +84,6 @@ $("#costo").on({
   },
 });
 
-
-
 function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == null) {  $("#definiendo").prop('checked', false); } }
 
 function permanente_pago_obrero() {
@@ -2196,6 +2194,8 @@ function calcular_plazo_fechafin() {
       if ($("#fecha_inicio").val() != "") {      
       
         if (parseInt( $("#dias_habiles").val() ) > 0) {
+
+          
           // sumamos las fechas
           var fecha_fin = sumaFecha( $("#dias_habiles").val(), $("#fecha_inicio").val()); //console.log(format_a_m_d(fecha_fin));
 
@@ -2224,7 +2224,9 @@ function calcular_plazo_fechafin() {
             //   // });
             // }
 
-            $("#fecha_fin").val(fecha_fin); $("#plazo").val(new_plazo);
+            var fecha_ayer = sumaFecha( -1, fecha_fin);
+
+            $("#fecha_fin").val(fecha_ayer); $("#plazo").val(new_plazo);
 
             toastr.success('Suma de fecha correctamente. </br> <h6 class="pt-1 mt-1 pb-1 mb-1">→ ' + data.count_feriado + ' feriados encontrados. </h6>  <h6 class="pt-1 mt-1">→ ' + cant_sabados + ' sábados</h6>')
           });
@@ -2302,7 +2304,8 @@ function cuentaSabado(fi, ff){
 
   for (var i=0; i < diffDays; i++) {
     //0 => Domingo - 6 => Sábado
-    if (inicio.getDay() == 6) {
+    console.log(inicio.getDay());
+    if (inicio.getDay() == 5) {
       cuentaFinde++;
     }
 

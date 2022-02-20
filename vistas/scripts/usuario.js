@@ -58,17 +58,19 @@ function seleccion() {
 function limpiar() {
   estado_usuario_requerido = true;
 
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); $("#trabajador").val("").trigger("change"); });
+
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");
-  $("#trabajador").val("").trigger("change"); 
+   
   $("#trabajador_old").val(""); 
   $("#cargo").val("").trigger("change"); 
   $("#login").val("");
   $("#password").val("");
   $("#password-old").val(""); 
   
-  $(".modal-title").html("Agregar usuario");
-  
+  $(".modal-title").html("Agregar usuario");  
+
   //Mostramos los permisos
   $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
 }
