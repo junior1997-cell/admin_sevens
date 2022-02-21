@@ -106,7 +106,7 @@
                     </div>
                     <!-- /.container-fluid -->
 
-                    <!-- Modal agregar proveedores -->
+                    <!-- Modal agregar Activos -->
                     <div class="modal fade" id="modal-agregar-activos-fijos">
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">

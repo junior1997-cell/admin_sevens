@@ -111,11 +111,128 @@ function init() {
   $("#doc1").change(function (e) {
     addDocs(e, $("#doc1").attr("id"));
   });
+  //============Agregar activo================
+  $("#guardar_registro_activo").on("click", function (e) {
+    $("#submit-form-activos-fijos").submit();
+  });
+
+  $("#imagen_a_i").click(function () {
+    $("#imagen_a").trigger("click");
+  });
+  $("#imagen_a").change(function (e) {
+    addImage(e, $("#imagen_a").attr("id"));
+  });
+  //ficha tecnica
+  $("#ficha_t_i").click(function () {
+    $("#ficha_t").trigger("click");
+  });
+  $("#ficha_t").change(function (e) {
+    addficha(e, $("#ficha_t").attr("id"));
+  });
+
+  //Mostramos colores
+  $.post("../ajax/color.php?op=selectcolor", function (r) {
+    $("#color_activo").html(r);
+  });
+  //Mostramos unidades
+  $.post("../ajax/unidades_m.php?op=selectUnidad", function (r) {
+    $("#unid_medida_activo").html(r);
+  });
+
+  //Initialize Select2 color
+  $("#color_activo").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar color",
+    allowClear: true,
+  });
+  //Initialize Select2 unidad
+  $("#unid_medida_activo").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar una unidad",
+    allowClear: true,
+  });
+
+  $("#unid_medida_activo").val(4).trigger("change");
+  $("#color_activo").val(1).trigger("change");
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+//--------------add ficha tecnica-----
+/* PREVISUALIZAR LOS PDF */
+function addficha(e, id) {
+  // colocamos cargando hasta que se vizualice
+  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 
+  console.log(id);
+
+  var file = e.target.files[0],
+    imageType = /application.*/;
+
+  if (e.target.files[0]) {
+    var sizeByte = file.size;
+
+    var sizekiloBytes = parseInt(sizeByte / 1024);
+
+    var sizemegaBytes = sizeByte / 1000000;
+    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+    if (extrae_extencion(file.name) == "pdf" || extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "png" || extrae_extencion(file.name) == "webp") {
+      if (sizekiloBytes <= 10240) {
+        var reader = new FileReader();
+
+        reader.onload = fileOnload;
+
+        function fileOnload(e) {
+          var result = e.target.result;
+          if (extrae_extencion(file.name) == "pdf") {
+            $("#ficha_t_i").hide();
+            $("#ver_pdf_ficha").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          } else {
+            $("#" + id + "_i").attr("src", result);
+            $("#ficha_t_i").show();
+          }
+
+          $("#" + id + "_nombre").html(
+            "" +
+              '<div class="row">' +
+              '<div class="col-md-12">' +
+              file.name +
+              "</div>" +
+              '<div class="col-md-12">' +
+              '<button  class="btn btn-danger  btn-block" onclick="' +
+              id +
+              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
+              "</div>" +
+              "</div>" +
+              ""
+          );
+
+          toastr.success("Imagen aceptada.");
+        }
+
+        reader.readAsDataURL(file);
+      } else {
+        toastr.warning("La imagen: " + file.name.toUpperCase() + " es muy pesada. Tamaño máximo 10mb");
+
+        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
+
+        $("#" + id).val("");
+      }
+    } else {
+      // return;
+      toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>");
+
+      $("#" + id + "_i").attr("src", "../dist/img/default/pdf.png");
+    }
+  } else {
+    toastr.error("Seleccione una Imagen");
+
+    $("#" + id + "_i").attr("src", "../dist/img/default/pdf.png");
+
+    $("#" + id + "_nombre").html("");
+  }
+}
 /* PREVISUALIZAR LAS IMAGENES */
 function addImage(e, id) {
   // colocamos cargando hasta que se vizualice
@@ -192,6 +309,24 @@ function addImage(e, id) {
   }
 }
 
+function ficha_t_eliminar() {
+  $("#ficha_t").val("");
+  $("#ver_pdf_ficha").html("");
+
+  $("#ficha_t_i").attr("src", "../dist/img/default/pdf.png");
+
+  $("#ficha_t_nombre").html("");
+  $("#ficha_t_i").show();
+}
+
+function imagen_a_eliminar() {
+  $("#imagen_a").val("");
+
+  $("#imagen_a_i").attr("src", "../dist/img/default/img_defecto.png");
+
+  $("#imagen_a_nombre").html("");
+}
+//--fin--
 function foto1_eliminar() {
   $("#foto1").val("");
 
@@ -373,6 +508,7 @@ function doc1_eliminar() {
 
   $("#doc1_nombre").html("");
 }
+
 
 function fecha_actual() {
   //Obtenemos la fecha actual
@@ -1094,6 +1230,68 @@ function ver_modal_vaucher(imagen) {
   $("#descargar").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
 
   // $(".tooltip").hide();
+}
+//-----------agregar activos----------------------------
+//Función limpiar
+function limpiar_crear_activos() {
+  $("#nombre_activo").val("");
+  $("#modelo_activo").val("");
+  $("#serie_activo").val("");
+  $("#marca_activo").val("");
+  $("#descripcion_activo").val("");
+
+  $("#precio_compra_activo").val("");
+  $("#subtotal_activo").val("");
+  $("#igv_activo").val("");
+  $("#total_activo").val("");
+
+  $("#imagen_a_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
+  $("#imagen_a").val("");
+  $("#imagen_a_actual").val("");
+  $("#imagen_a_nombre").html("");
+
+  $("#ficha_t_i").attr("src", "../dist/img/default/pdf.png");
+  $("#ficha_t").val("");
+  $("#ficha_t_actual").val("");
+  $("#ver_pdf_ficha").val("");
+  $("#ficha_t_nombre").html("");
+  $("#ficha_t_i").show();
+  $("#ver_pdf_ficha").hide();
+
+  $("#unid_medida_activo").val(4).trigger("change");
+  $("#color_activo").val(1).trigger("change");
+
+  $("#my-switch_igv").prop("checked", true);
+  $("#estado_igv_activo").val("1");
+
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
+}
+function guardaryeditar_c_activos(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-materiales-activos-fijos")[0]);
+
+  $.ajax({
+    url: "../ajax/activos_fijos.php?op=guardaryeditar",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+      if (datos == "ok") {
+        toastr.success("Registrado correctamente");
+
+        tabla.ajax.reload();
+
+        limpiar();
+
+        $("#modal-agregar-activos-fijos").modal("hide");
+      } else {
+        toastr.error(datos);
+      }
+    },
+  });
 }
 
 /**===============================
