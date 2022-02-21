@@ -365,11 +365,14 @@ switch ($_GET["op"]) {
                 $info = "info";
                 $icon = "eye";
 
-                while ($reg = $rspta->fetch_object()) {
+
+                foreach ($rspta as $key => $value) {
                     $data[] = [
-                        "0" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor_af_g(' . $reg->idproveedor . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
-                        "1" => $reg->razon_social,
-                        "2" => $reg->total,
+                        "0" =>'<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor_af_g(' . $value['idproveedor'] . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
+                        "1" => '<div class="user-block">
+                                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['razon_social'].'</p></span>
+                                <span class="description" style="margin-left: 0px !important;"><b>'. $value['tipo_documento'].' </b>'.$value['ruc'].'</span></div>',
+                        "2" => number_format($value['total'], 2, '.', ','),
                     ];
                 }
                 $results = [
@@ -398,19 +401,22 @@ switch ($_GET["op"]) {
                 $rspta = $all_activos_fijos->listar_detalle_comprax_provee($_GET["idproveedor"]);
                 //Vamos a declarar un array
                 $data = [];
-
-                while ($reg = $rspta->fetch_object()) {
+               // <span class="description" style="margin-left: 0px !important;"><b>'.((empty($value['idproyecto'])) ? 'General':$value['idproyecto'] ).' </b></span>
+                foreach ($rspta as $key => $value) {
                     $data[] = [
-                        "0" =>
-                            '<center><button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' .
-                            $reg->idcompra_af_general .
-                            ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
-                        "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-                        "2" => $reg->tipo_comprobante,
-                        "3" => $reg->serie_comprobante,
-                        "4" => $reg->total,
-                        "5" => $reg->descripcion,
-                        "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+                        "0" => (empty($value['idproyecto'])) ?'<center><button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' . $value['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>':
+                                '<center><button class="btn btn-info btn-sm" onclick="ver_compras_af_p(' . $value['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
+                        "1" => date("d/m/Y", strtotime($value['fecha_compra'])),
+                        "2" => '<div class="user-block">
+                                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.((empty($value['idproyecto'])) ? 'General' : $value['codigo_proyecto']).'</p></span>                                   
+                                </div>',
+                        "3" =>'<div class="user-block">
+                        <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['tipo_comprobante'] .'</p></span> 
+                        <span class="description" style="margin-left: 0px !important;"><b>'.$value['serie_comprobante'].'</b></span>                                  
+                        </div>',
+                        "4" =>number_format($value['total'], 2, '.', ','),
+                        "5" => $value['descripcion'],
+                        "6" => $value['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
                     ];
                 }
                 $results = [

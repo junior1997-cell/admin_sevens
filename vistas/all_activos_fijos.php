@@ -190,8 +190,8 @@
                               <tr>
                                 <th class="">Acciones</th>
                                 <th>Fecha</th>
-                                <th>Comprobante</th>
-                                <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
+                                <th  data-toggle="tooltip" data-original-title="Registrado en ..."> Registro</th>
+                                <th data-toggle="tooltip" data-original-title="Número y serie comprobante">Comprobante</th>
                                 <th>Total</th>
                                 <th>Descripcion</th>
                                 <th>Estado</th>
@@ -202,8 +202,8 @@
                               <tr>
                                 <th class="">Acciones</th>
                                 <th>Fecha</th>
-                                <th>Comprobante</th>
-                                <th data-toggle="tooltip" data-original-title="Número Comprobante">Num. Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Registrado en ...">Registro</th>
+                                <th data-toggle="tooltip" data-original-title="Número y serie comprobante">Num. Comprobante</th>
                                 <th>Total</th>
                                 <th>Descripcion</th>
                                 <th>Estado</th>

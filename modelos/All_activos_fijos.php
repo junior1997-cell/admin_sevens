@@ -254,22 +254,138 @@ class All_activos_fijos
     //Implementar un método para listar los registros x proveedor
     public function listar_compraxporvee_af_g()
     {
-        // $idproyecto=2;
-        $sql = "SELECT  COUNT(cafg.idproveedor) as cantidad,
-        SUM(cafg.total) as total,
-        cafg.idproveedor as idproveedor,
-        p.razon_social as razon_social
-		FROM compra_af_general as cafg, proveedor as p 
-		WHERE cafg.idproveedor=p.idproveedor GROUP BY cafg.idproveedor";
-        return ejecutarConsulta($sql);
+        $total=0; $totales_proveedor = array();
+
+        $sq_l="SELECT idproveedor,razon_social,ruc,tipo_documento FROM proveedor";
+
+        $proveedor = ejecutarConsultaArray($sq_l);
+        
+        foreach ($proveedor as $key => $value) {
+            $total=0;
+            $id=$value['idproveedor'];
+            
+            // activo fijos general
+            $sq_2 = "SELECT  SUM(total) as total_general FROM compra_af_general WHERE idproveedor=$id";
+            $compra_general= ejecutarConsultaSimpleFila($sq_2);
+
+            $total += (empty($compra_general)) ? 0 : $retVal = (empty($compra_general['total_general'])) ? 0 : floatval($compra_general['total_general']) ; 
+
+             // activo fijos proyecto
+            $sql_3 = "SELECT SUM(total) as total_proyecto FROM compra_af_proyecto  WHERE idproveedor=$id";
+            $compra_proyecto=  ejecutarConsultaSimpleFila($sql_3);
+
+            $total += (empty($compra_proyecto)) ? 0 : $retVal = (empty($compra_proyecto['total_proyecto'])) ? 0 : floatval($compra_proyecto['total_proyecto']) ; 
+
+            if ( $total>0) {
+
+                $totales_proveedor[]=array(
+
+                    "idproveedor"=>$value['idproveedor'],
+                    "razon_social"=>$value['razon_social'],
+                    "ruc"=>$value['ruc'],
+                    "tipo_documento"=>$value['tipo_documento'],
+                    "total"=>$total
+                );
+                
+            }
+
+        }
+        return $totales_proveedor;
     }
     //Implementar un método para listar los registros x proveedor
     public function listar_detalle_comprax_provee($idproveedor)
     {
-        //var_dump($idproyecto,$idproveedor);die();
-        // $idproyecto=2;
-        $sql = "SELECT* FROM compra_af_general WHERE idproveedor='$idproveedor'";
-        return ejecutarConsulta($sql);
+        $a = array();  $b = array();
+
+        $sql_1 = "SELECT
+        cafg.idcompra_af_general as idcompra_af_general,
+        cafg.idproveedor as idproveedor,
+        cafg.fecha_compra as fecha_compra,
+        cafg.tipo_comprobante as tipo_comprobante,
+        cafg.serie_comprobante as serie_comprobante,
+        cafg.descripcion as descripcion,
+        cafg.total as total,
+        cafg.comprobante as imagen_comprobante,
+        p.razon_social as razon_social, p.telefono,
+        cafg.estado as estado
+        FROM compra_af_general as cafg, proveedor as p 
+        WHERE cafg.idproveedor=p.idproveedor AND  cafg.idproveedor=$idproveedor
+        ORDER BY cafg.idcompra_af_general DESC";
+        $compra_general= ejecutarConsultaArray($sql_1);
+
+        if (!empty($compra_general)) {
+
+            foreach ($compra_general as $key => $value) {
+
+                $a[]=array(
+
+                    "idtabla"=>$value['idcompra_af_general'],
+                    "idproyecto"=>'',
+                    "idproveedor"=>$value['idproveedor'],
+                    "fecha_compra"=>$value['fecha_compra'],
+                    "tipo_comprobante"=>$value['tipo_comprobante'],
+                    "serie_comprobante"=>$value['serie_comprobante'],
+                    "descripcion"=>$value['descripcion'],
+                    "total"=>(empty($value['total'])) ? '0' :$value['total'],
+                    "imagen_comprobante"=>$value['imagen_comprobante'],
+                    "razon_social"=>$value['razon_social'],
+                    "telefono"=>$value['telefono'],
+                    "estado"=>$value['estado'],
+                    "codigo_proyecto"=>'',
+                    
+                );
+            }
+        }
+
+            
+        $sql_2="SELECT
+            cafp.idproyecto as idproyecto,
+            cafp.idcompra_af_proyecto as idcompra_af_proyecto,
+            cafp.idproveedor as idproveedor,
+            cafp.fecha_compra as fecha_compra,
+            cafp.tipo_comprobante as tipo_comprobante,
+            cafp.serie_comprobante as serie_comprobante,
+            cafp.descripcion as descripcion,
+            cafp.total as total,
+            cafp.comprobante as imagen_comprobante,
+            p.razon_social as razon_social, p.telefono,
+            cafp.estado as estado,
+            proy.nombre_proyecto as nombre_proyecto,
+            proy.nombre_codigo as nombre_codigo
+            FROM compra_af_proyecto as cafp, proveedor as p, proyecto as proy
+            WHERE cafp.idproveedor=p.idproveedor AND  cafp.idproveedor=$idproveedor
+            AND cafp.idproyecto=proy.idproyecto 
+            ORDER BY cafp.idcompra_af_proyecto DESC";
+
+        $compra_proyecto  = ejecutarConsultaArray($sql_2);
+
+        if (!empty($compra_proyecto)) {
+
+            foreach ($compra_proyecto as $key => $value) {
+
+                $b[]=array(
+
+                    "idtabla"=>$value['idcompra_af_proyecto'],
+                    "idproyecto"=>$value['idproyecto'],
+                    "idproveedor"=>$value['idproveedor'],
+                    "fecha_compra"=>$value['fecha_compra'],
+                    "tipo_comprobante"=>$value['tipo_comprobante'],
+                    "serie_comprobante"=>$value['serie_comprobante'],
+                    "descripcion"=>$value['descripcion'],
+                    "total"=>(empty($value['total'])) ? '0' :$value['total'],
+                    "imagen_comprobante"=>$value['imagen_comprobante'],
+                    "razon_social"=>$value['razon_social'],
+                    "telefono"=>$value['telefono'],
+                    "estado"=>$value['estado'],
+                    "codigo_proyecto"=>$value['nombre_codigo']
+
+                );
+            }
+        }
+
+        $data = array_merge($a,$b);
+        return $data;
+
     }
 	//mostrar detalles uno a uno de la factura
     public function ver_compra($idcompra_af_general)
