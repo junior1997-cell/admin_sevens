@@ -1137,15 +1137,15 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
   var descuento = 0;
 
   if (idactivos_fijos != "") {
-    // $('.producto_'+idactivos_fijos).addClass('producto_selecionado');
-    if ($(".producto_" + idactivos_fijos).hasClass("producto_selecionado")) {
+    // $('.producto_p_'+idactivos_fijos).addClass('producto_p_selecionado');
+    if ($(".producto_p_" + idactivos_fijos).hasClass("producto_selecionado")) {
       toastr.success("Activo: " + nombre + " agregado !!");
 
-      var cant_producto = $(".producto_" + idactivos_fijos).val();
+      var cant_producto = $(".producto_p_" + idactivos_fijos).val();
 
       var sub_total = parseInt(cant_producto, 10) + 1;
 
-      $(".producto_" + idactivos_fijos).val(sub_total);
+      $(".producto_p_" + idactivos_fijos).val(sub_total);
 
       modificarSubtotales();
     } else {
@@ -1159,21 +1159,21 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
       <tr class="filas" id="fila${cont}">
         <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(${cont})">X</button></td>
         <td>
-          <input type="hidden" name="idactivos_fijos[]" value="${idactivos_fijos}">
-          <input type="hidden" name="ficha_tecnica_activo[]" value="${ficha_tecnica_activo}">
+          <input type="hidden" name="idactivos_fijos_p[]" value="${idactivos_fijos}">
+          <input type="hidden" name="ficha_tecnica_activo_p[]" value="${ficha_tecnica_activo}">
           <div class="user-block text-nowrap">
             <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
         </td>
-        <td><span class="">${unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td class="form-group"><input class="producto_${idactivos_fijos} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class="hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
-        <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
-        <td ><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
+        <td><span class="">${unidad_medida}</span> <input type="hidden" name="unidad_medida_p[]" id="unidad_medida_p[]" value="${unidad_medida}"><input type="hidden" name="nombre_color_p[]" id="nombre_color_p[]" value="${nombre_color}"></td>
+        <td class="form-group"><input class="producto_p_${idactivos_fijos} producto_p_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class="hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
+        <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv_p[]" id="precio_igv_p[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
+        <td ><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+        <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento_p[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class="text-right"><span class="text-right subtotal_producto_p_${cont}" name="subtotal_producto_p" id="subtotal_producto_p">${subtotal}</span></td>
         <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
       </tr>`;
 
@@ -1230,7 +1230,7 @@ function modificarSubtotales() {
 
         // Calculamos: Subtotal de cada producto
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-        $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
+        $(`.subtotal_producto_p_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
       });
       calcularTotalesSinIgv();
     }
@@ -1258,7 +1258,7 @@ function modificarSubtotales() {
 
           // Calculamos: Subtotal de cada producto
           subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-          $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
+          $(`.subtotal_producto_p_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
         });
 
         calcularTotalesConIgv();
@@ -1286,7 +1286,7 @@ function modificarSubtotales() {
 
           // Calculamos: Subtotal de cada producto
           subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-          $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
+          $(`.subtotal_producto_p_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
         });
 
         calcularTotalesSinIgv();
@@ -1304,7 +1304,7 @@ function calcularTotalesSinIgv() {
   if (array_class_trabajador.length === 0) {
   } else {
     array_class_trabajador.forEach((element, index) => {
-      total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
+      total += parseFloat(quitar_formato_miles($(`.subtotal_producto_p_${element.id_cont}`).text()));
     });
 
     $("#subtotal").html("S/. " + formato_miles(total));
@@ -1325,7 +1325,7 @@ function calcularTotalesConIgv() {
   var subotal_sin_igv = 0;
 
   array_class_trabajador.forEach((element, index) => {
-    total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
+    total += parseFloat(quitar_formato_miles($(`.subtotal_producto_p_${element.id_cont}`).text()));
   });
 
   console.log(total);
@@ -1509,12 +1509,12 @@ function editar_detalle_compras(idcompra_af_proyecto) {
               </div>
             </td>
             <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td class="form-group"><input class="producto_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="form-group"><input class="producto_p_${element.idactivos_fijos} producto_p_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
             <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
             <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
+            <td class="text-right"><span class="text-right subtotal_producto_p_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
             <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
           </tr>`;
 
