@@ -323,7 +323,8 @@ Class Asistencia_trabajador
 			$id_trabajador_proyect = $key['idtrabajador_por_proyecto'];
 
 			// extraemos la asistencia por trabajador
-			$sql3 = "SELECT * FROM asistencia_trabajador  AS atr WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
+			$sql3 = "SELECT * FROM asistencia_trabajador  AS atr 
+			WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
 			$asistencia = ejecutarConsultaArray($sql3);
 
 			$sql4 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal, estado_envio_contador 

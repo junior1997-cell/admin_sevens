@@ -32,7 +32,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;     
 
-        $rspta = $resumen_general->r_compras($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+        $rspta = $resumen_general->tabla_compras($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor']);
 
         foreach ($rspta as $key => $value) {
 
@@ -130,63 +130,101 @@ if (!isset($_SESSION["nombre"])) {
         $rspta = $resumen_general->detalles_compras($_GET['id_compra']);
         $rspta2 = $resumen_general->ver_compras($_GET['id_compra']);
 
-        $subtotal = 0;
-        $ficha = '';
-        echo '<thead style="background-color:#A9D0F5">
-						<th>Ficha técnica</th>
-						<th>Material</th>
-						<th>Cantidad</th>
-						<th>Precio Compra</th>
-						<th>Descuento</th>
-						<th>Subtotal</th>
-				</thead>';
+        $subtotal = 0;    $ficha = ''; $igv = ""; $row_descr = "col-lg-6";
+
+        if ($rspta2['tipo_comprovante'] == 'Factura') {
+          $igv = '<!-- IGV-->
+          <div class="col-lg-1 " >
+            <div class="form-group">
+              <label for="igv">IGV</label>
+              <span class="form-control form-control-sm"> 0.18 </span>                                 
+            </div>
+          </div>';
+          $row_descr = "col-lg-5";
+        }
+        
+
+        echo '<!-- Tipo de Empresa -->
+          <div class="col-lg-8">
+            <div class="form-group">
+              <label for="idproveedor">Proveedor</label>
+              <h5 class="form-control form-control-sm" >'.$rspta2['razon_social'].'</h5>
+            </div>
+          </div>
+          <!-- fecha -->
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label for="fecha_compra">Fecha </label>
+              <span class="form-control form-control-sm"> <i class="far fa-calendar-alt"></i> '.format_d_m_a($rspta2['fecha_compra']).' </span>
+            </div>
+          </div>
+          <!-- Tipo de comprobante -->
+          <div class="col-lg-4 content-t-comprob">
+            <div class="form-group">
+              <label for="tipo_comprovante">Tipo Comprobante</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta2['tipo_comprovante'])) ? '- - -' :  $rspta2['tipo_comprovante'])  .' </span>
+            </div>
+          </div>
+          <!-- serie_comprovante-->
+          <div class="col-lg-2 content-comprob">
+            <div class="form-group">
+              <label for="serie_comprovante">N° de Comprobante</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta2['serie_comprovante'])) ? '- - -' :  $rspta2['serie_comprovante']).' </span>
+            </div>
+          </div>
+          '.$igv.'
+          <!-- Descripcion-->
+          <div class="'.$row_descr.' content-descrp">
+            <div class="form-group">
+              <label for="descripcion">Descripción </label> <br />
+              <textarea class="form-control form-control-sm" rows="1">'.((empty($rspta2['descripcion'])) ? '- - -' :$rspta2['descripcion']).'</textarea>
+            </div>
+        </div>';
+
+        $tbody = "";
 
         while ($reg = $rspta->fetch_object()) {
+
           $subtotal = $reg->cantidad * $reg->precio_venta - $reg->descuento;
 
-          empty($reg->ficha_tecnica)
-            ? ($ficha = '<a ><i class="far fa-file-pdf fa-2x" style="color:#000000c4"></i></a>')
-            : ($ficha = '<a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>');
-          echo '<tr class="filas">
-							<td>' .
-            $ficha .
-            '</td>
-							<td>' .
-            $reg->nombre .
-            '</td>
-							<td>' .
-            $reg->cantidad .
-            '</td>
-							<td>' .
-            $reg->precio_venta .
-            '</td>
-							<td>' .
-            $reg->descuento .
-            '</td>
-							<td>' .
-            $subtotal .
-            '</td></tr>';
-        }
-        echo '<tfoot>
-						<td colspan="4"></td>
-						<th class="text-center">
-							<h5>Subtotal</h5>
-							<h5>IGV</h5>
-							<h5>TOTAL</h5>
-						</th>
-						<th>
-							<h5 class="text-right subtotal"  style="font-weight: bold;">S/' .
-          $rspta2['subtotal_compras'] .
-          '</h5>
-							<h5 class="text-right igv_comp" style="font-weight: bold;">S/' .
-          $rspta2['igv_compras_proyect'] .
-          '</h5>
-							<b>
-								<h4 class="text-right total"  style="font-weight: bold;">S/' .
-          $rspta2['monto_total'] .
-          '</h4>
-							</b>
-					</tfoot>';
+          empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-2x text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-primary"></i></a>');
+          
+          $tbody .= '<tr class="filas">
+            <td class="text-center p-0px">' . $ficha . '</td>
+            <td class="text-left">' . $reg->nombre . '</td>
+            <td class="text-center">' . $reg->cantidad . '</td>		
+            <td class="text-right">' . number_format($reg->precio_venta, 2, '.',',') . '</td>
+            <td class="text-right">' . number_format($reg->descuento, 2, '.',',') . '</td>
+            <td class="text-right">' . number_format($subtotal, 2, '.',',') .'</td>
+          </tr>';
+        }         
+
+        echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+          <table class="table table-striped table-bordered table-condensed table-hover">
+            <thead style="background-color:#A9D0F5">
+              <th class="text-center">Ficha técnica</th>
+              <th>Material</th>
+              <th>Cantidad</th>
+              <th>Precio Compra</th>
+              <th>Descuento</th>
+              <th>Subtotal</th>
+            </thead>
+            <tbody>'.$tbody.'</tbody>          
+            <tfoot>
+              <td colspan="4"></td>
+              <th class="text-center">
+                <h5>Subtotal</h5>
+                <h5>IGV</h5>
+                <h5>TOTAL</h5>
+              </th>
+              <th>
+                <h5 class="text-right font-weight-bold">S/. ' . number_format($rspta2['subtotal_compras'], 2, '.',',') . '</h5>
+                <h5 class="text-right font-weight-bold">S/. ' . number_format($rspta2['igv_compras_proyect'], 2, '.',',') . '</h5>
+                <h4 class="text-right font-weight-bold">S/. ' . number_format($rspta2['monto_total'], 2, '.',',') . '</h4>
+              </th>
+            </tfoot>
+          </table>
+        </div> ';
 
       break;
 
@@ -203,7 +241,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor'], $tipo);
+        $rspta = $resumen_general->tabla_maquinaria_y_equipo($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor'], $tipo);
 
         foreach ($rspta as $key => $value) {
 
@@ -212,10 +250,10 @@ if (!isset($_SESSION["nombre"])) {
           if ($deuda == '' || $deuda == null || $deuda == 'todos') {
             $datatable[] = array(
               '0' => $key+1, 
-              '1' => $value['proveedor'],
-              '2' => '- - -',
+              '1' => $value['maquina'] .' - '. $value['proveedor'],
+              '2' => format_d_m_a($value['fecha_entrega']),
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'] .', \'' . $value['idproyecto']. '\', \'' .'Servicio Maquinaria:' . '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
               '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -229,10 +267,10 @@ if (!isset($_SESSION["nombre"])) {
               if ($saldo_x_fila == 0) {
                 $datatable[] = array(
                   '0' => $key+1, 
-                  '1' => $value['proveedor'],
-                  '2' => '- - -',
+                  '1' => $value['maquina'] .' - '. $value['proveedor'],
+                  '2' => format_d_m_a($value['fecha_entrega']),
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                   '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -247,10 +285,10 @@ if (!isset($_SESSION["nombre"])) {
                 if ($saldo_x_fila > 0) {
                   $datatable[] = array(
                     '0' => $key+1, 
-                    '1' => $value['proveedor'],
-                    '2' => '- - -',
+                    '1' => $value['maquina'] .' - '. $value['proveedor'],
+                    '2' => format_d_m_a($value['fecha_entrega']),
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -265,10 +303,10 @@ if (!isset($_SESSION["nombre"])) {
                   if ($saldo_x_fila < 0) {
                     $datatable[] = array(
                       '0' => $key+1, 
-                      '1' => $value['proveedor'],
-                      '2' => '- - -',
+                      '1' => $value['maquina'] .' - '. $value['proveedor'],
+                      '2' => format_d_m_a($value['fecha_entrega']),
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -309,7 +347,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_serv_maquinaria_equipos($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor'], $tipo);
+        $rspta = $resumen_general->tabla_maquinaria_y_equipo($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor'], $tipo);
 
         foreach ($rspta as $key => $value) {
 
@@ -318,10 +356,10 @@ if (!isset($_SESSION["nombre"])) {
           if ($deuda == '' || $deuda == null || $deuda == 'todos') {
             $datatable[] = array(
               '0' => $key+1, 
-              '1' => $value['proveedor'],
-              '2' => '- - -',
+              '1' => $value['maquina'] .' - '. $value['proveedor'],
+              '2' => format_d_m_a($value['fecha_entrega']),
               '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-              '4' => '<button class="btn btn-info btn-sm" onclick="ver_detalle('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+              '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
               '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
               '6' => number_format($value['deposito'], 2, '.', ',' ),
               '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -335,10 +373,10 @@ if (!isset($_SESSION["nombre"])) {
               if ($saldo_x_fila == 0) {
                 $datatable[] = array(
                   '0' => $key+1, 
-                  '1' => $value['proveedor'],
-                  '2' => '- - -',
+                  '1' => $value['maquina'] .' - '. $value['proveedor'],
+                  '2' => format_d_m_a($value['fecha_entrega']),
                   '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                  '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                   '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                   '6' => number_format($value['deposito'], 2, '.', ',' ),
                   '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -353,10 +391,10 @@ if (!isset($_SESSION["nombre"])) {
                 if ($saldo_x_fila > 0) {
                   $datatable[] = array(
                     '0' => $key+1, 
-                    '1' => $value['proveedor'],
-                    '2' => '- - -',
+                    '1' => $value['maquina'] .' - '. $value['proveedor'],
+                    '2' => format_d_m_a($value['fecha_entrega']),
                     '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -371,10 +409,10 @@ if (!isset($_SESSION["nombre"])) {
                   if ($saldo_x_fila < 0) {
                     $datatable[] = array(
                       '0' => $key+1, 
-                      '1' => $value['proveedor'],
-                      '2' => '- - -',
+                      '1' => $value['maquina'] .' - '. $value['proveedor'],
+                      '2' => format_d_m_a($value['fecha_entrega']),
                       '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -414,35 +452,19 @@ if (!isset($_SESSION["nombre"])) {
 
         while ($reg = $rspta->fetch_object()) {
           if (empty($reg->fecha_recojo) || $reg->fecha_recojo == '0000-00-00') {
-            $fechas = new FechaEs($reg->fecha_entrega);
-            $dia = $fechas->getDDDD() . PHP_EOL;
-            $mun_dia = $fechas->getdd() . PHP_EOL;
-            $mes = $fechas->getMMMM() . PHP_EOL;
-            $anio = $fechas->getYYYY() . PHP_EOL;
-            $fecha_entreg = "$dia, $mun_dia de $mes del $anio";
-            $fecha = "<b style=" . 'color:#1570cf;' . ">$fecha_entreg</b>";
-          } else {
-            $fechas = new FechaEs($reg->fecha_entrega);
-            //----------
-            $dia = $fechas->getDDDD() . PHP_EOL;
-            $mun_dia = $fechas->getdd() . PHP_EOL;
-            $mes = $fechas->getMMMM() . PHP_EOL;
-            $anio = $fechas->getYYYY() . PHP_EOL;
-            $fecha_entreg = "$dia, $mun_dia de $mes del $anio";
-            //----------
-            $fechas = new FechaEs($reg->fecha_recojo);
-            $dia2 = $fechas->getDDDD() . PHP_EOL;
-            $mun_dia2 = $fechas->getdd() . PHP_EOL;
-            $mes2 = $fechas->getMMMM() . PHP_EOL;
-            $anio2 = $fechas->getYYYY() . PHP_EOL;
-            $fecha_recoj = "$dia2, $mun_dia2 de $mes2 del $anio2";
-            $fecha = "<b style=" . 'color:#1570cf;' . ">$fecha_entreg </b> / <br> <b  style=" . 'color:#ff0000;' . ">$fecha_recoj<b>";
-          }
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
+             
+            $fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
+
+            $fecha = '<b class="text-primary text-nowrap" >'.$fecha_entreg.', '. format_d_m_a( $reg->fecha_entrega).'</b>';
+          } else {            
+             
+            $fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
+             
+            $fecha_recoj = nombre_dia_semana($reg->fecha_recojo);             
+             
+            $fecha = '<b class="text-primary text-nowrap" > '.$fecha_entreg .', '. format_d_m_a( $reg->fecha_entrega) .'</b> / <br> 
+            <b  class="text-danger text-nowrap">'.$fecha_recoj .', '.format_d_m_a( $reg->fecha_recojo) .'<b>';
+          }           
 
           $tool = '"tooltip"';
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
@@ -453,7 +475,7 @@ if (!isset($_SESSION["nombre"])) {
             "2" => empty($reg->cantidad) ? '-' : $reg->cantidad,
             "3" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ? '-' : number_format($reg->costo_unitario, 2, '.', ','),
             "4" => empty($reg->costo_parcial) ? '-' : number_format($reg->costo_parcial, 2, '.', ','),
-            "5" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+            "5" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>'  ,
           ];
         }
         $results = [
@@ -476,7 +498,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_transportes($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+        $rspta = $resumen_general->tabla_transportes($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
         
         foreach ($rspta as $key => $value) {
 
@@ -546,7 +568,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_hospedajes($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+        $rspta = $resumen_general->tabla_hospedajes($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
         foreach ($rspta as $key => $value) {
 
@@ -616,7 +638,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_comidas_extras($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+        $rspta = $resumen_general->tabla_comidas_extras($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
         foreach ($rspta as $key => $value) {
 
@@ -686,7 +708,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_breaks($_POST['idproyecto'], $_POST['fecha_filtro'], $_POST['id_proveedor']);
+        $rspta = $resumen_general->tabla_breaks($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
         foreach ($rspta as $key => $value) {
 
@@ -794,7 +816,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_pensiones($_POST['idproyecto'], $_POST['id_proveedor']);
+        $rspta = $resumen_general->tabla_pensiones($_POST['idproyecto'], $_POST['id_proveedor']);
 
         foreach ($rspta as $key => $value) {
 
@@ -983,7 +1005,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_trab_administrativo($_POST['idproyecto'], $_POST['id_trabajador']);
+        $rspta = $resumen_general->tabla_administrativo($_POST['idproyecto'], $_POST['id_trabajador']);
 
         foreach ($rspta as $key => $value) {
 
@@ -1094,7 +1116,7 @@ if (!isset($_SESSION["nombre"])) {
         $t_saldo = 0;   
         $saldo_x_fila = 0;
 
-        $rspta = $resumen_general->r_trabajador_obrero($_POST['idproyecto'], $_POST['id_trabajador']);
+        $rspta = $resumen_general->tabla_obrero($_POST['idproyecto'], $_POST['id_trabajador']);
         
         foreach ($rspta as $key => $value) {
 
@@ -1250,18 +1272,34 @@ if (!isset($_SESSION["nombre"])) {
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a($fecha) {
 
-  if (!empty($fecha)) {
+  $fecha_convert = "";
+
+  if (!empty($fecha) || $fecha != '0000-00-00') {
 
     $fecha_expl = explode("-", $fecha);
 
     $fecha_convert = $fecha_expl[2] . "-" . $fecha_expl[1] . "-" . $fecha_expl[0];
 
-  } else {
-
-    $fecha_convert = "";
-  }
+  } 
 
   return $fecha_convert;
+}
+
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+function nombre_dia_semana($fecha) {
+
+  $nombre_dia_semana = "";
+
+  if (!empty($fecha) || $fecha != '0000-00-00' ) {
+
+    $fechas = new FechaEs($fecha);
+    $dia = $fechas->getDDDD() . PHP_EOL;
+
+    $nombre_dia_semana = $dia;
+
+  }
+
+  return $nombre_dia_semana;
 }
 
 ob_end_flush();

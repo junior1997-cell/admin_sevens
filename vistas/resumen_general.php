@@ -62,9 +62,10 @@
                                   <!-- filtro por: fecha -->
                                   <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                     <label for="filtros" >Filtar por Fecha </label>
-                                    <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
-                                    
-                                    <input name="fecha_filtro" id="fecha_filtro" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                    <!-- fecha inicial -->
+                                    <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                    <!-- fecha final -->
+                                    <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
                                   </div>                                    
 
                                   <!-- filtro por: trabajador -->
@@ -573,7 +574,7 @@
                   </div>
                   <!-- /.container-fluid -->
 
-                  <!--Modal ver detalles compras-->
+                  <!--MODAL DETALLE - COMPRAS-->
                   <div class="modal fade" id="modal-ver-compras">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -585,87 +586,16 @@
                         </div>
 
                         <div class="modal-body">
-                          <div class="row" id="cargando-1-fomulario">
-                            <!-- Tipo de Empresa -->
-                            <div class="col-lg-7">
-                              <div class="form-group">
-                                <label for="idproveedor">Proveedor</label>
-
-                                <h5 class="idproveedor" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem;"></h5>
-                              </div>
-                            </div>
-                            <!-- fecha -->
-                            <div class="col-lg-5">
-                              <div class="form-group">
-                                <label for="fecha_compra">Fecha </label>
-                                <input type="date" class="form-control fecha_compra" placeholder="Fecha" />
-                              </div>
-                            </div>
-                            <!-- Tipo de comprobante -->
-                            <div class="col-lg-4 content-t-comprob">
-                              <div class="form-group">
-                                <label for="tipo_comprovante">Tipo Comprobante</label>
-                                <h5 class="tipo_comprovante" style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 0.75rem;"></h5>
-                              </div>
-                            </div>
-                            <!-- serie_comprovante-->
-                            <div class="col-lg-2 content-comprob">
-                              <div class="form-group">
-                                <label for="serie_comprovante">N° de Comprobante</label>
-                                <input type="text" class="form-control serie_comprovante" placeholder="N° de Comprobante" />
-                              </div>
-                            </div>
-                            <!-- IGV-->
-                            <div class="col-lg-1 content-igv" style="display: none;">
-                              <div class="form-group">
-                                <label for="igv">IGV</label>
-                                <input type="text" class="form-control igv" readonly value="0.18" />
-                              </div>
-                            </div>
-                            <!-- Descripcion-->
-                            <div class="col-lg-5 content-descrp">
-                              <div class="form-group">
-                                <label for="descripcion">Descripción </label> <br />
-                                <textarea class="form-control descripcion" rows="1"></textarea>
-                              </div>
-                            </div>
-                            <!--tabla detalles plantas-->
-                            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+                          <div class="row detalles_compra" id="cargando-1-fomulario">
+                            
+                            <!--detalle de la compra-->
+                                                         
+                          </div>
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                               <br />
-                              <table id="detalles_compra" class="table table-striped table-bordered table-condensed table-hover">
-                                <thead style="background-color: #ff6c046b;">
-                                  <th>Opciones</th>
-                                  <th>Material</th>
-                                  <th>Cantidad</th>
-                                  <th>Precio Compra</th>
-                                  <th>Descuento</th>
-                                  <th>Subtotal</th>
-                                </thead>
-                                <tfoot>
-                                  <td colspan="4"></td>
-                                  <th class="text-center">
-                                    <h5>Subtotal</h5>
-                                    <h5>IGV</h5>
-                                    <h5>TOTAL</h5>
-                                  </th>
-                                  <!--idproveedor,fecha_compra,tipo_comprovante,serie_comprovante,igv,descripcion, igv_comp, total-->
-                                  <th>
-                                    <h5 class="text-right subtotal" style="font-weight: bold;">S/. 0.00</h5>
-                                    <h5 class="text-right igv_comp" style="font-weight: bold;">S/. 0.00</h5>
-                                    <b>
-                                      <h4 class="text-right total" style="font-weight: bold;">S/. 0.00</h4>
-                                    </b>
-                                  </th>
-                                </tfoot>
-                                <tbody></tbody>
-                              </table>
-                            </div>
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
+                              <h4>Cargando...</h4>
                             </div>
                           </div>
                         </div>
@@ -675,7 +605,8 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Modal ver detalle maquina equipos -->
+
+                  <!-- MODAL DETALLE - MAQUINARIA EQUIPO -->
                   <div class="modal fade" id="modal_ver_detalle_maq_equ">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -684,7 +615,7 @@
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>
-                        </div>
+                        </div> 
 
                         <div class="modal-body">
                           <!--la tabla-->
@@ -718,7 +649,8 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Modal ver detalle maquina equipos -->
+
+                  <!-- MODAL DETALLE - BREAKS -->
                   <div class="modal fade" id="modal_ver_breaks">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -767,7 +699,8 @@
                       </div>
                     </div>
                   </div>
-                  <!--modal-ver-detalle-semana pension-->
+
+                  <!--MODAL DETALLE - PENSION-->
                   <div class="modal fade" id="modal-ver-detalle-semana">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -805,7 +738,8 @@
                       </div>
                     </div>
                   </div>
-                  <!--modal-ver-detalle-semana pension-->
+
+                  <!--MODAL COMPROBANTES - PENSION-->
                   <div class="modal fade" id="modal-ver-comprobantes_pension">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -851,7 +785,8 @@
                       </div>
                     </div>
                   </div>
-                  <!--modal-ver-ver-detalle-t-administ-->
+
+                  <!--MODAL DETALLE - ADMINISTRADOR-->
                   <div class="modal fade" id="modal-ver-detalle-t-administ">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -862,7 +797,8 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <div class="class-style tabla" style="text-align: center;">
+
+                          <div class="class-style tabla" id="cargando-3-fomulario" style="text-align: center;">
                             <div class="table-responsive" id="tbl-fechas">
                               <div class="table-responsive-lg">
                                 <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
@@ -903,6 +839,15 @@
                               </div>
                             </div>
                           </div>
+
+                          <div class="row" id="cargando-4-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+
                           <div style="display: none;" class="alerta">
                             <div class="alert alert-warning alert-dismissible">
                               <h5><i class="icon fas fa-exclamation-triangle fa-3x text-white"></i> <b>No hay pagos!</b></h5>
@@ -913,7 +858,8 @@
                       </div>
                     </div>
                   </div>
-                  <!--modal-ver-ver-detalle-t-obrero-->
+
+                  <!--MODAL DETALLE - OBRERO-->
                   <div class="modal fade" id="modal-ver-detalle-t-obrero">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -924,7 +870,8 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <div class="class-style tabla_obrero" style="text-align: center;">
+
+                          <div class="class-style tabla_obrero" id="cargando-5-fomulario" style="text-align: center;">
                             <div class="table-responsive" id="tbl-fechas">
                               <div class="row-horizon disenio-scroll">
                                 <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
@@ -962,6 +909,14 @@
                                   </tfoot>
                                 </table>
                               </div>
+                            </div>
+                          </div>
+
+                          <div class="row" id="cargando-6-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
                             </div>
                           </div>
 
@@ -1004,7 +959,7 @@
             color: #f0f8ff00;
           }
           .text_area_clss {
-            width: 280px;
+            width: 100%;
             background: rgb(215 224 225 / 22%);
             border-block-color: inherit;
             border-bottom: aliceblue;

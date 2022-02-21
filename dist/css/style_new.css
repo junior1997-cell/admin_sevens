@@ -291,6 +291,27 @@ table th {
   margin-top: 5px !important;
 }
 
+.m-r-1px{
+  margin-right: 1px !important;
+}
+
+.m-r-2px{
+  margin-right: 2px !important;
+}
+
+.m-r-5px{
+  margin-right: 5px !important;
+}
+
+.m-r-10px{
+  margin-right: 10px !important;
+}
+
+.m-r-15px{
+  margin-right: 15px !important;
+}
+
+
 .hidden{
   display: none;
 }
