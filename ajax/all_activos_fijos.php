@@ -595,6 +595,72 @@ switch ($_GET["op"]) {
         }
 
     break;
+    case 'listarActivoscompra2':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                //contenido
+
+                require_once "../modelos/Activos_fijos.php";
+
+                $activos_fijos=new Activos_fijos();
+
+                $rspta =$activos_fijos->lista_para_compras();
+                //Vamos a declarar un array
+                $datas = [];
+                // echo json_encode($rspta);
+                $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/default_activos_fijos_empresa.png'";    $color_stock = "";   $ficha_tecnica = ""; 
+                
+                while ($reg = $rspta->fetch_object()) {
+
+                    if (empty($reg->imagen)) {
+                        $img='src="../dist/img/default/default_activos_fijos_empresa.png"';
+                        $img_parametro="default_activos_fijos_empresa.png";
+                    } else {
+                        $img='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
+                        $img_parametro=$reg->imagen;
+                    }
+
+                    !empty($reg->ficha_tecnica)
+                        ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+                        : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+
+                    $datas[] = [
+                        "0" =>
+                            '<button class="btn btn-warning" onclick="agregarDetalleCompraActivos_p(' . $reg->idactivos_fijos  . 
+                            ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->subtotal . '\', \'' .
+                            $reg->igv. '\', \'' . $reg->total.  '\', \'' . $img_parametro . '\', \'' .$reg->ficha_tecnica .'\')" 
+                            data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
+                        "1" =>
+                            '<div class="user-block w-px-200">
+                                <img class="profile-user-img img-responsive img-circle" ' . $img .' alt="user image" onerror="'.$imagen_error.'">
+                                <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                                <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
+                            </div>',
+                        "2" => $reg->marca,
+                        "3" => number_format($reg->total, 2, '.', ','),
+                        "4" => $reg->descripcion,
+                        "5" => $ficha_tecnica,
+                    ];
+                }
+
+                $results = [
+                    "sEcho" => 1, //Información para el datatables
+                    "iTotalRecords" => count($datas), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
+                    "aaData" => $datas,
+                ];
+                echo json_encode($results);
+
+        
+            } else {
+                require 'noacceso.php';
+            }
+        }
+
+    break;
 
     case 'selectProveedor':
 
@@ -1051,31 +1117,19 @@ switch ($_GET["op"]) {
 
     /**SECCION-ACTIVOS FIJOS POR PROYECTO*/
 
-    case 'guardaryeditarcompra': 
+    case 'editarcompra_proyecto': 
+        
+        $idproyecto = isset($_POST["idproyecto_proy"]) ? limpiarCadena($_POST["idproyecto_proy"]) : "";
+        $idcompra_af_proyecto = isset($_POST["idcompra_af_proy"]) ? limpiarCadena($_POST["idcompra_af_proy"]) : "";
+        $idproveedor = isset($_POST["idproveedor_proy"]) ? limpiarCadena($_POST["idproveedor_proy"]) : "";
+        $fecha_compra = isset($_POST["fecha_compra_proy"]) ? limpiarCadena($_POST["fecha_compra_proy"]) : "";
+        $tipo_comprobante = isset($_POST["tipo_comprobante_proy"]) ? limpiarCadena($_POST["tipo_comprobante_proy"]) : "";
+        $serie_comprobante = isset($_POST["serie_comprobante_proy"]) ? limpiarCadena($_POST["serie_comprobante_proy"]) : "";
+        $descripcion = isset($_POST["descripcion_proy"]) ? limpiarCadena($_POST["descripcion_proy"]) : "";
 
-        /*$idcompra_af_general = isset($_POST["idcompra_af_general"]) ? limpiarCadena($_POST["idcompra_af_general"]) : "";
-        $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
-        $fecha_compra = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
-        $tipo_comprovante = isset($_POST["tipo_comprovante"]) ? limpiarCadena($_POST["tipo_comprovante"]) : "";
-        $serie_comprovante = isset($_POST["serie_comprovante"]) ? limpiarCadena($_POST["serie_comprovante"]) : "";
-        $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
-
-        $subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
-        $igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
-        $total_compra_af_g = isset($_POST["total_compra_af_g"]) ? limpiarCadena($_POST["total_compra_af_g"]) : "";*/
-        //----------------------------
-
-        $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
-        $idcompra_af_proyecto = isset($_POST["idcompra_af_general"]) ? limpiarCadena($_POST["idcompra_af_general"]) : "";
-        $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
-        $fecha_compra = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
-        $tipo_comprobante = isset($_POST["tipo_comprovante"]) ? limpiarCadena($_POST["tipo_comprovante"]) : "";
-        $serie_comprobante = isset($_POST["serie_comprovante"]) ? limpiarCadena($_POST["serie_comprovante"]) : "";
-        $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
-
-        $subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
-        $igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
-        $total_compra_af_p = isset($_POST["total_compra_af_g"]) ? limpiarCadena($_POST["total_compra_af_g"]) : "";
+        $subtotal_compra = isset($_POST["subtotal_compra_proy"]) ? limpiarCadena($_POST["subtotal_compra_proy"]) : "";
+        $igv_compra = isset($_POST["igv_compra_proy"]) ? limpiarCadena($_POST["igv_compra_proy"]) : "";
+        $total_compra_af_p = isset($_POST["total_compra_af_proy"]) ? limpiarCadena($_POST["total_compra_af_proy"]) : "";
 
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -1083,28 +1137,12 @@ switch ($_GET["op"]) {
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['activo_fijo_general'] == 1) {
 
-                if (empty($idcompra_af_proyecto)) {
-                    $rspta = $ctivos_fijos_proy->insertar($idproyecto,$idproveedor,$fecha_compra,$tipo_comprobante,$serie_comprobante,$descripcion,$total_compra_af_p,$subtotal_compra,
-                        $igv_compra,$_POST["idactivos_fijos"],$_POST["unidad_medida"],$_POST["nombre_color"],$_POST["cantidad"],$_POST["precio_sin_igv"],$_POST["precio_igv"],
-                        $_POST["precio_con_igv"],$_POST["descuento"],$_POST["ficha_tecnica_activo"]
-                    );
-                    //precio_sin_igv,precio_igv,precio_total
-                    echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la compra";
-                } else {
-                    $rspta=$ctivos_fijos_proy->editar(
-                    $idcompra_af_proyecto, $idproyecto, 
-                    $idproveedor, $fecha_compra, 
-                    $tipo_comprobante,$serie_comprobante, 
-                    $descripcion, $total_compra_af_p, 
-                    $subtotal_compra,$igv_compra,
-                    $_POST["idactivos_fijos"],$_POST["unidad_medida"],
-                    $_POST["nombre_color"],  $_POST["cantidad"],
-                    $_POST["precio_sin_igv"], $_POST["precio_igv"],
-                    $_POST["precio_con_igv"], $_POST["descuento"],
-                    $_POST["ficha_tecnica_activo"]);
+                    $rspta=$ctivos_fijos_proy->editar($idcompra_af_proyecto, $idproyecto,$idproveedor, $fecha_compra,$tipo_comprobante,$serie_comprobante, 
+                    $descripcion, $total_compra_af_p,$subtotal_compra,$igv_compra,$_POST["idactivos_fijos_p"],$_POST["unidad_medida_p"],
+                    $_POST["nombre_color_p"],  $_POST["cantidad_p"],$_POST["precio_sin_igv_p"], $_POST["precio_igv_p"],
+                    $_POST["precio_con_igv_p"], $_POST["descuento_p"],$_POST["ficha_tecnica_activo_p"]);
 
                     echo $rspta ? "ok" : "Compra no se pudo actualizar";
-                } 
 
             } else {
                 require 'noacceso.php';

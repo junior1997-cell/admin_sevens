@@ -1,12 +1,15 @@
 
 var tabla;
 var tabla_comp_prov;
-var tablamateriales;
+var tablaactivos1;
+var tablaactivos2;
 var tabla_list_comp_prov;
 var tabla_pagos1;
 var tabla_pagos_af_p;
 
 var array_class_trabajador = [];
+var array_class_activo_p = [];
+
 //Requejo99@
 //Función que se ejecuta al inicio
 function init() {
@@ -21,12 +24,20 @@ function init() {
   $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
     $("#idproveedor").html(r);
   });
-
+  //Cargamos los items al select proveedor para proyecto
+  $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
+    $("#idproveedor_proy").html(r);
+  });
   $("#mAllactivos_fijos").addClass("active");
 
   // guardar el registro de la compra
   $("#guardar_registro_compras").on("click", function (e) {
     $("#submit-form-compra-activos-f").submit();
+  });
+  // guardar el registro de la compra
+  $("#guardar_registro_compras_p").on("click", function (e) {
+    $("#submit-form-compra-activos-p").submit();
+   
   });
 
   //guardar registro proveedor
@@ -62,6 +73,12 @@ function init() {
     placeholder: "Selecione trabajador",
     allowClear: true,
   });
+  //Initialize Select2 Elements
+  $("#idproveedor_proy").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione trabajador",
+    allowClear: true,
+  });
 
   //Initialize Select2 Elements
   $("#tipo_comprovante").select2({
@@ -69,6 +86,14 @@ function init() {
     placeholder: "Selecione Comprobante",
     allowClear: true,
   });
+  //Initialize Select2 proyecto
+  $("#tipo_comprobante_proy").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione Comprobante",
+    allowClear: true,
+  });
+
+
   //============pagoo================
   //Cargamos los items al select bancos
   $.post("../ajax/bancos.php?op=selectbancos_2", function (r) {
@@ -494,6 +519,7 @@ function ver_form_add() {
   $("#tabla-compra").hide();
   $("#tabla-compra-proveedor").hide();
   $("#agregar_compras").show();
+  $("#agregar_compras_proyecto").hide();
   $("#regresar").show();
   $("#btn_agregar").hide();
   $("#guardar_registro_compras").hide();
@@ -503,6 +529,24 @@ function ver_form_add() {
   $(".leyecnda_pagos").hide();
   $(".leyecnda_saldos").hide();
   listaractivos();
+  //listaractivos_p();
+}
+function ver_form_add_p() {
+  array_class_activo_p = [];
+  $("#tabla-compra").hide();
+  $("#tabla-compra-proveedor").hide();
+  $("#agregar_compras").hide();
+  $("#agregar_compras_proyecto").show();
+  $("#regresar").show();
+  $("#btn_agregar").hide();
+  $("#guardar_registro_compras").hide();
+  $("#div_tabla_compra").hide();
+  $("#factura_compras").hide();
+
+  $(".leyecnda_pagos").hide();
+  $(".leyecnda_saldos").hide();
+ // listaractivos();
+  listaractivos_p();
 }
 
 function regresar() {
@@ -510,6 +554,7 @@ function regresar() {
   $("#tabla-compra").show();
   $("#tabla-compra-proveedor").show();
   $("#agregar_compras").hide();
+  $("#agregar_compras_proyecto").hide();
   $("#btn_agregar").show();
   $("#div_tabla_compra").show();
   $("#div_tabla_compra_proveedor").hide();
@@ -628,6 +673,7 @@ function listar_facuras_proveedor_af_g(idproveedor) {
   //console.log('idproyecto '+idproyecto, 'idproveedor '+idproveedor);
   $("#div_tabla_compra").hide();
   $("#agregar_compras").hide();
+  $("#agregar_compras_proyecto").hide();
   $("#btn_agregar").hide();
   $("#regresar").show();
   $("#div_tabla_compra_proveedor").show();
@@ -1492,7 +1538,7 @@ function limpiar_pagos_af_p() {
  */
 //Función ListarArticulos
 function listaractivos() {
-  tablamateriales = $("#tblaactivos")
+  tablaactivos1 = $("#tblaactivos")
     .dataTable({
       responsive: true,
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
@@ -1520,6 +1566,8 @@ function listaractivos() {
 var impuesto = 18;
 var cont = 0;
 var detalles = 0;
+var cont_p = 0;
+var detalles_p = 0;
 
 function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_activo) {
   var stock = 5;
@@ -1529,7 +1577,7 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
   if (idactivos_fijos != "") {
     // $('.producto_'+idactivos_fijos).addClass('producto_selecionado');
     if ($(".producto_" + idactivos_fijos).hasClass("producto_selecionado")) {
-      toastr.success("Material: " + nombre + " agregado !!");
+      toastr.success("Activo: " + nombre + " agregado !!");
 
       var cant_producto = $(".producto_" + idactivos_fijos).val();
 
@@ -1592,6 +1640,13 @@ function evaluar() {
   } else {
     $("#guardar_registro_compras").hide();
     cont = 0;
+  }
+
+  if (detalles_p > 0) {
+    $("#guardar_registro_compras_p").show();
+  } else {
+    $("#guardar_registro_compras_p").hide();
+    cont_p = 0;
   }
 }
 
@@ -1868,6 +1923,8 @@ function guardaryeditar_comprobante_p(e) {
 //mostramos para editar el datalle del comprobante de la compras
 function editar_detalle_compras(idcompra_af_general) {
   limpiar();
+  //$('#agregar_compras').show();
+  //$('#agregar_compras_proyecto').hide();
   array_class_trabajador = [];
 
   cont = 0;
@@ -2128,55 +2185,165 @@ function ver_compras_af_p(idcompra_af_proyecto) {
   });
 }
 
-//mostramos para editar el datalle del comprobante de la compras
-function editar_detalle_compras_af_p(idcompra_af_proyecto) {
-  limpiar();
-  array_class_trabajador = [];
+//======================guardar o editar - COMPRAS================================
+//Función ListarArticulos
+function listaractivos_p() {
+  tablaactivos2 = $("#tblaactivos_proyecto")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [],
+      ajax: {
+        url: "../ajax/all_activos_fijos.php?op=listarActivoscompra2",
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
+}
+function agregarDetalleCompraActivos_p(idactivos_fijos, nombre, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_activo) {
 
-  cont = 0;
-  detalles = 0;
-  ver_form_add();
+  var cantidad = 1;
+  var descuento = 0;
+
+  if (idactivos_fijos != "") {
+    // $('.producto_'+idactivos_fijos).addClass('producto_selecionado');
+    if ($(".producto_p_" + idactivos_fijos).hasClass("producto_selecionado")) {
+      toastr.success("Activo: " + nombre + " agregado !!");
+
+      var cant_producto = $(".producto_p_" + idactivos_fijos).val();
+
+      var sub_total = parseInt(cant_producto, 10) + 1;
+
+      $(".producto_p_" + idactivos_fijos).val(sub_total);
+
+      modificarSubtotales_p();
+    } else {
+
+      if ($("#tipo_comprobante_proy").select2("val") == "Factura") {
+        var subtotal = cantidad * precio_total;
+      } else {
+        var subtotal = cantidad * precio_sin_igv;
+      }
+
+      var fila = `
+      <tr class="filas" id="fila${cont_p}">
+        <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle_p(${cont_p})">X</button></td>
+        <td>
+          <input type="hidden" name="idactivos_fijos_p[]" value="${idactivos_fijos}">
+          <input type="hidden" name="ficha_tecnica_activo_p[]" value="${ficha_tecnica_activo}">
+          <div class="user-block text-nowrap">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${nombre}')">
+            <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
+            <span class="description"><b>Color: </b>${nombre_color}</span>
+          </div>
+        </td>
+        <td> 
+          <span >${unidad_medida}</span> 
+          <input type="hidden" name="unidad_medida_p[]" id="unidad_medida_p[]" value="${unidad_medida}"> 
+          <input type="hidden" name="nombre_color_p[]" id="nombre_color_p[]" value="${nombre_color}">
+        </td>
+        <td class="form-group">
+          <input class="producto_p_${idactivos_fijos} producto_selecionado w-px-100 cantidad_p_${cont_p} form-control " type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+        </td>
+        <td class="hidden">
+          <input class="w-px-135 input-no-border precio_sin_igv_p_${cont_p}" type="number" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${precio_sin_igv}" readonly >
+        </td>
+          <td class="hidden"><input class="w-px-135 input-no-border precio_igv_p_${cont_p}" type="number"  name="precio_igv_p[]" id="precio_igv_p[]" value="${precio_igv}" readonly >
+        </td>
+        <td >
+          <input type="number" class="w-px-135 precio_con_igv_p_${cont_p}" type="number"  name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales_p();" onchange="modificarSubtotales_p();">
+        </td>
+        <td>
+          <input type="number" class="w-px-135 descuento_p_${cont_p}" name="descuento_p[]" value="${descuento}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+        </td>
+        <td class="text-right">
+          <span class="text-right subtotal_producto_p_${cont_p}" name="subtotal_producto_p" id="subtotal_producto_p">${subtotal}</span>
+        </td>
+        <td>
+          <button type="button" onclick="modificarSubtotales_p()" class="btn btn-info"><i class="fas fa-sync"></i></button>
+          </td>
+      </tr>`;
+
+      detalles_p = detalles_p + 1;
+
+      $("#detalles_af_proyecto").append(fila);
+
+      array_class_activo_p.push({ id_cont_p: cont_p });
+      modificarSubtotales_p();
+
+      cont_p++;
+      evaluar();
+
+    }
+  } else {
+    // alert("Error al ingresar el detalle, revisar los datos del artículo");
+    toastr.error("Error al ingresar el detalle, revisar los datos del material.");
+  }
+}
+function editar_detalle_compras_af_p(idcompra_af_proyecto) {
+  limpiar_p();
+  //$('#agregar_compras').hide();
+  //$('#agregar_compras_proyecto').show();
+  array_class_activo_p = [];
+
+  cont_p = 0;
+  detalles_p = 0;
+
+  ver_form_add_p();
 
   $.post("../ajax/all_activos_fijos.php?op=ver_compra_editar_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
     data = JSON.parse(data);
     console.log(data);
 
     if (data) {
-      $(".subtotal").html("");
-      $(".igv_comp").html("");
-      $(".total").html("");
+      $(".subtotal_proy").html("");
+      $(".igv_comp_proy").html("");
+      $(".total_proy").html("");
+      $("#idproveedor_proy").val("").trigger("change");
 
       if (data.tipo_comprobante == "Factura") {
-        $(".igv").val("0.18");
-        $(".content-igv").show();
-        $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
-        $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-        $(".content-comprob").show();
+        $("#igv_proy").val("0.18");
+        $("#content-igv-p").show();
+        $("#content-t-comprob-p").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
+        $("#content-descrp-p").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+        $("#content-comprob-p").show();
       } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
-        $(".igv").val("");
-        $(".content-comprob").show();
-        $(".content-igv").hide();
-        $(".content-t-comprob").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
+        $("#igv_proy").val("");
+        $("#content-comprob-p").show();
+        $("#content-igv-p").hide();
+        $("#content-t-comprob-p").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
 
-        $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+        $("#content-descrp-p").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
+
       } else if (data.tipo_comprobante == "Ninguno") {
-        $(".content-comprob").hide();
-        $(".content-comprob").val("");
-        $(".content-igv").hide();
-        $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
-        $(".content-descrp").removeClass(" col-lg-4 col-lg-5 col-lg-7").addClass("col-lg-8");
+        $("#igv_proy").val("");
+        $("#content-comprob-p").hide();
+        $("#content-comprob-p").val("");
+        $("#content-igv-p").hide();
+        $("#content-t-comprob-p").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
+        $("#content-descrp-p").removeClass(" col-lg-4 col-lg-5 col-lg-7").addClass("col-lg-8");
       } else {
-        $(".content-comprob").show();
+        $("#content-comprob-p").show();
         //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
       }
 
-      $("#idproyecto").val(data.idproyecto);
-      $("#idcompra_af_general").val(data.idcompra_af_proyecto);
-      $("#idproveedor").val(data.idproveedor).trigger("change");
-      $("#fecha_compra").val(data.fecha_compra);
-      $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
-      $("#serie_comprovante").val(data.serie_comprobante).trigger("change");
-      $("#descripcion").val(data.descripcion);
+      $("#idproyecto_proy").val(data.idproyecto);
+      $("#idcompra_af_proy").val(data.idcompra_af_proyecto);
+      $("#idproveedor_proy").val(data.idproveedor).trigger("change");
+      $("#fecha_compra_proy").val(data.fecha_compra);
+      $("#tipo_comprobante_proy").val(data.tipo_comprobante).trigger("change");
+      $("#serie_comprobante_proy").val(data.serie_comprobante);
+      $("#descripcion_proy").val(data.descripcion);
 
       if (data.activos) {
         data.activos.forEach((element, index) => {
@@ -2189,53 +2356,228 @@ function editar_detalle_compras_af_p(idcompra_af_proyecto) {
           }
 
           var fila = `
-          <tr class="filas" id="fila${cont}">
-            <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(${cont})">X</button></td>
+          <tr class="filas" id="fila${cont_p}">
+            <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle_p(${cont_p})">X</button></td>
             <td>
-              <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
-              <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
+              <input type="hidden" name="idactivos_fijos_p[]" value="${element.idactivos_fijos}">
+              <input type="hidden" name="ficha_tecnica_activo_p[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${element.nombre_activo}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
             </td>
-            <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td class="form-group"><input class="producto_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
-            <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-            <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
-            <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
+            <td> 
+              <span >${element.unidad_medida}</span> 
+              <input type="hidden" name="unidad_medida_p[]" id="unidad_medida_p[]" value="${element.unidad_medida}"> 
+              <input type="hidden" name="nombre_color_p[]" id="nombre_color_p[]" value="${element.color}">
+            </td>
+            <td class="form-group">
+              <input class="producto_p_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_p_${cont_p} form-control " type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+            </td>
+            <td class="hidden">
+              <input class="w-px-135 input-no-border precio_sin_igv_p_${cont_p}" type="number" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${element.precio_sin_igv}" readonly >
+            </td>
+              <td class="hidden"><input class="w-px-135 input-no-border precio_igv_p_${cont_p}" type="number"  name="precio_igv_p[]" id="precio_igv_p[]" value="${element.igv}" readonly >
+            </td>
+            <td >
+              <input type="number" class="w-px-135 precio_con_igv_p_${cont_p}" type="number"  name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales_p();" onchange="modificarSubtotales_p();">
+            </td>
+            <td>
+              <input type="number" class="w-px-135 descuento_p_${cont_p}" name="descuento_p[]" value="${element.descuento}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+            </td>
+            <td class="text-right">
+              <span class="text-right subtotal_producto_p_${cont_p}" name="subtotal_producto_p" id="subtotal_producto_p">0.00</span>
+            </td>
+            <td>
+              <button type="button" onclick="modificarSubtotales_p()" class="btn btn-info"><i class="fas fa-sync"></i></button>
+              </td>
           </tr>`;
 
-          detalles = detalles + 1;
+          detalles_p = detalles_p + 1;
 
-          $("#detalles").append(fila);
+          $("#detalles_af_proyecto").append(fila);
 
-          array_class_trabajador.push({ id_cont: cont });
+          array_class_activo_p.push({ id_cont_p: cont_p });
 
-          cont++;
+          cont_p++;
           evaluar();
         });
 
-        modificarSubtotales();
+        modificarSubtotales_p();
       } else {
-        toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");
-        $(".subtotal").html("S/. 0.00");
-        $(".igv_comp").html("S/. 0.00");
-        $(".total").html("S/. 0.00");
+        toastr.error("<h3>Sin Activos.</h3> <br> Este registro no tiene Activos para mostrar");
+        $("#igv_comp_proy").html("S/. 0.00");
+        $("#igv_comp_proy").html("S/. 0.00");
+        $("#total_proy").html("S/. 0.00");
       }
     } else {
       toastr.error("<h3>Error.</h3> <br> Este registro tiene errores, o esta vacio");
     }
   });
-}
-//Función para guardar o editar - COMPRAS
-function guardaryeditar_compras(e) {
 
-  var formData = new FormData($("#form-compra-activos-f")[0]);
+}
+function modificarSubtotales_p() {
+  console.log(array_class_activo_p);
+  if ($("#tipo_comprobante_proy").select2("val") == null) {
+    $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
+
+    $("#colspan_subtotal_p").attr("colspan", 5); //cambiamos el: colspan
+
+    if (array_class_activo_p.length === 0) {
+    } else {
+      array_class_activo_p.forEach((element, index) => {
+
+        var cantidad = parseFloat($(`.cantidad_p_${element.id_cont_p}`).val());
+        var precio_con_igv = parseFloat($(`.precio_con_igv_p_${element.id_cont_p}`).val());
+        var descuento = parseFloat($(`.descuento_p_${element.id_cont_p}`).val());
+        var subtotal_producto = 0;
+
+        // Calculamos: IGV
+        var precio_sin_igv = precio_con_igv;
+        $(`.precio_sin_igv_p_${element.id_cont_p}`).val(precio_sin_igv);
+
+        // Calculamos: precio + IGV
+        var igv = 0;
+        $(`.precio_igv_p_${element.id_cont_p}`).val(igv);
+
+        // Calculamos: Subtotal de cada producto
+        subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
+        $(`.subtotal_producto_p_${element.id_cont_p}`).html(formato_miles(subtotal_producto.toFixed(4)));
+      });
+      calcularTotalesSinIgv_p();
+    }
+  } else {
+    if ($("#tipo_comprobante_proy").select2("val") == "Factura") {
+      $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
+
+      $("#colspan_subtotal_p").attr("colspan", 7); //cambiamos el: colspan
+
+      if (array_class_activo_p.length === 0) {
+      } else {
+          array_class_activo_p.forEach((element, index) => {
+
+          var cantidad = parseFloat($(`.cantidad_p_${element.id_cont_p}`).val());
+          var precio_con_igv = parseFloat($(`.precio_con_igv_p_${element.id_cont_p}`).val());
+          var descuento = parseFloat($(`.descuento_p_${element.id_cont_p}`).val());
+          var subtotal_producto = 0;
+
+          // Calculamos: IGV
+          var precio_sin_igv = (precio_con_igv / 1.18).toFixed(2);
+          $(`.precio_sin_igv_p_${element.id_cont_p}`).val(precio_sin_igv);
+
+          // Calculamos: precio + IGV
+          var igv = (parseFloat(precio_con_igv) - parseFloat(precio_sin_igv)).toFixed(2);
+          $(`.precio_igv_p_${element.id_cont_p}`).val(igv);
+
+          // Calculamos: Subtotal de cada producto
+          subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
+          $(`.subtotal_producto_p_${element.id_cont_p}`).html(formato_miles(subtotal_producto.toFixed(2)));
+        });
+
+        calcularTotalesConIgv_p();
+      }
+    } else {
+      $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
+
+      $("#colspan_subtotal_p").attr("colspan", 5); //cambiamos el: colspan
+
+      if (array_class_activo_p.length === 0) {
+      } else {
+          array_class_activo_p.forEach((element, index) => {
+
+          var cantidad = parseFloat($(`.cantidad_p_${element.id_cont_p}`).val());
+          var precio_con_igv = parseFloat($(`.precio_con_igv_p_${element.id_cont_p}`).val());
+          var descuento = parseFloat($(`.descuento_p_${element.id_cont_p}`).val());
+          var subtotal_producto = 0;
+
+          // Calculamos: IGV
+          var precio_sin_igv = precio_con_igv;
+          $(`.precio_sin_igv_p_${element.id_cont_p}`).val(precio_sin_igv);
+
+          // Calculamos: precio + IGV
+          var igv = 0;
+          $(`.precio_igv_p_${element.id_cont_p}`).val(igv);
+
+          // Calculamos: Subtotal de cada producto
+          subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
+          $(`.subtotal_producto_p_${element.id_cont_p}`).html(formato_miles(subtotal_producto.toFixed(4)));
+        });
+
+        calcularTotalesSinIgv_p();
+      }
+    }
+  }
+  toastr.success("Precio Actualizado !!!");
+}
+function calcularTotalesSinIgv_p() {
+  var total = 0.0;
+  var igv = 0;
+  var mtotal = 0;
+
+  if (array_class_activo_p.length === 0) {
+  } else {
+    array_class_activo_p.forEach((element, index) => {
+      total += parseFloat(quitar_formato_miles($(`.subtotal_producto_p_${element.id_cont_p}`).text()));
+    });
+    console.log('-----------------');
+    console.log(total);
+    $("#subtotal_proy").html("S/. " + formato_miles(total));
+    $("#subtotal_compra_proy").val(redondearExp(total, 4));
+
+    $("#igv_comp_proy").html("S/. 0.00");
+    $("#igv_compra_proy").val(0.0);
+
+    $("#total_proy").html("S/. " + formato_miles(total.toFixed(2)));
+    $("#total_compra_af_proy").val(redondearExp(total, 2));
+  }
+} 
+function calcularTotalesConIgv_p() {
+var igv = 0;
+var total = 0.0;
+
+var subotal_sin_igv = 0;
+
+array_class_activo_p.forEach((element, index) => {
+  total += parseFloat(quitar_formato_miles($(`.subtotal_producto_p_${element.id_cont_p}`).text()));
+});
+
+console.log("total");
+console.log(total);
+subotal_sin_igv = (parseFloat(total) / 1.18).toFixed(2);
+igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
+
+$("#subtotal_proy").html(`S/. ${formato_miles(subotal_sin_igv)}`);
+$("#subtotal_compra_proy").val(redondearExp(subotal_sin_igv, 4));
+
+$("#igv_comp_proy").html("S/. " + formato_miles(igv));
+$("#igv_compra_proy").val(igv);
+
+$("#total_proy").html("S/. " + formato_miles(total.toFixed(2)));
+$("#total_compra_af_proy").val(redondearExp(total, 2));
+
+total = 0.0;
+}
+function eliminarDetalle_p(indice) {
+  $("#fila" + indice).remove();
+
+  array_class_activo_p.forEach(function (car, index, object) {
+    if (car.id_cont_p === indice) {
+      object.splice(index, 1);
+    }
+  });
+
+  modificarSubtotales_p();
+
+  detalles_p = detalles_p - 1;
+
+  evaluar();
+
+  toastr.warning("Activo removido.");
+}
+function guardaryeditar_compras_af_p(e) {
+
+  var formData = new FormData($("#form-compra-activos-p")[0]);
 
   Swal.fire({
     title: "¿Está seguro que deseas guardar esta compra?",
@@ -2248,7 +2590,7 @@ function guardaryeditar_compras(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/all_activos_fijos.php?op=guardaryeditarcompraactivo",
+        url: "../ajax/all_activos_fijos.php?op=editarcompra_proyecto",
         type: "POST",
         data: formData,
         contentType: false,
@@ -2274,9 +2616,44 @@ function guardaryeditar_compras(e) {
     }
   });
 }
+//Función limpiar
+function limpiar_p() {
+  $(".tooltip").hide();
+
+  //Mostramos los selectProveedor
+  $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {
+    $("#idproveedor_proy").html(r);
+  });
+
+  $("#idcompra_af_proy").val();
+  $("#idproyecto_proy").val();
+
+  $("#idproveedor_proy").val("null").trigger("change");
+  $("#tipo_comprobante_proy").val("Ninguno").trigger("change");
+
+  $("#serie_comprobante_proy").val("");
+  $("#descripcion_proy").val("");
+
+  $(".filas").remove();
+  $("#total").html("0");
+
+  $("#subtotal_proy").html("");
+  $("#subtotal_compra_proy").val("");
+
+  $("#igv_comp_proy").html("");
+  $("#igv_compra_proy").val("");
+
+  $("#total_proy").html("");
+  $("#total_compra_af_proy").val("");
+
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
+}
 
 
-// .......:::::::::::::::::: - COMPRAS POR PORYECTO ::::::::::::.......
+
+
+// .......:::::::::::::::::: - FIN COMPRAS POR PORYECTO ::::::::::::.......
 
 
 // .......:::::::::::::::::: - FIN - AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
@@ -2327,6 +2704,52 @@ $(function () {
 
     submitHandler: function (form) {
       guardaryeditar_compras(form);
+    },
+  });
+
+  $("#form-compra-activos-p").validate({
+    rules: {
+      idproveedor_proy: { required: true },
+      tipo_comprobante_proy: { required: true },
+      serie_comprobante_proy: { minlength: 2 },
+      descripcion_proy: { minlength: 4 },
+      fecha_compra_proy: { required: true },
+    },
+    messages: {
+      idproveedor_proy: {
+        required: "Por favor debe seleccionar un proveedor.",
+      },
+      tipo_comprobante_proy: {
+        required: "Por favor debe seleccionar tipo de comprobante.",
+      },
+      serie_comprobante_proy: {
+        minlength: "mayor a 2 caracteres",
+      },
+      descripcion_proy: {
+        minlength: "mayor a 4 caracteres",
+      },
+      fecha_compra_proy: {
+        required: "Campo requerido",
+      },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (form) {
+      guardaryeditar_compras_af_p(form);
     },
   });
   
