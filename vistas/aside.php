@@ -115,7 +115,7 @@
               <li class="nav-item ">
                 <a href="materiales.php" class="nav-link" id="lAllMateriales">
                 <i class="nav-icon fas fa-bars"></i>
-                  <p>Materiales</p>
+                  <p>Insumos</p>
                 </a>
               </li>
               <!-- Activos fijos -->
@@ -153,7 +153,7 @@
           </li>
         <?php  }  ?>
         
-        <li class="nav-header">Modulos</li>   
+        <li class="nav-header">MÓDULOS</li>
 
         <!-- cargando -->     
         <li class="nav-item ver-otros-modulos-2" style="display: none !important;">
@@ -165,6 +165,8 @@
           </a>
         </li>
 
+        <li class="nav-header bg-color-2c2c2c">TÉCNICO</li> 
+
         <?php if ($_SESSION['valorizacion']==1) {  ?>
           <!-- VALORIZACIONES -->
           <li class="nav-item ver-otros-modulos-1">
@@ -172,19 +174,6 @@
               <i class="nav-icon far fa-file-alt"></i>
               <p>
                 Valorizaciones
-              </p>
-            </a>
-          </li>
-        <?php  }  ?>
-
-        <?php if ($_SESSION['trabajador']==1) {  ?>
-          <!-- TRABAJADORES -->
-          <li class="nav-item ver-otros-modulos-1">
-            <a href="trabajador.php" class="nav-link" id="mTrabajador">
-              <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
-              <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-              <p>
-                Trabajadores
               </p>
             </a>
           </li>
@@ -200,37 +189,46 @@
               </p>
             </a>
           </li>
-        <?php  }  ?> 
+        <?php  }  ?>
 
-        <?php if ($_SESSION['pago_trabajador']==1) {  ?>          
-          <!-- PAGOS DE TRABAJADORES -->
-          <li class="nav-item ver-otros-modulos-1" id="bloc_PagosTrabajador">
-            <a href="#" class="nav-link" id="mPagosTrabajador">
-              <i class="fas fa-dollar-sign nav-icon"></i>
+        <?php if ($_SESSION['calendario']==1) {  ?>
+          <!-- CALENDARIO -->       
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="calendario.php" class="nav-link" id="mCalendario">
+              <i class="nav-icon far fa-calendar-alt"></i>
               <p>
-                Pago Trabajador
-                <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">2</span>
+                Calendario                 
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <!-- Obreros  -->
-              <li class="nav-item ">
-                <a href="pago_obrero.php" class="nav-link" id="lPagosObrero">
-                  <i class="nav-icon fas fa-users"></i>
-                  <p>Obreros</p>
-                </a>
-              </li>
-              <!-- Administradores -->
-              <li class="nav-item ">
-                <a href="pago_administrador.php" class="nav-link" id="lPagosAdministrador">
-                  <i class="nav-icon fas fa-briefcase"></i>
-                  <p>Administradores</p>
-                </a>
-              </li> 
-            </ul>
           </li>
-        <?php  }  ?> 
+        <?php  }  ?>
+
+        <?php if ($_SESSION['plano_otro']==1) {  ?>
+          <!-- PLANOS Y OTROS -->       
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="plano_otro.php" class="nav-link" id="mPlanoOtro">
+              <i class="nav-icon fas fa-map-marked-alt"></i>
+              <p>
+                Planos y otros                 
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <li class="nav-header bg-color-2c2c2c">LOGÍSTICA Y ADQUISICIONES</li>
+
+        <?php if ($_SESSION['trabajador']==1) {  ?>
+          <!-- TRABAJADORES -->
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="trabajador.php" class="nav-link" id="mTrabajador">
+              <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
+              <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+              <p>
+                Trabajadores
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
 
         <?php if ($_SESSION['compra']==1) {  ?>   
           <!-- COMPRAS -->      
@@ -270,8 +268,7 @@
               <p>Activos fijos proyecto</p>
             </a>
           </li>
-        <?php  }  ?>
-        
+        <?php  }  ?>        
 
         <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
           <!-- SERVICIO -->       
@@ -301,29 +298,6 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['calendario']==1) {  ?>
-          <!-- CALENDARIO -->       
-          <li class="nav-item ver-otros-modulos-1">
-            <a href="calendario.php" class="nav-link" id="mCalendario">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Calendario                 
-              </p>
-            </a>
-          </li>
-        <?php  }  ?>
-
-        <?php if ($_SESSION['plano_otro']==1) {  ?>
-          <!-- PLANOS Y OTROS -->       
-          <li class="nav-item ver-otros-modulos-1">
-            <a href="plano_otro.php" class="nav-link" id="mPlanoOtro">
-              <i class="nav-icon fas fa-map-marked-alt"></i>
-              <p>
-                Planos y otros                 
-              </p>
-            </a>
-          </li>
-        <?php  }  ?>
         <?php if ($_SESSION['planilla_seguro']==1) {  ?>
           <!-- PLANILLAS Y SEGUROS -->       
           <li class="nav-item ver-otros-modulos-1">
@@ -336,17 +310,19 @@
             </a>
           </li>
         <?php  }  ?>
+
         <?php if ($_SESSION['otro_servicio']==1) {  ?>
           <!-- OTROS SERVICIOS -->       
           <li class="nav-item ver-otros-modulos-1">
             <a href="otros_servicios.php" class="nav-link" id="mOtroServicio">
               <i class="nav-icon fas fa-network-wired"></i>
               <p>
-                Otros servicios                
+                Otros Gastos                
               </p>
             </a>
           </li>
         <?php  }  ?>
+
         <?php if ($_SESSION['resumen_general']==1) {  ?>
           <!-- OTROS SERVICIOS -->       
           <li class="nav-item ver-otros-modulos-1">
@@ -419,7 +395,75 @@
               </li>              
             </ul>
           </li>
-        <?php  }  ?>       
+        <?php  }  ?>
+
+        <li class="nav-header bg-color-2c2c2c">CONTABLE Y FINANCIERO</li>
+
+        <?php if ($_SESSION['pago_trabajador']==1) {  ?>          
+          <!-- PAGOS DE TRABAJADORES -->
+          <li class="nav-item ver-otros-modulos-1" id="bloc_PagosTrabajador">
+            <a href="#" class="nav-link" id="mPagosTrabajador">
+              <i class="fas fa-dollar-sign nav-icon"></i>
+              <p>
+                Pago Trabajador
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">2</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <!-- Obreros  -->
+              <li class="nav-item ">
+                <a href="pago_obrero.php" class="nav-link" id="lPagosObrero">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>Obreros</p>
+                </a>
+              </li>
+              <!-- Administradores -->
+              <li class="nav-item ">
+                <a href="pago_administrador.php" class="nav-link" id="lPagosAdministrador">
+                  <i class="nav-icon fas fa-briefcase"></i>
+                  <p>Administradores</p>
+                </a>
+              </li> 
+            </ul>
+          </li>
+        <?php  }  ?>
+
+        <li class="nav-item ver-otros-modulos-1">
+          <a href="prestamo.php" class="nav-link" id="mPrestamo">
+            <i class="nav-icon fas fa-university"></i>
+            <p>
+              Prestamos               
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item ver-otros-modulos-1">
+          <a href="otra_factura.php" class="nav-link" id="mOtraFactura">
+            <i class="nav-icon fas fa-receipt"></i>
+            <p>
+              Otras Facturas               
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item ver-otros-modulos-1">
+          <a href="resumen_factura.php" class="nav-link" id="mResumenFacura">            
+            <i class="nav-icon fas fa-poll"></i>
+            <p>
+              Resumen de Facturas               
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item ver-otros-modulos-1">
+          <a href="estado_financiero.php" class="nav-link" id="mEstadoFinanciero">             
+            <i class="nav-icon fas fa-balance-scale-left"></i>
+            <p>
+              Estado Financiero               
+            </p>
+          </a>
+        </li>
         
       </ul>      
     </nav>
