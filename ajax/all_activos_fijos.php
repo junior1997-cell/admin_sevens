@@ -307,28 +307,28 @@ switch ($_GET["op"]) {
                                     ' <button class="btn btn-danger btn-sm" onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
                                 : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
                                 ' <button class="btn btn-success btn-sm" onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
-                        "1" => date("d/m/Y", strtotime($reg['fecha_compra'])),
-                        "2" => '<div class="user-block">
+                        "1" => $reg['descripcion'],
+                        "2" => date("d/m/Y", strtotime($reg['fecha_compra'])),
+                        "3" => '<div class="user-block">
                                     <span class="description" style="margin-left: 0px !important;"><b>'.((empty($reg['idproyecto'])) ? 'General' : $reg['codigo_proyecto']).'</b></span>
                                     <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg['razon_social'] .'</p></span>
                                     <span class="description" style="margin-left: 0px !important;"><b>Cel: </b><a class="text-body" href="tel:+51'.quitar_guion($reg['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al proveedor.">'. $reg['telefono'] . '</a> </span>
                                    
                                 </div>',
-                        "3" => '<div class="user-block">
+                        "4" => '<div class="user-block">
                                 <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprobante1.'</p></span>
                                 <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
                             </div>',
-                        "4" => number_format($reg['total'], 2, '.', ','),
-                        "5" => (empty($reg['idproyecto'])) ?'<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
+                        "5" => number_format($reg['total'], 2, '.', ','),
+                        "6" => (empty($reg['idproyecto'])) ?'<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>':
                                 '<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
-                        "6" => number_format($saldo, 2, '.', ','),
-                        "7" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
-                        '<center><button class="btn btn-info" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
-                        "8" => $reg['descripcion'],
+                        "7" => number_format($saldo, 2, '.', ','),
+                        "8" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
+                        '<center><button class="btn btn-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
                         "9" => $reg['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
                     ];
                 }

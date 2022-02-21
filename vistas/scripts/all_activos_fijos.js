@@ -595,18 +595,18 @@ function listar() {
       },
       createdRow: function (row, data, ixdex) {
         //console.log(data);
-        if (quitar_formato_miles(data[6]) > 0) {
-          $("td", row).eq(6).css({
+        if (quitar_formato_miles(data[7]) > 0) {
+          $("td", row).eq(7).css({
             "background-color": "#ffc107",
             color: "black",
           });
-        } else if (quitar_formato_miles(data[6]) == 0) {
-          $("td", row).eq(6).css({
+        } else if (quitar_formato_miles(data[7]) == 0) {
+          $("td", row).eq(7).css({
             "background-color": "#28a745",
             color: "white",
           });
         } else {
-          $("td", row).eq(6).css({
+          $("td", row).eq(7).css({
             "background-color": "#ff5252",
             color: "white",
           });
@@ -624,12 +624,12 @@ function listar() {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
+      order: [[2, "desc"]], //Ordenar (columna,orden)
       columnDefs: [
         {
-          targets: [8],
-          visible: false,
-          searchable: false,
+         // targets: [8],
+         // visible: true,
+         // searchable: true,
         },
       ],
     })
@@ -706,7 +706,7 @@ function listar_facuras_proveedor_af_g(idproveedor) {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
+      order: [[1, "desc"]], //Ordenar (columna,orden)
     })
     .DataTable();
 }
