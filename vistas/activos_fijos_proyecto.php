@@ -286,11 +286,17 @@
                                   </div>
 
                                   <!--Boton agregar Activo-->
-                                  <div class="row col-lg-12 justify-content-between">
-                                    <div class="col-lg-3 xs-12">
+                                  <div class="row col-lg-12">
+                                    <div class="col-lg-2 xs-12">
                                       <label for="" style="color: white;">.</label> <br />
                                       <a data-toggle="modal" data-target="#modal-elegir-activo">
-                                        <button id="btnAgregarArt" type="button" class="btn btn-success"><span class="fa fa-plus"></span> Agregar Activo</button>
+                                        <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Activo</button>
+                                      </a>
+                                    </div>
+                                    <div class="col-lg-2 xs-12">
+                                      <label for="" style="color: white;">.</label> <br />
+                                      <a data-toggle="modal" data-target="#modal-elegir-activo">
+                                        <button type="button" class="btn btn-success btn-block"><span class="fa fa-plus"></span> Crear Activo</button>
                                       </a>
                                     </div>
                                   </div>

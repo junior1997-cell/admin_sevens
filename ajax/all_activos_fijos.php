@@ -307,7 +307,8 @@ switch ($_GET["op"]) {
                                     ' <button class="btn btn-danger btn-sm" onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
                                 : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
                                 ' <button class="btn btn-success btn-sm" onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
-                        "1" => $reg['descripcion'],
+                        "1" => '<textarea class="form-control text_area_clss" cols="30" rows="2">'. $reg['descripcion'].'</textarea>',
+                       
                         "2" => date("d/m/Y", strtotime($reg['fecha_compra'])),
                         "3" => '<div class="user-block">
                                     <span class="description" style="margin-left: 0px !important;"><b>'.((empty($reg['idproyecto'])) ? 'General' : $reg['codigo_proyecto']).'</b></span>

@@ -20,6 +20,17 @@
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
         <!-- Theme style -->
         <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
+        <style>
+            .text_area_clss {
+              width: 100%;
+              background: rgb(215 224 225 / 22%);
+              border-block-color: inherit;
+              border-bottom: aliceblue;
+              border-left: aliceblue;
+              border-right: aliceblue;
+              border-top: hidden;
+              }
+        </style>
     </head>
     <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
       <div class="wrapper">
