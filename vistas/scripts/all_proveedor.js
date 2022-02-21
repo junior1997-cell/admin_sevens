@@ -190,7 +190,7 @@ function activar(idproveedor) {
 
 // damos formato a: Cta, CCI
 function formato_banco() {
-  if ($("#banco").select2("val") == null || $("#banco").select2("val") == "") {
+  if ($("#banco").select2("val") == null || $("#banco").select2("val") == "" || $("#banco").select2("val") == "1" ) {
     $("#c_bancaria").prop("readonly", true);
     $("#cci").prop("readonly", true);
     $("#c_detracciones").prop("readonly", true);

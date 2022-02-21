@@ -107,7 +107,7 @@
                           </div>
                         </div>
                         <!--===============Tabla Principal =========-->
-                        <div class="card-body display" id="tabla_principal">
+                        <div class="card-body display " id="tabla_principal">
                           <table id="tabla-servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
@@ -140,7 +140,6 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--=============== FIN Tabla Principal =======--->
 
                         <!--===============Tabla detalle por maquina  =======--->
                         <div class="card-body" id="tabla_detalles" style="display: none;">
@@ -178,11 +177,12 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--=============== FIN Tabla detalle por maquina =======--->
 
                         <!--===============Tabla Pagos =======--->
                         <div class="card-body" id="tabla_pagos" style="display: none;">
-                          <div style="text-align: center;">
+
+                        <!-- TABLA PROVEDDOR -->
+                          <div class="text-center" >
                             <div>
                               <h4>Total a pagar: <b id="total_costo_secc_pagos"></b></h4>
                             </div>
@@ -190,8 +190,7 @@
                             <div style="background-color: aliceblue;">
                               <h5>Proveedor S/ <b id="t_proveedor"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_provee_porc"></b> <b>%</b></h5>
                             </div>
-                          </div>
-                          <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
+                          </div>                           
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
@@ -239,9 +238,10 @@
                               </tr>
                             </tfoot>
                           </table>
-                          <!--Tabla 2-->
                           <br />
-                          <div style="text-align: center;">
+
+                          <!-- TABLA DETRACCION -->
+                          <div class="text-center" style="text-align: center;">
                             <div style="background-color: aliceblue;">
                               <h5>Detracción S/ <b id="t_detaccion"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_detacc_porc"></b> <b>%</b></h5>
                             </div>
@@ -294,7 +294,6 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--===============FIN Tabla Pagos =======--->
 
                         <!--===============Tabla facturas =======--->
                         <div class="card-body" id="tabla_facturas_h" style="display: none;">
@@ -333,7 +332,6 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--===============FIN Tabla facturas =======--->
                       </div>
                       <!-- /.card -->
                     </div>
@@ -557,7 +555,7 @@
                               <div class="col-lg-6 validar_fp">
                                 <div class="form-group">
                                   <label for="cuenta_destino_pago">Cuenta destino </label>
-                                  <input type="number" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" onchange="captura_op();" placeholder="Cuenta destino" />
+                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                                 </div>
                               </div>
                               <!-- banco -->

@@ -114,14 +114,15 @@
               <!-- Materiales para la empresa -->
               <li class="nav-item ">
                 <a href="materiales.php" class="nav-link" id="lAllMateriales">
-                <i class="nav-icon fas fa-bars"></i>
+                  
+                <img src="../dist/svg/palana-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                   <p>Insumos</p>
                 </a>
               </li>
               <!-- Activos fijos -->
               <li class="nav-item ">
                 <a href="activos_fijos.php" class="nav-link" id="lActivosfijos">
-                <i class="nav-icon fas fa-bars"></i>
+                <i class="nav-icon fas fa-truck-pickup"></i>
                   <p>Activos fijos</p>
                 </a>
               </li>
@@ -152,6 +153,15 @@
             </a>
           </li>
         <?php  }  ?>
+
+        <li class="nav-item ver-otros-modulos-1">
+          <a href="papelera.php" class="nav-link" id="mPapelera">
+            <i class="nav-icon fas fa-trash-alt"></i>
+            <p>
+              Papelera               
+            </p>
+          </a>
+        </li>
         
         <li class="nav-header">MÓDULOS</li>
 

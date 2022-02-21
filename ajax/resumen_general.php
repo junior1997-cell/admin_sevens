@@ -1285,7 +1285,7 @@ function format_d_m_a($fecha) {
   return $fecha_convert;
 }
 
-// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+// NOMBRE DIA DE SEMANA
 function nombre_dia_semana($fecha) {
 
   $nombre_dia_semana = "";
