@@ -7,21 +7,24 @@ var idmaquina;
 
 //Función que se ejecuta al inicio
 function init() {
-  
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+  $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
   //Mostramos los BANCOS
-  $.post("../ajax/servicio_maquina.php?op=select2Banco", function (r) { $("#banco_pago").html(r); });
+  $.post("../ajax/servicio_maquina.php?op=select2Banco", function (r) {
+    $("#banco_pago").html(r);
+  });
 
- //Mostramos los maquinariaes
- $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
+  //Mostramos los maquinariaes
+  $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) {
+    $("#maquinaria").html(r);
+  });
 
- $("#mMaquina").addClass("active");
+  $("#mMaquina").addClass("active");
 
- listar(localStorage.getItem('nube_idproyecto'));
+  listar(localStorage.getItem("nube_idproyecto"));
 
   // $("#lproveedor").addClass("active");
- //=====Guardar Servicio=============
+  //=====Guardar Servicio=============
   $("#guardar_registro").on("click", function (e) {
     $("#submit-form-servicios").submit();
   });
@@ -32,13 +35,21 @@ function init() {
   //=====Guardar factura=============
   $("#guardar_registro_factura").on("click", function (e) {
     $("#submit-form-factura").submit();
-     });
+  });
   //vaucher
-  $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
-  $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
+  $("#foto1_i").click(function () {
+    $("#foto1").trigger("click");
+  });
+  $("#foto1").change(function (e) {
+    addImage(e, $("#foto1").attr("id"));
+  });
   //Factura
-  $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
-  $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
+  $("#foto2_i").click(function () {
+    $("#foto2").trigger("click");
+  });
+  $("#foto2").change(function (e) {
+    addImage(e, $("#foto2").attr("id"));
+  });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -49,8 +60,8 @@ function init() {
     placeholder: "Selecione maquinaria",
     allowClear: true,
   });
-   //Initialize Select2 Elements
-   $("#unidad_m").select2({
+  //Initialize Select2 Elements
+  $("#unidad_m").select2({
     theme: "bootstrap4",
     placeholder: "Selecione una unidad de medida",
     allowClear: false,
@@ -62,7 +73,7 @@ function init() {
     placeholder: "Selecione una forma de pago",
     allowClear: true,
   });
-    //Initialize Select2 Elements
+  //Initialize Select2 Elements
   $("#tipo_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un tipo de pago",
@@ -82,123 +93,108 @@ function init() {
   $("#forma_pago").val("null").trigger("change");
   $("#tipo_pago").val("null").trigger("change");
   $("#banco_pago").val("null").trigger("change");
-
 }
 
 /* PREVISUALIZAR LAS IMAGENES */
-function addImage(e,id) {
+function addImage(e, id) {
   // colocamos cargando hasta que se vizualice
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 
-	console.log(id);
+  console.log(id);
 
-	var file = e.target.files[0], imageType = /application.*/;
-	
-	if (e.target.files[0]) {
+  var file = e.target.files[0],
+    imageType = /application.*/;
 
-		var sizeByte = file.size;
+  if (e.target.files[0]) {
+    var sizeByte = file.size;
 
-		var sizekiloBytes = parseInt(sizeByte / 1024);
+    var sizekiloBytes = parseInt(sizeByte / 1024);
 
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+    var sizemegaBytes = sizeByte / 1000000;
+    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
 
-		if (extrae_extencion(file.name)=='pdf' || extrae_extencion(file.name)=='jpeg'|| extrae_extencion(file.name)=='jpg'|| extrae_extencion(file.name)=='png'|| extrae_extencion(file.name)=='webp'){
-      
-			if (sizekiloBytes <= 10240) {
+    if (extrae_extencion(file.name) == "pdf" || extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "png" || extrae_extencion(file.name) == "webp") {
+      if (sizekiloBytes <= 10240) {
+        var reader = new FileReader();
 
-				var reader = new FileReader();
+        reader.onload = fileOnload;
 
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-          if (extrae_extencion(file.name) =='pdf') {
-            $('#foto2_i').hide();
-           $('#ver_pdf').html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          }else{
-					$("#"+id+"_i").attr("src", result);
-          $('#foto2_i').show();
+        function fileOnload(e) {
+          var result = e.target.result;
+          if (extrae_extencion(file.name) == "pdf") {
+            $("#foto2_i").hide();
+            $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          } else {
+            $("#" + id + "_i").attr("src", result);
+            $("#foto2_i").show();
           }
 
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
+          $("#" + id + "_nombre").html(
+            "" +
+              '<div class="row">' +
+              '<div class="col-md-12">' +
               file.name +
-              '</div>'+
-              '<div class="col-md-12">'+
-              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-          
-					toastr.success('Imagen aceptada.')
-        
-				}
+              "</div>" +
+              '<div class="col-md-12">' +
+              '<button  class="btn btn-danger  btn-block" onclick="' +
+              id +
+              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
+              "</div>" +
+              "</div>" +
+              ""
+          );
 
-				reader.readAsDataURL(file);
+          toastr.success("Imagen aceptada.");
+        }
 
-			} else {
+        reader.readAsDataURL(file);
+      } else {
+        toastr.warning("La imagen: " + file.name.toUpperCase() + " es muy pesada. Tamaño máximo 10mb");
 
-				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
+        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
 
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-
-		}else{
+        $("#" + id).val("");
+      }
+    } else {
       // return;
-			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>');
+      toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>");
 
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto.png");
+    }
+  } else {
+    toastr.error("Seleccione una Imagen");
 
-		}
+    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto2.png");
 
-	}else{
-
-		toastr.error('Seleccione una Imagen');
-
-
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto2.png");
-   
-		$("#"+id+"_nombre").html("");
-	}
+    $("#" + id + "_nombre").html("");
+  }
 }
 function foto1_eliminar() {
+  $("#foto1").val("");
 
-	$("#foto1").val("");
+  $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
 
-	$("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
-
-	$("#foto1_nombre").html("");
+  $("#foto1_nombre").html("");
 }
 function foto2_eliminar() {
+  $("#foto2").val("");
+  $("#ver_pdf").html("");
 
-	$("#foto2").val("");
-	$("#ver_pdf").html("");
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
 
-	$("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-
-	$("#foto2_nombre").html("");
-  $('#foto2_i').show();
+  $("#foto2_nombre").html("");
+  $("#foto2_i").show();
 }
 function seleccion() {
-
   if ($("#maquinaria").select2("val") == null) {
-
     $("#maquinaria_validar").show(); //console.log($("#maquinaria").select2("val") + ", "+ $("#maquinaria_old").val());
-
   } else {
-
     $("#maquinaria_validar").hide();
   }
 }
 function capture_unidad() {
-    //Hora
-  if ($("#unidad_m").select2("val") =="Hora") {
-
+  //Hora
+  if ($("#unidad_m").select2("val") == "Hora") {
     $("#dias_head").hide();
     $("#meses_head").hide();
     $("#fecha_i").show();
@@ -208,24 +204,23 @@ function capture_unidad() {
     $("#horometro_f").show();
     $("#costo_unit").show();
     $("#horas_head").show();
-    $("#unidad").addClass("col-lg-6")
+    $("#unidad").addClass("col-lg-6");
 
     $("#dias").val("");
     $("#mes").val("");
     $("#fecha_fin").val("");
     $("#fecha_inicio").val("");
-    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>');
     $("#cantidad").val("0");
-   // $("#fecha_inicio").val("");
+    // $("#fecha_inicio").val("");
 
-   //Dia
-  } else if($("#unidad_m").select2("val")=="Dia"){
-
+    //Dia
+  } else if ($("#unidad_m").select2("val") == "Dia") {
     $("#horas_head").hide();
     $("#dias_head").hide();
     $("#meses_head").hide();
     $("#fecha_i").show();
-    $("#unidad").removeClass("col-lg-6").addClass("col-lg-3")
+    $("#unidad").removeClass("col-lg-6").addClass("col-lg-3");
     $("#cantidad_ii").show();
     $("#fecha_f").hide();
     $("#horometro_i").hide();
@@ -233,7 +228,7 @@ function capture_unidad() {
     $("#costo_unit").show();
     $("#dias").hide();
     //$("#costo_parcial").removeAttr("readonly");
-    $("#fecha_fin").attr('readonly',true);
+    $("#fecha_fin").attr("readonly", true);
     /**======= */
 
     $("#fecha_fi").html("Fecha Fin :");
@@ -246,25 +241,24 @@ function capture_unidad() {
     $("#horometro_final").val("");
     $("#costo_unitario").val("");
     $("#costo_parcial").val("");
-    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>');
     $("#cantidad").val("1");
     $("#costo_partcial").val("");
 
     //Mes
-  }else if($("#unidad_m").select2("val")=="Mes"){
-
+  } else if ($("#unidad_m").select2("val") == "Mes") {
     $("#horas_head").hide();
     $("#dias_head").hide();
     $("#meses_head").hide();
     $("#costo_unit").show();
     $("#horometro_i").hide();
     $("#horometro_f").hide();
-    $("#unidad").removeClass("col-lg-6").addClass("col-lg-3")
+    $("#unidad").removeClass("col-lg-6").addClass("col-lg-3");
     $("#cantidad_ii").show();
     $("#fecha_i").show();
     $("#fecha_f").show();
-   // $("#costo_parcial").removeAttr("readonly").focus().val();
-    $("#fecha_fin").attr('readonly',true);
+    // $("#costo_parcial").removeAttr("readonly").focus().val();
+    $("#fecha_fin").attr("readonly", true);
     /**======= */
     $("#fecha_fi").html("Fecha Fin :");
 
@@ -276,153 +270,137 @@ function capture_unidad() {
     $("#costo_unitario").val("");
     $("#horas").val("");
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>');
-    $("#cantidad").val("1"); 
+    $("#cantidad").val("1");
     $("#costo_partcial").val("");
     $("#fecha_inicio").val("");
     $("#fecha_fin").val("");
-   
   }
-
 }
 //Calculamos costo parcial.
 function costo_partcial() {
-  
-  var horometro_inicial = $('#horometro_inicial').val();
-  var horometro_final = $('#horometro_final').val();
-  var costo_unitario = $('#costo_unitario').val();
-  var costo_adicional = $('#costo_adicional').val();
-  var cantidad = $('#cantidad').val();
+  var horometro_inicial = $("#horometro_inicial").val();
+  var horometro_final = $("#horometro_final").val();
+  var costo_unitario = $("#costo_unitario").val();
+  var costo_adicional = $("#costo_adicional").val();
+  var cantidad = $("#cantidad").val();
   var costo_parcial = 0;
 
-  if (cantidad==0) {
-
-    if (horometro_final!=0) {
-      var horas=(horometro_final-horometro_inicial).toFixed(2);
-      costo_parcial=parseFloat(horas*costo_unitario).toFixed(2);
+  if (cantidad == 0) {
+    if (horometro_final != 0) {
+      var horas = (horometro_final - horometro_inicial).toFixed(2);
+      costo_parcial = parseFloat(horas * costo_unitario).toFixed(2);
       /*console.log('horas '+horas);
       console.log('costo_unitario '+costo_unitario);
       console.log('costo_parcial '+costo_parcial);*/
-    }else{
-      var horas=(horometro_inicial-horometro_inicial).toFixed(2);
-      costo_parcial=parseFloat(costo_unitario).toFixed(2);
+    } else {
+      var horas = (horometro_inicial - horometro_inicial).toFixed(2);
+      costo_parcial = parseFloat(costo_unitario).toFixed(2);
     }
-
-  }else{
-
-    if (cantidad!=0) {
-      costo_parcial=(cantidad*costo_unitario).toFixed(2);
-  
-    }else{
-      costo_parcial=parseFloat(costo_unitario).toFixed(2);  
+  } else {
+    if (cantidad != 0) {
+      costo_parcial = (cantidad * costo_unitario).toFixed(2);
+    } else {
+      costo_parcial = parseFloat(costo_unitario).toFixed(2);
     }
   }
 
-  if ( costo_adicional != "" ) {
-    costo_parcial = (parseFloat(costo_parcial) + parseFloat(costo_adicional)).toFixed(2) ;
-  }  
-  
+  if (costo_adicional != "") {
+    costo_parcial = (parseFloat(costo_parcial) + parseFloat(costo_adicional)).toFixed(2);
+  }
+
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
 }
-//funcion calcular dias 
+//funcion calcular dias
 function calculardia() {
-
-  if($("#fecha_inicio").val().length > 0){ 
-
-    if ($("#unidad_m").select2("val") =="Hora" || $("#unidad_m").select2("val")=="Dia") {
-
+  if ($("#fecha_inicio").val().length > 0) {
+    if ($("#unidad_m").select2("val") == "Hora" || $("#unidad_m").select2("val") == "Dia") {
       $("#fecha_fin").val("");
-      $("#fecha_fi").html("Fecha final")
+      $("#fecha_fi").html("Fecha final");
       var x = $("#fecha_inicio").val(); // día lunes
       //var x = document.getElementById("fecha");
-      let date = new Date(x.replace(/-+/g, '/'));
-    
-      let options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      };
-      $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+date.toLocaleDateString('es-MX', options)+'</b>');
+      let date = new Date(x.replace(/-+/g, "/"));
 
+      let options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">' + date.toLocaleDateString("es-MX", options) + "</b>");
     } else {
       //Recogemos las fechas del input  fecha_inicio
 
-      var y = $("#fecha_inicio").val(); 
+      var y = $("#fecha_inicio").val();
 
       //Recogemos la fecha inical y la cantidas de meses y calculamos la fecha final
-      var cantidad_meses= $("#cantidad").val();
+      var cantidad_meses = $("#cantidad").val();
 
-      if ($("#fecha_inicio").val()!="" && $("#cantidad").val()!="") {
+      if ($("#fecha_inicio").val() != "" && $("#cantidad").val() != "") {
+        var x = $("#fecha_inicio").val();
 
-        var x = $("#fecha_inicio").val(); 
+        var calculando_fecha = moment(x).add(cantidad_meses, "months").format("YYYY-MM-DD");
 
-        var calculando_fecha=  moment(x).add(cantidad_meses, 'months').format('YYYY-MM-DD');
+        $("#fecha_fin").val(calculando_fecha);
 
-        $("#fecha_fin").val(calculando_fecha); 
-                
         var nombrefecha1 = diaSemana(x);
         var nombrefecha2 = diaSemana(calculando_fecha);
-        
-        $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">'+nombrefecha1+'</b>');
 
-        $("#fecha_fi").html('Fecha Fin: <b style="color: red;">'+nombrefecha2+'</b>');
+        $("#fecha-i-tutulo").html('Fecha: <b style="color: red;">' + nombrefecha1 + "</b>");
 
-      }else{
+        $("#fecha_fi").html('Fecha Fin: <b style="color: red;">' + nombrefecha2 + "</b>");
+      } else {
+        toastr.error("Seleccionar la fecha inicial o la cantidad!!!");
 
-        toastr.error('Seleccionar la fecha inicial o la cantidad!!!')
-
-        $("#fecha_fin").val(""); 
+        $("#fecha_fin").val("");
 
         $("#fecha-i-tutulo").html("");
         $("#fecha_fi").html("");
       }
-
     }
-  }else{
-    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>'); 
+  } else {
+    $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>');
   }
 }
 //Funcion para los nombres de la día mes y año
 function diaSemana(fecha) {
-
-  if (fecha!="") {
-    let date = new Date(fecha.replace(/-+/g, '/'));
+  if (fecha != "") {
+    let date = new Date(fecha.replace(/-+/g, "/"));
 
     let options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
-  
-    return date.toLocaleDateString('es-MX', options);
 
-  }else{
+    return date.toLocaleDateString("es-MX", options);
+  } else {
     return "";
   }
-  
 }
 //Función limpiar
 function limpiar() {
   //Mostramos los proveedores
-  $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
+  $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) {
+    $("#maquinaria").html(r);
+  });
 
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
-  $("#idservicio").val(""); 
-  $("#maquinaria").val("null").trigger("change"); 
-  $("#unidad_m").val("Hora").trigger("change"); 
+  $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
+  $("#idservicio").val("");
+  $("#maquinaria").val("null").trigger("change");
+  $("#unidad_m").val("Hora").trigger("change");
   $("#fecha_inicio").val("");
   $("#fecha_fin").val("");
   $("#horometro_inicial").val("");
   $("#horometro_final").val("");
   $("#horas").val("");
-  $("#dias").val(""); 
-  $("#mes").val(""); 
+  $("#dias").val("");
+  $("#mes").val("");
   $("#costo_unitario").val("");
   $("#costo_parcial").val("");
   $("#costo_adicional").val("");
-  $("#costo_unitario").attr('readonly',false);
+  $("#costo_unitario").attr("readonly", false);
   $("#sssss").val("");
   $("#nomb_maq").val("");
   $("#descripcion").val("");
@@ -431,33 +409,31 @@ function limpiar() {
   $("#cantidad").val("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
-
 }
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
-  $("#forma_pago").val("");
-  $("#tipo_pago").val("");
+  $("#forma_pago").val("").trigger("change");
+  $("#tipo_pago").val("").trigger("change");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
   $("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_servicio").val("");
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
-	$("#foto1").val("");
-	$("#foto1_actual").val("");  
-  $("#foto1_nombre").html(""); 
- // $("#total_costo_secc_pagos").html("");
+  $("#foto1").val("");
+  $("#foto1_actual").val("");
+  $("#foto1_nombre").html("");
+  // $("#total_costo_secc_pagos").html("");
 
- // Limpiamos las validaciones
- $(".form-control").removeClass('is-valid');
- $(".is-invalid").removeClass("error is-invalid");
-
+  // Limpiamos las validaciones
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
 }
 //regresar_principal
-function regresar_principal(){
+function regresar_principal() {
   $("#tabla_principal").show();
   $("#btn-agregar").show();
 
@@ -483,59 +459,60 @@ function regresar_principal(){
   =================================================
  */
 //Función Listar
-function listar( nube_idproyecto ) {
-
-  tabla=$('#tabla-servicio').dataTable({
-    "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/servicio_maquina.php?op=listar&nube_idproyecto='+nube_idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
+function listar(nube_idproyecto) {
+  tabla = $("#tabla-servicio")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/servicio_maquina.php?op=listar&nube_idproyecto=" + nube_idproyecto,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+      },
+      createdRow: function (row, data, ixdex) {
+        //console.log(data);
+        if (data[7] < 0) {
+          $("td", row).eq(7).css({
+            "background-color": "#ff5252",
+            color: "white",
+          });
+        } else if (data[7] == 0) {
+          $("td", row).eq(7).css({
+            "background-color": "#28a745",
+            color: "white",
+          });
+        } else {
+          $("td", row).eq(7).css({
+            "background-color": "#ffc107",
+            color: "black",
+          });
         }
       },
-    "createdRow":function(row,data,ixdex) {
-      //console.log(data);
-      if (data[7]<0) {
-        $('td', row).eq(7).css({
-          'background-color':'#ff5252',
-          'color':'white',
-        });  
-      }else if(data[7]==0){
-        $('td', row).eq(7).css({
-          'background-color':'#28a745',
-          'color':'white',
-        });
-      }else{
-        $('td', row).eq(7).css({
-          'background-color':'#ffc107',
-          'color':'black',
-        });
-      }
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
 }
 //Función detalles po maquina
-function listar_detalle(idmaquinaria,idproyecto,unidad_medida) {
+function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
   var hideen_colums;
   //console.log('lis_deta '+idproyecto,idmaquinaria,unidad_medida);
   $("#tabla_principal").hide();
@@ -543,113 +520,106 @@ function listar_detalle(idmaquinaria,idproyecto,unidad_medida) {
   $("#btn-agregar").hide();
   $("#btn-regresar").show();
   $("#btn-pagar").hide();
-  if (unidad_medida=='Hora') {
-    hideen_colums=[];
-    
-  }else{
-    hideen_colums=[
+  if (unidad_medida == "Hora") {
+    hideen_colums = [];
+  } else {
+    hideen_colums = [
       {
-          "targets": [ 2 ],
-          "visible": false,
-          "searchable": false
+        targets: [2],
+        visible: false,
+        searchable: false,
       },
       {
-          "targets": [ 3 ],
-          "visible": false,
-          "searchable": false
+        targets: [3],
+        visible: false,
+        searchable: false,
       },
       {
-          "targets": [ 4 ],
-          "visible": false,
-          "searchable": false
-      }
+        targets: [4],
+        visible: false,
+        searchable: false,
+      },
       /*{
           "targets": [ 5 ],
           "visible": false,
           "searchable": false
       }*/
-  ]
-
+    ];
   }
- // console.log(hideen_colums);
-  tabla2=$('#tabla-detalle-m').dataTable({
-    "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
+  // console.log(hideen_colums);
+  tabla2 = $("#tabla-detalle-m")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
       },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
-    "columnDefs": hideen_colums
-  }).DataTable();
-  suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-  
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      // order: [[0, "desc"]], //Ordenar (columna,orden)
+      columnDefs: hideen_colums,
+    })
+    .DataTable();
+  suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
 }
 //Mostrar datos
-function mostrar_datos_pago(idmaquinaria,idproyecto){
- // console.log('qqqqqq  '+idmaquinaria,idproyecto);
+function mostrar_datos_pago(idmaquinaria, idproyecto) {
+  // console.log('qqqqqq  '+idmaquinaria,idproyecto);
   $.post("../ajax/servicio_maquina.php?op=mostrar", { idmaquinaria: idmaquinaria }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);   
-
+    data = JSON.parse(data);
+    console.log(data);
   });
 }
 //Función para guardar o editar
-function suma_horas_costoparcial(idmaquinaria,idproyecto){
-  console.log('...'+idmaquinaria,idproyecto);
-    //suma
-    $.post("../ajax/servicio_maquina.php?op=suma_horas_costoparcial", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-     // $("#horas-total").html(""); 
-      $("#costo-parcial").html("");
-      data = JSON.parse(data); 
-      //console.log(data);
-     // tabla.ajax.reload();
-     // $("#horas-total").html(data.horas); 
-      num= data.costo_parcial;
-      if (!num || num == 'NaN') return '-';
-      if (num == 'Infinity') return '&#x221e;';
-      num = num.toString().replace(/\$|\,/g, '');
-      if (isNaN(num))
-          num = "0";
-      sign = (num == (num = Math.abs(num)));
-      num = Math.floor(num * 100 + 0.50000000001);
-      cents = num % 100;
-      num = Math.floor(num / 100).toString();
-      if (cents < 10)
-          cents = "0" + cents;
-      for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
-          num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-          costo_parcial= (((sign) ? '' : '-') + num + '.' + cents);
-        $("#costo-parcial").html(costo_parcial);
-       
-  
-    });
+function suma_horas_costoparcial(idmaquinaria, idproyecto) {
+  console.log("..." + idmaquinaria, idproyecto);
+  //suma
+  $.post("../ajax/servicio_maquina.php?op=suma_horas_costoparcial", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (data, status) {
+    // $("#horas-total").html("");
+    $("#costo-parcial").html("");
+    data = JSON.parse(data);
+    //console.log(data);
+    // tabla.ajax.reload();
+    // $("#horas-total").html(data.horas);
+    num = data.costo_parcial;
+    if (!num || num == "NaN") return "-";
+    if (num == "Infinity") return "&#x221e;";
+    num = num.toString().replace(/\$|\,/g, "");
+    if (isNaN(num)) num = "0";
+    sign = num == (num = Math.abs(num));
+    num = Math.floor(num * 100 + 0.50000000001);
+    cents = num % 100;
+    num = Math.floor(num / 100).toString();
+    if (cents < 10) cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+    costo_parcial = (sign ? "" : "-") + num + "." + cents;
+    $("#costo-parcial").html(costo_parcial);
+  });
 }
 //Guardar y editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-servicios")[0]);
- 
+
   $.ajax({
     url: "../ajax/servicio_maquina.php?op=guardaryeditar",
     type: "POST",
@@ -658,70 +628,64 @@ function guardaryeditar(e) {
     processData: false,
 
     success: function (datos) {
-             
-      if (datos == 'ok') {
+      if (datos == "ok") {
+        toastr.success("servicio registrado correctamente");
 
-				toastr.success('servicio registrado correctamente')				 
-
-        
-	      tabla.ajax.reload();
-        
+        tabla.ajax.reload();
 
         $("#modal-agregar-servicio").modal("hide");
-       // console.log(tabla2);
+        // console.log(tabla2);
         tabla2.ajax.reload();
-        var idmaquinaria =$("#maquinaria").val();
-        if (idmaquinaria!='') {
-          suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        var idmaquinaria = $("#maquinaria").val();
+        if (idmaquinaria != "") {
+          suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         }
         limpiar();
-			}else{
-
-				toastr.error(datos)
-			}
+      } else {
+        toastr.error(datos);
+      }
     },
   });
 }
 //mostrar
 function mostrar(idservicio) {
   limpiar();
-  
-  $("#maquinaria").val("").trigger("change"); 
-  $("#unidad_m").val("").trigger("change"); 
+
+  $("#maquinaria").val("").trigger("change");
+  $("#unidad_m").val("").trigger("change");
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   $("#cantidad").val("");
   $("#modal-agregar-servicio").modal("show");
   $("#sssss").hide();
   $("#nomb_maq").show();
-  $("#costo_unitario").attr('readonly',false);
+  $("#costo_unitario").attr("readonly", false);
   $.post("../ajax/servicio_maquina.php?op=mostrar", { idservicio: idservicio }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);
+    console.log(data);
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-    $("#nomb_maq").val(data.nombre_maquina+' - '+data.codigo_maquina+' --> '+data.razon_social);
-    $("#idservicio").val(data.idservicio); 
-    $("#maquinaria").val(data.idmaquinaria).trigger("change"); 
-    $("#unidad_m").val(data.unidad_medida).trigger("change"); 
-    $("#fecha_inicio").val(data.fecha_entrega); 
-    $("#fecha_fin").val(data.fecha_recojo); 
-    $("#horometro_inicial").val(data.horometro_inicial); 
-    $("#horometro_final").val(data.horometro_final); 
-    $("#horas").val(data.horas); 
+    $("#nomb_maq").val(data.nombre_maquina + " - " + data.codigo_maquina + " --> " + data.razon_social);
+    $("#idservicio").val(data.idservicio);
+    $("#maquinaria").val(data.idmaquinaria).trigger("change");
+    $("#unidad_m").val(data.unidad_medida).trigger("change");
+    $("#fecha_inicio").val(data.fecha_entrega);
+    $("#fecha_fin").val(data.fecha_recojo);
+    $("#horometro_inicial").val(data.horometro_inicial);
+    $("#horometro_final").val(data.horometro_final);
+    $("#horas").val(data.horas);
     $("#cantidad").val(data.cantidad);
-    $("#descripcion").val(data.descripcion); 
-    $("#dias").val(data.dias_uso); 
-    $("#mes").val(data.meses_uso); 
-    $("#costo_unitario").val(data.costo_unitario); 
+    $("#descripcion").val(data.descripcion);
+    $("#dias").val(data.dias_uso);
+    $("#mes").val(data.meses_uso);
+    $("#costo_unitario").val(data.costo_unitario);
     $("#costo_adicional").val(data.costo_adicional);
-    $("#costo_parcial").val(data.costo_parcial); 
-
+    $("#costo_parcial").val(data.costo_parcial);
   });
 }
 //Función para desactivar registros
-function desactivar(idservicio,idmaquinaria) {
+function desactivar(idservicio, idmaquinaria) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar  el servicio?",
     text: "",
@@ -733,17 +697,16 @@ function desactivar(idservicio,idmaquinaria) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/servicio_maquina.php?op=desactivar", { idservicio: idservicio }, function (e) {
-
         Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
-        suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         tabla.ajax.reload();
         tabla2.ajax.reload();
-      });      
+      });
     }
-  });   
+  });
 }
 //Función para activar registros
-function activar(idservicio,idmaquinaria) {
+function activar(idservicio, idmaquinaria) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Servicio?",
     text: "",
@@ -755,15 +718,13 @@ function activar(idservicio,idmaquinaria) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/servicio_maquina.php?op=activar", { idservicio: idservicio }, function (e) {
-
         Swal.fire("Activado!", "Servicio ha sido activado.", "success");
-        suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         tabla.ajax.reload();
         tabla2.ajax.reload();
       });
-      
     }
-  });      
+  });
 }
 /**
  * ================================================
@@ -774,7 +735,7 @@ function activar(idservicio,idmaquinaria) {
 function guardaryeditar_pago(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-servicios-pago")[0]);
- 
+
   $.ajax({
     url: "../ajax/servicio_maquina.php?op=guardaryeditar_pago",
     type: "POST",
@@ -783,200 +744,187 @@ function guardaryeditar_pago(e) {
     processData: false,
 
     success: function (datos) {
-             
-      if (datos == 'ok') {
+      if (datos == "ok") {
+        toastr.success("servicio registrado correctamente");
 
-				toastr.success('servicio registrado correctamente')				 
-
-        
-	      tabla.ajax.reload();
-        
+        tabla.ajax.reload();
 
         $("#modal-agregar-pago").modal("hide");
-       // console.log(tabla2);
+        // console.log(tabla2);
         //tabla2.ajax.reload();
         tabla3.ajax.reload();
         tabladetrecc.ajax.reload();
         /**================================================== */
-        total_pagos(localStorage.getItem('nubeidmaquinaria'),localStorage.getItem('nube_idproyecto'));
-        total_costo_secc_pagoss(localStorage.getItem('nubeidmaquinaria'),localStorage.getItem('nube_idproyecto'));
+        total_pagos(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"));
+        total_costo_secc_pagoss(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"));
         limpiar_c_pagos();
-			}else{
-
-				toastr.error(datos)
-			}
+      } else {
+        toastr.error(datos);
+      }
     },
   });
 }
 //Listar pagos.
-function listar_pagos(idmaquinaria,idproyecto,costo_parcial,monto) {
-
+function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
   //console.log(idmaquinaria,idproyecto,costo_parcial);
-  localStorage.setItem('monto_total_p',costo_parcial);
-  localStorage.setItem('monto_total_dep',monto);
+  localStorage.setItem("monto_total_p", costo_parcial);
+  localStorage.setItem("monto_total_dep", monto);
   //console.log('::::->'+idmaquinaria,idproyecto);
   //most_datos_prov_pago(idmaquinaria);
-  var proveedor ="Proveedor";
-  var detraccion ="Detraccion";
+  var proveedor = "Proveedor";
+  var detraccion = "Detraccion";
   $("#tabla_principal").hide();
   $("#tabla_pagos").show();
   $("#btn-agregar").hide();
   $("#btn-regresar").show();
   $("#btn-pagar").show();
 
-  tabla3=$('#tabla-pagos-proveedor').dataTable({
-    "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-       /* success:function(data){
+  tabla3 = $("#tabla-pagos-proveedor")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+        /* success:function(data){
           console.log(data);	
         },*/
       },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
 
-  tabladetrecc=$('#tabla-pagos-detrecciones').dataTable({
-    "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-       /* success:function(data){
+  tabladetrecc = $("#tabla-pagos-detrecciones")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
+        /* success:function(data){
           console.log(data);	
         },*/
       },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
 
-  total_pagos(idmaquinaria,idproyecto);
-  most_datos_prov_pago(idmaquinaria,idproyecto);
-  total_costo_secc_pagoss(idmaquinaria,idproyecto);
+  total_pagos(idmaquinaria, idproyecto);
+  most_datos_prov_pago(idmaquinaria, idproyecto);
+  total_costo_secc_pagoss(idmaquinaria, idproyecto);
 }
 //total_costo_secc_pagoss
-function total_costo_secc_pagoss(idmaquinaria,idproyecto) {
-
+function total_costo_secc_pagoss(idmaquinaria, idproyecto) {
   $("#total_costo_secc_pagos").html("");
-  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial_pago", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-
-     data = JSON.parse(data);  //console.log(data);
-     num= data.costo_parcial;
-     if (!num || num == 'NaN') return '-';
-     if (num == 'Infinity') return '&#x221e;';
-     num = num.toString().replace(/\$|\,/g, '');
-     if (isNaN(num))
-         num = "0";
-     sign = (num == (num = Math.abs(num)));
-     num = Math.floor(num * 100 + 0.50000000001);
-     cents = num % 100;
-     num = Math.floor(num / 100).toString();
-     if (cents < 10)
-         cents = "0" + cents;
-     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
-         num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-         costo_parcial= (((sign) ? '' : '-') + num + '.' + cents);
-       $("#total_costo_secc_pagos").html(costo_parcial);
-      
-   });
+  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial_pago", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (data, status) {
+    data = JSON.parse(data); //console.log(data);
+    num = data.costo_parcial;
+    if (!num || num == "NaN") return "-";
+    if (num == "Infinity") return "&#x221e;";
+    num = num.toString().replace(/\$|\,/g, "");
+    if (isNaN(num)) num = "0";
+    sign = num == (num = Math.abs(num));
+    num = Math.floor(num * 100 + 0.50000000001);
+    cents = num % 100;
+    num = Math.floor(num / 100).toString();
+    if (cents < 10) cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+    costo_parcial = (sign ? "" : "-") + num + "." + cents;
+    $("#total_costo_secc_pagos").html(costo_parcial);
+  });
   // monto_total_p=1000;
 }
 //-total Pagos
-function total_pagos(idmaquinaria,idproyecto) {
-
- var totattotal = localStorage.getItem('monto_total_p');
+function total_pagos(idmaquinaria, idproyecto) {
+  var totattotal = localStorage.getItem("monto_total_p");
   console.log(typeof totattotal);
   console.log(totattotal);
 
   //------
 
-
-  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_proveedor", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    var porcen_sal=0;
-    var porcen_sal_ocult=0;
-    var saldo=0;
-    var t_proveedor_p=0;
+  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_proveedor", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (data, status) {
+    var porcen_sal = 0;
+    var porcen_sal_ocult = 0;
+    var saldo = 0;
+    var t_proveedor_p = 0;
     $("#t_proveedor").html("");
     $("#t_provee_porc").html("");
 
     $("#porcnt_sald_p").html("");
     $("#saldo_p").html("");
-    
-    $("#monto_total_prob").html(""); 
 
-    data = JSON.parse(data); 
+    $("#monto_total_prob").html("");
+
+    data = JSON.parse(data);
     //console.log(data);
-    $('#monto_total_prob').html( formato_miles(data.total_monto));
-    $('#porcnt_prove').html(((data.total_monto*100)/totattotal).toFixed(2)+' %')
+    $("#monto_total_prob").html(formato_miles(data.total_monto));
+    $("#porcnt_prove").html(((data.total_monto * 100) / totattotal).toFixed(2) + " %");
 
-    porcen_sal=(90-((data.total_monto*100)/totattotal)).toFixed(2);
-    porcen_sal_ocult=(90-((data.total_monto*100)/totattotal)).toFixed(4);
-   // console.log('porcen_saldoooooooooooooo ' +porcen_sal);
-   // console.log('porcen_saldoooooooooooooo ' +porcen_sal_ocult);
-    
+    porcen_sal = (90 - (data.total_monto * 100) / totattotal).toFixed(2);
+    porcen_sal_ocult = (90 - (data.total_monto * 100) / totattotal).toFixed(4);
+    // console.log('porcen_saldoooooooooooooo ' +porcen_sal);
+    // console.log('porcen_saldoooooooooooooo ' +porcen_sal_ocult);
 
-    saldo=(data.total_monto*porcen_sal_ocult)/((data.total_monto*100)/totattotal);
-    var saldoxmiles_p=formato_miles(saldo);
+    saldo = (data.total_monto * porcen_sal_ocult) / ((data.total_monto * 100) / totattotal);
+    var saldoxmiles_p = formato_miles(saldo);
     $("#saldo_p").html(saldoxmiles_p);
-    console.log('saldooooo ' +saldoxmiles_p);
+    console.log("saldooooo " + saldoxmiles_p);
     //console.log('saldo---'+typeof((data.total_monto*porcen_sal).toFixed(2)/((data.total_monto*100)/totattotal).toFixed(2)));
-    $("#porcnt_sald_p").html(porcen_sal+' %');
+    $("#porcnt_sald_p").html(porcen_sal + " %");
 
-     t_proveedor_p=(totattotal*90)/100;
-    var totalxmiles_p=formato_miles(t_proveedor_p);
+    t_proveedor_p = (totattotal * 90) / 100;
+    var totalxmiles_p = formato_miles(t_proveedor_p);
     $("#t_proveedor").html(totalxmiles_p);
-    $("#t_provee_porc").html('90');
-
-
+    $("#t_provee_porc").html("90");
   });
- // console.log('idmaquinaria: '+idmaquinaria,'idproyecto '+idproyecto);
-  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_detracc", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    var porcen_sal_d=0;
-    var porcen_sal_oclt=0;
-    var saldo_d=0;
-    var t_detaccion_miles=0;
-    t_mont_d=0;
-    $("#monto_total_detracc").html(""); 
+  // console.log('idmaquinaria: '+idmaquinaria,'idproyecto '+idproyecto);
+  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_detracc", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (data, status) {
+    var porcen_sal_d = 0;
+    var porcen_sal_oclt = 0;
+    var saldo_d = 0;
+    var t_detaccion_miles = 0;
+    t_mont_d = 0;
+    $("#monto_total_detracc").html("");
     $("#porcnt_detrcc").html("");
 
     $("#porcnt_sald_d").html("");
@@ -985,116 +933,110 @@ function total_pagos(idmaquinaria,idproyecto) {
     $("#t_detaccion").html("");
     $("#t_detacc_porc").html("");
 
-    data = JSON.parse(data); 
+    data = JSON.parse(data);
     //console.log(data);
-    t_mont_d=formato_miles(data.total_monto);
+    t_mont_d = formato_miles(data.total_monto);
     $("#monto_total_detracc").html(t_mont_d);
-    $("#porcnt_detrcc").html(((data.total_monto*100)/totattotal).toFixed(2)+' %'); 
+    $("#porcnt_detrcc").html(((data.total_monto * 100) / totattotal).toFixed(2) + " %");
 
-    porcen_sal_d=(10-((data.total_monto*100)/totattotal)).toFixed(2);
-    porcen_sal_oclt=(10-((data.total_monto*100)/totattotal)).toFixed(4);
+    porcen_sal_d = (10 - (data.total_monto * 100) / totattotal).toFixed(2);
+    porcen_sal_oclt = (10 - (data.total_monto * 100) / totattotal).toFixed(4);
     //console.log('porcen_sal_oclt '+porcen_sal_oclt);
-    saldo_d=(data.total_monto*porcen_sal_oclt)/((data.total_monto*100)/totattotal);
-    var saldoxmiles=formato_miles(saldo_d);
+    saldo_d = (data.total_monto * porcen_sal_oclt) / ((data.total_monto * 100) / totattotal);
+    var saldoxmiles = formato_miles(saldo_d);
     //console.log('saldoxmiles '+saldoxmiles);
 
     $("#saldo_d").html(saldoxmiles);
-    $("#porcnt_sald_d").html(porcen_sal_d+' %');
+    $("#porcnt_sald_d").html(porcen_sal_d + " %");
 
-    t_detaccion_miles=(totattotal*10)/100;
-    var t_detaccion_t=formato_miles(t_detaccion_miles);
+    t_detaccion_miles = (totattotal * 10) / 100;
+    var t_detaccion_t = formato_miles(t_detaccion_miles);
 
     $("#t_detaccion").html(t_detaccion_t);
-    $("#t_detacc_porc").html('10');
-
+    $("#t_detacc_porc").html("10");
   });
-//totattotal=0;
+  //totattotal=0;
 }
 
 //mostrar datos proveedor pago
-function most_datos_prov_pago(idmaquinaria,idproyecto) {
-
-  localStorage.setItem('nubeidmaquinaria',idmaquinaria);
+function most_datos_prov_pago(idmaquinaria, idproyecto) {
+  localStorage.setItem("nubeidmaquinaria", idmaquinaria);
 
   $("#h4_mostrar_beneficiario").html("");
   $("#id_maquinaria_pago").html("");
   $("#idproyecto_pago").val("");
 
-  $("#banco_pago").val("").trigger("change"); 
+  $("#banco_pago").val("").trigger("change");
   $.post("../ajax/servicio_maquina.php?op=most_datos_prov_pago", { idmaquinaria: idmaquinaria }, function (data, status) {
+    data = JSON.parse(data);
+    console.log(data);
 
-    data = JSON.parse(data);      console.log(data); 
-    
     $("#idproyecto_pago").val(idproyecto);
     $("#id_maquinaria_pago").val(data.idmaquinaria);
     $("#maquinaria_pago").html(data.nombre);
     $("#beneficiario_pago").val(data.razon_social);
     $("#h4_mostrar_beneficiario").html(data.razon_social);
-    $("#banco_pago").val(data.idbancos).trigger("change"); 
+    $("#banco_pago").val(data.idbancos).trigger("change");
     $("#titular_cuenta_pago").val(data.titular_cuenta);
-    localStorage.setItem('nube_c_b',data.cuenta_bancaria);
-    localStorage.setItem('nube_c_d',data.cuenta_detracciones);
+    localStorage.setItem("nube_c_b", data.cuenta_bancaria);
+    localStorage.setItem("nube_c_d", data.cuenta_detracciones);
   });
 }
 //captura_opicion tipopago
-function  captura_op() {
-
-  cuenta_bancaria= localStorage.getItem('nube_c_b');
-  cuenta_detracciones=localStorage.getItem('nube_c_d');
+function captura_op() {
+  cuenta_bancaria = localStorage.getItem("nube_c_b");
+  cuenta_detracciones = localStorage.getItem("nube_c_d");
   //console.log(cuenta_bancaria,cuenta_detracciones);
   $("#cuenta_destino_pago").val("");
 
-  if ($("#tipo_pago").select2("val") =="Proveedor") {
+  if ($("#tipo_pago").select2("val") == "Proveedor") {
     $("#cuenta_destino_pago").val("");
     $("#cuenta_destino_pago").val(cuenta_bancaria);
   }
 
-  if ($("#tipo_pago").select2("val") =="Detraccion") {
+  if ($("#tipo_pago").select2("val") == "Detraccion") {
     $("#cuenta_destino_pago").val("");
     $("#cuenta_destino_pago").val(cuenta_detracciones);
   }
-
 }
 //validando excedentes
 function validando_excedentes() {
-  var totattotal = localStorage.getItem('monto_total_p');
-  var monto_total_dep = localStorage.getItem('monto_total_dep');
+  var totattotal = localStorage.getItem("monto_total_p");
+  var monto_total_dep = localStorage.getItem("monto_total_dep");
   var monto_entrada = $("#monto_pago").val();
-  var total_suma=parseFloat(monto_total_dep)+parseFloat(monto_entrada);
-  var debe =totattotal-monto_total_dep
-   //console.log(typeof total_suma);
-  if (total_suma>totattotal) {
-    toastr.error('ERROR monto excedido al total del monto a pagar!');
-  }else{
-    toastr.success('Monto Aceptado.'); 
+  var total_suma = parseFloat(monto_total_dep) + parseFloat(monto_entrada);
+  var debe = totattotal - monto_total_dep;
+  //console.log(typeof total_suma);
+  if (total_suma > totattotal) {
+    toastr.error("ERROR monto excedido al total del monto a pagar!");
+  } else {
+    toastr.success("Monto Aceptado.");
   }
-
-
 }
 //mostrar
-function mostrar_pagos(idpago_servicio,id_maquinaria) {
+function mostrar_pagos(idpago_servicio, id_maquinaria) {
   limpiar_c_pagos();
   $("#h4_mostrar_beneficiario").html("");
   $("#id_maquinaria_pago").html("");
   $("#maquinaria_pago").html("");
   $("#idproyecto_pago").val("");
   $("#modal-agregar-pago").modal("show");
-  $("#banco_pago").val("").trigger("change");   
+  $("#banco_pago").val("").trigger("change");
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
   $.post("../ajax/servicio_maquina.php?op=mostrar_pagos", { idpago_servicio: idpago_servicio }, function (data, status) {
+    data = JSON.parse(data);
+    console.log(data);
 
-    data = JSON.parse(data);  console.log(data);   
-      
     $("#idproyecto_pago").val(data.idproyecto);
     $("#id_maquinaria_pago").val(data.id_maquinaria);
     $("#maquinaria_pago").html(data.nombre_maquina);
     $("#beneficiario_pago").val(data.beneficiario);
     $("#h4_mostrar_beneficiario").html(data.beneficiario);
     $("#cuenta_destino_pago").val(data.cuenta_destino);
-    $("#banco_pago").val(data.id_banco).trigger("change"); 
-    $("#titular_cuenta_pago").val(data.titular_cuenta);   
+    $("#banco_pago").val(data.id_banco).trigger("change");
+    $("#titular_cuenta_pago").val(data.titular_cuenta);
     $("#forma_pago").val(data.forma_pago).trigger("change");
     $("#tipo_pago").val(data.tipo_pago).trigger("change");
     $("#fecha_pago").val(data.fecha_pago);
@@ -1104,16 +1046,14 @@ function mostrar_pagos(idpago_servicio,id_maquinaria) {
     $("#idpago_servicio").val(data.idpago_servicio);
 
     if (data.imagen != "") {
+      $("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
 
-			$("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
-
-			$("#foto1_actual").val(data.imagen);
-		}
-
+      $("#foto1_actual").val(data.imagen);
+    }
   });
 }
 //Función para desactivar registros
-function desactivar_pagos(idpago_servicio,idmaquinaria) {
+function desactivar_pagos(idpago_servicio, idmaquinaria) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar  el servicio?",
     text: "",
@@ -1125,20 +1065,18 @@ function desactivar_pagos(idpago_servicio,idmaquinaria) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/servicio_maquina.php?op=desactivar_pagos", { idpago_servicio: idpago_servicio }, function (e) {
-
         Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
-        suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         //Función para activar registros
-        total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));   
+        total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         tabla.ajax.reload();
         tabla3.ajax.reload();
         tabladetrecc.ajax.reload();
-      });      
+      });
     }
-  });  
-
+  });
 }
-function activar_pagos(idpago_servicio,idmaquinaria) {
+function activar_pagos(idpago_servicio, idmaquinaria) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Servicio?",
     text: "",
@@ -1150,30 +1088,46 @@ function activar_pagos(idpago_servicio,idmaquinaria) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/servicio_maquina.php?op=activar_pagos", { idpago_servicio: idpago_servicio }, function (e) {
-
         Swal.fire("Activado!", "Servicio ha sido activado.", "success");
-        suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         //Función para activar registros
-        total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto')); 
+        total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         tabla.ajax.reload();
         tabla3.ajax.reload();
         tabladetrecc.ajax.reload();
       });
-      
     }
-  }); 
- 
+  });
 }
-function ver_modal_vaucher(imagen){
-  $('#img-vaucher').attr("src", "");
-  $('#modal-ver-vaucher').modal("show");
-  $('#img-vaucher').attr("src", "../dist/img/vauchers_pagos/" +imagen);
-  $("#descargar").attr("href","../dist/img/vauchers_pagos/" +imagen);
-  
- // $(".tooltip").hide();
+function ver_modal_vaucher(imagen) {
+  $("#img-vaucher").attr("src", "");
+  $("#modal-ver-vaucher").modal("show");
+  $("#img-vaucher").attr("src", "../dist/img/vauchers_pagos/" + imagen);
+  $("#descargar").attr("href", "../dist/img/vauchers_pagos/" + imagen);
+
+  // $(".tooltip").hide();
 }
 
- /**
+function validar_forma_de_pago() {
+  var forma_pago = $("#forma_pago").select2("val");
+
+  if (forma_pago == null || forma_pago == "") {
+    // no ejecutamos nada
+    $(".validar_fp").show();
+  } else {
+    if (forma_pago == "Efectivo") {
+      $(".validar_fp").hide();
+      $("#tipo_pago").val("Proveedor").trigger("change");
+      $("#banco_pago").val("1").trigger("change");
+      $("#cuenta_destino_pago").val("");
+      $("#titular_cuenta_pago").val("");
+    } else {
+      $(".validar_fp").show();
+    }
+  }
+}
+
+/**
  * =================================
  *         SECCIÒN FACTURAS
  * ================================
@@ -1182,7 +1136,7 @@ function ver_modal_vaucher(imagen){
 function guardaryeditar_factura(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-agregar-factura")[0]);
- 
+
   $.ajax({
     url: "../ajax/servicio_maquina.php?op=guardaryeditar_factura",
     type: "POST",
@@ -1191,29 +1145,25 @@ function guardaryeditar_factura(e) {
     processData: false,
 
     success: function (datos) {
-             
-      if (datos == 'ok') {
+      if (datos == "ok") {
+        toastr.success("servicio registrado correctamente");
 
-				toastr.success('servicio registrado correctamente')				 
-
-        
         tabla4.ajax.reload();
         tabla.ajax.reload();
 
         $("#modal-agregar-factura").modal("hide");
-        total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
+        total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
         limpiar_factura();
-			}else{
-
-				toastr.error(datos)
-			}
+      } else {
+        toastr.error(datos);
+      }
     },
   });
 }
 
-function listar_facturas(idmaquinaria,idproyecto) {
-  localStorage.setItem('nubeidmaquif',idmaquinaria);
-  localStorage.setItem('nubeidproyectf',idproyecto);
+function listar_facturas(idmaquinaria, idproyecto) {
+  localStorage.setItem("nubeidmaquif", idmaquinaria);
+  localStorage.setItem("nubeidproyectf", idproyecto);
   $("#tabla_principal").hide();
   $("#tabla_pagos").hide();
   $("#tabla_facturas_h").show();
@@ -1222,54 +1172,54 @@ function listar_facturas(idmaquinaria,idproyecto) {
   $("#btn-pagar").hide();
   $("#btn-factura").show();
 
-  tabla4=$('#tabla_facturas').dataTable({  
-    "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/servicio_maquina.php?op=listar_facturas&idmaquinaria='+idmaquinaria+'&idproyecto='+idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
+  tabla4 = $("#tabla_facturas")
+    .dataTable({
+      responsive: true,
+      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      ajax: {
+        url: "../ajax/servicio_maquina.php?op=listar_facturas&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+        type: "get",
+        dataType: "json",
+        error: function (e) {
+          console.log(e.responseText);
+        },
       },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();
+      language: {
+        lengthMenu: "Mostrar : _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "desc"]], //Ordenar (columna,orden)
+    })
+    .DataTable();
   $("#idmaquina").val(idmaquinaria);
   $("#idproyectof").val(idproyecto);
-  total_monto_f(idmaquinaria,idproyecto);
-  total_costo_parcial(idmaquinaria,idproyecto);
-
-} 
+  total_monto_f(idmaquinaria, idproyecto);
+  total_costo_parcial(idmaquinaria, idproyecto);
+}
 //Calcular Igv y subtotal
 function calcula_igv_subt() {
-   var subtotal=0;
-   var igv=0;
+  var subtotal = 0;
+  var igv = 0;
   $("#subtotal").val("");
   $("#igv").val("");
-  var monto = parseFloat($('#monto').val());
-  
-  subtotal= monto/1.18;
-  igv= monto-subtotal;
+  var monto = parseFloat($("#monto").val());
+
+  subtotal = monto / 1.18;
+  igv = monto - subtotal;
   $("#subtotal").val(subtotal.toFixed(4));
   $("#igv").val(igv.toFixed(4));
-
 }
 //Función limpiar-factura
 function limpiar_factura() {
@@ -1282,23 +1232,20 @@ function limpiar_factura() {
   $("#igv").val("");
   $("#nota").val("");
   $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-  $('#foto2_i').show();
-  $('#ver_pdf').html('');
-	$("#foto2").val("");
-	$("#foto2_actual").val("");  
-  $("#foto2_nombre").html(""); 
-
+  $("#foto2_i").show();
+  $("#ver_pdf").html("");
+  $("#foto2").val("");
+  $("#foto2_actual").val("");
+  $("#foto2_nombre").html("");
 }
 //mostrar
 function mostrar_factura(idfactura) {
   limpiar_factura();
   $("#modal-agregar-factura").modal("show");
 
-
   $.post("../ajax/servicio_maquina.php?op=mostrar_factura", { idfactura: idfactura }, function (data, status) {
+    data = JSON.parse(data); //console.log(data);
 
-    data = JSON.parse(data);  //console.log(data);   
-      
     $("#idfactura").val(data.idfactura);
     $("#codigo").val(data.codigo);
     $("#monto").val(data.monto);
@@ -1311,46 +1258,47 @@ function mostrar_factura(idfactura) {
     if (data.imagen != "") {
       var img = data.imagen;
 
-			$("#foto2_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
+      $("#foto2_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
 
       var extencion = img.substr(img.length - 3); // => "1"
       console.log(extencion);
-        $('#ver_pdf').html('');
-        $('#foto2_i').attr("src", "");
+      $("#ver_pdf").html("");
+      $("#foto2_i").attr("src", "");
 
-        if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-          $('#ver_pdf').hide();
-          $('#foto2_i').show();
-          $('#foto2_i').attr("src", "../dist/img/facturas/" +img);
+      if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
+        $("#ver_pdf").hide();
+        $("#foto2_i").show();
+        $("#foto2_i").attr("src", "../dist/img/facturas/" + img);
 
-          $("#foto2_nombre").html(''+
-          '<div class="row">'+
-            '<div class="col-md-12">Factura</div>'+
-            '<div class="col-md-12">'+
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-            '</div>'+
-          '</div>'+
-        '');
+        $("#foto2_nombre").html(
+          "" +
+            '<div class="row">' +
+            '<div class="col-md-12">Factura</div>' +
+            '<div class="col-md-12">' +
+            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
+            "</div>" +
+            "</div>" +
+            ""
+        );
+      } else {
+        $("#foto2_i").hide();
+        $("#ver_pdf").show();
+        $("#ver_pdf").html('<iframe src="../dist/img/facturas/' + img + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
 
-        }else{
-          $('#foto2_i').hide();
-          $('#ver_pdf').show();
-          $('#ver_pdf').html('<iframe src="../dist/img/facturas/'+img+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          
-          $("#foto2_nombre").html(''+
-          '<div class="row">'+
-            '<div class="col-md-12">Factura</div>'+
-            '<div class="col-md-12">'+
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-            '</div>'+
-          '</div>'+
-        '');
+        $("#foto2_nombre").html(
+          "" +
+            '<div class="row">' +
+            '<div class="col-md-12">Factura</div>' +
+            '<div class="col-md-12">' +
+            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
+            "</div>" +
+            "</div>" +
+            ""
+        );
+      }
 
-        }
-
-			$("#foto2_actual").val(data.imagen);
-		}
-
+      $("#foto2_actual").val(data.imagen);
+    }
   });
 }
 //Función para desactivar registros
@@ -1367,15 +1315,13 @@ function desactivar_factura(idfactura) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/servicio_maquina.php?op=desactivar_factura", { idfactura: idfactura }, function (e) {
-
         Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
-       // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));   
-       total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
+        // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
         tabla4.ajax.reload();
-      });      
+      });
     }
-  });  
-
+  });
 }
 
 function activar_factura(idfactura) {
@@ -1390,132 +1336,90 @@ function activar_factura(idfactura) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/servicio_maquina.php?op=activar_factura", { idfactura: idfactura }, function (e) {
-
         Swal.fire("Activado!", "Servicio ha sido activado.", "success");
 
-        //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto')); 
-        total_monto_f(localStorage.getItem('nubeidmaquif'),localStorage.getItem('nubeidproyectf'));
+        //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
+        total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
         tabla4.ajax.reload();
       });
-      
     }
-  }); 
- 
-}
-
-function ver_modal_factura(imagen){
-  var img = imagen;
-var extencion = img.substr(img.length - 3); // => "1"
-//console.log(extencion);
-  $('#ver_fact_pdf').html('');
-  $('#img-factura').attr("src", "");
-  $('#modal-ver-factura').modal("show");
-
-  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-    $('#ver_fact_pdf').hide();
-    $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/img/facturas/" +img);
-
-    $("#iddescargar").attr("href","../dist/img/facturas/" +img);
-
-  }else{
-    $('#img-factura').hide();
-    $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/img/facturas/'+img+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/img/facturas/" +img);
-  }
-
-
-  
- // $(".tooltip").hide();
-}
-//-total Pagos
-function total_monto_f(idmaquinaria,idproyecto) {
-  $.post("../ajax/servicio_maquina.php?op=total_monto_f", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    $("#monto_total_f").html("00.0");
-    data = JSON.parse(data); 
-   // console.log(data);
-   num= data.total_mont_f;
-    if (!num || num == 'NaN') return '-';
-    if (num == 'Infinity') return '&#x221e;';
-    num = num.toString().replace(/\$|\,/g, '');
-    if (isNaN(num))
-        num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num * 100 + 0.50000000001);
-    cents = num % 100;
-    num = Math.floor(num / 100).toString();
-    if (cents < 10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
-        num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-        total_mont_f= (((sign) ? '' : '-') + num + '.' + cents);
-
-    $("#monto_total_f").html(total_mont_f);
-
   });
 }
-//-Mostral total monto
-function total_costo_parcial(idmaquinaria,idproyecto) {
-  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
-    $("#total_costo").html("00.0");
-    data = JSON.parse(data); 
-    num= data.costo_parcial;
+
+function ver_modal_factura(imagen) {
+  var img = imagen;
+  var extencion = img.substr(img.length - 3); // => "1"
+  //console.log(extencion);
+  $("#ver_fact_pdf").html("");
+  $("#img-factura").attr("src", "");
+  $("#modal-ver-factura").modal("show");
+
+  if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
+    $("#ver_fact_pdf").hide();
+    $("#img-factura").show();
+    $("#img-factura").attr("src", "../dist/img/facturas/" + img);
+
+    $("#iddescargar").attr("href", "../dist/img/facturas/" + img);
+  } else {
+    $("#img-factura").hide();
+    $("#ver_fact_pdf").show();
+    $("#ver_fact_pdf").html('<iframe src="../dist/img/facturas/' + img + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href", "../dist/img/facturas/" + img);
+  }
+
+  // $(".tooltip").hide();
+}
+
+//-total Pagos
+function total_monto_f(idmaquinaria, idproyecto) {
+
+  $("#monto_total_f").html("00.0");
+
+  $.post("../ajax/servicio_maquina.php?op=total_monto_f", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (data, status) {
     
-    if (!num || num == 'NaN') return '-';
-    if (num == 'Infinity') return '&#x221e;';
-    num = num.toString().replace(/\$|\,/g, '');
-    if (isNaN(num))
-        num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num * 100 + 0.50000000001);
-    cents = num % 100;
-    num = Math.floor(num / 100).toString();
-    if (cents < 10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
-        num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-    total_parcial= (((sign) ? '' : '-') + num + '.' + cents);
+    data = JSON.parse(data);  // console.log(data);     
 
-    $("#total_costo").html(total_parcial);
+    $("#monto_total_f").html(formato_miles(data.total_mont_f));
+  });
+}
 
+//-Mostral total monto
+function total_costo_parcial(idmaquinaria, idproyecto) {
+  
+  $("#total_costo").html("00.0");
+
+  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (data, status) {
+   
+    data = JSON.parse(data); // console.log(data);   
+     
+    $("#total_costo").html(formato_miles(data.costo_parcial));
   });
 }
 //========FIN=================
 init();
 
 function formato_miles(num) {
-  if (!num || num == 'NaN') return '-';
-  if (num == 'Infinity') return '&#x221e;';
-  num = num.toString().replace(/\$|\,/g, '');
-  if (isNaN(num))
-      num = "0";
-  sign = (num == (num = Math.abs(num)));
+  if (!num || num == "NaN") return "0.00";
+  if (num == "Infinity") return "&#x221e;";
+  num = num.toString().replace(/\$|\,/g, "");
+  if (isNaN(num)) num = "0";
+  sign = num == (num = Math.abs(num));
   num = Math.floor(num * 100 + 0.50000000001);
   cents = num % 100;
   num = Math.floor(num / 100).toString();
-  if (cents < 10)
-      cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
-      num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-  return (((sign) ? '' : '-') + num + '.' + cents);
+  if (cents < 10) cents = "0" + cents;
+  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+  return (sign ? "" : "-") + num + "." + cents;
 }
 
 $(function () {
-
-  
   $.validator.setDefaults({
-
     submitHandler: function (e) {
-
       if ($("#maquinaria").select2("val") == null) {
-        
         $("#maquinaria_validar").show(); //console.log($("#proveedor").select2("val") + ", "+ $("#proveedor_old").val());
-       // console.log('holaaa""2222');
+        // console.log('holaaa""2222');
       } else {
-
         $("#maquinaria_validar").hide();
-       
 
         guardaryeditar(e);
       }
@@ -1525,189 +1429,159 @@ $(function () {
   $("#form-servicios").validate({
     rules: {
       maquinaria: { required: true },
-      fecha_inicio:{ required: true },
-      fecha_fin:{minlength: 1},
-      horometro_inicial:{ required: true, minlength: 1},
-      horometro_final:{minlength: 1},
-      costo_unitario:{minlength: 1},
-      unidad_m:{ required: true},
-      descripcion:{ minlength: 1},
+      fecha_inicio: { required: true },
+      fecha_fin: { minlength: 1 },
+      horometro_inicial: { required: true, minlength: 1 },
+      horometro_final: { minlength: 1 },
+      costo_unitario: { minlength: 1 },
+      unidad_m: { required: true },
+      descripcion: { minlength: 1 },
       //=======SECCION PAGO=========
       // terms: { required: true },
     },
     messages: {
       maquinaria: {
-        required: "Por favor selecione una maquina", 
+        required: "Por favor selecione una maquina",
       },
 
       fecha_inicio: {
-        required: "Por favor ingrese fecha inicial", 
+        required: "Por favor ingrese fecha inicial",
       },
       horometro_inicial: {
-        required: "Por favor ingrese horometro inicial", 
+        required: "Por favor ingrese horometro inicial",
       },
       unidad_m: {
-        required: "Por favor seleccione un tipo de unidad", 
+        required: "Por favor seleccione un tipo de unidad",
       },
     },
-        
+
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
 
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
       $(element).removeClass("is-invalid").addClass("is-valid");
 
-      if ($("#maquinaria").select2("val")== null) {
-         
+      if ($("#maquinaria").select2("val") == null) {
         $("#maquinaria_validar").show(); //console.log($("#maquinaria").select2("val") + ", "+ $("#maquinaria_old").val());
-
       } else {
-
         $("#maquinaria_validar").hide();
-      }       
+      }
     },
-
-
   });
+
   /**=======pagos */
   $.validator.setDefaults({
-
     submitHandler: function (e) {
-
       guardaryeditar_pago(e);
-
     },
   });
 
   $("#form-servicios-pago").validate({
     rules: {
       //=======SECCION PAGO=========
-      forma_pago:{required: true},
-      tipo_pago:{required: true},
-      banco_pago:{required: true},
-      fecha_pago:{required: true},
-      monto_pago:{required: true},
-      numero_op_pago:{minlength: 1},
-      descripcion_pago:{minlength: 1},
-      titular_cuenta_pago:{minlength: 1},
-
+      forma_pago: { required: true },
+      tipo_pago: { required: true },
+      banco_pago: { required: true },
+      fecha_pago: { required: true },
+      monto_pago: { required: true },
+      numero_op_pago: { minlength: 1 },
+      descripcion_pago: { minlength: 1 },
+      titular_cuenta_pago: { minlength: 1 },
 
       // terms: { required: true },
     },
     messages: {
       //====================
       forma_pago: {
-        required: "Por favor selecione una forma de pago", 
+        required: "Por favor selecione una forma de pago",
       },
       tipo_pago: {
-        required: "Por favor selecione un tipo de pago", 
+        required: "Por favor selecione un tipo de pago",
       },
       banco_pago: {
-        required: "Por favor selecione un banco", 
+        required: "Por favor selecione un banco",
       },
       fecha_pago: {
-        required: "Por favor ingresar una fecha", 
+        required: "Por favor ingresar una fecha",
       },
       monto_pago: {
-        required: "Por favor ingresar el monto a pagar", 
-      }
-
+        required: "Por favor ingresar el monto a pagar",
+      },
     },
-        
+
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
 
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
       $(element).removeClass("is-invalid").addClass("is-valid");
-     
+    },
+  });
+  /**=======Factura */
+  $.validator.setDefaults({
+    submitHandler: function (e) {
+      guardaryeditar_factura(e);
+      //console.log('factura 22222');
+    },
+  });
+
+  $("#form-agregar-factura").validate({
+    rules: {
+      codigo: { required: true },
+      monto: { required: true },
+      fecha_emision: { required: true },
+      descripcion_f: { minlength: 1 },
+      foto2_i: { required: true },
+
+      // terms: { required: true },
+    },
+    messages: {
+      //====================
+      forma_pago: {
+        codigo: "Por favor ingresar el código",
+      },
+      monto: {
+        required: "Por favor ingresar el monto",
+      },
+      fecha_emision: {
+        required: "Por favor ingresar la fecha de emisión",
+      },
     },
 
+    errorElement: "span",
 
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
   });
-    /**=======Factura */
-    $.validator.setDefaults({
-
-      submitHandler: function (e) {
-  
-        guardaryeditar_factura(e);
-        //console.log('factura 22222');
-  
-      },
-    });
-  
-    $("#form-agregar-factura").validate({
-      rules: {
-        codigo:{required: true},
-        monto:{required: true},
-        fecha_emision:{required: true},
-        descripcion_f:{minlength: 1},
-        foto2_i:{required: true}
-    
-        // terms: { required: true },
-      },
-      messages: {
-        //====================
-        forma_pago: {
-          codigo: "Por favor ingresar el código", 
-        },
-        monto: {
-          required: "Por favor ingresar el monto", 
-        },
-        fecha_emision: {
-          required: "Por favor ingresar la fecha de emisión", 
-        }
-  
-      },
-          
-      errorElement: "span",
-  
-      errorPlacement: function (error, element) {
-  
-        error.addClass("invalid-feedback");
-  
-        element.closest(".form-group").append(error);
-      },
-  
-      highlight: function (element, errorClass, validClass) {
-  
-        $(element).addClass("is-invalid");
-      },
-  
-      unhighlight: function (element, errorClass, validClass) {
-  
-        $(element).removeClass("is-invalid").addClass("is-valid");
-       
-      },
-  
-  
-    });
 });
-
-
 
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec() {
@@ -1717,28 +1591,22 @@ function buscar_sunat_reniec() {
 
   let tipo_doc = $("#tipo_documento").val();
 
-  let dni_ruc = $("#num_documento").val(); 
-   
+  let dni_ruc = $("#num_documento").val();
+
   if (tipo_doc == "DNI") {
-
     if (dni_ruc.length == "8") {
-
       $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
         data = JSON.parse(data);
 
         console.log(data);
 
         if (data.success == false) {
-
           $("#search").show();
 
           $("#charge").hide();
 
           toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
         } else {
-
           $("#search").show();
 
           $("#charge").hide();
@@ -1749,7 +1617,6 @@ function buscar_sunat_reniec() {
         }
       });
     } else {
-
       $("#search").show();
 
       $("#charge").hide();
@@ -1758,25 +1625,19 @@ function buscar_sunat_reniec() {
     }
   } else {
     if (tipo_doc == "RUC") {
-
       if (dni_ruc.length == "11") {
         $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
           data = JSON.parse(data);
 
           console.log(data);
           if (data.success == false) {
-
             $("#search").show();
 
             $("#charge").hide();
 
             toastr.error("Datos no encontrados en la SUNAT!!!");
-            
           } else {
-
             if (data.estado == "ACTIVO") {
-
               $("#search").show();
 
               $("#charge").hide();
@@ -1784,12 +1645,11 @@ function buscar_sunat_reniec() {
               $("#nombre").val(data.razonSocial);
 
               data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
+
               data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
               // $("#direccion").val(data.direccion);
               toastr.success("Cliente encontrado");
             } else {
-
               toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
 
               $("#search").show();
@@ -1799,7 +1659,7 @@ function buscar_sunat_reniec() {
               $("#nombre").val(data.razonSocial);
 
               data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
+
               data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
 
               // $("#direccion").val(data.direccion);
@@ -1815,15 +1675,12 @@ function buscar_sunat_reniec() {
       }
     } else {
       if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
         $("#search").show();
 
         $("#charge").hide();
 
         toastr.info("No necesita hacer consulta");
-
       } else {
-
         $("#tipo_doc").addClass("is-invalid");
 
         $("#search").show();
@@ -1837,5 +1694,5 @@ function buscar_sunat_reniec() {
 }
 
 function extrae_extencion(filename) {
-  return filename.split('.').pop();
+  return filename.split(".").pop();
 }

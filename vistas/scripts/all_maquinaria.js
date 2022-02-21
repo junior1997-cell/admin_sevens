@@ -46,6 +46,10 @@ function limpiar() {
   $("#codigo_m").val(""); 
   $("#proveedor").val("null").trigger("change");
   $("#tipo").val("null").trigger("change");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
   
 }
 

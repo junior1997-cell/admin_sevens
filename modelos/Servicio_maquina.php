@@ -62,7 +62,8 @@ Class ServicioMaquina
 	public function ver_detalle_m($idmaquinaria,$idproyecto){
 
 		$sql="SELECT * FROM servicio as s 
-		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND estado = '1' ORDER BY fecha_entrega ASC";
+		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND estado = '1' 
+		ORDER BY s.fecha_entrega ASC";
 
 		return ejecutarConsulta($sql);	
 
@@ -356,7 +357,7 @@ Class ServicioMaquina
 	}
 
 	public function select2_banco() {
-		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND idbancos > 1 ORDER BY nombre ASC;";
+		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' ORDER BY idbancos ASC;";
 		return ejecutarConsulta($sql);		
 	}
 

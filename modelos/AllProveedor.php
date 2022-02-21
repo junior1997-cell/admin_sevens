@@ -74,7 +74,7 @@ Class Proveedor
 	}
 
 	public function select2_banco() {
-		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND idbancos > 1 ORDER BY nombre ASC;";
+		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1'  ORDER BY idbancos ASC;";
 		return ejecutarConsulta($sql);		
 	}
 

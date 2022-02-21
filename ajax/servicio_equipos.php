@@ -299,29 +299,15 @@ switch ($_GET["op"]){
 					while ($reg=$rspta->fetch_object()){
 						//empty($fecha_recojo)?setlocale(LC_ALL,"es_ES").''.date('l d-m-Y', strtotime($reg->fecha_entrega)):$reg->fecha_entrega.'/'.$reg->fecha_recojo,
 						if (empty($reg->fecha_recojo) || $reg->fecha_recojo=='0000-00-00') {
-							$fechas=new FechaEs($reg->fecha_entrega);
-							$dia=$fechas->getDDDD().PHP_EOL;
-							$mun_dia=$fechas->getdd().PHP_EOL;
-							$mes=$fechas->getMMMM().PHP_EOL;
-							$anio=$fechas->getYYYY().PHP_EOL;
-							$fecha_entreg="$dia, $mun_dia de $mes del $anio";
-							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg</b>";
+							$fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
+							 
+							$fecha='<b class="text-primary">'.$fecha_entreg.', '. format_d_m_a($reg->fecha_entrega).'</b>';
 						}else{
-							$fechas=new FechaEs($reg->fecha_entrega);
-							//----------
-							$dia=$fechas->getDDDD().PHP_EOL;
-							$mun_dia=$fechas->getdd().PHP_EOL;
-							$mes=$fechas->getMMMM().PHP_EOL;
-							$anio=$fechas->getYYYY().PHP_EOL;
-							$fecha_entreg="$dia, $mun_dia de $mes del $anio";
-							//----------
-							$fechas=new FechaEs($reg->fecha_recojo);
-							$dia2=$fechas->getDDDD().PHP_EOL;
-							$mun_dia2=$fechas->getdd().PHP_EOL;
-							$mes2=$fechas->getMMMM().PHP_EOL;
-							$anio2=$fechas->getYYYY().PHP_EOL;
-							$fecha_recoj="$dia2, $mun_dia2 de $mes2 del $anio2";
-							$fecha="<b style=".'color:#1570cf;'.">$fecha_entreg </b> / <br> <b  style=".'color:#ff0000;'.">$fecha_recoj<b>";
+							$fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
+							
+							$fecha_recoj=nombre_dia_semana($reg->fecha_recojo);							 
+							 
+							$fecha='<b class="text-primary">'.$fecha_entreg .', '.format_d_m_a($reg->fecha_entrega).'</b> / <br> <b  class="text-danger">'.$fecha_recoj .', '.format_d_m_a($reg->fecha_entrega).'<b>';
 
 						}
 						if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
@@ -951,6 +937,38 @@ switch ($_GET["op"]){
         header("Location: ../index.php");
 
 	break;
+}
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
+function format_d_m_a($fecha) {
+
+	$fecha_convert = "";
+  
+	if (!empty($fecha) || $fecha != '0000-00-00') {
+  
+	  $fecha_expl = explode("-", $fecha);
+  
+	  $fecha_convert = $fecha_expl[2] . "-" . $fecha_expl[1] . "-" . $fecha_expl[0];
+  
+	} 
+  
+	return $fecha_convert;
+}
+
+// NOMBRE DIA DE SEMANA
+function nombre_dia_semana($fecha) {
+
+	$nombre_dia_semana = "";
+  
+	if (!empty($fecha) || $fecha != '0000-00-00' ) {
+  
+	  $fechas = new FechaEs($fecha);
+	  $dia = $fechas->getDDDD() . PHP_EOL;
+  
+	  $nombre_dia_semana = $dia;
+  
+	}
+  
+	return $nombre_dia_semana;
 }
 ob_end_flush();
 ?>

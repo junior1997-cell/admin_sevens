@@ -18,7 +18,7 @@ function init() {
 
   $("#mEquipo").addClass("active");
 
-  listar(localStorage.getItem('nube_idproyecto')); 
+  tbla_principal(localStorage.getItem('nube_idproyecto')); 
   
   //=====Guardar Servicio=============
   $("#guardar_registro").on("click", function (e) { $("#submit-form-servicios").submit(); });
@@ -437,8 +437,9 @@ function limpiar() {
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
-  $("#forma_pago").val("");
-  $("#tipo_pago").val("");
+   
+  $("#forma_pago").val("").trigger("change");
+  $("#tipo_pago").val("").trigger("change");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
   $("#cuenta_destino_pago").val("");
@@ -482,7 +483,7 @@ function regresar_principal(){
   =================================================
  */
 //Función Listar
-function listar( nube_idproyecto ) {
+function tbla_principal( nube_idproyecto ) {
 
   tabla=$('#tabla-servicio').dataTable({
     "responsive": true,
@@ -501,21 +502,35 @@ function listar( nube_idproyecto ) {
       },
     "createdRow":function(row,data,ixdex) {
       //console.log(data);
+      if (data[3]!="") {
+        $('td', row).eq(3).addClass('text-center');
+      }
+      if (data[4]!="") {
+        $('td', row).eq(4).addClass('text-center');
+      }
+      if (data[5]!="") {
+        $('td', row).eq(5).addClass('text-right');
+      }
+
       if (data[7]<0) {
         $('td', row).eq(7).css({
           'background-color':'#ff5252',
           'color':'white',
-        });  
+        }).addClass('text-right');  
       }else if(data[7]==0){
         $('td', row).eq(7).css({
           'background-color':'#28a745',
           'color':'white',
-        });
+        }).addClass('text-right');
       }else{
         $('td', row).eq(7).css({
           'background-color':'#ffc107',
           'color':'black',
-        });
+        }).addClass('text-right');
+      }
+
+      if (data[9]!="") {
+        $('td', row).eq(9).addClass('text-center');
       }
     },
     "language": {
@@ -598,7 +613,7 @@ function listar_detalle(idmaquinaria,idproyecto,unidad_medida) {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
+    // "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
     "columnDefs": hideen_colums
   }).DataTable();
   suma_horas_costoparcial(idmaquinaria,localStorage.getItem('nube_idproyecto'));
@@ -1181,6 +1196,10 @@ function validar_forma_de_pago() {
   } else {
     if (forma_pago == "Efectivo") {
       $('.validar_fp').hide();
+      $("#tipo_pago").val("Proveedor").trigger("change");
+      $("#banco_pago").val("1").trigger("change");
+      $("#cuenta_destino_pago").val("");
+      $("#titular_cuenta_pago").val("");
     } else {
       $('.validar_fp').show();
     }    
