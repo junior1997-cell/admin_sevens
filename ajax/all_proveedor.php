@@ -163,6 +163,17 @@ switch ($_GET["op"]){
 			}
 		}
 	break;
+	
+	case 'select2Banco': 
+
+		$rspta = $proveedor->select2_banco();
+	
+		while ($reg = $rspta->fetch_object())  {
+
+		  echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
+		}
+
+	  break;
 
 	case 'formato_banco':
            

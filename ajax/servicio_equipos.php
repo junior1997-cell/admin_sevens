@@ -373,17 +373,15 @@ switch ($_GET["op"]){
 		echo json_encode($rspta);
 		//Fin de las validaciones de acceso
 
-
 	break;
 
 	case 'select2_servicio': 
 
 		$rspta=$servicioequipos->select2_servicio();
 
-		while ($reg = $rspta->fetch_object())
-			{
+		while ($reg = $rspta->fetch_object()){
 			echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre .' : '. $reg->codigo_maquina .' ---> ' .$reg->nombre_proveedor.'</option>';
-			}
+		}
 	break;
 
 	/**
@@ -924,7 +922,24 @@ switch ($_GET["op"]){
 
 	break;
 
+	case 'select2Banco': 
 
+		$rspta = $servicioequipos->select2_banco();
+	
+		while ($reg = $rspta->fetch_object())  {
+
+		  echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
+		}
+
+	  break;
+
+	case 'formato_banco':
+           
+		$rspta=$servicioequipos->formato_banco($_POST["idbanco"]);
+		//Codificar el resultado utilizando json
+		echo json_encode($rspta);
+		 
+	break;
 
 
 	case 'salir':

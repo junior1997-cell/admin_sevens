@@ -318,7 +318,7 @@
       
           while ($reg = $rspta->fetch_object())  {
 
-            echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+            echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
           }
 
         break;

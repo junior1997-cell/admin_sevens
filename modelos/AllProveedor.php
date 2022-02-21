@@ -73,11 +73,16 @@ Class Proveedor
 		return ejecutarConsulta($sql);		
 	}
 
+	public function select2_banco() {
+		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND idbancos > 1 ORDER BY nombre ASC;";
+		return ejecutarConsulta($sql);		
+	}
+
 	// optenesmo el formato para los bancos
 	public function formato_banco($idbanco){
 		$sql="SELECT nombre, formato_cta, formato_cci, formato_detracciones FROM bancos WHERE estado='1' AND idbancos = '$idbanco';";
 		return ejecutarConsultaSimpleFila($sql);		
-	  }
+	}
 
 }
 

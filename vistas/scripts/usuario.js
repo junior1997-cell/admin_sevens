@@ -58,17 +58,19 @@ function seleccion() {
 function limpiar() {
   estado_usuario_requerido = true;
 
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); $("#trabajador").val("").trigger("change"); });
+
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");
-  $("#trabajador").val("").trigger("change"); 
+   
   $("#trabajador_old").val(""); 
   $("#cargo").val("").trigger("change"); 
   $("#login").val("");
   $("#password").val("");
   $("#password-old").val(""); 
   
-  $(".modal-title").html("Agregar usuario");
-  
+  $(".modal-title").html("Agregar usuario");  
+
   //Mostramos los permisos
   $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
 }
@@ -312,129 +314,13 @@ $(function () {
   });
 });
 
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#num_documento").val(); 
+function marcar_todos_permiso() {
    
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);
-
-        console.log(data);
-
-        if (data.success == false) {
-
-          $("#search").show();
-
-          $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
-        } else {
-
-          $("#search").show();
-
-          $("#charge").hide();
-
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-          toastr.success("Cliente encontrado!!!!");
-        }
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
+  if ($(`#marcar_todo`).is(':checked')) {
+    $('.permiso').each(function(){ this.checked = true; });
+    $('.marcar_todo').html('Desmarcar Todo');
   } else {
-    if (tipo_doc == "RUC") {
-
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);
-
-          console.log(data);
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
-            
-          } else {
-
-            if (data.estado == "ACTIVO") {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
-            } else {
-
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-              // $("#direccion").val(data.direccion);
-            }
-          }
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
+    $('.permiso').each(function(){ this.checked = false; });
+    $('.marcar_todo').html('Marcar Todo');
+  }  
 }

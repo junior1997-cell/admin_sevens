@@ -8,30 +8,27 @@ var idmaquina;
 //Función que se ejecuta al inicio
 function init() {
   
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
- //var idproyecto =localStorage.getItem('nube_idproyecto');
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto')); 
+   
+  //Mostramos los BANCOS
+  $.post("../ajax/servicio_equipos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); });
 
- listar(localStorage.getItem('nube_idproyecto'));
- 
-  // $("#bloc_Accesos").addClass("menu-open");
   //Mostramos los maquinariaes
   $.post("../ajax/servicio_equipos.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
 
-  $("#mProveedor").addClass("active");
+  $("#mEquipo").addClass("active");
 
-  // $("#lproveedor").addClass("active");
- //=====Guardar Servicio=============
-  $("#guardar_registro").on("click", function (e) {
-    $("#submit-form-servicios").submit();
-  });
+  listar(localStorage.getItem('nube_idproyecto')); 
+  
+  //=====Guardar Servicio=============
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-servicios").submit(); });
+
   //=====Guardar pago=============
-  $("#guardar_registro_pago").on("click", function (e) {
-    $("#submit-form-pago").submit();
-  });
+  $("#guardar_registro_pago").on("click", function (e) { $("#submit-form-pago").submit(); });
+
   //=====Guardar factura=============
-  $("#guardar_registro_factura").on("click", function (e) {
-    $("#submit-form-factura").submit();
-     });
+  $("#guardar_registro_factura").on("click", function (e) {  $("#submit-form-factura").submit(); });
+
   //vaucher
   $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
   $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
@@ -41,6 +38,7 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
+
   //============SERVICIO================
   //Initialize Select2 Elements
   $("#maquinaria").select2({
@@ -54,6 +52,7 @@ function init() {
     placeholder: "Selecione una unidad de medida",
     allowClear: false,
   });
+
   //============pagoo================
   //Initialize Select2 Elements
   $("#forma_pago").select2({
@@ -1173,11 +1172,27 @@ function ver_modal_vaucher(imagen){
  // $(".tooltip").hide();
 }
 
- /**
+function validar_forma_de_pago() {
+  var forma_pago = $('#forma_pago').select2('val');
+
+  if (forma_pago == null || forma_pago == "") {
+    // no ejecutamos nada
+    $('.validar_fp').show();
+  } else {
+    if (forma_pago == "Efectivo") {
+      $('.validar_fp').hide();
+    } else {
+      $('.validar_fp').show();
+    }    
+  }
+}
+
+/**
  * =================================
  *         SECCIÒN FACTURAS
  * ================================
- */
+*/
+
 //Guardar y editar
 function guardaryeditar_factura(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -1429,6 +1444,7 @@ var extencion = img.substr(img.length - 3); // => "1"
   
  // $(".tooltip").hide();
 }
+
 //-total Pagos
 function total_monto_f(idmaquinaria,idproyecto) {
   $.post("../ajax/servicio_equipos.php?op=total_monto_f", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
@@ -1455,6 +1471,7 @@ function total_monto_f(idmaquinaria,idproyecto) {
 
   });
 }
+
 //-Mostral total monto
 function total_costo_parcial(idmaquinaria,idproyecto) {
   $.post("../ajax/servicio_equipos.php?op=total_costo_parcial", { idmaquinaria:idmaquinaria,idproyecto:idproyecto }, function (data, status) {
@@ -1485,7 +1502,7 @@ function total_costo_parcial(idmaquinaria,idproyecto) {
 init();
 
 function formato_miles(num) {
-  if (!num || num == 'NaN') return '-';
+  if (!num || num == 'NaN') return '0.00';
   if (num == 'Infinity') return '&#x221e;';
   num = num.toString().replace(/\$|\,/g, '');
   if (isNaN(num))
@@ -1706,135 +1723,6 @@ $(function () {
   
     });
 });
-
-
-
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#num_documento").val(); 
-   
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);
-
-        console.log(data);
-
-        if (data.success == false) {
-
-          $("#search").show();
-
-          $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
-        } else {
-
-          $("#search").show();
-
-          $("#charge").hide();
-
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-          toastr.success("Cliente encontrado!!!!");
-        }
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);
-
-          console.log(data);
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
-            
-          } else {
-
-            if (data.estado == "ACTIVO") {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
-            } else {
-
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-              
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-              // $("#direccion").val(data.direccion);
-            }
-          }
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
-}
 
 function extrae_extencion(filename) {
   return filename.split('.').pop();

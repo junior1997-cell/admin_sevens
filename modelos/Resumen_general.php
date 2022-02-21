@@ -5,18 +5,35 @@ require "../config/Conexion.php";
 class Resumen_general
 {
   //Implementamos nuestro constructor
-  public function __construct()
-  {
-  }
-  public function r_compras($idproyecto, $fecha_filtro, $id_proveedor)
-  {
-    $Arraycompras = [];
+  public function __construct() { }
+
+  // TABLA
+  public function tabla_compras($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor) {
+
+    $Arraycompras = [];   $filtro_proveedor = ""; $filtro_fecha = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND cpp.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND cpp.fecha_compra = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND cpp.fecha_compra = '$fecha_filtro_2'";
+        }     
+      }      
+    }    
 
     $sql = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.monto_total, p.razon_social, cpp.descripcion 
 		FROM compra_por_proyecto as cpp, proveedor as p
-		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor 
-		AND cpp.fecha_compra LIKE '%$fecha_filtro%' AND cpp.idproveedor LIKE '%$id_proveedor%' AND cpp.estado='1' 
-		ORDER by cpp.idcompra_proyecto ASC";
+		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor $filtro_fecha $filtro_proveedor AND cpp.estado='1' 
+		ORDER by cpp.fecha_compra DESC";
 
     $compras = ejecutarConsultaArray($sql);
 
@@ -45,8 +62,7 @@ class Resumen_general
   }
 
   //lismatamos los detalles compras
-  public function detalles_compras($id_compra)
-  {
+  public function detalles_compras($id_compra) {
     $sql = "SELECT 
 		dp.idproducto as idproducto,
 		dp.ficha_tecnica_producto as ficha_tecnica,
@@ -59,9 +75,9 @@ class Resumen_general
 
     return ejecutarConsulta($sql);
   }
+
   //mostrar detalles uno a uno de la factura
-  public function ver_compras($idcompra_proyecto)
-  {
+  public function ver_compras($idcompra_proyecto)  {
     $sql = "SELECT  
 		cpp.idcompra_proyecto as idcompra_proyecto, 
 		cpp.idproyecto as idproyecto, 
@@ -82,15 +98,40 @@ class Resumen_general
     return ejecutarConsultaSimpleFila($sql);
   }
 
-  public function r_serv_maquinaria_equipos($idproyecto, $fecha_filtro, $id_proveedor, $tipo)
-  {
-    $serv_maquinaria = [];
-    $pago_total = 0;
-    $sql = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, COUNT(s.idmaquinaria) as cantidad_veces, SUM(s.costo_parcial) as costo_parcial 
+  // TABLA
+  public function tabla_maquinaria_y_equipo($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor, $tipo)  {
+
+    $serv_maquinaria = [];  $pago_total = 0; $filtro_proveedor = ""; $filtro_fecha = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND m.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND s.fecha_entrega BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND s.fecha_entrega = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND s.fecha_entrega = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+
+    $sql = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, s.costo_parcial , s.fecha_entrega
 		FROM servicio as s, maquinaria as m, proveedor as p 
-		WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND m.idproveedor LIKE '%$id_proveedor%'
+		WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' $filtro_proveedor $filtro_fecha
 		AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
-		GROUP BY s.idmaquinaria";
+    ORDER by s.fecha_entrega DESC";
+
+    // SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, COUNT(s.idmaquinaria) as cantidad_veces, SUM(s.costo_parcial) as costo_parcial 
+		// FROM servicio as s, maquinaria as m, proveedor as p 
+		// WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND m.idproveedor LIKE '%$id_proveedor%'
+		// AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
+		// GROUP BY s.idmaquinaria
 
     $maquinaria = ejecutarConsultaArray($sql);
 
@@ -102,12 +143,13 @@ class Resumen_general
         $ser_maq_monto = ejecutarConsultaSimpleFila($sql_2);
 
         $serv_maquinaria[] = [
-          "idmaquinaria" => $value['idmaquinaria'],
-          "idproyecto" => $value['idproyecto'],
-          "maquina" => $value['maquina'],
-          "cantidad_veces" => $value['cantidad_veces'],
-          "costo_parcial" => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
-          "proveedor" => $value['razon_social'],
+          "idmaquinaria"=> $value['idmaquinaria'],
+          "idproyecto"  => $value['idproyecto'],
+          "maquina"     => $value['maquina'],
+          "cantidad_veces"  => 1,
+          "costo_parcial"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
+          "fecha_entrega"   => ($retVal_4 = empty($value['fecha_entrega']) ? '' : $value['fecha_entrega']),
+          "proveedor"   => $value['razon_social'],
 
           "deposito" => ($retVal_2 = empty($ser_maq_monto) ? 0 : ($retVal_3 = empty($ser_maq_monto['deposito']) ? 0 : $ser_maq_monto['deposito'])),
         ];
@@ -118,56 +160,119 @@ class Resumen_general
   }
 
   //ver detallete por maquina-equipo
-  public function ver_detalle_maq_equ($idmaquinaria, $idproyecto)
-  {
-    $sql = "SELECT * FROM servicio as s WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' ORDER BY idservicio DESC";
+  public function ver_detalle_maq_equ($idmaquinaria, $idproyecto)  {
+    $sql = "SELECT * FROM servicio as s 
+    WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado = '1'
+    ORDER BY s.fecha_entrega DESC";
 
     return ejecutarConsulta($sql);
   }
 
-  public function r_transportes($idproyecto, $fecha_filtro)
-  {
+  // TABLA
+  public function tabla_transportes($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND t.fecha_viaje BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND t.fecha_viaje = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND t.fecha_viaje = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+
     $sql = "SELECT t.idtransporte, t.idproyecto, t.fecha_viaje, t.descripcion, t.precio_parcial, t.comprobante 
 		FROM transporte as t, proyecto as p 
-		WHERE t.idproyecto='$idproyecto' AND t.idproyecto=p.idproyecto AND t.estado='1' AND t.fecha_viaje LIKE '%$fecha_filtro%'
-		ORDER BY idtransporte DESC";
+		WHERE t.idproyecto='$idproyecto' AND t.idproyecto=p.idproyecto AND t.estado='1' $filtro_fecha
+		ORDER BY t.fecha_viaje DESC";
     return ejecutarConsultaArray($sql);
   }
 
-  public function r_hospedajes($idproyecto, $fecha_filtro)
-  {
+  // TABLA
+  public function tabla_hospedajes($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND h.fecha_comprobante BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND h.fecha_comprobante = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND h.fecha_comprobante = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+
     $sql = "SELECT h.idhospedaje, h.idproyecto, h.fecha_comprobante, h.descripcion, h.precio_parcial, h.comprobante 
 		FROM hospedaje as h, proyecto as p 
-		WHERE h.idproyecto=p.idproyecto AND h.idproyecto='$idproyecto' AND h.estado=1 AND h.fecha_comprobante LIKE '%$fecha_filtro%'
-		ORDER BY h.idhospedaje DESC";
+		WHERE h.idproyecto=p.idproyecto AND h.idproyecto='$idproyecto' AND h.estado=1 $filtro_fecha
+		ORDER BY h.fecha_comprobante DESC";
     return ejecutarConsultaArray($sql);
   }
 
-  public function r_comidas_extras($idproyecto, $fecha_filtro)
-  {
+  // TABLA
+  public function tabla_comidas_extras($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND ce.fecha_comida BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND ce.fecha_comida = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND ce.fecha_comida = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+    
     $sql = "SELECT ce.idcomida_extra, ce.idproyecto, ce.fecha_comida, ce.descripcion, ce.costo_parcial, ce.comprobante 
 		FROM comida_extra as ce, proyecto as p 
-		WHERE ce.estado=1 AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto' AND ce.fecha_comida LIKE '%$fecha_filtro%'";
+		WHERE ce.estado=1 AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto' $filtro_fecha
+    ORDER BY ce.fecha_comida DESC";
     return ejecutarConsultaArray($sql);
   }
 
-  public function r_breaks($idproyecto, $fecha_filtro)
-  {
+  // TABLA
+  public function tabla_breaks($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND sb.fecha_inicial BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND sb.fecha_inicial = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND sb.fecha_inicial = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+
     $sql = "SELECT sb.idsemana_break, sb.idproyecto, sb.numero_semana, sb.fecha_inicial, sb.fecha_final, sb.total
-			FROM semana_break as sb, proyecto as p
-			WHERE sb.idproyecto ='$idproyecto' AND sb.estado=1 AND sb.idproyecto=p.idproyecto AND sb.fecha_inicial LIKE '%$fecha_filtro%'";
+		FROM semana_break as sb, proyecto as p
+		WHERE sb.idproyecto ='$idproyecto' AND sb.estado=1 AND sb.idproyecto=p.idproyecto $filtro_fecha
+    ORDER BY sb.fecha_inicial DESC";
     return ejecutarConsultaArray($sql);
   }
 
-  public function listar_comprobantes_breaks($idsemana_break)
-  {
+  // TABLA
+  public function listar_comprobantes_breaks($idsemana_break)  {
     $sql = "SELECT * FROM factura_break 
 		WHERE idsemana_break  ='$idsemana_break'";
     return ejecutarConsulta($sql);
   }
-  //-------------------------------------------------------------------
-  public function r_pensiones($idproyecto, $id_proveedor)
-  {
+
+  // TABLA
+  public function tabla_pensiones($idproyecto, $id_proveedor)  {
     $serv_pension = []; 
 
     $sql = "SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
@@ -197,9 +302,7 @@ class Resumen_general
 
           $total_monto += $retVal_1 = (empty($monto_semana)) ? 0 : $retVal_2 = (empty($monto_semana['total'])) ? 0 : floatval($monto_semana['total']);
           
-        }
-
-         
+        }         
 
         $serv_pension[] = [
           "idpension" => $value['idpension'],
@@ -216,8 +319,7 @@ class Resumen_general
     return $serv_pension;
   }
 
-  public function ver_detalle_x_servicio($idpension)
-  {
+  public function ver_detalle_x_servicio($idpension)  {
     $sql = "SELECT SUM(se_p.total) as total,sp.nombre_servicio,SUM(se_p.adicional_descuento) as adicional_descuento,SUM(se_p.cantidad_total_platos) as cantidad_total_platos, sp.precio
 		FROM servicio_pension as sp, pension as p, semana_pension as se_p 
 		WHERE p.idpension='$idpension' AND sp.idpension=p.idpension AND se_p.idservicio_pension=sp.idservicio_pension 
@@ -225,15 +327,14 @@ class Resumen_general
     return ejecutarConsulta($sql);
   }
 
-  public function listar_comprobantes_pension($idpension)
-  {
+  public function listar_comprobantes_pension($idpension)  {
     $sql = "SELECT * FROM factura_pension 
 		WHERE idpension  ='$idpension'";
     return ejecutarConsulta($sql);
   }
 
-  public function r_trab_administrativo($idproyecto, $id_trabajador)
-  {
+  // TABLA
+  public function tabla_administrativo($idproyecto, $id_trabajador)  {
     $administrativo = [];
     $m_total_x_meses = 0;
     $pago_monto_total = 0;
@@ -298,8 +399,7 @@ class Resumen_general
     return $administrativo;
   }
 
-  public function r_detalle_trab_administrativo($idtrabajador_por_proyecto)
-  {
+  public function r_detalle_trab_administrativo($idtrabajador_por_proyecto)  {
     $detalle_pagos_adm = [];
     $monto_total = 0;
 
@@ -331,23 +431,10 @@ class Resumen_general
     }
 
     return $detalle_pagos_adm;
-  }
+  }  
 
-  public function select_proveedores()
-  {
-    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor";
-    return ejecutarConsulta($sql);
-  }
-
-  public function selecct_trabajadores($idproyecto)
-  {
-    $sql = "SELECT tpp.idtrabajador_por_proyecto, t.nombres, t.numero_documento FROM trabajador_por_proyecto as tpp, trabajador as t
-			WHERE tpp.idtrabajador= t.idtrabajador AND tpp.idproyecto='$idproyecto'";
-    return ejecutarConsulta($sql);
-  }
-
-  public function r_trabajador_obrero($idproyecto, $id_trabajador)
-  {
+  // TABLA
+  public function tabla_obrero($idproyecto, $id_trabajador)  {
     $obrero = [];
     $total_deposito_obrero = 0;
 
@@ -393,9 +480,8 @@ class Resumen_general
     }
   }
 
-  //TABLA detalle por cada obrero
-  public function r_detalle_x_obrero($idtrabajador_x_proyecto)
-  {
+  // detalle por cada obrero
+  public function r_detalle_x_obrero($idtrabajador_x_proyecto)  {
     $data = [];
 
     $sql_1 = "SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
@@ -440,6 +526,19 @@ class Resumen_general
     }
 
     return $data;
+  }
+
+  // SELECT2
+  public function select_proveedores()  {
+    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor";
+    return ejecutarConsulta($sql);
+  }
+
+  // SELECT2
+  public function selecct_trabajadores($idproyecto)  {
+    $sql = "SELECT tpp.idtrabajador_por_proyecto, t.nombres, t.numero_documento FROM trabajador_por_proyecto as tpp, trabajador as t
+		WHERE tpp.idtrabajador= t.idtrabajador AND tpp.idproyecto='$idproyecto'";
+    return ejecutarConsulta($sql);
   }
 }
 ?>

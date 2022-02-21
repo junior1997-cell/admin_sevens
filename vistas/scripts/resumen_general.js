@@ -68,20 +68,12 @@ function init() {
   });
 
   filtros();
-
-  //============borramos los valores================
-  // $("#filtrar_por").val("null").trigger("change");
-  // $("#trabajador").val("null").trigger("change");
-  // $("#proveedor").val("null").trigger("change");
-
-  // Formato para telefono
-  // $("[data-mask]").inputmask();
 }
 
 // TABLA - COMPRAS - -------------------------------------------------------
-function tbla_compras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {   
-  $('.cargando-compras').removeClass('backgff9100').addClass('bg-danger').html('Compras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_compras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {   
+  
+  $.post("../ajax/resumen_general.php?op=tbla_compras", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
      
@@ -122,7 +114,7 @@ function tbla_compras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deu
 
         // columna: #
         if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          $("td", row).eq(0).addClass("w-px-35 text-center");         
         }
 
         // columna: fecha
@@ -181,15 +173,15 @@ function tbla_compras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deu
     $('.cargando-compras').removeClass('bg-danger').addClass('backgff9100').html('Compras');
     console.log(monto_compras, pago_compras, saldo_compras);
 
-    tbla_maquinaria(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   });  
    
 }
 
 // TABLA - MAQUINARIA - -----------------------------------------------------
-function tbla_maquinaria(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {   
-  $('.cargando-maquinas').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Maquinaria - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_maquinaria", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {   
+   
+  $.post("../ajax/resumen_general.php?op=tbla_maquinaria", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);
     
@@ -286,15 +278,17 @@ function tbla_maquinaria(idproyecto, fecha_filtro, id_trabajador, id_proveedor, 
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_equipos(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    $('.cargando-maquinas').removeClass('bg-danger').addClass('backgff9100').html('Servicios-Maquinaria');
+
+    tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   });
    
 }
 
 // TABLA - EQUIPO
-function tbla_equipos(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {   
-  $('.cargando-equipos').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Equipo - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_equipos", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {   
+   
+  $.post("../ajax/resumen_general.php?op=tbla_equipos", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     data = JSON.parse(data); //console.log(data);    
 
     $("#monto_serv_equi").html(formato_miles(data.t_monto.toFixed(2)));
@@ -334,7 +328,12 @@ function tbla_equipos(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deu
 
         // columna: #
         if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
+          $("td", row).eq(0).addClass("w-px-35 text-center");         
+        }
+
+        // columna: Proveedor
+        if (data[1] != '') {
+          $("td", row).eq(1).removeClass("w-px-35 text-nowrap text-center");         
         }
 
         // columna: fecha
@@ -390,15 +389,17 @@ function tbla_equipos(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deu
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_transportes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    $('.cargando-equipos').removeClass('bg-danger').addClass('backgff9100').html('Servicios-Equipo');
+
+    tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   });
   
 }
 
 // TABLA - TRANSPORTE - -------------------------------------------------------
-function tbla_transportes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
-  $('.cargando-transporte').removeClass('backgff9100').addClass('bg-danger').html('Transporte - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_transportes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_transportes", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);   
 
@@ -495,15 +496,17 @@ function tbla_transportes(idproyecto, fecha_filtro, id_trabajador, id_proveedor,
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_hospedajes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    $('.cargando-transporte').removeClass('bg-danger').addClass('backgff9100').html('Transporte');
+
+    tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   });
   
 }
 
 // TABLA - HOSPEDAJES - -------------------------------------------------------
-function tbla_hospedajes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
-  $('.cargando-hospedaje').removeClass('backgff9100').addClass('bg-danger').html('Hospedaje - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_hospedajes", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+    
+  $.post("../ajax/resumen_general.php?op=tbla_hospedajes", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
 
@@ -600,16 +603,18 @@ function tbla_hospedajes(idproyecto, fecha_filtro, id_trabajador, id_proveedor, 
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_comidas_extras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    $('.cargando-hospedaje').removeClass('bg-danger').addClass('backgff9100').html('Hospedaje');
+
+    tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
 
   });
   
 }
 
 // TABLA - COMIDAS EXTRAS - ----------------------------------------------------
-function tbla_comidas_extras(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
-  $('.cargando-comida-extra').removeClass('backgff9100').addClass('bg-danger').html('Comidas extras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
 
@@ -706,15 +711,17 @@ function tbla_comidas_extras(idproyecto, fecha_filtro, id_trabajador, id_proveed
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_breaks(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    $('.cargando-comida-extra').removeClass('bg-danger').addClass('backgff9100').html('Comidas extras');
+
+    tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   });
    
 }
 
 // TABLA - BREAKS - -------------------------------------------------------------
-function tbla_breaks(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
-  $('.cargando-breaks').removeClass('backgff9100').addClass('bg-danger').html('Breaks - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_breaks", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_breaks", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
 
@@ -743,7 +750,7 @@ function tbla_breaks(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deud
 
     $('#breaks').empty(); // Vacía en caso de que las columnas cambien
 
-    $("#tabla7_breaks").dataTable({
+    tabla_7 = $("#tabla7_breaks").dataTable({
       responsive: true,
       lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
@@ -811,16 +818,18 @@ function tbla_breaks(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deud
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_pensiones(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda);
+    $('.cargando-breaks').removeClass('bg-danger').addClass('backgff9100').html('Breaks');
+
+    tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
 
   });
    
 }
 
 // TABLA - PENSIONES - -----------------------------------------------------------
-function tbla_pensiones(idproyecto, fecha_filtro, id_trabajador, id_proveedor, deuda) {
-  $('.cargando-pension').removeClass('backgff9100').addClass('bg-danger').html('Pensión - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
+function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
 
@@ -917,15 +926,17 @@ function tbla_pensiones(idproyecto, fecha_filtro, id_trabajador, id_proveedor, d
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda);
+    $('.cargando-pension').removeClass('bg-danger').addClass('backgff9100').html('Pensión');
+
+    tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_trabajador, deuda);
   });
    
 }
 
 // TABLA - ADMINISTRAIVOS - -------------------------------------------------------
-function tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda) {
-  $('.cargando-administrativo').removeClass('backgff9100').addClass('bg-danger').html('Personal Administrativo - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
+function tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_trabajador, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_administrativo", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data);  //console.log(data);     
 
@@ -1023,16 +1034,18 @@ function tbla_administrativo(idproyecto, fecha_filtro, id_trabajador, id_trabaja
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
 
-    tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda);
+    $('.cargando-administrativo').removeClass('bg-danger').addClass('backgff9100').html('Personal Administrativo');
+
+    tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_trabajador, deuda);
 
   });
    
 }
 
 // TABLA - OBRERO - ----------------------------------------------------------------
-function tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deuda) {
-  $('.cargando-obrero').removeClass('backgff9100').addClass('bg-danger').html('Personal Obrero - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $.post("../ajax/resumen_general.php?op=tbla_obrero", { 'idproyecto': idproyecto, 'fecha_filtro':fecha_filtro, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
+function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_trabajador, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_obrero", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (data, status) {
     
     data = JSON.parse(data); //  console.log(data);
     
@@ -1129,6 +1142,8 @@ function tbla_obrero(idproyecto, fecha_filtro, id_trabajador, id_trabajador, deu
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
+
+    $('.cargando-obrero').removeClass('bg-danger').addClass('backgff9100').html('Personal Obrero');
 
     table_all_sumas();
 
@@ -1338,20 +1353,23 @@ function table_all_sumas() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
   }).DataTable();  
+
+  $('.cargando-sumas').removeClass('bg-danger').addClass('backgff9100').html('Sumas totales');
 }
 
 function filtros() {
 
   monto_all = 0; deposito_all = 0; saldo_all = 0;
-
-  // console.log('--------------------------');
-  var fecha          = $("#fecha_filtro").val();
+  
+  var fecha_1        = $("#fecha_filtro_1").val();
+  var fecha_2        = $("#fecha_filtro_2").val();  
   var id_trabajador  = $("#trabajador_filtro").select2('val');
   var id_proveedor   = $("#proveedor_filtro").select2('val');
   var deuda          = $("#deuda_filtro").select2('val');
 
   // filtro de fechas
-  if (fecha == "" || fecha == null) { fecha = ""; }
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; }
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; }
 
   // filtro de trabajdor
   if (id_trabajador == '' || id_trabajador == 0 || id_trabajador == null) { id_trabajador = ""; }
@@ -1362,44 +1380,59 @@ function filtros() {
   // filtro deuda
   if (deuda == "" || deuda == null) { deuda = ""; }
 
-  console.log(fecha, id_trabajador, id_proveedor, deuda);
+  console.log(fecha_1, fecha_2, id_trabajador, id_proveedor, deuda);
+  
+  $('.cargando-compras').removeClass('backgff9100').addClass('bg-danger').html('Compras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-maquinas').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Maquinaria - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-equipos').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Equipo - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-transporte').removeClass('backgff9100').addClass('bg-danger').html('Transporte - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-hospedaje').removeClass('backgff9100').addClass('bg-danger').html('Hospedaje - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-comida-extra').removeClass('backgff9100').addClass('bg-danger').html('Comidas extras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-breaks').removeClass('backgff9100').addClass('bg-danger').html('Breaks - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  
+  $('.cargando-pension').removeClass('backgff9100').addClass('bg-danger').html('Pensión - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  
+  $('.cargando-administrativo').removeClass('backgff9100').addClass('bg-danger').html('Personal Administrativo - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-obrero').removeClass('backgff9100').addClass('bg-danger').html('Personal Obrero - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  
+  $('.cargando-sumas').removeClass('backgff9100').addClass('bg-danger').html('Sumas totales - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   // ejecutamos las funcioes a filtrar
-  tbla_compras(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, id_proveedor, deuda);
-  // tbla_maquinaria(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  // tbla_equipos(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-
-  // tbla_transportes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  // tbla_hospedajes(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  // tbla_comidas_extras(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  // tbla_breaks(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-
-  // tbla_pensiones(localStorage.getItem("nube_idproyecto"), fecha, id_proveedor, deuda);
-  // tbla_administrativo(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);
-  // tbla_obrero(localStorage.getItem("nube_idproyecto"), fecha, id_trabajador, deuda);  
-
-  // table_all_sumas();
+  tbla_compras(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_trabajador, id_proveedor, deuda);
+  
 }
 
 // ::::::::::::::::::::::: MODALS ::::::::::::::::::::::::::::::::
 //MODAL - COMPRAS
 function mostrar_detalle_compras(idcompra_proyecto) {
-
+  $('#cargando-1-fomulario').hide();
+  $('#cargando-2-fomulario').show();
   $("#modal-ver-compras").modal("show");  
 
   $.post("../ajax/resumen_general.php?op=mostrar_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
-    $("#detalles_compra").html(r);
+
+    $(".detalles_compra").html(r);
+
+    $('#cargando-1-fomulario').show();
+    $('#cargando-2-fomulario').hide();
   });
 }
 
 //MODAL - MAQUINARIA y EQUIPO
-function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, proveedor) {
+function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, proveedor, maquina) {
   $("#nombre_proveedor_").html("");
 
   $("#modal_ver_detalle_maq_equ").modal("show");
 
   $("#detalle_").html(servicio);
-  $("#nombre_proveedor_").html(proveedor);
+  $("#nombre_proveedor_").html(`${maquina} - <i>${proveedor}</i>`);
 
   tabla2 = $("#tabla-detalle-m")
     .dataTable({
@@ -1408,7 +1441,7 @@ function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, p
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      buttons: ["copyHtml5", "excelHtml5", "pdf",],
       ajax: {
         url: "../ajax/resumen_general.php?op=mostrar_detalle_maquinaria_equipo&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
         type: "get",
@@ -1416,6 +1449,28 @@ function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, p
         error: function (e) {
           console.log(e.responseText);
         },
+      },
+      createdRow: function (row, data, ixdex) {    
+
+        // columna: unidad
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-center");         
+        } 
+        
+        // columna: cantidad
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass("text-center");         
+        } 
+
+        // columna: costo unitario
+        if (data[3] != '') {
+          $("td", row).eq(3).addClass("text-right");         
+        }  
+
+        // columna: costo parcial
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass("text-right");         
+        } 
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -1445,7 +1500,7 @@ function mostrar_comprobantes_breaks(idsemana_break) {
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      buttons: ["copyHtml5", "excelHtml5", "pdf",],
       ajax: {
         url: "../ajax/resumen_general.php?op=mostrar_comprobantes_breaks&idsemana_break=" + idsemana_break,
         type: "get",
@@ -1482,7 +1537,7 @@ function mostrar_detalle_pension(idpension) {
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      buttons: ["copyHtml5", "excelHtml5",  "pdf",],
       ajax: {
         url: "../ajax/resumen_general.php?op=mostrar_detalle_pension&idpension=" + idpension,
         type: "get",
@@ -1519,7 +1574,7 @@ function mostrar_comprobantes_pension(idpension) {
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      buttons: ["copyHtml5", "excelHtml5",  "pdf"],
       ajax: {
         url: "../ajax/resumen_general.php?op=mostrar_comprobantes_pension&idpension=" + idpension,
         type: "get",
@@ -1551,13 +1606,16 @@ function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
   var sueldo_estimado = 0;
   var depositos = 0;
 
+  $('#cargando-3-fomulario').hide();
+  $('#cargando-4-fomulario').show();
+
   $("#modal-ver-detalle-t-administ").modal("show");
 
   $(".data-detalle-pagos-administador").html("");
   $("#nombre_trabajador_detalle").html(nombres);
 
-  $.post("../ajax/resumen_general.php?op=ver_detalle_pagos_x_trab_adms", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+  $.post("../ajax/resumen_general.php?op=mostrar_detalle_administrativo", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
+    data = JSON.parse(data); console.log(data);
     $(".sueldo_estimado").html("");
     $(".depositos").html("");
 
@@ -1571,8 +1629,8 @@ function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
                   <td>${format_d_m_a(value.fecha_inicial)}</td>
                   <td>${format_d_m_a(value.fecha_final)}</td>
                   <td>${value.cant_dias_laborables}</td>
-                  <td style="text-align: end !important;">S/. ${formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
-                  <td style="text-align: end !important;">S/. ${formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
+                  <td class="m-r-10px" style="text-align: end !important;">S/. ${formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
+                  <td class="m-r-10px" style="text-align: end !important;">S/. ${formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
               </tr>`;
 
         $(".data-detalle-pagos-administador").append(detalle);
@@ -1587,6 +1645,9 @@ function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
       $(".tabla").hide();
       $(".alerta").show();
     }
+
+    $('#cargando-3-fomulario').show();
+    $('#cargando-4-fomulario').hide();
   });
 }
 
@@ -1601,6 +1662,10 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
   var adicional_descuento = 0;
   var deposito = 0;
   var total_hn_he = 0;
+
+  $('#cargando-5-fomulario').hide();
+  $('#cargando-6-fomulario').show();
+
   $("#modal-ver-detalle-t-obrero").modal("show");
 
   $(".detalle-data-q-s").html("");
@@ -1631,7 +1696,7 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
                   <td><sup>S/. </sup>${value.sueldo_hora}</td>
                   <td>${value.total_hn}<b> / </b>${value.total_he}</td>
                   <td>${value.sabatical}</td>          
-                  <td><sup>S/. </sup>${formato_miles(value.pago_parcial_hn)}<b> / </b><sup>S/. </sup>${formato_miles(value.pago_parcial_he)}</td>
+                  <td> ${formato_miles(value.pago_parcial_hn)}<b> / </b>${formato_miles(value.pago_parcial_he)}</td>
                   <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.adicional_descuento)}</td>
                   <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.pago_quincenal)}</td>
                   <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.deposito)}</td>
@@ -1661,6 +1726,10 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
       $(".tabla_obrero").hide();
       $(".alerta_obrero").show();
     }
+
+    $('#cargando-5-fomulario').show();
+    $('#cargando-6-fomulario').hide();
+
   });
 }
 

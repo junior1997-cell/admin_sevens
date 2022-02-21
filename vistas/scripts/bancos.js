@@ -21,13 +21,14 @@ function init() {
 
 }
 //Función limpiar
-function limpiar() {
+function limpiar_banco() {
   //Mostramos los Materiales
   $("#idbancos").val("");
   $("#nombre").val(""); 
-  $("#formato_cta").val("0000"); 
-  $("#formato_cci").val("0000"); 
-  $("#formato_detracciones").val("0000");
+  $("#alias").val("");
+  $("#formato_cta").val("00000000"); 
+  $("#formato_cci").val("00000000"); 
+  $("#formato_detracciones").val("00000000");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -64,7 +65,7 @@ function listar_bancos() {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    // "order": [[ 1, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -115,6 +116,7 @@ function mostrar_bancos(idbancos) {
 
     $("#idbancos").val(data.idbancos);
     $("#nombre").val(data.nombre); 
+    $("#alias").val(data.alias);
     $("#formato_cta").val(data.formato_cta); 
     $("#formato_cci").val(data.formato_cci); 
     $("#formato_detracciones").val(data.formato_detracciones); 
@@ -182,14 +184,18 @@ $(function () {
 
   $("#form-bancos").validate({
     rules: {
-      nombre: { required: true },    
+      nombre: { required: true, minlength:2, maxlength:65},    
+      alias: { minlength:2, maxlength:65 },    
       formato_cta: { required: true, minlength:8 },
       formato_cci: { required: true, minlength:8 },
       formato_detracciones: { required: true, minlength:8 },
     },
     messages: {
       nombre: {
-        required: "Por favor ingrese nombre ", 
+        required: "Por favor ingrese nombre ", minlength:"Ingrese almenos 2 carecteres", maxlength: "Máximo 65 carecteres"
+      },
+      alias: {
+        minlength:"Ingrese almenos 2 carecteres", maxlength: "Máximo 65 carecteres"
       },
       formato_cta: {
         required: "Campo requerido", minlength:"Ingrese almenos 8 dígitos"

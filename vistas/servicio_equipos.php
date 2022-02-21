@@ -528,7 +528,7 @@
                                 <div class="form-group">
                                   <label for="beneficiario_pago">Beneficiario</label>
                                   <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
-                                  <br />
+                                  <br />                                   
                                   <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
@@ -536,7 +536,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="forma_pago">Forma Pago</label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" onchange="validar_forma_de_pago();" style="width: 100%;">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
                                     <option value="Crédito">Crédito</option>
@@ -544,7 +544,7 @@
                                 </div>
                               </div>
                               <!--tipo de pago -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 validar_fp">
                                 <div class="form-group">
                                   <label for="tipo_pago">Tipo Pago</label>
                                   <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
@@ -554,28 +554,24 @@
                                 </div>
                               </div>
                               <!-- Cuenta de destino-->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 validar_fp">
                                 <div class="form-group">
                                   <label for="cuenta_destino_pago">Cuenta destino </label>
                                   <input type="number" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" onchange="captura_op();" placeholder="Cuenta destino" />
                                 </div>
                               </div>
                               <!-- banco -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 validar_fp">
                                 <div class="form-group">
                                   <label for="banco_pago">Banco</label>
                                   <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
-                                    <option value="1">BCP</option>
-                                    <option value="2">BBVA</option>
-                                    <option value="3">SCOTIA BANK</option>
-                                    <option value="4">INTERBANK</option>
-                                    <option value="5">NACIÓN</option>
+                                     
                                   </select>
                                   <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>-->
                                 </div>
                               </div>
                               <!-- Titular Cuenta-->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 validar_fp">
                                 <div class="form-group">
                                   <label for="titular_cuenta_pago">Titular Cuenta </label>
                                   <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
@@ -597,7 +593,7 @@
                                 </div>
                               </div>
                               <!-- Número de Operación-->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 validar_fp">
                                 <div class="form-group">
                                   <label for="numero_op_pago">Número de operación </label>
                                   <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />

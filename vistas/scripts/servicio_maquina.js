@@ -9,15 +9,16 @@ var idmaquina;
 function init() {
   
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
- //var idproyecto =localStorage.getItem('nube_idproyecto');
+
+  //Mostramos los BANCOS
+  $.post("../ajax/servicio_maquina.php?op=select2Banco", function (r) { $("#banco_pago").html(r); });
+
+ //Mostramos los maquinariaes
+ $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
+
+ $("#mMaquina").addClass("active");
 
  listar(localStorage.getItem('nube_idproyecto'));
- 
-  // $("#bloc_Accesos").addClass("menu-open");
-  //Mostramos los maquinariaes
-  $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
-
-  $("#mProveedor").addClass("active");
 
   // $("#lproveedor").addClass("active");
  //=====Guardar Servicio=============
