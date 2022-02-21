@@ -297,13 +297,13 @@
                                         <div class="col-lg-6">
                                             <label for="" style="color: white;">.</label> <br />
                                             <a data-toggle="modal" data-target="#modal-elegir-material">
-                                              <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Material</button>
+                                              <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Insumos</button>
                                             </a>
                                         </div>
                                         <div class="col-lg-6">
                                           <label for="" style="color: white;">.</label> <br />
                                           <a data-toggle="modal" data-target="#modal-agregar-material">
-                                            <button id="btnAgregarArt" type="button" class="btn btn-success btn-block"><span class="fa fa-plus"></span> Crear Material</button>
+                                            <button id="btnAgregarArt" type="button" class="btn btn-success btn-block"><span class="fa fa-plus"></span> Crear Insumos</button>
                                           </a>
                                         </div>
                                       </div>
@@ -736,7 +736,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Seleccionar material</h4>
+                        <h4 class="modal-title">Seleccionar Insumos</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -745,7 +745,7 @@
                         <table id="tblamateriales" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
                           <thead>
                             <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                            <th>Nombre Producto</th>
+                            <th>Nombre Insumo</th>
                             <th>Marca</th>
                             <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
                             <th>Descripción</th>
@@ -760,6 +760,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal agregar factura =========-->
                 <div class="modal fade" id="modal-agregar-factura">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -866,6 +867,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal-ver-factura =========-->
                 <div class="modal fade" id="modal-ver-factura">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -887,6 +889,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal agregar Pagos =========-->
                 <div class="modal fade" id="modal-agregar-pago">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -1020,6 +1023,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal Ver compras =========-->
                 <div class="modal fade" id="modal-ver-compras">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -1122,6 +1126,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal agregar comprobantes =========-->
                 <!-- Modal agregar Comprobante -->
                 <div class="modal fade" id="modal-comprobantes-pago">
@@ -1199,6 +1204,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!-- Modal ver los documentos subidos -->
                 <div class="modal fade" id="modal-ver-docs">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
@@ -1233,6 +1239,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal-ver-vaucher-pagos =========-->
                 <div class="modal fade" id="modal-ver-vaucher">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
@@ -1274,13 +1281,14 @@
                     </div>
                   </div>
                 </div>
+
                 <!-- Modal agregar materiales -->
                 <div class="modal fade" id="modal-agregar-material">
                     <link rel="stylesheet" href="../dist/css/switch_materiales.css">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Agregar Meterial</h4>
+                                <h4 class="modal-title">Agregar Insumos</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span class="text-danger" aria-hidden="true">&times;</span>
                                 </button>
@@ -1299,7 +1307,7 @@
                                             <div class="col-lg-12 class_pading">
                                                 <div class="form-group">
                                                     <label for="nombre">Nombre</label>
-                                                    <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del material." />
+                                                    <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del insumo." />
                                                 </div>
 
                                             </div>
