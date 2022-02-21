@@ -19,9 +19,6 @@ $subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subt
 $igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
 $total_compra_af_p = isset($_POST["total_compra_af_p"]) ? limpiarCadena($_POST["total_compra_af_p"]) : "";
 
-//$subtotal_compra,$igv_compra
-//$idproyecto, $idproveedor, $fecha_compra, $tipo_comprobante, $serie_comprobante, $descripcion
-//,$_POST["idactivos_fijos"],$_POST["cantidad"]_POST["precio_unitario"],$_POST["descuento"]
 //============factura========================
 //$idproyectof,$idfacturacompra,$idcompra_af_proyecto,$codigo
 $idproyectof = isset($_POST["idproyectof"]) ? limpiarCadena($_POST["idproyectof"]) : "";

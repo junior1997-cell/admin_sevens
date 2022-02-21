@@ -134,14 +134,14 @@
                             <thead>
                               <tr>
                                 <th class="">Acciones</th>
+                                <th>Descripción</th>
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                 <th>Total</th>
                                 <th>Añadir pago</th>
                                 <th>Saldo</th>
-                                <th>Comprobantes</th>
-                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
                                 <th>Estado</th>
                               </tr>
                             </thead>
@@ -149,14 +149,14 @@
                             <tfoot>
                               <tr>
                                 <th class="">Acciones</th>
+                                <th>Descripción</th>
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                 <th>Total</th>
                                 <th>Añadir pago</th>
                                 <th>Saldo</th>
-                                <th>Comprobantes</th>
-                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
                                 <th>Estado</th>
                               </tr>
                             </tfoot>
