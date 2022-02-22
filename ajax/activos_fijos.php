@@ -14,27 +14,26 @@
       
       require_once "../modelos/Activos_fijos.php";
 
-      $activos_fijos = new Activos_fijos();
+      $activos_fijos = new Activos_fijos();       
 
-      $idactivos_fijos = isset($_POST["idactivos_fijos"]) ? limpiarCadena($_POST["idactivos_fijos"]) : "";
-      $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
-      $modelo = isset($_POST["modelo"]) ? limpiarCadena($_POST["modelo"]) : "";
-      $serie = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "";
-      $marca = isset($_POST["marca"]) ? limpiarCadena($_POST["marca"]) : "";
-      $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
-      $unid_medida = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "";
-      $precio_compra = isset($_POST["precio_compra"]) ? limpiarCadena($_POST["precio_compra"]) : "";
-      $subtotal = isset($_POST["subtotal"]) ? limpiarCadena($_POST["subtotal"]) : "";
-      $igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
-      $total = isset($_POST["total"]) ? limpiarCadena($_POST["total"]) : "";
-      $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+      $idproducto     = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "" ;
+      $unidad_medida  = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "" ;
+      $color          = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "" ;
+      $idcategoria    = isset($_POST["categoria_insumos_af"]) ? limpiarCadena($_POST["categoria_insumos_af"]) : "" ;
+      $nombre         = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "" ;
+      $modelo         = isset($_POST["modelo"]) ? limpiarCadena($_POST["modelo"]) : "" ;
+      $serie          = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "" ;
+      $marca          = isset($_POST["marca"]) ? limpiarCadena($_POST["marca"]) : "" ;
+      $estado_igv     = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "" ;
+      $precio_unitario= isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "" ;      
+      $precio_sin_igv = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "" ;
+      $precio_igv     = isset($_POST["precio_igv"]) ? limpiarCadena($_POST["precio_igv"]) : "" ;
+      $precio_total   = isset($_POST["precio_total"]) ? limpiarCadena($_POST["precio_total"]) : "" ;      
+      $descripcion    = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "" ; 
 
-      $foto1 = isset($_POST["foto1"]) ? limpiarCadena($_POST["foto1"]) : "";
+      $img_pefil = isset($_POST["foto1"]) ? limpiarCadena($_POST["foto1"]) : "" ;
+      $ficha_tecnica = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
 
-      $foto2 = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "";
-
-      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
- 
       switch ($_GET["op"]) {
 
         case 'guardaryeditar':
@@ -75,9 +74,9 @@
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica);
           }
 
-          if (empty($idactivos_fijos)) {
+          if (empty($idproducto)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $activos_fijos->insertar($color, $unid_medida, $nombre, $modelo, $serie, $marca, $precio_compra, $subtotal, $igv, $total, $descripcion, $imagen1, $ficha_tecnica, $estado_igv);
+            $rspta = $activos_fijos->insertar( $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 
@@ -86,7 +85,7 @@
             // validamos si existe LA IMG para eliminarlo
             if ($flat_img1 == true) {
 
-              $datos_f1 = $activos_fijos->obtenerImg($idactivos_fijos);
+              $datos_f1 = $activos_fijos->obtenerImg($idproducto);
 
               $img1_ant = $datos_f1->fetch_object()->imagen;
 
@@ -96,7 +95,7 @@
               }
             }
             
-            $rspta = $activos_fijos->editar($idactivos_fijos, $color, $unid_medida, $nombre, $modelo, $serie, $marca, $precio_compra, $subtotal, $igv, $total, $descripcion, $imagen1, $ficha_tecnica, $estado_igv);
+            $rspta = $activos_fijos->editar( $idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
             //var_dump($idactivos_fijos,$idproveedor);
             echo $rspta ? "ok" : "No se pudo actualizar";
           }
@@ -105,7 +104,7 @@
 
         case 'desactivar':
 
-          $rspta = $activos_fijos->desactivar($idactivos_fijos);
+          $rspta = $activos_fijos->desactivar($idproducto);
 
           echo $rspta ? "material Desactivado" : "material no se puede desactivar";
 
@@ -113,7 +112,7 @@
 
         case 'activar':
 
-          $rspta = $activos_fijos->activar($idactivos_fijos);
+          $rspta = $activos_fijos->activar($idproducto);
 
           echo $rspta ? "Material activado" : "material no se puede activar";
 
@@ -121,7 +120,7 @@
 
         case 'mostrar':
 
-          $rspta = $activos_fijos->mostrar($idactivos_fijos);
+          $rspta = $activos_fijos->mostrar($idproducto);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -158,9 +157,10 @@
               ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
               "1" =>'<div class="user-block"> <img class="profile-user-img img-responsive img-circle" ' . $imagen . ' alt="user image" onerror="'.$imagen_error.'">
                 <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
-                <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
+                <span class="description"><b>Marca: </b>' . $reg->marca . '</span>
+                <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>
               </div>',
-              "2" => $reg->marca,
+              "2" => $reg->categoria, 
               "3" => number_format($reg->precio_unitario, 2, '.', ','),
               "4" => number_format($reg->precio_sin_igv, 2, '.', ','),
               "5" => number_format($igv, 2, '.', ','),
@@ -178,6 +178,39 @@
           ];
 
           echo json_encode($results);
+
+        break;
+
+        case 'select2Color': 
+
+          $rspta = $activos_fijos->select2_color();
+      
+          while ($reg = $rspta->fetch_object())  {
+
+            echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+          }
+
+        break;
+
+        case 'select2UnidaMedida': 
+
+          $rspta = $activos_fijos->select2_unidad_medida();
+      
+          while ($reg = $rspta->fetch_object())  {
+
+            echo '<option value=' . $reg->id . '>' . $reg->nombre . ' - ' . $reg->abreviacion .'</option>';
+          }
+
+        break;
+
+        case 'select2Categoria': 
+
+          $rspta = $activos_fijos->select2_categoria();
+      
+          while ($reg = $rspta->fetch_object())  {
+
+            echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+          }
 
         break;
 

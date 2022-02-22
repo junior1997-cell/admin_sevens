@@ -65,17 +65,17 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                           <table id="tabla-activos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead>
+                            <thead> 
                               <tr>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
-                                <th>Marca</th>
-                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                <th>Ficha técnica</th>
-                                <th>Estado</th>
+                                <th>Categoria</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                <th class="text-center">Ficha técnica</th>
+                                <th class="text-center">Estado</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -83,13 +83,13 @@
                               <tr>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
-                                <th>Marca</th>
-                                <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                <th>Ficha técnica</th>
-                                <th>Estado</th>
+                                <th>Categoria</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                <th class="text-center">Ficha técnica</th>
+                                <th class="text-center">Estado</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -120,7 +120,10 @@
                         <form id="form-materiales-activos-fijos" name="form-materiales-activos-fijos" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
-                              <input type="hidden" name="idactivos_fijos" id="idactivos_fijos" />
+                              <!--  -->
+                              <input type="hidden" name="idproducto" id="idproducto" />
+                               
+
                               <!-- Nombre -->
                               <div class="col-lg-8 class_pading">
                                 <div class="form-group">
@@ -128,29 +131,39 @@
                                   <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del activo." />
                                 </div>
                               </div>
-                              <!-- Modelo -->
+
+                              <!-- Categoria -->
                               <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="categoria_insumos_af">Categoria</label>
+                                  <select name="categoria_insumos_af" id="categoria_insumos_af" class="form-control select2" style="width: 100%;"> 
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- Modelo -->
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="modelo">Modelo <sup class="text-danger">*</sup> </label>
                                   <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
                                 </div>
                               </div>
                               <!-- Serie -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="serie">Serie </label>
                                   <input class="form-control" type="text" id="serie" name="serie" placeholder="Serie." />
                                 </div>
                               </div>
                               <!-- Marca -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="marca">Marca </label>
                                   <input class="form-control" type="text" id="marca" name="marca" placeholder="Marca de activo." />
                                 </div>
                               </div>
                               <!-- Color -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="color">Color</label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
@@ -166,8 +179,8 @@
                               <!--Precio U-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="precio_compra">Precio <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_compra" class="form-control miimput" id="precio_compra" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                  <label for="precio_unitario">Precio <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                 </div>
                               </div>
                               <!-- Rounded switch -->
@@ -188,22 +201,22 @@
                               <!--Sub Total subtotal igv total-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub Total</label>
-                                  <input type="number" class="form-control" name="subtotal" id="subtotal" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                  <label for="precio_sin_igv">Sub Total</label>
+                                  <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                 </div>
                               </div>
                               <!--IGV-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="igv">IGV</label>
-                                  <input type="number" class="form-control" name="igv" id="igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                  <label for="precio_igv">IGV</label>
+                                  <input type="number" class="form-control" name="precio_igv" id="precio_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                 </div>
                               </div>
                               <!--Total-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="subtotal">Total</label>
-                                  <input type="number" class="form-control" name="total" id="total" placeholder="Precio real." readonly />
+                                  <label for="precio_total">Total</label>
+                                  <input type="number" class="form-control" name="precio_total" id="precio_total" placeholder="Precio real." readonly />
                                 </div>
                               </div>
                               <!--Descripcion-->
