@@ -88,13 +88,11 @@ function limpiar() {
   $("#imagen1_actual").val("");
   $("#imagen1_nombre").html("");
 
-  $("#imagen_ficha_i").attr("src", "../dist/img/default/pdf.png");
-  $("#imagen_ficha").val("");
-  $("#imagen_ficha_actual").val("");
-  $("#ver_pdf").val("");
-  $("#imagen_ficha_nombre").html("");
-  $("#imagen_ficha_i").show();
-  $("#ver_pdf").hide();
+  $("#doc_old_2").val("");
+  $("#doc2").val("");  
+  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc2_nombre').html("");
+
   $("#unid_medida").val("null").trigger("change");
   $("#color").val("1").trigger("change");
   $("#my-switch_igv").prop("checked", true);
@@ -133,7 +131,7 @@ function listar() {
         },
       },
       bDestroy: true,
-      iDisplayLength: 5, //Paginación
+      iDisplayLength: 10, //Paginación
       order: [[0, "desc"]], //Ordenar (columna,orden)
     })
     .DataTable();
@@ -208,8 +206,8 @@ function mostrar(idproducto) {
   $("#color").val("").trigger("change");
 
   $.post("../ajax/materiales.php?op=mostrar", { idproducto: idproducto }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+    
+    data = JSON.parse(data); console.log(data);
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
@@ -223,7 +221,7 @@ function mostrar(idproducto) {
     $("#estado_igv").val(data.estado_igv);
     $("#monto_igv").val(data.precio_igv);
     $("#precio_real").val(data.precio_sin_igv);
-    /**-------------------------*/
+     
     $("#unid_medida").val(data.idunidad_medida).trigger("change");
     $("#color").val(data.idcolor).trigger("change");
 
@@ -231,46 +229,53 @@ function mostrar(idproducto) {
 
     $(".precio_real").val(parseFloat(data.precio_sin_igv).toFixed(2));
     $(".total").val(parseFloat(data.precio_total).toFixed(2));
-    $(".monto_igv").val(parseFloat(data.precio_igv).toFixed(2));
-    //------------
+    $(".monto_igv").val(parseFloat(data.precio_igv).toFixed(2));     
 
     if (data.estado_igv == "1") {
       $("#my-switch_igv").prop("checked", true);
     } else {
       $("#my-switch_igv").prop("checked", false);
     }
-
-    //----------------------
+     
     if (data.imagen != "") {
-      $("#imagen1_i").attr("src", "../dist/img/materiales/" + data.imagen);
+      $("#imagen1_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
 
       $("#imagen1_actual").val(data.imagen);
     }
 
-    if (data.ficha_tecnica != "") {
-      $("#imagen_ficha_actual").val(data.ficha_tecnica);
-      $("#ver_pdf").html("");
-      $("#imagen_ficha_i").attr("src", "");
+    // FICHA TECNICA
+    if (data.ficha_tecnica == "" || data.ficha_tecnica == null  ) {
 
-      $("#imagen_ficha_i").hide();
-      $("#ver_pdf").show();
-      $("#ver_pdf").html('<iframe src="../dist/ficha_tecnica_materiales/' + data.ficha_tecnica + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
-      $("#imagen_ficha_nombre").html(
-        "" +
-          '<div class="row">' +
-          '<div class="col-md-12">.</div>' +
-          '<div class="col-md-12">' +
-          '<button  class="btn btn-danger  btn-block" onclick="imagen_ficha_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-          "</div>" +
-          "</div>" +
-          ""
-      );
+      $("#doc1_nombre").html('');
+
+      $("#doc_old_2").val(""); $("#doc1").val("");
+
     } else {
-      $("#imagen_ficha_i").show();
-      $("#ver_pdf").html("");
-      $("#imagen_ficha_nombre").html("");
-      $("#ver_pdf").hide();
+
+      $("#doc_old_2").val(data.ficha_tecnica); 
+
+      $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(data.ficha_tecnica)}</i></div></div>`);
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.ficha_tecnica) == "pdf" ) {
+
+        $("#doc2_ver").html('<iframe src="../dist/docs/material/ficha_tecnica/'+data.ficha_tecnica+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+      }else{
+        if (
+          extrae_extencion(data.ficha_tecnica) == "jpeg" || extrae_extencion(data.ficha_tecnica) == "jpg" || extrae_extencion(data.ficha_tecnica) == "jpe" ||
+          extrae_extencion(data.ficha_tecnica) == "jfif" || extrae_extencion(data.ficha_tecnica) == "gif" || extrae_extencion(data.ficha_tecnica) == "png" ||
+          extrae_extencion(data.ficha_tecnica) == "tiff" || extrae_extencion(data.ficha_tecnica) == "tif" || extrae_extencion(data.ficha_tecnica) == "webp" ||
+          extrae_extencion(data.ficha_tecnica) == "bmp" || extrae_extencion(data.ficha_tecnica) == "svg" ) {
+
+          $("#doc2_ver").html(`<img src="../dist/docs/material/ficha_tecnica/${data.ficha_tecnica}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          
+        } else {
+          $("#doc2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+        }        
+      }      
     }
   });
 }
@@ -464,62 +469,86 @@ function addImage(e, id) {
 
   console.log(id);
 
-  var file = e.target.files[0],
-    imageType = /image.*/;
+  var file = e.target.files[0], imageType = /image.*/;
 
   if (e.target.files[0]) {
     var sizeByte = file.size;
 
     var sizekiloBytes = parseInt(sizeByte / 1024);
 
-    var sizemegaBytes = sizeByte / 1000000;
-    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+    var sizemegaBytes = sizeByte / 1000000; 
 
     if (!file.type.match(imageType)) {
-      // return;
-      toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>");
+       
+      // toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .png .jpeg .jpg .webp etc...',
+        showConfirmButton: false,
+        timer: 1500
+      });
 
       $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
+
     } else {
+
       if (sizekiloBytes <= 10240) {
+
         var reader = new FileReader();
 
         reader.onload = fileOnload;
 
         function fileOnload(e) {
+
           var result = e.target.result;
 
-          $("#" + id + "_i").attr("src", result);
+          $(`#${id}_i`).attr("src", result);
 
-          $("#" + id + "_nombre").html(
-            "" +
-              '<div class="row">' +
-              '<div class="col-md-4"></div>' +
-              '<div class="col-md-4">' +
-              "</br>" +
-              '<button  class="btn btn-danger  btn-block" onclick="' +
-              id +
-              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-              "</div>" +
-              '<div class="col-md-4"></div>' +
-              "</div>" +
-              ""
+          $(`#${id}_nombre`).html(
+            
+            `<div class="row">
+              <div class="col-md-12"> <i> ${file.name} </i></div>
+              <div class="col-md-12">                
+                <button class="btn btn-danger btn-block btn-xs" onclick="${id}'_eliminar();" type="button" >
+                  <i class="far fa-trash-alt"></i>
+                </button>
+              </div>               
+            </div>`               
           );
 
-          toastr.success("Imagen aceptada.");
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
 
         reader.readAsDataURL(file);
       } else {
-        toastr.warning("La imagen: " + file.name.toUpperCase() + " es muy pesada. Tamaño máximo 10mb");
-
+         
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: `El documento: ${file.name.toUpperCase()} es muy pesado. Tamaño máximo 10mb`,
+          showConfirmButton: false,
+          timer: 1500
+        })
         $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
 
         $("#" + id).val("");
       }
     }
   } else {
-    toastr.error("Seleccione una Imagen");
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    })
 
     $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
 

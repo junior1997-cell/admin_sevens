@@ -12,15 +12,27 @@ var array_class_trabajador = [];
 //Requejo99@
 //Función que se ejecuta al inicio
 function init() {
+
   listar(localStorage.getItem("nube_idproyecto"));
 
   fecha_actual();
+
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
-  //Cargamos los items al select cliente
-  $.post("../ajax/compra.php?op=selectProveedor", function (r) {
-    $("#idproveedor").html(r);
-  });
+  //Mostramos los proveedores
+  $.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
+  
+  // Mostra,ps los bancos
+  $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); });
+  
+  //Mostramos colores
+  $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color").html(r); });
+
+  //Mostramos las unidades de medida
+  $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unid_medida").html(r); });
+
+  //Mostramos las categorias del producto
+  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af").html(r); });
 
   $("#bloc_Compras").addClass("menu-open");
 
@@ -29,298 +41,96 @@ function init() {
   $("#lCompras").addClass("active");
 
   // guardar el registro de la compra
-  $("#guardar_registro_compras").on("click", function (e) {
-    $("#submit-form-compras").submit();
-  });
+  $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
 
   //guardar registro proveedor
-  $("#guardar_registro_proveedor").on("click", function (e) {
-    $("#submit-form-proveedor").submit();
-   
-  });
-  //=====Guardar pago=============
-  $("#guardar_registro_pago").on("click", function (e) {
-    $("#submit-form-pago").submit();
-  });
+  $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
+
+  //Guardar pago
+  $("#guardar_registro_pago").on("click", function (e) {  $("#submit-form-pago").submit(); });
+
   //subir factura modal
-  $("#guardar_registro_2").on("click", function (e) {
-    $("#submit-form-planootro").submit();
-  });
-  $.post("../ajax/bancos.php?op=selectbancos_2", function (r) {
-    $("#banco_pago").html(r);
-  });
-  //Initialize Select2 Elements
+  $("#guardar_registro_2").on("click", function (e) {  $("#submit-form-planootro").submit();  });  
+
+   //materiales  
+  $("#guardar_registro").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
+
+  //Initialize Select2 BANCO
   $("#banco_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un banco",
     allowClear: true,
-  });
-  $("#banco_pago").val("null").trigger("change");
+  });  
 
-  //Initialize Select2 Elements
+  //Initialize Select2 PROVEEDOR
   $("#idproveedor").select2({
     theme: "bootstrap4",
     placeholder: "Selecione trabajador",
     allowClear: true,
   });
 
-  //Initialize Select2 Elements
+  //Initialize Select2 TIPO DE COMPROBANTE
   $("#tipo_comprovante").select2({
     theme: "bootstrap4",
     placeholder: "Selecione Comprobante",
     allowClear: true,
   });
-  //============pagoo================
-  //Initialize Select2 Elements
+
+  //Initialize Select2 FORMA DE PAGO
   $("#forma_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione una forma de pago",
     allowClear: true,
   });
-  //Initialize Select2 Elements
+
+  //Initialize Select2 TIPO DE PAGO
   $("#tipo_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un tipo de pago",
     allowClear: true,
   });
 
-  $("#idproveedor").val("null").trigger("change");
-
-  //===============Pago============
-  $("#forma_pago").val("null").trigger("change");
-  $("#tipo_pago").val("null").trigger("change");
-
-  //vaucher
-  $("#foto1_i").click(function () {
-    $("#foto1").trigger("click");
-  });
-  $("#foto1").change(function (e) {
-    addImage(e, $("#foto1").attr("id"));
+  //Initialize Select2 CATEGORIA
+  $("#categoria_insumos_af").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar color",
+    allowClear: true,
   });
 
-  //Factura
-  $("#foto2_i").click(function () {
-    $("#foto2").trigger("click");
-  });
-  $("#foto2").change(function (e) {
-    addImage(e, $("#foto2").attr("id"));
-  });
-
-  //subir factura modal
-  $("#doc1_i").click(function () {
-    $("#doc1").trigger("click");
-  });
-  $("#doc1").change(function (e) {
-    addDocs(e, $("#doc1").attr("id"));
-  });
-  //materiales
-  
-  $("#guardar_registro").on("click", function (e) {
-    $("#submit-form-materiales").submit();
-  });
-
-  $("#imagen1_i").click(function () {
-    $("#imagen1").trigger("click");
-  });
-  $("#imagen1").change(function (e) {
-    addImage(e, $("#imagen1").attr("id"));
-  });
-  //ficha tecnica
-  $("#imagen_ficha_i").click(function () {
-    $("#imagen_ficha").trigger("click");
-  });
-  $("#imagen_ficha").change(function (e) {
-    addficha(e, $("#imagen_ficha").attr("id"));
-  });
-
-  //Mostramos colores
-  $.post("../ajax/color.php?op=selectcolor", function (r) {
-    $("#color").html(r);
-  });
-  //Mostramos colores
-  $.post("../ajax/unidades_m.php?op=selectUnidad", function (r) {
-    $("#unid_medida").html(r);
-  });
-
-  //Initialize Select2 color
+  //Initialize Select2 COLOR
   $("#color").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar color",
     allowClear: true,
   });
-  //Initialize Select2 unidad
+
+  //Initialize Select2 UNIDAD DE MEDIDA
   $("#unid_medida").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar una unidad",
     allowClear: true,
   });
-  //============unidad================
-  $("#unid_medida").val("null").trigger("change");
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
 
+//vaucher
+$("#foto1_i").click(function () { $("#foto1").trigger("click"); });
+$("#foto1").change(function (e) { addImage(e, $("#foto1").attr("id")); });
 
-/* PREVISUALIZAR LOS PDF */
-function addficha(e, id) {
-  // colocamos cargando hasta que se vizualice
-  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+//subir factura modal
+$("#doc1_i").click(function () {  $("#doc1").trigger("click"); });
+$("#doc1").change(function (e) { addDocs(e, $("#doc1").attr("id")); });
 
-  console.log(id);
+// Perfil material
+$("#foto2_i").click(function () {  $("#foto2").trigger("click"); });
+$("#foto2").change(function (e) { addImage(e, $("#foto2").attr("id")); });
 
-  var file = e.target.files[0],
-    imageType = /application.*/;
+//ficha tecnica
+$("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
+$("#doc2").change(function(e) {  addDocs(e,$("#doc2").attr("id")) });
 
-  if (e.target.files[0]) {
-    var sizeByte = file.size;
-
-    var sizekiloBytes = parseInt(sizeByte / 1024);
-
-    var sizemegaBytes = sizeByte / 1000000;
-    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-    if (extrae_extencion(file.name) == "pdf" || extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "png" || extrae_extencion(file.name) == "webp") {
-      if (sizekiloBytes <= 10240) {
-        var reader = new FileReader();
-
-        reader.onload = fileOnload;
-
-        function fileOnload(e) {
-          var result = e.target.result;
-          if (extrae_extencion(file.name) == "pdf") {
-            $("#imagen_ficha_i").hide();
-            $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          } else {
-            $("#" + id + "_i").attr("src", result);
-            $("#imagen_ficha_i").show();
-          }
-
-          $("#" + id + "_nombre").html(
-            "" +
-              '<div class="row">' +
-              '<div class="col-md-12">' +
-              file.name +
-              "</div>" +
-              '<div class="col-md-12">' +
-              '<button  class="btn btn-danger  btn-block" onclick="' +
-              id +
-              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-              "</div>" +
-              "</div>" +
-              ""
-          );
-
-          toastr.success("Imagen aceptada.");
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        toastr.warning("La imagen: " + file.name.toUpperCase() + " es muy pesada. Tamaño máximo 10mb");
-
-        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
-
-        $("#" + id).val("");
-      }
-    } else {
-      // return;
-      toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>");
-
-      $("#" + id + "_i").attr("src", "../dist/img/default/pdf.png");
-    }
-  } else {
-    toastr.error("Seleccione una Imagen");
-
-    $("#" + id + "_i").attr("src", "../dist/img/default/pdf.png");
-
-    $("#" + id + "_nombre").html("");
-  }
-}
-
-function imagen_ficha_eliminar() {
-  $("#imagen_ficha").val("");
-  $("#ver_pdf").html("");
-
-  $("#imagen_ficha_i").attr("src", "../dist/img/default/pdf.png");
-
-  $("#imagen_ficha_nombre").html("");
-  $("#imagen_ficha_i").show();
-}
-/* PREVISUALIZAR LAS IMAGENES */
-function addImage(e, id) {
-  // colocamos cargando hasta que se vizualice
-  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  console.log(id);
-
-  var file = e.target.files[0],
-    imageType = /application.*/;
-
-  if (e.target.files[0]) {
-    var sizeByte = file.size;
-
-    var sizekiloBytes = parseInt(sizeByte / 1024);
-
-    var sizemegaBytes = sizeByte / 1000000;
-    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-    if (extrae_extencion(file.name) == "pdf" || extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "png" || extrae_extencion(file.name) == "webp") {
-      if (sizekiloBytes <= 10240) {
-        var reader = new FileReader();
-
-        reader.onload = fileOnload;
-
-        function fileOnload(e) {
-          var result = e.target.result;
-          if (extrae_extencion(file.name) == "pdf") {
-            $("#foto2_i").hide();
-            console.log("pdf..." + result);
-            $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          } else {
-            $("#" + id + "_i").attr("src", result);
-            $("#foto2_i").show();
-          }
-
-          $("#" + id + "_nombre").html(
-            "" +
-              '<div class="row">' +
-              '<div class="col-md-12">' +
-              file.name +
-              "</div>" +
-              '<div class="col-md-12">' +
-              '<button  class="btn btn-danger  btn-block" onclick="' +
-              id +
-              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-              "</div>" +
-              "</div>" +
-              ""
-          );
-
-          toastr.success("Imagen aceptada.");
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        toastr.warning("La imagen: " + file.name.toUpperCase() + " es muy pesada. Tamaño máximo 10mb");
-
-        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
-
-        $("#" + id).val("");
-      }
-    } else {
-      // return;
-      toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>");
-
-      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto.png");
-    }
-  } else {
-    toastr.error("Seleccione una Imagen");
-
-    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto2.png");
-
-    $("#" + id + "_nombre").html("");
-  }
-}
 
 function foto1_eliminar() {
   $("#foto1").val("");
@@ -330,186 +140,33 @@ function foto1_eliminar() {
   $("#foto1_nombre").html("");
 }
 
-function imagen1_eliminar() {
-  $("#imagen1").val("");
-
-  $("#imagen1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
-
-  $("#imagen1_nombre").html("");
-}
-
-function foto2_eliminar() {
-  $("#foto2").val("");
-  $("#ver_pdf").html("");
-
-  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-
-  $("#foto2_nombre").html("");
-  $("#foto2_i").show();
-}
-
-/* PREVISUALIZAR LAS DOCS */
-function addDocs(e, id) {
-  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-  // console.log(id);
-
-  var file = e.target.files[0],
-    imageType = false;
-
-  if (e.target.files[0]) {
-    // console.log(extrae_extencion(file.name));
-    var sizeByte = file.size;
-
-    var sizekiloBytes = parseInt(sizeByte / 1024);
-
-    var sizemegaBytes = sizeByte / 10000;
-    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-    if (imageType) {
-      // return;
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.xlsx",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      $("#" + id + "_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto.png");
-    } else {
-      if (sizekiloBytes <= 262144) {
-        var reader = new FileReader();
-
-        reader.onload = fileOnload;
-
-        function fileOnload(e) {
-          var result = e.target.result;
-
-          // cargamos la imagen adecuada par el archivo
-          if (extrae_extencion(file.name) == "xls") {
-            $("#" + id + "_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(file.name) == "xlsx") {
-              $("#" + id + "_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-            } else {
-              if (extrae_extencion(file.name) == "csv") {
-                $("#" + id + "_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(file.name) == "xlsm") {
-                  $("#" + id + "_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                } else {
-                  if (extrae_extencion(file.name) == "pdf") {
-                    // $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    $("#" + id + "_ver").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-                  } else {
-                    if (extrae_extencion(file.name) == "dwg") {
-                      $("#" + id + "_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-                    } else {
-                      if (extrae_extencion(file.name) == "zip" || extrae_extencion(file.name) == "rar" || extrae_extencion(file.name) == "iso") {
-                        $("#" + id + "_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                      } else {
-                        if (
-                          extrae_extencion(file.name) == "jpeg" ||
-                          extrae_extencion(file.name) == "jpg" ||
-                          extrae_extencion(file.name) == "jpe" ||
-                          extrae_extencion(file.name) == "jfif" ||
-                          extrae_extencion(file.name) == "gif" ||
-                          extrae_extencion(file.name) == "png" ||
-                          extrae_extencion(file.name) == "tiff" ||
-                          extrae_extencion(file.name) == "tif" ||
-                          extrae_extencion(file.name) == "webp" ||
-                          extrae_extencion(file.name) == "bmp"
-                        ) {
-                          $("#" + id + "_ver").html('<img src="' + result + '" alt="" width="50%" >');
-                        } else {
-                          if (
-                            extrae_extencion(file.name) == "docx" ||
-                            extrae_extencion(file.name) == "docm" ||
-                            extrae_extencion(file.name) == "dotx" ||
-                            extrae_extencion(file.name) == "dotm" ||
-                            extrae_extencion(file.name) == "doc" ||
-                            extrae_extencion(file.name) == "dot"
-                          ) {
-                            $("#" + id + "_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                          } else {
-                            $("#" + id + "_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          $("#" + id + "_nombre").html(
-            "" +
-              '<div class="row">' +
-              '<div class="col-md-12">' +
-              "<i>" +
-              file.name +
-              "</i>" +
-              "</div>" +
-              '<div class="col-md-12">' +
-              '<button  class="btn btn-danger  btn-block" onclick="' +
-              id +
-              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-              "</div>" +
-              "</div>" +
-              ""
-          );
-
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "El documento: " + file.name.toUpperCase() + " es aceptado.",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "warning",
-          title: "El documento: " + file.name.toUpperCase() + " es muy pesado. Tamaño máximo 150mb",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        $("#" + id + "_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
-
-        $("#" + id).val("");
-      }
-    }
-  } else {
-    Swal.fire({
-      position: "top-end",
-      icon: "error",
-      title: "Seleccione un documento",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-
-    $("#" + id + "_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    $("#" + id + "_nombre").html("");
-  }
-}
-
-// Eliminamos el doc comprobante
+// Eliminamos el doc COMPROBANTE
 function doc1_eliminar() {
   $("#doc1").val("");
 
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
   $("#doc1_nombre").html("");
+}
+
+// Eliminamos el doc FOTO PERFIL MATERIAL
+function foto2_eliminar() {
+  $("#foto2").val("");
+  $("#ver_pdf").html("");
+
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
+
+  $("#foto2_nombre").html("");
+  $("#foto2_i").show();
+}
+
+// Eliminamos el doc FICHA TECNICA
+function doc2_eliminar() {
+  $("#doc2").val("");
+
+  $("#doc2_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+  $("#doc2_nombre").html("");
 }
 
 function fecha_actual() {
@@ -879,359 +536,6 @@ function des_anular(idcompra_proyecto) {
       });
     }
   });
-}
-
-//=========================================
-//SECCION-facturas-compras
-//=========================================
-
-function facturas_compras(idcompra_proyecto, idproyecto) {
-  total_monto_f(idcompra_proyecto, idproyecto);
-  localStorage.setItem("idcompra_com_nube", idcompra_proyecto);
-  localStorage.setItem("idproyecto_com_nube", idproyecto);
-
-  $("#idcomp_proyecto").val(idcompra_proyecto);
-  $("#idproyectof").val(idproyecto);
-
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  // $("#agregar_compras").show();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-  $("#factura_compras").show();
-  $("#btn-factura").show();
-
-  tabla_facturas = $("#tabla_facturas")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_facturas&idcompra_proyecto=" + idcompra_proyecto + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-}
-
-//Calcular Igv y subtotal
-function igv_subtotal() {
-  var subtotall = 0;
-  var igvv = 0;
-  $("#subtotal_compraa").val("");
-  $("#igv_compraa").val("");
-
-  var mont = $("#monto_compraa").val();
-  var monto = parseFloat(mont);
-  console.log(monto);
-  // var subbbb= $('#subtotal_compra').val();
-  //console.log(subbbb);
-
-  subtotall = monto / 1.18;
-  console.log("subtotal " + subtotal);
-
-  igvv = monto - subtotall;
-  console.log("igvv " + igvv);
-  $("#subtotal_compraa").val(subtotall.toFixed(4));
-  //console.log(subtotall.toFixed(4));
-  $("#igv_compraa").val(igvv.toFixed(4));
-}
-
-//Función limpiar-factura
-function limpiar_factura() {
-  $("#codigo").val("");
-  $("#monto_compraa").val("");
-  $("#idfacturacompra").val("");
-  $("#fecha_emision").val("");
-  $("#descripcion_f").val("Por concepto de alquiler de maquinaria");
-  $("#subtotal_compraa").val("");
-  $("#igv_compraa").val("");
-  $("#nota").val("");
-  $("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
-  $("#foto2_i").show();
-  $("#ver_pdf").html("");
-  $("#foto2").val("");
-  $("#foto2_actual").val("");
-  $("#foto2_nombre").html("");
-}
-
-function guardaryeditar_factura(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-agregar-factura")[0]);
-
-  $.ajax({
-    url: "../ajax/compra.php?op=guardaryeditar_factura",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        toastr.success("servicio registrado correctamente");
-
-        tabla_facturas.ajax.reload();
-        tabla.ajax.reload();
-
-        $("#modal-agregar-factura").modal("hide");
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        limpiar_factura();
-      } else {
-        toastr.error(datos);
-      }
-    },
-  });
-}
-
-//-total montos facturas
-function total_monto_f(idcompra_proyecto, idproyecto) {
-  $.post("../ajax/compra.php?op=total_monto_f", { idcompra_proyecto: idcompra_proyecto, idproyecto: idproyecto }, function (data, status) {
-    $("#monto_total_f").html("00.0");
-    data = JSON.parse(data);
-
-    $("#monto_total_f").html(formato_miles(data.total_mont_f));
-  });
-}
-
-function ver_modal_factura(imagen) {
-  var img = imagen;
-  var extencion = img.substr(img.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
-  $("#modal-ver-factura").modal("show");
-
-  if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-    $("#ver_fact_pdf").hide();
-    $("#img-factura").show();
-    $("#img-factura").attr("src", "../dist/img/facturas_compras/" + img);
-
-    $("#iddescargar").attr("href", "../dist/img/facturas_compras/" + img);
-  } else {
-    $("#img-factura").hide();
-    $("#ver_fact_pdf").show();
-    $("#ver_fact_pdf").html('<iframe src="../dist/img/facturas_compras/' + img + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href", "../dist/img/facturas_compras/" + img);
-  }
-}
-//mostrar
-function mostrar_factura(idfacturacompra) {
-  limpiar_factura();
-  $("#modal-agregar-factura").modal("show");
-
-  $.post("../ajax/compra.php?op=mostrar_factura", { idfacturacompra: idfacturacompra }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    $("#idfacturacompra").val(data.idfacturacompra);
-    $("#codigo").val(data.codigo);
-    $("#monto_compraa").val(data.monto);
-    $("#fecha_emision").val(data.fecha_emision);
-    $("#descripcion_f").val(data.descripcion);
-    $("#subtotal_compraa").val(data.subtotal);
-    $("#igv_compraa").val(data.igv);
-    console.log(data.imagen);
-
-    if (data.imagen != "") {
-      var img = data.imagen;
-
-      $("#foto2_i").attr("src", "../dist/img/facturas_compras/" + data.imagen);
-
-      var extencion = img.substr(img.length - 3); // => "1"
-      // console.log(extencion);
-      $("#ver_pdf").html("");
-      $("#foto2_i").attr("src", "");
-
-      if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-        $("#ver_pdf").hide();
-        $("#foto2_i").show();
-        $("#foto2_i").attr("src", "../dist/img/facturas_compras/" + img);
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      } else {
-        $("#foto2_i").hide();
-        $("#ver_pdf").show();
-        $("#ver_pdf").html('<iframe src="../dist/img/facturas_compras/' + img + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      }
-
-      $("#foto2_actual").val(data.imagen);
-    }
-  });
-}
-//Función para desactivar registros
-function desactivar_factura(idfacturacompra) {
-  console.log(idfacturacompra);
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el servicio?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=desactivar_factura", { idfacturacompra: idfacturacompra }, function (e) {
-        Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
-        // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        tabla_facturas.ajax.reload();
-      });
-    }
-  });
-}
-
-function activar_factura(idfacturacompra) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  Servicio?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=activar_factura", { idfacturacompra: idfacturacompra }, function (e) {
-        Swal.fire("Activado!", "Servicio ha sido activado.", "success");
-
-        //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
-        total_monto_f(localStorage.getItem("idcompra_com_nube"), localStorage.getItem("idproyecto_com_nube"));
-        tabla_facturas.ajax.reload();
-      });
-    }
-  });
-}
-
-function comprobante_compras(idcompra_proyecto, doc) {
-  //console.log(idcompra_proyecto,doc);
-  $("#modal-comprobantes-pago").modal("show");
-  $("#comprobante_c").val(idcompra_proyecto);
-  $("#doc1_nombre").html("");
-  $("#doc_old_1").val("doc");
-  if (doc != "") {
-    $("#doc_old_1").val(doc);
-
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(doc) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-    } else {
-      if (extrae_extencion(doc) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-      } else {
-        if (extrae_extencion(doc) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-        } else {
-          if (extrae_extencion(doc) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(doc) == "pdf") {
-              $("#doc1_ver").html('<iframe src="../dist/comprobantes_compras/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-            } else {
-              if (extrae_extencion(doc) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                } else {
-                  if (
-                    extrae_extencion(doc) == "jpeg" ||
-                    extrae_extencion(doc) == "jpg" ||
-                    extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" ||
-                    extrae_extencion(doc) == "gif" ||
-                    extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" ||
-                    extrae_extencion(doc) == "tif" ||
-                    extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="../dist/comprobantes_compras/' + doc + '" alt="" width="50%" >');
-                  } else {
-                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                    } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    //ver_completo descargar comprobante subir
-
-    $(".ver_completo").val(doc);
-
-    //ver_completo descargar comprobante subir
-    // $(".subir").show();
-    $(".subir").removeClass("col-md-6").addClass("col-md-4");
-    $(".comprobante").removeClass("col-md-6").addClass("col-md-4");
-
-    $(".ver_completo").show();
-    $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
-
-    $(".descargar").show();
-    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
-
-    $("#ver_completo").attr("href", "../dist/comprobantes_compras/" + doc);
-    $("#descargar_comprob").attr("href", "../dist/comprobantes_compras/" + doc);
-  } else {
-    $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    // $("#doc1_nombre").html("");
-
-    $("#doc_old_1").val("");
-
-    $(".ver_completo").hide();
-    $(".descargar").hide();
-
-    $(".subir").removeClass("col-md-4").addClass("col-md-6");
-    $(".comprobante").removeClass("col-md-4").addClass("col-md-6");
-  }
 }
 
 //=========================================
@@ -1674,27 +978,31 @@ function ver_modal_vaucher(imagen) {
  */
 //Función ListarArticulos
 function listarmateriales() {
-  tablamateriales = $("#tblamateriales")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: [],
-      ajax: {
-        url: "../ajax/compra.php?op=listarMaterialescompra",
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
+  tablamateriales = $("#tblamateriales").dataTable({
+    responsive: true,
+    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [],
+    ajax: {
+      url: "../ajax/compra.php?op=listarMaterialescompra",
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: sueldo mensual
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-right');
+      }  
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    // order: [[0, "desc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 
 // .......:::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
@@ -1734,7 +1042,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -2085,7 +1393,7 @@ function editar_detalle_compras(idcompra_proyecto) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
@@ -2223,12 +1531,12 @@ function limpiar_materiales() {
   $(".is-invalid").removeClass("error is-invalid");
 }
 
-function guardaryeditar_materiales(e) {
+function guardar_y_editar_materiales(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-materiales")[0]);
 
   $.ajax({
-    url: "../ajax/materiales.php?op=guardaryeditar",
+    url: "../ajax/compra.php?op=guardar_y_editar_materiales",
     type: "POST",
     data: formData,
     contentType: false,
@@ -2242,13 +1550,14 @@ function guardaryeditar_materiales(e) {
         tablamateriales.ajax.reload();
         limpiar_materiales();
 
-        $("#modal-agregar-material").modal("hide");
+        $("#modal-agregar-material-activos-fijos").modal("hide");
       } else {
         toastr.error(datos);
       }
     },
   });
 }
+
 function precio_con_igv() {
   var precio_total = 0;
   var mont_igv = 0.0;
@@ -2259,38 +1568,29 @@ function precio_con_igv() {
 
   //var precio_r=0;
   precio_total = $("#precio_unitario").val();
-  $("#monto_igv").val(mont_igv.toFixed(2));
-  $("#precio_real").val(precio_total);
+
+  $("#precio_igv").val(mont_igv.toFixed(2));
+  $("#precio_sin_igv").val(precio_total);
 
   if ($("#my-switch_igv").is(":checked")) {
     precio_base = precio_total / 1.18;
     igv = precio_total - precio_base;
     precio_re = parseFloat(precio_total) - igv;
-
-    $("#monto_igv").val(redondearExp(igv, 4));
-    $("#precio_real").val(redondearExp(precio_re, 4));
-
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $(".precio_real").val(redondearExp(precio_re, 2));
-
-    $(".total").val(redondearExp(precio_re, 2) + redondearExp(igv, 2));
-    $("#total_precio").val(redondearExp(precio_re, 4) + redondearExp(igv, 4));
+    
+    $("#precio_igv").val(igv.toFixed(2));
+    $("#precio_sin_igv").val(precio_re.toFixed(2));
+    $("#precio_total").val((precio_re + igv).toFixed(2));
 
     $("#estado_igv").val("1");
   } else {
     precio_base = precio_total * 1.18;
-    console.log("precio_base precio_con_igv " + precio_base);
+
     igv = precio_base - precio_total;
     precio_re = parseFloat(precio_total) - igv;
 
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $("#monto_igv").val(redondearExp(igv, 4));
-
-    $(".precio_real").val(redondearExp(precio_total, 2));
-    $("#precio_real").val(redondearExp(precio_total, 4));
-
-    $(".total").val(redondearExp(precio_base, 2));
-    $("#total_precio").val(redondearExp(precio_base, 4));
+    $("#precio_igv").val(igv.toFixed(2));
+    $("#precio_sin_igv").val( parseFloat(precio_total).toFixed(2));
+    $("#precio_total").val(precio_base.toFixed(2));
 
     $("#estado_igv").val("0");
   }
@@ -2462,54 +1762,6 @@ $(function () {
     },
   });
 
-  // validar formulario FACTURA
-  // $.validator.setDefaults({
-  //     submitHandler: function (e) {
-  //         guardaryeditar_factura(e);
-  //     },
-  // });
-
-  $("#form-agregar-factura").validate({
-    rules: {
-      codigo: { required: true },
-      monto: { required: true },
-      fecha_emision: { required: true },
-      descripcion_f: { minlength: 1 },
-      foto2_i: { required: true },
-    },
-    messages: {
-      forma_pago: {
-        codigo: "Por favor ingresar el código",
-      },
-      monto: {
-        required: "Por favor ingresar el monto",
-      },
-      fecha_emision: {
-        required: "Por favor ingresar la fecha de emisión",
-      },
-    },
-
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass("is-invalid").addClass("is-valid");
-    },
-
-    submitHandler: function (e) {
-      guardaryeditar_factura(e);
-    },
-  });
-
   // Validar formulario PAGOS
   // $.validator.setDefaults({
   //     submitHandler: function (e) {
@@ -2613,7 +1865,7 @@ $(function () {
 $(function () {
   $.validator.setDefaults({
     submitHandler: function (e) {
-      guardaryeditar_materiales(e);
+      guardar_y_editar_materiales(e);
     },
   });
 
@@ -2655,7 +1907,8 @@ $(function () {
 });
 
 
-// .......:::::::::::::::::: -  FUNCIONES GENERALES ::::::::::::.......
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
 /**formato_miles */
 function formato_miles(num) {
   if (!num || num == "NaN") return "0.00";
@@ -2688,182 +1941,358 @@ function redondearExp(numero, digitos) {
   let entero = Math.round(toExp(Math.abs(numero), digitos));
   return Math.sign(numero) * toExp(entero, -digitos);
 }
-// recargar un doc para ver
-function re_visualizacion() {
-  $("#doc1_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 
-  pdffile = document.getElementById("doc1").files[0];
+/* PREVISUALIZAR LAS IMAGENES */
+function addImage(e, id) {
+  // colocamos cargando hasta que se vizualice
+  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 
-  antiguopdf = $("#doc_old_1").val();
+  console.log(id);
 
-  if (pdffile === undefined) {
-    var dr = antiguopdf;
+  var file = e.target.files[0], imageType = /image.*/;
 
-    if (dr == "") {
+  if (e.target.files[0]) {
+    var sizeByte = file.size;
+
+    var sizekiloBytes = parseInt(sizeByte / 1024);
+
+    var sizemegaBytes = sizeByte / 1000000; 
+
+    if (!file.type.match(imageType)) {
+       
+      // toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>");
       Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Seleccione un documento",
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .png .jpeg .jpg .webp etc...',
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       });
 
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
 
-      $("#doc1_nombre").html("");
     } else {
-      // cargamos la imagen adecuada par el archivo
-      if (extrae_extencion(dr) == "xls") {
-        $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
 
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+      if (sizekiloBytes <= 10240) {
+
+        var reader = new FileReader();
+
+        reader.onload = fileOnload;
+
+        function fileOnload(e) {
+
+          var result = e.target.result;
+
+          $(`#${id}_i`).attr("src", result);
+
+          $(`#${id}_nombre`).html(
+            
+            `<div class="row">
+              <div class="col-md-12"> <i> ${file.name} </i></div>
+              <div class="col-md-12">                
+                <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" >
+                  <i class="far fa-trash-alt"></i>
+                </button>
+              </div>               
+            </div>`               
+          );
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+
+        reader.readAsDataURL(file);
       } else {
-        if (extrae_extencion(dr) == "xlsx") {
-          $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+         
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: `El documento: ${file.name.toUpperCase()} es muy pesado. Tamaño máximo 10mb`,
+          showConfirmButton: false,
+          timer: 1500
+        })
+        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
 
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(dr) == "csv") {
-            $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+        $("#" + id).val("");
+      }
+    }
+  } else {
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    })
 
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
+
+    $("#" + id + "_nombre").html("");
+  }
+}
+
+/* PREVISUALIZAR LOS DOCUMENTOS */
+function addDocs(e,id) {
+
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
+
+	var file = e.target.files[0], archivoType = /image.*|application.*/;
+	
+	if (e.target.files[0]) {
+    
+		var sizeByte = file.size; console.log(file.type);
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(archivoType) ){
+			// return;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .pdf, .png. .jpeg, .jpg, .jpe, .webp, .svg',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+      $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >'); 
+
+		}else{
+
+			if (sizekiloBytes <= 40960) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+
+          // cargamos la imagen adecuada par el archivo
+				  if ( extrae_extencion(file.name) == "doc") {
+            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
           } else {
-            if (extrae_extencion(dr) == "xlsm") {
-              $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-              toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-            } else {
-              if (extrae_extencion(dr) == "pdf") {
-                $("#doc1_ver").html('<iframe src="../dist/comprobantes_compras/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-                toastr.success("Documento vizualizado correctamente!!!");
-              } else {
-                if (extrae_extencion(dr) == "dwg") {
-                  $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+            if ( extrae_extencion(file.name) == "docx" ) {
+              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+            }else{
+              if ( extrae_extencion(file.name) == "pdf" ) {
+                $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+              }else{
+                if ( extrae_extencion(file.name) == "csv" ) {
+                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
                 } else {
-                  if (extrae_extencion(dr) == "zip" || extrae_extencion(dr) == "rar" || extrae_extencion(dr) == "iso") {
-                    $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                    toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+                  if ( extrae_extencion(file.name) == "xls" ) {
+                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
                   } else {
-                    if (
-                      extrae_extencion(dr) == "jpeg" ||
-                      extrae_extencion(dr) == "jpg" ||
-                      extrae_extencion(dr) == "jpe" ||
-                      extrae_extencion(dr) == "jfif" ||
-                      extrae_extencion(dr) == "gif" ||
-                      extrae_extencion(dr) == "png" ||
-                      extrae_extencion(dr) == "tiff" ||
-                      extrae_extencion(dr) == "tif" ||
-                      extrae_extencion(dr) == "webp" ||
-                      extrae_extencion(dr) == "bmp"
-                    ) {
-                      $("#doc1_ver").html('<img src="../dist/comprobantes_compras/' + dr + '" alt="" width="50%" >');
-
-                      toastr.success("Documento vizualizado correctamente!!!");
+                    if ( extrae_extencion(file.name) == "xlsx" ) {
+                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
                     } else {
-                      if (extrae_extencion(dr) == "docx" || extrae_extencion(dr) == "docm" || extrae_extencion(dr) == "dotx" || extrae_extencion(dr) == "dotm" || extrae_extencion(dr) == "doc" || extrae_extencion(dr) == "dot") {
-                        $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+                      if ( extrae_extencion(file.name) == "xlsm" ) {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
                       } else {
-                        $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                        if (
+                          extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
+                          extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
+                          extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
+                          extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
 
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+                          $("#"+id+"_ver").html(`<img src="${result}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+                          
+                        } else {
+                          $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                        }
+                        
                       }
                     }
                   }
                 }
               }
             }
-          }
-        }
-      }
-    }
+          } 
+					$("#"+id+"_nombre").html(`<div class="row">
+            <div class="col-md-12">
+              <i> ${file.name} </i>
+            </div>
+            <div class="col-md-12">
+              <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
+            </div>
+          </div>`);
 
-    // console.log('hola'+dr);
-  } else {
-    pdffile_url = URL.createObjectURL(pdffile);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+				}
 
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(pdffile.name) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+				reader.readAsDataURL(file);
 
-      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+			} else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: `El documento: ${file.name.toUpperCase()} es muy pesado.`,
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+        $("#"+id+"_nombre").html("");
+				$("#"+id).val("");
+			}
+		}
+	}else{
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    });
+		 
+    $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+		$("#"+id+"_nombre").html("");
+    $("#"+id).val("");
+	}	
+}
+
+// recargar un doc para ver
+function re_visualizacion(id, carpeta) {
+
+  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
+
+  pdffile     = document.getElementById("doc"+id+"").files[0];
+
+  var antiguopdf  = $("#doc_old_"+id+"").val();
+
+  if(pdffile === undefined){
+
+    if (antiguopdf == "") {
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Seleccione un documento',
+        showConfirmButton: false,
+        timer: 1500
+      })
+
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+		  $("#doc"+id+"_nombre").html("");
+
     } else {
-      if (extrae_extencion(pdffile.name) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+      if ( extrae_extencion(antiguopdf) == "doc") {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
       } else {
-        if (extrae_extencion(pdffile.name) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+        if ( extrae_extencion(antiguopdf) == "docx" ) {
+          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
-          if (extrae_extencion(pdffile.name) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+          if ( extrae_extencion(antiguopdf) == "pdf" ) {
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/material/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            toastr.success('Documento vizualizado correctamente!!!')
           } else {
-            if (extrae_extencion(pdffile.name) == "pdf") {
-              $("#doc1_ver").html('<iframe src="' + pdffile_url + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-              toastr.success("Documento vizualizado correctamente!!!");
+            if ( extrae_extencion(antiguopdf) == "csv" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
             } else {
-              if (extrae_extencion(pdffile.name) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+              if ( extrae_extencion(antiguopdf) == "xls" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
               } else {
-                if (extrae_extencion(pdffile.name) == "zip" || extrae_extencion(pdffile.name) == "rar" || extrae_extencion(pdffile.name) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
                 } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" ||
-                    extrae_extencion(pdffile.name) == "jpg" ||
-                    extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" ||
-                    extrae_extencion(pdffile.name) == "gif" ||
-                    extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" ||
-                    extrae_extencion(pdffile.name) == "tif" ||
-                    extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="' + pdffile_url + '" alt="" width="50%" >');
-
-                    toastr.success("Documento vizualizado correctamente!!!");
+                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
                   } else {
                     if (
-                      extrae_extencion(pdffile.name) == "docx" ||
-                      extrae_extencion(pdffile.name) == "docm" ||
-                      extrae_extencion(pdffile.name) == "dotx" ||
-                      extrae_extencion(pdffile.name) == "dotm" ||
-                      extrae_extencion(pdffile.name) == "doc" ||
-                      extrae_extencion(pdffile.name) == "dot"
-                    ) {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
+                      extrae_extencion(antiguopdf) == "jpeg" || extrae_extencion(antiguopdf) == "jpg" || extrae_extencion(antiguopdf) == "jpe" ||
+                      extrae_extencion(antiguopdf) == "jfif" || extrae_extencion(antiguopdf) == "gif" || extrae_extencion(antiguopdf) == "png" ||
+                      extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
+                      extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
+  
+                      $("#doc"+id+"_ver").html(`<img src="../dist/material/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="50%" >`);
+                      toastr.success('Documento vizualizado correctamente!!!');
                     } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    }
+                      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                    }                    
                   }
                 }
               }
             }
           }
         }
-      }
+      }      
     }
+    // console.log('hola'+dr);
+  }else{
 
+    pdffile_url=URL.createObjectURL(pdffile);
+
+    // cargamos la imagen adecuada par el archivo
+    if ( extrae_extencion(pdffile.name) == "doc") {
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+    } else {
+      if ( extrae_extencion(pdffile.name) == "docx" ) {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      }else{
+        if ( extrae_extencion(pdffile.name) == "pdf" ) {
+          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="310"> </iframe>');
+          toastr.success('Documento vizualizado correctamente!!!');
+        }else{
+          if ( extrae_extencion(pdffile.name) == "csv" ) {
+            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+          } else {
+            if ( extrae_extencion(pdffile.name) == "xls" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+            } else {
+              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+              } else {
+                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+                } else {
+                  if (
+                    extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
+                    extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
+                    extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
+                    extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
+
+                    $("#doc"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="50%" >`);
+                    toastr.success('Documento vizualizado correctamente!!!');
+                  } else {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+                  }                  
+                }
+              }
+            }
+          }
+        }
+      }
+    }     	
     console.log(pdffile);
   }
 }

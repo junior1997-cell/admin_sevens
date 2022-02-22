@@ -103,8 +103,7 @@ class Materiales
   }
 
   //Implementar un método para listar los registros
-  public function listar()
-  {
+  public function listar() {
     $sql = "SELECT
 			p.idproducto as idproducto,
 			p.idunidad_medida as idunidad_medida,
@@ -127,6 +126,7 @@ class Materiales
 			ORDER BY idproducto DESC";
     return ejecutarConsulta($sql);
   }
+  
   //Seleccionar Trabajador Select2
   public function obtenerImg($idproducto)
   {

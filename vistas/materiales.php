@@ -219,7 +219,7 @@
                                     src="../dist/img/default/img_defecto_materiales.png"
                                     class="img-thumbnail"
                                     id="imagen1_i"
-                                    style="cursor: pointer !important; height: 300px !important;"
+                                    style="cursor: pointer !important; height: 100% !important;"
                                     width="auto"
                                   />
                                   <input style="display: none;" type="file" name="imagen1" id="imagen1" accept="image/*" />
@@ -227,16 +227,31 @@
                                   <div class="text-center" id="imagen1_nombre"><!-- aqui va el nombre de la FOTO --></div>
                                 </div>
                               </div>
+
                               <!-- Ficha tecnica -->
                               <div class="col-md-6 col-lg-6">
-                                <label for="imagen_ficha">Ficha técnica <b style="color: red;">(Imagen o PDF)</b></label> <br />
-                                <div class="text-center">
-                                  <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="imagen_ficha_i" style="cursor: pointer !important;" width="auto" height="150px" />
-                                  <div id="ver_pdf"></div>
+                                <label for="doc2_i" >Ficha técnica <b class="text-danger">(Imagen o PDF)</b> </label>  
+                                <div class="row text-center">                               
+                                  <!-- Subir documento -->
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <!-- Recargar -->
+                                  <div class="col-md-6 text-center comprobante">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'ficha_tecnica');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                  </button>
+                                  </div>                                  
                                 </div>
-                                <input style="display: none;" type="file" name="imagen_ficha" id="imagen_ficha" accept="image/*, .pdf" />
-                                <input type="hidden" name="imagen_ficha_actual" id="imagen_ficha_actual" />
-                                <div class="text-center" id="imagen_ficha_nombre"><!-- aqui va el nombre de la FOTO --></div>
+
+                                <div id="doc2_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
                             </div>
 

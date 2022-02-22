@@ -22,10 +22,7 @@
       $nombre = isset($_POST["nombre_material"]) ? limpiarCadenaHtml($_POST["nombre_material"]) : "";
       $marca = isset($_POST["marca"]) ? limpiarCadenaHtml($_POST["marca"]) : "";
       $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadenaHtml($_POST["precio_unitario"]) : "";
-      $descripcion = isset($_POST["descripcion_material"]) ? limpiarCadenaHtml($_POST["descripcion_material"]) : "";
-      $imagen1 = isset($_POST["imagen1"]) ? limpiarCadenaHtml($_POST["imagen1"]) : "";
-
-      $imagen_ficha = isset($_POST["imagen_ficha"]) ? limpiarCadenaHtml($_POST["imagen_ficha"]) : "";
+      $descripcion = isset($_POST["descripcion_material"]) ? limpiarCadenaHtml($_POST["descripcion_material"]) : "";      
 
       $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadenaHtml($_POST["estado_igv"]) : "";
       $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadenaHtml($_POST["monto_igv"]) : "";
@@ -34,6 +31,9 @@
       $unid_medida = isset($_POST["unid_medida"]) ? limpiarCadenaHtml($_POST["unid_medida"]) : "";
       $color = isset($_POST["color"]) ? limpiarCadenaHtml($_POST["color"]) : "";
       $total_precio = isset($_POST["total_precio"]) ? limpiarCadenaHtml($_POST["total_precio"]) : "";
+
+      $imagen1 = isset($_POST["imagen1"]) ? limpiarCadenaHtml($_POST["imagen1"]) : "";
+      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadenaHtml($_POST["doc2"]) : "";
 
       switch ($_GET["op"]) {
 
@@ -57,21 +57,21 @@
           }
 
           // ficha técnica
-          if (!file_exists($_FILES['imagen_ficha']['tmp_name']) || !is_uploaded_file($_FILES['imagen_ficha']['tmp_name'])) {
+          if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
 
-            $ficha_tecnica = $_POST["imagen_ficha_actual"];
+            $ficha_tecnica = $_POST["doc_old_2"];
 
             $flat_ficha1 = false;
 
           } else {
 
-            $ext1 = explode(".", $_FILES["imagen_ficha"]["name"]);
+            $ext1 = explode(".", $_FILES["doc2"]["name"]);
 
             $flat_ficha1 = true;
 
             $ficha_tecnica = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-            move_uploaded_file($_FILES["imagen_ficha"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica);
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica);
           }
 
           if (empty($idproducto)) {

@@ -18,10 +18,10 @@ function init() {
   //Mostramos colores
   $.post("../ajax/activos_fijos.php?op=select2Color", function (r) { $("#color").html(r); });
 
-  //Mostramos unidades
+  //Mostramos unidades de medida
   $.post("../ajax/activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unid_medida").html(r); });
 
-  //Mostramos unidades
+  //Mostramos categoria
   $.post("../ajax/activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af").html(r); });
 
   //Initialize Select2 color
@@ -534,7 +534,7 @@ function addImage(e, id) {
             `<div class="row">
               <div class="col-md-12"> <i> ${file.name} </i></div>
               <div class="col-md-12">                
-                <button class="btn btn-danger btn-block btn-xs" onclick="${id}'_eliminar();" type="button" >
+                <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" >
                   <i class="far fa-trash-alt"></i>
                 </button>
               </div>               

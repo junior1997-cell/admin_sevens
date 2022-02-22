@@ -28,7 +28,7 @@
 					//Vamos a declarar un array
 					$data= Array();
 
-          $imagen_error = "this.src='../dist/img/materiales/img_material_defect.jpg'";
+          $imagen_error = "this.src='../dist/svg/default_producto.svg'";
 
 					while ($reg=$rspta->fetch_object()){
 
