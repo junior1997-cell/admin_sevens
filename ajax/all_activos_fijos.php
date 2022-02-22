@@ -548,17 +548,17 @@ switch ($_GET["op"]) {
 
                 $activos_fijos=new Activos_fijos();
 
-                $rspta =$activos_fijos->lista_para_compras();
+                $rspta =$activos_fijos->lista_activos_para_compras();
                 //Vamos a declarar un array
                 $datas = [];
                 // echo json_encode($rspta);
-                $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/default_activos_fijos_empresa.png'";    $color_stock = "";   $ficha_tecnica = ""; 
+                $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/img_defecto_activo_fijo.png'";    $color_stock = "";   $ficha_tecnica = ""; 
                 
                 while ($reg = $rspta->fetch_object()) {
 
                     if (empty($reg->imagen)) {
-                        $img='src="../dist/img/default/default_activos_fijos_empresa.png"';
-                        $img_parametro="default_activos_fijos_empresa.png";
+                        $img='src="../dist/img/default/img_defecto_activo_fijo.png"';
+                        $img_parametro="img_defecto_activo_fijo.png";
                     } else {
                         $img='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
                         $img_parametro=$reg->imagen;
@@ -570,9 +570,9 @@ switch ($_GET["op"]) {
 
                     $datas[] = [
                         "0" =>
-                            '<button class="btn btn-warning" onclick="agregarDetalleCompraActivos(' . $reg->idactivos_fijos  . 
-                            ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->subtotal . '\', \'' .
-                            $reg->igv. '\', \'' . $reg->total.  '\', \'' . $img_parametro . '\', \'' .$reg->ficha_tecnica .'\')" 
+                            '<button class="btn btn-warning" onclick="agregarDetalleCompraActivos(' . $reg->idproducto  . 
+                            ', \'' .  $reg->nombre .  '\', \'' .  $reg->nombre_medida.  '\', \'' . $reg->nombre_color.  '\', \'' . $reg->precio_sin_igv . '\', \'' .
+                            $reg->igv. '\', \'' . $reg->precio_con_igv.  '\', \'' . $img_parametro . '\', \'' .$reg->ficha_tecnica .'\')" 
                             data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
                         "1" =>
                             '<div class="user-block w-px-200">
@@ -581,7 +581,7 @@ switch ($_GET["op"]) {
                                 <span class="description"><b>Color: </b>'. $reg->nombre_color.'</span>
                             </div>',
                         "2" => $reg->marca,
-                        "3" => number_format($reg->total, 2, '.', ','),
+                        "3" => number_format($reg->precio_con_igv, 2, '.', ','),
                         "4" => $reg->descripcion,
                         "5" => $ficha_tecnica,
                     ];
@@ -614,7 +614,7 @@ switch ($_GET["op"]) {
 
                 $activos_fijos=new Activos_fijos();
 
-                $rspta =$activos_fijos->lista_para_compras();
+                $rspta =$activos_fijos->lista_activos_para_compras();
                 //Vamos a declarar un array
                 $datas = [];
                 // echo json_encode($rspta);

@@ -15,7 +15,7 @@ Class Activos_fijos
 	{
 
 		$sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, nombre, modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen) 
-		VALUES ('$unid_medida', '$color', '$marca', '$idcategoria', '$nombre', '$modelo', '$serie', '$estado_igv', '$precio_unitario', '$subtotal', '$precio_igv', '$color', '$total_precio')";
+		VALUES ('$unid_medida', '$color', '$marca', '$idcategoria', '$nombre', '$modelo', '$serie', '$estado_igv', '$precio_unitario', '$subtotal', '$precio_igv', '$color', '$total')";
     	return ejecutarConsulta($sql);
 			
 	}
@@ -93,12 +93,13 @@ Class Activos_fijos
 	}
 
 	//Implementar un método para listar los registros
-	public function lista_para_compras()
+	public function lista_activos_para_compras()
 	{
-		$sql="SELECT af.idactivos_fijos,af.idcolor,af.idunidad_medida,af.nombre,af.modelo,af.serie,af.marca,af.precio_compra,af.subtotal,af.igv,af.total,af.descripcion,af.imagen,af.ficha_tecnica,af.estado_igv, c.nombre_color, um.nombre_medida
-		FROM activos_fijos as af, color as c, unidad_medida as um
-		WHERE af.idcolor= c.idcolor AND af.idunidad_medida=um.idunidad_medida AND af.estado=1  
-		ORDER BY `af`.`idactivos_fijos` ASC";
+		$sql="SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
+		p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color
+		FROM producto as p, unidad_medida as um, color as c
+		WHERE p.idcategoria_insumos_af!='1' AND p.estado=1 AND p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor 
+		ORDER BY p.idproducto ASC";
 		return ejecutarConsulta($sql);		
 	}
 
