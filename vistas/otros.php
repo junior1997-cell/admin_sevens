@@ -390,6 +390,67 @@
                   </section>
                   <!-- /.content -->
                 </div>
+
+                <!--====Categorias activos fijos==-->
+                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <!-- Content Header (Page header) -->
+                  <section class="content-header">
+                    <div class="container-fluid">
+                      <div class="row mb-2">
+                        <div class="col-sm-6">
+                          <h1>Categorias activos fijos</h1>
+                        </div>
+                        <div class="col-sm-6">
+                          <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">activos fijos</li>
+                          </ol>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.container-fluid -->
+                  </section>
+
+                  <!-- Main content -->
+
+                  <!-- Main content -->
+                  <section class="content">
+                    <div class="container-fluid">
+                      <div class="card card-primary card-outline">
+                        <div class="card-header">
+                          <h3 class="card-title">
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-categorias-af" onclick="limpiar_c_af();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            Categorías activos fijos.
+                          </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="tabla-categorias-af" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">Acciones</th>
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">Acciones</th>
+                                <th>Nombre</th>
+                                <th>Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <!-- /.card -->
+                    </div>
+                    <!-- /.container-fluid -->
+                  </section>
+                  <!-- /.content -->
+                </div>
               </div>
 
               <!--================ modals-Bancos  ======================-->
@@ -716,6 +777,53 @@
                   </div>
                 </div>
               </div>
+              <!--================ modals-cargo ======================-->
+              <div class="modal fade" id="modal-agregar-categorias-af">
+                <div class="modal-dialog modal-dialog-scrollable modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Agregar categoría activo fijo</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-categoria-af" name="form-categoria-af" method="POST" autocomplete="off">
+                        <div class="card-body">
+                          <div class="row" id="cargando-1-fomulario">
+                            <!-- id categoria_insumos_af -->
+                            <input type="hidden" name="idcategoria_insumos_af" id="idcategoria_insumos_af" />
+
+                            <!-- nombre categoria -->
+                            <div class="col-lg-12 class_pading">
+                              <div class="form-group">
+                                <label for="nombre_categoria">Nombre categoría</label>
+                                <input type="text" name="nombre_categoria_af" id="nombre_categoria_af" class="form-control" placeholder="Nombre categoría" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-cateogrias-af">Submit</button>
+                      </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_c_af();">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_categoria_af">Guardar Cambios</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <?php
@@ -758,6 +866,7 @@
         <script type="text/javascript" src="scripts/ocupacion.js"></script>
         <script type="text/javascript" src="scripts/tipo.js"></script>
         <script type="text/javascript" src="scripts/cargo.js"></script>
+        <script type="text/javascript" src="scripts/categoria_af.js"></script>
 
         <script>
           $(function () {
