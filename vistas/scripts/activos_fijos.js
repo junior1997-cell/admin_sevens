@@ -16,10 +16,13 @@ function init() {
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-activos-fijos").submit(); });
 
   //Mostramos colores
-  $.post("../ajax/color.php?op=selectcolor", function (r) { $("#color").html(r); });
+  $.post("../ajax/activos_fijos.php?op=select2Color", function (r) { $("#color").html(r); });
 
   //Mostramos unidades
-  $.post("../ajax/unidades_m.php?op=selectUnidad", function (r) { $("#unid_medida").html(r); });
+  $.post("../ajax/activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unid_medida").html(r); });
+
+  //Mostramos unidades
+  $.post("../ajax/activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af").html(r); });
 
   //Initialize Select2 color
   $("#color").select2({
@@ -32,6 +35,13 @@ function init() {
   $("#unid_medida").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar una unidad",
+    allowClear: true,
+  });
+
+  //Initialize Select2 categoria
+  $("#categoria_insumos_af").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar una categoria",
     allowClear: true,
   });
 }
@@ -65,17 +75,17 @@ function doc2_eliminar() {
 //Función limpiar
 function limpiar() {
   //Mostramos los Materiales
-  $("#idactivos_fijos").val("");
+  $("#idproducto").val("");  
   $("#nombre").val("");
   $("#modelo").val("");
   $("#serie").val("");
   $("#marca").val("");
   $("#descripcion").val("");
 
-  $("#precio_compra").val("");
-  $("#subtotal").val("");
-  $("#igv").val("");
-  $("#total").val("");
+  $("#precio_unitario").val("");
+  $("#precio_sin_igv").val("");
+  $("#precio_igv").val("");
+  $("#precio_total").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
   $("#foto1").val("");
@@ -89,6 +99,7 @@ function limpiar() {
 
   $("#unid_medida").val(4).trigger("change");
   $("#color").val(1).trigger("change");
+  $("#categoria_insumos_af").val("").trigger("change");
 
   $("#my-switch_igv").prop("checked", true);
   $("#estado_igv").val("1");
@@ -99,37 +110,58 @@ function limpiar() {
 
 //Función Listar
 function listar() {
-  tabla = $("#tabla-activos")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/activos_fijos.php?op=listar",
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla = $("#tabla-activos").dataTable({
+    responsive: true,
+    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/activos_fijos.php?op=listar",
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: pago total
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-right');         
+      } 
+      
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-right');         
+      } 
+
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-right');         
+      } 
+
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-right');         
+      }
+
+      if (data[8] != '') {
+        $("td", row).eq(8).addClass('text-center');         
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 10, //Paginación
-      // order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    // order: [[0, "desc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 //ver ficha tecnica
 function modal_ficha_tec(ficha_tecnica) {
@@ -174,7 +206,8 @@ function guardaryeditar(e) {
 
     success: function (datos) {
       if (datos == "ok") {
-        toastr.success("Registrado correctamente");
+         
+        Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");
 
         tabla.ajax.reload();
 
@@ -182,13 +215,14 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-activos-fijos").modal("hide");
       } else {
-        toastr.error(datos);
+         
+        Swal.fire("Error!", datos, "error");
       }
     },
   });
 }
 
-function mostrar(idactivos_fijos) {
+function mostrar(idproducto) {
   limpiar();
 
   $("#cargando-1-fomulario").hide();
@@ -199,68 +233,78 @@ function mostrar(idactivos_fijos) {
   $("#unid_medida").val("").trigger("change");
   $("#color").val("").trigger("change");
 
-  $.post("../ajax/activos_fijos.php?op=mostrar", { idactivos_fijos: idactivos_fijos }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+  $.post("../ajax/activos_fijos.php?op=mostrar", { 'idproducto': idproducto }, function (data, status) {
+    
+    data = JSON.parse(data); console.log(data);
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
-    $("#idactivos_fijos").val(data.idactivos_fijos);
+    $("#idproducto").val(data.idproducto);
     $("#nombre").val(data.nombre);
     $("#modelo").val(data.modelo);
     $("#serie").val(data.serie);
     $("#marca").val(data.marca);
-    $("#precio_compra").val(parseFloat(data.precio_compra).toFixed(2));
+    $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2));
     $("#descripcion").val(data.descripcion);
 
+    $('#precio_unitario').val(data.precio_unitario);
     $("#estado_igv").val(data.estado_igv);
-    $("#igv").val(data.igv);
-    $("#subtotal").val(data.subtotal);
-    /**-------------------------*/
+    $("#precio_sin_igv").val(data.precio_sin_igv);
+    $("#precio_igv").val(data.precio_igv);
+    $("#precio_total").val(parseFloat(data.precio_total).toFixed(2));
+     
     $("#unid_medida").val(data.idunidad_medida).trigger("change");
-    $("#color").val(data.idcolor).trigger("change");
-
-    $("#total").val(parseFloat(data.total).toFixed(2));
+    $("#color").val(data.idcolor).trigger("change");  
+    $("#categoria_insumos_af").val(data.idcategoria_insumos_af).trigger("change");    
 
     if (data.estado_igv == "1") {
       $("#my-switch_igv").prop("checked", true);
     } else {
       $("#my-switch_igv").prop("checked", false);
     }
-
-    //----------------------
+     
     if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/docs/activos_fijos_general/img_activos_fijos/" + data.imagen);
+      
+      $("#foto1_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
 
       $("#foto1_actual").val(data.imagen);
     }
 
-    if (data.ficha_tecnica != "") {
-      $("#foto2_actual").val(data.ficha_tecnica);
-      $("#ver_pdf").html("");
-      $("#foto2_i").attr("src", "");
+    // FICHA TECNICA
+    if (data.ficha_tecnica == "" || data.ficha_tecnica == null  ) {
 
-      $("#foto2_i").hide();
-      $("#ver_pdf").show();
-      $("#ver_pdf").html('<iframe src="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/' + data.ficha_tecnica + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
-      $("#foto2_nombre").html(
-        "" +
-          '<div class="row">' +
-          '<div class="col-md-12">.</div>' +
-          '<div class="col-md-12">' +
-          '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-          "</div>" +
-          "</div>" +
-          ""
-      );
+      $("#doc1_nombre").html('');
+
+      $("#doc_old_2").val(""); $("#doc1").val("");
+
     } else {
-      $("#foto2_i").show();
-      $("#ver_pdf").html("");
-      $("#foto2_nombre").html("");
-      $("#ver_pdf").hide();
-    }
+
+      $("#doc_old_2").val(data.ficha_tecnica); 
+
+      $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(data.ficha_tecnica)}</i></div></div>`);
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.ficha_tecnica) == "pdf" ) {
+
+        $("#doc2_ver").html('<iframe src="../dist/docs/material/ficha_tecnica/'+data.ficha_tecnica+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+      }else{
+        if (
+          extrae_extencion(data.ficha_tecnica) == "jpeg" || extrae_extencion(data.ficha_tecnica) == "jpg" || extrae_extencion(data.ficha_tecnica) == "jpe" ||
+          extrae_extencion(data.ficha_tecnica) == "jfif" || extrae_extencion(data.ficha_tecnica) == "gif" || extrae_extencion(data.ficha_tecnica) == "png" ||
+          extrae_extencion(data.ficha_tecnica) == "tiff" || extrae_extencion(data.ficha_tecnica) == "tif" || extrae_extencion(data.ficha_tecnica) == "webp" ||
+          extrae_extencion(data.ficha_tecnica) == "bmp" || extrae_extencion(data.ficha_tecnica) == "svg" ) {
+
+          $("#doc2_ver").html(`<img src="../dist/docs/material/ficha_tecnica/${data.ficha_tecnica}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          
+        } else {
+          $("#doc2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+        }        
+      }      
+    } 
   });
 }
 
@@ -315,19 +359,19 @@ function precio_con_igv() {
   var precio_re = 0;
 
   //var precio_r=0;
-  precio_total = $("#precio_compra").val();
+  precio_total = $("#precio_unitario").val();
 
-  $("#igv").val(mont_igv.toFixed(2));
-  $("#subtotal").val(precio_total);
+  $("#precio_igv").val(mont_igv.toFixed(2));
+  $("#precio_sin_igv").val(precio_total);
 
   if ($("#my-switch_igv").is(":checked")) {
     precio_base = precio_total / 1.18;
     igv = precio_total - precio_base;
     precio_re = parseFloat(precio_total) - igv;
     
-    $("#igv").val(igv.toFixed(2));
-    $("#subtotal").val(precio_re.toFixed(2));
-    $("#total").val((precio_re + igv).toFixed(2));
+    $("#precio_igv").val(igv.toFixed(2));
+    $("#precio_sin_igv").val(precio_re.toFixed(2));
+    $("#precio_total").val((precio_re + igv).toFixed(2));
 
     $("#estado_igv").val("1");
   } else {
@@ -336,9 +380,9 @@ function precio_con_igv() {
     igv = precio_base - precio_total;
     precio_re = parseFloat(precio_total) - igv;
 
-    $("#igv").val(igv.toFixed(2));
-    $("#subtotal").val( parseFloat(precio_total).toFixed(2));
-    $("#total").val(precio_base.toFixed(2));
+    $("#precio_igv").val(igv.toFixed(2));
+    $("#precio_sin_igv").val( parseFloat(precio_total).toFixed(2));
+    $("#precio_total").val(precio_base.toFixed(2));
 
     $("#estado_igv").val("0");
   }
@@ -390,21 +434,22 @@ $(function () {
 
   $("#form-materiales-activos-fijos").validate({
     rules: {
-      nombre: { required: true },
+      nombre: { required: true, minlength:3, maxlength:200},
+      categoria_insumos_af: { required: true },
+      color: { required: true },
+      unid_medida: { required: true },
       modelo: { required: true },
-      precio_compra: { required: true },
-      descripcion: { minlength: 1 },
+      precio_unitario: { required: true },
+      descripcion: { minlength: 3 },
     },
     messages: {
-      nombre: {
-        required: "Por favor ingrese nombre",
-      },
-      modelo: {
-        required: "Por favor ingrese modelo",
-      },
-      precio_compra: {
-        required: "Ingresar precio compra",
-      },
+      nombre: { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
+      categoria_insumos_af: { required: "Campo requerido", },
+      color: { required: "Campo requerido" },
+      unid_medida: { required: "Campo requerido" },
+      modelo: { required: "Por favor ingrese modelo", },
+      precio_unitario: { required: "Ingresar precio compra", },      
+      descripcion: { minlength: "Minimo 3 caracteres" },
     },
 
     errorElement: "span",

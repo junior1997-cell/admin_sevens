@@ -7,34 +7,22 @@ function init() {
 
   $("#mRecurso").addClass("active");
 
-  //$("#lAllMateriales").addClass("active");
+  $("#lAllMateriales").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) {
-    $("#submit-form-materiales").submit();
-  });
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
 
-  $("#imagen1_i").click(function () {
-    $("#imagen1").trigger("click");
-  });
-  $("#imagen1").change(function (e) {
-    addImage(e, $("#imagen1").attr("id"));
-  });
+  $("#imagen1_i").click(function () { $("#imagen1").trigger("click"); });
+  $("#imagen1").change(function (e) { addImage(e, $("#imagen1").attr("id")); });
+
   //ficha tecnica
-  $("#imagen_ficha_i").click(function () {
-    $("#imagen_ficha").trigger("click");
-  });
-  $("#imagen_ficha").change(function (e) {
-    addficha(e, $("#imagen_ficha").attr("id"));
-  });
+  $("#imagen_ficha_i").click(function () { $("#imagen_ficha").trigger("click"); });
+  $("#imagen_ficha").change(function (e) { addficha(e, $("#imagen_ficha").attr("id")); });
 
   //Mostramos colores
-  $.post("../ajax/color.php?op=selectcolor", function (r) {
-    $("#color").html(r);
-  });
+  $.post("../ajax/color.php?op=selectcolor", function (r) { $("#color").html(r); });
+
   //Mostramos colores
-  $.post("../ajax/unidades_m.php?op=selectUnidad", function (r) {
-    $("#unid_medida").html(r);
-  });
+  $.post("../ajax/unidades_m.php?op=selectUnidad", function (r) { $("#unid_medida").html(r); });
 
   //Initialize Select2 color
   $("#color").select2({
@@ -42,12 +30,14 @@ function init() {
     placeholder: "Seleccinar color",
     allowClear: true,
   });
+  
   //Initialize Select2 unidad
   $("#unid_medida").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar una unidad",
     allowClear: true,
   });
+
   //============unidad================
   $("#unid_medida").val("null").trigger("change");
 
