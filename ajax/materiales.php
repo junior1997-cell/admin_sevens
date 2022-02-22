@@ -17,6 +17,8 @@
       $materiales = new Materiales();
 
       $idproducto = isset($_POST["idproducto"]) ? limpiarCadenaHtml($_POST["idproducto"]) : "";
+      $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadenaHtml($_POST["idcategoria_insumos_af"]) : "";
+
       $nombre = isset($_POST["nombre_material"]) ? limpiarCadenaHtml($_POST["nombre_material"]) : "";
       $marca = isset($_POST["marca"]) ? limpiarCadenaHtml($_POST["marca"]) : "";
       $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadenaHtml($_POST["precio_unitario"]) : "";
@@ -62,7 +64,7 @@
 
           if (empty($idproducto)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $materiales->insertar($nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
+            $rspta = $materiales->insertar($idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
           } else {
             // validamos si existe LA IMG para eliminarlo
@@ -75,19 +77,8 @@
                 unlink("../dist/img/materiales/" . $img1_ant);
               }
             }
-            // validamos si existe ficha tecnica para eliminarlo
-            /*if ($flat_ficha1 == true) {
-
-              $datos_ficha1 = $materiales->ficha_tec($idproducto);
-        
-              $ficha1_ant = $datos_ficha1->fetch_object()->ficha_tecnica;
-        
-              if ($ficha1_ant != "") {
-        
-                unlink("../dist/ficha_tecnica_materiales/" . $ficha1_ant);
-              }
-            }*/
-            $rspta = $materiales->editar($idproducto, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
+             
+            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
             //var_dump($idproducto,$idproveedor);
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }
@@ -124,13 +115,11 @@
           $imagen = '';
           $ficha_tecnica = '';
           $monto_igv = '';
-
+          $imagen_error = "this.src='../dist/img/materiales/img_material_defect.jpg'";
           while ($reg = $rspta->fetch_object()) {
-            if (empty($reg->imagen)) {
-              $imagen = 'img_material_defect.jpg';
-            } else {
-              $imagen = $reg->imagen;
-            }
+
+            if (empty($reg->imagen)) { $imagen = 'img_material_defect.jpg';  } else { $imagen = $reg->imagen;   }
+
             //'<a target="_blank" href="../dist/ficha_tecnica_materiales/'.$reg->ficha_tecnica.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a>
             //'<div><center><a type="btn btn-danger" onclick="modal_ficha_tec('."'".$reg->ficha_tecnica."'".')"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center></div>'
             empty($reg->ficha_tecnica)
@@ -138,30 +127,15 @@
               : ($ficha_tecnica = '<center><a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>');
             empty($reg->precio_igv) ? ($monto_igv = '-') : ($monto_igv = $reg->precio_igv);
             $data[] = [
-              "0" => $reg->estado
-                ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
-                  $reg->idproducto .
-                  ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger btn-sm" onclick="desactivar(' .
-                  $reg->idproducto .
-                  ')"><i class="far fa-trash-alt"></i></button>'
-                : '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
-                  $reg->idproducto .
-                  ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' .
-                  $reg->idproducto .
-                  ')"><i class="fa fa-check"></i></button>',
+              "0" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>' .
+              ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idproducto . ')"><i class="far fa-trash-alt"></i></button>' : 
+              '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
+              ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
               "1" =>
                 '<div class="user-block">
-                  <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' .
-                $imagen .
-                '" alt="user image">
-                  <span class="username"><p style="margin-bottom: 0px !important;">' .
-                $reg->nombre .
-                '</p></span>
-                  <span class="description">' .
-                substr($reg->descripcion, 0, 30) .
-                '...</span>
+                  <img class="profile-user-img img-responsive img-circle" src="../dist/img/materiales/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'">
+                  <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                  <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
                 </div>',
               "2" => $reg->nombre_medida,
               "3" => $reg->marca,

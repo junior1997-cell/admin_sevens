@@ -124,6 +124,9 @@
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id proveedores -->
                               <input type="hidden" name="idproducto" id="idproducto" />
+                              <!-- id categoria_insumos_af -->
+                              <input type="hidden" name="idcategoria_insumos_af" id="idcategoria_insumos_af" value="1"/>
+
                               <!-- Nombre -->
                               <div class="col-lg-12 class_pading">
                                 <div class="form-group">

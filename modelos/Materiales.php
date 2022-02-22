@@ -1,30 +1,29 @@
-<?php 
+<?php
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-Class Materiales
+class Materiales
 {
-	//Implementamos nuestro constructor
-	public function __construct()
-	{
+  //Implementamos nuestro constructor
+  public function __construct()
+  {
+  }
 
-	}
+  //Implementamos un método para insertar registros
+  public function insertar($idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
+  {
+    //var_dump($idproducto,$idproveedor);die();
+    $sql = "INSERT INTO producto (idcategoria_insumos_af, nombre, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
+		VALUES ('$idcategoria','$nombre','$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
+    return ejecutarConsulta($sql);
+  }
 
-	//Implementamos un método para insertar registros
-	public function insertar($nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$color,$total_precio)
-	{
-		//var_dump($idproducto,$idproveedor);die();
-		$sql="INSERT INTO producto (nombre,marca,precio_unitario,descripcion,imagen,ficha_tecnica,estado_igv,precio_igv,precio_sin_igv,idunidad_medida,idcolor,precio_total) 
-		VALUES ('$nombre','$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
-		return ejecutarConsulta($sql);
-			
-	}
-
-	//Implementamos un método para editar registros
-	public function editar($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$color,$total_precio)
-	{
-		//var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);die();
-		$sql="UPDATE producto SET 
+  //Implementamos un método para editar registros
+  public function editar($idproducto, $idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
+  {
+    //var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);die();
+    $sql = "UPDATE producto SET 
+		idcategoria_insumos_af = '$idcategoria',
 		nombre='$nombre', 
 		marca='$marca', 
 		precio_unitario='$precio_unitario', 
@@ -37,28 +36,30 @@ Class Materiales
 		idunidad_medida='$unid_medida',
 		idcolor='$color',
 		precio_total='$total_precio'
-		WHERE idproducto='$idproducto'";	
-		return ejecutarConsulta($sql);	
-	}
+		WHERE idproducto='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
 
-	//Implementamos un método para desactivar categorías
-	public function desactivar($idproducto )
-	{
-		$sql="UPDATE producto SET estado='0' WHERE idproducto ='$idproducto'";
-		return ejecutarConsulta($sql);
-	}
+  //Implementamos un método para desactivar categorías
+  public function desactivar($idproducto)
+  {
+    $sql = "UPDATE producto SET estado='0' WHERE idproducto ='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
 
-	//Implementamos un método para activar categorías
-	public function activar($idproducto )
-	{
-		$sql="UPDATE producto SET estado='1' WHERE idproducto ='$idproducto'";
-		return ejecutarConsulta($sql);
-	}
+  //Implementamos un método para activar categorías
+  public function activar($idproducto)
+  {
+    $sql = "UPDATE producto SET estado='1' WHERE idproducto ='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
 
-	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idproducto )
-	{
-		$sql="SELECT 
+  //Implementar un método para mostrar los datos de un registro a modificar
+  public function mostrar($idproducto)
+  {
+    $data = [];
+
+    $sql = "SELECT 
 		p.idproducto as idproducto,
 		p.idunidad_medida as idunidad_medida,
 		p.idcolor as idcolor,
@@ -77,13 +78,34 @@ Class Materiales
 		um.nombre_medida as nombre_medida
 		FROM producto p, unidad_medida as um, color as c  
 		WHERE p.idproducto ='$idproducto' AND um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor";
-		return ejecutarConsultaSimpleFila($sql);
-	}
 
-	//Implementar un método para listar los registros
-	public function listar()
-	{
-		$sql="SELECT
+    $producto = ejecutarConsultaSimpleFila($sql);
+
+    $data = [
+      'idproducto'  => ($retVal_1 = empty($producto['idproducto']) ? '' : $producto['idproducto']),
+      'idunidad_medida' => ($retVal_2 = empty($producto['idunidad_medida']) ? '' : $producto['idunidad_medida']),
+      'idcolor'     => ($retVal_3 = empty($producto['idcolor']) ? '' : $producto['idcolor']),
+      'nombre'      => ($retVal_4 = empty($producto['nombre']) ? '' : htmlspecialchars_decode($producto['nombre'])),
+      'marca'       => ($retVal_5 = empty($producto['marca']) ? '' : $producto['marca']),
+      'descripcion' => ($retVal_6 = empty($producto['descripcion']) ? '' : htmlspecialchars_decode($producto['descripcion'])),
+      'imagen'      => ($retVal_7 = empty($producto['imagen']) ? '' : $producto['imagen']),
+      'estado_igv'  => ($retVal_8 = empty($producto['estado_igv']) ? '' : $producto['estado_igv']),
+      'precio_unitario' => ($retVal_9 = empty($producto['precio_unitario']) ? '' : $producto['precio_unitario']),
+      'precio_igv'  => ($retVal_10 = empty($producto['precio_igv']) ? '' : $producto['precio_igv']),
+      'precio_sin_igv'=> ($retVal_11 = empty($producto['precio_sin_igv']) ? '' : $producto['precio_sin_igv']),
+      'precio_total' => ($retVal_12 = empty($producto['precio_total']) ? '' : $producto['precio_total']),
+      'ficha_tecnica'=> ($retVal_13 = empty($producto['ficha_tecnica']) ? '' : $producto['ficha_tecnica']),
+      'estado'      => ($retVal_14 = empty($producto['estado']) ? '' : $producto['estado']),
+      'nombre_color'=> ($retVal_15 = empty($producto['nombre_color']) ? '' : $producto['nombre_color']),
+      'nombre_medida'=> ($retVal_16 = empty($producto['nombre_medida']) ? '' : $producto['nombre_medida']),
+    ];
+    return $data;
+  }
+
+  //Implementar un método para listar los registros
+  public function listar()
+  {
+    $sql = "SELECT
 			p.idproducto as idproducto,
 			p.idunidad_medida as idunidad_medida,
 			p.idcolor as idcolor,
@@ -101,23 +123,22 @@ Class Materiales
 			c.nombre_color as nombre_color,
 			um.nombre_medida as nombre_medida
 			FROM producto p, unidad_medida as um, color as c  
-			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor
+			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND idcategoria_insumos_af = '1' 
 			ORDER BY idproducto DESC";
-		return ejecutarConsulta($sql);		
-	}
-	//Seleccionar Trabajador Select2
-	public function obtenerImg($idproducto)
-	{
-		$sql="SELECT imagen FROM producto WHERE idproducto='$idproducto'";
-		return ejecutarConsulta($sql);		
-	}
-	//Seleccionar una ficha tecnica
-	public function ficha_tec($idproducto)
-	{
-		$sql="SELECT ficha_tecnica FROM producto WHERE idproducto='$idproducto'";
-		return ejecutarConsulta($sql);		
-	}
-
+    return ejecutarConsulta($sql);
+  }
+  //Seleccionar Trabajador Select2
+  public function obtenerImg($idproducto)
+  {
+    $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
+  //Seleccionar una ficha tecnica
+  public function ficha_tec($idproducto)
+  {
+    $sql = "SELECT ficha_tecnica FROM producto WHERE idproducto='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
 }
 
 ?>
