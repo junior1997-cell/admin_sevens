@@ -169,6 +169,7 @@
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
+                              
                               <!-- Unnidad-->
                               <div class="col-lg-6" id="content-t-unidad">
                                 <div class="form-group">
@@ -176,6 +177,7 @@
                                   <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
+
                               <!--Precio U-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
@@ -183,6 +185,7 @@
                                   <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                 </div>
                               </div>
+
                               <!-- Rounded switch -->
                               <div class="col-lg-2 class_pading">
                                 <div class="form-group">

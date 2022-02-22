@@ -163,6 +163,7 @@ function listar() {
     // order: [[0, "desc"]], //Ordenar (columna,orden)
   }).DataTable();
 }
+
 //ver ficha tecnica
 function modal_ficha_tec(ficha_tecnica) {
   var ficha_tec = ficha_tecnica;
