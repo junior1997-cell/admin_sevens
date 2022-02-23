@@ -945,7 +945,7 @@ function comprobante_compras(idcompra_af_proyecto, doc) {
             $("#doc2_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
           } else {
             if (extrae_extencion(doc) == "pdf") {
-              $("#doc2_ver").html('<iframe src="../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+              $("#doc2_ver").html('<iframe src="../dist/docs/compra/comprobante_compra/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
             } else {
               if (extrae_extencion(doc) == "dwg") {
                 $("#doc2_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
@@ -965,7 +965,7 @@ function comprobante_compras(idcompra_af_proyecto, doc) {
                     extrae_extencion(doc) == "webp" ||
                     extrae_extencion(doc) == "bmp"
                   ) {
-                    $("#doc2_ver").html('<img src="../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/' + doc + '" alt="" width="50%" >');
+                    $("#doc2_ver").html('<img src="../dist/docs/compra/comprobante_compra/' + doc + '" alt="" width="50%" >');
                   } else {
                     if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
                       $("#doc2_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
@@ -3212,7 +3212,7 @@ function re_visualizacion2() {
               toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
             } else {
               if (extrae_extencion(dr) == "pdf") {
-                $("#doc2_ver").html('<iframe src="../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#doc2_ver").html('<iframe src="../dist/docs/compra/comprobante_compra/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 toastr.success("Documento vizualizado correctamente!!!");
               } else {
@@ -3238,7 +3238,7 @@ function re_visualizacion2() {
                       extrae_extencion(dr) == "webp" ||
                       extrae_extencion(dr) == "bmp"
                     ) {
-                      $("#doc2_ver").html('<img src="../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/' + dr + '" alt="" width="50%" >');
+                      $("#doc2_ver").html('<img src="../dist/docs/compra/comprobante_compra/' + dr + '" alt="" width="50%" >');
 
                       toastr.success("Documento vizualizado correctamente!!!");
                     } else {

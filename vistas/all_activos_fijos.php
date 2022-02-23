@@ -511,7 +511,6 @@
                         </div>
                         <!--Pagos sin detracciòn-->
                         <div id="pago_compras" style="display: none;">
-                          <h5>pago Compras</h5>
                           <div style="text-align: center;">
                             <div>
                               <h4>Total a pagar: <b id="total_compra"></b></h4>

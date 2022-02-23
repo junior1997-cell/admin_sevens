@@ -328,8 +328,8 @@ switch ($_GET["op"]) {
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm" disabled>'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
                         "7" => number_format($saldo, 2, '.', ','),
-                        "8" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
-                        '<center><button class="btn btn-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
+                        "8" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
+                        '<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
                         "9" => $reg['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
                     ];
                 }
