@@ -157,7 +157,7 @@
         <?php if ($_SESSION['resumen_activo_fijo_general']==1) {  ?>
           <!-- RESUMEN ACTIVOS FIJOS GENERAL-->
           <li class="nav-item">
-            <a href="resumen_activos_fijos_general.php" class="nav-link" id="mResumen_activos_fijos_general">
+            <a href="resumen_activos_fijos_general.php" class="nav-link" id="mResumenActivosFijosGeneral">
               <i class="nav-icon fas fa-tasks"></i>
               <p>Resumen activos fijos</p>
             </a>
@@ -269,11 +269,18 @@
                   <p>Compras</p>
                 </a>
               </li>
-              <!-- Proveedores de la empresa -->
+              <!-- Resumend de Insumos -->
               <li class="nav-item ">
                 <a href="resumen_insumos.php" class="nav-link" id="lResumenInsumos">
                   <i class="nav-icon fas fa-tasks"></i>
                   <p>Resumen de insumos</p>
+                </a>
+              </li> 
+              <!-- Resumend de Insumos -->
+              <li class="nav-item ">
+                <a href="resumen_activos_fijos.php" class="nav-link" id="lResumenActivosFijos">
+                  <i class="nav-icon fas fa-tasks"></i>
+                  <p>Resumen de Activos Fijos</p>
                 </a>
               </li> 
             </ul>
