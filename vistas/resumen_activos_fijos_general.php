@@ -70,7 +70,7 @@
                           <thead>
                             <tr>
                               <th class="">Producto</th>
-                              <th>Unidad de medida</th>
+                              <th>U. medida</th>
                               <th>Cantidad</th> 
                               <th>Precio promedio</th> 
                               <th>Precio actual</th>    
@@ -83,11 +83,11 @@
                           <tfoot>
                             <tr>
                               <th class="">Producto</th>
-                              <th>Unidad de medida</th>
-                              <th class="text-center"> <h5 class="suma_total_productos"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                              <th>U. medida</th>
+                              <th class="text-center" > <h5 class="suma_total_cant_maquinarias" style="font-weight: bold;"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
                               <th>Precio promedio</th>
                               <th>Precio actual</th>   
-                              <th class="text-center"> <h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                              <th class="text-right" > <h5 class="suma_total_de_maquinarias" style="font-weight: bold;">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                             </tr>
                           </tfoot>
                         </table>
@@ -98,7 +98,7 @@
                   </div>
                   <!-- /.Equipos -->
                   <div class="col-12">
-                    <div class="card card-primary card-outline">
+                    <div class="card  collapsed-card card-primary card-outline">
                       <div class="card-header">
                         <h3 class="card-title">Lista de activos: <b>Equipos</b>    </h3>
 
@@ -142,7 +142,7 @@
                   </div>
                   <!-- /. Herramientas -->
                   <div class="col-12">
-                    <div class="card card-primary card-outline">
+                    <div class="card collapsed-card card-primary card-outline">
                       <div class="card-header">
                         <h3 class="card-title">Lista de activos:  <b>Herramientas</b>    </h3>
 
@@ -186,7 +186,7 @@
                   </div>
                   <!-- /.Oficina -->
                   <div class="col-12">
-                    <div class="card card-primary card-outline">
+                    <div class="card collapsed-card card-primary card-outline">
                       <div class="card-header">
                         <h3 class="card-title">Lista de activos <b>Oficina</b>    </h3>
 
