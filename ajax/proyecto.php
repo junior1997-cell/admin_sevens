@@ -31,7 +31,10 @@
       $costo					      = isset($_POST["costo"])? limpiarCadena($_POST["costo"]):"";
       $fecha_inicio			    = isset($_POST["fecha_inicio"])? limpiarCadena($_POST["fecha_inicio"]):"";
       $fecha_fin				    = isset($_POST["fecha_fin"])? limpiarCadena($_POST["fecha_fin"]):"";
-      $plazo		            = isset($_POST["plazo"])? limpiarCadena($_POST["plazo"]):"";
+      $fecha_inicio_actividad= isset($_POST["fecha_inicio_actividad"])? limpiarCadena($_POST["fecha_inicio_actividad"]):"";
+      $fecha_fin_actividad	= isset($_POST["fecha_fin_actividad"])? limpiarCadena($_POST["fecha_fin_actividad"]):"";
+      $plazo_actividad		  = isset($_POST["plazo_actividad"])? limpiarCadena($_POST["plazo_actividad"]):"";
+      $plazo		            = isset($_POST["plazo"])? limpiarCadena($_POST["plazo"]):""; 
       $dias_habiles		      = isset($_POST["dias_habiles"])? limpiarCadena($_POST["dias_habiles"]):"";
 
       $fecha_pago_obrero		= isset($_POST["fecha_pago_obrero"])? limpiarCadena($_POST["fecha_pago_obrero"]):"";
@@ -45,12 +48,13 @@
       switch ($_GET["op"]){
 
         case 'guardaryeditar':
+          
+          $fecha_inicio_actividad =  format_a_m_d( $fecha_inicio_actividad);          
+          $fecha_fin_actividad =  format_a_m_d( $fecha_fin_actividad);
 
-          $fecha_inicio_expl = explode("-", $fecha_inicio);
-          $fecha_inicio =  $fecha_inicio_expl[2]."-".$fecha_inicio_expl[1]."-".$fecha_inicio_expl[0];
+          $fecha_inicio =  format_a_m_d( $fecha_inicio);          
+          $fecha_fin =  format_a_m_d( $fecha_fin);
 
-          $fecha_fin_expl = explode("-", $fecha_fin);
-          $fecha_fin =  $fecha_fin_expl[2]."-".$fecha_fin_expl[1]."-".$fecha_fin_expl[0];
           //*DOC 1*//
           if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
@@ -160,11 +164,11 @@
 
             move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/pdf/" . $doc6);
             
-          }
+          }          
 
           if (empty($idproyecto)){
             // insertamos en la bd
-            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
+            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
             // echo $rspta ;
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proyecto";
 
@@ -242,7 +246,7 @@
               }
             }
 
-            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
+            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
             
             echo $rspta ? "ok" : "Proyecto no se pudo actualizar";
           }
@@ -506,6 +510,23 @@
     if ( !empty($number) ) { $sin_format = floatval(str_replace(",", "", $number)); }
     
     return $sin_format;
+  }
+
+  // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
+  function format_a_m_d( $fecha ) {
+
+    if (!empty($fecha)) {
+
+      $fecha_expl = explode("-", $fecha);
+
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+
+    }else{
+
+      $fecha_convert = "";
+    }   
+
+    return $fecha_convert;
   }
 
   ob_end_flush();

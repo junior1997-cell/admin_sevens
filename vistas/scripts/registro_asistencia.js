@@ -302,10 +302,10 @@ function listar_tbla_principal(nube_idproyecto) {
     "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
-  //Listar quincenas(botones)
+  //Suma ACUMULADO
   $.post("../ajax/registro_asistencia.php?op=suma_total_acumulado", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); console.log(data);
+    data =JSON.parse(data); //console.log(data);
 
     if (data) {
       var normal = parseFloat(data.pagos_normal_dias); var extras = parseFloat(data.pagos_horas_extras);
@@ -319,7 +319,7 @@ function listar_tbla_principal(nube_idproyecto) {
   //Listar quincenas(botones)
   $.post("../ajax/registro_asistencia.php?op=listarquincenas_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); //console.log(data);
+    data =JSON.parse(data); console.log(data);
 
     // validamos la existencia de DATOS
     if (data) {
