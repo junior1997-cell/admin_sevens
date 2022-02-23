@@ -102,7 +102,7 @@
 
               <!-- Modal agregar usuario -->
               <div class="modal fade" id="modal-agregar-usuario">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 class="modal-title">Agregar usuario</h4>
@@ -162,8 +162,8 @@
                             <!-- permisos -->
                             <div class="col-lg-4">
                               <div class="form-group mb-0">
-                                <label class="ml-4" for="permisos">Permisos</label>                               
-                                <ul style="list-style: none; padding-left: 30px !important;" id="permisos"></ul>
+                                <label class="ml-1" for="permisos">Permisos</label>                               
+                                <ul style="list-style: none; padding-left: 10px !important;" id="permisos"></ul>
                               </div>
                             </div>
                             

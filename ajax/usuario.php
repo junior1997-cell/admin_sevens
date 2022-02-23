@@ -242,7 +242,7 @@ switch ($_GET["op"]) {
       in_array(15, $valores) ? ($_SESSION['otro_servicio'] = 1) : ($_SESSION['otro_servicio'] = 0);
       in_array(16, $valores) ? ($_SESSION['resumen_general'] = 1) : ($_SESSION['resumen_general'] = 0);
       in_array(17, $valores) ? ($_SESSION['activo_fijo_general'] = 1) : ($_SESSION['activo_fijo_general'] = 0);
-      in_array(18, $valores) ? ($_SESSION['activo_fijo_proyecto'] = 1) : ($_SESSION['activo_fijo_proyecto'] = 0);
+      in_array(18, $valores) ? ($_SESSION['resumen_activo_fijo_general'] = 1) : ($_SESSION['resumen_activo_fijo_general'] = 0);
     }
     echo json_encode($fetch);
   break;

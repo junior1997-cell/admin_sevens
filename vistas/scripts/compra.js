@@ -565,7 +565,7 @@ function comprobante_compras(idcompra_proyecto, doc) {
             $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
           } else {
             if (extrae_extencion(doc) == "pdf") {
-              $("#doc1_ver").html('<iframe src="../dist/comprobantes_compras/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+              $("#doc1_ver").html('<iframe src="../dist/docs/compra/comprobante_compra/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
             } else {
               if (extrae_extencion(doc) == "dwg") {
                 $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
@@ -573,19 +573,11 @@ function comprobante_compras(idcompra_proyecto, doc) {
                 if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
                   $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
                 } else {
-                  if (
-                    extrae_extencion(doc) == "jpeg" ||
-                    extrae_extencion(doc) == "jpg" ||
-                    extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" ||
-                    extrae_extencion(doc) == "gif" ||
-                    extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" ||
-                    extrae_extencion(doc) == "tif" ||
-                    extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="../dist/comprobantes_compras/' + doc + '" alt="" width="50%" >');
+                  if ( extrae_extencion(doc) == "jpeg" || extrae_extencion(doc) == "jpg" || extrae_extencion(doc) == "jpe" ||
+                    extrae_extencion(doc) == "jfif" || extrae_extencion(doc) == "gif" || extrae_extencion(doc) == "png" ||
+                    extrae_extencion(doc) == "tiff" || extrae_extencion(doc) == "tif" || extrae_extencion(doc) == "webp" ||
+                    extrae_extencion(doc) == "svg" ||  extrae_extencion(doc) == "bmp"  ) {
+                    $("#doc1_ver").html('<img src="../dist/docs/compra/comprobante_compra/' + doc + '" alt="" width="50%" >');
                   } else {
                     if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
                       $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
@@ -615,8 +607,8 @@ function comprobante_compras(idcompra_proyecto, doc) {
     $(".descargar").show();
     $(".descargar").removeClass("col-md-4").addClass("col-md-2");
 
-    $("#ver_completo").attr("href", "../dist/comprobantes_compras/" + doc);
-    $("#descargar_comprob").attr("href", "../dist/comprobantes_compras/" + doc);
+    $("#ver_completo").attr("href", "../dist/docs/compra/comprobante_compra/" + doc);
+    $("#descargar_comprob").attr("href", "../dist/docs/compra/comprobante_compra/" + doc);
   } else {
     $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
@@ -695,12 +687,16 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
   total_pagos(idcompra_proyecto);
 }
 
-function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total) {
+function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, deposito_Actual) {
   var total = 0;
   reload_detraccion = "si";
   total_pagos_detracc(idcompra_proyecto);
 
   localStorage.setItem("idcompra_pago_detracc_nub", idcompra_proyecto);
+
+  localStorage.setItem("monto_total_p", monto_total);
+  localStorage.setItem("monto_total_dep", deposito_Actual);
+
   most_datos_prov_pago(idcompra_proyecto);
   $("#ttl_monto_pgs_detracc").html(formato_miles(monto_total));
   //mostramos los montos del 90 y 10 %
@@ -861,12 +857,14 @@ function guardaryeditar_pago(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (datos) {
+
       if (datos == "ok") {
-        toastr.success("servicio registrado correctamente");
+         
+        Swal.fire("Correcto!", "Pago guardado correctamente", "success");	    
 
         tabla.ajax.reload();
+
         $("#modal-agregar-pago").modal("hide");
 
         if (reload_detraccion == "si") {
@@ -875,13 +873,16 @@ function guardaryeditar_pago(e) {
         } else {
           tabla_pagos1.ajax.reload();
         }
+
         /**================================================== */
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
         limpiar_c_pagos();
       } else {
-        toastr.error(datos);
+
+        Swal.fire("Error!", datos, "error");	
       }
     },
   });
@@ -903,19 +904,22 @@ function total_pagos_detracc(idcompra_proyecto) {
   //tabla 2 proveedor
   $.post("../ajax/compra.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
     $("#monto_total_prov").html("");
+    
+
+    data = JSON.parse(data); //console.log(data);
+
     var inputValue = 0;
     var x = 0;
     var x_saldo = 0;
     var diferencia = 0;
-    data = JSON.parse(data);
-    //console.log(data);
-    inputValue = $(".t_proveedor").val();
+
+    inputValue = parseFloat(quitar_formato_miles($(".t_proveedor").val()));
 
     $("#monto_total_prov").html(formato_miles(data.total_montoo));
     x = (data.total_montoo * 90) / inputValue;
     $("#porcnt_prove").html(redondearExp(x, 2) + " %");
 
-    diferencia = 90 - x;
+    diferencia = 90 - x; console.log(inputValue+'xxxxxxxxxxxxxxxxxxxxx');
 
     x_saldo = (diferencia * data.total_montoo) / x;
 
@@ -936,10 +940,9 @@ function total_pagos_detracc(idcompra_proyecto) {
     var x_saldo_detrcc = 0;
     var diferencia_detrcc = 0;
 
-    data = JSON.parse(data);
-    console.log(data);
+    data = JSON.parse(data); //  console.log(data);
 
-    valor_tt_detrcc = $(".t_detaccion").val();
+    valor_tt_detrcc = parseFloat(quitar_formato_miles($(".t_detaccion").val()));
 
     $("#monto_total_detracc").html(formato_miles(data.total_montoo));
 
@@ -992,7 +995,7 @@ function mostrar_pagos(idpago_compras) {
     $("#idpago_compras").val(data.idpago_compras);
 
     if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/img/vauchers_pagos/" + data.imagen);
+      $("#foto1_i").attr("src", "../dist/docs/compra/baucher/" + data.imagen);
 
       $("#foto1_actual").val(data.imagen);
     }
@@ -2287,7 +2290,7 @@ function re_visualizacion(id, carpeta) {
           toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
           if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/material/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/compra/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
             toastr.success('Documento vizualizado correctamente!!!')
           } else {
             if ( extrae_extencion(antiguopdf) == "csv" ) {
@@ -2312,7 +2315,7 @@ function re_visualizacion(id, carpeta) {
                       extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
                       extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
   
-                      $("#doc"+id+"_ver").html(`<img src="../dist/material/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="50%" >`);
+                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/compra/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="50%" >`);
                       toastr.success('Documento vizualizado correctamente!!!');
                     } else {
                       $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -2393,12 +2396,14 @@ function extrae_extencion(filename) {
 
 //validando excedentes
 function validando_excedentes() {
-  var totattotal = localStorage.getItem("monto_total_p");
-  var monto_total_dep = localStorage.getItem("monto_total_dep");
+  var totattotal = quitar_formato_miles(localStorage.getItem("monto_total_p"));
+  var monto_total_dep = quitar_formato_miles(localStorage.getItem("monto_total_dep"));
   var monto_entrada = $("#monto_pago").val();
   var total_suma = parseFloat(monto_total_dep) + parseFloat(monto_entrada);
-  var debe = totattotal - monto_total_dep;
+  var debe = parseFloat(totattotal) - monto_total_dep;
+
   console.log(typeof total_suma);
+
   if (total_suma > totattotal) {
     toastr.error("ERROR monto excedido al total del monto a pagar!");
   } else {

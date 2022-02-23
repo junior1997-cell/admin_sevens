@@ -145,11 +145,21 @@
         <?php  }  ?>
 
         <?php if ($_SESSION['activo_fijo_general']==1) {  ?>
-          <!-- ESCRITORIO -->
+          <!-- ALL ACTIVOS FIJOS -->
           <li class="nav-item">
             <a href="all_activos_fijos.php" class="nav-link" id="mAllactivos_fijos">
               <i class="nav-icon fas fa-hand-holding-usd"></i>
               <p>All activos fijos</p>
+            </a>
+          </li>
+        <?php  }  ?>
+
+        <?php if ($_SESSION['resumen_activo_fijo_general']==1) {  ?>
+          <!-- RESUMEN ACTIVOS FIJOS GENERAL-->
+          <li class="nav-item">
+            <a href="resumen_activos_fijos_general.php" class="nav-link" id="mResumen_activos_fijos_general">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>Resumen activos fijos</p>
             </a>
           </li>
         <?php  }  ?>
@@ -268,17 +278,7 @@
               </li> 
             </ul>
           </li>
-        <?php  }  ?>
-
-        <?php if ($_SESSION['activo_fijo_proyecto']==1) {  ?>
-          <!-- Activo fijo por proyecto -->
-          <li class="nav-item">
-            <a href="activos_fijos_proyecto.php" class="nav-link" id="mActivos_fijos_proyect">
-              <i class="nav-icon fas fa-hand-holding-usd"></i>
-              <p>Activos fijos proyecto</p>
-            </a>
-          </li>
-        <?php  }  ?>        
+        <?php  }  ?>           
 
         <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
           <!-- SERVICIO -->       
@@ -307,6 +307,15 @@
             </a>
           </li>
         <?php  }  ?>
+
+        <li class="nav-item ver-otros-modulos-1">
+          <a href="sub_contrato.php" class="nav-link" id="mSubContrato">
+            <i class="nav-icon fas fa-hands-helping"></i>
+            <p>
+              Sub Contrato              
+            </p>
+          </a>
+        </li>
 
         <?php if ($_SESSION['planilla_seguro']==1) {  ?>
           <!-- PLANILLAS Y SEGUROS -->       

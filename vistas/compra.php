@@ -449,11 +449,8 @@
                                 <thead>
                                   <tr>
                                     <th>Acciones</th>
-                                    <th>Forma pago</th>
+                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma</th>
                                     <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                    <th>Banco</th>
-                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                     <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                     <th>Descripción</th>
                                     <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -466,11 +463,8 @@
                                 <tfoot>
                                   <tr>
                                     <th>Aciones</th>
-                                    <th>Forma pago</th>
-                                    <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                    <th>Banco</th>
-                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                    <th>Forma</th>
+                                    <th>Beneficiario</th>                                     
                                     <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                     <th>Descripción</th>
                                     <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -513,9 +507,6 @@
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
-                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -530,9 +521,6 @@
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
-                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -544,7 +532,7 @@
                                   <th>Estado</th>
                                 </tr>
                                 <tr>
-                                  <td colspan="8"></td>
+                                  <td colspan="5"></td>
                                   <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                   <th style="color: #ff0000; background-color: #f3e700;">
                                     <b id="saldo_p"></b> <br />
@@ -1051,7 +1039,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" />
                                   </div>
                                   <div class="col-md-6 text-center comprobante">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, '');"><i class="fa fa-eye"></i> Comprobante.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_compra');"><i class="fa fa-eye"></i> Comprobante.</button>
                                   </div>
                                   <div class="col-md-4 text-center descargar" style="display: none;">
                                     <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob"  download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
@@ -1365,7 +1353,7 @@
                           </form>
                         </div>
                         <div class="modal-footer justify-content-between">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_material();">Close</button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_materiales();">Close</button>
                           <button type="submit" class="btn btn-success" id="guardar_registro_material">Guardar Cambios</button>
                         </div>
                       </div>

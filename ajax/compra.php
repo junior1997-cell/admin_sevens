@@ -21,7 +21,7 @@ $total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"
 
 $estado_detraccion = isset($_POST["estado_detraccion"]) ? limpiarCadena($_POST["estado_detraccion"]) : "";
 
-///==============DATOS PAGO COMPRA==============
+// :::::::::::::::::::::::::::::::::::: D A T O S   P A G O   C O M P A ::::::::::::::::::::::::::::::::::::::
 $beneficiario_pago = isset($_POST["beneficiario_pago"]) ? limpiarCadena($_POST["beneficiario_pago"]) : "";
 $forma_pago = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
 $tipo_pago = isset($_POST["tipo_pago"]) ? limpiarCadena($_POST["tipo_pago"]) : "";
@@ -33,13 +33,11 @@ $monto_pago = isset($_POST["monto_pago"]) ? limpiarCadena($_POST["monto_pago"]) 
 $numero_op_pago = isset($_POST["numero_op_pago"]) ? limpiarCadena($_POST["numero_op_pago"]) : "";
 $descripcion_pago = isset($_POST["descripcion_pago"]) ? limpiarCadena($_POST["descripcion_pago"]) : "";
 $idcompra_proyecto_p = isset($_POST["idcompra_proyecto_p"]) ? limpiarCadena($_POST["idcompra_proyecto_p"]) : "";
-$idpago_compras = isset($_POST["idpago_compras"]) ? limpiarCadena($_POST["idpago_compras"]) : "";
- 
+$idpago_compras = isset($_POST["idpago_compras"]) ? limpiarCadena($_POST["idpago_compras"]) : ""; 
 $idproveedor_pago = isset($_POST["idproveedor_pago"]) ? limpiarCadena($_POST["idproveedor_pago"]) : "";
-
 $imagen1 = isset($_POST["foto1"]) ? limpiarCadena($_POST["foto1"]) : "";
 
-//comprobante
+// :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R O B A N T E ::::::::::::::::::::::::::::::::::::::
 $comprobante_c = isset($_POST["comprobante_c"]) ? limpiarCadena($_POST["comprobante_c"]) : "";
 $doc1 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
 $doc_old_1 = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
@@ -128,7 +126,7 @@ switch ($_GET["op"]) {
 
       $doc_comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-      move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/comprobantes_compras/" . $doc_comprobante);
+      move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/compra/comprobante_compra/" . $doc_comprobante);
     }
     //Borramos el comprobante
     if ($flat_comprob == true) {
@@ -137,7 +135,7 @@ switch ($_GET["op"]) {
       $doc1_ant = $datos_f1->fetch_object()->imagen_comprobante;
 
       if ($doc1_ant != "") {
-        unlink("../dist/comprobantes_compras/" . $doc1_ant);
+        unlink("../dist/docs/compra/comprobante_compra/" . $doc1_ant);
       }
     }
 
@@ -281,7 +279,15 @@ switch ($_GET["op"]) {
 
       if ($reg->estado_detraccion == "1") {
 
-        $list_segun_estado_detracc = '<div class="text-center"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .')">
+        $deposito_Actual = 0;
+
+        if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
+          $deposito_Actual = 0;
+        } else {
+          $deposito_Actual = $rspta2['total_pago_compras'];
+        }
+
+        $list_segun_estado_detracc = '<div class="text-center"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total . ',' . $deposito_Actual .')">
           <i class="fas fa-' . $icon .' nav-icon"></i> ' .$nombre .
         '</button>' .
         ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($rspta2['total_pago_compras'], 2, '.', ',') .
@@ -543,79 +549,51 @@ switch ($_GET["op"]) {
   break;
 
   case 'guardaryeditar_pago':
-    if (!isset($_SESSION["nombre"])) {
-      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+
+    // imgen de perfil
+    if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
+
+      $imagen1 = $_POST["foto1_actual"];
+
+      $flat_img1 = false;
+
     } else {
-      //Validamos el acceso solo al usuario logueado y autorizado.
-      if ($_SESSION['servicio_maquina'] == 1) {
-        // imgen de perfil
-        if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
-          $imagen1 = $_POST["foto1_actual"];
-          $flat_img1 = false;
-        } else {
-          $ext1 = explode(".", $_FILES["foto1"]["name"]);
-          $flat_img1 = true;
 
-          $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+      $ext1 = explode(".", $_FILES["foto1"]["name"]);
 
-          move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/img/vauchers_pagos/" . $imagen1);
+      $flat_img1 = true;
+
+      $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+      move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/compra/baucher/" . $imagen1);
+    }
+
+    if (empty($idpago_compras)) {
+
+      $rspta = $compra->insertar_pago( $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago,
+        $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago,
+        $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
+
+      echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
+
+    } else {
+
+      // validamos si existe LA IMG para eliminarlo
+      if ($flat_img1 == true) {
+
+        $datos_f1 = $compra->obtenerImg($idpago_compras);
+
+        $img1_ant = $datos_f1->fetch_object()->imagen;
+
+        if ($img1_ant != "") {
+
+          unlink("../dist/docs/compra/baucher/" . $img1_ant);
         }
-
-        if (empty($idpago_compras)) {
-          //$idpago_compras,$idcompra_proyecto_p,$descripcion_pago,$numero_op_pago,$monto_pago,$fecha_pago,$titular_cuenta_pago,$banco_pago,$cuenta_destino_pago,$tipo_pago,$forma_pago,$beneficiario_pago
-
-          $rspta = $compra->insertar_pago(
-            $idcompra_proyecto_p,
-            $idproveedor_pago,
-            $beneficiario_pago,
-            $forma_pago,
-            $tipo_pago,
-            $cuenta_destino_pago,
-            $banco_pago,
-            $titular_cuenta_pago,
-            $fecha_pago,
-            $monto_pago,
-            $numero_op_pago,
-            $descripcion_pago,
-            $imagen1
-          );
-          echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
-        } else {
-          // validamos si existe LA IMG para eliminarlo
-          if ($flat_img1 == true) {
-            $datos_f1 = $compra->obtenerImg($idpago_compras);
-
-            $img1_ant = $datos_f1->fetch_object()->imagen;
-
-            if ($img1_ant != "") {
-              unlink("../dist/img/vauchers_pagos/" . $img1_ant);
-            }
-          }
-
-          $rspta = $compra->editar_pago(
-            $idpago_compras,
-            $idcompra_proyecto_p,
-            $idproveedor_pago,
-            $beneficiario_pago,
-            $forma_pago,
-            $tipo_pago,
-            $cuenta_destino_pago,
-            $banco_pago,
-            $titular_cuenta_pago,
-            $fecha_pago,
-            $monto_pago,
-            $numero_op_pago,
-            $descripcion_pago,
-            $idcompra_proyecto,
-            $imagen1
-          );
-
-          echo $rspta ? "ok" : "Servicio no se pudo actualizar";
-        }
-        //Fin de las validaciones de acceso
-      } else {
-        require 'noacceso.php';
       }
+
+      $rspta = $compra->editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $idcompra_proyecto, $imagen1 );
+
+      echo $rspta ? "ok" : "Servicio no se pudo actualizar";
     }
   break;
 
@@ -670,19 +648,7 @@ switch ($_GET["op"]) {
 
         while ($reg = $rspta->fetch_object()) {
 
-          $suma = $suma + $reg->monto;
-
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
-
-          if (strlen($reg->titular_cuenta) >= 20) {
-            $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
-          } else {
-            $titular_cuenta = $reg->titular_cuenta;
-          }
+          $suma = $suma + $reg->monto;                 
 
           empty($reg->imagen) ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>') : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
           
@@ -697,16 +663,17 @@ switch ($_GET["op"]) {
               : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
             "1" => $reg->forma_pago,
-            "2" => $reg->beneficiario,
-            "3" => $reg->cuenta_destino,
-            "4" => $reg->banco,
-            "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-            "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "8" => $reg->numero_operacion,
-            "9" => number_format($reg->monto, 2, '.', ','),
-            "10" => $imagen,
-            "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "2" => '<div class="user-block">
+              <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
+              <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
+              <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+            </div>',             
+            "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
+            "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+            "5" => $reg->numero_operacion,
+            "6" => number_format($reg->monto, 2, '.', ','),
+            "7" => $imagen,
+            "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         //$suma=array_sum($rspta->fetch_object()->monto);
@@ -769,15 +736,15 @@ switch ($_GET["op"]) {
             "1" => $reg->forma_pago,
             "2" => '<div class="user-block">
               <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
-              <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>            
+              <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
+              <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
             </div>',
-            "3" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-            "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "5" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "6" => $reg->numero_operacion,
-            "7" => number_format($reg->monto, 2, '.', ','),
-            "8" => $imagen,
-            "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
+            "4" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+            "5" => $reg->numero_operacion,
+            "6" => number_format($reg->monto, 2, '.', ','),
+            "7" => $imagen,
+            "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         //$suma=array_sum($rspta->fetch_object()->monto);

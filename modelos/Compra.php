@@ -286,57 +286,20 @@ class Compra
   /**=========================== */
   //SECCION PAGOS
   /**=========================== */
-  public function insertar_pago(
-    $idcompra_proyecto_p,
-    $idproveedor_pago,
-    $beneficiario_pago,
-    $forma_pago,
-    $tipo_pago,
-    $cuenta_destino_pago,
-    $banco_pago,
-    $titular_cuenta_pago,
-    $fecha_pago,
-    $monto_pago,
-    $numero_op_pago,
-    $descripcion_pago,
-    $imagen1
-  ) {
-    /*var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago,
-     $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();*/
+  public function insertar_pago( $idcompra_proyecto_p,  $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago,
+    $banco_pago, $titular_cuenta_pago, $fecha_pago,  $monto_pago,  $numero_op_pago,  $descripcion_pago, $imagen1  ) {
+    // var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago, $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();
     ///idproyecto
-    $sql = "INSERT INTO pago_compras (idcompra_proyecto,idproveedor,beneficiario,forma_pago,tipo_pago,cuenta_destino,idbancos,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,imagen) 
-		VALUES ('$idcompra_proyecto_p',
-			'$idproveedor_pago',
-			'$beneficiario_pago',
-			'$forma_pago',
-			'$tipo_pago',
-			'$cuenta_destino_pago',
-			'$banco_pago',
-			'$titular_cuenta_pago',
-			'$fecha_pago',
-			'$monto_pago',
-			'$numero_op_pago',
-			'$descripcion_pago',
-			'$imagen1')";
+    $sql = "INSERT INTO pago_compras (idcompra_proyecto, idproveedor, beneficiario, forma_pago, tipo_pago, cuenta_destino, idbancos, titular_cuenta, fecha_pago, monto, numero_operacion, descripcion, imagen) 
+		VALUES ('$idcompra_proyecto_p',	'$idproveedor_pago', '$beneficiario_pago', '$forma_pago', '$tipo_pago', '$cuenta_destino_pago',
+			'$banco_pago', '$titular_cuenta_pago', '$fecha_pago', '$monto_pago', '$numero_op_pago',	'$descripcion_pago', '$imagen1')";
     return ejecutarConsulta($sql);
   }
   //Implementamos un método para editar registros
-  public function editar_pago(
-    $idpago_compras,
-    $idcompra_proyecto_p,
-    $idproveedor_pago,
-    $beneficiario_pago,
-    $forma_pago,
-    $tipo_pago,
-    $cuenta_destino_pago,
-    $banco_pago,
-    $titular_cuenta_pago,
-    $fecha_pago,
-    $monto_pago,
-    $numero_op_pago,
-    $descripcion_pago,
-    $imagen1
-  ) {
+  public function editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago,
+    $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 ) {
+    var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago, $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();
+    
     $sql = "UPDATE pago_compras SET
 		idcompra_proyecto ='$idcompra_proyecto_p',
 		idproveedor='$idproveedor_pago',
