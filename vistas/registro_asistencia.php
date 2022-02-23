@@ -123,7 +123,7 @@
                                 <th rowspan="2" class="stile-celda">Sabatical</th>
                                 <th rowspan="2" class="stile-celda">Pago <br> parcial</th>
                                 <th rowspan="2" class="stile-celda">Adicional <br> descuento</th>
-                                <th rowspan="2" class="stile-celda">Pago quincenal</th> 
+                                <th rowspan="2" class="stile-celda head_pago_q_s">Pago quincenal</th> 
                                 <th rowspan="2" class="stile-celda"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
                               </tr>
                               <tr class="table-dias data-dia-semana">

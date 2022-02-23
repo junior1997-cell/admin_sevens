@@ -80,7 +80,7 @@ function init(){
   $('#fecha_fin_actividad').datetimepicker({
     locale: 'es',
     format: 'DD-MM-YYYY',
-    daysOfWeekDisabled: [6]
+    daysOfWeekDisabled: [6],
   });
   
   // $('#costo').inputmask('999,999,999.99', { reverse: true });
@@ -142,8 +142,11 @@ function limpiar() {
   $("#nombre_proyecto").val(""); $("#nombre_codigo").val("");
   $("#ubicacion").val(""); 
   $("#actividad_trabajo").val("");  
-  
+
   $("#fecha_inicio_actividad").val("");  $("#fecha_fin_actividad").val("");
+  $('#plazo_actividad').val("0");
+  $('.plazo_actividad').html("0");
+
   $("#fecha_inicio").val("");  $("#fecha_fin").val("");   
   $("#dias_habiles").val(""); $("#plazo").val(""); 
 
@@ -489,6 +492,7 @@ function reiniciar_proyecto(idproyecto) {
   });      
 }
 
+
 $(function () {  
 
   //Date range picker
@@ -536,6 +540,8 @@ $(function () {
       empresa_acargo: {minlength: 6, maxlength: 200},
       fecha_inicio: {required: true,minlength: 1, maxlength: 25},
       fecha_fin:{required: true,minlength: 1, maxlength: 25},
+      fecha_inicio_actividad: {required: true, minlength: 1, maxlength: 25},
+      fecha_fin_actividad:{required: true, minlength: 1, maxlength: 25},
       dias_habiles: {required: true,minlength: 1, maxlength: 11, digits: true, number: true},
       plazo: {required: true,minlength: 1, maxlength: 11, number: true},
       costo: { minlength: 1, maxlength: 20,  },
@@ -577,6 +583,12 @@ $(function () {
       },
       fecha_fin: {
         required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
+      },
+      fecha_inicio_actividad: {
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo."
+      },
+      fecha_fin_actividad:{
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo."
       },
       dias_habiles: {
         required: "Este campo es requerido.", 
@@ -779,6 +791,7 @@ function calcular_palzo() {
     $("#plazo").val( plazo_dia +' dias');    
   });
 }
+
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -1588,7 +1601,7 @@ function mostrar(idproyecto) {
     $("#ubicacion").val(data.ubicacion); 
     $("#actividad_trabajo").val(data.actividad_trabajo);  
        
-    $("#dias_habiles").val(parseInt( data.dias_habiles)); 
+    $("#dias_habiles").val(parseInt( data.dias_habiles));     
     $("#plazo").val(data.plazo); 
     $("#costo").val(formato_miles(data.costo)); 
     $("#empresa_acargo").val(data.empresa_acargo); 
@@ -1599,6 +1612,11 @@ function mostrar(idproyecto) {
     // console.log(format_d_m_a(data.fecha_inicio));
     $("#fecha_inicio").val(format_d_m_a(data.fecha_inicio));
     $("#fecha_fin").val(format_d_m_a(data.fecha_fin));
+
+    $("#fecha_inicio_actividad").val(format_d_m_a(data.fecha_inicio_actividad));  
+    $("#fecha_fin_actividad").val(format_d_m_a(data.fecha_fin_actividad));
+    $('#plazo_actividad').val(data.plazo_actividad); 
+    $('.plazo_actividad').html(data.plazo_actividad);
 
     if (data.permanente_pago_obrero == '1') {
       $("#fecha_pago_obrero").prop("disabled", true); 
@@ -2023,6 +2041,10 @@ function mostrar_detalle(idproyecto) {
                   '<td>'+data.actividad_trabajo+'</td>'+
                 '</tr>'+
                 '<tr data-widget="expandable-table" aria-expanded="false">'+
+                  '<th>Fecha inicio/fin actividad</th>'+
+                  '<td>'+format_d_m_a(data.fecha_inicio_actividad)+' / ' + format_d_m_a(data.fecha_fin_actividad)+'</td>'+
+                '</tr>'+
+                '<tr data-widget="expandable-table" aria-expanded="false">'+
                   '<th>Fecha inicio/fin</th>'+
                   '<td>'+format_d_m_a(data.fecha_inicio)+' / ' + format_d_m_a(data.fecha_fin)+'</td>'+
                 '</tr>'+
@@ -2263,6 +2285,23 @@ function calcular_plazo_fechafin() {
   } 
 }
 
+function calcular_plazo_actividad() {
+
+  var plazo = 0;  
+
+  if ($('#fecha_inicio_actividad').val() != "" && $('#fecha_fin_actividad').val() != "") {
+
+    var fecha1 = moment( format_a_m_d($('#fecha_inicio_actividad').val()) );
+
+    var fecha2 = moment( format_a_m_d($('#fecha_fin_actividad').val()) );
+
+    plazo = fecha2.diff(fecha1, 'days') + 1;
+  } 
+
+  $('.plazo_actividad').html(plazo);
+  $('#plazo_actividad').val(plazo);
+}
+
 // funcino para sumar dias
 sumaFecha = function(d, fecha) {
   var Fecha = new Date();
@@ -2307,6 +2346,21 @@ function format_a_m_d(fecha) {
   } else {
     let splits = fecha.split("-"); //console.log(splits);
     format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
+}
+
+// convierte de una fecha(mm-dd-aa): 23-12-2021 a una fecha(mm-dd-aa): 12-23-2021
+function format_m_d_a(fecha) {
+
+  var format = "";
+
+  if (fecha == '' || fecha == null) {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[1]+'-'+splits[0]+'-'+splits[2];
   } 
 
   return format;
