@@ -1,120 +1,111 @@
-<?php 
-	ob_start();
+<?php
+ob_start();
 
-	if (strlen(session_id()) < 1){
+if (strlen(session_id()) < 1) {
+  session_start(); //Validamos si existe o no la sesión
+}
 
-		session_start();//Validamos si existe o no la sesión
-	}
+if (!isset($_SESSION["nombre"])) {
+  header("Location: login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+} else {
+  //Validamos el acceso solo al usuario logueado y autorizado.
+  if ($_SESSION['compra'] == 1) {
 
-	if (!isset($_SESSION["nombre"])) {
+    require_once "../modelos/Resumen_insumos.php";
 
-		header("Location: login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+    $resumen_insumos = new ResumenInsumos();
 
-	} else {
-		//Validamos el acceso solo al usuario logueado y autorizado.
-		if ($_SESSION['compra']==1)	{ 
+    switch ($_GET["op"]) {
 
-			require_once "../modelos/Resumen_insumos.php";
+      case 'listar_tbla_principal':
 
-			$resumen_insumos=new ResumenInsumos();
+        $idproyecto = $_GET["id_proyecto"];
 
-			switch ($_GET["op"]){
-				
-				case 'listar_tbla_principal':
+        $rspta = $resumen_insumos->listar_tbla_principal($idproyecto);
+        //Vamos a declarar un array
+        $data = [];
 
-          $idproyecto = $_GET["id_proyecto"];
+        $imagen_error = "this.src='../dist/svg/default_producto.svg'";
 
-					$rspta=$resumen_insumos->listar_tbla_principal($idproyecto);
-					//Vamos a declarar un array
-					$data= Array();
+        while ($reg = $rspta->fetch_object()) {
 
-          $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+          $precio_promedio = number_format($reg->precio_con_igv / $reg->count_productos, 2, ".", ",");
 
-					while ($reg=$rspta->fetch_object()){
+          $data[] = [             
+            "0" => '<div class="user-block"> <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg->imagen . '" alt="User Image" onerror="' .  $imagen_error .  '">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombre_producto . '</p></span>
+                <span class="description"> <b>Color:</b> ' . $reg->nombre_color .'</span>
+              </div>',
+            "1" => $reg->nombre_medida,
+            "2" => $reg->cantidad_total,
+            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
+            <span> S/. ' . number_format($reg->promedio_precio, 2, ".", ",") . '</span>',
+            "4" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
+            "5" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+          ];
+        }
 
-            $precio_promedio = number_format($reg->precio_con_igv/$reg->count_productos, 2, ".", ",");
-						$data[]=array(
-              // "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
-              //   ' <button class="btn btn-danger" onclick="desactivar('.$reg->idusuario.')"><i class="far fa-trash-alt  "></i></button>':
-              //   '<button class="btn btn-warning" onclick="mostrar('.$reg->idusuario.')"><i class="fas fa-pencil-alt"></i></button>'.
-              //   ' <button class="btn btn-primary" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>',
-              "0"=>'<div class="user-block">
-                 <img class="img-circle" src="../dist/img/materiales/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
-                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre_producto .'</p></span>
-                 <span class="description"> <b>Color:</b> '. $reg->nombre_color .' </span>
-               </div>',
-              "1"=>$reg->nombre_medida,
-              "2"=>$reg->cantidad_total,
-              "3"=>'<span> S/. '. number_format($reg->promedio_precio, 2, ".", ",") . '</span>  <button class="btn btn-info btn-sm" onclick="ver_precios_y_mas('.$reg->idproyecto.', '.$reg->idproducto .', \'' . $reg->nombre_producto . '\', \''. $precio_promedio . '\', \''. number_format($reg->precio_total, 2, ".", ",") .'\')"><i class="far fa-eye"></i></button>' ,
-              "4"=>'S/. '.number_format($reg->precio_actual, 2, ".", ","),
-              "5"=>'S/. '. number_format($reg->precio_total, 2, ".", ",") ,
-              // "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              // '<span class="text-center badge badge-danger">Desactivado</span>'
-            );
-					}
+        $results = [
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data), //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+          "aaData" => $data,
+        ];
+        echo json_encode($results);
 
-					$results = array(
-						"sEcho"=>1, //Información para el datatables
-						"iTotalRecords"=>count($data), //enviamos el total registros al datatable
-						"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
-						"aaData"=>$data);
-					echo json_encode($results);
-
-				break;
-
-				case 'ver_precios_y_mas':
-
-					$idproyecto = $_GET["idproyecto"]; $idproducto = $_GET["idproducto"];
-
-					$rspta=$resumen_insumos->ver_precios_y_mas($idproyecto, $idproducto);
-					//Vamos a declarar un array
-					$data= Array();	
-          
-          $imagen_error = "this.src='../dist/svg/user_default.svg'"; $ficha_tecnica = ""; 
-
-					while ($reg=$rspta->fetch_object()){
-
-            // validamos si existe una ficha tecnica
-            !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
-						
-            $data[]=array(
-							// "0"=>'<div class="user-block">
-							// 	<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-							// 	<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-							// 	<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-							// </div>',
-              "0" =>date("d/m/Y", strtotime($reg->fecha_compra)),
-							"1"=>$reg->cantidad,
-							"2"=> '<h4> <b>'. number_format( $reg->precio_igv, 2, ".", ",") .'</b> </h4>',
-              "3"=>'S/. '. number_format($reg->descuento , 2, ".", ","),
-              "4"=>'S/. '. number_format($reg->subtotal, 2, ".", ","),
-              "5"=>$ficha_tecnica,
-						);
-					}
-
-					$results = array(
-						"sEcho"=>1, //Información para el datatables
-						"iTotalRecords"=>count($data), //enviamos el total registros al datatable
-						"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
-						"aaData"=>$data);
-					echo json_encode($results);
-
-				break;
-
-        case 'suma_total_compras':
-
-          $idproyecto = $_POST["idproyecto"];
-
-          $rspta = $resumen_insumos->suma_total_compras($idproyecto);
-
-          echo json_encode($rspta);
         break;
-			}
-			//Fin de las validaciones de acceso
-		} else {
 
-			require 'noacceso.php';
-		}
-	}
-	ob_end_flush();
+      case 'ver_precios_y_mas':
+        $idproyecto = $_GET["idproyecto"];
+        $idproducto = $_GET["idproducto"];
+
+        $rspta = $resumen_insumos->ver_precios_y_mas($idproyecto, $idproducto);
+        //Vamos a declarar un array
+        $data = [];
+
+        $imagen_error = "this.src='../dist/svg/user_default.svg'";
+        $ficha_tecnica = "";
+
+        while ($reg = $rspta->fetch_object()) {
+          // validamos si existe una ficha tecnica
+          !empty($reg->ficha_tecnica)
+            ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-success"></i></a></center>')
+            : ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-lg text-gray-50"></i></center>');
+
+          $data[] = [    
+            "0" => '<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>',
+            "1" => '<span class="text-primary font-weight-bold" >' . $reg->proveedor . '</span>',      
+            "2" => date("d/m/Y", strtotime($reg->fecha_compra)),
+            "3" => $reg->cantidad,
+            "4" => '<b>' . number_format($reg->precio_igv, 2, ".", ",") . '</b>',
+            "5" => 'S/. ' . number_format($reg->descuento, 2, ".", ","),
+            "6" => 'S/. ' . number_format($reg->subtotal, 2, ".", ","),
+            // "7" => $ficha_tecnica,
+          ];
+        }
+
+        $results = [
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data), //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+          "aaData" => $data,
+        ];
+        echo json_encode($results);
+
+        break;
+
+      case 'suma_total_compras':
+        $idproyecto = $_POST["idproyecto"];
+
+        $rspta = $resumen_insumos->suma_total_compras($idproyecto);
+
+        echo json_encode($rspta);
+        break;
+    }
+    //Fin de las validaciones de acceso
+  } else {
+    require 'noacceso.php';
+  }
+}
+ob_end_flush();
 ?>

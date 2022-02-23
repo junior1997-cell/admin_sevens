@@ -31,6 +31,29 @@ function listar_tbla_principal(id_proyecto)
         console.log(e.responseText);	
       }
 		},
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: Cantidad
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass("text-center");         
+      }
+
+      // columna: Precio promedio
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass("modal-footer justify-content-between");         
+      }
+
+      // columna: Precio actual
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-right");         
+      }
+      // columna: Suma Total
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");         
+      }
+
+
+    },
 		"language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -91,18 +114,45 @@ function ver_precios_y_mas( idproyecto, idproducto, nombre_producto, precio_prom
         console.log(e.responseText);	
       }
     },
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: Cantidad
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass("text-center");         
+      }
+
+      // columna: Precio promedio
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-right h5");         
+      }
+
+      // columna: Precio actual
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");         
+      }
+      
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass("text-right");         
+      }
+    },
 		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
 		"bDestroy": true,
 		"iDisplayLength": 5,//Paginación
 		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-	}).DataTable();
+	}).DataTable();  
+}
 
+function editar_detalle_compras(id) {
   
 }
 
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+
 /**formato_miles */
 function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
+  if (!num || num == "NaN") return "0.00";
   if (num == "Infinity") return "&#x221e;";
   num = num.toString().replace(/\$|\,/g, "");
   if (isNaN(num)) num = "0";

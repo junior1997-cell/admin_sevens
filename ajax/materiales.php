@@ -138,7 +138,7 @@
 
             if (empty($reg->imagen)) { $imagen = 'img_material_defect.jpg';  } else { $imagen = $reg->imagen;   }
 
-            empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<div><center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center></div>') : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
+            empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
             
             empty($reg->precio_igv) ? ($monto_igv = '-') : ($monto_igv = $reg->precio_igv);
             

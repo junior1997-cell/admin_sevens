@@ -295,10 +295,11 @@ class Compra
 			'$banco_pago', '$titular_cuenta_pago', '$fecha_pago', '$monto_pago', '$numero_op_pago',	'$descripcion_pago', '$imagen1')";
     return ejecutarConsulta($sql);
   }
+  
   //Implementamos un método para editar registros
   public function editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago,
     $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 ) {
-    var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago, $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();
+    // var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago, $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();
     
     $sql = "UPDATE pago_compras SET
 		idcompra_proyecto ='$idcompra_proyecto_p',
@@ -317,6 +318,7 @@ class Compra
 		WHERE idpago_compras='$idpago_compras'";
     return ejecutarConsulta($sql);
   }
+
   //Listar pagos-normal
   public function listar_pagos($idcompra_proyecto)
   {

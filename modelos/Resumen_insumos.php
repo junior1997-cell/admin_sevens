@@ -24,9 +24,13 @@ Class ResumenInsumos
 
 	public function ver_precios_y_mas($idproyecto, $idproducto)
 	{
-		$sql="SELECT cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, pr.nombre AS nombre_producto, dc.cantidad, dc.precio_igv, dc.descuento, dc.subtotal 
-		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
-		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' AND dc.idproducto = '$idproducto';";
+		$sql="SELECT cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, pr.nombre AS nombre_producto, dc.cantidad, 
+		dc.precio_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
+		AND dc.idproducto = pr.idproducto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' 
+		AND cpp.idproveedor = prov.idproveedor AND dc.idproducto = '$idproducto' 
+		ORDER BY cpp.fecha_compra DESC;";
 
 		return ejecutarConsulta($sql);		
 	}

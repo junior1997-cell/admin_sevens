@@ -570,9 +570,8 @@ switch ($_GET["op"]) {
 
     if (empty($idpago_compras)) {
 
-      $rspta = $compra->insertar_pago( $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago,
-        $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago,
-        $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
+      $rspta = $compra->insertar_pago( $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
+      $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
 
       echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
 
@@ -591,7 +590,8 @@ switch ($_GET["op"]) {
         }
       }
 
-      $rspta = $compra->editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $idcompra_proyecto, $imagen1 );
+      $rspta = $compra->editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
+      $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
 
       echo $rspta ? "ok" : "Servicio no se pudo actualizar";
     }
@@ -628,212 +628,181 @@ switch ($_GET["op"]) {
   break;
 
   case 'listar_pagos_proveedor':
-    if (!isset($_SESSION["nombre"])) {
-      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-    } else {
-      //Validamos el acceso solo al usuario logueado y autorizado.
-      if ($_SESSION['servicio_maquina'] == 1) {
-        //$_GET["nube_idproyecto"]
-        $idcompra_proyecto = $_GET["idcompra_proyecto"];
-        /*$idproyecto =$_GET["idproyecto"];
-         $tipopago ='Proveedor';*/
-        //$idmaquinaria ='3';
-        //$idproyecto ='2';
-        $rspta = $compra->listar_pagos($idcompra_proyecto);
-        //Vamos a declarar un array
-        //$banco='';
-        $data = [];
-        $suma = 0;
-        $imagen = '';
+    $idcompra_proyecto = $_GET["idcompra_proyecto"];
+        
+    $rspta = $compra->listar_pagos($idcompra_proyecto);
+    //Vamos a declarar un array
+      
+    $data = [];
+    $suma = 0;
+    $imagen = '';
 
-        while ($reg = $rspta->fetch_object()) {
+    while ($reg = $rspta->fetch_object()) {
 
-          $suma = $suma + $reg->monto;                 
+      $suma = $suma + $reg->monto;                 
 
-          empty($reg->imagen) ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>') : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-          
-          $tool = '"tooltip"';
-          
-          $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
-          
-          $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-            "1" => $reg->forma_pago,
-            "2" => '<div class="user-block">
-              <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
-              <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
-              <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
-            </div>',             
-            "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-            "5" => $reg->numero_operacion,
-            "6" => number_format($reg->monto, 2, '.', ','),
-            "7" => $imagen,
-            "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
-          ];
-        }
-        //$suma=array_sum($rspta->fetch_object()->monto);
-        $results = [
-          "sEcho" => 1, //Información para el datatables
-          "iTotalRecords" => count($data), //enviamos el total registros al datatable
-          "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-          "data" => $data,
-          "suma" => $suma,
-        ];
-        echo json_encode($results);
-        //Fin de las validaciones de acceso
-      } else {
-        require 'noacceso.php';
-      }
+      empty($reg->imagen) ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>') : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+      
+      $tool = '"tooltip"';
+      
+      $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+      
+      $data[] = [
+        "0" => $reg->estado
+          ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
+            ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
+          : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
+            ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
+        "1" => $reg->forma_pago,
+        "2" => '<div class="user-block">
+          <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
+          <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
+          <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+        </div>',             
+        "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
+        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "5" => $reg->numero_operacion,
+        "6" => number_format($reg->monto, 2, '.', ','),
+        "7" => $imagen,
+        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+      ];
     }
+    //$suma=array_sum($rspta->fetch_object()->monto);
+    $results = [
+      "sEcho" => 1, //Información para el datatables
+      "iTotalRecords" => count($data), //enviamos el total registros al datatable
+      "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+      "data" => $data,
+      "suma" => $suma,
+    ];
+    
+    echo json_encode($results);
   break;
 
   case 'listar_pagos_compra_prov_con_dtracc':
-    if (!isset($_SESSION["nombre"])) {
-      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-    } else {
-      //Validamos el acceso solo al usuario logueado y autorizado.
-      if ($_SESSION['servicio_maquina'] == 1) {
-        //$_GET["nube_idproyecto"]
-        $idcompra_proyecto = $_GET["idcompra_proyecto"];
-        $tipo_pago = 'Proveedor';
-        //$idmaquinaria ='3';
-        //$idproyecto ='2';
-        $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
-        //Vamos a declarar un array
-        //$banco='';
-        $data = [];
-        $imagen = '';
-        while ($reg = $rspta->fetch_object()) {
+    
+    $idcompra_proyecto = $_GET["idcompra_proyecto"];
 
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
+    $tipo_pago = 'Proveedor';
+    
+    $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
+    //Vamos a declarar un array   
+    $data = [];
 
-          if (strlen($reg->titular_cuenta) >= 20) {
-            $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
-          } else {
-            $titular_cuenta = $reg->titular_cuenta;
-          }
+    $imagen = '';
 
-          empty($reg->imagen)
-            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
-            : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-          $tool = '"tooltip"';
-          $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
-          $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .$reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-            "1" => $reg->forma_pago,
-            "2" => '<div class="user-block">
-              <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
-              <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
-              <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
-            </div>',
-            "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "4" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "5" => $reg->numero_operacion,
-            "6" => number_format($reg->monto, 2, '.', ','),
-            "7" => $imagen,
-            "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
-          ];
-        }
-        //$suma=array_sum($rspta->fetch_object()->monto);
-        $results = [
-          "sEcho" => 1, //Información para el datatables
-          "iTotalRecords" => count($data), //enviamos el total registros al datatable
-          "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-          "data" => $data,
-        ];
-        echo json_encode($results);
-        //Fin de las validaciones de acceso
+    while ($reg = $rspta->fetch_object()) {
+
+      if (strlen($reg->descripcion) >= 20) {
+        $descripcion = substr($reg->descripcion, 0, 20) . '...';
       } else {
-        require 'noacceso.php';
+        $descripcion = $reg->descripcion;
       }
+
+      if (strlen($reg->titular_cuenta) >= 20) {
+        $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
+      } else {
+        $titular_cuenta = $reg->titular_cuenta;
+      }
+
+      empty($reg->imagen)
+        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
+        : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+      $tool = '"tooltip"';
+      $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+      $data[] = [
+        "0" => $reg->estado
+          ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
+            ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .$reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
+          : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
+            ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
+        "1" => $reg->forma_pago,
+        "2" => '<div class="user-block">
+          <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
+          <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
+          <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+        </div>',
+        "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
+        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "5" => $reg->numero_operacion,
+        "6" => number_format($reg->monto, 2, '.', ','),
+        "7" => $imagen,
+        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+      ];
     }
+    //$suma=array_sum($rspta->fetch_object()->monto);
+    $results = [
+      "sEcho" => 1, //Información para el datatables
+      "iTotalRecords" => count($data), //enviamos el total registros al datatable
+      "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+      "data" => $data,
+    ];
+    echo json_encode($results);
   break;
 
   case 'listar_pgs_detrac_detracc_cmprs':
-    if (!isset($_SESSION["nombre"])) {
-      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-    } else {
-      //Validamos el acceso solo al usuario logueado y autorizado.
-      if ($_SESSION['servicio_maquina'] == 1) {
-        //$_GET["nube_idproyecto"]
-        $idcompra_proyecto = $_GET["idcompra_proyecto"];
-        $tipo_pago = 'Detraccion';
-        //$idmaquinaria ='3';
-        //$idproyecto ='2';
-        $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
-        //Vamos a declarar un array
-        //$banco='';
-        $data = [];
-        $imagen = '';
-        while ($reg = $rspta->fetch_object()) {
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
-          if (strlen($reg->titular_cuenta) >= 20) {
-            $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
-          } else {
-            $titular_cuenta = $reg->titular_cuenta;
-          }
-          empty($reg->imagen)
-            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
-            : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-          $tool = '"tooltip"';
-          $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
-          $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_compras .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
-                $reg->idpago_compras .
-                ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_compras .
-                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                $reg->idpago_compras .
-                ')"><i class="fa fa-check"></i></button>',
-            "1" => $reg->forma_pago,
-            "2" => $reg->beneficiario,
-            "3" => $reg->cuenta_destino,
-            "4" => $reg->banco,
-            "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-            "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "8" => $reg->numero_operacion,
-            "9" => number_format($reg->monto, 2, '.', ','),
-            "10" => $imagen,
-            "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
-          ];
-        }
-        //$suma=array_sum($rspta->fetch_object()->monto);
-        $results = [
-          "sEcho" => 1, //Información para el datatables
-          "iTotalRecords" => count($data), //enviamos el total registros al datatable
-          "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-          "data" => $data,
-        ];
-        echo json_encode($results);
-        //Fin de las validaciones de acceso
+    //$_GET["nube_idproyecto"]
+    $idcompra_proyecto = $_GET["idcompra_proyecto"];
+
+    $tipo_pago = 'Detraccion';
+    
+    $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
+    //Vamos a declarar un array
+    
+    $data = [];
+
+    $imagen = '';
+
+    while ($reg = $rspta->fetch_object()) {
+
+      if (strlen($reg->descripcion) >= 20) {
+        $descripcion = substr($reg->descripcion, 0, 20) . '...';
       } else {
-        require 'noacceso.php';
+        $descripcion = $reg->descripcion;
       }
+
+      if (strlen($reg->titular_cuenta) >= 20) {
+        $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
+      } else {
+        $titular_cuenta = $reg->titular_cuenta;
+      }
+
+      empty($reg->imagen)
+        ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
+        : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+      $tool = '"tooltip"';
+
+      $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+
+      $data[] = [
+        "0" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
+            ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
+          : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
+            ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
+        "1" => $reg->forma_pago,
+        "2" => '<div class="user-block">
+          <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
+          <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
+          <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+        </div>',
+        "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
+        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "5" => $reg->numero_operacion,
+        "6" => number_format($reg->monto, 2, '.', ','),
+        "7" => $imagen,
+        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+      ];
     }
+
+    //$suma=array_sum($rspta->fetch_object()->monto);
+    $results = [
+      "sEcho" => 1, //Información para el datatables
+      "iTotalRecords" => count($data), //enviamos el total registros al datatable
+      "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+      "data" => $data,
+    ];
+
+    echo json_encode($results);
   break;
 
   case 'suma_total_pagos':

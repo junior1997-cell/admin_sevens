@@ -65,7 +65,23 @@ function init(){
       "11-10-2021",
       "11-05-2021"
     ],     
-  });  
+  }); 
+  
+  $('#fecha_inicio_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_inicio_actividad').datetimepicker({
+    locale: 'es',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6]
+  });
+
+  $('#fecha_fin_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_fin_actividad').datetimepicker({
+    locale: 'es',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6]
+  });
   
   // $('#costo').inputmask('999,999,999.99', { reverse: true });
 }
@@ -126,8 +142,11 @@ function limpiar() {
   $("#nombre_proyecto").val(""); $("#nombre_codigo").val("");
   $("#ubicacion").val(""); 
   $("#actividad_trabajo").val("");  
+  
+  $("#fecha_inicio_actividad").val("");  $("#fecha_fin_actividad").val("");
   $("#fecha_inicio").val("");  $("#fecha_fin").val("");   
   $("#dias_habiles").val(""); $("#plazo").val(""); 
+
   $("#costo").val(""); 
   $("#empresa_acargo").val("Seven's Ingenieros SAC"); 
 

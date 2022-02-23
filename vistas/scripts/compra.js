@@ -303,22 +303,27 @@ function listar(nube_idproyecto) {
           $("td", row).eq(0).addClass('text-nowrap');
         }
 
-        if (data[7] > 0) {
-          $("td", row).eq(7).css({
-            "background-color": "#ffc107",
-            color: "black",
-          });
-        } else if (data[7] == 0) {
-          $("td", row).eq(7).css({
-            "background-color": "#28a745",
-            color: "white",
-          });
-        } else {
-          $("td", row).eq(7).css({
-            "background-color": "#ff5252",
-            color: "white",
-          });
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass('text-center');
         }
+
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass('text-right');
+        }
+
+        if (data[7] != "") {
+
+          var num = parseFloat(quitar_formato_miles(data[7]));
+
+          if (num > 0) {
+            $("td", row).eq(7).addClass('bg-warning text-right');
+          } else if (num == 0) {
+            $("td", row).eq(7).addClass('bg-success text-right');            
+          } else if (num < 0) {
+            $("td", row).eq(7).addClass('bg-danger text-right');
+          }
+        }
+        
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -668,6 +673,16 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
           console.log(e.responseText);
         },
       },
+      createdRow: function (row, data, ixdex) {
+        //console.log(data);
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass('text-left');
+        }  
+        
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass('text-right');
+        }  
+      },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
         buttons: {
@@ -787,18 +802,20 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
-  $("#forma_pago").val("");
-  $("#tipo_pago").val("");
+  $("#forma_pago").val("").trigger("change");
+  $("#tipo_pago").val("").trigger("change");
   $("#monto_pago").val("");
   $("#numero_op_pago").val("");
-  $("#idpago_compras").val("");
-  //$("#cuenta_destino_pago").val("");
+  $("#idpago_compras").val("");   
   $("#descripcion_pago").val("");
   $("#idpago_compra").val("");
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
   $("#foto1").val("");
   $("#foto1_actual").val("");
   $("#foto1_nombre").html("");
+
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //mostrar datos proveedor pago
@@ -927,7 +944,7 @@ function total_pagos_detracc(idcompra_proyecto) {
       $("#saldo_p").html("0.00");
       $("#porcnt_sald_p").html("0.00" + " %");
     } else {
-      $("#saldo_p").html(redondearExp(x_saldo, 2));
+      $("#saldo_p").html(formato_miles(redondearExp(x_saldo, 2)));
       $("#porcnt_sald_p").html(redondearExp(diferencia, 2) + " %");
     }
   });
@@ -957,7 +974,7 @@ function total_pagos_detracc(idcompra_proyecto) {
       $("#saldo_d").html("0.00");
       $("#porcnt_sald_d").html("0.00" + " %");
     } else {
-      $("#saldo_d").html(redondearExp(x_saldo_detrcc, 2));
+      $("#saldo_d").html(formato_miles(redondearExp(x_saldo_detrcc, 2)));
       $("#porcnt_sald_d").html(redondearExp(diferencia_detrcc, 2) + " %");
     }
   });
@@ -975,8 +992,8 @@ function mostrar_pagos(idpago_compras) {
   $("#tipo_pago").val("").trigger("change");
 
   $.post("../ajax/compra.php?op=mostrar_pagos", { idpago_compras: idpago_compras }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+    
+    data = JSON.parse(data);  console.log(data);
 
     $("#idproveedor_pago").val(data.idproveedor);
     $("#idcompra_proyecto_p").val(data.idcompra_proyecto);
@@ -1064,42 +1081,29 @@ function activar_pagos(idpago_compras) {
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");
-  $("#img-vaucher").attr("src", "../dist/img/vauchers_pagos/" + imagen);
-  $("#descargar").attr("href", "../dist/img/vauchers_pagos/" + imagen);
+  $("#img-vaucher").attr("src", "../dist/docs/compra/baucher/" + imagen);
+  $("#descargar").attr("href", "../dist/docs/compra/baucher/" + imagen);
 
   // $(".tooltip").hide();
 }
 
-/**===============================
- * =========
- */
-//Función ListarArticulos
-function listarmateriales() {
-  tablamateriales = $("#tblamateriales").dataTable({
-    responsive: true,
-    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-    aProcessing: true, //Activamos el procesamiento del datatables
-    aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [],
-    ajax: {
-      url: "../ajax/compra.php?op=listarMaterialescompra",
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText);
-      },
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: sueldo mensual
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-right');
-      }  
-    },
-    bDestroy: true,
-    iDisplayLength: 5, //Paginación
-    // order: [[0, "desc"]], //Ordenar (columna,orden)
-  }).DataTable();
+function validar_forma_de_pago() {
+  var forma_pago = $('#forma_pago').select2('val');
+
+  if (forma_pago == null || forma_pago == "") {
+    // no ejecutamos nada
+    $('.validar_fp').show();
+  } else {
+    if (forma_pago == "Efectivo") {
+      $('.validar_fp').hide();
+      $("#tipo_pago").val("Proveedor").trigger("change");
+      $("#banco_pago").val("1").trigger("change");
+      $("#cuenta_destino_pago").val("");
+      $("#titular_cuenta_pago").val("");
+    } else {
+      $('.validar_fp').show();
+    }    
+  }
 }
 
 // .......:::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
@@ -1589,8 +1593,36 @@ function ver_detalle_compras(idcompra_proyecto) {
 
 // .......:::::::::::::::::: - FIN - AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
 
-/**seccion agregar material */
-//Función para guardar o editar
+// :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S  ::::::::::::::::::::::::::
+//Función ListarArticulos
+function listarmateriales() {
+  tablamateriales = $("#tblamateriales").dataTable({
+    responsive: true,
+    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [],
+    ajax: {
+      url: "../ajax/compra.php?op=listarMaterialescompra",
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: sueldo mensual
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-right');
+      }  
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    // order: [[0, "desc"]], //Ordenar (columna,orden)
+  }).DataTable();
+}
+
 //Función limpiar
 function limpiar_materiales() {
   $("#idproducto_p").val("");  
@@ -1626,6 +1658,7 @@ function limpiar_materiales() {
   $(".is-invalid").removeClass("error is-invalid");
 }
 
+//Función para guardar o editar
 function guardar_y_editar_materiales(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-materiales")[0]);
@@ -1727,6 +1760,8 @@ $("#my-switch_igv").on("click ", function (e) {
     $("#estado_igv_p").val("0");
   }
 });
+
+// :::::::::::::::::::::::::: - F I N   S E C C I O N   M A T E R I A L E S -  ::::::::::::::::::::::::::
 
 init();
 

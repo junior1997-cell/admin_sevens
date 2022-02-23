@@ -562,10 +562,7 @@
                                 <tr>
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
-                                  <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
-                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                  <th>Beneficiario</th> 
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -579,10 +576,7 @@
                                 <tr>
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
-                                  <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                  <th>Banco</th>
-                                  <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
+                                  <th>Beneficiario</th> 
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -594,7 +588,7 @@
                                   <th>Estado</th>
                                 </tr>
                                 <tr>
-                                  <td colspan="8"></td>
+                                  <td colspan="5"></td>
                                   <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                   <th style="color: #ff0000; background-color: #f3e700;">
                                     <b id="saldo_d"></b> <br />
@@ -806,7 +800,7 @@
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="forma_pago">Forma Pago</label>
-                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="validar_forma_de_pago();">
                                       <option value="Transferencia">Transferencia</option>
                                       <option value="Efectivo">Efectivo</option>
                                       <option value="Crédito">Crédito</option>
@@ -814,7 +808,7 @@
                                   </div>
                                 </div>
                                 <!--tipo de pago -->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 validar_fp">
                                   <div class="form-group">
                                     <label for="tipo_pago">Tipo Pago</label>
                                     <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
@@ -824,14 +818,14 @@
                                   </div>
                                 </div>
                                 <!-- Cuenta de destino-->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 validar_fp">
                                   <div class="form-group">
                                     <label for="cuenta_destino_pago">Cuenta destino </label>
                                     <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                                   </div>
                                 </div>
                                 <!-- banco -->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 validar_fp">
                                   <div class="form-group">
                                     <label for="banco_pago">Banco</label>
                                     <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
@@ -839,7 +833,7 @@
                                   </div>
                                 </div>
                                 <!-- Titular Cuenta-->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 validar_fp">
                                   <div class="form-group">
                                     <label for="titular_cuenta_pago">Titular Cuenta </label>
                                     <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
@@ -861,7 +855,7 @@
                                   </div>
                                 </div>
                                 <!-- Número de Operación-->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 validar_fp">
                                   <div class="form-group">
                                     <label for="numero_op_pago">Número de operación </label>
                                     <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
