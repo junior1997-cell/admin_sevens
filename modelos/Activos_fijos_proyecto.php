@@ -183,24 +183,23 @@ class Activos_fijos_proyecto
         return ejecutarConsulta($sql);
     }
 	//mostrar detalles uno a uno de la factura
-    public function ver_compra($idcompra_af_proyecto)
+    public function ver_compra($idcompra_proyecto)
     {
         $sql = "SELECT  
-            acfp.idcompra_af_proyecto as idcompra_af_proyecto, 
-            acfp.idproyecto as idproyecto, 
-            acfp.idproveedor as idproveedor, 
-            p.razon_social as razon_social, 
-            acfp.fecha_compra as fecha_compra, 
-            acfp.tipo_comprobante as tipo_comprobante, 
-            acfp.serie_comprobante as serie_comprobante, 
-            acfp.descripcion as descripcion, 
-            acfp.subtotal as subtotal, 
-            acfp.igv as igv, 
-            acfp.total as total,
-            acfp.fecha_compra as fecha, 
-            acfp.estado as estado
-            FROM compra_af_proyecto as acfp, proveedor as p 
-            WHERE acfp.idcompra_af_proyecto='$idcompra_af_proyecto'  AND acfp.idproveedor = p.idproveedor";
+        cp.idcompra_proyecto as idcompra_proyecto, 
+        cp.idproyecto as idproyecto, 
+        cp.idproveedor as idproveedor, 
+        p.razon_social as razon_social, 
+        cp.fecha_compra as fecha_compra, 
+        cp.tipo_comprovante as tipo_comprobante, 
+        cp.serie_comprovante as serie_comprobante, 
+        cp.descripcion as descripcion, 
+        cp.subtotal_compras_proyect as subtotal, 
+        cp.igv_compras_proyect as igv, 
+        cp.monto_total as total, 
+        cp.estado as estado
+        FROM compra_por_proyecto as cp, proveedor as p 
+        WHERE cp.idcompra_proyecto='$idcompra_proyecto'  AND cp.idproveedor = p.idproveedor";
 
         return ejecutarConsultaSimpleFila($sql);
     }

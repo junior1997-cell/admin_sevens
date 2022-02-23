@@ -11,7 +11,8 @@ class All_activos_fijos
     //Implementamos un método para insertar registros
     public function insertar($idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,$descripcion,$subtotal_compra,$igv_compra,$total_compra_af_g,
     $idactivos_fijos,$unidad_medida,$nombre_color,$cantidad,$precio_sin_igv,$precio_igv,$precio_con_igv,$descuento,$ficha_tecnica_activo) {
-        /*var_dump('subtotal_compra '.$subtotal_compra,'igv_compra '.$igv_compra,'total '.$total_compra_af_g);die();*/
+        /*var_dump($idproveedor,$fecha_compra,$tipo_comprovante,$serie_comprovante,$descripcion,$subtotal_compra,$igv_compra,$total_compra_af_g,
+        $idactivos_fijos,$unidad_medida,$nombre_color,$cantidad,$precio_sin_igv,$precio_igv,$precio_con_igv,$descuento,$ficha_tecnica_activo);die();*/
         $sql = "INSERT INTO compra_af_general(idproveedor,fecha_compra,tipo_comprobante,serie_comprobante,descripcion,subtotal,igv,total)
 		VALUES ('$idproveedor','$fecha_compra','$tipo_comprovante','$serie_comprovante','$descripcion','$subtotal_compra','$igv_compra','$total_compra_af_g')";
         //return ejecutarConsulta($sql);
@@ -23,7 +24,7 @@ class All_activos_fijos
         while ($num_elementos < count($idactivos_fijos)) {
             $subtotal_activo_g= ( floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) ) + $descuento[$num_elementos] ;
 
-            $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general,idactivos_fijos,unidad_medida,color,ficha_tecnica_producto,cantidad,precio_sin_igv,igv,precio_con_igv,descuento,subtotal) 
+            $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general,idproducto,unidad_medida,color,ficha_tecnica_producto,cantidad,precio_sin_igv,igv,precio_con_igv,descuento,subtotal) 
 			VALUES ('$idcompra_af_generalnew','$idactivos_fijos[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', 
             '$ficha_tecnica_activo[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', 
             '$descuento[$num_elementos]', '$subtotal_activo_g')";
@@ -60,7 +61,7 @@ class All_activos_fijos
 
                 $subtotal_activo_g= ( floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) ) + $descuento[$num_elementos] ;
 
-                $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general,idactivos_fijos,unidad_medida,color,ficha_tecnica_producto,cantidad,precio_sin_igv,igv,precio_con_igv,descuento,subtotal) 
+                $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general,idproducto,unidad_medida,color,ficha_tecnica_producto,cantidad,precio_sin_igv,igv,precio_con_igv,descuento,subtotal) 
                 VALUES ('$idcompra_af_general','$idactivos_fijos[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', 
                 '$ficha_tecnica_activo[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', 
                 '$descuento[$num_elementos]', '$subtotal_activo_g')";
@@ -89,15 +90,20 @@ class All_activos_fijos
 
         $compra_af_general = ejecutarConsultaSimpleFila($sql);
         
-        $sql_2 = "SELECT dcafg.idactivos_fijos as idactivos_fijos,
+        $sql_2 = "SELECT 
+            dcafg.idproducto as idactivos_fijos,
             dcafg.ficha_tecnica_producto as ficha_tecnica,
             dcafg.cantidad as cantidad,
-            dcafg.precio_sin_igv as precio_sin_igv, dcafg.igv, dcafg.precio_con_igv,
+            dcafg.precio_sin_igv,
+            dcafg.igv,
+            dcafg.precio_con_igv as precio_con_igv,
             dcafg.descuento as descuento,
-            af.nombre as nombre_activo, af.imagen,
-            dcafg.unidad_medida, dcafg.color
-            FROM detalle_compra_af_g AS dcafg, activos_fijos AS af
-            WHERE idcompra_af_general='$idcompra_af_general' AND  dcafg.idactivos_fijos=af.idactivos_fijos";
+            dcafg.unidad_medida,
+            dcafg.color,
+            p.nombre as nombre,
+            p.imagen
+            FROM detalle_compra_af_g as dcafg, producto as p
+            WHERE dcafg.idcompra_af_general='$idcompra_af_general' AND  dcafg.idproducto=p.idproducto";
 
         $activos = ejecutarConsultaArray($sql_2);
 
@@ -196,53 +202,61 @@ class All_activos_fijos
         }
            
         $sql_2="SELECT
-            cafp.idproyecto as idproyecto,
-            cafp.idcompra_af_proyecto as idcompra_af_proyecto,
-            cafp.idproveedor as idproveedor,
-            cafp.fecha_compra as fecha_compra,
-            cafp.tipo_comprobante as tipo_comprobante,
-            cafp.serie_comprobante as serie_comprobante,
-            cafp.descripcion as descripcion,
-            cafp.total as total,
-            cafp.comprobante as imagen_comprobante,
+
+            cpp.idproyecto as idproyecto,
+            cpp.idcompra_proyecto as idcompra_proyecto,
+            cpp.idproveedor as idproveedor,
+            cpp.fecha_compra as fecha_compra,
+            cpp.tipo_comprovante as tipo_comprobante,
+            cpp.serie_comprovante as serie_comprobante,
+            cpp.descripcion as descripcion,
+            cpp.monto_total as total,
+            cpp.imagen_comprobante as imagen_comprobante,
             p.razon_social as razon_social, p.telefono,
-            cafp.estado as estado,
+            cpp.estado as estado,
             proy.nombre_proyecto as nombre_proyecto,
             proy.nombre_codigo as nombre_codigo
-            FROM compra_af_proyecto as cafp, proveedor as p, proyecto as proy
-            WHERE cafp.idproveedor=p.idproveedor
-            AND cafp.idproyecto=proy.idproyecto 
-            ORDER BY cafp.idcompra_af_proyecto DESC";
+            FROM compra_por_proyecto as cpp, proveedor as p, proyecto as proy
+            WHERE cpp.idproveedor=p.idproveedor
+            AND cpp.idproyecto=proy.idproyecto 
+            ORDER BY cpp.idcompra_proyecto DESC";
 
         $proyecto  = ejecutarConsultaArray($sql_2);
 
         if (!empty($proyecto)) {
 
             foreach ($proyecto as $key => $value) {
+                
+                $idcompra=$value['idcompra_proyecto'];
 
-                $id_af_p=$value['idcompra_af_proyecto'];
-
-                $sql_2_2 = "SELECT SUM(monto) as total_pago_compras FROM pago_af_proyecto WHERE idcompra_af_proyecto='$id_af_p' AND estado=1";
+                $sql_2_2 = "SELECT SUM(monto) as total_pago_compras FROM pago_compras WHERE idcompra_proyecto='$idcompra' AND estado=1";
                 $total_pago= ejecutarConsultaSimpleFila($sql_2_2);
+                
+                $sql_2_3 = "SELECT COUNT(dc.iddetalle_compra) as contador FROM detalle_compra dc, producto as p 
+                WHERE idcompra_proyecto='$idcompra' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1";
+                 $detalle_factura= ejecutarConsultaSimpleFila($sql_2_3);
 
-                $b[]=array(
+                if ( floatval($detalle_factura['contador'])>0) {
 
-                    "idtabla"=>$value['idcompra_af_proyecto'],
-                    "idproyecto"=>$value['idproyecto'],
-                    "idproveedor"=>$value['idproveedor'],
-                    "fecha_compra"=>$value['fecha_compra'],
-                    "tipo_comprobante"=>$value['tipo_comprobante'],
-                    "serie_comprobante"=>$value['serie_comprobante'],
-                    "descripcion"=>$value['descripcion'],
-                    "total"=>(empty($value['total'])) ? '0' :$value['total'],
-                    "imagen_comprobante"=>$value['imagen_comprobante'],
-                    "razon_social"=>$value['razon_social'],
-                    "telefono"=>$value['telefono'],
-                    "estado"=>$value['estado'],
-                    "codigo_proyecto"=>$value['nombre_codigo'],
-                    "deposito"=>$reval2=(empty($total_pago)) ? '0' :$dataelse2= (empty($total_pago['total_pago_compras'])) ? '0' : $total_pago['total_pago_compras']
+                    $b[]=array(
 
-                );
+                        "idtabla"=>$value['idcompra_proyecto'],
+                        "idproyecto"=>$value['idproyecto'],
+                        "idproveedor"=>$value['idproveedor'],
+                        "fecha_compra"=>$value['fecha_compra'],
+                        "tipo_comprobante"=>$value['tipo_comprobante'],
+                        "serie_comprobante"=>$value['serie_comprobante'],
+                        "descripcion"=>$value['descripcion'],
+                        "total"=>(empty($value['total'])) ? '0' :$value['total'],
+                        "imagen_comprobante"=>$value['imagen_comprobante'],
+                        "razon_social"=>$value['razon_social'],
+                        "telefono"=>$value['telefono'],
+                        "estado"=>$value['estado'],
+                        "codigo_proyecto"=>$value['nombre_codigo'],
+                        "deposito"=>$reval2=(empty($total_pago)) ? '0' :$dataelse2= (empty($total_pago['total_pago_compras'])) ? '0' : $total_pago['total_pago_compras']
+
+                    );
+                }
             }
         }
 
@@ -270,11 +284,28 @@ class All_activos_fijos
 
             $total += (empty($compra_general)) ? 0 : $retVal = (empty($compra_general['total_general'])) ? 0 : floatval($compra_general['total_general']) ; 
 
-             // activo fijos proyecto
-            $sql_3 = "SELECT SUM(total) as total_proyecto FROM compra_af_proyecto  WHERE idproveedor=$id";
-            $compra_proyecto=  ejecutarConsultaSimpleFila($sql_3);
+            $sql_3 = "SELECT `idcompra_proyecto` FROM `compra_por_proyecto` WHERE `idproveedor`='$id' AND `estado`=1";
+            $compras_proveedor = ejecutarConsultaArray($sql_3);
 
-            $total += (empty($compra_proyecto)) ? 0 : $retVal = (empty($compra_proyecto['total_proyecto'])) ? 0 : floatval($compra_proyecto['total_proyecto']) ; 
+            foreach ($compras_proveedor as $key => $val) {
+
+                $idcompra_proyecto = $val['idcompra_proyecto'];
+
+                $sql_3_1 = "SELECT COUNT(dc.iddetalle_compra) as contador FROM detalle_compra dc, producto as p 
+                WHERE idcompra_proyecto='$idcompra_proyecto' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1";
+                $detalle_factura= ejecutarConsultaSimpleFila($sql_3_1);
+
+                if ( floatval($detalle_factura['contador'])>0) {
+
+                    // activo fijos proyecto
+                    $sql_3 = "SELECT SUM(monto_total) as total_proyecto FROM compra_por_proyecto WHERE idcompra_proyecto='$idcompra_proyecto' AND estado =1";
+                    $compra_proyecto=  ejecutarConsultaSimpleFila($sql_3);
+
+                    $total += (empty($compra_proyecto)) ? 0 : $retVal = (empty($compra_proyecto['total_proyecto'])) ? 0 : floatval($compra_proyecto['total_proyecto']) ; 
+
+                }
+            }
+
 
             if ( $total>0) {
 
@@ -339,23 +370,23 @@ class All_activos_fijos
 
             
         $sql_2="SELECT
-            cafp.idproyecto as idproyecto,
-            cafp.idcompra_af_proyecto as idcompra_af_proyecto,
-            cafp.idproveedor as idproveedor,
-            cafp.fecha_compra as fecha_compra,
-            cafp.tipo_comprobante as tipo_comprobante,
-            cafp.serie_comprobante as serie_comprobante,
-            cafp.descripcion as descripcion,
-            cafp.total as total,
-            cafp.comprobante as imagen_comprobante,
-            p.razon_social as razon_social, p.telefono,
-            cafp.estado as estado,
-            proy.nombre_proyecto as nombre_proyecto,
-            proy.nombre_codigo as nombre_codigo
-            FROM compra_af_proyecto as cafp, proveedor as p, proyecto as proy
-            WHERE cafp.idproveedor=p.idproveedor AND  cafp.idproveedor=$idproveedor
-            AND cafp.idproyecto=proy.idproyecto 
-            ORDER BY cafp.idcompra_af_proyecto DESC";
+        cp.idproyecto as idproyecto,
+        cp.idcompra_proyecto as idcompra_proyecto,
+        cp.idproveedor as idproveedor,
+        cp.fecha_compra as fecha_compra,
+        cp.tipo_comprovante as tipo_comprobante,
+        cp.serie_comprovante as serie_comprobante,
+        cp.descripcion as descripcion,
+        cp.monto_total as total,
+        cp.imagen_comprobante as imagen_comprobante,
+        p.razon_social as razon_social, p.telefono,
+        cp.estado as estado,
+        proy.nombre_proyecto as nombre_proyecto,
+        proy.nombre_codigo as nombre_codigo
+        FROM compra_por_proyecto as cp, proveedor as p, proyecto as proy
+        WHERE cp.idproveedor=p.idproveedor AND  cp.idproveedor=$idproveedor
+        AND cp.idproyecto=proy.idproyecto 
+        ORDER BY cp.idcompra_proyecto DESC";
 
         $compra_proyecto  = ejecutarConsultaArray($sql_2);
 
@@ -363,23 +394,32 @@ class All_activos_fijos
 
             foreach ($compra_proyecto as $key => $value) {
 
-                $b[]=array(
+                $idcompra_proyecto = $value['idcompra_proyecto'];
 
-                    "idtabla"=>$value['idcompra_af_proyecto'],
-                    "idproyecto"=>$value['idproyecto'],
-                    "idproveedor"=>$value['idproveedor'],
-                    "fecha_compra"=>$value['fecha_compra'],
-                    "tipo_comprobante"=>$value['tipo_comprobante'],
-                    "serie_comprobante"=>$value['serie_comprobante'],
-                    "descripcion"=>$value['descripcion'],
-                    "total"=>(empty($value['total'])) ? '0' :$value['total'],
-                    "imagen_comprobante"=>$value['imagen_comprobante'],
-                    "razon_social"=>$value['razon_social'],
-                    "telefono"=>$value['telefono'],
-                    "estado"=>$value['estado'],
-                    "codigo_proyecto"=>$value['nombre_codigo']
+                $sql_3_1 = "SELECT COUNT(dc.iddetalle_compra) as contador FROM detalle_compra dc, producto as p 
+                WHERE idcompra_proyecto='$idcompra_proyecto' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1";
+                $detalle_factura= ejecutarConsultaSimpleFila($sql_3_1);
 
-                );
+                if ( floatval($detalle_factura['contador'])>0) {
+
+                    $b[]=array(
+
+                        "idtabla"=>$value['idcompra_proyecto'],
+                        "idproyecto"=>$value['idproyecto'],
+                        "idproveedor"=>$value['idproveedor'],
+                        "fecha_compra"=>$value['fecha_compra'],
+                        "tipo_comprobante"=>$value['tipo_comprobante'],
+                        "serie_comprobante"=>$value['serie_comprobante'],
+                        "descripcion"=>$value['descripcion'],
+                        "total"=>(empty($value['total'])) ? '0' :$value['total'],
+                        "imagen_comprobante"=>$value['imagen_comprobante'],
+                        "razon_social"=>$value['razon_social'],
+                        "telefono"=>$value['telefono'],
+                        "estado"=>$value['estado'],
+                        "codigo_proyecto"=>$value['nombre_codigo']
+
+                    );
+                }
             }
         }
 
@@ -412,14 +452,50 @@ class All_activos_fijos
 	public function listarDetalle($id_compra_afg)
     {
         $sql = "SELECT 
-		dcafg.idactivos_fijos as idactivos_fijos,
+		dcafg.idproducto as idactivos_fijos,
 		dcafg.ficha_tecnica_producto as ficha_tecnica,
 		dcafg.cantidad as cantidad,
 		dcafg.precio_con_igv as precio_con_igv,
 		dcafg.descuento as descuento,
-		af.nombre as nombre
-		FROM detalle_compra_af_g as dcafg, activos_fijos as af
-		WHERE dcafg.idcompra_af_general='$id_compra_afg' AND  dcafg.idactivos_fijos=af.idactivos_fijos";
+		p.nombre as nombre
+		FROM detalle_compra_af_g as dcafg, producto as p
+		WHERE dcafg.idcompra_af_general='$id_compra_afg' AND  dcafg.idproducto=p.idproducto";
+
+        return ejecutarConsulta($sql);
+    }
+    //mostrar detalles uno a uno de la factura
+    public function ver_compra_proyecto($idcompra_proyecto)
+    {
+        $sql = "SELECT  
+        cp.idcompra_proyecto as idcompra_proyecto, 
+        cp.idproyecto as idproyecto, 
+        cp.idproveedor as idproveedor, 
+        p.razon_social as razon_social, 
+        cp.fecha_compra as fecha_compra, 
+        cp.tipo_comprovante as tipo_comprobante, 
+        cp.serie_comprovante as serie_comprobante, 
+        cp.descripcion as descripcion, 
+        cp.subtotal_compras_proyect as subtotal, 
+        cp.igv_compras_proyect as igv, 
+        cp.monto_total as total, 
+        cp.estado as estado
+        FROM compra_por_proyecto as cp, proveedor as p 
+        WHERE cp.idcompra_proyecto='$idcompra_proyecto'  AND cp.idproveedor = p.idproveedor";
+
+        return ejecutarConsultaSimpleFila($sql);
+    }
+    //lismatamos los detalles proyecto
+    public function listarDetalle_proyecto($id_compra)
+    {
+        $sql = "SELECT 
+        cp.idproducto as idproducto,
+        cp.ficha_tecnica_producto as ficha_tecnica,
+        cp.cantidad as cantidad,
+        cp.precio_igv as precio_con_igv,
+        cp.descuento as descuento,
+        p.nombre as nombre
+        FROM detalle_compra  cp, producto as p
+        WHERE cp.idcompra_proyecto='$id_compra' AND  cp.idproducto=p.idproducto";
 
         return ejecutarConsulta($sql);
     }
@@ -573,6 +649,17 @@ class All_activos_fijos
     {
         $sql = "SELECT * FROM compra_af_general as cafg, proveedor as p  WHERE cafg.idproveedor=p.idproveedor AND cafg.idcompra_af_general='$idcompra_af_general'";
         return ejecutarConsultaSimpleFila($sql);
+    }
+
+    //Implementar un método para listar los registros de activos fijos
+    public function lista_activos_para_compras()
+    {
+        $sql="SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
+        p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color
+        FROM producto as p, unidad_medida as um, color as c
+        WHERE p.idcategoria_insumos_af!='1' AND p.estado=1 AND p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor 
+        ORDER BY p.idproducto ASC";
+        return ejecutarConsulta($sql);
     }
 
 }

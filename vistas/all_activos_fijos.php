@@ -1232,7 +1232,7 @@
                                     <label for="cip" class="control-label">Documento </label>
                                   </div>
                                   <div class="col-md-6 text-center subir_c">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i" disabled ><i class="fas fa-file-upload"></i> Subir.</button>
                                     <input type="hidden" id="doc_old_2" name="doc_old_2" />
                                     <input style="display: none;" id="doc2" type="file" name="doc2" class="docpdf" />
                                   </div>
@@ -1351,7 +1351,7 @@
                       <div class="modal-body">
                         <div class="class-style" style="text-align: center;">
                            
-                          <img onerror="this.src='../dist/img/default/default_activos_fijos_empresa.png';" src="" class="img-thumbnail " id="ver_img_activo" style="cursor: pointer !important;" width="auto" />
+                          <img onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" src="" class="img-thumbnail " id="ver_img_activo" style="cursor: pointer !important;" width="auto" />
                            
                         </div>
                       </div>

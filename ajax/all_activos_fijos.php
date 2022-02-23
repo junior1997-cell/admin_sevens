@@ -237,7 +237,7 @@ switch ($_GET["op"]) {
             }
         }
     break;
-
+    //listar_compras
     case 'listar_compra_activo_f_g':
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -302,11 +302,11 @@ switch ($_GET["op"]) {
                                     ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
                                 : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
                                 ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>') :
-                                ($reg['estado'] == '1'? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                                    ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
-                                    ' <button class="btn btn-danger btn-sm" onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
-                                : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
-                                ' <button class="btn btn-success btn-sm" onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
+                                ($reg['estado'] == '1'? '<button class="btn btn-info btn-sm " onclick="ver_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                                    ' <button class="btn btn-warning btn-sm" disabled onclick="editar_detalle_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
+                                    ' <button class="btn btn-danger btn-sm" disabled onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
+                                : '<button class="btn btn-info btn-sm" disabled onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                                ' <button class="btn btn-success btn-sm" disabled onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                         "1" => '<textarea class="form-control text_area_clss" cols="30" rows="2">'. $reg['descripcion'].'</textarea>',
                        
                         "2" => date("d/m/Y", strtotime($reg['fecha_compra'])),
@@ -324,9 +324,9 @@ switch ($_GET["op"]) {
                         "6" => (empty($reg['idproyecto'])) ?'<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>':
-                                '<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
+                                '<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" disabled onclick="listar_pagos(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
-                                <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
+                                <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm" disabled>'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
                         "7" => number_format($saldo, 2, '.', ','),
                         "8" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-info btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
                         '<center><button class="btn btn-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
@@ -347,7 +347,7 @@ switch ($_GET["op"]) {
         }
 
     break;
-
+    //tbl listar compras por proveedor
     case 'listar_compraxporvee_af_g':
 
         if (!isset($_SESSION["nombre"])) {
@@ -542,13 +542,9 @@ switch ($_GET["op"]) {
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['activo_fijo_general'] == 1) {
-                //contenido
 
-                require_once "../modelos/Activos_fijos.php";
 
-                $activos_fijos=new Activos_fijos();
-
-                $rspta =$activos_fijos->lista_activos_para_compras();
+                $rspta =$all_activos_fijos->lista_activos_para_compras();
                 //Vamos a declarar un array
                 $datas = [];
                 // echo json_encode($rspta);
@@ -582,7 +578,7 @@ switch ($_GET["op"]) {
                             </div>',
                         "2" => $reg->marca,
                         "3" => number_format($reg->precio_con_igv, 2, '.', ','),
-                        "4" => $reg->descripcion,
+                        "4" => '<textarea class="form-control text_area_clss" cols="30" rows="2">'.$reg->descripcion.'</textarea>',
                         "5" => $ficha_tecnica,
                     ];
                 }
@@ -608,23 +604,18 @@ switch ($_GET["op"]) {
         } else {
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['activo_fijo_general'] == 1) {
-                //contenido
 
-                require_once "../modelos/Activos_fijos.php";
-
-                $activos_fijos=new Activos_fijos();
-
-                $rspta =$activos_fijos->lista_activos_para_compras();
+                $rspta =$all_activos_fijos->lista_activos_para_compras();
                 //Vamos a declarar un array
                 $datas = [];
                 // echo json_encode($rspta);
-                $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/default_activos_fijos_empresa.png'";    $color_stock = "";   $ficha_tecnica = ""; 
+                $img_parametro = ""; $img = ""; $imagen_error = "this.src='../dist/img/default/img_defecto_activo_fijo.png'";    $color_stock = "";   $ficha_tecnica = ""; 
                 
                 while ($reg = $rspta->fetch_object()) {
 
                     if (empty($reg->imagen)) {
-                        $img='src="../dist/img/default/default_activos_fijos_empresa.png"';
-                        $img_parametro="default_activos_fijos_empresa.png";
+                        $img='src="../dist/img/default/img_defecto_activo_fijo.png"';
+                        $img_parametro="img_defecto_activo_fijo.png";
                     } else {
                         $img='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
                         $img_parametro=$reg->imagen;
@@ -1190,6 +1181,23 @@ switch ($_GET["op"]) {
             }
         }        
     break;
+    case 'ver_compra_af_p':
+                        
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+
+                $rspta = $all_activos_fijos->ver_compra_proyecto($_POST['idcompra_proyecto']);
+                //Codificar el resultado utilizando json
+                echo json_encode($rspta);
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }         
+    break;
     case 'ver_detalle_compras_af_p':
                 
         if (!isset($_SESSION["nombre"])) {
@@ -1198,8 +1206,8 @@ switch ($_GET["op"]) {
             //Validamos el acceso solo al usuario logueado y autorizado.
             if ($_SESSION['activo_fijo_general'] == 1) {
 
-				$rspta  =  $ctivos_fijos_proy->listarDetalle($_GET['idcompra_af_proyecto']);
-                $rspta2 =  $ctivos_fijos_proy->ver_compra($_GET['idcompra_af_proyecto']);
+				$rspta  =  $all_activos_fijos->listarDetalle_proyecto($_GET['idcompra_proyecto']);
+                $rspta2 =  $all_activos_fijos->ver_compra_proyecto($_GET['idcompra_proyecto']);
 				$subtotal=0;
                 $ficha='';
 				echo '<thead style="background-color:#A9D0F5">
@@ -1246,23 +1254,8 @@ switch ($_GET["op"]) {
             }
         }
     break;
-    case 'ver_compra_af_p':
-                        
-        if (!isset($_SESSION["nombre"])) {
-            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-        } else {
-            //Validamos el acceso solo al usuario logueado y autorizado.
-            if ($_SESSION['activo_fijo_general'] == 1) {
 
-                $rspta = $ctivos_fijos_proy->ver_compra($_POST['idcompra_af_proyecto']);
-                //Codificar el resultado utilizando json
-                echo json_encode($rspta);
-                //Fin de las validaciones de acceso
-            } else {
-                require 'noacceso.php';
-            }
-        }         
-    break;
+
     case 'ver_compra_editar_af_p':
                         
         if (!isset($_SESSION["nombre"])) {

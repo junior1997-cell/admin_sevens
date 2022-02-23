@@ -1600,7 +1600,7 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
           <input type="hidden" name="idactivos_fijos[]" value="${idactivos_fijos}">
           <input type="hidden" name="ficha_tecnica_activo[]" value="${ficha_tecnica_activo}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_activo('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1975,7 +1975,7 @@ function editar_detalle_compras(idcompra_af_general) {
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
-            img = `../dist/img/default/default_activos_fijos_empresa.png`;
+            img = `../dist/img/default/img_defecto_activo_fijo.png`;
           } else {
             img =`../dist/docs/activos_fijos_general/img_activos_fijos/${element.imagen}`;
           }
@@ -1987,7 +1987,7 @@ function editar_detalle_compras(idcompra_af_general) {
               <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
               <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/default_activos_fijos_empresa.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre_activo}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre_activo}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
@@ -2128,10 +2128,10 @@ function des_anular_af_p(idcompra_af_proyecto) {
 }
 
 //mostramos el detalle del comprobante de la compras
-function ver_compras_af_p(idcompra_af_proyecto) {
+function ver_compras_af_p(idcompra_proyecto) {
   $("#modal-ver-compras").modal("show");
 
-  $.post("../ajax/all_activos_fijos.php?op=ver_compra_af_p", { idcompra_af_proyecto: idcompra_af_proyecto }, function (data, status) {
+  $.post("../ajax/all_activos_fijos.php?op=ver_compra_af_p", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
     data = JSON.parse(data); //  console.log(data);
     $(".idproveedor").html("");
     $(".fecha_compra").val("");
@@ -2180,7 +2180,7 @@ function ver_compras_af_p(idcompra_af_proyecto) {
     $(".total").html(formato_miles(data.total));
   });
   $("#detalles_compra").html("");
-  $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_af_p&idcompra_af_proyecto=" + idcompra_af_proyecto, function (r) {
+  $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_af_p&idcompra_proyecto=" + idcompra_proyecto, function (r) {
     $("#detalles_compra").html(r);
   });
 }
@@ -2242,7 +2242,7 @@ function agregarDetalleCompraActivos_p(idactivos_fijos, nombre, unidad_medida, n
           <input type="hidden" name="idactivos_fijos_p[]" value="${idactivos_fijos}">
           <input type="hidden" name="ficha_tecnica_activo_p[]" value="${ficha_tecnica_activo}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_activo('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -2350,7 +2350,7 @@ function editar_detalle_compras_af_p(idcompra_af_proyecto) {
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
-            img = `../dist/img/default/default_activos_fijos_empresa.png`;
+            img = `../dist/img/default/img_defecto_activo_fijo.png`;
           } else {
             img =`../dist/docs/activos_fijos_general/img_activos_fijos/${element.imagen}`;
           }
@@ -2362,7 +2362,7 @@ function editar_detalle_compras_af_p(idcompra_af_proyecto) {
               <input type="hidden" name="idactivos_fijos_p[]" value="${element.idactivos_fijos}">
               <input type="hidden" name="ficha_tecnica_activo_p[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/materiales/img_material_defect.jpg';" onclick="ver_img_activo('${img}', '${element.nombre_activo}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_activo('${img}', '${element.nombre_activo}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
