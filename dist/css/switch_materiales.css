@@ -70,6 +70,14 @@
       margin-top: -0px; 
       margin-right: 20px;
     }
+
+    .myestilo-switch2{
+      padding: 0px 0px!important; 
+      margin-left: -17px; 
+      margin-top: -0px; 
+      /* margin-right: 20px; */
+    }
+
     .labelswitch{
     margin-left: -12px;
     font-size: 11px;
@@ -88,7 +96,8 @@
     .labelswitch{
       margin-left: 0px;
       font-size: 16px;
-      }
+    }
+
     .miimput{
       border-right: 1px solid #ada9a9;
     }

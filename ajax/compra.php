@@ -49,7 +49,7 @@ $idproducto_p     = isset($_POST["idproducto_p"]) ? limpiarCadena($_POST["idprod
 $unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
 $color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
 $categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
-$nombre_p       = isset($_POST["nombre_p"]) ? limpiarCadena($_POST["nombre_p"]) : "" ;
+$nombre_p         = isset($_POST["nombre_p"]) ? limpiarCadena($_POST["nombre_p"]) : "" ;
 $modelo_p         = isset($_POST["modelo_p"]) ? limpiarCadena($_POST["modelo_p"]) : "" ;
 $serie_p          = isset($_POST["serie_p"]) ? limpiarCadena($_POST["serie_p"]) : "" ;
 $marca_p          = isset($_POST["marca_p"]) ? limpiarCadena($_POST["marca_p"]) : "" ;
@@ -58,9 +58,9 @@ $precio_unitario_p= isset($_POST["precio_unitario_p"]) ? limpiarCadena($_POST["p
 $precio_sin_igv_p = isset($_POST["precio_sin_igv_p"]) ? limpiarCadena($_POST["precio_sin_igv_p"]) : "" ;
 $precio_igv_p     = isset($_POST["precio_igv_p"]) ? limpiarCadena($_POST["precio_igv_p"]) : "" ;
 $precio_total_p   = isset($_POST["precio_total_p"]) ? limpiarCadena($_POST["precio_total_p"]) : "" ;      
-$descripcion_p    = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "" ; 
-$img_pefil_p = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "" ;
-$ficha_tecnica_p = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
+$descripcion_p    = isset($_POST["descripcion_p"]) ? limpiarCadena($_POST["descripcion_p"]) : "" ; 
+$img_pefil_p      = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "" ;
+$ficha_tecnica_p  = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
 
 switch ($_GET["op"]) {
   case 'guardaryeditarcompra':
@@ -152,19 +152,19 @@ switch ($_GET["op"]) {
     // imgen
     if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
 
-      $img_pefil_p = $_POST["foto1_actual"];
+      $img_pefil_p = $_POST["foto2_actual"];
 
       $flat_img1 = false;
 
     } else {
 
-      $ext1 = explode(".", $_FILES["foto1"]["name"]);
+      $ext1 = explode(".", $_FILES["foto2"]["name"]);
 
       $flat_img1 = true;
 
       $img_pefil_p = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-      move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/material/img_perfil/" . $img_pefil_p);
+      move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/material/img_perfil/" . $img_pefil_p);
     }
 
     // ficha técnica
@@ -187,7 +187,7 @@ switch ($_GET["op"]) {
 
     if (empty($idproducto)) {
       //var_dump($idproyecto,$idproveedor);
-      $rspta = $activos_fijos->insertar( $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $img_pefil_p);
+      $rspta = $compra->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
       
       echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 
@@ -196,7 +196,7 @@ switch ($_GET["op"]) {
       // validamos si existe LA IMG para eliminarlo
       if ($flat_img1 == true) {
 
-        $datos_f1 = $activos_fijos->obtenerImg($idproducto);
+        $datos_f1 = $compra->obtenerImg($idproducto);
 
         $img1_ant = $datos_f1->fetch_object()->imagen;
 
@@ -206,7 +206,7 @@ switch ($_GET["op"]) {
         }
       }
       
-      $rspta = $activos_fijos->editar( $idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $img_pefil_p);
+      // $rspta = $compra->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
       //var_dump($idactivos_fijos,$idproveedor);
       echo $rspta ? "ok" : "No se pudo actualizar";
     }
@@ -243,14 +243,13 @@ switch ($_GET["op"]) {
     $serie_comprobante = "";
     $function_tipo_comprob = "";
     $list_segun_estado_detracc = "";
-    $tipo_comprovante1 = "";
+     
     $num_comprob = "";
 
     while ($reg = $rspta->fetch_object()) {
       $rspta2 = $compra->pago_servicio($reg->idcompra_proyecto);
 
-      empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->monto_total - $rspta2['total_pago_compras']);
-      $tipo_comprovante1 = $reg->tipo_comprovante;
+      empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->monto_total - $rspta2['total_pago_compras']);       
 
       if ($saldo == $reg->monto_total) {
         $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
@@ -281,27 +280,17 @@ switch ($_GET["op"]) {
       }
 
       if ($reg->estado_detraccion == "1") {
-        $list_segun_estado_detracc =
-          '<div class="text-center"> <button class="btn btn-' .
-          $c .
-          ' btn-xs" onclick="listar_pagos_detraccion(' .
-          $reg->idcompra_proyecto .
-          ',' .
-          $reg->idproyecto .
-          ',' .
-          $reg->monto_total .
-          ')"><i class="fas fa-' .
-          $icon .
-          ' nav-icon"></i> ' .
-          $nombre .
-          '</button>' .
-          ' <button style="font-size: 14px;" class="btn btn-' .
-          $cc .
-          ' btn-sm">' .
-          number_format($rspta2['total_pago_compras'], 2, '.', ',') .
-          '</button></div>';
+
+        $list_segun_estado_detracc = '<div class="text-center"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->monto_total .')">
+          <i class="fas fa-' . $icon .' nav-icon"></i> ' .$nombre .
+        '</button>' .
+        ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($rspta2['total_pago_compras'], 2, '.', ',') .
+        '</button></div>';
+
       } else {
+
         $deposito_Actual = 0;
+
         if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
           $deposito_Actual = 0;
         } else {
@@ -315,10 +304,11 @@ switch ($_GET["op"]) {
           ' <button style="font-size: 14px;" class="btn btn-' .  $cc . ' btn-sm">' .  number_format($rspta2['total_pago_compras'], 2, '.', ',') . '</button>
         </div>';
       }
-      $vercomprobantes = "'$reg->idcompra_proyecto','$reg->imagen_comprobante'";
-      //($reg->tipo_comprovante="Ninguno" || $reg->tipo_comprovante="Nota de venta")?$function_tipo_comprob="joooo":$function_tipo_comprob="aaaaaaa";
 
-      empty($reg->serie_comprovante) ? ($serie_comprobante = "-") : ($serie_comprobante = $reg->serie_comprovante);
+      $vercomprobantes = "'$reg->idcompra_proyecto','$reg->imagen_comprobante'"; 
+
+      $btn_tipo = (empty($reg->imagen_comprobante)) ? 'btn-outline-info' : 'btn-info';       
+
       $data[] = [
         "0" => $reg->estado == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
               ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
@@ -326,25 +316,13 @@ switch ($_GET["op"]) {
             : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .  $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
               ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>',
         "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-        "2" => '<div class="user-block">
-          <span class="username" style="margin-left: 0px !important;">
-            <p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->razon_social .   '</p>
-          </span>
-          <span class="description" style="margin-left: 0px !important;">
-            <b>Cel: </b><a class="text-body" href="tel:+51' . quitar_guion($reg->telefono) . '" data-toggle="tooltip" data-original-title="Llamar al proveedor.">' .
-          $reg->telefono .'</a> 
-          </span>
-        </div>',
-        "3" =>
-          '<div class="user-block">
-            <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >' . $tipo_comprovante1 . '</p></span>
-            <span class="description" style="margin-left: 0px !important;">Número: ' . $serie_comprobante . ' </span>
-        </div>',
+        "2" => '<span class="text-primary font-weight-bold" >' . $reg->razon_social . '</span>',
+        "3" =>'<span class="" ><b>' . $reg->tipo_comprovante .  '</b> '.(empty($reg->serie_comprovante) ?  "" :  '- '.$reg->serie_comprovante).'</span>',
         "4" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
         "5" => number_format($reg->monto_total, 2, '.', ','),
         "6" => $list_segun_estado_detracc,
         "7" => number_format($saldo, 2, '.', ','),
-        "8" => '<center> <button class="btn btn-info" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+        "8" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
         "9" => $reg->descripcion,
         "10" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
       ];
@@ -789,16 +767,17 @@ switch ($_GET["op"]) {
               : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
             "1" => $reg->forma_pago,
-            "2" => $reg->beneficiario,
-            "3" => $reg->cuenta_destino,
-            "4" => $reg->banco,
-            "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-            "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "8" => $reg->numero_operacion,
-            "9" => number_format($reg->monto, 2, '.', ','),
-            "10" => $imagen,
-            "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "2" => '<div class="user-block">
+              <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
+              <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>            
+            </div>',
+            "3" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
+            "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+            "5" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+            "6" => $reg->numero_operacion,
+            "7" => number_format($reg->monto, 2, '.', ','),
+            "8" => $imagen,
+            "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         //$suma=array_sum($rspta->fetch_object()->monto);

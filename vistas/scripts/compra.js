@@ -26,13 +26,13 @@ function init() {
   $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); });
   
   //Mostramos colores
-  $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color").html(r); });
+  $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
   //Mostramos las unidades de medida
-  $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unid_medida").html(r); });
+  $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
   //Mostramos las categorias del producto
-  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af").html(r); });
+  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
 
   $("#bloc_Compras").addClass("menu-open");
 
@@ -40,20 +40,20 @@ function init() {
 
   $("#lCompras").addClass("active");
 
-  // guardar el registro de la compra
+  // Guardar el registro de la compra
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
 
-  //guardar registro proveedor
+  //Guardar registro proveedor
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
   //Guardar pago
   $("#guardar_registro_pago").on("click", function (e) {  $("#submit-form-pago").submit(); });
 
-  //subir factura modal
+  //Guardar factura modal
   $("#guardar_registro_2").on("click", function (e) {  $("#submit-form-planootro").submit();  });  
 
-   //materiales  
-  $("#guardar_registro").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
+   //Guardar  
+  $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
 
   //Initialize Select2 BANCO
   $("#banco_pago").select2({
@@ -91,21 +91,21 @@ function init() {
   });
 
   //Initialize Select2 CATEGORIA
-  $("#categoria_insumos_af").select2({
+  $("#categoria_insumos_af_p").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar color",
     allowClear: true,
   });
 
   //Initialize Select2 COLOR
-  $("#color").select2({
+  $("#color_p").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar color",
     allowClear: true,
   });
 
   //Initialize Select2 UNIDAD DE MEDIDA
-  $("#unid_medida").select2({
+  $("#unidad_medida_p").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar una unidad",
     allowClear: true,
@@ -164,7 +164,7 @@ function foto2_eliminar() {
 function doc2_eliminar() {
   $("#doc2").val("");
 
-  $("#doc2_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+  $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
   $("#doc2_nombre").html("");
 }
@@ -299,6 +299,10 @@ function listar(nube_idproyecto) {
       },
       createdRow: function (row, data, ixdex) {
         //console.log(data);
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-nowrap');
+        }
+
         if (data[7] > 0) {
           $("td", row).eq(7).css({
             "background-color": "#ffc107",
@@ -327,7 +331,7 @@ function listar(nube_idproyecto) {
         },
       },
       bDestroy: true,
-      iDisplayLength: 5, //Paginación
+      iDisplayLength: 10, //Paginación
       order: [[0, "desc"]], //Ordenar (columna,orden)
       columnDefs: [
         {
@@ -367,7 +371,7 @@ function listar(nube_idproyecto) {
         },
       },
       bDestroy: true,
-      iDisplayLength: 5, //Paginación
+      iDisplayLength: 10, //Paginación
       order: [[0, "desc"]], //Ordenar (columna,orden)
     })
     .DataTable();
@@ -536,6 +540,96 @@ function des_anular(idcompra_proyecto) {
       });
     }
   });
+}
+
+function comprobante_compras(idcompra_proyecto, doc) {
+  //console.log(idcompra_proyecto,doc);
+  $("#modal-comprobantes-compra").modal("show");
+  $("#comprobante_c").val(idcompra_proyecto);
+  $("#doc1_nombre").html("");
+  $("#doc_old_1").val("doc");
+  if (doc != "") {
+    $("#doc_old_1").val(doc);
+
+    // cargamos la imagen adecuada par el archivo
+    if (extrae_extencion(doc) == "xls") {
+      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+    } else {
+      if (extrae_extencion(doc) == "xlsx") {
+        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+      } else {
+        if (extrae_extencion(doc) == "csv") {
+          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+        } else {
+          if (extrae_extencion(doc) == "xlsm") {
+            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+          } else {
+            if (extrae_extencion(doc) == "pdf") {
+              $("#doc1_ver").html('<iframe src="../dist/comprobantes_compras/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+            } else {
+              if (extrae_extencion(doc) == "dwg") {
+                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
+              } else {
+                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
+                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
+                } else {
+                  if (
+                    extrae_extencion(doc) == "jpeg" ||
+                    extrae_extencion(doc) == "jpg" ||
+                    extrae_extencion(doc) == "jpe" ||
+                    extrae_extencion(doc) == "jfif" ||
+                    extrae_extencion(doc) == "gif" ||
+                    extrae_extencion(doc) == "png" ||
+                    extrae_extencion(doc) == "tiff" ||
+                    extrae_extencion(doc) == "tif" ||
+                    extrae_extencion(doc) == "webp" ||
+                    extrae_extencion(doc) == "bmp"
+                  ) {
+                    $("#doc1_ver").html('<img src="../dist/comprobantes_compras/' + doc + '" alt="" width="50%" >');
+                  } else {
+                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
+                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+                    } else {
+                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    //ver_completo descargar comprobante subir
+
+    $(".ver_completo").val(doc);
+
+    //ver_completo descargar comprobante subir
+    // $(".subir").show();
+    $(".subir").removeClass("col-md-6").addClass("col-md-4");
+    $(".comprobante").removeClass("col-md-6").addClass("col-md-4");
+
+    $(".ver_completo").show();
+    $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
+
+    $(".descargar").show();
+    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
+
+    $("#ver_completo").attr("href", "../dist/comprobantes_compras/" + doc);
+    $("#descargar_comprob").attr("href", "../dist/comprobantes_compras/" + doc);
+  } else {
+    $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+    // $("#doc1_nombre").html("");
+
+    $("#doc_old_1").val("");
+
+    $(".ver_completo").hide();
+    $(".descargar").hide();
+
+    $(".subir").removeClass("col-md-4").addClass("col-md-6");
+    $(".comprobante").removeClass("col-md-4").addClass("col-md-6");
+  }
 }
 
 //=========================================
@@ -865,6 +959,7 @@ function total_pagos_detracc(idcompra_proyecto) {
     }
   });
 }
+
 //mostrar
 function mostrar_pagos(idpago_compras) {
   limpiar_c_pagos();
@@ -973,7 +1068,6 @@ function ver_modal_vaucher(imagen) {
 }
 
 /**===============================
- * ======================================
  * =========
  */
 //Función ListarArticulos
@@ -1267,23 +1361,24 @@ function guardaryeditar_comprobante(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (datos) {
+
       if (datos == "ok") {
+
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
         tabla.ajax.reload();
 
         limpiar();
 
-        $("#modal-comprobantes-pago").modal("hide");
+        $("#modal-comprobantes-compra").modal("hide");
       } else {
+
         Swal.fire("Error!", datos, "error");
       }
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener(
         "progress",
         function (evt) {
@@ -1430,6 +1525,7 @@ function editar_detalle_compras(idcompra_proyecto) {
     }
   });
 }
+
 //mostramos el detalle del comprobante de la compras
 function ver_detalle_compras(idcompra_proyecto) {
   $("#modal-ver-compras").modal("show");
@@ -1494,38 +1590,34 @@ function ver_detalle_compras(idcompra_proyecto) {
 //Función para guardar o editar
 //Función limpiar
 function limpiar_materiales() {
-  //Mostramos los Materiales
-  $("#idproducto").val("");
-  $("#nombre_material").val("");
-  $("#marca").val("");
-  $("#descripcion_material").val("");
+  $("#idproducto_p").val("");  
+  $("#nombre_p").val("");
+  $("#modelo_p").val("");
+  $("#serie_p").val("");
+  $("#marca_p").val("");
+  $("#descripcion_p").val("");
 
-  $("#precio_unitario").val("");
-  $("#estado_igv").val("");
-  $("#monto_igv").val("");
-  $("#precio_real").val("");
-  $(".precio_real").val("");
-  $(".total").val("");
-  $(".monto_igv").val("");
-  $("#unid_medida").val("");
-  $("#total_precio").val("");
+  $("#precio_unitario_p").val("");
+  $("#precio_sin_igv_p").val("");
+  $("#precio_igv_p").val("");
+  $("#precio_total_p").val("");
 
-  $("#imagen1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
-  $("#imagen1").val("");
-  $("#imagen1_actual").val("");
-  $("#imagen1_nombre").html("");
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
+  $("#foto2").val("");
+  $("#foto2_actual").val("");
+  $("#foto2_nombre").html("");   
 
-  $("#imagen_ficha_i").attr("src", "../dist/img/default/pdf.png");
-  $("#imagen_ficha").val("");
-  $("#imagen_ficha_actual").val("");
-  $("#ver_pdf").val("");
-  $("#imagen_ficha_nombre").html("");
-  $("#imagen_ficha_i").show();
-  $("#ver_pdf").hide();
-  $("#unid_medida").val("null").trigger("change");
-  $("#color").val("1").trigger("change");
+  $("#doc_old_2").val("");
+  $("#doc2").val("");  
+  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc2_nombre').html("");
+
+  $("#unid_medida_p").val(4).trigger("change");
+  $("#color_p").val(1).trigger("change");
+  $("#categoria_insumos_af_p").val("").trigger("change");
+
   $("#my-switch_igv").prop("checked", true);
-  $("#estado_igv").val("1");
+  $("#estado_igv_p").val("1");
 
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
@@ -1544,7 +1636,8 @@ function guardar_y_editar_materiales(e) {
 
     success: function (datos) {
       if (datos == "ok") {
-        toastr.success("Registrado correctamente");
+
+        Swal.fire("Correcto!", "Producto creado correctamente", "success");
 
         tabla.ajax.reload();
         tablamateriales.ajax.reload();
@@ -1552,7 +1645,7 @@ function guardar_y_editar_materiales(e) {
 
         $("#modal-agregar-material-activos-fijos").modal("hide");
       } else {
-        toastr.error(datos);
+        Swal.fire("Error!", datos, "error");
       }
     },
   });
@@ -1567,76 +1660,68 @@ function precio_con_igv() {
   var precio_re = 0;
 
   //var precio_r=0;
-  precio_total = $("#precio_unitario").val();
+  precio_total = $("#precio_unitario_p").val();
 
-  $("#precio_igv").val(mont_igv.toFixed(2));
-  $("#precio_sin_igv").val(precio_total);
+  $("#precio_igv_p").val(mont_igv.toFixed(2));
+  $("#precio_sin_igv_p").val(precio_total);
 
   if ($("#my-switch_igv").is(":checked")) {
     precio_base = precio_total / 1.18;
     igv = precio_total - precio_base;
     precio_re = parseFloat(precio_total) - igv;
     
-    $("#precio_igv").val(igv.toFixed(2));
-    $("#precio_sin_igv").val(precio_re.toFixed(2));
-    $("#precio_total").val((precio_re + igv).toFixed(2));
+    $("#precio_igv_p").val(igv.toFixed(2));
+    $("#precio_sin_igv_p").val(precio_re.toFixed(2));
+    $("#precio_total_p").val((precio_re + igv).toFixed(2));
 
-    $("#estado_igv").val("1");
+    $("#estado_igv_p").val("1");
   } else {
     precio_base = precio_total * 1.18;
 
     igv = precio_base - precio_total;
     precio_re = parseFloat(precio_total) - igv;
 
-    $("#precio_igv").val(igv.toFixed(2));
-    $("#precio_sin_igv").val( parseFloat(precio_total).toFixed(2));
-    $("#precio_total").val(precio_base.toFixed(2));
+    $("#precio_igv_p").val(igv.toFixed(2));
+    $("#precio_sin_igv_p").val( parseFloat(precio_total).toFixed(2));
+    $("#precio_total_p").val(precio_base.toFixed(2));
 
-    $("#estado_igv").val("0");
+    $("#estado_igv_p").val("0");
   }
 }
 
 $("#my-switch_igv").on("click ", function (e) {
-  var precio_total = 0;
-  var precio_base = 0;
-  var igv = 0;
-  var precio_re = 0;
-  precio_total = $("#precio_unitario").val();
 
-  $("#monto_igv").val("");
-  $("#precio_real").val("");
+  var precio_ingresado = 0;
+  var precio_sin_igv = 0;
+  var igv = 0;
+  var precio_total = 0;
+
+  precio_ingresado = $("#precio_unitario_p").val(); 
 
   if ($("#my-switch_igv").is(":checked")) {
-    precio_base = precio_total / 1.18;
-    igv = precio_total - precio_base;
-    precio_re = parseFloat(precio_total) - igv;
+    precio_sin_igv = precio_ingresado / 1.18;
+    igv = precio_ingresado - precio_sin_igv;
+    precio_total = parseFloat(precio_sin_igv) + igv;   
+    console.log(precio_sin_igv, igv, precio_total);
+    $("#precio_sin_igv_p").val(redondearExp(precio_sin_igv, 2));
 
-    $("#monto_igv").val(redondearExp(igv, 4));
-    $("#precio_real").val(redondearExp(precio_re, 4));
+    $("#precio_igv_p").val(redondearExp(igv, 2));   
 
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $(".precio_real").val(redondearExp(precio_re, 2));
+    $("#precio_total_p").val(redondearExp(precio_total, 2)) ;
 
-    $(".total").val(redondearExp(precio_base, 2) + redondearExp(igv, 2));
-    $("#total_precio").val(redondearExp(precio_re, 4) + redondearExp(igv, 4));
-
-    $("#estado_igv").val("1");
+    $("#estado_igv_p").val("1");
   } else {
-    precio_base = precio_total * 1.18;
-    console.log(precio_base);
-    igv = precio_base - precio_total;
-    precio_re = parseFloat(precio_total) + igv;
+    precio_sin_igv = precio_ingresado * 1.18;     
+    igv = precio_sin_igv - precio_ingresado;
+    precio_total = parseFloat(precio_ingresado) + igv;    
+    console.log(precio_sin_igv, igv, precio_total);
+    $("#precio_sin_igv_p").val(redondearExp(precio_ingresado, 2));
 
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $("#monto_igv").val(redondearExp(igv, 4));
+    $("#precio_igv_p").val(redondearExp(igv, 2));
 
-    $(".precio_real").val(redondearExp(precio_total, 2));
-    $("#precio_real").val(redondearExp(precio_total, 4));
+    $("#precio_total_p").val(redondearExp(precio_total, 2) );
 
-    $(".total").val(redondearExp(precio_re, 2));
-    $("#total_precio").val(redondearExp(precio_re, 4));
-
-    $("#estado_igv").val("0");
+    $("#estado_igv_p").val("0");
   }
 });
 
@@ -1871,21 +1956,22 @@ $(function () {
 
   $("#form-materiales").validate({
     rules: {
-      nombre_material: { required: true },
-      descripcion_material: { minlength: 1 },
-      unid_medida: { required: true },
-      color: { required: true },
+      nombre_p: { required: true, minlength:3, maxlength:200},
+      categoria_insumos_af_p: { required: true },
+      color_p: { required: true },
+      unid_medida_p: { required: true },
+      modelo_p: { required: true },
+      precio_unitario_p: { required: true },
+      descripcion_p: { minlength: 3 },
     },
     messages: {
-      nombre_material: {
-        required: "Por favor ingrese nombre",
-      },
-      unid_medida: {
-        required: "Seleccione unidad",
-      },
-      color: {
-        required: "Selecione un color",
-      },
+      nombre_p: { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
+      categoria_insumos_af_p: { required: "Campo requerido", },
+      color_p: { required: "Campo requerido" },
+      unid_medida_p: { required: "Campo requerido" },
+      modelo_p: { required: "Por favor ingrese modelo", },
+      precio_unitario_p: { required: "Ingresar precio compra", },      
+      descripcion_p: { minlength: "Minimo 3 caracteres" },
     },
 
     errorElement: "span",
@@ -1969,7 +2055,7 @@ function addImage(e, id) {
         timer: 1500
       });
 
-      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
+      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
 
     } else {
 
@@ -2030,7 +2116,7 @@ function addImage(e, id) {
       timer: 1500
     })
 
-    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
+    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
 
     $("#" + id + "_nombre").html("");
   }
