@@ -12,12 +12,12 @@ Class Resumen_activos_fijos_general
 
 	
 	//Implementar un método para listar los registros
-	public function listar_tbla_principal()
+	public function listar_tbla_principal_general($clacificacion)
 	{
 		$data_productos = array(); 
 		$sql_1="SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color
 		FROM producto as p, unidad_medida as um, color as c
-		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af=2";
+		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af='$clacificacion'";
 
 		$producto = ejecutarConsultaArray($sql_1);
 
@@ -85,11 +85,11 @@ Class Resumen_activos_fijos_general
 
         $compra_af_general =  ejecutarConsultaArray($sql_1);
 
-		if (!empty($producto)) {
+		if (!empty($compra_af_general)) {
 
 			foreach ($compra_af_general as $key => $value) {
 
-				$b[]=array(
+				$a[]=array(
 					'idproyecto'=>'',
 					'idcompra'=>$value['idcompra_af_general'],
 					'fecha_compra'=>$value['fecha_compra'],
@@ -113,7 +113,7 @@ Class Resumen_activos_fijos_general
 
 		$compras_proyecto =  ejecutarConsultaArray($sql_2);
 
-		if (!empty($producto)) {
+		if (!empty($compras_proyecto)) {
 
 			foreach ($compras_proyecto as $key => $value) {
 
@@ -137,13 +137,13 @@ Class Resumen_activos_fijos_general
 
 	}
 
-	public function suma_total_compras()	{
+	public function suma_total_compras($clacificacion)	{
 
 		$data_totales = array(); $cantidad = 0;  $subtotal=0; 
 
 		$sql_1="SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color
 		FROM producto as p, unidad_medida as um, color as c
-		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af=2";
+		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af='$clacificacion'";
 
 		$producto = ejecutarConsultaArray($sql_1);
 

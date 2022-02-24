@@ -66,7 +66,7 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <table id="tabla-resumen-maquinarias" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
                               <th class="">Producto</th>
@@ -110,32 +110,32 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                          <thead>
-                            <tr>
-                              <th class="">Producto</th>
-                              <th>Unidad de medida</th>
-                              <th>Cantidad</th> 
-                              <th>Precio promedio</th> 
-                              <th>Precio actual</th>    
-                              <th>Suma Total</th>                      
-                            </tr>
-                          </thead>
-                          <tbody>                         
-                            <!-- aqui la va el detalle de la tabla -->
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <th class="">Producto</th>
-                              <th>Unidad de medida</th>
-                              <th class="text-center"> <h5 class="suma_total_productos"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
-                              <th>Precio promedio</th>
-                              <th>Precio actual</th>   
-                              <th class="text-center"> <h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
-                            </tr>
-                          </tfoot>
-                        </table>
-                      </div>
+                        <table id="tabla-resumen-equipos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">Producto</th>
+                                <th>U. medida</th>
+                                <th>Cantidad</th> 
+                                <th>Precio promedio</th> 
+                                <th>Precio actual</th>    
+                                <th>Suma Total</th>                      
+                              </tr>
+                            </thead>
+                            <tbody>                         
+                              <!-- aqui la va el detalle de la tabla -->
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">Producto</th>
+                                <th>U. medida</th>
+                                <th class="text-center" > <h5 class="suma_total_cant_equipos" style="font-weight: bold;"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                                <th>Precio promedio</th>
+                                <th>Precio actual</th>   
+                                <th class="text-right" > <h5 class="suma_total_de_equipos" style="font-weight: bold;">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
                       <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
@@ -154,7 +154,7 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <table id="tabla-resumen-herramientas" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
                               <th class="">Producto</th>
@@ -172,10 +172,10 @@
                             <tr>
                               <th class="">Producto</th>
                               <th>Unidad de medida</th>
-                              <th class="text-center"> <h5 class="suma_total_productos"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                              <th class="text-center"> <h5 class="suma_total_herramientas"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
                               <th>Precio promedio</th>
                               <th>Precio actual</th>   
-                              <th class="text-center"> <h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                              <th class="text-center"> <h5 class="suma_total_de_herramientas">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                             </tr>
                           </tfoot>
                         </table>
@@ -198,7 +198,7 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
-                        <table id="tabla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <table id="tabla-resumen-oficina" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
                               <th class="">Producto</th>
@@ -216,10 +216,10 @@
                             <tr>
                               <th class="">Producto</th>
                               <th>Unidad de medida</th>
-                              <th class="text-center"> <h5 class="suma_total_productos"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                              <th class="text-center"> <h5 class="suma_total_oficina"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
                               <th>Precio promedio</th>
                               <th>Precio actual</th>   
-                              <th class="text-center"> <h5 class="suma_total_de_compras">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                              <th class="text-center"> <h5 class="suma_total_de_oficina">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                             </tr>
                           </tfoot>
                         </table>
@@ -232,9 +232,9 @@
               </div>
               <!-- /.container-fluid -->
 
-              <!-- Modal agregar usuario -->
-              <div class="modal fade" id="modal-ver-precios">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <!-- Modal Maquinarias -->
+              <div class="modal fade" id="modal-ver-precios-maquinarias">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
                   <div class="modal-content">
 
                     <div class="modal-header">
@@ -249,9 +249,11 @@
                         <div class="row" id="cargando-1-fomulario">
                           <!-- Trabajador -->
                           <div class="col-lg-12">
-                            <table id="tabla-precios" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <table id="tabla-precios-maquinarias" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
                                   <th>Fecha compra</th>
                                   <th>Cantidad</th>
                                   <th>Precio</th>  
@@ -265,11 +267,214 @@
                               </tbody>
                               <tfoot>
                                 <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
                                   <th>Fecha compra</th>
                                   <th >Cantidad</th>
                                   <th > <h4 class="precio_promedio"> S/. --</h4> </th>  
                                   <th>Descuento</th> 
                                   <th><h4 class="subtotal_x_producto"> S/. --</h4></th>
+                                  <th>Ficha técnica</th>                        
+                                </tr>
+                              </tfoot>
+                            </table>                                                        
+                          </div>
+                        </div>  
+
+                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+                        
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                    <div class="modal-footer justify-content-end">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <!-- <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button> -->
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+              <!-- Modal Equipos -->
+              <div class="modal fade" id="modal-ver-precios-equipos">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h4 class="modal-title nombre-equipos-modal-titel">Producto y mas</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                      <div class="card-body">
+                        <div class="row" id="cargando-1-fomulario">
+                          <!-- Trabajador -->
+                          <div class="col-lg-12">
+                            <table id="tabla-precios-equipos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
+                                  <th>Fecha compra</th>
+                                  <th>Cantidad</th>
+                                  <th>Precio</th>  
+                                  <th>Descuento</th>
+                                  <th>SubTotal</th>
+                                  <th>Ficha técnica</th>                               
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
+                                  <th>Fecha compra</th>
+                                  <th >Cantidad</th>
+                                  <th > <h4 class="precio_promedio_equipos"> S/. --</h4> </th>  
+                                  <th>Descuento</th> 
+                                  <th><h4 class="subtotal_x_producto_equipos"> S/. --</h4></th>
+                                  <th>Ficha técnica</th>                        
+                                </tr>
+                              </tfoot>
+                            </table>                                                        
+                          </div>
+                        </div>  
+
+                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+                        
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                    <div class="modal-footer justify-content-end">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <!-- <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button> -->
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+              <!-- Modal Herramientas -->
+              <div class="modal fade" id="modal-ver-precios-herramientas">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h4 class="modal-title nombre-herramientas-modal-titel">Producto y mas</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                      <div class="card-body">
+                        <div class="row" id="cargando-1-fomulario">
+                          <!-- Trabajador -->
+                          <div class="col-lg-12">
+                            <table id="tabla-precios-herramientas" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
+                                  <th>Fecha compra</th>
+                                  <th>Cantidad</th>
+                                  <th>Precio</th>  
+                                  <th>Descuento</th>
+                                  <th>SubTotal</th>
+                                  <th>Ficha técnica</th>                               
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
+                                  <th>Fecha compra</th>
+                                  <th >Cantidad</th>
+                                  <th > <h4 class="precio_promedio_herramientas"> S/. --</h4> </th>  
+                                  <th>Descuento</th> 
+                                  <th><h4 class="subtotal_x_producto_herramientas"> S/. --</h4></th>
+                                  <th>Ficha técnica</th>                        
+                                </tr>
+                              </tfoot>
+                            </table>                                                        
+                          </div>
+                        </div>  
+
+                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+                        
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+
+                    <div class="modal-footer justify-content-end">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <!-- <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button> -->
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+              <!-- Modal oficina -->
+              <div class="modal fade" id="modal-ver-precios-oficina">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h4 class="modal-title nombre-oficina-modal-titel">Producto y mas</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                      <div class="card-body">
+                        <div class="row" id="cargando-1-fomulario">
+                          <!-- Trabajador -->
+                          <div class="col-lg-12">
+                            <table id="tabla-precios-oficina" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
+                                  <th>Fecha compra</th>
+                                  <th>Cantidad</th>
+                                  <th>Precio</th>  
+                                  <th>Descuento</th>
+                                  <th>SubTotal</th>
+                                  <th>Ficha técnica</th>                               
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th>OP.</th>
+                                  <th>Proveedor</th>
+                                  <th>Fecha compra</th>
+                                  <th >Cantidad</th>
+                                  <th > <h4 class="precio_promedio_oficina"> S/. --</h4> </th>  
+                                  <th>Descuento</th> 
+                                  <th><h4 class="subtotal_x_producto_oficina"> S/. --</h4></th>
                                   <th>Ficha técnica</th>                        
                                 </tr>
                               </tfoot>
