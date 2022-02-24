@@ -57,6 +57,24 @@ $idproveedor_pago = isset($_POST["idproveedor_pago"]) ? limpiarCadena($_POST["id
 
 $imagen1 = isset($_POST["foto1"]) ?$_POST["foto1"]: "";
 
+// :::::::::::::::::::::::::::::::::::: D A T O S   M A T E R I A L E S ::::::::::::::::::::::::::::::::::::::
+$idproducto_p     = isset($_POST["idproducto_p"]) ? limpiarCadena($_POST["idproducto_p"]) : "" ;
+$unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
+$color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
+$categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
+$nombre_p         = isset($_POST["nombre_p"]) ? limpiarCadena($_POST["nombre_p"]) : "" ;
+$modelo_p         = isset($_POST["modelo_p"]) ? limpiarCadena($_POST["modelo_p"]) : "" ;
+$serie_p          = isset($_POST["serie_p"]) ? limpiarCadena($_POST["serie_p"]) : "" ;
+$marca_p          = isset($_POST["marca_p"]) ? limpiarCadena($_POST["marca_p"]) : "" ;
+$estado_igv_p     = isset($_POST["estado_igv_p"]) ? limpiarCadena($_POST["estado_igv_p"]) : "" ;
+$precio_unitario_p= isset($_POST["precio_unitario_p"]) ? limpiarCadena($_POST["precio_unitario_p"]) : "" ;      
+$precio_sin_igv_p = isset($_POST["precio_sin_igv_p"]) ? limpiarCadena($_POST["precio_sin_igv_p"]) : "" ;
+$precio_igv_p     = isset($_POST["precio_igv_p"]) ? limpiarCadena($_POST["precio_igv_p"]) : "" ;
+$precio_total_p   = isset($_POST["precio_total_p"]) ? limpiarCadena($_POST["precio_total_p"]) : "" ;      
+$descripcion_p    = isset($_POST["descripcion_p"]) ? limpiarCadena($_POST["descripcion_p"]) : "" ; 
+$img_pefil_p      = isset($_POST["fotop2"]) ? limpiarCadena($_POST["fotop2"]) : "" ;
+$ficha_tecnica_p  = isset($_POST["doct2"]) ? limpiarCadena($_POST["doct2"]) : "" ;
+
 switch ($_GET["op"]) {
 
     case 'guardaryeditarcompraactivo': 
@@ -201,6 +219,53 @@ switch ($_GET["op"]) {
             }
         }
     break;
+    
+  case 'guardar_y_editar_materiales':
+    // imgen
+    if (!file_exists($_FILES['fotop2']['tmp_name']) || !is_uploaded_file($_FILES['fotop2']['tmp_name'])) {
+
+      $img_pefil_p = $_POST["fotop2_actual"];
+
+      $flat_img1 = false;
+
+    } else {
+
+      $ext1 = explode(".", $_FILES["fotop2"]["name"]);
+
+      $flat_img1 = true;
+
+      $img_pefil_p = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+      move_uploaded_file($_FILES["fotop2"]["tmp_name"], "../dist/docs/material/img_perfil/" . $img_pefil_p);
+    }
+
+    // ficha técnica
+    if (!file_exists($_FILES['doct2']['tmp_name']) || !is_uploaded_file($_FILES['doct2']['tmp_name'])) {
+
+      $ficha_tecnica_p = $_POST["doc_oldt_2"];
+
+      $flat_ficha1 = false;
+
+    } else {
+
+      $ext1 = explode(".", $_FILES["doct2"]["name"]);
+
+      $flat_ficha1 = true;
+
+      $ficha_tecnica_p = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+      move_uploaded_file($_FILES["doct2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica_p);
+    }
+
+    if (empty($idproducto)) {
+      //var_dump($idproyecto,$idproveedor);
+      $rspta = $all_activos_fijos->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+      
+      echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+
+    } 
+  break;
+
 
     case 'anular':
         if (!isset($_SESSION["nombre"])) {
@@ -1273,6 +1338,9 @@ switch ($_GET["op"]) {
         }                 
     break;
 
+    /** SECCCION AGREGAR PRODUCTO */
+
+
 
     case 'salir':
         //Limpiamos las variables de sesión
@@ -1283,6 +1351,8 @@ switch ($_GET["op"]) {
         header("Location: ../index.php");
 
     break;
+
+
 }
 
 function quitar_guion($numero){ return str_replace("-", "", $numero); }

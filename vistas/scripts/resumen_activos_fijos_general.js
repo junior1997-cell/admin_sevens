@@ -114,11 +114,14 @@ function listar_tbla_principal_maq()
 
 function ver_precios_y_mas_maq(idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) 
 {
+  var precio_prom=quitar_formato_miles(precio_promedio);
+  var subtotal_x_prod=quitar_formato_miles(subtotal_x_producto);
 
   $(".nombre-producto-modal-titel").html('Producto: <b>'+ nombre_producto +'</b>');
 	$("#modal-ver-precios-maquinarias").modal("show");
-  $(".precio_promedio").html(precio_promedio);
-  $(".subtotal_x_producto").html(subtotal_x_producto);
+  
+  $(".precio_promedio").html(formato_miles(parseFloat(precio_prom).toFixed(2)));
+  $(".subtotal_x_producto").html( formato_miles(parseFloat(subtotal_x_prod).toFixed(2)));
 
 	tabla_maaquinaria2 = $('#tabla-precios-maquinarias').dataTable({
 		"responsive": true,
@@ -230,11 +233,14 @@ function listar_tbla_principal_equip()
 
 function ver_precios_y_mas_equip(idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) 
 {
+  var precio_prom=quitar_formato_miles(precio_promedio);
+  var subtotal_x_prod=quitar_formato_miles(subtotal_x_producto);
 
   $(".nombre-equipos-modal-titel").html('Producto: <b>'+ nombre_producto +'</b>');
 	$("#modal-ver-precios-equipos").modal("show");
-  $(".precio_promedio_equipos").html(precio_promedio);
-  $(".subtotal_x_producto_equipos").html(subtotal_x_producto);
+
+  $(".precio_promedio_equipos").html(formato_miles(parseFloat(precio_prom).toFixed(2)));
+  $(".subtotal_x_producto_equipos").html( formato_miles(parseFloat(subtotal_x_prod).toFixed(2)));
 
 	tabla_equipo2 = $('#tabla-precios-equipos').dataTable({
 		"responsive": true,
@@ -346,11 +352,13 @@ function listar_tbla_principal_herra()
 }
 function ver_precios_y_mas_herra(idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) 
 {
+  var precio_prom=quitar_formato_miles(precio_promedio);
+  var subtotal_x_prod=quitar_formato_miles(subtotal_x_producto);
 
   $(".nombre-herramientas-modal-titel").html('Producto: <b>'+ nombre_producto +'</b>');
 	$("#modal-ver-precios-herramientas").modal("show");
-  $(".precio_promedio_herramientas").html(precio_promedio);
-  $(".subtotal_x_producto_herramientas").html(subtotal_x_producto);
+  $(".precio_promedio_herramientas").html(formato_miles(parseFloat(precio_prom).toFixed(2)));
+  $(".subtotal_x_producto_herramientas").html( formato_miles(parseFloat(subtotal_x_prod).toFixed(2)));
 
 	tabla_herramientas2 = $('#tabla-precios-herramientas').dataTable({
 		"responsive": true,
@@ -454,18 +462,20 @@ function listar_tbla_principal_oficina()
       if (data.total_monto == null || data.total_monto == '') {
         $('.suma_total_de_oficina').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.suma_total_de_oficina').html( 'S/. '+ formato_miles(data.total_monto));
+        $('.suma_total_de_oficina').html( 'S/. '+ formato_miles((data.total_monto).toFixed(2)));
       }
     }    
   });
 }
 function ver_precios_y_mas_oficina(idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) 
 {
-
+  var precio_prom=quitar_formato_miles(precio_promedio);
+  var subtotal_x_prod=quitar_formato_miles(subtotal_x_producto);
+  
   $(".nombre-oficina-modal-titel").html('Producto: <b>'+ nombre_producto +'</b>');
 	$("#modal-ver-precios-oficina").modal("show");
-  $(".precio_promedio_oficina").html(precio_promedio);
-  $(".subtotal_x_producto_oficina").html(subtotal_x_producto);
+  $(".precio_promedio_oficina").html(formato_miles(parseFloat(precio_prom).toFixed(2)));
+  $(".subtotal_x_producto_oficina").html( formato_miles(parseFloat(subtotal_x_prod).toFixed(2)));
 
 	tabla_oficina2 = $('#tabla-precios-oficina').dataTable({
 		"responsive": true,
@@ -505,6 +515,11 @@ function formato_miles(num) {
   if (cents < 10) cents = "0" + cents;
   for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
   return (sign ? "" : "-") + num + "." + cents;
+}
+
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, "");
+  return inVal;
 }
 
 init();
