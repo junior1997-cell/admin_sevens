@@ -1932,7 +1932,7 @@ function editar_detalle_compras(idcompra_af_general) {
   ver_form_add();
 
   $.post("../ajax/all_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    data = JSON.parse(data);
+    data = JSON.parse(data); console.log(data);
     
     if (data) {
       $(".subtotal").html("");
@@ -1987,8 +1987,8 @@ function editar_detalle_compras(idcompra_af_general) {
               <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
               <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre_activo}')">
-                <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_activo}</p></span>
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre}')">
+                <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
             </td>
@@ -2029,7 +2029,7 @@ function ver_compras_af_g(idcompra_af_general) {
   $("#modal-ver-compras").modal("show");
 
   $.post("../ajax/all_activos_fijos.php?op=ver_compra", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+    data = JSON.parse(data); console.log(data);
     $(".idproveedor").html("");
     $(".fecha_compra").val("");
     $(".tipo_comprovante").html("");
