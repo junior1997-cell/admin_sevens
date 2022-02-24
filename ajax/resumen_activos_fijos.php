@@ -11,11 +11,11 @@ if (!isset($_SESSION["nombre"])) {
   //Validamos el acceso solo al usuario logueado y autorizado.
   if ($_SESSION['compra'] == 1) {
 
-    require_once "../modelos/Resumen_insumos.php";
+    require_once "../modelos/Resumen_activos_fijos.php";
     require_once "../modelos/Compra.php";
     require_once "../modelos/AllProveedor.php";
 
-    $resumen_insumos = new ResumenInsumos();
+    $resumen_activo_fijo = new ResumenActivoFijo();
     $compra = new Compra();
     $proveedor = new Proveedor();
 
@@ -123,7 +123,7 @@ if (!isset($_SESSION["nombre"])) {
     
         if (empty($idproducto_p)) {
           //var_dump($idproyecto,$idproveedor);
-          $rspta = $resumen_insumos->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+          $rspta = $resumen_activo_fijo->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
           
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
     
@@ -149,7 +149,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $idproyecto = $_GET["id_proyecto"];
 
-        $rspta = $resumen_insumos->tbla_principal($idproyecto);
+        $rspta = $resumen_activo_fijo->tbla_principal($idproyecto);
         //Vamos a declarar un array
         $data = [];
 
@@ -187,7 +187,7 @@ if (!isset($_SESSION["nombre"])) {
         $idproyecto = $_GET["idproyecto"];
         $idproducto = $_GET["idproducto"];
 
-        $rspta = $resumen_insumos->tbla_facturas($idproyecto, $idproducto);
+        $rspta = $resumen_activo_fijo->tbla_facturas($idproyecto, $idproducto);
         //Vamos a declarar un array
         $data = [];
 
@@ -229,10 +229,10 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($rspta);
          
       break;
-      
+
       case 'listarMaterialescompra':     
 
-        $rspta = $resumen_insumos->listar_productos();
+        $rspta = $resumen_activo_fijo->listar_productos();
         //Vamos a declarar un array
         $datas = [];
         // echo json_encode($rspta);
@@ -282,7 +282,7 @@ if (!isset($_SESSION["nombre"])) {
       case 'suma_total_compras':
         $idproyecto = $_POST["idproyecto"];
 
-        $rspta = $resumen_insumos->suma_total_compras($idproyecto);
+        $rspta = $resumen_activo_fijo->suma_total_compras($idproyecto);
 
         echo json_encode($rspta);
       break;

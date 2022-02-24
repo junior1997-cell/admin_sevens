@@ -191,8 +191,6 @@ function tbla_principal(id_proyecto) {
       if (data[5] != '') {
         $("td", row).eq(5).addClass("text-right");         
       }
-
-
     },
 		"language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -292,9 +290,7 @@ function limpiar_form_compra() {
   $(".tooltip").hide();
 
   //Mostramos los selectProveedor
-  $.post("../ajax/compra.php?op=selectProveedor", function (r) {
-    $("#idproveedor").html(r);
-  });
+  $.post("../ajax/resumen_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
 
   $("#idcompra_proyecto").val();
   $("#idproyecto").val();
@@ -337,7 +333,7 @@ function editar_detalle_compras(id) {
 
   tbla_materiales()
 
-  $.post("../ajax/compra.php?op=ver_compra_editar", { 'idcompra_proyecto': id }, function (data, status) {
+  $.post("../ajax/resumen_insumos.php?op=ver_compra_editar", { 'idcompra_proyecto': id }, function (data, status) {
     
     data = JSON.parse(data);  console.log(data);
 
@@ -711,7 +707,7 @@ function tbla_materiales() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/compra.php?op=listarMaterialescompra",
+      url: "../ajax/resumen_insumos.php?op=listarMaterialescompra",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -821,7 +817,7 @@ function guardar_materiales(e) {
   var formData = new FormData($("#form-materiales")[0]);
 
   $.ajax({
-    url: "../ajax/compra.php?op=guardar_materiales",
+    url: "../ajax/resumen_insumos.php?op=guardar_materiales",
     type: "POST",
     data: formData,
     contentType: false,
@@ -953,7 +949,7 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/all_proveedor.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/resumen_insumos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
       
       data = JSON.parse(data);  // console.log(data);
 

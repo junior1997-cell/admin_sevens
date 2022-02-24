@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-Class ResumenInsumos
+Class ResumenActivoFijo
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -45,16 +45,6 @@ Class ResumenInsumos
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	//CREAR - PRODUCTO
-	public function insertar_material($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen)
-	{
-		// var_dump($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen); die;
-		$sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, nombre, modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen) 
-		VALUES ('$unidad_medida', '$color', '$idcategoria', '$nombre', '$modelo', '$serie', '$marca', '$estado_igv', '$precio_unitario', '$precio_igv', '$precio_sin_igv', '$precio_total', '$ficha_tecnica', '$descripcion', '$imagen')";
-    	return ejecutarConsulta($sql);
-			
-	}
-
 	public function listar_productos() {
     	$sql = "SELECT
             p.idproducto AS idproducto,
@@ -81,7 +71,17 @@ Class ResumenInsumos
     	return ejecutarConsulta($sql);
   	}
 
-	//Seleccionar 
+	//CREAR - PRODUCTO
+	public function insertar_material($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen)
+	{
+		// var_dump($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen); die;
+		$sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, nombre, modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen) 
+		VALUES ('$unidad_medida', '$color', '$idcategoria', '$nombre', '$modelo', '$serie', '$marca', '$estado_igv', '$precio_unitario', '$precio_igv', '$precio_sin_igv', '$precio_total', '$ficha_tecnica', '$descripcion', '$imagen')";
+    	return ejecutarConsulta($sql);
+			
+	}
+
+	//Seleccionar Trabajador Select2
 	public function obtenerImgPerfilProducto($idproducto)
 	{
 	  $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
