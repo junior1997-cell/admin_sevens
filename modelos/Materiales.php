@@ -133,6 +133,7 @@ class Materiales
     $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
     return ejecutarConsulta($sql);
   }
+  
   //Seleccionar una ficha tecnica
   public function ficha_tec($idproducto)
   {

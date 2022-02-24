@@ -52,7 +52,7 @@ function init() {
   //Guardar factura modal
   $("#guardar_registro_2").on("click", function (e) {  $("#submit-form-planootro").submit();  });  
 
-   //Guardar  
+  //Guardar Material
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
 
   //Initialize Select2 BANCO

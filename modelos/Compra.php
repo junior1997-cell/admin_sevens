@@ -429,6 +429,7 @@ class Compra
 
     return ejecutarConsultaSimpleFila($sql);
   }
+  
   // obtebnemos los DOCS para eliminar
   public function obtenerImg($idpago_compras)
   {
@@ -436,6 +437,14 @@ class Compra
 
     return ejecutarConsulta($sql);
   }
+
+  //Seleccionar Trabajador Select2
+	public function obtenerImgPerfilProducto($idproducto)
+	{
+	  $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
+	  return ejecutarConsulta($sql);
+	}
+
   //mostrar datos del proveedor y maquina en form
   public function most_datos_prov_pago($idcompra_proyecto)
   {
@@ -471,7 +480,7 @@ class Compra
     return ejecutarConsulta($sql);
   }
 
-  	//Implementamos un método para insertar registros
+  //Implementamos un método para insertar registros
 	public function insertar_material($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen)
 	{
 		// var_dump($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen); die;

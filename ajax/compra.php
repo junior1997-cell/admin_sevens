@@ -21,7 +21,7 @@ $total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"
 
 $estado_detraccion = isset($_POST["estado_detraccion"]) ? limpiarCadena($_POST["estado_detraccion"]) : "";
 
-// :::::::::::::::::::::::::::::::::::: D A T O S   P A G O   C O M P A ::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::: D A T O S   P A G O   C O M P R A ::::::::::::::::::::::::::::::::::::::
 $beneficiario_pago = isset($_POST["beneficiario_pago"]) ? limpiarCadena($_POST["beneficiario_pago"]) : "";
 $forma_pago = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
 $tipo_pago = isset($_POST["tipo_pago"]) ? limpiarCadena($_POST["tipo_pago"]) : "";
@@ -183,7 +183,7 @@ switch ($_GET["op"]) {
       move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica_p);
     }
 
-    if (empty($idproducto)) {
+    if (empty($idproducto_p)) {
       //var_dump($idproyecto,$idproveedor);
       $rspta = $compra->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
       
@@ -194,7 +194,7 @@ switch ($_GET["op"]) {
       // validamos si existe LA IMG para eliminarlo
       if ($flat_img1 == true) {
 
-        $datos_f1 = $compra->obtenerImg($idproducto);
+        $datos_f1 = $compra->obtenerImgPerfilProducto($idproducto_p);
 
         $img1_ant = $datos_f1->fetch_object()->imagen;
 

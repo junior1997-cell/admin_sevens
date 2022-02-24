@@ -163,7 +163,7 @@
                                     <div class="form-group">
                                       <label for="Add" style="color: white;">.</label>
                                       <a data-toggle="modal" href="#modal-agregar-proveedor" >
-                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiardatosproveedor();">
+                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
                                           <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         </button>
                                       </a>
@@ -317,6 +317,141 @@
                 </div>
                 <!-- /.container-fluid -->
 
+                <!-- Modal agregar proveedores -->
+                <div class="modal fade" id="modal-agregar-proveedor">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Agregar proveedor</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-proveedor" name="form-proveedor" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-1-fomulario">
+                              <!-- id proveedores -->
+                              <input type="hidden" name="idproveedor_prov" id="idproveedor_prov" />
+
+                              <!-- Tipo de documento -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="tipo_documento_prov">Tipo de documento</label>
+                                  <select name="tipo_documento_prov" id="tipo_documento_prov" class="form-control" placeholder="Tipo de documento">
+                                    <option value="RUC">RUC</option>
+                                    <option selected value="DNI">DNI</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- N° de documento -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="num_documento_prov">N° RUC / DNI</label>
+                                  <div class="input-group">
+                                    <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                      <span class="input-group-text" style="cursor: pointer;">
+                                        <i class="fas fa-search text-primary" id="search"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Nombre -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="nombre_prov">Razón Social / Nombre y Apellidos</label>
+                                  <input type="text" name="nombre_prov" class="form-control" id="nombre_prov" placeholder="Razón Social o  Nombre" />
+                                </div>
+                              </div>
+
+                              <!-- Direccion -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="direccion_prov">Dirección</label>
+                                  <input type="text" name="direccion_prov" class="form-control" id="direccion_prov" placeholder="Dirección" />
+                                </div>
+                              </div>
+
+                              <!-- Telefono -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="telefono_prov">Teléfono</label>
+                                  <input type="text" name="telefono_prov" id="telefono_prov" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- Titular de la cuenta -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="titular_cuenta_prov">Titular de la cuenta</label>
+                                  <input type="text" name="titular_cuenta_prov" class="form-control" id="titular_cuenta_prov" placeholder="Titular de la cuenta" />
+                                </div>
+                              </div>
+
+                              <!-- banco -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="banco_prov">Banco</label>
+                                  <select name="banco_prov" id="banco_prov" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+                                    <!-- Aqui listamos los bancos -->
+                                  </select>
+                                  <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
+                                </div>
+                              </div>
+
+                              <!-- Cuenta bancaria -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="c_bancaria_prov" class="chargue-format-1">Cuenta Bancaria</label>
+                                  <input type="text" name="c_bancaria_prov" class="form-control" id="c_bancaria_prov" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- CCI -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="cci_prov" class="chargue-format-2">CCI</label>
+                                  <input type="text" name="cci_prov" class="form-control" id="cci_prov" placeholder="CCI" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- Cuenta de detracciones -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="c_detracciones_prov" class="chargue-format-3">Cuenta Detracciones</label>
+                                  <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_proveedor">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- MODA - ELEGIR PRODUCTO -->
                 <div class="modal fade" id="modal-elegir-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -346,6 +481,204 @@
                     </div>
                   </div>
                 </div>  
+
+                <!-- MODAL - AGREGAR MATERIALES Y ACTIVOS FIJOS -->                 
+                <div class="modal fade" id="modal-agregar-material-activos-fijos">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Agregar Producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-materiales" name="form-materiales" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-3-fomulario">
+
+                              <!-- idproducto -->
+                              <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
+
+                              <!-- Nombre -->
+                              <div class="col-lg-8 class_pading">
+                                <div class="form-group">
+                                  <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
+                                </div>
+                              </div>
+
+                              <!-- Categoria -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="categoria_insumos_af_p">Categoria</label>
+                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- Modelo -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="modelo_p">Modelo <sup class="text-danger">*</sup> </label>
+                                  <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
+                                </div>
+                              </div>
+
+                              <!-- Serie -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="serie_p">Serie </label>
+                                  <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
+                                </div>
+                              </div>
+
+                              <!-- Marca -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="marca_p">Marca </label>
+                                  <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." />
+                                </div>
+                              </div>
+
+                              <!-- Color -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="color_p">Color</label>
+                                  <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
+                                </div>
+                              </div>
+                              
+                              <!-- Unnidad-->
+                              <div class="col-lg-6" id="content-t-unidad">
+                                <div class="form-group">
+                                  <label for="unidad_medida_p">Unidad-medida</label>
+                                  <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
+                                </div>
+                              </div>
+
+                              <!--Precio U-->
+                              <div class="col-lg-4 class_pading">
+                                <div class="form-group">
+                                  <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                </div>
+                              </div>
+
+                              <!-- Rounded switch -->
+                              <div class="col-lg-2 class_pading">
+                                <div class="form-group">
+                                  <label for="" class="labelswitch">Sin o Con (Igv)</label>
+                                  <div id="switch_igv">
+                                    <div class="switch-holder myestilo-switch">
+                                      <div class="switch-toggle">
+                                        <input type="checkbox" id="my-switch_igv" checked />
+                                        <label for="my-switch_igv"></label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <input type="hidden" name="estado_igv_p" id="estado_igv_p" />
+                                </div>
+                              </div>
+
+                              <!--Sub Total subtotal igv total-->
+                              <div class="col-lg-4 class_pading">
+                                <div class="form-group">
+                                  <label for="precio_sin_igv_p">Sub Total</label>
+                                  <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                </div>
+                              </div>
+
+                              <!--IGV-->
+                              <div class="col-lg-4 class_pading">
+                                <div class="form-group">
+                                  <label for="precio_igv_p">IGV</label>
+                                  <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                </div>
+                              </div>
+
+                              <!--Total-->
+                              <div class="col-lg-4 class_pading">
+                                <div class="form-group">
+                                  <label for="precio_total_p">Total</label>
+                                  <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
+                                </div>
+                              </div>
+
+                              <!--Descripcion-->
+                              <div class="col-lg-12 class_pading">
+                                <div class="form-group">
+                                  <label for="descripcion_p">Descripción </label> <br />
+                                  <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>
+                                </div>
+                              </div>
+
+                              <!--iamgen-material-->
+                              <div class="col-md-6 col-lg-6">
+                                <label for="foto2">Imagen</label>
+                                <div style="text-align: center;">
+                                  <img
+                                    onerror="this.src='../dist/img/default/img_defecto_activo_fijo_material.png';"
+                                    src="../dist/img/default/img_defecto_activo_fijo_material.png"
+                                    class="img-thumbnail"
+                                    id="foto2_i"
+                                    style="cursor: pointer !important; height: 100% !important;"
+                                    width="auto"
+                                  />
+                                  <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
+                                  <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                  <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                </div>
+                              </div>
+
+                              <!-- Ficha tecnica -->
+                              <div class="col-md-6 col-lg-6">
+                                <label for="doc2_i" >Ficha técnica <b class="text-danger">(Imagen o PDF)</b> </label>  
+                                <div class="row text-center">                               
+                                  <!-- Subir documento -->
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <!-- Recargar -->
+                                  <div class="col-md-6 text-center comprobante">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'ficha_tecnica');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                  </button>
+                                  </div>                                  
+                                </div>
+                                <div id="doc2_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                            </div>
+
+                            <div class="row" id="cargando-4-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-materiales">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_materiales();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_material">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <!-- MODAL - VER IMG GRANDE PRODUCTO -->
                 <div class="modal fade" id="modal-ver-img-material">
