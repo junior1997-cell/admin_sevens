@@ -18,7 +18,7 @@ function init(){
   // mostramos las fechas feriadas
   $.post("../ajax/proyecto.php?op=listar_feriados",  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);
+    data = JSON.parse(data);  //console.log(data);
     var colors = [];
     $.each(data, function (index, value) { 
       //console.log(value);
@@ -134,6 +134,12 @@ function permanente_pago_obrero() {
 
 //Función limpiar
 function limpiar() {  
+  $(".show_hide_select_1").show(); 
+  $(".show_hide_select_2").hide();
+  $(".show_hide_select_2").html('');
+
+  $('.show_hide_switch_1').show();
+  $('.show_hide_switch_2').hide();
 
   $("#idproyecto").val("");  
   $("#tipo_documento option[value='RUC']").attr("selected", true);
@@ -1618,13 +1624,22 @@ function mostrar(idproyecto) {
     $('#plazo_actividad').val(data.plazo_actividad); 
     $('.plazo_actividad').html(data.plazo_actividad);
 
-    if (data.permanente_pago_obrero == '1') {
-      $("#fecha_pago_obrero").prop("disabled", true); 
-      $("#definiendo").prop('checked', true); 
-      $("#definiendo").attr("disabled", true);
-    } else {
-      $("#fecha_pago_obrero").prop("disabled", false); 
-      $("#definiendo").removeAttr("disabled");
+    if (data.permanente_pago_obrero == '1') {      
+      $(".show_hide_select_1").hide(); 
+      $(".show_hide_select_2").show();
+      $(".show_hide_select_2").html(`<label for="">Pago de obreros <sup class="text-danger">*</sup></label>  <span class="form-control" > ${data.fecha_pago_obrero} </span>`);
+
+      $('.show_hide_switch_1').hide();
+      $('.show_hide_switch_2').show();
+
+      $("#definiendo").prop('checked', true);        
+    } else {      
+      $(".show_hide_select_1").show(); 
+      $(".show_hide_select_2").hide();
+      $(".show_hide_select_2").html("");
+
+      $('.show_hide_switch_1').show();
+      $('.show_hide_switch_2').hide();
       $("#definiendo").prop('checked', false);       
     }
 

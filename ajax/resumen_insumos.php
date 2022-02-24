@@ -38,7 +38,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>',
             "1" => $reg->nombre_medida,
             "2" => $reg->cantidad_total,
-            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
+            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
             <span> S/. ' . number_format($reg->promedio_precio, 2, ".", ",") . '</span>',
             "4" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
             "5" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             

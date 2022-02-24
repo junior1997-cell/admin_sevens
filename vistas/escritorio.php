@@ -321,7 +321,7 @@
                             <!-- FECHA INICIO FIN DE ACTIVIDADES -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label>Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
+                                <label>Fecha Fin de actividades: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
                                   <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin_actividad" id="fecha_fin_actividad" name="fecha_fin_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();" />
                                   <div class="input-group-append" data-target="#fecha_fin_actividad" data-toggle="datetimepicker">
@@ -417,20 +417,26 @@
 
                             <!-- fechas de pago de obreros -->
                             <div class="col-lg-4">                               
-                              <div class="form-group">
+                              <div class="form-group show_hide_select_1">
                                 <label for="fecha_pago_obrero">Pago de obreros <sup class="text-danger">*</sup></label>
                                 <select class="form-control select2" name="fecha_pago_obrero" id="fecha_pago_obrero" style="width: 100%;" onchange="validar_permanent();">
                                   <option value="quincenal">Quincenal</option>
                                   <option value="semanal">Semanal</option>
-                                </select>
+                                </select>                                
+                              </div>
+                              <div class="form-group show_hide_select_2" style="display: none !important;">
+                                
                               </div>
                             </div>
 
                             <div class="col-lg-4">
                               <label for="fecha_pago_obrero">Definir permanente <small class="text-danger">(pago de obreros)</small> </label>
-                              <div class="switch-toggle">
+                              <div class="switch-toggle show_hide_switch_1">
                                 <input type="checkbox" id="definiendo" >
                                 <label for="definiendo" onclick="permanente_pago_obrero()"></label>
+                              </div>
+                              <div class="show_hide_switch_2" style="display: none;">
+                                Esta no se configuracion NO se puede cambiar
                               </div>
                               <input type="hidden" name="permanente_pago_obrero" id="permanente_pago_obrero"  >
                             </div>
