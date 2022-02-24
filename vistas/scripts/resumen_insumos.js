@@ -149,7 +149,7 @@ function tbla_principal(id_proyecto) {
   });
 }
 
-// ::::::::::::::::::::::::::::::::::::::: SECCION COMPRAS :::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPRAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // TABLA - FACTURAS
 function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) {
@@ -300,9 +300,9 @@ function editar_detalle_compras(id) {
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
-            img = "img_material_defect.jpg";
+            img = "../dist/svg/default_producto.svg";
           } else {
-            img = element.imagen;
+            img = `../dist/docs/material/img_perfil/${element.imagen}`;
           }
 
           var fila = `
@@ -312,7 +312,7 @@ function editar_detalle_compras(id) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
@@ -372,7 +372,13 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
       if ($("#tipo_comprovante").select2("val") == "Factura") {
         var subtotal = cantidad * precio_total;
       } else {
-        var subtotal = cantidad * precio_sin_igv;
+        var subtotal = cantidad * precio_sin_igv;      
+      }
+
+      if (img == "" || img == null) {
+        img = "../dist/svg/default_producto.svg";
+      } else {
+        img = `../dist/docs/material/img_perfil/${img}`;
       }
 
       var fila = `
@@ -382,7 +388,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -640,12 +646,14 @@ function tbla_materiales() {
 
 // ver imagen grande del producto agregado a la compra
 function ver_img_material(img, nombre) {
-  $("#ver_img_material").attr("src", `../docs/material/img_perfil/${img}`);
+  $("#ver_img_material").attr("src", `../dist/docs/material/img_perfil/${img}`);
   $(".nombre-img-material").html(nombre);
   $("#modal-ver-img-material").modal("show");
 }
 
-// ::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PRODUCTO :::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PRODUCTO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PROVEEDOR ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
@@ -663,6 +671,25 @@ function formato_miles(num) {
   if (cents < 10) cents = "0" + cents;
   for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
   return (sign ? "" : "-") + num + "." + cents;
+}
+
+// quitamos las comas de miles de un numero
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, '');
+  return inVal;
+}
+
+/**Redondear */
+function redondearExp(numero, digitos) {
+  function toExp(numero, digitos) {
+    let arr = numero.toString().split("e");
+    let mantisa = arr[0],
+      exponente = digitos;
+    if (arr[1]) exponente = Number(arr[1]) + digitos;
+    return Number(mantisa + "e" + exponente.toString());
+  }
+  let entero = Math.round(toExp(Math.abs(numero), digitos));
+  return Math.sign(numero) * toExp(entero, -digitos);
 }
 
 init();

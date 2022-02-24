@@ -1143,7 +1143,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1495,7 +1495,7 @@ function editar_detalle_compras(idcompra_proyecto) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
@@ -2558,7 +2558,7 @@ function buscar_sunat_reniec() {
 
 // ver imagen grande del producto agregado a la compra
 function ver_img_material(img, nombre) {
-  $("#ver_img_material").attr("src", `../docs/material/img_perfil/${img}`);
+  $("#ver_img_material").attr("src", `../dist/docs/material/img_perfil/${img}`);
   $(".nombre-img-material").html(nombre);
   $("#modal-ver-img-material").modal("show");
 }
