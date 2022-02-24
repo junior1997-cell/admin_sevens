@@ -980,29 +980,31 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
       total_pago = total_pago + parseFloat( (  (parseFloat((parseFloat(value.sueldo_hora) * parseFloat(horas_nomr_total)).toFixed(2)) + parseFloat( (parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2) ) ) + parseFloat(value.adicional_descuento)  ).toFixed(2) );
       
       var tabla_bloc_HN_1 = `<tr>
-              <td>H/N</td>
-              ${tabla_bloc_HN_trabaj_2}
-              ${tabla_bloc_HN_asistencia_3} 
-              ${tabla_bloc_HN_total_hora_4}
-              ${tabla_bloc_HN_total_dia_5} 
-              ${tabla_bloc_HN_sueldos_6} 
-              ${tabla_bloc_HN_sabatical_7} 
-              ${tabla_bloc_HN_pago_parcial_8} 
-              ${tabla_bloc_HN_descuent_9}
-              ${tabla_bloc_HN_pago_total_10}
-              ${tabla_bloc_envio_contador_11}
-            </tr>`;      
+        <td class="" rowspan="2"><b>${index+1}</b></td>
+        <td class="">H/N</td>
+        ${tabla_bloc_HN_trabaj_2}
+        ${tabla_bloc_HN_asistencia_3} 
+        ${tabla_bloc_HN_total_hora_4}
+        ${tabla_bloc_HN_total_dia_5} 
+        ${tabla_bloc_HN_sueldos_6} 
+        ${tabla_bloc_HN_sabatical_7} 
+        ${tabla_bloc_HN_pago_parcial_8} 
+        ${tabla_bloc_HN_descuent_9}
+        ${tabla_bloc_HN_pago_total_10}
+        ${tabla_bloc_envio_contador_11}
+      </tr>`;      
     
       var tabla_bloc_HE_total_hora_3 = `<td class="text-center"> <span  class="total_HE_${value.idtrabajador_por_proyecto}">${horas_extr_total}</span> </td>`;
     
       var tabla_bloc_HE_pago_parcial_4 =`<td class="text-center"><span  class="pago_parcial_HE_${value.idtrabajador_por_proyecto}"> ${(parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2)}</span> </td>`;
-    
-      var tabla_bloc_HE_1 = '<tr>'+
-            '<td>H/E</td>'+
-            tabla_bloc_HE_asistencia_2 +
-            tabla_bloc_HE_total_hora_3 +
-            tabla_bloc_HE_pago_parcial_4 +      	       
-          '</tr>';
+      
+     
+      var tabla_bloc_HE_1 = `<tr>            
+        <td class="">H/E</td>
+        ${tabla_bloc_HE_asistencia_2 }
+        ${tabla_bloc_HE_total_hora_3 }
+        ${tabla_bloc_HE_pago_parcial_4 }
+      </tr>`;
 
       //Unimos y mostramos los bloques separados
       $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);

@@ -93,7 +93,7 @@
                         <div class="row row-horizon disenio-scroll pb-3" id="tbl-principal">
                           <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
-                              <tr> 
+                              <tr>                                
                                 <th>Trabajdor</th> 
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>

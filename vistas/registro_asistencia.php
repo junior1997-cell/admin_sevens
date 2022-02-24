@@ -112,6 +112,7 @@
                             <thead>
                               <tr>
                                 <th rowspan="2" class="stile-celda">#</th>
+                                <th rowspan="2" class="stile-celda">#</th>
                                 <th rowspan="2" class="stile-celda">Nombre del trabajador</th>
                                 <th rowspan="2" class="stile-celda">Cargo</th>
                                 <th colspan="14" id="dias_asistidos_s_q" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
@@ -126,6 +127,7 @@
                                 <th rowspan="2" class="stile-celda head_pago_q_s">Pago quincenal</th> 
                                 <th rowspan="2" class="stile-celda"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
                               </tr>
+                              
                               <tr class="table-dias data-dia-semana">
                                 <!-- <th class=""> Lu </th>
                                 <th class=""> Ma </th>
@@ -544,6 +546,15 @@
           margin-left: 3px;
           padding: 5px;
           border-radius: 6px;
+        }
+        .fixed-celda{
+          background-color: #fff;
+          border-bottom: 0;
+          box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          z-index: 10;
         }
       </style>
       <!-- Bootstrap 4 -->
