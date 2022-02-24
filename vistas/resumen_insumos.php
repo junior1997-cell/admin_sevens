@@ -357,12 +357,8 @@
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          
-                          <img onerror="this.src='../dist/svg/default_producto.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
-                          
-                        </div>
+                      <div class="modal-body">                        
+                        <img onerror="this.src='../dist/svg/default_producto.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="100%" />
                       </div>
                     </div>
                   </div>

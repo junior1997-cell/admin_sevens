@@ -1130,10 +1130,19 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
 
       modificarSubtotales();
     } else {
+
       if ($("#tipo_comprovante").select2("val") == "Factura") {
         var subtotal = cantidad * precio_total;
       } else {
         var subtotal = cantidad * precio_sin_igv;
+      }
+
+      var img_p = "";
+
+      if (img == "" || img == null) {
+        img_p = "../dist/svg/default_producto.svg";
+      } else {
+        img_p = `../dist/docs/material/img_perfil/${img}`;
       }
 
       var fila = `
@@ -1143,7 +1152,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
             <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
             <span class="description"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1483,9 +1492,9 @@ function editar_detalle_compras(idcompra_proyecto) {
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
-            img = "img_material_defect.jpg";
+            img = "../dist/svg/default_producto.svg";
           } else {
-            img = element.imagen;
+            img = `../dist/docs/material/img_perfil/${element.imagen}`;
           }
 
           var fila = `
@@ -1495,7 +1504,7 @@ function editar_detalle_compras(idcompra_proyecto) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${element.nombre_producto}')">
                 <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
                 <span class="description"><b>Color: </b>${element.color}</span>
               </div>
