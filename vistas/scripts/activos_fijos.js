@@ -390,35 +390,35 @@ function precio_con_igv() {
 }
 
 $("#my-switch_igv").on("click ", function (e) {
-  var precio_total = 0;
-  var precio_base = 0;
+  var precio_ingresado = 0;
+  var precio_sin_igv = 0;
   var igv = 0;
-  var precio_re = 0;
-  precio_total = $("#precio_compra").val();
+  var precio_total = 0;
 
-  $("#igv").val("");
-  $("#subtotal").val("");
-
+  precio_ingresado = $("#precio_unitario").val(); 
+  
   if ($("#my-switch_igv").is(":checked")) {
-    precio_base = precio_total / 1.18;
-    igv = precio_total - precio_base;
-    precio_re = parseFloat(precio_total) - igv;
+    precio_sin_igv = precio_ingresado / 1.18;
+    igv = precio_ingresado - precio_sin_igv;
+    precio_total = parseFloat(precio_sin_igv) + igv;   
+    console.log(precio_sin_igv, igv, precio_total);
+    $("#precio_sin_igv").val(redondearExp(precio_sin_igv, 2));
 
-    $("#igv").val(igv.toFixed(2));
-    $("#subtotal").val(precio_re.toFixed(2));
-    $("#total").val((precio_re + igv).toFixed(2));
+    $("#precio_igv").val(redondearExp(igv, 2));   
+
+    $("#precio_total").val(redondearExp(precio_total, 2)) ;
 
     $("#estado_igv").val("1");
   } else {
-    precio_base = precio_total * 1.18;
-    console.log(precio_base);
-    igv = precio_base - precio_total;
-    precio_re = parseFloat(precio_total) + igv;
+    precio_sin_igv = precio_ingresado * 1.18;     
+    igv = precio_sin_igv - precio_ingresado;
+    precio_total = parseFloat(precio_ingresado) + igv;    
+    console.log(precio_sin_igv, igv, precio_total);
+    $("#precio_sin_igv").val(redondearExp(precio_ingresado, 2));
 
+    $("#precio_igv").val(redondearExp(igv, 2));
 
-    $("#igv").val(igv.toFixed(2));
-    $("#subtotal").val( parseFloat(precio_total).toFixed(2));
-    $("#total").val(precio_re.toFixed(2));
+    $("#precio_total").val(redondearExp(precio_total, 2) );
 
     $("#estado_igv").val("0");
   }
