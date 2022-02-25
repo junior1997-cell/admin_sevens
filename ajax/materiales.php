@@ -19,10 +19,10 @@
       $idproducto = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "";
       $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
 
-      $nombre = isset($_POST["nombre_material"]) ? limpiarCadenaHtml($_POST["nombre_material"]) : "";
-      $marca = isset($_POST["marca"]) ? limpiarCadenaHtml($_POST["marca"]) : "";
+      $nombre = isset($_POST["nombre_material"]) ? encodeCadenaHtml($_POST["nombre_material"] ) : "";
+      $marca = isset($_POST["marca"]) ? encodeCadenaHtml($_POST["marca"]) : "";
       $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
-      $descripcion = isset($_POST["descripcion_material"]) ? limpiarCadenaHtml($_POST["descripcion_material"]) : "";      
+      $descripcion = isset($_POST["descripcion_material"]) ? encodeCadenaHtml($_POST["descripcion_material"]) : "";      
 
       $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
       $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadena($_POST["monto_igv"]) : "";

@@ -1634,8 +1634,7 @@ function listarmateriales() {
   }).DataTable();
 }
 
-function mostrar_material(idproducto) {
-  limpiar();
+function mostrar_material(idproducto) {  
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();

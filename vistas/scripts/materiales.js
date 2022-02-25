@@ -179,7 +179,7 @@ function guardaryeditar(e) {
 
     success: function (datos) {
       if (datos == "ok") {
-        toastr.success("Registrado correctamente");
+        Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
 
         tabla.ajax.reload();
 
@@ -187,7 +187,7 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-material").modal("hide");
       } else {
-        toastr.error(datos);
+        Swal.fire("Error!", datos, "error");
       }
     },
   });

@@ -57,12 +57,19 @@ if (!function_exists('ejecutarConsulta'))
 		return $str;
 	}
 
-	function limpiarCadenaHtml($str)
+	function encodeCadenaHtml($str)
 	{
 		// htmlspecialchars($str);
 		global $conexion;
+		$encod = "UTF-8";
 		$str = mysqli_real_escape_string($conexion,trim($str));
-		return htmlspecialchars($str);
+		return htmlspecialchars($str, ENT_QUOTES);
+	}
+
+	function decodeCadenaHtml($str)
+	{				
+		$encod = "UTF-8";
+		return htmlspecialchars_decode($str, ENT_QUOTES);
 	}
 }
 ?>
