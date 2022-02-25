@@ -144,12 +144,13 @@ if (!isset($_SESSION["nombre"])) {
         }
 
       break;
-
-      case 'tbla_principal':
+      
+      // -------------------------------------
+      case 'tbla_principal_maquinaria':
 
         $idproyecto = $_GET["id_proyecto"];
 
-        $rspta = $resumen_activo_fijo->tbla_principal($idproyecto);
+        $rspta = $resumen_activo_fijo->tbla_principal_maquinaria($idproyecto);
         //Vamos a declarar un array
         $data = [];
 
@@ -183,6 +184,156 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
+      case 'suma_total_maquinaria':
+        $idproyecto = $_POST["idproyecto"];
+
+        $rspta = $resumen_activo_fijo->suma_total_maquinaria($idproyecto);
+
+        echo json_encode($rspta);
+      break;
+      
+      // -------------------------------------
+      case 'tbla_principal_equipo':
+
+        $idproyecto = $_GET["id_proyecto"];
+
+        $rspta = $resumen_activo_fijo->tbla_principal_equipo($idproyecto);
+        //Vamos a declarar un array
+        $data = [];
+
+        $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+
+        while ($reg = $rspta->fetch_object()) {
+
+          $precio_promedio = number_format($reg->precio_con_igv / $reg->count_productos, 2, ".", ",");
+
+          $data[] = [             
+            "0" => '<div class="user-block"> <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg->imagen . '" alt="User Image" onerror="' .  $imagen_error .  '">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombre_producto . '</p></span>
+                <span class="description"> <b>Color:</b> ' . $reg->nombre_color .'</span>
+              </div>',
+            "1" => $reg->nombre_medida,
+            "2" => $reg->cantidad_total,
+            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
+            <span> S/. ' . number_format($reg->promedio_precio, 2, ".", ",") . '</span>',
+            "4" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
+            "5" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+          ];
+        }
+
+        $results = [
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data), //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+          "aaData" => $data,
+        ];
+        echo json_encode($results);
+
+      break;
+
+      case 'suma_total_equipo':
+        $idproyecto = $_POST["idproyecto"];
+
+        $rspta = $resumen_activo_fijo->suma_total_equipo($idproyecto);
+
+        echo json_encode($rspta);
+      break;
+      
+      // -------------------------------------
+      case 'tbla_principal_herramienta':
+
+        $idproyecto = $_GET["id_proyecto"];
+
+        $rspta = $resumen_activo_fijo->tbla_principal_herramienta($idproyecto);
+        //Vamos a declarar un array
+        $data = [];
+
+        $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+
+        while ($reg = $rspta->fetch_object()) {
+
+          $precio_promedio = number_format($reg->precio_con_igv / $reg->count_productos, 2, ".", ",");
+
+          $data[] = [             
+            "0" => '<div class="user-block"> <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg->imagen . '" alt="User Image" onerror="' .  $imagen_error .  '">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombre_producto . '</p></span>
+                <span class="description"> <b>Color:</b> ' . $reg->nombre_color .'</span>
+              </div>',
+            "1" => $reg->nombre_medida,
+            "2" => $reg->cantidad_total,
+            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
+            <span> S/. ' . number_format($reg->promedio_precio, 2, ".", ",") . '</span>',
+            "4" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
+            "5" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+          ];
+        }
+
+        $results = [
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data), //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+          "aaData" => $data,
+        ];
+        echo json_encode($results);
+
+      break;
+
+      case 'suma_total_herramienta':
+        $idproyecto = $_POST["idproyecto"];
+
+        $rspta = $resumen_activo_fijo->suma_total_herramienta($idproyecto);
+
+        echo json_encode($rspta);
+      break;
+      
+      // -------------------------------------
+      case 'tbla_principal_oficina':
+
+        $idproyecto = $_GET["id_proyecto"];
+
+        $rspta = $resumen_activo_fijo->tbla_principal_oficina($idproyecto);
+        //Vamos a declarar un array
+        $data = [];
+
+        $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+
+        while ($reg = $rspta->fetch_object()) {
+
+          $precio_promedio = number_format($reg->precio_con_igv / $reg->count_productos, 2, ".", ",");
+
+          $data[] = [             
+            "0" => '<div class="user-block"> <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg->imagen . '" alt="User Image" onerror="' .  $imagen_error .  '">
+                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombre_producto . '</p></span>
+                <span class="description"> <b>Color:</b> ' . $reg->nombre_color .'</span>
+              </div>',
+            "1" => $reg->nombre_medida,
+            "2" => $reg->cantidad_total,
+            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
+            <span> S/. ' . number_format($reg->promedio_precio, 2, ".", ",") . '</span>',
+            "4" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
+            "5" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+          ];
+        }
+
+        $results = [
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data), //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+          "aaData" => $data,
+        ];
+        echo json_encode($results);
+
+      break;
+
+      case 'suma_total_oficina':
+        $idproyecto = $_POST["idproyecto"];
+
+        $rspta = $resumen_activo_fijo->suma_total_oficina($idproyecto);
+
+        echo json_encode($rspta);
+      break;
+      
+      // -------------------------------------
       case 'tbla_facturas':
         $idproyecto = $_GET["idproyecto"];
         $idproducto = $_GET["idproducto"];
@@ -279,13 +430,7 @@ if (!isset($_SESSION["nombre"])) {
     
       break;
       
-      case 'suma_total_compras':
-        $idproyecto = $_POST["idproyecto"];
-
-        $rspta = $resumen_activo_fijo->suma_total_compras($idproyecto);
-
-        echo json_encode($rspta);
-      break;
+      
 
       // SELECT2
       case 'select2Proveedor': 

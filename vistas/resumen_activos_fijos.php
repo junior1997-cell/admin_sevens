@@ -54,7 +54,176 @@
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-12">
-                      <div class="card card-primary card-outline">
+                      <!-- TBLA PRINCIPAL  -->
+                      <div id="tabla-principal">
+
+                        <!-- CARD - MAQUINARIA --------------------------------------------- -->
+                        <div class="card card-primary card-outline collapsed-card">
+                          <div class="card-header">
+                            <h3 class="card-title">Lista de activo: <b>Maquinarias</b></h3>
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body row-horizon disenio-scroll">
+                            <table id="tbla-resumen-maquinaria" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th>Cantidad</th> 
+                                  <th>Precio promedio</th> 
+                                  <th>Precio actual</th>    
+                                  <th>Suma Total</th>                      
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                <!-- aqui la va el detalle de la tabla -->
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th class="text-center suma_total_productos_m h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th>Precio promedio</th>
+                                  <th>Precio actual</th>   
+                                  <th class="text-nowrap text-right suma_total_de_compras_m h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+
+                        <!-- CARD - EQUIPO -------------------------------------------------- -->
+                        <div class="card  card-primary card-outline collapsed-card">
+                          <div class="card-header">
+                            <h3 class="card-title">Lista de activos: <b>Equipos</b></h3>
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body  row-horizon disenio-scroll">
+                            <table id="tbla-resumen-equipo" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th>Cantidad</th> 
+                                  <th>Precio promedio</th> 
+                                  <th>Precio actual</th>    
+                                  <th>Suma Total</th>                      
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                <!-- aqui la va el detalle de la tabla -->
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th class="text-center suma_total_productos_e h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th>Precio promedio</th>
+                                  <th>Precio actual</th>   
+                                  <th class="text-nowrap text-right suma_total_de_compras_e h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+
+                        <!-- CARD - HERRAMIENTA -------------------------------------------- -->
+                        <div class="card card-primary card-outline collapsed-card">
+                          <div class="card-header">
+                            <h3 class="card-title">Lista de activos:  <b>Herramientas</b></h3>
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body row-horizon disenio-scroll">
+                            <table id="tbla-resumen-herramienta" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th>Cantidad</th> 
+                                  <th>Precio promedio</th> 
+                                  <th>Precio actual</th>    
+                                  <th>Suma Total</th>                      
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                <!-- aqui la va el detalle de la tabla -->
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th class="text-center suma_total_productos_h h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th>Precio promedio</th>
+                                  <th>Precio actual</th>   
+                                  <th class="text-nowrap text-right suma_total_de_compras_h h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+
+                        <!-- CARD - OFICINA ------------------------------------------------ -->
+                        <div class="card card-primary card-outline collapsed-card">
+                          <div class="card-header">
+                            <h3 class="card-title">Lista de activos <b>Oficina</b></h3>
+
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body row-horizon disenio-scroll">
+                            <table id="tbla-resumen-oficina" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th>Cantidad</th> 
+                                  <th>Precio promedio</th> 
+                                  <th>Precio actual</th>    
+                                  <th>Suma Total</th>                      
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                <!-- aqui la va el detalle de la tabla -->
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="">Producto</th>
+                                  <th>Unidad de medida</th>
+                                  <th class="text-center suma_total_productos_o h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th>Precio promedio</th>
+                                  <th>Precio actual</th>   
+                                  <th class="text-nowrap text-right suma_total_de_compras_o h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+                      </div>
+
+                      <div class="card card-primary card-outline card-2" style="display: none !important;">
                         <div class="card-header">
 
                           <h3 class="card-title mensaje-tbla-principal" >                           
@@ -78,34 +247,6 @@
                         </div>
                         
                         <div class="card-body">
-                          <!-- TBLA PRINCIPAL  -->
-                          <div id="tabla-principal">
-                            <table id="tbla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
-                                  <th>Cantidad</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
-                                </tr>
-                              </thead>
-                              <tbody>                         
-                                <!-- aqui la va el detalle de la tabla -->
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
-                                  <th class="text-center suma_total_productos h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th>Precio promedio</th>
-                                  <th>Precio actual</th>   
-                                  <th class="text-nowrap text-right suma_total_de_compras h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </div>
 
                           <!-- TBLA FACTURAS  -->
                           <div id="tabla-factura" style="display: none !important;">

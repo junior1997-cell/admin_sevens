@@ -1,4 +1,8 @@
-var tabla_principal;
+var tabla_principal_maquinaria;
+var tabla_principal_equipo;
+var tabla_principal_herramienta;
+var tabla_principal_oficina;
+
 var tabla_factura;
 var tabla_materiales;
 
@@ -9,7 +13,10 @@ var detalles = 0;
 //Función que se ejecuta al inicio
 function init(){
 	
-	tbla_principal(localStorage.getItem('nube_idproyecto'));
+	tbla_principal_maquinaria(localStorage.getItem('nube_idproyecto'));
+  tbla_principal_equipo(localStorage.getItem('nube_idproyecto'));
+  tbla_principal_herramienta(localStorage.getItem('nube_idproyecto'));
+  tbla_principal_oficina(localStorage.getItem('nube_idproyecto'));
 
 	$("#bloc_Compras").addClass("menu-open");
 
@@ -126,6 +133,7 @@ function table_show_hide(flag) {
     $(".nombre-insumo").html("Resumen de Insumos");
 
     $("#tabla-principal").show();
+    $('.card-2').hide();
     $("#tabla-factura").hide();
     $("#tabla-editar-factura").hide();
   } else {
@@ -137,6 +145,7 @@ function table_show_hide(flag) {
        
 
       $("#tabla-principal").hide();
+      $('.card-2').show();
       $("#tabla-factura").show();
       $("#tabla-editar-factura").hide();
     }else{
@@ -147,6 +156,7 @@ function table_show_hide(flag) {
         $("#btn-regresar-bloque").show();         
 
         $("#tabla-principal").hide();
+        $('.card-2').show();
         $("#tabla-factura").hide();
         $("#tabla-editar-factura").show();        
       }
@@ -155,8 +165,8 @@ function table_show_hide(flag) {
 }
 
 // TABLA - PRINCIPAL
-function tbla_principal(id_proyecto) {
-	tabla_principal=$('#tbla-resumen-insumos').dataTable({
+function tbla_principal_maquinaria(id_proyecto) {
+	tabla_principal_maquinaria = $('#tbla-resumen-maquinaria').dataTable({
 		"responsive": true,
 		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
@@ -164,7 +174,7 @@ function tbla_principal(id_proyecto) {
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
 	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
 		"ajax":	{
-      url: '../ajax/resumen_activos_fijos.php?op=tbla_principal&id_proyecto='+id_proyecto,
+      url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_maquinaria&id_proyecto='+id_proyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -191,8 +201,6 @@ function tbla_principal(id_proyecto) {
       if (data[5] != '') {
         $("td", row).eq(5).addClass("text-right");         
       }
-
-
     },
 		"language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -206,27 +214,255 @@ function tbla_principal(id_proyecto) {
 	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 
-  $.post("../ajax/resumen_activos_fijos.php?op=suma_total_compras", { 'idproyecto': id_proyecto }, function (data, status) {
+  $.post("../ajax/resumen_activos_fijos.php?op=suma_total_maquinaria", { 'idproyecto': id_proyecto }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data); 
 
     if (data.length === 0) {
 
-      $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
+      $(".suma_total_de_compras_m").html('<i class="far fa-frown fa-lg text-danger"></i>');
 
-      $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
+      $('.suma_total_productos_m').html('<i class="far fa-frown fa-lg text-danger"></i>');
 
     } else {
       if (data.suma_total_compras == null || data.suma_total_compras == '') {
-        $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
+        $(".suma_total_de_compras_m").html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $(".suma_total_de_compras").html( 'S/. '+ formato_miles(data.suma_total_compras));
+        $(".suma_total_de_compras_m").html( 'S/. '+ formato_miles(data.suma_total_compras));
       }
 
       if (data.suma_total_productos == null || data.suma_total_productos == '') {
-        $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
+        $('.suma_total_productos_m').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.suma_total_productos').html(data.suma_total_productos);
+        $('.suma_total_productos_m').html(data.suma_total_productos);
+      }
+    }    
+  });
+}
+
+// TABLA - PRINCIPAL
+function tbla_principal_equipo(id_proyecto) {
+	tabla_principal_equipo = $('#tbla-resumen-equipo').dataTable({
+		"responsive": true,
+		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+		"aProcessing": true,//Activamos el procesamiento del datatables
+	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
+		"ajax":	{
+      url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_equipo&id_proyecto='+id_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+		},
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: Cantidad
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass("text-center");         
+      }
+
+      // columna: Precio promedio
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass("modal-footer justify-content-between");         
+      }
+
+      // columna: Precio actual
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-right");         
+      }
+      // columna: Suma Total
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");         
+      }
+    },
+		"language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": { _: '%d líneas copiadas',  1: '1 línea copiada' }
+      }
+    },
+		"bDestroy": true,
+		"iDisplayLength": 10,//Paginación
+	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+	}).DataTable();
+
+  $.post("../ajax/resumen_activos_fijos.php?op=suma_total_equipo", { 'idproyecto': id_proyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+
+    if (data.length === 0) {
+
+      $(".suma_total_de_compras_e").html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+      $('.suma_total_productos_e').html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+    } else {
+      if (data.suma_total_compras == null || data.suma_total_compras == '') {
+        $(".suma_total_de_compras_e").html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $(".suma_total_de_compras_e").html( 'S/. '+ formato_miles(data.suma_total_compras));
+      }
+
+      if (data.suma_total_productos == null || data.suma_total_productos == '') {
+        $('.suma_total_productos_e').html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $('.suma_total_productos_e').html(data.suma_total_productos);
+      }
+    }    
+  });
+}
+
+// TABLA - PRINCIPAL
+function tbla_principal_herramienta(id_proyecto) {
+	tabla_principal_herramienta = $('#tbla-resumen-herramienta').dataTable({
+		"responsive": true,
+		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+		"aProcessing": true,//Activamos el procesamiento del datatables
+	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
+		"ajax":	{
+      url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_herramienta&id_proyecto='+id_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+		},
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: Cantidad
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass("text-center");         
+      }
+
+      // columna: Precio promedio
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass("modal-footer justify-content-between");         
+      }
+
+      // columna: Precio actual
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-right");         
+      }
+      // columna: Suma Total
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");         
+      }
+    },
+		"language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": { _: '%d líneas copiadas',  1: '1 línea copiada' }
+      }
+    },
+		"bDestroy": true,
+		"iDisplayLength": 10,//Paginación
+	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+	}).DataTable();
+
+  $.post("../ajax/resumen_activos_fijos.php?op=suma_total_herramienta", { 'idproyecto': id_proyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+
+    if (data.length === 0) {
+
+      $(".suma_total_de_compras_h").html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+      $('.suma_total_productos_h').html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+    } else {
+      if (data.suma_total_compras == null || data.suma_total_compras == '') {
+        $(".suma_total_de_compras_h").html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $(".suma_total_de_compras_h").html( 'S/. '+ formato_miles(data.suma_total_compras));
+      }
+
+      if (data.suma_total_productos == null || data.suma_total_productos == '') {
+        $('.suma_total_productos_h').html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $('.suma_total_productos_h').html(data.suma_total_productos);
+      }
+    }    
+  });
+}
+
+// TABLA - PRINCIPAL
+function tbla_principal_oficina(id_proyecto) {
+	tabla_principal_oficina = $('#tbla-resumen-oficina').dataTable({
+		"responsive": true,
+		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+		"aProcessing": true,//Activamos el procesamiento del datatables
+	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
+		"ajax":	{
+      url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_oficina&id_proyecto='+id_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+		},
+    createdRow: function (row, data, ixdex) {          
+
+      // columna: Cantidad
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass("text-center");         
+      }
+
+      // columna: Precio promedio
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass("modal-footer justify-content-between");         
+      }
+
+      // columna: Precio actual
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-right");         
+      }
+      // columna: Suma Total
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");         
+      }
+    },
+		"language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": { _: '%d líneas copiadas',  1: '1 línea copiada' }
+      }
+    },
+		"bDestroy": true,
+		"iDisplayLength": 10,//Paginación
+	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+	}).DataTable();
+
+  $.post("../ajax/resumen_activos_fijos.php?op=suma_total_oficina", { 'idproyecto': id_proyecto }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data); 
+
+    if (data.length === 0) {
+
+      $(".suma_total_de_compras_o").html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+      $('.suma_total_productos_o').html('<i class="far fa-frown fa-lg text-danger"></i>');
+
+    } else {
+      if (data.suma_total_compras == null || data.suma_total_compras == '') {
+        $(".suma_total_de_compras_o").html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $(".suma_total_de_compras_o").html( 'S/. '+ formato_miles(data.suma_total_compras));
+      }
+
+      if (data.suma_total_productos == null || data.suma_total_productos == '') {
+        $('.suma_total_productos_o').html('<i class="far fa-frown fa-lg text-danger"></i>');
+      } else {
+        $('.suma_total_productos_o').html(data.suma_total_productos);
       }
     }    
   });
@@ -760,8 +996,16 @@ function guardar_y_editar_compras(e) {
           if (datos == "ok") {
             // toastr.success("Usuario registrado correctamente");
             Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+            
+            tabla_principal_maquinaria.ajax.reload();
+            tabla_principal_equipo.ajax.reload();
+            tabla_principal_herramienta.ajax.reload();
+            tabla_principal_oficina.ajax.reload();
 
-            tabla_principal.ajax.reload();
+            tbla_principal_maquinaria(localStorage.getItem('nube_idproyecto'));
+            tbla_principal_equipo(localStorage.getItem('nube_idproyecto'));
+            tbla_principal_herramienta(localStorage.getItem('nube_idproyecto'));
+            tbla_principal_oficina(localStorage.getItem('nube_idproyecto'));
 
             limpiar_form_compra();
 
