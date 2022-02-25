@@ -293,8 +293,8 @@
                     </div>
                   </div>
                   <div class="col-12 tercer-div" style="display: none;" >
-
-                      <div class="card card-primary card-outline">
+                      <!--EDITAR COMPRA GENERAL-->
+                      <div class="card card-primary card-outline compra_general">
                           <div class="card-header">
                           <!-- regresar "tabla principal" -->
                           <h3 class="card-title mr-3" id="btn-regresar-todo" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
@@ -315,7 +315,7 @@
                                   <div class="card-body">
                                     <div class="row" id="cargando-1-fomulario">
 
-                                      <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                      <input type="hidden" name="idcompra_general" id="idcompra_general" /> 
 
                                       <!-- Tipo de Empresa -->
                                       <div class="col-lg-7">
@@ -402,7 +402,7 @@
                                         </div>
 
                                         <!-- Rounded switch -->
-                                        <div class="col-lg-1   col-xs-3 class_pading">
+                                        <!--<div class="col-lg-1   col-xs-3 class_pading">
                                           <div class="form-group">
                                             <div id="switch_detracc">
                                               <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
@@ -415,7 +415,7 @@
                                             </div>
                                             <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
                                           </div>
-                                        </div>
+                                        </div>-->
                                       </div>
                                       <!--tabla detalles materiales-->
                                       <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
@@ -475,6 +475,7 @@
                             </div>
                           </div>
                       </div>
+                      
                   </div>
                 </div>
               </div>

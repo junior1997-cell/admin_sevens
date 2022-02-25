@@ -78,6 +78,7 @@ $ficha_tecnica_p  = isset($_POST["doct2"]) ? limpiarCadena($_POST["doct2"]) : ""
 switch ($_GET["op"]) {
 
     case 'guardaryeditarcompraactivo': 
+        
         if (!isset($_SESSION["nombre"])) {
             header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
         } else {

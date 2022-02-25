@@ -824,7 +824,7 @@ $(function () {
 });
 //:::::::::::::::F I N  A G R E G A R  P R O D U C T O S:::::::::::::::
 
-// :::::::::::::: S E C C I O N   E D I T A R  C O M P R A S  P O R  P R O Y E C T O  :::::::::::::::
+// :::::::::::::: S E C C I O N   E D I T A R  C O M P R A S  G E N E R A L  :::::::::::::::
 
 var impuesto = 18;
 var cont = 0;
@@ -874,7 +874,7 @@ function guardaryeditar_compras(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/resumen_activos_fijos_general.php?op=guardaryeditarcompra",
+        url: "../ajax/resumen_activos_fijos_general.php?op=guardaryeditarcomprageneral",
         type: "POST",
         data: formData,
         contentType: false,
@@ -976,7 +976,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
   }
 }
 
-function editar_detalle_compras(idcompra_proyecto){
+function editar_detalle_compras_general(idcompra_general){
   ingresar_tercer_div();
   limpiar();
   array_class_trabajador = [];
@@ -984,7 +984,7 @@ function editar_detalle_compras(idcompra_proyecto){
   cont = 0;
   detalles = 0;
 
-  $.post("../ajax/compra.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra.php?op=ver_compra_editar", { idcompra_general: idcompra_general }, function (data, status) {
     data = JSON.parse(data);
     console.log(data);
 
@@ -1016,9 +1016,7 @@ function editar_detalle_compras(idcompra_proyecto){
         $(".content-comprob").show();
         //$(".content-descrp").removeClass("col-lg-7").addClass("col-lg-4");
       }
-
-      $("#idproyecto").val(data.idproyecto);
-      $("#idcompra_proyecto").val(data.idcompra_x_proyecto);
+      $("#idcompra_general").val(data.idcompra_x_proyecto);
       $("#idproveedor").val(data.idproveedor).trigger("change");
       $("#fecha_compra").val(data.fecha_compra);
       $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
@@ -1280,7 +1278,7 @@ function limpiar() {
     $("#idproveedor").html(r);
   });
 
-  $("#idcompra_proyecto").val();
+  $("#idcompra_general").val();
   $("#idproyecto").val();
 
   $("#idusuario").val("");
@@ -1308,6 +1306,7 @@ function limpiar() {
   $(".is-invalid").removeClass("error is-invalid");
 }
 
+// :::::::::::::: F I N  S E C C I O N   E D I T A R  C O M P R A S  G E N E R A L  :::::::::::::::
 // :::::::::::::: F I N  S E C C I O N   E D I T A R  C O M P R A S  P O R  P R O Y E C T O  :::::::::::::::
 $(function () {
   // validando form compras 
