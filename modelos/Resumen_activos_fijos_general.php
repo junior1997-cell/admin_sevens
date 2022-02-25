@@ -52,20 +52,25 @@ Class Resumen_activos_fijos_general
 					$promedio_total=$promedio_precio;
 				}
 
-				$data_productos[]=array(
+				if ($cantidad>0) {
 
-					"idproducto"      =>$value['idproducto'],
-					"nombre_producto" =>$value['nombre'],
-					"imagen"          =>$value['imagen'],
-					"precio_actual"   =>$value['precio_actual'],
-					"nombre_medida"   =>$value['nombre_medida'],
-					"nombre_color"    =>$value['nombre_color'],
-					"cantidad"        =>$cantidad,
-					"descuento"       =>$descuento,
-					"subtotal"        =>$subtotal,
-					"promedio_precio" =>$promedio_total
-		
-				);
+					$data_productos[]=array(
+
+						"idproducto"      =>$value['idproducto'],
+						"nombre_producto" =>$value['nombre'],
+						"imagen"          =>$value['imagen'],
+						"precio_actual"   =>$value['precio_actual'],
+						"nombre_medida"   =>$value['nombre_medida'],
+						"nombre_color"    =>$value['nombre_color'],
+						"cantidad"        =>$cantidad,
+						"descuento"       =>$descuento,
+						"subtotal"        =>$subtotal,
+						"promedio_precio" =>$promedio_total
+			
+					);
+	
+				}
+
 
 			}
 
@@ -178,6 +183,35 @@ Class Resumen_activos_fijos_general
 			return $data_totales;
 		}
 	}
+
+	//.METODOS PARA EDITAR COMPRA POR PROYECTO
+	  //Listamos los productos a selecionar
+	  public function listar_productos()
+	  {
+		$sql = "SELECT
+				p.idproducto AS idproducto,
+				p.idunidad_medida AS idunidad_medida,
+				p.idcolor AS idcolor,
+				p.nombre AS nombre,
+				p.marca AS marca,
+				ciaf.nombre AS categoria,
+				p.descripcion AS descripcion,
+				p.imagen AS imagen,
+				p.estado_igv AS estado_igv,
+				p.precio_unitario AS precio_unitario,
+				p.precio_igv AS precio_igv,
+				p.precio_sin_igv AS precio_sin_igv,
+				p.precio_total AS precio_total,
+				p.ficha_tecnica AS ficha_tecnica,
+				p.estado AS estado,
+				c.nombre_color AS nombre_color,
+				um.nombre_medida AS nombre_medida
+			FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor  AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af
+			ORDER BY p.nombre ASC";
+	
+		return ejecutarConsulta($sql);
+	  }
 
 }
 
