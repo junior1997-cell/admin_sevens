@@ -57,7 +57,7 @@ class Materiales
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idproducto)
   {
-    $data = [];
+    $data = Array();
 
     $sql = "SELECT 
 		p.idproducto as idproducto,
@@ -81,7 +81,7 @@ class Materiales
 
     $producto = ejecutarConsultaSimpleFila($sql);
 
-    $data = [
+    $data = array(
       'idproducto'  => ($retVal_1 = empty($producto['idproducto']) ? '' : $producto['idproducto']),
       'idunidad_medida' => ($retVal_2 = empty($producto['idunidad_medida']) ? '' : $producto['idunidad_medida']),
       'idcolor'     => ($retVal_3 = empty($producto['idcolor']) ? '' : $producto['idcolor']),
@@ -98,7 +98,7 @@ class Materiales
       'estado'      => ($retVal_14 = empty($producto['estado']) ? '' : $producto['estado']),
       'nombre_color'=> ($retVal_15 = empty($producto['nombre_color']) ? '' : $producto['nombre_color']),
       'nombre_medida'=> ($retVal_16 = empty($producto['nombre_medida']) ? '' : $producto['nombre_medida']),
-    ];
+    );
     return $data;
   }
 

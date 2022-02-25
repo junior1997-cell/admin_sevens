@@ -305,10 +305,10 @@
                                               </a>
                                           </div>
                                           <div class="col-lg-6">
-                                            <label for="" style="color: white;">.</label> <br />
+                                            <!-- <label for="" style="color: white;">.</label> <br />
                                             <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                                               <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
-                                            </a>
+                                            </a> -->
                                           </div>
                                         </div>
                                       </div>
@@ -740,7 +740,12 @@
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title">Seleccionar producto</h4>
+                          <h4 class="modal-title"> 
+                            <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                              <button id="btnAgregarArt" type="button" class="btn btn-success" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                            </a>
+                            Seleccionar producto
+                          </h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>

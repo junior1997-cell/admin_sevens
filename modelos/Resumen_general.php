@@ -103,11 +103,7 @@ class Resumen_general
 
     $serv_maquinaria = [];  $pago_total = 0; $filtro_proveedor = ""; $filtro_fecha = "";
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {
-      $filtro_proveedor = "";
-    } else {
-      $filtro_proveedor = "AND m.idproveedor = '$id_proveedor'";
-    }
+    
 
     if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
       $filtro_fecha = "AND s.fecha_entrega BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
@@ -121,38 +117,81 @@ class Resumen_general
       }      
     }
 
-    $sql = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, s.costo_parcial , s.fecha_entrega
-		FROM servicio as s, maquinaria as m, proveedor as p 
-		WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' $filtro_proveedor $filtro_fecha
-		AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
-    ORDER by s.fecha_entrega DESC";
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND m.idproveedor = '$id_proveedor'";
+    }
 
-    // SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, COUNT(s.idmaquinaria) as cantidad_veces, SUM(s.costo_parcial) as costo_parcial 
+    // $sql = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, s.costo_parcial , s.fecha_entrega
 		// FROM servicio as s, maquinaria as m, proveedor as p 
-		// WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND m.idproveedor LIKE '%$id_proveedor%'
+		// WHERE s.estado = 1 AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' $filtro_proveedor $filtro_fecha
 		// AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
-		// GROUP BY s.idmaquinaria
+    // ORDER by s.fecha_entrega DESC";
+
+    $sql ="SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, 
+    SUM(s.costo_parcial) AS costo_parcial , s.fecha_entrega
+		FROM servicio as s, maquinaria as m, proveedor as p 
+		WHERE s.estado = '1' AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' $filtro_proveedor
+		AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
+    GROUP BY s.idmaquinaria;";
 
     $maquinaria = ejecutarConsultaArray($sql);
 
     if (!empty($maquinaria)) {
-      foreach ($maquinaria as $key => $value) {
-        $idmaquinaria = $value['idmaquinaria'];
+      foreach ($maquinaria as $key => $val) {
 
-        $sql_2 = "SELECT SUM(ps.monto) as deposito FROM pago_servicio ps WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado=1 GROUP by id_maquinaria";
-        $ser_maq_monto = ejecutarConsultaSimpleFila($sql_2);
+        $idmaquinaria = $val['idmaquinaria']; $deposito_m = 0; $estado_deposito = false; $deposito_cubre = 0;
 
-        $serv_maquinaria[] = [
-          "idmaquinaria"=> $value['idmaquinaria'],
-          "idproyecto"  => $value['idproyecto'],
-          "maquina"     => $value['maquina'],
-          "cantidad_veces"  => 1,
-          "costo_parcial"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
-          "fecha_entrega"   => ($retVal_4 = empty($value['fecha_entrega']) ? '' : $value['fecha_entrega']),
-          "proveedor"   => $value['razon_social'],
+        $sql_2 = "SELECT SUM(ps.monto) as deposito FROM pago_servicio ps 
+        WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1';";
+        $deposito_mquina = ejecutarConsultaSimpleFila($sql_2);
 
-          "deposito" => ($retVal_2 = empty($ser_maq_monto) ? 0 : ($retVal_3 = empty($ser_maq_monto['deposito']) ? 0 : $ser_maq_monto['deposito'])),
-        ];
+        $deposito_m = (empty($deposito_mquina)) ? 0 : $retVal = (empty($deposito_mquina['deposito'])) ? 0 : floatval($deposito_mquina['deposito']);
+
+        $sql_3 = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, 
+        s.costo_parcial , s.fecha_entrega
+        FROM servicio as s, maquinaria as m, proveedor as p 
+        WHERE s.estado = '1' AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND s.idmaquinaria = '$idmaquinaria' $filtro_fecha
+        AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor ORDER by s.fecha_entrega ASC;";
+
+        $desglose_mquina = ejecutarConsultaArray($sql_3);
+
+        if (!empty($desglose_mquina)) {
+          foreach ($desglose_mquina as $keys => $value) {
+             
+            if ( floatval($value['costo_parcial']) < $deposito_m) {
+
+              $deposito_m = $deposito_m - floatval($value['costo_parcial']);
+              $deposito_cubre = $value['costo_parcial'];
+
+            } else {   
+
+              if ($deposito_m > 0) {
+
+                $deposito_cubre = $deposito_m;
+
+                
+  
+                $estado_deposito = true;
+              }               
+            }
+            
+            $serv_maquinaria[] = [
+              "idmaquinaria"=> $value['idmaquinaria'],
+              "idproyecto"  => $value['idproyecto'],
+              "maquina"     => $value['maquina'],
+              "cantidad_veces"  => 1,              
+              "fecha_entrega"   => ($retVal_4 = empty($value['fecha_entrega']) ? '' : $value['fecha_entrega']),
+              "proveedor"   => $value['razon_social'],
+
+              "costo_parcial"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
+              "deposito" => $deposito_cubre,
+            ];
+
+            if ($estado_deposito) { $deposito_m = 0; $deposito_cubre = 0;  }
+          }
+        }        
       }
     }
 

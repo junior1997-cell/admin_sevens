@@ -232,6 +232,8 @@ if (!isset($_SESSION["nombre"])) {
          
         $tipo = '1';
 
+        // $_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor']
+        // $idproyecto = 1; $fecha_filtro_1 =""; $fecha_filtro_2=""; $id_proveedor="";
         $data = Array(); $datatable = Array();
 
         $deuda = $_POST['deuda'];

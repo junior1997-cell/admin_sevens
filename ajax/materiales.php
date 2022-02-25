@@ -16,24 +16,24 @@
 
       $materiales = new Materiales();
 
-      $idproducto = isset($_POST["idproducto"]) ? limpiarCadenaHtml($_POST["idproducto"]) : "";
-      $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadenaHtml($_POST["idcategoria_insumos_af"]) : "";
+      $idproducto = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "";
+      $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
 
       $nombre = isset($_POST["nombre_material"]) ? limpiarCadenaHtml($_POST["nombre_material"]) : "";
       $marca = isset($_POST["marca"]) ? limpiarCadenaHtml($_POST["marca"]) : "";
-      $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadenaHtml($_POST["precio_unitario"]) : "";
+      $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
       $descripcion = isset($_POST["descripcion_material"]) ? limpiarCadenaHtml($_POST["descripcion_material"]) : "";      
 
-      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadenaHtml($_POST["estado_igv"]) : "";
-      $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadenaHtml($_POST["monto_igv"]) : "";
-      $precio_real = isset($_POST["precio_real"]) ? limpiarCadenaHtml($_POST["precio_real"]) : "";
+      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
+      $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadena($_POST["monto_igv"]) : "";
+      $precio_real = isset($_POST["precio_real"]) ? limpiarCadena($_POST["precio_real"]) : "";
       
-      $unid_medida = isset($_POST["unid_medida"]) ? limpiarCadenaHtml($_POST["unid_medida"]) : "";
-      $color = isset($_POST["color"]) ? limpiarCadenaHtml($_POST["color"]) : "";
-      $total_precio = isset($_POST["total_precio"]) ? limpiarCadenaHtml($_POST["total_precio"]) : "";
+      $unid_medida = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "";
+      $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
+      $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
 
-      $imagen1 = isset($_POST["imagen1"]) ? limpiarCadenaHtml($_POST["imagen1"]) : "";
-      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadenaHtml($_POST["doc2"]) : "";
+      $imagen1 = isset($_POST["imagen1"]) ? limpiarCadena($_POST["imagen1"]) : "";
+      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "";
 
       switch ($_GET["op"]) {
 
