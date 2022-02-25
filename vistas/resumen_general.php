@@ -98,7 +98,7 @@
                             </div>
                           </div>
                           <!-- /.card-header -->
-                          <div class="card-body row-vertica disenio-scroll h-500px">
+                          <div class="card-body row-vertica disenio-scroll h-700px">
                             
                             <div class="/*container*/">
                               <!--Compras-->
