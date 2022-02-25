@@ -16,8 +16,54 @@
 
 			require_once "../modelos/Resumen_activos_fijos_general.php";
 			$resumen_af_g=new Resumen_activos_fijos_general();
+
 			require_once "../modelos/Compra.php";
 			$compra = new Compra();
+
+			$idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
+			$idcompra_proyecto = isset($_POST["idcompra_proyecto"]) ? limpiarCadena($_POST["idcompra_proyecto"]) : "";
+			$idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
+			$fecha_compra = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
+			$tipo_comprovante = isset($_POST["tipo_comprovante"]) ? limpiarCadena($_POST["tipo_comprovante"]) : "";
+			$serie_comprovante = isset($_POST["serie_comprovante"]) ? limpiarCadena($_POST["serie_comprovante"]) : "";
+			$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+
+			$subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
+			$igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
+			$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
+
+			$estado_detraccion = isset($_POST["estado_detraccion"]) ? limpiarCadena($_POST["estado_detraccion"]) : "";
+			
+			// :::::::::::::::::::::::::::::::::::: D A T O S   M A T E R I A L E S ::::::::::::::::::::::::::::::::::::::
+			$idproducto_p     = isset($_POST["idproducto_p"]) ? limpiarCadena($_POST["idproducto_p"]) : "" ;
+			$unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
+			$color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
+			$categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
+			$nombre_p         = isset($_POST["nombre_p"]) ? limpiarCadena($_POST["nombre_p"]) : "" ;
+			$modelo_p         = isset($_POST["modelo_p"]) ? limpiarCadena($_POST["modelo_p"]) : "" ;
+			$serie_p          = isset($_POST["serie_p"]) ? limpiarCadena($_POST["serie_p"]) : "" ;
+			$marca_p          = isset($_POST["marca_p"]) ? limpiarCadena($_POST["marca_p"]) : "" ;
+			$estado_igv_p     = isset($_POST["estado_igv_p"]) ? limpiarCadena($_POST["estado_igv_p"]) : "" ;
+			$precio_unitario_p= isset($_POST["precio_unitario_p"]) ? limpiarCadena($_POST["precio_unitario_p"]) : "" ;      
+			$precio_sin_igv_p = isset($_POST["precio_sin_igv_p"]) ? limpiarCadena($_POST["precio_sin_igv_p"]) : "" ;
+			$precio_igv_p     = isset($_POST["precio_igv_p"]) ? limpiarCadena($_POST["precio_igv_p"]) : "" ;
+			$precio_total_p   = isset($_POST["precio_total_p"]) ? limpiarCadena($_POST["precio_total_p"]) : "" ;      
+			$descripcion_p    = isset($_POST["descripcion_p"]) ? limpiarCadena($_POST["descripcion_p"]) : "" ; 
+			$img_pefil_p      = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "" ;
+			$ficha_tecnica_p  = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
+
+			// :::::::::::::::::::::::::::::::::::: D A T O S   P R O V E E D O R ::::::::::::::::::::::::::::::::::::::
+			$idproveedor		= isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";
+			$nombre 		    = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
+			$tipo_documento		= isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
+			$num_documento	    = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
+			$direccion		    = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
+			$telefono		    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
+			$c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
+			$cci		    	= isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
+			$c_detracciones		= isset($_POST["c_detracciones"])? limpiarCadena($_POST["c_detracciones"]):"";
+			$banco			    = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
+			$titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
 
 			switch ($_GET["op"]){
 
@@ -382,6 +428,153 @@
 					echo json_encode($results);
 				break;
 
+				case 'guardaryeditarcompra':
+					if (empty($idcompra_proyecto)) {
+					  $rspta = $compra->insertar(
+						$idproyecto,
+						$idproveedor,
+						$fecha_compra,
+						$tipo_comprovante,
+						$serie_comprovante,
+						$descripcion,
+						$total_venta,
+						$subtotal_compra,
+						$igv_compra,
+						$estado_detraccion,
+						$_POST["idproducto"],
+						$_POST["unidad_medida"],
+						$_POST["nombre_color"],
+						$_POST["cantidad"],
+						$_POST["precio_sin_igv"],
+						$_POST["precio_igv"],
+						$_POST["precio_con_igv"],
+						$_POST["descuento"],
+						$_POST["ficha_tecnica_producto"]
+					  );
+					  //precio_sin_igv,precio_igv,precio_total
+					  echo $rspta ? "ok" : "No se pudieron registrar todos los datos de la compra";
+					} else {
+					  $rspta = $compra->editar(
+						$idcompra_proyecto,
+						$idproyecto,
+						$idproveedor,
+						$fecha_compra,
+						$tipo_comprovante,
+						$serie_comprovante,
+						$descripcion,
+						$total_venta,
+						$subtotal_compra,
+						$igv_compra,
+						$estado_detraccion,
+						$_POST["idproducto"],
+						$_POST["unidad_medida"],
+						$_POST["nombre_color"],
+						$_POST["cantidad"],
+						$_POST["precio_sin_igv"],
+						$_POST["precio_igv"],
+						$_POST["precio_con_igv"],
+						$_POST["descuento"],
+						$_POST["ficha_tecnica_producto"]
+					  );
+				
+					  echo $rspta ? "ok" : "Compra no se pudo actualizar";
+					}
+				break;
+				
+				case 'guardar_y_editar_materiales':
+					// imgen
+					if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
+
+					$img_pefil_p = $_POST["foto2_actual"];
+
+					$flat_img1 = false;
+
+					} else {
+
+					$ext1 = explode(".", $_FILES["foto2"]["name"]);
+
+					$flat_img1 = true;
+
+					$img_pefil_p = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+					move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/material/img_perfil/" . $img_pefil_p);
+					}
+
+					// ficha técnica
+					if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
+
+					$ficha_tecnica_p = $_POST["doc_old_2"];
+
+					$flat_ficha1 = false;
+
+					} else {
+
+					$ext1 = explode(".", $_FILES["doc2"]["name"]);
+
+					$flat_ficha1 = true;
+
+					$ficha_tecnica_p = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+
+					move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica_p);
+					}
+
+					if (empty($idproducto_p)) {
+					//var_dump($idproyecto,$idproveedor);
+					$rspta = $compra->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+					
+					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+
+					} else {
+
+					// validamos si existe LA IMG para eliminarlo
+					if ($flat_img1 == true) {
+
+						$datos_f1 = $compra->obtenerImgPerfilProducto($idproducto_p);
+
+						$img1_ant = $datos_f1->fetch_object()->imagen;
+
+						if ($img1_ant != "") {
+
+						unlink("../dist/docs/material/img_perfil/" . $img1_ant);
+						}
+					}
+					
+					// $rspta = $compra->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+					//var_dump($idactivos_fijos,$idproveedor);
+					echo $rspta ? "ok" : "No se pudo actualizar";
+					}
+
+				break;
+
+				case 'guardaryeditar_proveedor':
+					if (!isset($_SESSION["nombre"])) {
+			
+					  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+			
+					} else {
+						//Validamos el acceso solo al usuario logueado y autorizado.
+						if ($_SESSION['recurso']==1)
+						{
+							require_once "../modelos/AllProveedor.php";
+
+							$proveedor=new Proveedor();
+			
+			
+							if (empty($idproveedor)){
+								$rspta=$proveedor->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria, $cci, $c_detracciones,$banco,$titular_cuenta);
+								echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
+							}
+							else {
+								$rspta=$proveedor->editar($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria, $cci, $c_detracciones,$banco,$titular_cuenta);
+								echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+							}
+							//Fin de las validaciones de acceso
+						} else {
+			
+							  require 'noacceso.php';
+						}
+					}		
+				break;
 			}
 			/** ==========FIN CLASIFICACIONES==============0 */
 			//Fin de las validaciones de acceso

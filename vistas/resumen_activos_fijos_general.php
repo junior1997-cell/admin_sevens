@@ -238,14 +238,12 @@
                     <div class="card card-primary card-outline">
                         <!--maquinaria-->
                         <div class="card-header">
-                          <div class="row">
-                            <div class="col-lg-2">
-                            <button type="button" class="btn bg-gradient-warning" id="regresar" onclick="regresar();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                            </div>
-                            <div class="col-lg-6">
-                              <h4 class="nombre-producto-modal-titel">Producto y mas</h4>
-                            </div>
-                          </div>
+                          <!-- regresar "tabla facuras" -->
+                          <h3 class="card-title mr-3" id="btn-regresar-bloque" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
+                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="regresar();"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                          </h3> 
+                          <!-- nombre producto -->
+                          <h1 class="card-title mr-3 nombre-producto-modal-titel" id="btn-regresar-bloque" style=" padding-left: 2px;"> </h1> 
                         </div>
                         <div class="card-body maquinarias">
 
@@ -297,23 +295,16 @@
                   <div class="col-12 tercer-div" style="display: none;" >
 
                       <div class="card card-primary card-outline">
-                          <!--maquinaria-->
                           <div class="card-header">
-                              <h3 class="">
-                                <div class="row">
-                                    <div class="col-lg-1 col-md-6 col-sm-6 col-xs-12">
-                                        <button type="button" class="btn btn-block btn-outline-warning " onclick="table_show_hide(1);">
-                                        <i class="fas fa-arrow-left"></i>
-                                      </button>
-                                      </div>
-                                      <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
-                                      <button type="button" class="btn btn-block bg-gradient-warning" id="regresar"  onclick="regresar();">
-                                        <i class="fas fa-arrow-left"></i> Regresar
-                                      </button>  
-                                    </div>
-                                </div>
-                              
-                              </h3>
+                          <!-- regresar "tabla principal" -->
+                          <h3 class="card-title mr-3" id="btn-regresar-todo" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
+                            <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="regresar();"><i class="fas fa-arrow-left"></i></button>
+                          </h3>
+
+                          <!-- regresar "tabla facuras" -->
+                          <h3 class="card-title mr-3" id="btn-regresar-bloque" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla facturas">
+                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="regresar_div2();"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                          </h3> 
                           </div>
                           <div class="card-body">
 
@@ -517,7 +508,323 @@
                     </div>
                   </div>
                 </div>
-              </div>                  
+              </div>  
+
+              <!-- Modal agregar proveedores -->
+              <div class="modal fade" id="modal-agregar-proveedor">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Agregar proveedor</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-proveedor" name="form-proveedor" method="POST">
+                        <div class="card-body">
+                          <div class="row" id="cargando-1-fomulario">
+                            <!-- id proyecto -->
+                            <input type="hidden" name="idproyecto" id="idproyecto" />
+                            <!-- id proveedores -->
+                            <input type="hidden" name="idproveedor" id="idproveedor" />
+
+                            <!-- Tipo de documento -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="tipo_documento">Tipo de documento</label>
+                                <select name="tipo_documento" id="tipo_documento" class="form-control select2" placeholder="Tipo de documento">
+                                  <option value="RUC">RUC</option>
+                                  <option selected value="DNI">DNI</option>
+                                </select>
+                              </div>
+                            </div>
+                            <!-- N° de documento -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="num_documento">N° RUC / DNI</label>
+                                <div class="input-group">
+                                  <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
+                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                    <span class="input-group-text" style="cursor: pointer;">
+                                      <i class="fas fa-search text-primary" id="search"></i>
+                                      <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Nombre -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="nombre">Razón Social / Nombre y Apellidos</label>
+                                <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Razón Social o  Nombre" />
+                              </div>
+                            </div>
+                            <!-- Direccion -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
+                              </div>
+                            </div>
+                            <!-- Telefono -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
+                              </div>
+                            </div>
+                            <!-- Cuenta bancaria -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="c_bancaria">Cuenta Bancaria</label>
+                                <input type="number" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
+                              </div>
+                            </div>
+                            <!-- fecha de nacimiento -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="fecha_nacimiento">Cuenta Detracciones</label>
+                                <input type="number" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Bancaria" />
+                              </div>
+                            </div>
+                            <!-- banco -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="banco">Banco</label>
+                                <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
+                                </select>
+                              </div>
+                            </div>
+                            <!-- Titular de la cuenta -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="titular_cuenta">Titular de la cuenta</label>
+                                <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
+                      </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_proveedor">Guardar Cambios</button>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+              
+              <!-- Modal agregar MATERIALES Y ACTIVOS FIJOS -->                 
+              <div class="modal fade" id="modal-agregar-material-activos-fijos">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Agregar Producto</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-materiales" name="form-materiales" method="POST">
+                        <div class="card-body">
+                          <div class="row" id="cargando-1-fomulario">
+
+                            <!-- idproducto -->
+                            <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
+
+                            <!-- Nombre -->
+                            <div class="col-lg-8 class_pading">
+                              <div class="form-group">
+                                <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
+                                <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
+                              </div>
+                            </div>
+
+                            <!-- Categoria -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="categoria_insumos_af_p">Clasificación</label>
+                                <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
+                                </select>
+                              </div>
+                            </div>
+
+                            <!-- Modelo -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="modelo_p">Modelo <sup class="text-danger">*</sup> </label>
+                                <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
+                              </div>
+                            </div>
+
+                            <!-- Serie -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="serie_p">Serie </label>
+                                <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
+                              </div>
+                            </div>
+
+                            <!-- Marca -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="marca_p">Marca </label>
+                                <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." />
+                              </div>
+                            </div>
+
+                            <!-- Color -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="color_p">Color</label>
+                                <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
+                              </div>
+                            </div>
+                            
+                            <!-- Unnidad-->
+                            <div class="col-lg-6" id="content-t-unidad">
+                              <div class="form-group">
+                                <label for="unidad_medida_p">Unidad-medida</label>
+                                <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
+                              </div>
+                            </div>
+
+                            <!--Precio U-->
+                            <div class="col-lg-4 class_pading">
+                              <div class="form-group">
+                                <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
+                                <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                              </div>
+                            </div>
+
+                            <!-- Rounded switch -->
+                            <div class="col-lg-2 class_pading">
+                              <div class="form-group">
+                                <label for="" class="labelswitch">Sin o Con (Igv)</label>
+                                <div id="switch_igv">
+                                  <div class="switch-holder myestilo-switch">
+                                    <div class="switch-toggle">
+                                      <input type="checkbox" id="my-switch_igv" checked />
+                                      <label for="my-switch_igv"></label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <input type="hidden" name="estado_igv_p" id="estado_igv_p" />
+                              </div>
+                            </div>
+
+                            <!--Sub Total subtotal igv total-->
+                            <div class="col-lg-4 class_pading">
+                              <div class="form-group">
+                                <label for="precio_sin_igv_p">Sub Total</label>
+                                <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                              </div>
+                            </div>
+
+                            <!--IGV-->
+                            <div class="col-lg-4 class_pading">
+                              <div class="form-group">
+                                <label for="precio_igv_p">IGV</label>
+                                <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                              </div>
+                            </div>
+
+                            <!--Total-->
+                            <div class="col-lg-4 class_pading">
+                              <div class="form-group">
+                                <label for="precio_total_p">Total</label>
+                                <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
+                              </div>
+                            </div>
+
+                            <!--Descripcion-->
+                            <div class="col-lg-12 class_pading">
+                              <div class="form-group">
+                                <label for="descripcion_p">Descripción </label> <br />
+                                <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>
+                              </div>
+                            </div>
+
+                            <!--iamgen-material-->
+                            <div class="col-md-6 col-lg-6">
+                              <label for="foto2">Imagen</label>
+                              <div style="text-align: center;">
+                                <img
+                                  onerror="this.src='../dist/img/default/img_defecto_activo_fijo_material.png';"
+                                  src="../dist/img/default/img_defecto_activo_fijo_material.png"
+                                  class="img-thumbnail"
+                                  id="foto2_i"
+                                  style="cursor: pointer !important; height: 100% !important;"
+                                  width="auto"
+                                />
+                                <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
+                                <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                              </div>
+                            </div>
+
+                            <!-- Ficha tecnica -->
+                            <div class="col-md-6 col-lg-6">
+                              <label for="doc2_i" >Ficha técnica <b class="text-danger">(Imagen o PDF)</b> </label>  
+                              <div class="row text-center">                               
+                                <!-- Subir documento -->
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                    <i class="fas fa-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                  <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                </div>
+                                <!-- Recargar -->
+                                <div class="col-md-6 text-center comprobante">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'ficha_tecnica');">
+                                  <i class="fas fa-redo"></i> Recargar.
+                                </button>
+                                </div>                                  
+                              </div>
+                              <div id="doc2_ver" class="text-center mt-4">
+                                <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
+                          </div>
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-materiales">Submit</button>
+                      </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_materiales();">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_material">Guardar Cambios</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             </section>
             <!-- /.content -->
