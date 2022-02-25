@@ -112,7 +112,7 @@
                             <thead>
                               <tr>
                                 <th rowspan="2" class="stile-celda">#</th>
-                                <th rowspan="2" class="stile-celda">#</th>
+                                <th rowspan="2" class="stile-celda"><i class="far fa-clock"></i></th>
                                 <th rowspan="2" class="stile-celda">Nombre del trabajador</th>
                                 <th rowspan="2" class="stile-celda">Cargo</th>
                                 <th colspan="14" id="dias_asistidos_s_q" style=" text-align: center !important; border: black 1px solid; padding: 0.5rem;">Horas de trabajo por día</th>
