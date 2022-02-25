@@ -135,7 +135,7 @@
                               <!-- Categoria -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="categoria_insumos_af">Categoria</label>
+                                  <label for="categoria_insumos_af">Clasificación</label>
                                   <select name="categoria_insumos_af" id="categoria_insumos_af" class="form-control select2" style="width: 100%;"> 
                                   </select>
                                 </div>
