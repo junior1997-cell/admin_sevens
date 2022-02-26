@@ -12,43 +12,50 @@ var array_guardar_fi_ff = [];
 //Función que se ejecuta al inicio
 function init() {  
 
+  //Activamos el "aside"
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#bloc_Viaticos").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#mViatico").addClass("active bg-primary");
+
+  $("#sub_bloc_comidas").addClass("menu-open");
+
+  $("#sub_mComidas").addClass("active bg-primary");
+
+  $("#lBreak").addClass("active");
+
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
   listar_botoness( localStorage.getItem('nube_idproyecto') );
+
   listar( localStorage.getItem('nube_idproyecto'));
-
-  //Activamos el "aside"
-  $("#bloc_Viaticos").addClass("menu-open");
-  $("#mViatico").addClass("active");
-  $("#sub_bloc_comidas").addClass("active");
-
-  $("#lbreak").addClass("active");
-
-  // $("#ltrabajador").addClass("active"); 
+  
   //=====Guardar factura=============
   $("#guardar_registro_comprobaante").on("click", function (e) {$("#submit-form-comprobante").submit();});
+
   //Factura
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
+
   $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
+
   //Initialize Select2 Elements
   $("#tipo_comprovante").select2({
     theme: "bootstrap4",
     placeholder: "Selecione tipo comprobante",
     allowClear: true,
   });
+
   $("#forma_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione una forma de pago",
     allowClear: true,
   });
 
-  //============SERVICIO================
-  $("#tipo_comprovante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-
   // Formato para telefono
-  $("[data-mask]").inputmask();
-  
+  $("[data-mask]").inputmask();  
 }
 /* PREVISUALIZAR LAS IMAGENES */
 function addImage(e,id) {

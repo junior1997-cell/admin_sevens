@@ -21,28 +21,39 @@ var cont_inial="";
 //Función que se ejecuta al inicio
 function init() {  
 
-  $("#idproyecto_p").val(localStorage.getItem('nube_idproyecto'));
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
-
-
-  listar_botoness( localStorage.getItem('nube_idproyecto') );
-  listar( localStorage.getItem('nube_idproyecto'));
   //Activamos el "aside"
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
   $("#bloc_Viaticos").addClass("menu-open");
-  $("#mViatico").addClass("active");
-  $("#sub_bloc_comidas").addClass("active");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#mViatico").addClass("active bg-primary");
+
+  $("#sub_bloc_comidas").addClass("menu-open");
+
+  $("#sub_mComidas").addClass("active bg-primary");
 
   $("#lPension").addClass("active");
 
-    //Mostramos los proveedor
-    $.post("../ajax/pension.php?op=select_proveedor", function (r) { $("#proveedor").html(r); });
+  $("#idproyecto_p").val(localStorage.getItem('nube_idproyecto'));
 
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  listar_botoness( localStorage.getItem('nube_idproyecto') );
+
+  listar( localStorage.getItem('nube_idproyecto'));
+
+ 
+
+  //Mostramos los proveedor
+  $.post("../ajax/pension.php?op=select_proveedor", function (r) { $("#proveedor").html(r); });
     
   //=====Guardar pension=============
   $("#guardar_registro_pension").on("click", function (e) {$("#submit-form-pension").submit();});
+
   //=====Guardar factura=============
   $("#guardar_registro_comprobaante").on("click", function (e) {$("#submit-form-comprobante").submit();});
-
 
   //Factura
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
@@ -60,6 +71,7 @@ function init() {
     placeholder: "Selecione una forma de pago",
     allowClear: true,
   });
+  
   //pension agregar 
   $("#proveedor").select2({
     theme: "bootstrap4",
@@ -69,16 +81,8 @@ function init() {
 
   $("#servicio_p").select2();
 
-  //============SERVICIO================
-  $("#tipo_comprovante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-  //pension
-  $("#servicio_p").val("null").trigger("change");
-  $("#proveedor").val("null").trigger("change");
-
   // Formato para telefono
-  $("[data-mask]").inputmask();
-  
+  $("[data-mask]").inputmask();  
 }
 
 /* PREVISUALIZAR LAS IMAGENES */

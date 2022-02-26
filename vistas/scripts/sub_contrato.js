@@ -2,20 +2,17 @@ var tabla_principal;
 
 //Función que se ejecuta al inicio
 function init() {
+
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lSubContrato").addClass("active bg-primary");
   
   listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
-
-  // $("#bloc_PagosTrabajador").addClass("menu-open");
-
-  $("#mSubContrato").addClass("active");
-
-  // $("#lPagosAdministrador").addClass("active");
-
-
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_color").on("click", function (e) { $("#submit-form-color").submit();  });
-
 
   //Initialize Select2 unidad
   $("#forma_pago").select2({

@@ -33,7 +33,11 @@ $( ".export_all_table" ).click(function() { $('#tabla1_compras').tableExport({ty
 function init() {   
 
   //Activamos el "aside"
-  $("#mresumen_general").addClass("active");
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lresumen_general").addClass("active bg-primary");
 
   //Mostramos los trabajadores
   $.post("../ajax/resumen_general.php?op=select2_trabajadores&idproyecto=" + localStorage.getItem("nube_idproyecto"), function (r) {

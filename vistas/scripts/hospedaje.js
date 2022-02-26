@@ -2,15 +2,21 @@ var tabla;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar();
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-    //Activamos el "aside"
-    $("#bloc_Viaticos").addClass("menu-open");
+  //Activamos el "aside"
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
-    $("#mViatico").addClass("active");
+  $("#bloc_Viaticos").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#mViatico").addClass("active bg-primary");
 
   $("#lHospedaje").addClass("active");
+
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  listar();    
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-hospedaje").submit();});
 

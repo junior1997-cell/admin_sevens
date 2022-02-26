@@ -2,11 +2,17 @@ var tabla;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar();
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
   //Activamos el "aside"
-  $("#mPlanillaSeguro").addClass("active");
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lPlanillaSeguro").addClass("active bg-primary");
+
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  listar();
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-otro_servicio").submit();});
 
@@ -20,21 +26,16 @@ function init() {
     placeholder: "Seleccinar tipo comprobante",
     allowClear: true,
   });
+
   //Initialize Select2 tipo_viajero
   $("#forma_pago").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar forma de pago",
     allowClear: true,
-  });
-
-  $("#tipo_comprobante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-  
+  }); 
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-
-
 }
 /* PREVISUALIZAR LOS PDF */
 function addficha(e,id) {

@@ -7,52 +7,43 @@ var idmaquina;
 
 //Función que se ejecuta al inicio
 function init() {
+
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lMaquina").addClass("active bg-primary");
+
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
   //Mostramos los BANCOS
-  $.post("../ajax/servicio_maquina.php?op=select2Banco", function (r) {
-    $("#banco_pago").html(r);
-  });
+  $.post("../ajax/servicio_maquina.php?op=select2Banco", function (r) { $("#banco_pago").html(r); });
 
   //Mostramos los maquinariaes
-  $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) {
-    $("#maquinaria").html(r);
-  });
-
-  $("#mMaquina").addClass("active");
+  $.post("../ajax/servicio_maquina.php?op=select2_servicio", function (r) {  $("#maquinaria").html(r); });  
 
   listar(localStorage.getItem("nube_idproyecto"));
-
-  // $("#lproveedor").addClass("active");
+  
   //=====Guardar Servicio=============
-  $("#guardar_registro").on("click", function (e) {
-    $("#submit-form-servicios").submit();
-  });
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-servicios").submit(); });
+
   //=====Guardar pago=============
-  $("#guardar_registro_pago").on("click", function (e) {
-    $("#submit-form-pago").submit();
-  });
+  $("#guardar_registro_pago").on("click", function (e) { $("#submit-form-pago").submit(); });
+
   //=====Guardar factura=============
-  $("#guardar_registro_factura").on("click", function (e) {
-    $("#submit-form-factura").submit();
-  });
+  $("#guardar_registro_factura").on("click", function (e) { $("#submit-form-factura").submit(); });
+
   //vaucher
-  $("#foto1_i").click(function () {
-    $("#foto1").trigger("click");
-  });
-  $("#foto1").change(function (e) {
-    addImage(e, $("#foto1").attr("id"));
-  });
+  $("#foto1_i").click(function () { $("#foto1").trigger("click"); });
+  $("#foto1").change(function (e) { addImage(e, $("#foto1").attr("id")); });
+
   //Factura
-  $("#foto2_i").click(function () {
-    $("#foto2").trigger("click");
-  });
-  $("#foto2").change(function (e) {
-    addImage(e, $("#foto2").attr("id"));
-  });
+  $("#foto2_i").click(function () { $("#foto2").trigger("click"); });
+  $("#foto2").change(function (e) { addImage(e, $("#foto2").attr("id")); });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
+
   //============SERVICIO================
   //Initialize Select2 Elements
   $("#maquinaria").select2({
@@ -60,12 +51,14 @@ function init() {
     placeholder: "Selecione maquinaria",
     allowClear: true,
   });
+
   //Initialize Select2 Elements
   $("#unidad_m").select2({
     theme: "bootstrap4",
     placeholder: "Selecione una unidad de medida",
     allowClear: false,
   });
+
   //============pagoo================
   //Initialize Select2 Elements
   $("#forma_pago").select2({
@@ -73,26 +66,20 @@ function init() {
     placeholder: "Selecione una forma de pago",
     allowClear: true,
   });
+
   //Initialize Select2 Elements
   $("#tipo_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un tipo de pago",
     allowClear: true,
   });
+
   //Initialize Select2 Elements
   $("#banco_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un banco",
     allowClear: true,
   });
-
-  //============SERVICIO================
-  $("#maquinaria").val("null").trigger("change");
-  $("#unidad_m").val("Hora").trigger("change");
-  //===============Pago============
-  $("#forma_pago").val("null").trigger("change");
-  $("#tipo_pago").val("null").trigger("change");
-  $("#banco_pago").val("null").trigger("change");
 }
 
 /* PREVISUALIZAR LAS IMAGENES */

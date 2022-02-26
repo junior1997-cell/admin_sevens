@@ -5,15 +5,15 @@ var editando2=false;
 //Función que se ejecuta al inicio
 function init() {  
 
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lTrabajador").addClass("active bg-primary");
+
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar( localStorage.getItem('nube_idproyecto') );
-
-  // $("#bloc_Accesos").addClass("menu-open");
-
-  $("#mTrabajador").addClass("active");
-
-  // $("#ltrabajador").addClass("active"); 
+  listar( localStorage.getItem('nube_idproyecto') );   
 
   // Formato para telefono
   $("[data-mask]").inputmask();

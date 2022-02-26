@@ -13,6 +13,16 @@ var array_class_trabajador = [];
 //Función que se ejecuta al inicio
 function init() {
 
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#bloc_Compras").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#mCompra").addClass("active  bg-primary");
+
+  $("#lCompras").addClass("active");
+
   listar(localStorage.getItem("nube_idproyecto"));
 
   fecha_actual();
@@ -32,13 +42,7 @@ function init() {
   $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
   //Mostramos las categorias del producto
-  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
-
-  $("#bloc_Compras").addClass("menu-open");
-
-  $("#mCompra").addClass("active");
-
-  $("#lCompras").addClass("active");
+  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });  
 
   // Guardar el registro de la compra
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });

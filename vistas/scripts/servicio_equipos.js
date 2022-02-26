@@ -7,6 +7,12 @@ var idmaquina;
 
 //Función que se ejecuta al inicio
 function init() {
+
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lEquipo").addClass("active bg-primary");
   
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto')); 
    
@@ -14,9 +20,7 @@ function init() {
   $.post("../ajax/servicio_equipos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); });
 
   //Mostramos los maquinariaes
-  $.post("../ajax/servicio_equipos.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });
-
-  $("#mEquipo").addClass("active");
+  $.post("../ajax/servicio_equipos.php?op=select2_servicio", function (r) { $("#maquinaria").html(r); });  
 
   tbla_principal(localStorage.getItem('nube_idproyecto')); 
   
@@ -46,6 +50,7 @@ function init() {
     placeholder: "Selecione maquinaria",
     allowClear: true,
   });
+
    //Initialize Select2 Elements
    $("#unidad_m").select2({
     theme: "bootstrap4",
@@ -60,27 +65,20 @@ function init() {
     placeholder: "Selecione una forma de pago",
     allowClear: true,
   });
-    //Initialize Select2 Elements
+
+  //Initialize Select2 Elements
   $("#tipo_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un tipo de pago",
     allowClear: true,
   });
+
   //Initialize Select2 Elements
   $("#banco_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un banco",
     allowClear: true,
   });
-
-  //============SERVICIO================
-  $("#maquinaria").val("null").trigger("change");
-  $("#unidad_m").val("Hora").trigger("change");
-  //===============Pago============
-  $("#forma_pago").val("null").trigger("change");
-  $("#tipo_pago").val("null").trigger("change");
-  $("#banco_pago").val("null").trigger("change");
-
 }
 
 /* PREVISUALIZAR LAS IMAGENES */

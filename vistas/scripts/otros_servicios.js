@@ -2,11 +2,17 @@ var tabla;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar();
-  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
   //Activamos el "aside"
-  $("#mOtroServicio").addClass("active");
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#lOtroGasto").addClass("active bg-primary");
+
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  listar();  
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-otro_servicio").submit();});
 

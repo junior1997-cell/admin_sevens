@@ -188,13 +188,9 @@
         <!-- <li class="nav-header bg-color-2c2c2c">TÉCNICO</li>  -->
          
         <li class="nav-item ver-otros-modulos-1" id="bloc_Tecnico">
-          <a href="#" class="nav-link bg-color-2c2c2c" id="mTecnico">
+          <a href="#" class="nav-link bg-color-2c2c2c" id="mTecnico" style="padding-left: 7px;">
             <i class="nav-icon far fa-circle"></i>
-            <p>
-              TÉCNICO
-              <i class="fas fa-angle-left right"></i>
-              <span class="badge badge-info right">4</span>
-            </p>
+            <p class="font-size-14px">TÉCNICO <i class="fas fa-angle-left right"></i><span class="badge badge-info right">4</span></p>
           </a>
           <ul class="nav nav-treeview">
             <?php if ($_SESSION['valorizacion']==1) {  ?>
@@ -215,7 +211,7 @@
                 <a href="registro_asistencia.php" class="nav-link" id="lAsistencia">
                   <i class="fas fa-clipboard-list nav-icon"></i>
                   <p>
-                    Asistencia del trabajador
+                    Asistencia del obrero
                   </p>
                 </a>
               </li>
@@ -245,24 +241,22 @@
               </li>
             <?php  }  ?>
           </ul>
-        </li>
-
-        
+        </li>        
 
         <!-- <li class="nav-header bg-color-2c2c2c">LOGÍSTICA Y ADQUISICIONES</li> -->
         
         <!-- COMPRAS -->      
-        <li class="nav-item ver-otros-modulos-1" id="bloc_Compras">
-          <a href="#" class="nav-link bg-color-2c2c2c" id="mCompra" style="padding-left: 7px;">
-            <!-- <i class="fas fa-shopping-cart nav-icon"></i> -->
-            <p>LOGÍSTICA Y ADQUISICIONES <i class="fas fa-angle-left right"></i><span class="badge badge-info right">2</span></p>
+        <li class="nav-item ver-otros-modulos-1" id="bloc_LogisticaAdquisiciones">
+          <a href="#" class="nav-link bg-color-2c2c2c" id="mLogisticaAdquisiciones" style="padding-left: 7px;">
+            <i class="nav-icon far fa-circle"></i>
+            <p class="font-size-14px">LOGÍSTICA Y ADQUISICIONES <i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
-            
+
             <?php if ($_SESSION['trabajador']==1) {  ?>
               <!-- TRABAJADORES -->
               <li class="nav-item ver-otros-modulos-1">
-                <a href="trabajador.php" class="nav-link" id="mTrabajador">
+                <a href="trabajador.php" class="nav-link" id="lTrabajador">
                   <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
                   <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                   <p>
@@ -312,7 +306,7 @@
             <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
               <!-- SERVICIO -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="servicio_maquina.php" class="nav-link" id="mMaquina">
+                <a href="servicio_maquina.php" class="nav-link" id="lMaquina">
                   <!-- <i class="nav-icon fas fa-tractor"></i> -->
                   <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                   <p>
@@ -326,7 +320,7 @@
             <?php if ($_SESSION['servicio_equipo']==1) {  ?>  
               <!-- EQUIPOS -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="servicio_equipos.php" class="nav-link" id="mEquipo">
+                <a href="servicio_equipos.php" class="nav-link" id="lEquipo">
                   <!-- <i class="nav-icon fas fa-tractor"></i> -->
                   <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                   <p>
@@ -338,7 +332,7 @@
             <?php  }  ?>
 
             <li class="nav-item ver-otros-modulos-1">
-              <a href="sub_contrato.php" class="nav-link" id="mSubContrato">
+              <a href="sub_contrato.php" class="nav-link" id="lSubContrato">
                 <i class="nav-icon fas fa-hands-helping"></i>
                 <p>
                   Sub Contrato              
@@ -349,7 +343,7 @@
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="planillas_seguros.php" class="nav-link" id="mPlanillaSeguro">
+                <a href="planillas_seguros.php" class="nav-link" id="lPlanillaSeguro">
                   <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
                   <img src="../dist/svg/planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                   <p>
@@ -360,9 +354,9 @@
             <?php  }  ?>
 
             <?php if ($_SESSION['otro_servicio']==1) {  ?>
-              <!-- OTROS SERVICIOS -->       
+              <!-- OTROS GASTOS -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="otros_servicios.php" class="nav-link" id="mOtroServicio">
+                <a href="otros_servicios.php" class="nav-link" id="lOtroGasto">
                   <i class="nav-icon fas fa-network-wired"></i>
                   <p>
                     Otros Gastos                
@@ -374,7 +368,7 @@
             <?php if ($_SESSION['resumen_general']==1) {  ?>
               <!-- OTROS SERVICIOS -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="resumen_general.php" class="nav-link" id="mresumen_general">
+                <a href="resumen_general.php" class="nav-link" id="lresumen_general">
                   
                 <i class="nav-icon fas fa-list-ul"></i>
                   <p>
@@ -411,8 +405,8 @@
                     </a>
                   </li>
                   <!-- COMIDA -->
-                  <li class="nav-item">
-                    <a href="#" class="nav-link"  id="sub_bloc_comidas">
+                  <li class="nav-item" id="sub_bloc_comidas">
+                    <a href="#" class="nav-link"  id="sub_mComidas">
                       <i class="fas fa-fish nav-icon"></i>
                       <p>
                         Comida
@@ -428,13 +422,13 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="break.php" class="nav-link" id="lbreak" >
+                        <a href="break.php" class="nav-link" id="lBreak" >
                           <i class="fas fa-hamburger nav-icon"></i>
                           <p>Break</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="comidas_extras.php" class="nav-link" id="lComidas_extras" >
+                        <a href="comidas_extras.php" class="nav-link" id="lComidasExtras" >
                           <i class="fas fa-drumstick-bite nav-icon"></i>
                           <p>Comidas - extras</p>
                         </a>
@@ -445,16 +439,14 @@
               </li>
             <?php  }  ?>
           </ul>
-        </li>
-
-        
+        </li>        
 
         <!-- <li class="nav-header bg-color-2c2c2c">CONTABLE Y FINANCIERO</li> -->
          
         <li class="nav-item ver-otros-modulos-1" id="bloc_ContableFinanciero">
           <a href="#" class="nav-link bg-color-2c2c2c" id="mContableFinanciero" style="padding-left: 7px;">
-            <!-- <i class="fas fa-dollar-sign nav-icon"></i> -->
-            <p>CONTABLE Y FINANCIERO<i class="fas fa-angle-left right"></i><span class="badge badge-info right">5</span></p>
+            <i class="nav-icon far fa-circle"></i>
+            <p class="font-size-14px">CONTABLE Y FINANCIERO<i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
             <?php if ($_SESSION['pago_trabajador']==1) {  ?>          

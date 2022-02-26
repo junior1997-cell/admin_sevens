@@ -12,17 +12,21 @@ var detalles = 0;
 
 //Función que se ejecuta al inicio
 function init(){
+
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#bloc_Compras").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+	$("#mCompra").addClass("active bg-primary");
+
+	$("#lResumenActivosFijos").addClass("active");
 	
 	tbla_principal_maquinaria(localStorage.getItem('nube_idproyecto'));
   tbla_principal_equipo(localStorage.getItem('nube_idproyecto'));
   tbla_principal_herramienta(localStorage.getItem('nube_idproyecto'));
-  tbla_principal_oficina(localStorage.getItem('nube_idproyecto'));
-
-	$("#bloc_Compras").addClass("menu-open");
-
-	$("#mCompra").addClass("active");
-
-	$("#lResumenActivosFijos").addClass("active");
+  tbla_principal_oficina(localStorage.getItem('nube_idproyecto'));	
 
   //MOSTRAMOS - los proveedores
   $.post("../ajax/resumen_activos_fijos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });

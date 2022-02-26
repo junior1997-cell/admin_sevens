@@ -8,14 +8,18 @@ var detalles = 0;
 
 //Función que se ejecuta al inicio
 function init(){
-	
-	tbla_principal(localStorage.getItem('nube_idproyecto'));
 
-	$("#bloc_Compras").addClass("menu-open");
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
-	$("#mCompra").addClass("active");
+  $("#bloc_Compras").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+	$("#mCompra").addClass("active bg-primary");
 
 	$("#lResumenInsumos").addClass("active");
+	
+	tbla_principal(localStorage.getItem('nube_idproyecto'));	
 
   //MOSTRAMOS - los proveedores
   $.post("../ajax/resumen_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });

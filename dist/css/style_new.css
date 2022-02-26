@@ -83,7 +83,7 @@
   color: inherit !important;
 }
 
-
+/*  ══════════════════════════════════════════ - E S T Y L O   D E S A R R O L L A D O R - ══════════════════════════════════════════ */
 .desarrollador-whatsapp {
   color: black !important;
 }
@@ -120,6 +120,8 @@
   font-weight: bold;
   color: #000000;
 }
+
+/*  ══════════════════════════════════════════ - B A C K G R O U N D   P E R S O N A L I Z A D O - ══════════════════════════════════════════ */
 
 .bg-color-acc3c7{
   background-color: #acc3c7;
@@ -216,9 +218,13 @@ table th {
 }
 
 .click-boton{
-  /* color: darkorange !important; */
   background: #17a2b8 linear-gradient( 180deg, #3ab0c3, #041604) repeat-x !important;
 }
+
+.table td, .table th {
+  vertical-align: middle !important;
+}
+
 /* ::::::::::::::::: END stylos para tblas::::::::::::::::::: */
 
 /*  ══════════════════════════════════════════ - D I S E Ñ O   D E   S C R O L L - ══════════════════════════════════════════ */
@@ -262,277 +268,168 @@ table th {
 
 /*  ══════════════════════════════════════════ - P A D D I N G   S I Z E - ══════════════════════════════════════════ */
 
-.p-0px{
-  padding: 0px !important;
-}
+.p-0px{ padding: 0px !important; }
 
-.p-x-10px{
-  padding: 0px 10px 0px 10px !important;
-}
+.p-x-10px{ padding: 0px 10px 0px 10px !important; }
 
-.p-r-10px{
-  padding-right: 10px !important;
-}
+.p-r-10px{ padding-right: 10px !important; }
 
-.p-l-10px{
-  padding-left: 10px !important;
-}
+.p-l-10px{ padding-left: 10px !important; }
 
 /* ══════════════════════════════════════════ - M A R G I N G   S I Z E - ══════════════════════════════════════════ */
 
-.m-0px{
-  margin: 0px !important;
-}
+.m-0px{ margin: 0px !important; }
 
-.m-b-1px{
-  margin-bottom: 1px !important;
-}
-.m-b-5px{
-  margin-bottom: 5px !important;
-}
+.m-b-1px{ margin-bottom: 1px !important; }
 
-.m-t-1px{
-  margin-top: 1px !important;
-}
+.m-b-5px{ margin-bottom: 5px !important; }
 
-.m-t-2px{
-  margin-top: 2px !important;
-}
+.m-t-1px{ margin-top: 1px !important; }
 
-.m-t-5px{
-  margin-top: 5px !important;
-}
+.m-t-2px{ margin-top: 2px !important; }
 
-.m-r-1px{
-  margin-right: 1px !important;
-}
+.m-t-5px{ margin-top: 5px !important; }
 
-.m-r-2px{
-  margin-right: 2px !important;
-}
+.m-r-1px{ margin-right: 1px !important; }
 
-.m-r-5px{
-  margin-right: 5px !important;
-}
+.m-r-2px{ margin-right: 2px !important; }
 
-.m-r-10px{
-  margin-right: 10px !important;
-}
+.m-r-5px{ margin-right: 5px !important; }
 
-.m-r-15px{
-  margin-right: 15px !important;
-}
+.m-r-10px{ margin-right: 10px !important; }
 
+.m-r-15px{ margin-right: 15px !important; }
 
-.hidden{
-  display: none;
-}
 
 /*  ══════════════════════════════════════════ - W I D T H   S I Z E - ══════════════════════════════════════════ */
 
-.w-px-30{
-  width: 30px !important;
-}
+.w-px-30{ width: 30px !important; }
 
-.w-px-35{
-  width: 35px !important;
-}
+.w-px-35{ width: 35px !important; }
 
-.w-px-40{
-  width: 40px !important;
-}
+.w-px-40{ width: 40px !important; }
 
-.w-px-45{
-  width: 45px !important;
-}
+.w-px-45{ width: 45px !important; }
 
-.w-px-60{
-  width: 60px !important;
-}
+.w-px-60{ width: 60px !important; }
 
-.w-px-65{
-  width: 65px !important;
-}
+.w-px-65{ width: 65px !important; }
 
-.w-px-70{
-  width: 70px !important;
-}
+.w-px-70{ width: 70px !important; }
 
-.w-px-75{
-  width: 75px !important;
-}
+.w-px-75{ width: 75px !important; }
 
-.w-px-80{
-  width: 80px !important;
-}
+.w-px-80{ width: 80px !important; }
 
-.w-px-85{
-  width: 85px !important;
-}
+.w-px-85{ width: 85px !important; }
 
-.w-px-90{
-  width: 90px !important;
-}
+.w-px-90{ width: 90px !important; }
 
-.w-px-95{
-  width: 95px !important;
-}
+.w-px-95{ width: 95px !important; }
 
-.w-px-100{
-  width: 100px !important;
-}
+.w-px-100{ width: 100px !important; }
 
-.w-px-110{
-  width: 110px !important;
-}
+.w-px-110{ width: 110px !important; }
 
-.w-px-120{
-  width: 120px !important;
-}
+.w-px-120{ width: 120px !important; }
 
-.w-px-135{
-  width: 135px !important;
-}
+.w-px-135{ width: 135px !important; }
 
-.w-px-200{
-  width: 250px !important;
-}
+.w-px-200{ width: 250px !important; }
 
-.w-px-250{
-  width: 250px !important;
-}
+.w-px-250{ width: 250px !important; }
 
-.w-px-300{
-  width: 300px !important;
-}
+.w-px-300{ width: 300px !important; }
 
-.w-px-350{
-  width: 350px !important;
-}
+.w-px-350{ width: 350px !important; }
 
-.w-px-600{
-  width: 600px !important;
-}
+.w-px-600{ width: 600px !important; }
 
-.w-xy-20{
-  width: 20px !important;
-  height: 20px !important;
-}
+.w-xy-20{  width: 20px !important;  height: 20px !important; }
 
 /*  ══════════════════════════════════════════ - H E I G H T   S I Z E - ══════════════════════════════════════════ */
 
-.h-10px{
-  height: 10px !important;
-}
+.h-10px{ height: 10px !important; }
 
-.h-15px{
-  height: 15px !important;
-}
+.h-15px{ height: 15px !important; }
 
-.h-20px{
-  height: 20px !important;
-}
-.h-30px{
-  height: 30px !important;
-}
+.h-20px{ height: 20px !important; }
 
-.h-40px{
-  height: 40px !important;
-}
+.h-30px{ height: 30px !important; }
 
-.h-50px{
-  height: 50px !important;
-}
+.h-40px{ height: 40px !important; }
 
-.h-60px{
-  height: 60px !important;
-}
+.h-50px{ height: 50px !important; }
 
-.h-70px{
-  height: 70px !important;
-}
+.h-60px{ height: 60px !important; }
 
-.h-80px{
-  height: 80px !important;
-}
+.h-70px{ height: 70px !important; }
 
-.h-90px{
-  height: 90px !important;
-}
+.h-80px{ height: 80px !important; }
 
-.h-100px{
-  height: 100px !important;
-}
+.h-90px{ height: 90px !important; }
 
-.h-150px{
-  height: 150px !important;
-}
+.h-100px{ height: 100px !important; }
 
-.h-200px{
-  height: 200px !important;
-}
+.h-150px{ height: 150px !important; }
 
-.h-250px{
-  height: 250px !important;
-}
+.h-200px{ height: 200px !important; }
 
-.h-300px{
-  height: 300px !important;
-}
+.h-250px{ height: 250px !important; }
 
-.h-350px{
-  height: 350px !important;
-}
+.h-300px{ height: 300px !important; }
 
-.h-400px{
-  height: 400px !important;
-}
+.h-350px{ height: 350px !important; }
 
-.h-500px{
-  height: 500px !important;
-}
+.h-400px{ height: 400px !important; }
 
-.h-600px{
-  height: 600px !important;
-}
+.h-500px{ height: 500px !important; }
 
-.h-700px{
-  height: 700px !important;
-}
+.h-600px{ height: 600px !important; }
+
+.h-700px{ height: 700px !important; }
 
 /*  ══════════════════════════════════════════ - F O N T   S I Z E - ══════════════════════════════════════════ */
 
-.font-size-1px{
-  font-size: 1px;
-}
+.font-size-1px{ font-size: 1px; }
 
-.font-size-1px{
-  font-size: 1px;
-}
+.font-size-2px{ font-size: 2px; }
 
-.font-size-1px{
-  font-size: 1px;
-}
+.font-size-3px{ font-size: 3px; }
 
-.font-size-1px{
-  font-size: 1px;
-}
-.font-size-1px{
-  font-size: 1px;
-}
-.font-size-1px{
-  font-size: 1px;
-}
-.font-size-1px{
-  font-size: 1px;
-}
-.font-size-1px{
-  font-size: 1px;
-}
+.font-size-4px{ font-size: 4px; }
 
-.center-vertical{
-  vertical-align: middle !important;
-}
+.font-size-5px{ font-size: 5px; }
+
+.font-size-6px{ font-size: 6px; }
+
+.font-size-7px{ font-size: 7px; }
+
+.font-size-8px{ font-size: 8px; }
+
+.font-size-9px{ font-size: 9px; }
+
+.font-size-10px{ font-size: 10px; }
+
+.font-size-11px{ font-size: 11px; }
+
+.font-size-12px{ font-size: 12px; }
+
+.font-size-13px{ font-size: 13px; }
+
+.font-size-14px{ font-size: 14px; }
+
+.font-size-15px{ font-size: 15px; }
+
+.font-size-16px{ font-size: 16px; }
+
+.font-size-17px{ font-size: 17px; }
+
+.font-size-18px{ font-size: 18px; }
+
+.font-size-19px{ font-size: 19px; }
+
+.font-size-20px{ font-size: 20px; }
 
 
 /*  ══════════════════════════════════════════ - I N P U T - ══════════════════════════════════════════ */
@@ -559,17 +456,14 @@ table th {
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 
-.table td, .table th {
-  /* padding: 1rem; */
-  vertical-align: middle !important;
-  /* border-top: 1px solid #dee2e6; */
-}
+/*  ══════════════════════════════════════════ - O T R O S - ══════════════════════════════════════════ */
+.hidden{ display: none; }
+
+.center-vertical{ vertical-align: middle !important; }
 
 #dp .ui-datepicker tbody td.highlight a{background-color: red; border-bottom: 3px blue solid;}
 
-.cursor-pointer{
-  cursor: pointer !important;
-}
+.cursor-pointer{ cursor: pointer !important; }
 
 /*  ══════════════════════════════════════════ - @ M E D I A - ══════════════════════════════════════════ */
 /* min-width = como minimo */

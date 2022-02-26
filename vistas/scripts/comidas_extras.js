@@ -2,22 +2,31 @@ var tabla;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar();
+
+  //Activamos el "aside"
+  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+
+  $("#bloc_Viaticos").addClass("menu-open");
+
+  $("#mLogisticaAdquisiciones").addClass("active");
+
+  $("#mViatico").addClass("active bg-primary");
+
+  $("#sub_bloc_comidas").addClass("menu-open");
+
+  $("#sub_mComidas").addClass("active bg-primary");
+
+  $("#lComidasExtras").addClass("active");
+
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
- // $("#bloc_Viaticos").addClass("menu-open");
-  //Activamos el "aside"
-  $("#bloc_Viaticos").addClass("menu-open");
-  $("#mViatico").addClass("active");
-  //$("#sub_bloc_comidas").addClass("menu-open");
-  $("#sub_bloc_comidas").addClass("active");
-
-  $("#lComidas_extras").addClass("active");
+  listar();  
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-comidas-ex").submit();});
 
   //ficha tecnica
   $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
+
   $("#foto2").change(function(e) { addficha(e,$("#foto2").attr("id")) });
 
   //Initialize Select2 Elements
@@ -26,23 +35,18 @@ function init() {
     placeholder: "Selecione tipo comprobante",
     allowClear: true,
   });
-    //Initialize Select2 Elements
-    $("#forma_pago").select2({
-      theme: "bootstrap4",
-      placeholder: "Selecione forma de pago",
-      allowClear: true,
-    });
 
-  //============SERVICIO================
-  $("#tipo_comprobante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-
+  //Initialize Select2 Elements
+  $("#forma_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione forma de pago",
+    allowClear: true,
+  });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-
-
 }
+
 /* PREVISUALIZAR LOS PDF */
 function addficha(e,id) {
   // colocamos cargando hasta que se vizualice

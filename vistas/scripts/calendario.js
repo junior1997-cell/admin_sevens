@@ -7,7 +7,7 @@ function init() {
 
   $("#mTecnico").addClass("active");
 
-  $("#lCalendario").addClass("active");
+  $("#lCalendario").addClass("active bg-primary");
 
   listar(localStorage.getItem('nube_idproyecto') );  
 

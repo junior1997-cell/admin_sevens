@@ -8,7 +8,7 @@ function init() {
 
     $("#mTecnico").addClass("active");
 
-    $("#lPlanoOtro").addClass("active");
+    $("#lPlanoOtro").addClass("active bg-primary");
 
     $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
