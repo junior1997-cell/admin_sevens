@@ -57,7 +57,7 @@
                       <!-- /.Maquinarias -->
                       <div class="col-12">
 
-                        <div class="card card-primary card-outline ">
+                        <div class="card collapsed-card card-primary card-outline ">
                           <div class="card-header">
                             <h3 class="card-title">Lista de activo: <b>Maquinarias</b>    </h3>
 
@@ -102,7 +102,7 @@
                       </div>
                       <!-- /.Equipos -->
                       <div class="col-12">
-                        <div class="card  card-primary card-outline">
+                        <div class="card collapsed-card  card-primary card-outline">
                           <div class="card-header">
                             <h3 class="card-title">Lista de activos: <b>Equipos</b>    </h3>
 
@@ -146,7 +146,7 @@
                       </div>
                       <!-- /. Herramientas -->
                       <div class="col-12">
-                        <div class="card card-primary card-outline">
+                        <div class="card collapsed-card card-primary card-outline">
                           <div class="card-header">
                             <h3 class="card-title">Lista de activos:  <b>Herramientas</b>    </h3>
 
@@ -294,7 +294,7 @@
                   </div>
                   <div class="col-12 tercer-div" style="display: none;" >
                       <!--EDITAR COMPRA GENERAL-->
-                      <div class="card card-primary card-outline compra_general">
+                      <div class="card card-primary card-outline compra_general" style="display: none;">
                           <div class="card-header">
                           <!-- regresar "tabla principal" -->
                           <h3 class="card-title mr-3" id="btn-regresar-todo" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
@@ -469,14 +469,197 @@
                               </div>
 
                               <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-danger" onclick="regresar();" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger" onclick="regresar_div2();" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                               </div>
                             </div>
                           </div>
                       </div>
-                      
-                  </div>
+                      <!--EDITAR COMPRA POR PROYECTO-->
+                      <div class="card card-primary card-outline compra_proyecto" style="display: none;">
+                          <div class="card-header">
+                          <!-- regresar "tabla principal" -->
+                          <h3 class="card-title mr-3" id="btn-regresar-todo" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
+                            <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="regresar_div2();"><i class="fas fa-arrow-left"></i></button>
+                          </h3>
+
+                          <!-- regresar "tabla facuras" -->
+                          <h3 class="card-title mr-3" id="btn-regresar-bloque" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla facturas">
+                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="regresar_div2();"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                          </h3> 
+                          </div>
+                          <div class="card-body">
+                            <div id="agregar_compras_proyecto">
+                              <div class="modal-body">
+                                <!-- form start -->
+                                <form id="form-compra-activos-p" name="form-compra-activos-p" method="POST">
+                                  <div class="card-body">
+                                    <div class="row" id="cargando-1-fomulario">
+                                      <!-- id proyecto -->
+                                      <input type="hidden" name="idproyecto_proy" id="idproyecto_proy" /> 
+                                      <!-- id compras activo general o por proyecto -->
+                                      <input type="hidden" name="idcompra_af_proy" id="idcompra_af_proy" /> 
+
+                                      <!-- Tipo de Empresa -->
+                                      <div class="col-lg-7">
+                                        <div class="form-group">
+                                          <label for="idproveedor">Proveedor</label>
+                                          <select id="idproveedor_proy" name="idproveedor_proy" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
+                                        </div>
+                                      </div>
+
+                                      <!-- adduser -->
+                                      <div class="col-lg-1">
+                                        <div class="form-group">
+                                          <label for="Add" style="color: white;">.</label>
+                                          <a data-toggle="modal" href="#modal-agregar-proveedor" >
+                                            <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiardatosproveedor();">
+                                              <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                            </button>
+                                          </a>
+                                        </div>
+                                      </div>
+
+                                      <!-- fecha -->
+                                      <div class="col-lg-4">
+                                        <div class="form-group">
+                                          <label for="fecha_compra">Fecha </label>
+                                          <input type="date" name="fecha_compra_proy" id="fecha_compra_proy" class="form-control" placeholder="Fecha" />
+                                        </div>
+                                      </div>
+
+                                      <!-- Tipo de comprobante -->
+                                      <div class="col-lg-4" id="content-t-comprob-p">
+                                        <div class="form-group">
+                                          <label for="tipo_comprovante">Tipo Comprobante</label>
+                                          <select name="tipo_comprobante_proy" id="tipo_comprobante_proy" class="form-control select2" onchange="modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
+                                            <option value="Ninguno">Ninguno</option>
+                                            <option value="Boleta">Boleta</option>
+                                            <option value="Factura">Factura</option>
+                                            <option value="Nota_de_venta">Nota de venta</option>
+                                          </select>
+                                        </div>
+                                      </div>
+
+                                      <!-- serie_comprovante-->
+                                      <div class="col-lg-2" id="content-comprob-p">
+                                        <div class="form-group">
+                                          <label for="serie_comprovante">N° de Comprobante</label>
+                                          <input type="text" name="serie_comprobante_proy" id="serie_comprobante_proy" class="form-control" placeholder="N° de Comprobante" />
+                                        </div>
+                                      </div>
+
+                                      <!-- IGV-->
+                                      <div class="col-lg-1" id="content-igv-p">
+                                        <div class="form-group">
+                                          <label for="igv">IGV</label>
+                                          <input type="text" name="igv_proy" id="igv_proy" class="form-control" readonly value="0.18" />
+                                        </div>
+                                      </div>
+
+                                      <!-- Descripcion-->
+                                      <div class="col-lg-5" id="content-descrp-p">
+                                        <div class="form-group">
+                                          <label for="descripcion">Descripción </label> <br />
+                                          <textarea name="descripcion_proy" id="descripcion_proy" class="form-control" rows="1"></textarea>
+                                        </div>
+                                      </div>
+
+                                      <!--Boton agregar material-->
+                                      <div class="row col-lg-12 justify-content-between">
+                                        <div class="col-lg-4 col-xs-12">
+                                          <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="" style="color: white;">.</label> <br />
+                                                <a data-toggle="modal" data-target="#modal-elegir-material">
+                                                  <button type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
+                                                </a>
+                                            </div>
+                                            <div class="col-lg-6">
+                                              <label for="" style="color: white;">.</label> <br />
+                                              <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                                                <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                                              </a>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <!-- Rounded switch -->
+                                        <div class="col-lg-1   col-xs-3 class_pading">
+                                          <div class="form-group">
+                                            <div id="switch_detracc">
+                                              <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
+                                              <div class="switch-holder myestilo-switch2" >
+                                                <div class="switch-toggle">
+                                                  <input type="checkbox" id="my-switch_detracc" />
+                                                  <label for="my-switch_detracc"></label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <!--tabla detalles productos-->
+                                      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
+                                        <br />
+                                        <table id="detalles_af_proyecto" class="table table-striped table-bordered table-condensed table-hover">
+                                          <thead style="background-color: #127ab6ba;">
+                                            <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                                            <th>Activo</th>
+                                            <th>Unidad medida</th>
+                                            <th>Cantidad</th>
+                                            <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
+                                            <th class="hidden">IGV</th>
+                                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                            <th>Descuento</th>
+                                            <th>Subtotal</th>
+                                          </thead>
+                                          <tfoot>
+                                            <td colspan="5" id="colspan_subtotal_p"></td>
+                                            <th class="text-center">
+                                              <h5>Gravada</h5>
+                                              <h5>IGV (18%)</h5>
+                                              <h5>TOTAL</h5>
+                                            </th>
+                                            <th class=" "> 
+                                              <h5 class="text-right " id="subtotal_proy" style="font-weight: bold;">S/. 0.00</h5>
+                                              <input type="hidden" name="subtotal_compra_proy" id="subtotal_compra_proy" />
+
+                                              <h5 class="text-right" name="igv_comp_proy" id="igv_comp_proy" style="font-weight: bold;">S/. 0.00</h5>
+                                              <input type="hidden" name="igv_compra_proy" id="igv_compra_proy" />
+                                              <b>
+                                                <h4 class="text-right" id="total_proy" style="font-weight: bold;">S/. 0.00</h4>
+                                                <input type="hidden" name="total_compra_proy" id="total_compra_proy" />
+                                              </b>
+                                            </th>
+                                          </tfoot>
+                                          <tbody></tbody>
+                                        </table>
+                                      </div>
+                                      <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                        <div class="col-lg-12 text-center">
+                                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                          <br />
+                                          <h4>Cargando...</h4>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- /.card-body -->
+                                  <button type="submit" style="display: none;" id="submit-form-compra-activos-p">Submit</button>
+                                </form>
+                              </div>
+
+                              <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" onclick="regresar_div2();" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" id="guardar_registro_compras_p">Guardar Cambios</button>
+                              </div>
+                            </div>
+                          </div>
+                      </div> 
+                   </div>
                 </div>
               </div>
               <!-- /.container-fluid -->
@@ -486,6 +669,9 @@
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
+                    <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                        <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                      </a>
                       <h4 class="modal-title">Seleccionar producto</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
@@ -822,6 +1008,27 @@
                     <div class="modal-footer justify-content-between">
                       <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_materiales();">Close</button>
                       <button type="submit" class="btn btn-success" id="guardar_registro_material">Guardar Cambios</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ============ Modal ver grande img producto -->
+              <div class="modal fade" id="modal-ver-img-activo">
+                <div class="modal-dialog modal-dialog-scrollable modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header" style="background-color: #49a9ceb8;">
+                      <h4 class="modal-title nombre-img-activo">Img producto</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="class-style" style="text-align: center;">
+                          
+                        <img onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" src="" class="img-thumbnail " id="ver_img_activo" style="cursor: pointer !important;" width="auto" />
+                          
+                      </div>
                     </div>
                   </div>
                 </div>

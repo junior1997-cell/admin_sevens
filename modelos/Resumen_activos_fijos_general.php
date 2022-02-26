@@ -186,7 +186,7 @@ Class Resumen_activos_fijos_general
 
 	//.METODOS PARA EDITAR COMPRA POR PROYECTO
 	  //Listamos los productos a selecionar
-	  public function listar_productos()
+	  public function listar_insumos_activo_general()
 	  {
 		$sql = "SELECT
 				p.idproducto AS idproducto,
@@ -211,7 +211,78 @@ Class Resumen_activos_fijos_general
 			ORDER BY p.nombre ASC";
 	
 		return ejecutarConsulta($sql);
-	  }
+	}
+
+	//.METODOS PARA EDITAR COMPRA POR PROYECTO
+	//Listamos los productos a selecionar
+	  public function listar_solo_activos()
+	  {
+		$sql = "SELECT
+				p.idproducto AS idproducto,
+				p.idunidad_medida AS idunidad_medida,
+				p.idcolor AS idcolor,
+				p.nombre AS nombre,
+				p.marca AS marca,
+				ciaf.nombre AS categoria,
+				p.descripcion AS descripcion,
+				p.imagen AS imagen,
+				p.estado_igv AS estado_igv,
+				p.precio_unitario AS precio_unitario,
+				p.precio_igv AS precio_igv,
+				p.precio_sin_igv AS precio_sin_igv,
+				p.precio_total AS precio_total,
+				p.ficha_tecnica AS ficha_tecnica,
+				p.estado AS estado,
+				c.nombre_color AS nombre_color,
+				um.nombre_medida AS nombre_medida
+			FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor  AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af AND p.idcategoria_insumos_af!='1'
+			ORDER BY p.nombre ASC";
+	
+		return ejecutarConsulta($sql);
+	}
+
+	
+  //Implementamos un método para editar registros
+  public function editar_por_proyecto(
+    $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion, $total_venta, $subtotal_compra, $igv_compra,
+    $estado_detraccion, $idproducto, $unidad_medida, $nombre_color, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto) 
+	{
+	
+	var_dump($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion, $total_venta, $subtotal_compra, $igv_compra,
+    $estado_detraccion, $idproducto, $unidad_medida, $nombre_color, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto);die();
+
+    if ($idcompra_proyecto != "") {
+      //Eliminamos todos los permisos asignados para volverlos a registrar
+      $sqldel = "DELETE FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
+      ejecutarConsulta($sqldel);
+
+      $sql = "UPDATE compra_por_proyecto SET idproyecto = '$idproyecto', idproveedor = '$idproveedor', fecha_compra = '$fecha_compra',
+            tipo_comprovante = '$tipo_comprovante', serie_comprovante = '$serie_comprovante', descripcion = '$descripcion',
+            monto_total = '$total_venta', subtotal_compras_proyect = '$subtotal_compra', igv_compras_proyect = '$igv_compra', 
+            estado_detraccion = '$estado_detraccion' WHERE idcompra_proyecto = '$idcompra_proyecto'";
+      ejecutarConsulta($sql);
+
+      $num_elementos = 0;
+      $sw = true;
+
+      while ($num_elementos < count($idproducto)) {
+        $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_total[$num_elementos]) + $descuento[$num_elementos];
+        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_venta, igv,precio_igv, descuento, subtotal, ficha_tecnica_producto) 
+                VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_total[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
+        ejecutarConsulta($sql_detalle) or ($sw = false);
+
+        $num_elementos = $num_elementos + 1;
+      }
+    }
+
+    if ($idcompra_proyecto != "") {
+      return $sw;
+    } else {
+      return false;
+    }
+  }
+
 
 }
 
