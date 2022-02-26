@@ -20,16 +20,16 @@
       $unidad_medida  = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "" ;
       $color          = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "" ;
       $idcategoria    = isset($_POST["categoria_insumos_af"]) ? limpiarCadena($_POST["categoria_insumos_af"]) : "" ;
-      $nombre         = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "" ;
-      $modelo         = isset($_POST["modelo"]) ? limpiarCadena($_POST["modelo"]) : "" ;
+      $nombre         = isset($_POST["nombre"]) ? encodeCadenaHtml($_POST["nombre"]) : "" ;
+      $modelo         = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"]) : "" ;
       $serie          = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "" ;
-      $marca          = isset($_POST["marca"]) ? limpiarCadena($_POST["marca"]) : "" ;
+      $marca          = isset($_POST["marca"]) ? encodeCadenaHtml($_POST["marca"]) : "" ;
       $estado_igv     = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "" ;
       $precio_unitario= isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "" ;      
       $precio_sin_igv = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "" ;
       $precio_igv     = isset($_POST["precio_igv"]) ? limpiarCadena($_POST["precio_igv"]) : "" ;
       $precio_total   = isset($_POST["precio_total"]) ? limpiarCadena($_POST["precio_total"]) : "" ;      
-      $descripcion    = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "" ; 
+      $descripcion    = isset($_POST["descripcion"]) ? encodeCadenaHtml($_POST["descripcion"]) : "" ; 
 
       $img_pefil = isset($_POST["foto1"]) ? limpiarCadena($_POST["foto1"]) : "" ;
       $ficha_tecnica = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
