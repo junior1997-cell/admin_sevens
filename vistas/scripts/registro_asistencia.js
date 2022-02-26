@@ -5,15 +5,15 @@ var f1_r = 0, f2_r = 0, i_r = 0, cant_dias_asistencia_r = 0; var estado_editar_a
 //Función que se ejecuta al inicio
 function init() {
 
+  $("#bloc_Tecnico").addClass("menu-open");
+
+  $("#mTecnico").addClass("active");
+
+  $("#lAsistencia").addClass("active");
+
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));  
-
-  // $("#bloc_Accesos").addClass("menu-open");
-
-  $("#mAsistencia").addClass("active");
-
-  // $("#lasistencia").addClass("active");
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto')); 
 
   // submnit a adicional descuento
   $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });

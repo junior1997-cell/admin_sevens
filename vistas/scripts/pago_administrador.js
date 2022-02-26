@@ -4,17 +4,21 @@ var id_tabajador_x_proyecto_r = "", nombre_trabajador_r = "", fecha_inicial_r = 
 
 //Función que se ejecuta al inicio
 function init() {
+
+  $("#bloc_ContableFinanciero").addClass("menu-open");
+
+  $("#bloc_PagosTrabajador").addClass("menu-open");
+
+  $("#mContableFinanciero").addClass("active");
+
+  $("#mPagosTrabajador").addClass("active bg-primary");
+
+  $("#lPagosAdministrador").addClass("active");
   
   listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
   //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
-
-  $("#bloc_PagosTrabajador").addClass("menu-open");
-
-  $("#mPagosTrabajador").addClass("active");
-
-  $("#lPagosAdministrador").addClass("active");
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });  
 
   // efectuamos SUBMIT  registro de: PAGOS POR MES
   $("#guardar_registro").on("click", function (e) { $("#submit-form-pagos-x-mes").submit(); });

@@ -3,15 +3,15 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
 
+  $("#bloc_Tecnico").addClass("menu-open");
+
+  $("#mTecnico").addClass("active");
+
+  $("#lValorizacion").addClass("active");
+
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  ver_quincenas(localStorage.getItem('nube_idproyecto'));
-
-  // $("#bloc_Recurso").addClass("menu-open");
-
-  $("#mValorizacion").addClass("active");
-
-  // $("#lAllTrabajador").addClass("active");
+  ver_quincenas(localStorage.getItem('nube_idproyecto'));  
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
 

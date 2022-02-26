@@ -3,29 +3,24 @@ var tabla_plano;
 
 //Función que se ejecuta al inicio
 function init() {
+
+    $("#bloc_Tecnico").addClass("menu-open");
+
+    $("#mTecnico").addClass("active");
+
+    $("#lPlanoOtro").addClass("active");
+
     $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
-    listar_carpeta(localStorage.getItem("nube_idproyecto"));
+    listar_carpeta(localStorage.getItem("nube_idproyecto"));    
 
-    // $("#bloc_Recurso").addClass("menu-open");
+    $("#guardar_registro").on("click", function (e) {  $("#submit-form-carpeta").submit();  });
 
-    $("#mPlanoOtro").addClass("active");
+    $("#guardar_registro_2").on("click", function (e) { $("#submit-form-planootro").submit(); });
 
-    // $("#lAllTrabajador").addClass("active");
+    $("#doc1_i").click(function () {  $("#doc1").trigger("click"); });
 
-    $("#guardar_registro").on("click", function (e) {
-        $("#submit-form-carpeta").submit();
-    });
-    $("#guardar_registro_2").on("click", function (e) {
-        $("#submit-form-planootro").submit();
-    });
-
-    $("#doc1_i").click(function () {
-        $("#doc1").trigger("click");
-    });
-    $("#doc1").change(function (e) {
-        addDocs(e, $("#doc1").attr("id"));
-    });
+    $("#doc1").change(function (e) {  addDocs(e, $("#doc1").attr("id")); });
 }
 
 /* PREVISUALIZAR LAS DOCS */

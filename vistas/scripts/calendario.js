@@ -3,13 +3,13 @@ var  calendar;
 //Función que se ejecuta al inicio
 function init() {
 
-  listar(localStorage.getItem('nube_idproyecto') );   
+  $("#bloc_Tecnico").addClass("menu-open");
 
-  // $("#bloc_Calendario").addClass("menu-open");
+  $("#mTecnico").addClass("active");
 
-  $("#mCalendario").addClass("active");
+  $("#lCalendario").addClass("active");
 
-  // $("#lCalendario").addClass("active");
+  listar(localStorage.getItem('nube_idproyecto') );  
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-calendario").submit(); });
 

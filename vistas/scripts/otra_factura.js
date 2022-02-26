@@ -2,16 +2,14 @@ var tabla_principal;
 
 //Función que se ejecuta al inicio
 function init() {
+
+  $("#bloc_ContableFinanciero").addClass("menu-open");
+
+  $("#mContableFinanciero").addClass("active");
+
+  $("#lOtraFactura").addClass("active bg-primary");
   
   listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
-
-
-  // $("#bloc_PagosTrabajador").addClass("menu-open");
-
-  $("#mOtraFactura").addClass("active");
-
-  // $("#lPagosAdministrador").addClass("active");
-
 
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_color").on("click", function (e) { $("#submit-form-color").submit();  });
