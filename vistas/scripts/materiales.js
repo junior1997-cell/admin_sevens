@@ -248,9 +248,9 @@ function mostrar(idproducto) {
 
       $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
-      $("#doc1_nombre").html('');
+      $("#doc2_nombre").html('');
 
-      $("#doc_old_2").val(""); $("#doc1").val("");
+      $("#doc_old_2").val(""); $("#doc2").val("");
 
     } else {
 

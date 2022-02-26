@@ -438,7 +438,7 @@
                             </table>
                           </div>
 
-                          <!--Pagos sin detracciòn-->
+                          <!-- Pagos sin detracciòn -->
                           <div id="pago_compras" style="display: none;">
                             <h5>pago Compras</h5>
                             <div style="text-align: center;">
@@ -480,7 +480,7 @@
                             </div>
                           </div>
 
-                          <!--=======================Pagos con Detracción ========================-->
+                          <!-- Pagos con Detracción -->
                           <div id="pagos_con_detraccion" style="display: none;">
                             <h5>pagos con detracccion</h5>
                             <div style="text-align: center;">

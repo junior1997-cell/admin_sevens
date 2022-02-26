@@ -1677,9 +1677,9 @@ function mostrar_material(idproducto) {
      
     if (data.imagen != "") {
       
-      $("#foto1_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
+      $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
 
-      $("#foto1_actual").val(data.imagen);
+      $("#foto2_actual").val(data.imagen);
     }
 
     // FICHA TECNICA
@@ -1687,9 +1687,9 @@ function mostrar_material(idproducto) {
 
       $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
-      $("#doc1_nombre").html('');
+      $("#doc2_nombre").html('');
 
-      $("#doc_old_2").val(""); $("#doc1").val("");
+      $("#doc_old_2").val(""); $("#doc2").val("");
 
     } else {
 
