@@ -1492,7 +1492,7 @@ function convertir_a_hora(hora_n) {
 
 //Función para desactivar registros
 function desactivar(idasistencia_trabajador) {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
   Swal.fire({
     title: "¿Está Seguro de  Desactivar la Asistencia?",
     text: "Al desactivar, las horas de este registro no seran contado.",
@@ -1515,7 +1515,7 @@ function desactivar(idasistencia_trabajador) {
 
 //Función para activar registros
 function activar(idasistencia_trabajador) {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
   Swal.fire({
     title: "¿Está Seguro de  Activar  la Asistencia?",
     text: "Al activar, las horas de este registro seran contados",

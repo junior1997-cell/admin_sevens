@@ -242,7 +242,7 @@
                                       <div class="form-group">
                                         <label for="Add" style="color: white;">.</label>
                                         <a data-toggle="modal" href="#modal-agregar-proveedor" >
-                                          <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiardatosproveedor();">
+                                          <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
                                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                                           </button>
                                         </a>
@@ -611,7 +611,7 @@
                   </div>
                   <!-- /.container-fluid -->
 
-                  <!-- Modal agregar proveedores -->
+                  <!-- Modal agregar proveedores - charge -->
                   <div class="modal fade" id="modal-agregar-proveedor">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -625,103 +625,105 @@
                         <div class="modal-body">
                           <!-- form start -->
                           <form id="form-proveedor" name="form-proveedor" method="POST">
-                            <div class="card-body">
-                              <div class="row" id="cargando-1-fomulario">
-                                <!-- id proyecto -->
-                                <input type="hidden" name="idproyecto" id="idproyecto" />
-                                <!-- id proveedores -->
-                                <input type="hidden" name="idproveedor" id="idproveedor" />
+                            <div class="card-body row">                               
+                             
+                              <!-- id proveedores -->
+                              <input type="hidden" name="idproveedor_prov" id="idproveedor_prov" />
 
-                                <!-- Tipo de documento -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="tipo_documento">Tipo de documento</label>
-                                    <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
-                                      <option value="RUC">RUC</option>
-                                      <option selected value="DNI">DNI</option>
-                                    </select>
-                                  </div>
+                              <!-- Tipo de documento -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="tipo_documento_prov">Tipo de documento</label>
+                                  <select name="tipo_documento_prov" id="tipo_documento_prov" class="form-control" placeholder="Tipo de documento">
+                                    <option value="RUC">RUC</option>
+                                    <option selected value="DNI">DNI</option>
+                                  </select>
                                 </div>
-                                <!-- N° de documento -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="num_documento">N° RUC / DNI</label>
-                                    <div class="input-group">
-                                      <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
-                                      <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
-                                        <span class="input-group-text" style="cursor: pointer;">
-                                          <i class="fas fa-search text-primary" id="search"></i>
-                                          <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                        </span>
-                                      </div>
+                              </div>
+
+                              <!-- N° de documento -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="num_documento_prov">N° RUC / DNI</label>
+                                  <div class="input-group">
+                                    <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                      <span class="input-group-text" style="cursor: pointer;">
+                                        <i class="fas fa-search text-primary" id="search"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
-                                <!-- Nombre -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="nombre">Razón Social / Nombre y Apellidos</label>
-                                    <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Razón Social o  Nombre" />
-                                  </div>
-                                </div>
-                                <!-- Direccion -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
-                                  </div>
-                                </div>
-                                <!-- Telefono -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="telefono">Teléfono</label>
-                                    <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
-                                  </div>
-                                </div>
-                                <!-- Cuenta bancaria -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="c_bancaria">Cuenta Bancaria</label>
-                                    <input type="number" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" />
-                                  </div>
-                                </div>
-                                <!-- fecha de nacimiento -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="fecha_nacimiento">Cuenta Detracciones</label>
-                                    <input type="number" name="c_detracciones" class="form-control" id="c_detracciones" placeholder="Cuenta Bancaria" />
-                                  </div>
-                                </div>
-                                <!-- banco -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="banco">Banco</label>
-                                    <select name="banco" id="banco" class="form-control select2" style="width: 100%;">
-                                      <option value="1">BCP</option>
-                                      <option value="2">BBVA</option>
-                                      <option value="3">SCOTIA BANK</option>
-                                      <option value="4">INTERBANK</option>
-                                      <option value="5">NACIÓN</option>
-                                    </select>
-                                    <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
-                                  </div>
-                                </div>
-                                <!-- Titular de la cuenta -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="titular_cuenta">Titular de la cuenta</label>
-                                    <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
-                                  </div>
+                              </div>
+
+                              <!-- Nombre -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="nombre_prov">Razón Social / Nombre y Apellidos</label>
+                                  <input type="text" name="nombre_prov" class="form-control" id="nombre_prov" placeholder="Razón Social o  Nombre" />
                                 </div>
                               </div>
 
-                              <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                <div class="col-lg-12 text-center">
-                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                  <br />
-                                  <h4>Cargando...</h4>
+                              <!-- Direccion -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="direccion_prov">Dirección</label>
+                                  <input type="text" name="direccion_prov" class="form-control" id="direccion_prov" placeholder="Dirección" />
                                 </div>
                               </div>
+
+                              <!-- Telefono -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="telefono_prov">Teléfono</label>
+                                  <input type="text" name="telefono_prov" id="telefono_prov" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- Titular de la cuenta -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="titular_cuenta_prov">Titular de la cuenta</label>
+                                  <input type="text" name="titular_cuenta_prov" class="form-control" id="titular_cuenta_prov" placeholder="Titular de la cuenta" />
+                                </div>
+                              </div>
+
+                              <!-- banco -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="banco_prov">Banco</label>
+                                  <select name="banco_prov" id="banco_prov" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+                                    <!-- Aqui listamos los bancos -->
+                                  </select>
+                                  <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
+                                </div>
+                              </div>
+
+                              <!-- Cuenta bancaria -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="c_bancaria_prov" class="chargue-format-1">Cuenta Bancaria</label>
+                                  <input type="text" name="c_bancaria_prov" class="form-control" id="c_bancaria_prov" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- CCI -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="cci_prov" class="chargue-format-2">CCI</label>
+                                  <input type="text" name="cci_prov" class="form-control" id="cci_prov" placeholder="CCI" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- Cuenta de detracciones -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="c_detracciones_prov" class="chargue-format-3">Cuenta Detracciones</label>
+                                  <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
+                                </div>
+                              </div>                  
+
                             </div>
                             <!-- /.card-body -->
                             <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
@@ -770,7 +772,7 @@
                     </div>
                   </div>                  
 
-                  <!-- Modal agregar Pagos -->
+                  <!-- Modal agregar Pagos - charge -->
                   <div class="modal fade" id="modal-agregar-pago">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -904,7 +906,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal Ver compras -->
+                  <!-- Modal Ver compras - charge -->
                   <div class="modal fade" id="modal-ver-compras">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -1007,7 +1009,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal agregar comprobantes -->
+                  <!-- Modal agregar comprobantes - charge -->
                   <div class="modal fade" id="modal-comprobantes-compra">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -1082,42 +1084,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Modal ver los documentos subidos -->
-                  <div class="modal fade" id="modal-ver-docs">
-                    <div class="modal-dialog modal-dialog-scrollable modal-md">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Documentos subidos</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-
-                        <div class="modal-body">
-                          <div class="row">
-                            <!-- Pdf 1 -->
-                            <div class="col-md-12 col-lg-12 mb-4">
-                              <div class="text-center mb-4" id="verdoc1_nombre">
-                                <!-- aqui va el nombre del pdf -->
-                              </div>
-
-                              <div id="verdoc1" class="text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="modal-footer justify-content-end">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  </div>                   
 
                   <!-- Modal-ver-vaucher-pagos -->
                   <div class="modal fade" id="modal-ver-vaucher">
@@ -1161,7 +1128,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal agregar MATERIALES Y ACTIVOS FIJOS -->                 
+                  <!-- Modal agregar MATERIALES Y ACTIVOS FIJOS - charge -->                 
                   <div class="modal fade" id="modal-agregar-material-activos-fijos">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">

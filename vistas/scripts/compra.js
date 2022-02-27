@@ -33,7 +33,7 @@ function init() {
   $.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
   
   // Mostra,ps los bancos
-  $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); });
+  $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); $("#banco_prov").html(r); });
   
   //Mostramos colores
   $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color_p").html(r); });
@@ -59,7 +59,14 @@ function init() {
   //Guardar Material
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
 
-  //Initialize Select2 BANCO
+  //Initialize Select2 BANCO DE PROVEEDOR
+  $("#banco_prov").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione un banco",
+    allowClear: true,
+  });
+
+  //Initialize Select2 BANCO DE PAGO
   $("#banco_pago").select2({
     theme: "bootstrap4",
     placeholder: "Selecione un banco",
@@ -215,26 +222,6 @@ function limpiar() {
 
   $("#total").html("");
   $("#total_venta").val("");
-
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
-}
-
-//Función limpiar
-function limpiardatosproveedor() {
-  $(".tooltip").hide();
-
-  $("#idproveedor").val("");
-  $("#tipo_documento option[value='RUC']").attr("selected", true);
-  $("#nombre").val("");
-  $("#num_documento").val("");
-  $("#direccion").val("");
-  $("#telefono").val("");
-  $("#c_bancaria").val("");
-  $("#c_detracciones").val("");
-  //$("#banco").val("");
-  $("#banco option[value='BCP']").attr("selected", true);
-  $("#titular_cuenta").val("");
 
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
@@ -473,39 +460,7 @@ function guardaryeditar_compras(e) {
   });
 }
 
-//guardar proveedor
-function guardarproveedor(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-proveedor")[0]);
 
-  $.ajax({
-    url: "../ajax/all_proveedor.php?op=guardaryeditar",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        // toastr.success("proveedor registrado correctamente");
-        Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
-        tabla.ajax.reload();
-
-        limpiardatosproveedor();
-
-        $("#modal-agregar-proveedor").modal("hide");
-
-        //Cargamos los items al select cliente
-        $.post("../ajax/compra.php?op=selectProveedor", function (r) {
-          $("#idproveedor").html(r);
-        });
-      } else {
-        // toastr.error(datos);
-        Swal.fire("Error!", datos, "error");
-      }
-    },
-  });
-}
 
 //Función para desactivar registros
 function anular(idcompra_proyecto) {
@@ -633,9 +588,118 @@ function comprobante_compras(idcompra_proyecto, doc) {
   }
 }
 
-//=========================================
-//SECCION-Pago-compras
-//=========================================
+// :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
+//Función limpiar
+function limpiar_form_proveedor() {
+  $("#idproveedor_prov").val("");
+  $("#tipo_documento_prov option[value='RUC']").attr("selected", true);
+  $("#nombre_prov").val("");
+  $("#num_documento_prov").val("");
+  $("#direccion_prov").val("");
+  $("#telefono_prov").val("");
+  $("#c_bancaria_prov").val("");
+  $("#cci_prov").val("");
+  $("#c_detracciones_prov").val("");
+  $("#banco_prov").val("").trigger("change");
+  $("#titular_cuenta_prov").val("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
+
+  $(".tooltip").removeClass('show');
+}
+
+// damos formato a: Cta, CCI
+function formato_banco() {
+
+  if ($("#banco_prov").select2("val") == null || $("#banco_prov").select2("val") == "" || $("#banco_prov").select2("val") == "1" ) {
+
+    $("#c_bancaria_prov").prop("readonly", true);
+    $("#cci_prov").prop("readonly", true);
+    $("#c_detracciones_prov").prop("readonly", true);
+
+  } else {
+    
+    $(".chargue-format-1").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
+
+    $.post("../ajax/compra.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+      
+      data = JSON.parse(data);  // console.log(data);
+
+      $(".chargue-format-1").html("Cuenta Bancaria");
+      $(".chargue-format-2").html("CCI");
+      $(".chargue-format-3").html("Cuenta Detracciones");
+
+      $("#c_bancaria_prov").prop("readonly", false);
+      $("#cci_prov").prop("readonly", false);
+      $("#c_detracciones_prov").prop("readonly", false);
+
+      var format_cta = decifrar_format_banco(data.formato_cta);
+      var format_cci = decifrar_format_banco(data.formato_cci);
+      var formato_detracciones = decifrar_format_banco(data.formato_detracciones);
+      // console.log(format_cta, formato_detracciones);
+
+      $("#c_bancaria_prov").inputmask(`${format_cta}`);
+      $("#cci_prov").inputmask(`${format_cci}`);
+      $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
+    });
+  }
+}
+
+function decifrar_format_banco(format) {
+
+  var array_format =  format.split("-"); var format_final = "";
+
+  array_format.forEach((item, index)=>{
+
+    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
+
+    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
+  });
+
+  var ultima_letra = format_final.slice(-1);
+   
+  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
+
+  return format_final;
+}
+
+//guardar proveedor
+function guardar_proveedor(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-proveedor")[0]);
+
+  $.ajax({
+    url: "../ajax/compra.php?op=guardar_proveedor",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+      if (datos == "ok") {
+        // toastr.success("proveedor registrado correctamente");
+        Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
+         
+        limpiar_form_proveedor();
+
+        $("#modal-agregar-proveedor").modal("hide");
+
+        //Cargamos los items al select cliente
+        $.post("../ajax/compra.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
+
+      } else {
+        // toastr.error(datos);
+        Swal.fire("Error!", datos, "error");
+      }
+    },
+  });
+}
+
+// :::::::::::::::::::::::::: S E C C I O N   P A G O   C O M P R A S  ::::::::::::::::::::::::::
 
 function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito) {
   reload_detraccion = "no";
@@ -1088,7 +1152,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/docs/compra/baucher/" + imagen);
   $("#descargar").attr("href", "../dist/docs/compra/baucher/" + imagen);
 
-  // $(".tooltip").hide();
+  $(".tooltip").hide();
 }
 
 function validar_forma_de_pago() {
@@ -1640,13 +1704,12 @@ function listarmateriales() {
 
 function mostrar_material(idproducto) {  
 
+  limpiar_materiales();
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-material-activos-fijos").modal("show");
-
-  $("#unid_medida").val("").trigger("change");
-  $("#color").val("").trigger("change");
 
   $.post("../ajax/activos_fijos.php?op=mostrar", { 'idproducto': idproducto }, function (data, status) {
     
@@ -1861,11 +1924,15 @@ $("#my-switch_igv").on("click ", function (e) {
   }
 });
 
+function actualizar_producto() {
+  var id = $("#idproducto_p").val();  
+}
+
 // :::::::::::::::::::::::::: - F I N   S E C C I O N   M A T E R I A L E S -  ::::::::::::::::::::::::::
 
 init();
 
-
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 $(function () {
   $("#form-compras").validate({
     rules: {
@@ -1913,55 +1980,41 @@ $(function () {
     },
   });
 
-  //Validar formulario PROVEEDOR
-  // $.validator.setDefaults({
-  //     submitHandler: function (e) {
-  //         guardarproveedor(e);
-  //     },
-  // });
-
   $("#form-proveedor").validate({
     rules: {
-      tipo_documento: { required: true },
-      num_documento: { required: true, minlength: 6, maxlength: 20 },
-      nombre: { required: true, minlength: 6, maxlength: 100 },
-      direccion: { minlength: 5, maxlength: 70 },
-      telefono: { minlength: 8 },
-      c_detracciones: { minlength: 14, maxlength: 14 },
-      c_bancaria: { minlength: 14, maxlength: 14 },
-      banco: { required: true },
-      titular_cuenta: { minlength: 4 },
+      tipo_documento_prov: { required: true },
+      num_documento_prov: { required: true, minlength: 6, maxlength: 20 },
+      nombre_prov: { required: true, minlength: 6, maxlength: 100 },
+      direccion_prov: { minlength: 5, maxlength: 150 },
+      telefono_prov: { minlength: 8 },
+      c_bancaria_prov: { minlength: 6,  },
+      cci_prov: { minlength: 6,  },
+      c_detracciones_prov: { minlength: 6,  },      
+      banco_prov: { required: true },
+      titular_cuenta_prov: { minlength: 4 },
     },
     messages: {
-      tipo_documento: {
-        required: "Por favor selecione un tipo de documento",
-      },
-      num_documento: {
+      tipo_documento_prov: { required: "Por favor selecione un tipo de documento", },
+      num_documento_prov: {
         required: "Ingrese un número de documento",
-        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El número documento debe tener como MÁXIMO 20 caracteres.",
+        minlength: "Ingrese como MÍNIMO 6 caracteres.",
+        maxlength: "Ingrese como MÁXIMO 20 caracteres.",
       },
-      nombre: {
+      nombre_prov: {
         required: "Por favor ingrese los nombres y apellidos",
-        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El número documento debe tener como MÁXIMO 100 caracteres.",
+        minlength: "Ingrese como MÍNIMO 6 caracteres.",
+        maxlength: "Ingrese como MÁXIMO 100 caracteres.",
       },
-      direccion: {
-        minlength: "La dirección debe tener MÍNIMO 5 caracteres.",
-        maxlength: "La dirección debe tener como MÁXIMO 70 caracteres.",
+      direccion_prov: {
+        minlength: "Ingrese como MÍNIMO 5 caracteres.",
+        maxlength: "Ingrese como MÁXIMO 150 caracteres.",
       },
-      telefono: {
-        minlength: "El teléfono debe tener  9 caracteres.",
-      },
-      c_detracciones: {
-        minlength: "El número documento debe tener 14 caracteres.",
-      },
-      c_bancaria: {
-        minlength: "El número documento debe tener 14 caracteres.",
-      },
-      banco: {
-        required: "Por favor  seleccione un banco",
-      },
+      telefono_prov: { minlength: "Ingrese como MÍNIMO 9 caracteres.", },
+      c_bancaria_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.", },
+      cci_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.",  },
+      c_detracciones_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.", },      
+      banco_prov: { required: "Por favor  seleccione un banco",  },
+      titular_cuenta_prov: { minlength: 'Ingrese como MÍNIMO 4 caracteres.' },
     },
 
     errorElement: "span",
@@ -1981,16 +2034,9 @@ $(function () {
     },
 
     submitHandler: function (e) {
-      guardarproveedor(e);
+      guardar_proveedor(e);
     },
   });
-
-  // Validar formulario PAGOS
-  // $.validator.setDefaults({
-  //     submitHandler: function (e) {
-  //         guardaryeditar_pago(e);
-  //     },
-  // });
 
   $("#form-servicios-pago").validate({
     rules: {
@@ -2041,15 +2087,6 @@ $(function () {
       guardaryeditar_pago(e);
     },
   });
-});
-
-// validacion formulario COMPROBANTE
-$(function () {
-  // $.validator.setDefaults({
-  //     submitHandler: function (e) {
-  //       guardaryeditar_comprobante(e);
-  //     },
-  // });
 
   $("#form-comprobante").validate({
     rules: {
@@ -2552,34 +2589,51 @@ function buscar_sunat_reniec() {
 
   $("#charge").show();
 
-  let tipo_doc = $("#tipo_documento").val();
+  let tipo_doc = $("#tipo_documento_prov").val();
 
-  let dni_ruc = $("#num_documento").val();
-
+  let dni_ruc = $("#num_documento_prov").val(); 
+   
   if (tipo_doc == "DNI") {
+
     if (dni_ruc.length == "8") {
-      $.post("../ajax/compra.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-        data = JSON.parse(data);
 
-        console.log(data);
+      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
 
-        if (data.success == false) {
+        data = JSON.parse(data);  console.log(data);
+
+        if (data == null) {
+
           $("#search").show();
-
+  
           $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+  
+          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+          
         } else {
-          $("#search").show();
+          if (data.success == false) {
 
-          $("#charge").hide();
+            $("#search").show();
 
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            $("#charge").hide();
 
-          toastr.success("Cliente encontrado!!!!");
+            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+
+          } else {
+
+            $("#search").show();
+
+            $("#charge").hide();
+
+            $("#nombre_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            $("#titular_cuenta_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+            toastr.success("Persona encontrada!!!!");
+          }
         }
+        
       });
     } else {
+
       $("#search").show();
 
       $("#charge").hide();
@@ -2588,46 +2642,70 @@ function buscar_sunat_reniec() {
     }
   } else {
     if (tipo_doc == "RUC") {
+
       if (dni_ruc.length == "11") {
-        $.post("../ajax/compra.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-          data = JSON.parse(data);
+        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
 
-          console.log(data);
-          if (data.success == false) {
+          data = JSON.parse(data);    console.log(data);
+
+          if (data == null) {
             $("#search").show();
-
+    
             $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
+    
+            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+            
           } else {
-            if (data.estado == "ACTIVO") {
+
+            if (data.success == false) {
+
               $("#search").show();
 
               $("#charge").hide();
 
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
+              toastr.error("Datos no encontrados en la SUNAT!!!");
+              
             } else {
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
 
-              $("#search").show();
+              if (data.estado == "ACTIVO") {
 
-              $("#charge").hide();
+                $("#search").show();
 
-              $("#nombre").val(data.razonSocial);
+                $("#charge").hide();
 
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
 
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
+                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
 
-              // $("#direccion").val(data.direccion);
+                var departamento = (data.departamento == null ? "" : data.departamento); 
+                var provincia = (data.provincia == null ? "" : data.provincia);
+                var distrito = (data.distrito == null ? "" : data.distrito);                
+
+                data.direccion == null ? $("#direccion_prov").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion_prov").val(data.direccion);
+
+                toastr.success("Persona encontrada!!");
+
+              } else {
+
+                toastr.info("Se recomienda NO generar FACTURAS ó BOLETAS!!!");
+
+                $("#search").show();
+
+                $("#charge").hide();
+
+                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
+
+                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
+                
+                var departamento = (data.departamento == null ? "" : data.departamento); 
+                var provincia = (data.provincia == null ? "" : data.provincia);
+                var distrito = (data.distrito == null ? "" : data.distrito);
+
+                data.direccion == null ? $("#direccion_prov").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion_prov").val(data.direccion);
+
+              }
             }
-          }
+          }          
         });
       } else {
         $("#search").show();
@@ -2638,12 +2716,15 @@ function buscar_sunat_reniec() {
       }
     } else {
       if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
+
         $("#search").show();
 
         $("#charge").hide();
 
         toastr.info("No necesita hacer consulta");
+
       } else {
+
         $("#tipo_doc").addClass("is-invalid");
 
         $("#search").show();

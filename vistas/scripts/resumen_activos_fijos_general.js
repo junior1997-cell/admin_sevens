@@ -639,7 +639,7 @@ function guardarproveedor(e) {
 }
 //Función limpiar
 function limpiardatosproveedor() {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 
   $("#idproveedor").val("");
   $("#nombre").val("");
@@ -1275,7 +1275,7 @@ $("#my-switch_detracc").on("click ", function (e) {
 //Función limpiar
 function limpiar() {
 
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 
   //Mostramos los selectProveedor
   $.post("../ajax/compra.php?op=selectProveedor", function (r) {
@@ -1732,7 +1732,7 @@ function guardaryeditar_compras_af_p(e) {
 
 //Función limpiar
 function limpiar_p() {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 
   //Mostramos los selectProveedor
   $.post("../ajax/all_activos_fijos.php?op=selectProveedor", function (r) {

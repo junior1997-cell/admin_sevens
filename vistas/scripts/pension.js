@@ -1311,7 +1311,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
     $('#ver_fact_pdf').html('<iframe src="../dist/img/comprob_pension/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
     $("#iddescargar").attr("href","../dist/img/comprob_pension/" +comprobante);
   } 
- // $(".tooltip").hide();
+ // $(".tooltip").removeClass('show');
 }
 
 //-total Pagos

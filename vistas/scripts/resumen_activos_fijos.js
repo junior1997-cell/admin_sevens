@@ -1182,6 +1182,8 @@ function limpiar_form_proveedor() {
   // Limpiamos las validaciones
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
+
+  $(".tooltip").removeClass('show');
 }
 
 // damos formato a: Cta, CCI
@@ -1263,7 +1265,7 @@ function guardar_proveedor(e) {
         $("#modal-agregar-proveedor").modal("hide");
 
         //Cargamos los items al select cliente
-        $.post("../ajax/compra.php?op=selectProveedor", function (r) {  $("#idproveedor").html(r); });
+        $.post("../ajax/compra.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
 
       } else {
         // toastr.error(datos);
@@ -1272,6 +1274,8 @@ function guardar_proveedor(e) {
     },
   });
 }
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
   $("#form-compras").validate({
@@ -1322,46 +1326,39 @@ $(function () {
 
   $("#form-proveedor").validate({
     rules: {
-      tipo_documento: { required: true },
-      num_documento: { required: true, minlength: 6, maxlength: 20 },
-      nombre: { required: true, minlength: 6, maxlength: 100 },
-      direccion: { minlength: 5, maxlength: 70 },
-      telefono: { minlength: 8 },
-      c_detracciones: { minlength: 14, maxlength: 14 },
-      c_bancaria: { minlength: 14, maxlength: 14 },
-      banco: { required: true },
-      titular_cuenta: { minlength: 4 },
+      tipo_documento_prov: { required: true },
+      num_documento_prov: { required: true, minlength: 6, maxlength: 20 },
+      nombre_prov: { required: true, minlength: 6, maxlength: 100 },
+      direccion_prov: { minlength: 5, maxlength: 150 },
+      telefono_prov: { minlength: 8 },
+      c_bancaria_prov: { minlength: 6,  },
+      cci_prov: { minlength: 6,  },
+      c_detracciones_prov: { minlength: 6,  },      
+      banco_prov: { required: true },
+      titular_cuenta_prov: { minlength: 4 },
     },
     messages: {
-      tipo_documento: {
-        required: "Por favor selecione un tipo de documento",
-      },
-      num_documento: {
+      tipo_documento_prov: { required: "Por favor selecione un tipo de documento", },
+      num_documento_prov: {
         required: "Ingrese un número de documento",
-        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El número documento debe tener como MÁXIMO 20 caracteres.",
+        minlength: "Ingrese como MÍNIMO 6 caracteres.",
+        maxlength: "Ingrese como MÁXIMO 20 caracteres.",
       },
-      nombre: {
+      nombre_prov: {
         required: "Por favor ingrese los nombres y apellidos",
-        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El número documento debe tener como MÁXIMO 100 caracteres.",
+        minlength: "Ingrese como MÍNIMO 6 caracteres.",
+        maxlength: "Ingrese como MÁXIMO 100 caracteres.",
       },
-      direccion: {
-        minlength: "La dirección debe tener MÍNIMO 5 caracteres.",
-        maxlength: "La dirección debe tener como MÁXIMO 70 caracteres.",
+      direccion_prov: {
+        minlength: "Ingrese como MÍNIMO 5 caracteres.",
+        maxlength: "Ingrese como MÁXIMO 150 caracteres.",
       },
-      telefono: {
-        minlength: "El teléfono debe tener  9 caracteres.",
-      },
-      c_detracciones: {
-        minlength: "El número documento debe tener 14 caracteres.",
-      },
-      c_bancaria: {
-        minlength: "El número documento debe tener 14 caracteres.",
-      },
-      banco: {
-        required: "Por favor  seleccione un banco",
-      },
+      telefono_prov: { minlength: "Ingrese como MÍNIMO 9 caracteres.", },
+      c_bancaria_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.", },
+      cci_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.",  },
+      c_detracciones_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.", },      
+      banco_prov: { required: "Por favor  seleccione un banco",  },
+      titular_cuenta_prov: { minlength: 'Ingrese como MÍNIMO 4 caracteres.' },
     },
 
     errorElement: "span",
@@ -1426,6 +1423,7 @@ $(function () {
     },
   });
 });
+
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 

@@ -400,7 +400,7 @@ function l_m(){
 
 //Función para desactivar registros
 function empezar_proyecto(idproyecto) {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
   Swal.fire({
     title: "¿Está Seguro de  Empezar  el proyecto ?",
     text: "Tendras acceso a agregar o editar: provedores, trabajadores!",
@@ -430,7 +430,7 @@ function empezar_proyecto(idproyecto) {
 
 //Función para activar registros
 function terminar_proyecto(idproyecto) {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
   Swal.fire({
 
     title: "¿Está Seguro de  Terminar  el Proyecto?",
@@ -465,7 +465,7 @@ function terminar_proyecto(idproyecto) {
 
 //Función para activar registros
 function reiniciar_proyecto(idproyecto) {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
   Swal.fire({
 
     title: "¿Está Seguro de  Reactivar  el Proyecto?",
@@ -1571,7 +1571,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     }
   }
 
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 }
 
 function no_pdf() {
@@ -2018,7 +2018,7 @@ function mostrar(idproyecto) {
     }
      
   });
-  $(".tooltip").hide();  
+  $(".tooltip").removeClass('show');  
 }
 
 function mostrar_detalle(idproyecto) {
@@ -2088,7 +2088,7 @@ function mostrar_detalle(idproyecto) {
      
   });
 
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 }
 
 function tablero() {   
@@ -2154,7 +2154,7 @@ function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final)
 
   Swal.fire("Abierto!", "Proyecto abierto corrrectamente", "success");
   // tabla.ajax.reload();
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 }
 
 function ver_modal_docs_valorizaciones(idproyecto, documento) {

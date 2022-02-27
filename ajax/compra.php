@@ -4,9 +4,12 @@ if (strlen(session_id()) < 1) {
   session_start(); //Validamos si existe o no la sesión
 }
 require_once "../modelos/Compra.php";
+require_once "../modelos/AllProveedor.php";
 
 $compra = new Compra();
+$proveedor = new Proveedor();
 
+// :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
 $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
 $idcompra_proyecto = isset($_POST["idcompra_proyecto"]) ? limpiarCadena($_POST["idcompra_proyecto"]) : "";
 $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
@@ -14,11 +17,9 @@ $fecha_compra = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_comp
 $tipo_comprovante = isset($_POST["tipo_comprovante"]) ? limpiarCadena($_POST["tipo_comprovante"]) : "";
 $serie_comprovante = isset($_POST["serie_comprovante"]) ? limpiarCadena($_POST["serie_comprovante"]) : "";
 $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
-
 $subtotal_compra = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
 $igv_compra = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
 $total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
-
 $estado_detraccion = isset($_POST["estado_detraccion"]) ? limpiarCadena($_POST["estado_detraccion"]) : "";
 
 // :::::::::::::::::::::::::::::::::::: D A T O S   P A G O   C O M P R A ::::::::::::::::::::::::::::::::::::::
@@ -59,6 +60,19 @@ $precio_total_p   = isset($_POST["precio_total_p"]) ? limpiarCadena($_POST["prec
 $descripcion_p    = isset($_POST["descripcion_p"]) ? encodeCadenaHtml($_POST["descripcion_p"]) : "" ; 
 $img_pefil_p      = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "" ;
 $ficha_tecnica_p  = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
+
+// :::::::::::::::::::::::::::::::::::: D A T O S   P R O V E E D O R ::::::::::::::::::::::::::::::::::::::
+$idproveedor_prov		= isset($_POST["idproveedor_prov"])? limpiarCadena($_POST["idproveedor_prov"]):"";
+$nombre_prov 		    = isset($_POST["nombre_prov"])? limpiarCadena($_POST["nombre_prov"]):"";
+$tipo_documento_prov		= isset($_POST["tipo_documento_prov"])? limpiarCadena($_POST["tipo_documento_prov"]):"";
+$num_documento_prov	    = isset($_POST["num_documento_prov"])? limpiarCadena($_POST["num_documento_prov"]):"";
+$direccion_prov		    = isset($_POST["direccion_prov"])? limpiarCadena($_POST["direccion_prov"]):"";
+$telefono_prov		    = isset($_POST["telefono_prov"])? limpiarCadena($_POST["telefono_prov"]):"";
+$c_bancaria_prov		    = isset($_POST["c_bancaria_prov"])? limpiarCadena($_POST["c_bancaria_prov"]):"";
+$cci_prov		    	= isset($_POST["cci_prov"])? limpiarCadena($_POST["cci_prov"]):"";
+$c_detracciones_prov		= isset($_POST["c_detracciones_prov"])? limpiarCadena($_POST["c_detracciones_prov"]):"";
+$banco_prov			    = isset($_POST["banco_prov"])? limpiarCadena($_POST["banco_prov"]):"";
+$titular_cuenta_prov		= isset($_POST["titular_cuenta_prov"])? limpiarCadena($_POST["titular_cuenta_prov"]):"";
 
 switch ($_GET["op"]) {
   case 'guardaryeditarcompra':
@@ -211,6 +225,28 @@ switch ($_GET["op"]) {
 
   break;
 
+  // :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
+  case 'guardar_proveedor':
+
+    if (empty($idproveedor_prov)){
+
+      $rspta=$proveedor->insertar($nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
+      $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
+      
+      echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
+    }
+
+  break;
+
+  case 'formato_banco':
+           
+    $rspta=$proveedor->formato_banco($_POST["idbanco"]);
+    //Codificar el resultado utilizando json
+    echo json_encode($rspta);
+     
+  break;
+
+  // :::::::::::::::::::::::::: S E C C I O N   C O M P R A  ::::::::::::::::::::::::::
   case 'anular':
     $rspta = $compra->desactivar($idcompra_proyecto);
 
@@ -521,12 +557,9 @@ switch ($_GET["op"]) {
       echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social . ' - ' . $reg->ruc . '</option>';
     }
   break;
-  /**======================== */
+   
 
-
-  /**
-   * ==============SECCION PAGOS=====
-   */
+  // :::::::::::::::::::::::::: S E C C I O N   P A G O  ::::::::::::::::::::::::::   
 
   //MOSTRANDO DATOS DE PROVEEDOR
   case 'most_datos_prov_pago':
@@ -873,6 +906,8 @@ switch ($_GET["op"]) {
   /*
    * ==============FIN SECCION PAGOS=====
   */
+
+  // :::::::::::::::::::::::::: S E C C I O N   S E L E C T 2  :::::::::::::::::::::::::: 
 
   case 'select2Proveedor': 
 

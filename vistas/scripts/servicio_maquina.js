@@ -1092,7 +1092,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/img/vauchers_pagos/" + imagen);
   $("#descargar").attr("href", "../dist/img/vauchers_pagos/" + imagen);
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 
 function validar_forma_de_pago() {
@@ -1354,7 +1354,7 @@ function ver_modal_factura(imagen) {
     $("#iddescargar").attr("href", "../dist/img/facturas/" + img);
   }
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 
 //-total Pagos
