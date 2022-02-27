@@ -272,7 +272,11 @@ table th {
 
 .p-x-10px{ padding: 0px 10px 0px 10px !important; }
 
+.p-r-0px{ padding-right: 0px !important; }
+
 .p-r-10px{ padding-right: 10px !important; }
+
+.p-l-0px{ padding-left: 0px !important; }
 
 .p-l-10px{ padding-left: 10px !important; }
 

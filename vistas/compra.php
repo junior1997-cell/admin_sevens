@@ -220,183 +220,168 @@
 
                           <!--agregar_compras-->
                           <div id="agregar_compras" style="display: none;">
-                            <div class="modal-body">
+                            <div class="modal-body p-0px mb-2">
                               <!-- form start -->
                               <form id="form-compras" name="form-compras" method="POST">
-                                <div class="card-body">
-                                  <div class="row" id="cargando-1-fomulario">
-                                    <!-- id proyecto -->
-                                    <input type="hidden" name="idproyecto" id="idproyecto" />
-                                    <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                 
+                                <div class="row" id="cargando-1-fomulario">
+                                  <!-- id proyecto -->
+                                  <input type="hidden" name="idproyecto" id="idproyecto" />
+                                  <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
 
-                                    <!-- Tipo de Empresa -->
-                                    <div class="col-lg-7">
-                                      <div class="form-group">
-                                        <label for="idproveedor">Proveedor</label>
-                                        <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
-                                      </div>
+                                  <!-- Tipo de Empresa -->
+                                  <div class="col-lg-7">
+                                    <div class="form-group">
+                                      <label for="idproveedor">Proveedor</label>
+                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
                                     </div>
+                                  </div>
 
-                                    <!-- adduser -->
-                                    <div class="col-lg-1">
-                                      <div class="form-group">
-                                        <label for="Add" style="color: white;">.</label>
-                                        <a data-toggle="modal" href="#modal-agregar-proveedor" >
-                                          <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
-                                            <i class="fa fa-user-plus" aria-hidden="true"></i>
-                                          </button>
-                                        </a>
-                                      </div>
+                                  <!-- adduser -->
+                                  <div class="col-lg-1">
+                                    <div class="form-group">
+                                      <label for="Add" style="color: white;">.</label>
+                                      <a data-toggle="modal" href="#modal-agregar-proveedor" >
+                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
+                                          <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                        </button>
+                                      </a>
                                     </div>
+                                  </div>
 
-                                    <!-- fecha -->
-                                    <div class="col-lg-4">
-                                      <div class="form-group">
-                                        <label for="fecha_compra">Fecha </label>
-                                        <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />
-                                      </div>
+                                  <!-- fecha -->
+                                  <div class="col-lg-4">
+                                    <div class="form-group">
+                                      <label for="fecha_compra">Fecha </label>
+                                      <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />
                                     </div>
+                                  </div>
 
-                                    <!-- Tipo de comprobante -->
-                                    <div class="col-lg-4" id="content-t-comprob">
-                                      <div class="form-group">
-                                        <label for="tipo_comprovante">Tipo Comprobante</label>
-                                        <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
-                                          <option value="Ninguno">Ninguno</option>
-                                          <option value="Boleta">Boleta</option>
-                                          <option value="Factura">Factura</option>
-                                          <option value="Nota_de_venta">Nota de venta</option>
-                                        </select>
-                                      </div>
+                                  <!-- Tipo de comprobante -->
+                                  <div class="col-lg-4" id="content-t-comprob">
+                                    <div class="form-group">
+                                      <label for="tipo_comprovante">Tipo Comprobante</label>
+                                      <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
+                                        <option value="Ninguno">Ninguno</option>
+                                        <option value="Boleta">Boleta</option>
+                                        <option value="Factura">Factura</option>
+                                        <option value="Nota_de_venta">Nota de venta</option>
+                                      </select>
                                     </div>
+                                  </div>
 
-                                    <!-- serie_comprovante-->
-                                    <div class="col-lg-2" id="content-comprob">
-                                      <div class="form-group">
-                                        <label for="serie_comprovante">N° de Comprobante</label>
-                                        <input type="text" name="serie_comprovante" id="serie_comprovante" class="form-control" placeholder="N° de Comprobante" />
-                                      </div>
+                                  <!-- serie_comprovante-->
+                                  <div class="col-lg-2" id="content-comprob">
+                                    <div class="form-group">
+                                      <label for="serie_comprovante">N° de Comprobante</label>
+                                      <input type="text" name="serie_comprovante" id="serie_comprovante" class="form-control" placeholder="N° de Comprobante" />
                                     </div>
+                                  </div>
 
-                                    <!-- IGV-->
-                                    <div class="col-lg-1" id="content-igv">
-                                      <div class="form-group">
-                                        <label for="igv">IGV</label>
-                                        <input type="text" name="igv" id="igv" class="form-control" readonly value="0.18" />
-                                      </div>
+                                  <!-- IGV-->
+                                  <div class="col-lg-1" id="content-igv">
+                                    <div class="form-group">
+                                      <label for="igv">IGV</label>
+                                      <input type="text" name="igv" id="igv" class="form-control" readonly value="0.18" />
                                     </div>
+                                  </div>
 
-                                    <!-- Descripcion-->
-                                    <div class="col-lg-5" id="content-descrp">
-                                      <div class="form-group">
-                                        <label for="descripcion">Descripción </label> <br />
-                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
-                                      </div>
+                                  <!-- Descripcion-->
+                                  <div class="col-lg-5" id="content-descrp">
+                                    <div class="form-group">
+                                      <label for="descripcion">Descripción </label> <br />
+                                      <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
                                     </div>
+                                  </div>
 
-                                    <!--Boton agregar material-->
-                                    <div class="row col-lg-12 justify-content-between">
-                                      <div class="col-lg-4 col-xs-12">
-                                        <div class="row">
-                                          <div class="col-lg-6">
-                                              <label for="" style="color: white;">.</label> <br />
-                                              <a data-toggle="modal" data-target="#modal-elegir-material">
-                                                <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
-                                              </a>
-                                          </div>
-                                          <div class="col-lg-6">
-                                            <!-- <label for="" style="color: white;">.</label> <br />
-                                            <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
-                                              <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
-                                            </a> -->
-                                          </div>
+                                  <!--Boton agregar material-->
+                                  <div class="row col-lg-12 justify-content-between">
+                                    <div class="col-lg-4 col-xs-12">
+                                      <div class="row">
+                                        <div class="col-lg-6">
+                                            <label for="" style="color: white;">.</label> <br />
+                                            <a data-toggle="modal" data-target="#modal-elegir-material">
+                                              <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-6">
+                                          <!-- <label for="" style="color: white;">.</label> <br />
+                                          <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                                            <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                                          </a> -->
                                         </div>
                                       </div>
+                                    </div>
 
-                                      <!-- Rounded switch -->
-                                      <div class="col-lg-1   col-xs-3 class_pading">
-                                        <div class="form-group">
-                                          <div id="switch_detracc">
-                                            <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
-                                            <div class="switch-holder myestilo-switch2" >
-                                              <div class="switch-toggle">
-                                                <input type="checkbox" id="my-switch_detracc" />
-                                                <label for="my-switch_detracc"></label>
-                                              </div>
+                                    <!-- Rounded switch -->
+                                    <div class="col-lg-1   col-xs-3 class_pading">
+                                      <div class="form-group">
+                                        <div id="switch_detracc">
+                                          <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
+                                          <div class="switch-holder myestilo-switch2" >
+                                            <div class="switch-toggle">
+                                              <input type="checkbox" id="my-switch_detracc" />
+                                              <label for="my-switch_detracc"></label>
                                             </div>
                                           </div>
-                                          <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
                                         </div>
-                                      </div>
-
-                                      <!-- <div class="col-lg-2 class_pading">
-                                        <div class="form-group">
-                                          <label for="" class="labelswitch">Sin o Con (Igv)</label>
-                                          <div id="switch_igv">
-                                            <div class="switch-holder myestilo-switch">
-                                              <div class="switch-toggle">
-                                                <input type="checkbox" id="my-switch_igv" checked />
-                                                <label for="my-switch_igv"></label>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <input type="hidden" name="estado_igv_p" id="estado_igv_p" />
-                                        </div>
-                                      </div> -->
-
-                                    </div>
-                                    <!--tabla detalles plantas-->
-                                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
-                                      <br />
-                                      <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
-                                        <thead style="background-color: #ff6c046b;">
-                                          <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                                          <th>Material</th>
-                                          <th>Unidad</th>
-                                          <th>Cantidad</th>
-                                          <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
-                                          <th class="hidden">IGV</th>
-                                          <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
-                                          <th>Descuento</th>
-                                          <th>Subtotal</th>
-                                        </thead>
-                                        <tfoot>
-                                          <td colspan="5" id="colspan_subtotal"></td>
-                                          <th class="text-center">
-                                            <h5>Gravada</h5>
-                                            <h5>IGV (18%)</h5>
-                                            <h5>TOTAL</h5>
-                                          </th>
-                                          <th class=" "> 
-                                            <h5 class="text-right " id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
-                                            <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
-
-                                            <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
-                                            <input type="hidden" name="igv_compra" id="igv_compra" />
-                                            <b>
-                                              <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
-                                              <input type="hidden" name="total_venta" id="total_venta" />
-                                            </b>
-                                          </th>
-                                        </tfoot>
-                                        <tbody></tbody>
-                                      </table>
-                                    </div>
-                                    <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                      <div class="col-lg-12 text-center">
-                                        <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                        <br />
-                                        <h4>Cargando...</h4>
+                                        <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
                                       </div>
                                     </div>
                                   </div>
+
+                                  <!--tabla detalles plantas-->
+                                  <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
+                                    <br />
+                                    <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
+                                      <thead style="background-color: #ff6c046b;">
+                                        <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                                        <th>Material</th>
+                                        <th>Unidad</th>
+                                        <th>Cantidad</th>
+                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
+                                        <th class="hidden">IGV</th>
+                                        <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                        <th>Descuento</th>
+                                        <th>Subtotal</th>
+                                      </thead>
+                                      <tfoot>
+                                        <td colspan="5" id="colspan_subtotal"></td>
+                                        <th class="text-center">
+                                          <h5>Gravada</h5>
+                                          <h5>IGV (18%)</h5>
+                                          <h5>TOTAL</h5>
+                                        </th>
+                                        <th class=" "> 
+                                          <h5 class="text-right " id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
+                                          <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
+
+                                          <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
+                                          <input type="hidden" name="igv_compra" id="igv_compra" />
+                                          <b>
+                                            <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
+                                            <input type="hidden" name="total_venta" id="total_venta" />
+                                          </b>
+                                        </th>
+                                      </tfoot>
+                                      <tbody></tbody>
+                                    </table>
+                                  </div>                                    
                                 </div>
-                                <!-- /.card-body -->
+
+                                <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                  <div class="col-lg-12 text-center">
+                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                    <br />
+                                    <h4>Cargando...</h4>
+                                  </div>
+                                </div>                                 
+                                 
                                 <button type="submit" style="display: none;" id="submit-form-compras">Submit</button>
                               </form>
                             </div>
 
-                            <div class="modal-footer justify-content-between">
+                            <div class="modal-footer justify-content-between pl-0 pb-0 ">
                               <button type="button" class="btn btn-danger" onclick="regresar();" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                             </div>
@@ -611,7 +596,7 @@
                   </div>
                   <!-- /.container-fluid -->
 
-                  <!-- Modal agregar proveedores - charge -->
+                  <!-- Modal agregar proveedores -->
                   <div class="modal fade" id="modal-agregar-proveedor">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -786,114 +771,114 @@
                         <div class="modal-body">
                           <!-- form start -->
                           <form id="form-servicios-pago" name="form-servicios-pago" method="POST">
-                            <div class="card-body">
-                              <div class="row" id="cargando-1-fomulario">
-                                <!-- id proveedor -->
-                                <input type="hidden" name="idproveedor_pago" id="idproveedor_pago" />
-                                <!-- idcompras_proyecto -->
-                                <input type="hidden" name="idcompra_proyecto_p" id="idcompra_proyecto_p" />
-                                <!-- id compras -->
-                                <input type="hidden" name="idpago_compras" id="idpago_compras" />
-                                <!-- Beneficiario -->
-                                <div class="col-lg-12">
-                                  <div class="form-group">
-                                    <label for="beneficiario_pago">Beneficiario</label>
-                                    <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
-                                    <br />
-                                    <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"> Jheyfer Arevealo Velasco</b>
-                                  </div>
+                             
+                            <div class="row" id="cargando-3-fomulario">
+                              <!-- id proveedor -->
+                              <input type="hidden" name="idproveedor_pago" id="idproveedor_pago" />
+                              <!-- idcompras_proyecto -->
+                              <input type="hidden" name="idcompra_proyecto_p" id="idcompra_proyecto_p" />
+                              <!-- id compras -->
+                              <input type="hidden" name="idpago_compras" id="idpago_compras" />
+                              <!-- Beneficiario -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="beneficiario_pago">Beneficiario</label>
+                                  <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
+                                  <br />
+                                  <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"> Jheyfer Arevealo Velasco</b>
                                 </div>
-                                <!--Forma de pago -->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="forma_pago">Forma Pago</label>
-                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="validar_forma_de_pago();">
-                                      <option value="Transferencia">Transferencia</option>
-                                      <option value="Efectivo">Efectivo</option>
-                                      <option value="Crédito">Crédito</option>
-                                    </select>
-                                  </div>
+                              </div>
+                              <!--Forma de pago -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="forma_pago">Forma Pago</label>
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="validar_forma_de_pago();">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                  </select>
                                 </div>
-                                <!--tipo de pago -->
-                                <div class="col-lg-6 validar_fp">
-                                  <div class="form-group">
-                                    <label for="tipo_pago">Tipo Pago</label>
-                                    <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
-                                      <option value="Proveedor">Proveedor</option>
-                                      <option value="Detraccion">Detracción</option>
-                                    </select>
-                                  </div>
+                              </div>
+                              <!--tipo de pago -->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="tipo_pago">Tipo Pago</label>
+                                  <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
+                                    <option value="Proveedor">Proveedor</option>
+                                    <option value="Detraccion">Detracción</option>
+                                  </select>
                                 </div>
-                                <!-- Cuenta de destino-->
-                                <div class="col-lg-6 validar_fp">
-                                  <div class="form-group">
-                                    <label for="cuenta_destino_pago">Cuenta destino </label>
-                                    <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
-                                  </div>
+                              </div>
+                              <!-- Cuenta de destino-->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="cuenta_destino_pago">Cuenta destino </label>
+                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                                 </div>
-                                <!-- banco -->
-                                <div class="col-lg-6 validar_fp">
-                                  <div class="form-group">
-                                    <label for="banco_pago">Banco</label>
-                                    <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
-                                    </select>
-                                  </div>
+                              </div>
+                              <!-- banco -->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="banco_pago">Banco</label>
+                                  <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
+                                  </select>
                                 </div>
-                                <!-- Titular Cuenta-->
-                                <div class="col-lg-6 validar_fp">
-                                  <div class="form-group">
-                                    <label for="titular_cuenta_pago">Titular Cuenta </label>
-                                    <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
-                                  </div>
-                                </div>
-
-                                <!-- Fecha Inicio-->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="fecha_pago">Fecha Pago </label>
-                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" />
-                                  </div>
-                                </div>
-                                <!-- Monto-->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="monto_pago">Monto </label>
-                                    <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
-                                  </div>
-                                </div>
-                                <!-- Número de Operación-->
-                                <div class="col-lg-6 validar_fp">
-                                  <div class="form-group">
-                                    <label for="numero_op_pago">Número de operación </label>
-                                    <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
-                                  </div>
-                                </div>
-                                <!-- Descripcion-->
-                                <div class="col-lg-12">
-                                  <div class="form-group">
-                                    <label for="descripcion_pago">Descripción </label> <br />
-                                    <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
-                                  </div>
-                                </div>
-                                <!--vaucher-->
-                                <div class="col-md-6 col-lg-4">
-                                  <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
-                                  <label for="foto1">Voucher</label> <br />
-                                  <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
-                                  <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
-                                  <input type="hidden" name="foto1_actual" id="foto1_actual" />
-                                  <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                              </div>
+                              <!-- Titular Cuenta-->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="titular_cuenta_pago">Titular Cuenta </label>
+                                  <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
                                 </div>
                               </div>
 
-                              <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                <div class="col-lg-12 text-center">
-                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                  <br />
-                                  <h4>Cargando...</h4>
+                              <!-- Fecha Inicio-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_pago">Fecha Pago </label>
+                                  <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" />
                                 </div>
+                              </div>
+                              <!-- Monto-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="monto_pago">Monto </label>
+                                  <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
+                                </div>
+                              </div>
+                              <!-- Número de Operación-->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="numero_op_pago">Número de operación </label>
+                                  <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
+                                </div>
+                              </div>
+                              <!-- Descripcion-->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="descripcion_pago">Descripción </label> <br />
+                                  <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
+                                </div>
+                              </div>
+                              <!--vaucher-->
+                              <div class="col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto1">Voucher</label> <br />
+                                <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
+                                <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
+                                <input type="hidden" name="foto1_actual" id="foto1_actual" />
+                                <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
                               </div>
                             </div>
+
+                            <div class="row" id="cargando-4-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                             
                             <!-- /.card-body -->
                             <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
                           </form>
@@ -918,7 +903,7 @@
                         </div>
 
                         <div class="modal-body">
-                          <div class="row" id="cargando-1-fomulario">
+                          <div class="row" id="cargando-5-fomulario">
                             <!-- Tipo de Empresa -->
                             <div class="col-lg-7">
                               <div class="form-group">
@@ -993,14 +978,17 @@
                                 <tbody></tbody>
                               </table>
                             </div>
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
+                            
+                          </div>
+
+                          <div class="row" id="cargando-6-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
                             </div>
                           </div>
+
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1024,7 +1012,7 @@
                           <!-- form start -->
                           <form id="form-comprobante" name="form-comprobante" method="POST">
                              
-                            <div class="row" id="cargando-3-fomulario">
+                            <div class="row" id="cargando-7-fomulario">
                               <!-- id Comprobante -->
                               <input type="hidden" name="comprobante_c" id="comprobante_c" />
 
@@ -1066,7 +1054,7 @@
                               </div>
                             </div>
 
-                            <div class="row" id="cargando-4-fomulario" style="display: none;">
+                            <div class="row" id="cargando-8-fomulario" style="display: none;">
                               <div class="col-lg-12 text-center">
                                 <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                                 <br />
@@ -1143,7 +1131,7 @@
                           <!-- form start -->
                           <form id="form-materiales" name="form-materiales" method="POST">
                             <div class="card-body">
-                              <div class="row" id="cargando-1-fomulario">
+                              <div class="row" id="cargando-9-fomulario">
 
                                 <!-- idproducto -->
                                 <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
@@ -1306,7 +1294,7 @@
 
                               </div>
 
-                              <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="row" id="cargando-10-fomulario" style="display: none;">
                                 <div class="col-lg-12 text-center">
                                   <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                                   <br />
@@ -1325,7 +1313,7 @@
                       </div>
                     </div>
                   </div>
-
+                </div>
               </section>
               <!-- /.content -->
             </div>
