@@ -249,9 +249,6 @@ Class Resumen_activos_fijos_general
     $estado_detraccion, $idproducto, $unidad_medida, $nombre_color, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto) 
 	{
 	
-	var_dump($idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprovante, $serie_comprovante, $descripcion, $total_venta, $subtotal_compra, $igv_compra,
-    $estado_detraccion, $idproducto, $unidad_medida, $nombre_color, $cantidad, $precio_sin_igv, $precio_igv, $precio_total, $descuento, $ficha_tecnica_producto);die();
-
     if ($idcompra_proyecto != "") {
       //Eliminamos todos los permisos asignados para volverlos a registrar
       $sqldel = "DELETE FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";

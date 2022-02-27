@@ -158,7 +158,7 @@ function listar_tbla_principal_maq()
 
 	tabla_maaquinaria1=$('#tabla-resumen-maquinarias').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -244,7 +244,7 @@ function ver_precios_y_mas_maq(idproducto, nombre_producto, precio_promedio, sub
 
 	tabla_factura = $('#tabla-precios').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -271,7 +271,7 @@ function listar_tbla_principal_equip()
 
 	tabla_equipo1=$('#tabla-resumen-equipos').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -357,7 +357,7 @@ function ver_precios_y_mas_equip(idproducto, nombre_producto, precio_promedio, s
 
 	tabla_factura = $('#tabla-precios').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -385,7 +385,7 @@ function listar_tbla_principal_herra()
 
 	tabla_herramientas1=$('#tabla-resumen-herramientas').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -471,7 +471,7 @@ function ver_precios_y_mas_herra(idproducto, nombre_producto, precio_promedio, s
 
 	tabla_factura = $('#tabla-precios').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -498,7 +498,7 @@ function listar_tbla_principal_oficina()
 
 	tabla_oficina1=$('#tabla-resumen-oficina').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -584,7 +584,7 @@ function ver_precios_y_mas_oficina(idproducto, nombre_producto, precio_promedio,
 
 	tabla_factura = $('#tabla-precios').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+	lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
