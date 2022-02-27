@@ -274,78 +274,76 @@ function regresar() {
 //TABLA - COMPRAS
 function tbla_principal(nube_idproyecto) {
   //console.log(idproyecto);
-  tabla = $("#tabla-compra")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_compra&nube_idproyecto=" + nube_idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla = $("#tabla-compra").dataTable({
+    responsive: true, 
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/compra.php?op=listar_compra&nube_idproyecto=" + nube_idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      //console.log(data);
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-nowrap');
+      }
+
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-center');
+      }
+
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-right');
+      }
+
+      if (data[7] != "") {
+
+        var num = parseFloat(quitar_formato_miles(data[7]));
+
+        if (num > 0) {
+          $("td", row).eq(7).addClass('bg-warning text-right');
+        } else if (num == 0) {
+          $("td", row).eq(7).addClass('bg-success text-right');            
+        } else if (num < 0) {
+          $("td", row).eq(7).addClass('bg-danger text-right');
+        }
+      }
+      
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      createdRow: function (row, data, ixdex) {
-        //console.log(data);
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass('text-nowrap');
-        }
-
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass('text-center');
-        }
-
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass('text-right');
-        }
-
-        if (data[7] != "") {
-
-          var num = parseFloat(quitar_formato_miles(data[7]));
-
-          if (num > 0) {
-            $("td", row).eq(7).addClass('bg-warning text-right');
-          } else if (num == 0) {
-            $("td", row).eq(7).addClass('bg-success text-right');            
-          } else if (num < 0) {
-            $("td", row).eq(7).addClass('bg-danger text-right');
-          }
-        }
-        
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "desc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      {
+        targets: [9],
+        visible: false,
+        searchable: false,
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 10, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-      columnDefs: [
-        {
-          targets: [9],
-          visible: false,
-          searchable: false,
-        },
-      ],
-    })
-    .DataTable();
+    ],
+  }).DataTable();
 
   //console.log(idproyecto);
   tabla_comp_prov = $("#tabla-compra-proveedor")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -386,7 +384,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
   tabla_list_comp_prov = $("#detalles-tabla-compra-prov")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -630,25 +628,25 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
       var fila = `
       <tr class="filas" id="fila${cont}">         
         <td>
-          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto})"><i class="fas fa-pencil-alt"></i></button>
+          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
           <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button></td>
         <td>
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
             <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
-            <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
-            <span class="description"><b>Color: </b>${nombre_color}</span>
+            <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
+            <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
         </td>
-        <td><span class="">${unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
+        <td><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
         <td class="form-group"><input class="producto_${idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class="hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
         <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
         <td ><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
         <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
-        <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
+        <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
       </tr>`;
 
       detalles = detalles + 1;
@@ -935,13 +933,12 @@ function mostrar_compra(idcompra_proyecto) {
   ver_form_add();
 
   $.post("../ajax/compra.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+    
+    data = JSON.parse(data);  console.log(data);
 
     if (data) {
-      $(".subtotal").html("");
-      $(".igv_comp").html("");
-      $(".total").html("");
+
+      $(".subtotal").html("");   $(".igv_comp").html("");  $(".total").html("");
 
       if (data.tipo_comprovante == "Factura") {
         $(".igv").val("0.18");
@@ -976,7 +973,9 @@ function mostrar_compra(idcompra_proyecto) {
       $("#descripcion").val(data.descripcion);
 
       if (data.producto) {
+
         data.producto.forEach((element, index) => {
+
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
@@ -987,24 +986,27 @@ function mostrar_compra(idcompra_proyecto) {
 
           var fila = `
           <tr class="filas" id="fila${cont}">
-            <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(${cont})">X</button></td>
+            <td>
+              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${element.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button></td>
+            </td>
             <td>
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${element.nombre_producto}')">
-                <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre_producto}</p></span>
-                <span class="description"><b>Color: </b>${element.color}</span>
+                <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
+                <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
             </td>
-            <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
+            <td> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
             <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_venta}" readonly ></td>
             <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
             <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
-            <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fas fa-sync"></i></button></td>
+            <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
           </tr>`;
 
           detalles = detalles + 1;
@@ -1233,7 +1235,7 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
   tabla_pagos1 = $("#tabla-pagos-proveedor")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1310,7 +1312,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
   tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1342,7 +1344,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
   tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1684,7 +1686,7 @@ function validar_forma_de_pago() {
 function listarmateriales() {
   tablamateriales = $("#tblamateriales").dataTable({
     responsive: true,
-    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1709,7 +1711,7 @@ function listarmateriales() {
   }).DataTable();
 }
 
-function mostrar_material(idproducto) { 
+function mostrar_material(idproducto, cont) { 
 
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
@@ -1726,17 +1728,18 @@ function mostrar_material(idproducto) {
     $("#cargando-10-fomulario").hide();
 
     $("#idproducto_p").val(data.idproducto);
+    $("#cont").val(cont);
+
     $("#nombre_p").val(data.nombre);
     $("#modelo_p").val(data.modelo);
     $("#serie_p").val(data.serie);
     $("#marca_p").val(data.marca);
-    $("#precio_unitario_p").val(parseFloat(data.precio_unitario).toFixed(2));
     $("#descripcion_p").val(data.descripcion);
 
-    $('#precio_unitario_p').val(data.precio_unitario);
-    $("#estado_igv_p").val(data.estado_igv);
-    $("#precio_sin_igv_p").val(data.precio_sin_igv);
-    $("#precio_igv_p").val(data.precio_igv);
+    $('#precio_unitario_p').val(parseFloat(data.precio_unitario).toFixed(2));
+    $("#estado_igv_p").val(parseFloat(data.estado_igv).toFixed(2));
+    $("#precio_sin_igv_p").val(parseFloat(data.precio_sin_igv).toFixed(2));
+    $("#precio_igv_p").val(parseFloat(data.precio_igv).toFixed(2));
     $("#precio_total_p").val(parseFloat(data.precio_total).toFixed(2));
      
     $("#unid_medida_p").val(data.idunidad_medida).trigger("change");
@@ -1817,7 +1820,7 @@ function limpiar_materiales() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
-  $("#unid_medida_p").val(4).trigger("change");
+  $("#unidad_medida_p").val(4).trigger("change");
   $("#color_p").val(1).trigger("change");
   $("#categoria_insumos_af_p").val("").trigger("change");
 
@@ -1839,17 +1842,14 @@ function guardar_y_editar_materiales(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (datos) {
       if (datos == "ok") {
 
         Swal.fire("Correcto!", "Producto creado correctamente", "success");
-
-        tabla.ajax.reload();
         tablamateriales.ajax.reload();
-        limpiar_materiales();
-
+        actualizar_producto();
         $("#modal-agregar-material-activos-fijos").modal("hide");
+
       } else {
         Swal.fire("Error!", datos, "error");
       }
@@ -1932,7 +1932,27 @@ $("#my-switch_igv").on("click ", function (e) {
 });
 
 function actualizar_producto() {
-  var id = $("#idproducto_p").val();  
+
+  var idproducto = $("#idproducto_p").val(); 
+  var cont = $("#cont").val(); 
+
+  var nombre_p = $("#nombre_p").val();  
+  var precio_total_p = $("#precio_total_p").val();
+  var unid_medida_p = $("#unidad_medida_p").find(':selected').text();
+  var color_p = $("#color_p").find(':selected').text();  
+
+  if (idproducto == "" || idproducto == null) {
+     
+  } else {
+    $(`.nombre_producto_${cont}`).html(nombre_p); 
+    $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
+    $(`.color_${cont}`).val(color_p); 
+    $(`.unidad_medida_${cont}`).html(unid_medida_p); 
+    $(`.unidad_medida_${cont}`).val(unid_medida_p);
+    $(`.precio_con_igv_${cont}`).val(precio_total_p);    
+  } 
+  
+  modificarSubtotales();
 }
 
 // :::::::::::::::::::::::::: - F I N   S E C C I O N   M A T E R I A L E S -  ::::::::::::::::::::::::::
@@ -2142,7 +2162,7 @@ $(function () {
       categoria_insumos_af_p: { required: true },
       color_p: { required: true },
       unid_medida_p: { required: true },
-      modelo_p: { required: true },
+      modelo_p: { minlength: 3 },
       precio_unitario_p: { required: true },
       descripcion_p: { minlength: 3 },
     },
@@ -2151,7 +2171,7 @@ $(function () {
       categoria_insumos_af_p: { required: "Campo requerido", },
       color_p: { required: "Campo requerido" },
       unid_medida_p: { required: "Campo requerido" },
-      modelo_p: { required: "Por favor ingrese modelo", },
+      modelo_p: { minlength: "Minimo 3 caracteres", },
       precio_unitario_p: { required: "Ingresar precio compra", },      
       descripcion_p: { minlength: "Minimo 3 caracteres" },
     },

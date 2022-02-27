@@ -112,7 +112,7 @@ function limpiar() {
 function listar() {
   tabla = $("#tabla-activos").dataTable({
     responsive: true,
-    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -246,13 +246,12 @@ function mostrar(idproducto) {
     $("#modelo").val(data.modelo);
     $("#serie").val(data.serie);
     $("#marca").val(data.marca);
-    $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2));
     $("#descripcion").val(data.descripcion);
 
-    $('#precio_unitario').val(data.precio_unitario);
-    $("#estado_igv").val(data.estado_igv);
-    $("#precio_sin_igv").val(data.precio_sin_igv);
-    $("#precio_igv").val(data.precio_igv);
+    $('#precio_unitario').val(parseFloat(data.precio_unitario).toFixed(2));
+    $("#estado_igv").val(parseFloat(data.estado_igv).toFixed(2));
+    $("#precio_sin_igv").val(parseFloat(data.precio_sin_igv).toFixed(2));
+    $("#precio_igv").val(parseFloat(data.precio_igv).toFixed(2));
     $("#precio_total").val(parseFloat(data.precio_total).toFixed(2));
      
     $("#unid_medida").val(data.idunidad_medida).trigger("change");
@@ -439,7 +438,7 @@ $(function () {
       categoria_insumos_af: { required: true },
       color: { required: true },
       unid_medida: { required: true },
-      modelo: { required: true },
+      modelo: {  minlength: 3 },
       precio_unitario: { required: true },
       descripcion: { minlength: 3 },
     },
@@ -448,7 +447,7 @@ $(function () {
       categoria_insumos_af: { required: "Campo requerido", },
       color: { required: "Campo requerido" },
       unid_medida: { required: "Campo requerido" },
-      modelo: { required: "Por favor ingrese modelo", },
+      modelo: { minlength: "Minimo 3 caracteres", },
       precio_unitario: { required: "Ingresar precio compra", },      
       descripcion: { minlength: "Minimo 3 caracteres" },
     },

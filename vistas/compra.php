@@ -1134,13 +1134,15 @@
                               <div class="row" id="cargando-9-fomulario">
 
                                 <!-- idproducto -->
-                                <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
+                                <input type="hidden" name="idproducto_p" id="idproducto_p" />  
+                                <!-- cont registro -->
+                                <input type="hidden" name="cont" id="cont" />                                
 
                                 <!-- Nombre -->
                                 <div class="col-lg-8 class_pading">
                                   <div class="form-group">
                                     <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
-                                    <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
+                                    <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto."  />
                                   </div>
                                 </div>
 
@@ -1313,6 +1315,7 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
               </section>
               <!-- /.content -->

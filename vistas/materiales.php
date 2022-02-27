@@ -198,8 +198,8 @@
                               <!--Total-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="precio_real">Total</label>
-                                  <input type="number" class="form-control total" placeholder="Precio real." readonly />
+                                  <label for="total_precio">Total</label>
+                                  <input type="number" class="form-control total_precio" placeholder="Precio real." readonly />
                                   <input type="hidden" name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                 </div>
                               </div>

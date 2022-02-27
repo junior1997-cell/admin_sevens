@@ -163,7 +163,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
   tabla_principal=$('#tabla-principal').dataTable({
     "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -596,7 +596,7 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
 
   tabla_ingreso_pagos=$('#tabla-ingreso-pagos').dataTable({
     "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -924,7 +924,7 @@ function reload_table_fechas_mes() {
 function reload_table_pagos_x_mes(id) {
   tabla_ingreso_pagos=$('#tabla-ingreso-pagos').dataTable({
     "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla

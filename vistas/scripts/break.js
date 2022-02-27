@@ -204,7 +204,7 @@ function listar(nube_idproyecto) {
 
   tabla=$('#tabla-resumen-break-semanal').dataTable({
     "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -327,7 +327,7 @@ function listar_botoness( nube_idproyecto ) {
         // console.log(datos);
         tabla=$('#tabla-resumen-break-semanal').dataTable({
           "responsive": true,
-          "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+          lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
           "aProcessing": true,//Activamos el procesamiento del datatables
           "aServerSide": true,//Paginación y filtrado realizados por el servidor
           dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -786,7 +786,7 @@ function listar_comprobantes(idsemana_break) {
   
   tabla=$('#t-comprobantes').dataTable({  
     "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla

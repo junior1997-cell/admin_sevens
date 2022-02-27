@@ -162,7 +162,7 @@ function table_show_hide(flag) {
 function tbla_principal(id_proyecto) {
 	tabla_principal=$('#tbla-resumen-insumos').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+		lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -248,7 +248,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 
 	tabla_factura = $('#tbla-facura').dataTable({
 		"responsive": true,
-		"lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+		lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla

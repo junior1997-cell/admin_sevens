@@ -5,7 +5,9 @@ if (strlen(session_id()) < 1) {
 }
 require_once "../modelos/Compra.php";
 require_once "../modelos/AllProveedor.php";
+require_once "../modelos/Activos_fijos.php";
 
+$activos_fijos = new Activos_fijos();
 $compra = new Compra();
 $proveedor = new Proveedor();
 
@@ -199,7 +201,7 @@ switch ($_GET["op"]) {
 
     if (empty($idproducto_p)) {
       //var_dump($idproyecto,$idproveedor);
-      $rspta = $compra->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+      $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
       
       echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 
@@ -208,7 +210,7 @@ switch ($_GET["op"]) {
       // validamos si existe LA IMG para eliminarlo
       if ($flat_img1 == true) {
 
-        $datos_f1 = $compra->obtenerImgPerfilProducto($idproducto_p);
+        $datos_f1 = $activos_fijos->obtenerImg($idproducto_p);
 
         $img1_ant = $datos_f1->fetch_object()->imagen;
 
@@ -218,7 +220,7 @@ switch ($_GET["op"]) {
         }
       }
       
-      // $rspta = $compra->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+      $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
       //var_dump($idactivos_fijos,$idproveedor);
       echo $rspta ? "ok" : "No se pudo actualizar";
     }
