@@ -72,10 +72,14 @@
                             <table id="tabla-resumen-maquinarias" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="">#</th>
+                                  <th class="">op</th>
                                   <th class="">Producto</th>
-                                  <th>U. medida</th>
-                                  <th>Cantidad</th> 
-                                  <th>Precio promedio</th> 
+                                  <th>Color</th>
+                                  <th>U. M</th>
+                                  <th>Cantidad</th>
+                                  <th>Compra</th> 
+                                  <th>Precio promedio</th>                                      
                                   <th>Precio actual</th>    
                                   <th>Suma Total</th>                      
                                 </tr>
@@ -85,9 +89,13 @@
                               </tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
+                                  <th class="">op</th>
                                   <th class="">Producto</th>
-                                  <th>U. medida</th>
+                                  <th>Color</th>
+                                  <th>U. M</th>
                                   <th class="text-center" > <h5 class="suma_total_cant_maquinarias" style="font-weight: bold;"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                                  <th>Compra</th>  
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-right" > <h5 class="suma_total_de_maquinarias" style="font-weight: bold;">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
@@ -117,12 +125,16 @@
                             <table id="tabla-resumen-equipos" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
                                   <tr>
+                                    <th class="">#</th>
+                                    <th class="">op</th>
                                     <th class="">Producto</th>
-                                    <th>U. medida</th>
-                                    <th>Cantidad</th> 
-                                    <th>Precio promedio</th> 
+                                    <th>Color</th>
+                                    <th>U. M</th>
+                                    <th>Cantidad</th>
+                                    <th>Compra</th> 
+                                    <th>Precio promedio</th>                                      
                                     <th>Precio actual</th>    
-                                    <th>Suma Total</th>                      
+                                    <th>Suma Total</th>                       
                                   </tr>
                                 </thead>
                                 <tbody>                         
@@ -130,9 +142,13 @@
                                 </tbody>
                                 <tfoot>
                                   <tr>
+                                    <th class="">#</th>
+                                    <th class="">op</th>
                                     <th class="">Producto</th>
-                                    <th>U. medida</th>
+                                    <th>Color</th>
+                                    <th>U. M</th>
                                     <th class="text-center" > <h5 class="suma_total_cant_equipos" style="font-weight: bold;"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                                    <th>Cantidad</th>
                                     <th>Precio promedio</th>
                                     <th>Precio actual</th>   
                                     <th class="text-right" > <h5 class="suma_total_de_equipos" style="font-weight: bold;">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
@@ -161,12 +177,16 @@
                             <table id="tabla-resumen-herramientas" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
-                                  <th>Cantidad</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
+                                    <th class="">#</th>
+                                    <th class="">op</th>
+                                    <th class="">Producto</th>
+                                    <th>Color</th>
+                                    <th>U. M</th>
+                                    <th>Cantidad</th>
+                                    <th>Compra</th> 
+                                    <th>Precio promedio</th>                                      
+                                    <th>Precio actual</th>    
+                                    <th>Suma Total</th>                     
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -174,9 +194,13 @@
                               </tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
+                                  <th class="">op</th>
                                   <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
+                                  <th>Color</th>
+                                  <th>U. M</th>
                                   <th class="text-center"> <h5 class="suma_total_herramientas"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                                  <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-center"> <h5 class="suma_total_de_herramientas">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
@@ -205,12 +229,16 @@
                             <table id="tabla-resumen-oficina" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
-                                  <th>Cantidad</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
+                                    <th class="">#</th>
+                                    <th class="">op</th>
+                                    <th class="">Producto</th>
+                                    <th>Color</th>
+                                    <th>U. M</th>
+                                    <th>Cantidad</th>
+                                    <th>Compra</th> 
+                                    <th>Precio promedio</th>                                      
+                                    <th>Precio actual</th>    
+                                    <th>Suma Total</th>                     
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -218,9 +246,13 @@
                               </tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
+                                  <th class="">op</th>
                                   <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
+                                  <th>Color</th>
+                                  <th>U. M</th>
                                   <th class="text-center"> <h5 class="suma_total_oficina"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5> </th> 
+                                  <th>Compra</th> 
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-center"> <h5 class="suma_total_de_oficina">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
@@ -392,12 +424,12 @@
                                                   <button type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
                                                 </a>
                                             </div>
-                                            <div class="col-lg-6">
+                                           <!-- <div class="col-lg-6">
                                               <label for="" style="color: white;">.</label> <br />
                                               <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                                                 <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
                                               </a>
-                                            </div>
+                                            </div>-->
                                           </div>
                                         </div>
 
@@ -480,7 +512,7 @@
                           <div class="card-header">
                           <!-- regresar "tabla principal" -->
                           <h3 class="card-title mr-3" id="btn-regresar-todo" style=" padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
-                            <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="regresar_div2();"><i class="fas fa-arrow-left"></i></button>
+                            <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="regresar();"><i class="fas fa-arrow-left"></i></button>
                           </h3>
 
                           <!-- regresar "tabla facuras" -->
@@ -575,12 +607,12 @@
                                                   <button type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
                                                 </a>
                                             </div>
-                                            <div class="col-lg-6">
+                                           <!-- <div class="col-lg-6">
                                               <label for="" style="color: white;">.</label> <br />
                                               <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                                                 <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
                                               </a>
-                                            </div>
+                                            </div>-->
                                           </div>
                                         </div>
 
@@ -669,10 +701,10 @@
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
-                    <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                      <h4 class="modal-title">Seleccionar producto -  </h4>
+                      <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                         <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
                       </a>
-                      <h4 class="modal-title">Seleccionar producto</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
                       </button>
@@ -830,10 +862,11 @@
                       <!-- form start -->
                       <form id="form-materiales" name="form-materiales" method="POST">
                         <div class="card-body">
-                          <div class="row" id="cargando-1-fomulario">
+                          <div class="row" id="cargando-3-fomulario">
 
                             <!-- idproducto -->
                             <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
+                            <input type="hidden" name="cont" id="cont" />                               
 
                             <!-- Nombre -->
                             <div class="col-lg-8 class_pading">
@@ -993,7 +1026,7 @@
 
                           </div>
 
-                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="row" id="cargando-4-fomulario" style="display: none;">
                             <div class="col-lg-12 text-center">
                               <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                               <br />

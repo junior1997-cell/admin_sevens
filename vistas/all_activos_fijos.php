@@ -177,6 +177,7 @@
                           <table id="tabla-compra-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                              <th class="">#</th>
                                 <th class="">Acciones</th>
                                 <th>Proveedor</th>
                                 <th>Total</th>
@@ -185,6 +186,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="">#</th>
                                 <th class="">Acciones</th>
                                 <th>Proveedor</th>
                                 <th>Total</th>

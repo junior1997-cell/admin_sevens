@@ -88,6 +88,7 @@
 					
 					$clacificacion =2;
 					$rspta=$resumen_af_g->listar_tbla_principal_general($clacificacion);
+					$cont=1;
 					//Vamos a declarar un array
 					$data= Array();
 
@@ -96,17 +97,21 @@
 					foreach ($rspta as $key => $reg) {
 
 						$data[]=array(
-
-						"0"=>'<div class="user-block">
-							<img class="img-circle" src="../dist/docs/material/img_perfil/'. $reg['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-							<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg['nombre_producto'] .'</p></span>
-							<span class="description"> <b>Color:</b> '. $reg['nombre_color'] .' </span>
-						</div>',
-						"1"=>$reg['nombre_medida'],
-						"2"=>$reg['cantidad'],
-						"3"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_maq('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button><span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
-						"4"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
-						"5"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
+						"0"=>$cont++,
+						"1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_insumo('.$reg['idproducto'] .')"><i class="fas fa-pencil-alt"></i></button>
+							 <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material('.$reg['idproducto'] .')"><i class="far fa-eye"></i></button>',
+						"2" => '<div class="user-block"> 
+									<img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg['imagen'] . '" alt="User Image" onerror="' .  $imagen_error .  '">
+									<span class="username"><p class="text-primary" style="margin-bottom: 0.2rem !important"; >' .  $reg['nombre_producto'] . '</p>
+									</span><span class="description"> '.(empty($reg['modelo']) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg['modelo'] ).'</span>
+								</div>',
+						"3" =>$reg['nombre_color'],
+						"4"=>$reg['nombre_medida'],
+						"5"=>$reg['cantidad'],
+						"6"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_maq('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button>',
+						"7"=>'<span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
+						"8"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
+						"9"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
 						);
 					}
 
@@ -166,6 +171,7 @@
 					
 					$clacificacion =3;
 					$rspta=$resumen_af_g->listar_tbla_principal_general($clacificacion);
+					$cont=1;
 					//Vamos a declarar un array
 					$data= Array();
 
@@ -174,17 +180,21 @@
 					foreach ($rspta as $key => $reg) {
 
 						$data[]=array(
-
-						"0"=>'<div class="user-block">
-							<img class="img-circle" src="../dist/docs/material/img_perfil/'. $reg['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-							<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg['nombre_producto'] .'</p></span>
-							<span class="description"> <b>Color:</b> '. $reg['nombre_color'] .' </span>
-						</div>',
-						"1"=>$reg['nombre_medida'],
-						"2"=>$reg['cantidad'],
-						"3"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_equip('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button><span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
-						"4"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
-						"5"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
+							"0"=>$cont++,
+							"1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_insumo('.$reg['idproducto'] .')"><i class="fas fa-pencil-alt"></i></button>
+								 <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material('.$reg['idproducto'] .')"><i class="far fa-eye"></i></button>',
+							"2" => '<div class="user-block"> 
+										<img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg['imagen'] . '" alt="User Image" onerror="' .  $imagen_error .  '">
+										<span class="username"><p class="text-primary" style="margin-bottom: 0.2rem !important"; >' .  $reg['nombre_producto'] . '</p>
+										</span><span class="description"> '.(empty($reg['modelo']) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg['modelo'] ).'</span>
+									</div>',
+							"3" =>$reg['nombre_color'],
+							"4"=>$reg['nombre_medida'],
+							"5"=>$reg['cantidad'],
+							"6"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_maq('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button>',
+							"7"=>'<span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
+							"8"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
+							"9"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
 						);
 					}
 
@@ -244,6 +254,7 @@
 					
 					$clacificacion =4;
 					$rspta=$resumen_af_g->listar_tbla_principal_general($clacificacion);
+					$cont=1;
 					//Vamos a declarar un array
 					$data= Array();
 
@@ -252,17 +263,21 @@
 					foreach ($rspta as $key => $reg) {
 
 						$data[]=array(
-
-						"0"=>'<div class="user-block">
-							<img class="img-circle" src="../dist/docs/material/img_perfil/'. $reg['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-							<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg['nombre_producto'] .'</p></span>
-							<span class="description"> <b>Color:</b> '. $reg['nombre_color'] .' </span>
-						</div>',
-						"1"=>$reg['nombre_medida'],
-						"2"=>$reg['cantidad'],
-						"3"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_herra('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button><span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
-						"4"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
-						"5"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
+							"0"=>$cont++,
+							"1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_insumo('.$reg['idproducto'] .')"><i class="fas fa-pencil-alt"></i></button>
+								 <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material('.$reg['idproducto'] .')"><i class="far fa-eye"></i></button>',
+							"2" => '<div class="user-block"> 
+										<img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg['imagen'] . '" alt="User Image" onerror="' .  $imagen_error .  '">
+										<span class="username"><p class="text-primary" style="margin-bottom: 0.2rem !important"; >' .  $reg['nombre_producto'] . '</p>
+										</span><span class="description"> '.(empty($reg['modelo']) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg['modelo'] ).'</span>
+									</div>',
+							"3" =>$reg['nombre_color'],
+							"4"=>$reg['nombre_medida'],
+							"5"=>$reg['cantidad'],
+							"6"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_maq('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button>',
+							"7"=>'<span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
+							"8"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
+							"9"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
 						);
 					}
 
@@ -322,6 +337,7 @@
 					
 					$clacificacion =5;
 					$rspta=$resumen_af_g->listar_tbla_principal_general($clacificacion);
+					$cont=1;
 					//Vamos a declarar un array
 					$data= Array();
 
@@ -330,17 +346,21 @@
 					foreach ($rspta as $key => $reg) {
 
 						$data[]=array(
-
-						"0"=>'<div class="user-block">
-							<img class="img-circle" src="../dist/docs/material/img_perfil/'. $reg['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-							<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg['nombre_producto'] .'</p></span>
-							<span class="description"> <b>Color:</b> '. $reg['nombre_color'] .' </span>
-						</div>',
-						"1"=>$reg['nombre_medida'],
-						"2"=>$reg['cantidad'],
-						"3"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_oficina('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button><span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
-						"4"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
-						"5"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
+							"0"=>$cont++,
+							"1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_insumo('.$reg['idproducto'] .')"><i class="fas fa-pencil-alt"></i></button>
+								 <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material('.$reg['idproducto'] .')"><i class="far fa-eye"></i></button>',
+							"2" => '<div class="user-block"> 
+										<img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg['imagen'] . '" alt="User Image" onerror="' .  $imagen_error .  '">
+										<span class="username"><p class="text-primary" style="margin-bottom: 0.2rem !important"; >' .  $reg['nombre_producto'] . '</p>
+										</span><span class="description"> '.(empty($reg['modelo']) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg['modelo'] ).'</span>
+									</div>',
+							"3" =>$reg['nombre_color'],
+							"4"=>$reg['nombre_medida'],
+							"5"=>$reg['cantidad'],
+							"6"=>'<button class="btn btn-info btn-sm mb-2" onclick="ver_precios_y_mas_maq('.$reg['idproducto'] .', \'' . $reg['nombre_producto'] . '\', \''. $reg['promedio_precio'] . '\', \''. number_format($reg['subtotal'], 2, ".", ",") .'\')"><i class="far fa-eye"></i></button>',
+							"7"=>'<span> S/. '. number_format($reg['promedio_precio'], 2, ".", ",") . '</span>'  ,
+							"8"=>'S/. '.number_format($reg['precio_actual'], 2, ".", ","),
+							"9"=>'S/. '. number_format($reg['subtotal'], 2, ".", ",")
 						);
 					}
 
@@ -498,9 +518,10 @@
 				break;
 				
 				case 'guardar_y_editar_materiales':
-					//compras
-					require_once "../modelos/Compra.php";
-					$compra = new Compra();
+      
+					require_once "../modelos/Activos_fijos.php";
+					$activos_fijos = new Activos_fijos();    
+
 					// imgen
 					if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
 
@@ -539,7 +560,7 @@
 
 					if (empty($idproducto_p)) {
 					//var_dump($idproyecto,$idproveedor);
-					$rspta = $compra->insertar_material( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+					$rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
 					
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 
@@ -548,7 +569,7 @@
 					// validamos si existe LA IMG para eliminarlo
 					if ($flat_img1 == true) {
 
-						$datos_f1 = $compra->obtenerImgPerfilProducto($idproducto_p);
+						$datos_f1 = $activos_fijos->obtenerImg($idproducto_p);
 
 						$img1_ant = $datos_f1->fetch_object()->imagen;
 
@@ -558,7 +579,7 @@
 						}
 					}
 					
-					// $rspta = $compra->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+					 $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
 					//var_dump($idactivos_fijos,$idproveedor);
 					echo $rspta ? "ok" : "No se pudo actualizar";
 					}
@@ -594,6 +615,18 @@
 						}
 					}		
 				break;
+
+				case 'mostrar_productos':
+
+					require_once "../modelos/Activos_fijos.php";
+					$activos_fijos = new Activos_fijos();    
+
+					$rspta = $activos_fijos->mostrar($_POST['idproducto_p']);
+					//Codificar el resultado utilizando json
+					echo json_encode($rspta);
+		  
+				break;
+		  
 				//:::::::::::::::::::FIN EDITAR COMPRA GENERAL, GUARDAR(MATERIALES Y PROVEEDOR)::::::::::::: */
 
 				//:::::::::::::::::::EDITAR COMPRA POR PROYECTO::::::::::::: */

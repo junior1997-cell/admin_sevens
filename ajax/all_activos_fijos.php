@@ -393,16 +393,19 @@ switch ($_GET["op"]) {
                 $nombre = "Ver";
                 $info = "info";
                 $icon = "eye";
-
+                $cont=1;
 
                 foreach ($rspta as $key => $value) {
                     $data[] = [
-                        "0" =>'<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor_af_g(' . $value['idproveedor'] . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
-                        "1" => '<div class="user-block">
+                        "0"=>$cont,
+                        "1" =>'<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor_af_g(' . $value['idproveedor'] . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
+                        "2" => '<div class="user-block">
                                 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['razon_social'].'</p></span>
                                 <span class="description" style="margin-left: 0px !important;"><b>'. $value['tipo_documento'].' </b>'.$value['ruc'].'</span></div>',
-                        "2" => number_format($value['total'], 2, '.', ','),
+                        "3" => number_format($value['total'], 2, '.', ','),
                     ];
+                    
+                    $cont++;
                 }
                 $results = [
                     "sEcho" => 1, //Información para el datatables

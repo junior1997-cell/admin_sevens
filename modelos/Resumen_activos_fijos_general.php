@@ -15,7 +15,7 @@ Class Resumen_activos_fijos_general
 	public function listar_tbla_principal_general($clacificacion)
 	{
 		$data_productos = array(); 
-		$sql_1="SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color
+		$sql_1="SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color, p.modelo
 		FROM producto as p, unidad_medida as um, color as c
 		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af='$clacificacion'";
 
@@ -58,6 +58,7 @@ Class Resumen_activos_fijos_general
 
 						"idproducto"      =>$value['idproducto'],
 						"nombre_producto" =>$value['nombre'],
+						"modelo"          =>$value['modelo'],
 						"imagen"          =>$value['imagen'],
 						"precio_actual"   =>$value['precio_actual'],
 						"nombre_medida"   =>$value['nombre_medida'],

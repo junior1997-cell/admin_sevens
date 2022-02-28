@@ -541,7 +541,7 @@ function listar() {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[3, "desc"]], //Ordenar (columna,orden)
+      order: [[0, "asc"]], //Ordenar (columna,orden)
       columnDefs: [
         {
          // targets: [8],
@@ -581,7 +581,7 @@ function listar() {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
+      order: [[0, "asc"]], //Ordenar (columna,orden)
     })
     .DataTable();
 }
