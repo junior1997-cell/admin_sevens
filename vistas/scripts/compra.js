@@ -1727,12 +1727,9 @@ function mostrar_material(idproducto, cont) {
 
   $("#modal-agregar-material-activos-fijos").modal("show");
 
-  $.post("../ajax/activos_fijos.php?op=mostrar", { 'idproducto': idproducto }, function (data, status) {
+  $.post("../ajax/compra.php?op=mostrar_materiales", { 'idproducto_p': idproducto }, function (data, status) {
     
-    data = JSON.parse(data); console.log(data);
-
-    $("#cargando-9-fomulario").show();
-    $("#cargando-10-fomulario").hide();
+    data = JSON.parse(data); console.log(data);    
 
     $("#idproducto_p").val(data.idproducto);
     $("#cont").val(cont);
@@ -1800,6 +1797,10 @@ function mostrar_material(idproducto, cont) {
         }        
       }      
     } 
+
+    $("#cargando-9-fomulario").show();
+    $("#cargando-10-fomulario").hide();
+    
   });
 }
 

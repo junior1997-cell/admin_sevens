@@ -154,7 +154,8 @@
                           <div id="tabla-editar-factura" style="display: none !important;">
                             <div class="modal-body">
                               <!-- form start -->
-                              <form id="form-compras" name="form-compras" method="POST">                               
+                              <form id="form-compras" name="form-compras" method="POST">   
+
                                 <div class="row" id="cargando-1-fomulario">
                                   <!-- id proyecto -->
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
@@ -236,10 +237,10 @@
                                             </a>
                                         </div>
                                         <div class="col-lg-6">
-                                          <label for="" style="color: white;">.</label> <br />
+                                          <!-- <label for="" style="color: white;">.</label> <br />
                                           <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                                             <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
-                                          </a>
+                                          </a> -->
                                         </div>
                                       </div>
                                     </div>
@@ -299,14 +300,17 @@
                                       <tbody></tbody>
                                     </table>
                                   </div>
-                                  <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                    <div class="col-lg-12 text-center">
-                                      <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                      <br />
-                                      <h4>Cargando...</h4>
-                                    </div>
+                                  
+                                </div>
+
+                                <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                  <div class="col-lg-12 text-center">
+                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                    <br />
+                                    <h4>Cargando...</h4>
                                   </div>
                                 </div>
+
                                 <button type="submit" style="display: none;" id="submit-form-compras">Submit</button>
                               </form>
                             </div>
@@ -327,7 +331,7 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar proveedores -->
+                <!-- MODAL - agregar proveedores -->
                 <div class="modal fade" id="modal-agregar-proveedor">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -341,114 +345,105 @@
                       <div class="modal-body">
                         <!-- form start -->
                         <form id="form-proveedor" name="form-proveedor" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
-                              <!-- id proveedores -->
-                              <input type="hidden" name="idproveedor_prov" id="idproveedor_prov" />
+                          <div class="row card-body">
+                            
+                            <!-- id proveedores -->
+                            <input type="hidden" name="idproveedor_prov" id="idproveedor_prov" />
 
-                              <!-- Tipo de documento -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="tipo_documento_prov">Tipo de documento</label>
-                                  <select name="tipo_documento_prov" id="tipo_documento_prov" class="form-control" placeholder="Tipo de documento">
-                                    <option value="RUC">RUC</option>
-                                    <option selected value="DNI">DNI</option>
-                                  </select>
-                                </div>
+                            <!-- Tipo de documento -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="tipo_documento_prov">Tipo de documento</label>
+                                <select name="tipo_documento_prov" id="tipo_documento_prov" class="form-control" placeholder="Tipo de documento">
+                                  <option value="RUC">RUC</option>
+                                  <option selected value="DNI">DNI</option>
+                                </select>
                               </div>
+                            </div>
 
-                              <!-- N° de documento -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="num_documento_prov">N° RUC / DNI</label>
-                                  <div class="input-group">
-                                    <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
-                                      <span class="input-group-text" style="cursor: pointer;">
-                                        <i class="fas fa-search text-primary" id="search"></i>
-                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                      </span>
-                                    </div>
+                            <!-- N° de documento -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="num_documento_prov">N° RUC / DNI</label>
+                                <div class="input-group">
+                                  <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
+                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                    <span class="input-group-text" style="cursor: pointer;">
+                                      <i class="fas fa-search text-primary" id="search"></i>
+                                      <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                    </span>
                                   </div>
                                 </div>
                               </div>
-
-                              <!-- Nombre -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="nombre_prov">Razón Social / Nombre y Apellidos</label>
-                                  <input type="text" name="nombre_prov" class="form-control" id="nombre_prov" placeholder="Razón Social o  Nombre" />
-                                </div>
-                              </div>
-
-                              <!-- Direccion -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="direccion_prov">Dirección</label>
-                                  <input type="text" name="direccion_prov" class="form-control" id="direccion_prov" placeholder="Dirección" />
-                                </div>
-                              </div>
-
-                              <!-- Telefono -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="telefono_prov">Teléfono</label>
-                                  <input type="text" name="telefono_prov" id="telefono_prov" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
-                                </div>
-                              </div>
-
-                              <!-- Titular de la cuenta -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="titular_cuenta_prov">Titular de la cuenta</label>
-                                  <input type="text" name="titular_cuenta_prov" class="form-control" id="titular_cuenta_prov" placeholder="Titular de la cuenta" />
-                                </div>
-                              </div>
-
-                              <!-- banco -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="banco_prov">Banco</label>
-                                  <select name="banco_prov" id="banco_prov" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
-                                    <!-- Aqui listamos los bancos -->
-                                  </select>
-                                  <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
-                                </div>
-                              </div>
-
-                              <!-- Cuenta bancaria -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="c_bancaria_prov" class="chargue-format-1">Cuenta Bancaria</label>
-                                  <input type="text" name="c_bancaria_prov" class="form-control" id="c_bancaria_prov" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
-                                </div>
-                              </div>
-
-                              <!-- CCI -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="cci_prov" class="chargue-format-2">CCI</label>
-                                  <input type="text" name="cci_prov" class="form-control" id="cci_prov" placeholder="CCI" data-inputmask="" data-mask />
-                                </div>
-                              </div>
-
-                              <!-- Cuenta de detracciones -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="c_detracciones_prov" class="chargue-format-3">Cuenta Detracciones</label>
-                                  <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
-                                </div>
-                              </div>
-                              
                             </div>
 
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
+                            <!-- Nombre -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="nombre_prov">Razón Social / Nombre y Apellidos</label>
+                                <input type="text" name="nombre_prov" class="form-control" id="nombre_prov" placeholder="Razón Social o  Nombre" />
                               </div>
                             </div>
+
+                            <!-- Direccion -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="direccion_prov">Dirección</label>
+                                <input type="text" name="direccion_prov" class="form-control" id="direccion_prov" placeholder="Dirección" />
+                              </div>
+                            </div>
+
+                            <!-- Telefono -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="telefono_prov">Teléfono</label>
+                                <input type="text" name="telefono_prov" id="telefono_prov" class="form-control" data-inputmask="'mask': ['999-999-999', '+099 99 99 999']" data-mask />
+                              </div>
+                            </div>
+
+                            <!-- Titular de la cuenta -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="titular_cuenta_prov">Titular de la cuenta</label>
+                                <input type="text" name="titular_cuenta_prov" class="form-control" id="titular_cuenta_prov" placeholder="Titular de la cuenta" />
+                              </div>
+                            </div>
+
+                            <!-- banco -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="banco_prov">Banco</label>
+                                <select name="banco_prov" id="banco_prov" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+                                  <!-- Aqui listamos los bancos -->
+                                </select>
+                                <!-- <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
+                              </div>
+                            </div>
+
+                            <!-- Cuenta bancaria -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="c_bancaria_prov" class="chargue-format-1">Cuenta Bancaria</label>
+                                <input type="text" name="c_bancaria_prov" class="form-control" id="c_bancaria_prov" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                              </div>
+                            </div>
+
+                            <!-- CCI -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="cci_prov" class="chargue-format-2">CCI</label>
+                                <input type="text" name="cci_prov" class="form-control" id="cci_prov" placeholder="CCI" data-inputmask="" data-mask />
+                              </div>
+                            </div>
+
+                            <!-- Cuenta de detracciones -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="c_detracciones_prov" class="chargue-format-3">Cuenta Detracciones</label>
+                                <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
+                              </div>
+                            </div>                              
+                            
                           </div>
                           <!-- /.card-body -->
                           <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
@@ -462,12 +457,17 @@
                   </div>
                 </div>
 
-                <!-- MODA - ELEGIR PRODUCTO -->
+                <!-- MODAL - ELEGIR MATERIAL O ACTIVOS FIJOS -->
                 <div class="modal fade" id="modal-elegir-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Seleccionar producto</h4>
+                        <h4 class="modal-title">
+                          <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                            <button id="btnAgregarArt" type="button" class="btn btn-success btn-sm" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                          </a>
+                          Seleccionar producto
+                        </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -492,7 +492,7 @@
                   </div>
                 </div>  
 
-                <!-- MODAL - AGREGAR MATERIALES Y ACTIVOS FIJOS -->                 
+                <!-- MODAL - AGREGAR MATERIALES O ACTIVOS FIJOS -->                 
                 <div class="modal fade" id="modal-agregar-material-activos-fijos">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -685,6 +685,26 @@
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_materiales();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_material">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - DETALLE MATERIALES O ACTIVOS FIJOS -->
+                <div class="modal fade" id="modal-ver-detalle-material-activo-fijo">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Datos Producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div id="datosproductos" class="class-style">
+                          <!-- vemos los datos del Producto -->
+                        </div>
                       </div>
                     </div>
                   </div>

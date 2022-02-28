@@ -60,20 +60,25 @@ class Activos_fijos
   {
     $data = [];
 
-    $sql = "SELECT idproducto, idunidad_medida, idcolor, idcategoria_insumos_af, nombre, 
-		modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, 
-		precio_total, ficha_tecnica, descripcion, imagen, estado, fecha 
-		FROM producto WHERE idproducto ='$idproducto'";
+    $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca, p.estado_igv, 
+    p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.fecha,
+    um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria
+		FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+    WHERE p.idunidad_medida = um.idunidad_medida AND p.idcolor = c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af 
+    AND p.idproducto = '$idproducto'";
     $activos = ejecutarConsultaSimpleFila($sql);
 
     $data = [
       'idproducto' => $activos['idproducto'],
       'idunidad_medida' => $activos['idunidad_medida'],
+      'nombre_medida' => $activos['nombre_medida'],
       'idcolor' => $activos['idcolor'],
+      'nombre_color' => $activos['nombre_color'],
       'idcategoria_insumos_af' => $activos['idcategoria_insumos_af'],
+      'categoria' => $activos['categoria'],
       'nombre' => decodeCadenaHtml($activos['nombre']),
       'modelo' => decodeCadenaHtml($activos['modelo']),
-      'serie' => $activos['serie'],
+      'serie' => decodeCadenaHtml($activos['serie']),
       'marca' => decodeCadenaHtml($activos['marca']),
       'estado_igv' => $activos['estado_igv'],
       'precio_unitario' => $activos['precio_unitario'],
@@ -81,7 +86,7 @@ class Activos_fijos
       'precio_sin_igv' => $activos['precio_sin_igv'],
       'precio_total' => $activos['precio_total'],
       'ficha_tecnica' => $activos['ficha_tecnica'],
-      'descripcion' => $activos['descripcion'],
+      'descripcion' => decodeCadenaHtml($activos['descripcion']),
       'imagen' => $activos['imagen'],
       'estado' => $activos['estado'],
       'fecha' => $activos['fecha'],

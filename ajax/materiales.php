@@ -35,7 +35,7 @@
       $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
 
       $imagen1 = isset($_POST["imagen1"]) ? limpiarCadena($_POST["imagen1"]) : "";
-      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : ""; //$modelo, $serie
+      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : ""; 
 
       switch ($_GET["op"]) {
 
@@ -78,7 +78,7 @@
 
           if (empty($idproducto)) {
             
-            $rspta = $materiales->insertar($idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
+            $rspta = $materiales->insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 
@@ -97,7 +97,7 @@
               }
             }
              
-            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
+            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
             
             echo $rspta ? "ok" : "Trabador no se pudo actualizar";
           }

@@ -161,7 +161,8 @@ switch ($_GET["op"]) {
     echo $rspta ? "ok" : "Documento no se pudo actualizar";
 
   break;
-
+  
+  // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
   case 'guardar_y_editar_materiales':
     // imgen
     if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
@@ -225,6 +226,56 @@ switch ($_GET["op"]) {
       echo $rspta ? "ok" : "No se pudo actualizar";
     }
 
+  break;
+
+  case 'mostrar_materiales':
+
+    $rspta = $activos_fijos->mostrar($idproducto_p);
+    //Codificar el resultado utilizando json
+    echo json_encode($rspta);
+
+  break;
+
+  case 'listarMaterialescompra':     
+
+    $rspta = $compra->listar_productos();
+    //Vamos a declarar un array
+    $datas = [];
+    // echo json_encode($rspta);
+    $img = "";
+    $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+    $color_stock = "";
+    $ficha_tecnica = "";
+
+    while ($reg = $rspta->fetch_object()) {
+
+      if (!empty($reg->imagen)) {   $img = "../dist/docs/material/img_perfil/$reg->imagen"; } else { $img = "../dist/svg/default_producto.svg"; }
+
+      !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+      
+      $datas[] = [
+        "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' . htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->precio_igv . '\', \'' . $reg->precio_total . '\', \'' . $reg->imagen . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Planta">
+          <span class="fa fa-plus"></span>
+        </button>',
+        "1" => '<div class="user-block w-px-200"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
+          <span class="username"><p style="margin-bottom: 0px !important;">' .   $reg->nombre . '</p></span> 
+          <span class="description"><b>Color: </b>' .$reg->nombre_color . '</span>
+          <span class="description"><b>Marca: </b>' .$reg->marca . '</span>
+        </div>',
+        "2" => $reg->categoria,
+        "3" => number_format($reg->precio_unitario, 2, '.', ','),
+        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+        "5" => $ficha_tecnica,
+      ];
+    }
+
+    $results = [
+      "sEcho" => 1, //Información para el datatables
+      "iTotalRecords" => count($datas), //enviamos el total registros al datatable
+      "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
+      "aaData" => $datas,
+    ];
+    echo json_encode($results);
   break;
 
   // :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
@@ -506,48 +557,7 @@ switch ($_GET["op"]) {
 
   break;
 
-  case 'listarMaterialescompra':
-     
-
-    $rspta = $compra->listar_productos();
-    //Vamos a declarar un array
-    $datas = [];
-    // echo json_encode($rspta);
-    $img = "";
-    $imagen_error = "this.src='../dist/svg/default_producto.svg'";
-    $color_stock = "";
-    $ficha_tecnica = "";
-
-    while ($reg = $rspta->fetch_object()) {
-
-      if (!empty($reg->imagen)) {   $img = "../dist/docs/material/img_perfil/$reg->imagen"; } else { $img = "../dist/svg/default_producto.svg"; }
-
-      !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
-      
-      $datas[] = [
-        "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' . htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->precio_igv . '\', \'' . $reg->precio_total . '\', \'' . $reg->imagen . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Planta">
-          <span class="fa fa-plus"></span>
-        </button>',
-        "1" => '<div class="user-block w-px-200"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
-          <span class="username"><p style="margin-bottom: 0px !important;">' .   $reg->nombre . '</p></span> 
-          <span class="description"><b>Color: </b>' .$reg->nombre_color . '</span>
-          <span class="description"><b>Marca: </b>' .$reg->marca . '</span>
-        </div>',
-        "2" => $reg->categoria,
-        "3" => number_format($reg->precio_unitario, 2, '.', ','),
-        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
-        "5" => $ficha_tecnica,
-      ];
-    }
-
-    $results = [
-      "sEcho" => 1, //Información para el datatables
-      "iTotalRecords" => count($datas), //enviamos el total registros al datatable
-      "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
-      "aaData" => $datas,
-    ];
-    echo json_encode($results);
-  break;
+  
 
   case 'selectProveedor':
     require_once "../modelos/AllProveedor.php";

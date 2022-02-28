@@ -10,21 +10,23 @@ class Materiales
   }
 
   //Implementamos un método para insertar registros
-  public function insertar($idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
+  public function insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
   {
     //var_dump($idproducto,$idproveedor);die();
-    $sql = "INSERT INTO producto (idcategoria_insumos_af, nombre, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
-		VALUES ('$idcategoria','$nombre','$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
+    $sql = "INSERT INTO producto (idcategoria_insumos_af, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
+		VALUES ('$idcategoria','$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para editar registros
-  public function editar($idproducto, $idcategoria, $nombre, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
+  public function editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
   {
     //var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);die();
     $sql = "UPDATE producto SET 
 		idcategoria_insumos_af = '$idcategoria',
 		nombre='$nombre', 
+    modelo = '$modelo', 
+    serie = '$serie',
 		marca='$marca', 
 		precio_unitario='$precio_unitario', 
 		descripcion='$descripcion', 
@@ -64,6 +66,8 @@ class Materiales
 		p.idunidad_medida as idunidad_medida,
 		p.idcolor as idcolor,
 		p.nombre as nombre,
+    p.modelo as modelo,
+    p.serie as serie,
 		p.marca as marca,
 		p.descripcion as descripcion,
 		p.imagen as imagen,
@@ -86,6 +90,8 @@ class Materiales
       'idunidad_medida' => ($retVal_2 = empty($producto['idunidad_medida']) ? '' : $producto['idunidad_medida']),
       'idcolor'     => ($retVal_3 = empty($producto['idcolor']) ? '' : $producto['idcolor']),
       'nombre'      => ($retVal_4 = empty($producto['nombre']) ? '' :decodeCadenaHtml($producto['nombre'])),
+      'modelo'      => ($retVal_4 = empty($producto['modelo']) ? '' :decodeCadenaHtml($producto['modelo'])),
+      'serie'      => ($retVal_4 = empty($producto['serie']) ? '' :decodeCadenaHtml($producto['serie'])),
       'marca'       => ($retVal_5 = empty($producto['marca']) ? '' : decodeCadenaHtml($producto['marca'])),
       'descripcion' => ($retVal_6 = empty($producto['descripcion']) ? '' : decodeCadenaHtml($producto['descripcion'])),
       'imagen'      => ($retVal_7 = empty($producto['imagen']) ? '' : $producto['imagen']),
@@ -123,7 +129,7 @@ class Materiales
 			um.nombre_medida as nombre_medida
 			FROM producto p, unidad_medida as um, color as c  
 			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND idcategoria_insumos_af = '1' 
-			ORDER BY idproducto DESC";
+			ORDER BY p.nombre ASC";
     return ejecutarConsulta($sql);
   }
   
