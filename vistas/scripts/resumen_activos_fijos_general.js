@@ -1026,19 +1026,19 @@ function mostrar_detalle_material(idproducto) {
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Precio Unitario</th>
-                <td>${data.precio_unitario}</td>
+                <td>${ formato_miles(parseFloat(data.precio_unitario).toFixed(2))}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>IGV</th>
-                <td>${data.precio_igv}</td>
+                <td>${ formato_miles(parseFloat(data.precio_igv).toFixed(2))}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Precio sin IGV</th>
-                <td>${data.precio_sin_igv}</td>
+                <td>${ formato_miles(parseFloat(data.precio_sin_igv).toFixed(2))}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Precio con IGV</th>
-                <td>${data.precio_total}</td>
+                <td>${ formato_miles(parseFloat(data.precio_total).toFixed(2))}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Descripción</th>

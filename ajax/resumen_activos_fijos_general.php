@@ -630,6 +630,16 @@
 					echo json_encode($rspta);
 		  
 				break;
+				case 'mostrar_detalle_material':
+
+					require_once "../modelos/Activos_fijos.php";
+					$activos_fijos = new Activos_fijos();    
+
+					$rspta = $activos_fijos->mostrar($_POST['idproducto_p']);
+					//Codificar el resultado utilizando json
+					echo json_encode($rspta);
+		  
+				break;
 		  
 				//:::::::::::::::::::FIN EDITAR COMPRA GENERAL, GUARDAR(MATERIALES Y PROVEEDOR)::::::::::::: */
 

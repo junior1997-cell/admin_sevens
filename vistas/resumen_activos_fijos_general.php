@@ -1047,6 +1047,26 @@
                   </div>
                 </div>
               </div>
+              
+              <!-- MODAL - DETALLE MATERIALES O ACTIVOS FIJOS -->
+              <div class="modal fade" id="modal-ver-detalle-material-activo-fijo">
+                <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Datos Producto</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <div id="datosproductos" class="class-style">
+                        <!-- vemos los datos del Producto -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!-- ============ Modal ver grande img producto -->
               <div class="modal fade" id="modal-ver-img-activo">
