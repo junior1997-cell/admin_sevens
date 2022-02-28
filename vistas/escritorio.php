@@ -148,6 +148,7 @@
                         <table id="tabla-proyectos" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th>#</th>
                               <th class="">Aciones</th>
                               <th>Empresa</th>
                               <th>Código proyecto</th>
@@ -162,6 +163,7 @@
                           </tbody>
                           <tfoot>
                             <tr>
+                              <th>#</th>
                               <th class="">Aciones</th>
                               <th>Empresa</th>
                               <th>Código proyecto</th>
@@ -178,6 +180,7 @@
                           <table id="tabla-proyectos-terminados" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th class="">Aciones</th>
                                 <th>Empresa</th>
                                 <th>Código proyecto</th>
@@ -192,6 +195,7 @@
                             </tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th class="">Aciones</th>
                                 <th>Empresa</th>
                                 <th>Código proyecto</th>

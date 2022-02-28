@@ -64,6 +64,7 @@
                       <table id="tabla-trabajador" class="table table-bordered table-striped display" style="width: 100% !important;">
                         <thead>
                           <tr>
+                            <th class="text-center">#</th>
                             <th class="">Aciones</th>
                             <th>Nombres</th>
                             <th>Tipo</th>
@@ -77,6 +78,7 @@
                         <tbody></tbody>
                         <tfoot>
                           <tr>
+                            <th class="text-center">#</th>
                             <th>Aciones</th>
                             <th>Nombres</th>
                             <th>Tipo</th>
@@ -94,6 +96,7 @@
                           <table id="tabla-trabajador-expulsado" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Aciones</th>
                                 <th>Nombres</th>
                                 <th>Tipo</th>
@@ -106,6 +109,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th>Aciones</th>
                                 <th>Nombres</th>
                                 <th>Tipo</th>

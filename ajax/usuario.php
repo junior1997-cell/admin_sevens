@@ -108,25 +108,27 @@ switch ($_GET["op"]) {
       //Validamos el acceso solo al usuario logueado y autorizado.
       if ($_SESSION['acceso'] == 1) {
         $rspta = $usuario->listar();
+        $cont=1;
         //Vamos a declarar un array
         $data = [];
         $imagen_error = "this.src='../dist/svg/user_default.svg'";
         while ($reg = $rspta->fetch_object()) {
           $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning" onclick="mostrar(' .
+            "0"=>$cont++,
+            "1" => $reg->estado
+              ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
                 $reg->idusuario .
                 ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger" onclick="desactivar(' .
+                ' <button class="btn btn-danger  btn-sm" onclick="desactivar(' .
                 $reg->idusuario .
                 ')"><i class="far fa-trash-alt  "></i></button>'
-              : '<button class="btn btn-warning" onclick="mostrar(' .
+              : '<button class="btn btn-warning  btn-sm" onclick="mostrar(' .
                 $reg->idusuario .
                 ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary" onclick="activar(' .
+                ' <button class="btn btn-primary  btn-sm" onclick="activar(' .
                 $reg->idusuario .
                 ')"><i class="fa fa-check"></i></button>',
-            "1" =>
+            "2" =>
               '<div class="user-block">
 										<img class="img-circle" src="../dist/img/usuarios/' .
               $reg->imagen_perfil .
@@ -142,10 +144,10 @@ switch ($_GET["op"]) {
               $reg->numero_documento .
               ' </span>
 									</div>',
-            "2" => $reg->telefono,
-            "3" => $reg->login,
-            "4" => $reg->cargo,
-            "5" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+            "3" => $reg->telefono,
+            "4" => $reg->login,
+            "5" => $reg->cargo,
+            "6" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
           ];
         }
         $results = [

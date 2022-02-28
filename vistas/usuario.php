@@ -67,6 +67,7 @@
                         <table id="tabla-usuarios" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="">#</th>
                               <th class="">Aciones</th>
                               <th>Nombres</th>
                               <th>Telefono</th>
@@ -80,6 +81,7 @@
                           </tbody>
                           <tfoot>
                             <tr>
+                              <th>#</th>
                               <th>Aciones</th>
                               <th>Nombres</th>
                               <th>Telefono</th>

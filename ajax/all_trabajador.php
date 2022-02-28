@@ -236,28 +236,30 @@
           $rspta=$trabajador->listar();
           //Vamos a declarar un array
           $data= Array();
+          $cont=1;
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>$cont++,
+              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
-              "1"=>'<div class="user-block">
+              "2"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
-              "2"=> $reg->nombre_tipo,
-              "3"=> $reg->nombre_ocupacion,
-              "4"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
-              "5"=>format_d_m_a($reg->fecha_nacimiento).'<b>: </b>'.$reg->edad,
-              "6"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria_format .' <br> <b>CCI: </b>'.$reg->cci_format,
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              "3"=> $reg->nombre_tipo,
+              "4"=> $reg->nombre_ocupacion,
+              "5"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
+              "6"=>format_d_m_a($reg->fecha_nacimiento).'<b>: </b>'.$reg->edad,
+              "7"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria_format .' <br> <b>CCI: </b>'.$reg->cci_format,
+              "8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
@@ -274,27 +276,28 @@
           $rspta=$trabajador->listar_expulsado();
           //Vamos a declarar un array
           $data= Array();
-
+          $cont=1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
           while ($reg=$rspta->fetch_object()){
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>$cont++,
+              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
-              "1"=>'<div class="user-block">
+              "2"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .'<br>'.format_d_m_a($reg->fecha_nacimiento).' : '.$reg->edad.' años</span>
                 </div>',
-              "2"=> '<div class="center-vertical">'. $reg->nombre_tipo .'</div>',
-              "3"=> $reg->nombre_ocupacion,
-              "4"=> '<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
-              "5"=> $reg->descripcion_expulsion ,
-              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+              "3"=> '<div class="center-vertical">'. $reg->nombre_tipo .'</div>',
+              "4"=> $reg->nombre_ocupacion,
+              "5"=> '<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
+              "6"=> $reg->descripcion_expulsion ,
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }

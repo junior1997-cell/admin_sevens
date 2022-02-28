@@ -37,6 +37,14 @@ function listar()
 						console.log(e.responseText);	
 					}
 				},
+				createdRow: function (row, data, ixdex) {    
+  
+					// columna: #0
+					if (data[0] != '') {
+					  $("td", row).eq(0).addClass("text-center");   
+					   
+					}
+				  },
 		"language": {
             "lengthMenu": "Mostrar : _MENU_ registros",
             "buttons": {
@@ -48,8 +56,8 @@ function listar()
             }
         },
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
-	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"iDisplayLength": 10,//Paginación
+	    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
 
@@ -75,13 +83,21 @@ function mostrar_usuarios( id ) {
 						console.log(e.responseText);	
 					}
 				},
+				createdRow: function (row, data, ixdex) {    
+  
+					// columna: #0
+					if (data[0] != '') {
+					  $("td", row).eq(0).addClass("text-center");   
+					   
+					}
+				  },
 		"language": {
 			"lengthMenu": "Mostrar : _MENU_ registros",
 			 
 		},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
-		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"iDisplayLength": 10,//Paginación
+		"order": [[ 0, "asc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
 

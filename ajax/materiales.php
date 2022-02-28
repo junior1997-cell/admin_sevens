@@ -135,6 +135,7 @@
           $ficha_tecnica = '';
           $monto_igv = '';
           $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+          $cont=1;
 
           while ($reg = $rspta->fetch_object()) {
 
@@ -145,24 +146,25 @@
             empty($reg->precio_igv) ? ($monto_igv = '-') : ($monto_igv = $reg->precio_igv);
             
             $data[] = [
-              "0" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>' .
+              "0"=>$cont++,
+              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>' .
               ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idproducto . ')"><i class="far fa-trash-alt"></i></button>' : 
               '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
               ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
-              "1" =>
+              "2" =>
                 '<div class="user-block">
                   <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'">
                   <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                   <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
                 </div>',
-              "2" => $reg->nombre_medida,
-              "3" => $reg->marca,
-              "4" => number_format($reg->precio_unitario, 2, '.', ','),
-              "5" => number_format($reg->precio_sin_igv, 2, '.', ','),
-              "6" => number_format($monto_igv, 2, '.', ','),
-              "7" => number_format($reg->precio_total, 2, '.', ','),
-              "8" => $ficha_tecnica,
-              "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+              "3" => $reg->nombre_medida,
+              "4" => $reg->marca,
+              "5" => number_format($reg->precio_unitario, 2, '.', ','),
+              "6" => number_format($reg->precio_sin_igv, 2, '.', ','),
+              "7" => number_format($monto_igv, 2, '.', ','),
+              "8" => number_format($reg->precio_total, 2, '.', ','),
+              "9" => $ficha_tecnica,
+              "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
             ];
           }
 

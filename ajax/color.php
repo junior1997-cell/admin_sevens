@@ -42,15 +42,16 @@ switch ($_GET["op"]){
 		$rspta=$color->listar();
  		//Vamos a declarar un array
  		$data= Array();
-
+		 $cont=1;
  		while ($reg=$rspta->fetch_object()){
  			$data[]=array(
- 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fas fa-pencil-alt"></i></button>'.
+				"0"=>$cont++,
+ 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcolor.')"><i class="far fa-trash-alt"></i></button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fa fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcolor.')"><i class="fa fa-check"></i></button>',
- 				"1"=>$reg->nombre_color,
- 				"2"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+ 				"2"=>$reg->nombre_color,
+ 				"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
  				'<span class="text-center badge badge-danger">Desactivado</span>'
  				);
  		}

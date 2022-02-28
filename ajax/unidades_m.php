@@ -43,16 +43,17 @@ switch ($_GET["op"]){
 		$rspta=$unidades_m->listar();
  		//Vamos a declarar un array
  		$data= Array();
-
+		 $cont=1;
  		while ($reg=$rspta->fetch_object()){
  			$data[]=array(
- 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
+				"0"=>$cont++,
+ 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-danger btn-sm" onclick="desactivar_unidades_m('.$reg->idunidad_medida.')"><i class="far fa-trash-alt"></i></button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar_unidades_m('.$reg->idunidad_medida.')"><i class="fa fa-check"></i></button>',
- 				"1"=>$reg->nombre_medida,
- 				"2"=>$reg->abreviacion,
- 				"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
+ 				"2"=>$reg->nombre_medida,
+ 				"3"=>$reg->abreviacion,
+ 				"4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
  				'<span class="text-center badge badge-danger">Desactivado</span>'
  				);
  		}

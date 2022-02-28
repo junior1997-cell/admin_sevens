@@ -172,7 +172,11 @@ function listar_tbla_principal_maq()
       }
 		},
     createdRow: function (row, data, ixdex) {    
-
+      // columna: #0
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+         
+      }
       // columna: Cantidad
       if (data[5] != '') {
         $("td", row).eq(5).addClass("text-center");   
@@ -205,7 +209,8 @@ function listar_tbla_principal_maq()
     },
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
-	  "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+	  "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs":[ { "targets": [ 3 ], "visible": false, "searchable": false }, ]
 	}).DataTable();
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras_maq", {}, function (data, status) {
@@ -287,8 +292,12 @@ function listar_tbla_principal_equip()
         console.log(e.responseText);	
       }
 		},
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {  
+      // columna: #0
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+          
+      }  
       // columna: Cantidad
       if (data[5] != '') {
         $("td", row).eq(5).addClass("text-center");   
@@ -321,7 +330,8 @@ function listar_tbla_principal_equip()
     },
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
-	  "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+	  "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs":[ { "targets": [ 3 ], "visible": false, "searchable": false }, ]
 	}).DataTable();
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras_equip", {}, function (data, status) {
@@ -405,7 +415,11 @@ function listar_tbla_principal_herra()
       }
 		},
     createdRow: function (row, data, ixdex) {    
-
+      // columna: #0
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+         
+      }
       // columna: Cantidad
       if (data[5] != '') {
         $("td", row).eq(5).addClass("text-center");   
@@ -438,7 +452,8 @@ function listar_tbla_principal_herra()
     },
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
-	  "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+	  "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs":[ { "targets": [ 3 ], "visible": false, "searchable": false }, ]
 	}).DataTable();
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras_herra", {}, function (data, status) {
@@ -521,7 +536,11 @@ function listar_tbla_principal_oficina()
       }
 		},
     createdRow: function (row, data, ixdex) {    
-
+      // columna: #0
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+         
+      }
       // columna: Cantidad
       if (data[5] != '') {
         $("td", row).eq(5).addClass("text-center");   
@@ -554,7 +573,8 @@ function listar_tbla_principal_oficina()
     },
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
-	  "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+	  "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs":[ { "targets": [ 3 ], "visible": false, "searchable": false }, ]
 	}).DataTable();
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras_oficina", {}, function (data, status) {

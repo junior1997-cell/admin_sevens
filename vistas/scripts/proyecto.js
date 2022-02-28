@@ -221,6 +221,14 @@ function listar() {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -232,8 +240,8 @@ function listar() {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
    
@@ -258,6 +266,14 @@ function listar2() {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -269,8 +285,8 @@ function listar2() {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
    

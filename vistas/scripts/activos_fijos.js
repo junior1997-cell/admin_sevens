@@ -148,6 +148,14 @@ function listar() {
         $("td", row).eq(8).addClass('text-center');         
       }
     },
+    createdRow: function (row, data, ixdex) {    
+  
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+         
+      }
+    },
     language: {
       lengthMenu: "Mostrar : _MENU_ registros",
       buttons: {
@@ -160,7 +168,7 @@ function listar() {
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
-    // order: [[0, "desc"]], //Ordenar (columna,orden)
+    order: [[0, "asc"]], //Ordenar (columna,orden)
   }).DataTable();
 }
 

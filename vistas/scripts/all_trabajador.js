@@ -524,10 +524,14 @@ function listar() {
     },
     createdRow: function (row, data, ixdex) {          
 
-      // columna: pago total
+      // columna: #
       if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-nowrap');         
-      }         
+        $("td", row).eq(0).addClass('text-center');         
+      } 
+      // columna: 1
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass('text-nowrap');         
+      }          
       
     },
     "language": {
@@ -541,8 +545,8 @@ function listar() {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
   // listamos al trabajadores expulsados
@@ -561,6 +565,13 @@ function listar() {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');         
+        }         
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -572,8 +583,8 @@ function listar() {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 //Función para guardar o editar

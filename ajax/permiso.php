@@ -23,13 +23,15 @@
 				case 'listar':
 					$rspta=$permiso->listar();
 					//Vamos a declarar un array
+					$cont=1;
 					$data= Array();
 
 					while ($reg=$rspta->fetch_object()){
 
 						$data[]=array(
-							"0"=>'<button class="btn btn-info" onclick="mostrar_usuarios('.$reg->idpermiso.')"><i class="fas fa-eye"></i></button>',
-							"1"=>$reg->nombre
+							"0"=>$cont++,
+							"1"=>'<button class="btn btn-info btn-sm" onclick="mostrar_usuarios('.$reg->idpermiso.')"><i class="fas fa-eye"></i></button>',
+							"2"=>$reg->nombre
 						);
 					}
 
@@ -47,19 +49,21 @@
 					$id_permiso = $_GET["id"];
 
 					$rspta=$permiso->ver_usuarios($id_permiso);
+					$cont=1;
 					//Vamos a declarar un array
 					$data= Array();
 					$imagen_error = "this.src='../dist/svg/user_default.svg'";
 					while ($reg=$rspta->fetch_object()){
 
 						$data[]=array(
-							"0"=>'<div class="user-block">
+							"0"=>$cont++,
+							"1"=>'<div class="user-block">
 								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
 								<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
 								<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
 							</div>',
-							"1"=>$reg->cargo,
-							"2"=>$reg->fecha
+							"2"=>$reg->cargo,
+							"3"=>$reg->fecha
 						);
 					}
 

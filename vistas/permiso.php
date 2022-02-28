@@ -67,6 +67,7 @@
                         <table id="tabla-permiso" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="text-center">#</th>
                               <th class="">Usuarios que acceden</th>
                               <th>Nombre de permiso</th>                               
                             </tr>
@@ -76,7 +77,8 @@
                           </tbody>
                           <tfoot>
                             <tr>
-                            <th class="">Usuarios que acceden</th>
+                              <th class="text-center">#</th>
+                              <th class="">Usuarios que acceden</th>
                               <th>Nombre de permiso</th>                               
                             </tr>
                           </tfoot>
@@ -112,6 +114,7 @@
                             <table id="tabla-usuarios" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="text-center" >#</th>
                                   <th class="">Usuarios que acceden</th>
                                   <th>Cargo</th>  
                                   <th>Fecha de creacion</th>                               
@@ -122,7 +125,8 @@
                               </tbody>
                               <tfoot>
                                 <tr>
-                                <th class="">Usuarios que acceden</th>
+                                  <th class="text-center" >#</th>
+                                  <th class="">Usuarios que acceden</th>
                                   <th>Cargo</th> 
                                   <th>Fecha de creacion</th>                          
                                 </tr>

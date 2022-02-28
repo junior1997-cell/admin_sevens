@@ -63,6 +63,7 @@
                           <table id="tabla-proveedores" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Aciones</th>
                                 <th>Proveedor</th>
                                 <th>Dirección</th>
@@ -74,6 +75,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th>Aciones</th>
                                 <th>Proveedor</th>
                                 <th>Dirección</th>

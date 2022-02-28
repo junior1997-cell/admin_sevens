@@ -130,23 +130,25 @@ switch ($_GET["op"]){
 				$rspta=$proveedor->listar();
 		 		//Vamos a declarar un array
 		 		$data= Array();
+				 $cont=1;
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
 
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproveedor.')"><i class="fas fa-pencil-alt"></i></button>'.
+						"0"=>$cont++,
+		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproveedor.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idproveedor.')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproveedor.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idproveedor.')"><i class="fa fa-check"></i></button>',
-						"1"=>'<div class="user-block">
+						"2"=>'<div class="user-block">
 							<span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->razon_social .'</p></span>
 							<span class="description" style="margin-left: 0px !important;"><b>'. $reg->tipo_documento .'</b>: '. $reg->ruc .' </span>
 							<span class="description" style="margin-left: 0px !important;"><b>Cel.:</b>'. '<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al PROVEEDOR.">'. $reg->telefono . '</a>' .' </span>
 							</div>',
-		 				"2"=>$reg->direccion,
-		 				"3"=> '<div class="w-px-250"><b>Cta. Banc.:</b>'. $reg->cuenta_bancaria. '<br> <b>CCI:</b> '. $reg->cci.' <br> <b>Cta. Dtrac.:</b> '.$reg->cuenta_detracciones. '</div>',
-		 				"4"=>$reg->titular_cuenta,
-		 				"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+		 				"3"=>$reg->direccion,
+		 				"4"=> '<div class="w-px-250"><b>Cta. Banc.:</b>'. $reg->cuenta_bancaria. '<br> <b>CCI:</b> '. $reg->cci.' <br> <b>Cta. Dtrac.:</b> '.$reg->cuenta_detracciones. '</div>',
+		 				"5"=>$reg->titular_cuenta,
+		 				"6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}
 		 		$results = array(

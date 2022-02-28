@@ -65,6 +65,7 @@
                           <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Unidad</th>
@@ -80,6 +81,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Unidad</th>

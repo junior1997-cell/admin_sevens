@@ -50,17 +50,18 @@ switch ($_GET["op"]) {
     $cta = "00000000000000000000000000000";
     $cci = "00000000000000000000000000000";
     $detraccion = "00000000000000000000000000000";
-
+    $cont=1;
     while ($reg = $rspta->fetch_object()) {
       $data[] = [
-        "0" => $reg->estado
+        "0"=>$cont++,
+        "1" => $reg->estado
           ? '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-danger btn-sm" onclick="desactivar_bancos(' . $reg->idbancos . ')"><i class="far fa-trash-alt"></i></button>'
           : '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' . 
             ' <button class="btn btn-primary btn-sm" onclick="activar_bancos(' . $reg->idbancos . ')"><i class="fa fa-check"></i></button>',
-        "1" => '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
+        "2" => '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
           <span class="text-muted">'. $reg->alias .' </span>',
-        "2" =>
+        "3" =>
           '<span> <b>Formato CTA :</b>' .
           $reg->formato_cta .
           '<br> 
@@ -79,7 +80,7 @@ switch ($_GET["op"]) {
 						<b>Ej. cci: </b>' .
           darFormatoBanco($detraccion, $reg->formato_detracciones) .
           '</span>',
-        "3" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+        "4" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
       ];
     }
     $results = [

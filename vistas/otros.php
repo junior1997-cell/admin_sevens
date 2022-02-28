@@ -68,6 +68,7 @@
                           <table id="tabla-bancos" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Formato Cta/CCI</th>
@@ -77,6 +78,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Formato</th>
@@ -131,6 +133,7 @@
                           <table id="tabla-colores" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -139,6 +142,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -192,6 +196,7 @@
                           <table id="tabla-unidades-m" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Abreviación</th>
@@ -201,6 +206,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Abreviación</th>
@@ -249,6 +255,7 @@
                           <table id="tabla-ocupacion" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -257,6 +264,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -304,6 +312,7 @@
                           <table id="tabla-tipo" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -312,6 +321,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -365,6 +375,7 @@
                           <table id="tabla-cargo" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Tipo</th>
                                 <th>Nombre</th>
@@ -374,6 +385,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Tipo</th>
                                 <th>Nombre</th>
@@ -428,6 +440,7 @@
                           <table id="tabla-categorias-af" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
@@ -436,6 +449,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>

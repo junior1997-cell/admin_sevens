@@ -64,7 +64,8 @@
                                         <table id="tabla-maquinas" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
-                                                    <th class="">Aciones</th>
+                                                    <th class="text-center">#</th>
+                                                    <th class="text-center">Aciones</th>
                                                     <th>Proveedor</th>
                                                     <th>Nombre máquina</th>
                                                     <th>Modelo</th>
@@ -74,7 +75,8 @@
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Aciones</th>
+                                                    <th class="text-center">#</th>
+                                                    <th class="text-center">Aciones</th>
                                                     <th>Proveedor</th>
                                                     <th>Nombre máquina</th>
                                                     <th>Modelo</th>
@@ -90,7 +92,8 @@
                                         <table id="tabla-equipos" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
-                                                    <th class="">Aciones</th>
+                                                    <th class="text-center">#</th>
+                                                    <th class="text-center">Aciones</th>
                                                     <th>Proveedor</th>
                                                     <th>Nombre equipo</th>
                                                     <th>Modelo</th>
@@ -100,7 +103,8 @@
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th>Aciones</th>
+                                                    <th class="text-center">#</th>
+                                                    <th class="text-center">Aciones</th>
                                                     <th>Proveedor</th>
                                                     <th>Nombre equipo</th>
                                                     <th>Modelo</th>

@@ -119,20 +119,22 @@ switch ($_GET["op"]){
 			{
 				$tipo = '1';
 				$rspta=$all_maquinaria->listar($tipo);
+				$cont=1;
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
 
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
-							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"1"=>$reg->razon_social,
-		 				"2"=>$reg->nombre,
-		 				"3"=>$reg->modelo,
-						"4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+						"0"=>$cont++,
+		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
+							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
+		 				"2"=>$reg->razon_social,
+		 				"3"=>$reg->nombre,
+		 				"4"=>$reg->modelo,
+						"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}
 		 		$results = array(
@@ -161,20 +163,22 @@ switch ($_GET["op"]){
 			{
 				$tipo = '2';
 				$rspta=$all_maquinaria->listar($tipo);
+				$cont=1;
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				 //idbancos,razon_social,tipo_documento,ruc,direccion,telefono,cuenta_bancaria,cuenta_detracciones,titular_cuenta
 
 		 		while ($reg=$rspta->fetch_object()){
 		 			$data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
-							 '<button class="btn btn-warning" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"1"=>$reg->razon_social,
-		 				"2"=>$reg->nombre,
-		 				"3"=>$reg->modelo,
-						"4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+						"0"=>$cont++,
+		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
+							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
+		 				"2"=>$reg->razon_social,
+		 				"3"=>$reg->nombre,
+		 				"4"=>$reg->modelo,
+						"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}
 		 		$results = array(

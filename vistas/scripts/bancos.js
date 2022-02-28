@@ -53,6 +53,14 @@ function listar_bancos() {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -65,7 +73,7 @@ function listar_bancos() {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    // "order": [[ 1, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
