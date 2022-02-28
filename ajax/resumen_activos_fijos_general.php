@@ -133,21 +133,22 @@
 					$data= Array();	
           
 					$ficha_tecnica = ""; 
-					
+					$cont=1;
 					foreach ($rspta as $key => $reg) {
 						// validamos si existe una ficha tecnica
 						!empty($reg['ficha_tecnica']) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 						
 						$data[]=array(
-							"0"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
+							"0"=>$cont++,
+							"1"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
 							('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_proyecto('.$reg['idcompra'].', \'' . $parametro_list_proyecto . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'),
-							"1"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
-							"2"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
-							"3"=>$reg['cantidad'],
-							"4"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
-							"5"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
-							"6"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
-							"7"=>$ficha_tecnica,
+							"2"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
+							"3"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
+							"4"=>$reg['cantidad'],
+							"5"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
+							"6"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
+							"7"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
+							"8"=>$ficha_tecnica,
 						);
 					}
 
@@ -216,21 +217,22 @@
 					$data= Array();	
           
 					$ficha_tecnica = ""; 
-
+					$cont=1;
 					foreach ($rspta as $key => $reg) {
 						// validamos si existe una ficha tecnica
 						!empty($reg['ficha_tecnica']) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 									
 						$data[]=array(
-							"0"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
+							"0"=>$cont++,
+							"1"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
 							('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_proyecto('.$reg['idcompra'].', \'' . $parametro_list_proyecto . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'),
-							"1"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
-							"2"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
-							"3"=>$reg['cantidad'],
-							"4"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
-							"5"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
-							"6"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
-							"7"=>$ficha_tecnica,
+							"2"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
+							"3"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
+							"4"=>$reg['cantidad'],
+							"5"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
+							"6"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
+							"7"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
+							"8"=>$ficha_tecnica,
 						);
 					}
 
@@ -299,21 +301,22 @@
 					$data= Array();	
           
 					$ficha_tecnica = ""; 
-
+					$cont=1;
 					foreach ($rspta as $key => $reg) {
 						// validamos si existe una ficha tecnica
 						!empty($reg['ficha_tecnica']) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 									
 						$data[]=array(
-							"0"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
+							"0"=>$cont++,
+							"1"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
 							('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_proyecto('.$reg['idcompra'].', \'' . $parametro_list_proyecto . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'),
-							"1"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
-							"2"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
-							"3"=>$reg['cantidad'],
-							"4"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
-							"5"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
-							"6"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
-							"7"=>$ficha_tecnica,
+							"2"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
+							"3"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
+							"4"=>$reg['cantidad'],
+							"5"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
+							"6"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
+							"7"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
+							"8"=>$ficha_tecnica,
 						);
 					}
 
@@ -382,21 +385,22 @@
 					$data= Array();	
           
 					$ficha_tecnica = ""; 
-
+					$cont=1;
 					foreach ($rspta as $key => $reg) {
 						// validamos si existe una ficha tecnica
 						!empty($reg['ficha_tecnica']) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>') : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 									
 						$data[]=array(
-							"0"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
+							"0"=>$cont++,
+							"1"=>(empty($reg['idproyecto'])) ?('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_general('.$reg['idcompra'].', \'' . $parametro_list_general . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'):
 							('<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras_proyecto('.$reg['idcompra'].', \'' . $parametro_list_proyecto . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'),
-							"1"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
-							"2"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
-							"3"=>$reg['cantidad'],
-							"4"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
-							"5"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
-							"6"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
-							"7"=>$ficha_tecnica,
+							"2"=>'<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',  
+							"3"=>date("d/m/Y", strtotime($reg['fecha_compra'])),
+							"4"=>$reg['cantidad'],
+							"5"=> '<h4> <b>'. number_format( $reg['precio_con_igv'], 2, ".", ",") .'</b> </h4>',
+							"6"=>'S/. '. number_format($reg['descuento'] , 2, ".", ","),
+							"7"=>'S/. '. number_format($reg['subtotal'], 2, ".", ","),
+							"8"=>$ficha_tecnica,
 						);
 					}
 

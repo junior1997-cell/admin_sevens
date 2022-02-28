@@ -267,8 +267,8 @@ function ver_precios_y_mas_maq(idproducto, nombre_producto, precio_promedio, sub
     },
 		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
-		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"iDisplayLength": 10,//Paginación
+		"order": [[ 3, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 
   
@@ -388,8 +388,8 @@ function ver_precios_y_mas_equip(idproducto, nombre_producto, precio_promedio, s
     },
 		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
-		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"iDisplayLength": 10,//Paginación
+		"order": [[ 3, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 
   
@@ -510,8 +510,8 @@ function ver_precios_y_mas_herra(idproducto, nombre_producto, precio_promedio, s
     },
 		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
-		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"iDisplayLength": 10,//Paginación
+		"order": [[ 3, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 
   
@@ -631,8 +631,8 @@ function ver_precios_y_mas_oficina(idproducto, nombre_producto, precio_promedio,
     },
 		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
-		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"iDisplayLength": 10,//Paginación
+		"order": [[ 3, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 
   

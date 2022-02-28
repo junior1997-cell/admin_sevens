@@ -285,6 +285,7 @@
                               <table id="tabla-precios" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
                                   <tr>
+                                    <th class="text-center">#</th>
                                     <th>OP.</th>
                                     <th>Proveedor</th>
                                     <th>Fecha compra</th>
@@ -300,6 +301,7 @@
                                 </tbody>
                                 <tfoot>
                                   <tr>
+                                    <th class="text-center">#</th>
                                     <th>OP.</th>
                                     <th>Proveedor</th>
                                     <th>Fecha compra</th>
