@@ -131,9 +131,9 @@ switch ($_GET["op"]){
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"2"=>$reg->razon_social,
-		 				"3"=>$reg->nombre,
-		 				"4"=>$reg->modelo,
+		 				"2"=>$reg->nombre,
+		 				"3"=>$reg->modelo, 
+		 				"4"=>$reg->razon_social,
 						"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}
@@ -175,9 +175,9 @@ switch ($_GET["op"]){
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
-		 				"2"=>$reg->razon_social,
-		 				"3"=>$reg->nombre,
-		 				"4"=>$reg->modelo,
+		 				"2"=>$reg->nombre,
+		 				"3"=>$reg->modelo,
+		 				"4"=>$reg->razon_social,
 						"5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);
 		 		}

@@ -47,7 +47,7 @@ Class Tipo
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM tipo_trabajador";
+		$sql="SELECT * FROM tipo_trabajador  ORDER BY nombre ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

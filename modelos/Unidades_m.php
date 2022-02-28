@@ -47,7 +47,7 @@ Class Unidades_m
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM unidad_medida";
+		$sql="SELECT * FROM unidad_medida ORDER BY nombre_medida ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

@@ -75,7 +75,7 @@ Class Allmaquinarias
 		mq.tipo as tipo, 
 		mq.estado as estado
 		
-		FROM maquinaria as mq, proveedor as p WHERE mq.idproveedor=p.idproveedor AND mq.tipo='$tipo'";
+		FROM maquinaria as mq, proveedor as p WHERE mq.idproveedor=p.idproveedor AND mq.tipo='$tipo' ORDER BY  mq.nombre ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Seleccionar Trabajador Select2

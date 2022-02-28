@@ -47,7 +47,7 @@ Class Ocupacion
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM ocupacion";
+		$sql="SELECT * FROM ocupacion  ORDER BY nombre_ocupacion ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

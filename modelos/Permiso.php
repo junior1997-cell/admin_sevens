@@ -14,7 +14,7 @@ Class Permiso
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM permiso";
+		$sql="SELECT * FROM permiso ORDER BY nombre ASC";
 
 		return ejecutarConsulta($sql);		
 	}

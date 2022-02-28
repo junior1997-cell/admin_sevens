@@ -120,7 +120,7 @@ class Activos_fijos
 		um.nombre_medida AS nombre_medida
 		FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
 		WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND p.idcategoria_insumos_af != '1' AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af
-		ORDER BY idproducto DESC";
+		ORDER BY p.nombre ASC";
     return ejecutarConsulta($sql);
   }
 

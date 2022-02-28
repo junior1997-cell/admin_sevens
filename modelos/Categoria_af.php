@@ -55,7 +55,7 @@ Class Categoria_af
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM categoria_insumos_af WHERE  idcategoria_insumos_af>1 AND estado=1 AND estado_delete=1";
+		$sql="SELECT * FROM categoria_insumos_af WHERE  idcategoria_insumos_af>1 AND estado=1 AND estado_delete=1  ORDER BY nombre ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

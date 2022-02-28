@@ -65,10 +65,10 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">#</th>
-                                                    <th class="text-center">Aciones</th>
-                                                    <th>Proveedor</th>
+                                                    <th class="text-center">Aciones</th>                                                    
                                                     <th>Nombre máquina</th>
                                                     <th>Modelo</th>
+                                                    <th>Proveedor</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -76,10 +76,10 @@
                                             <tfoot>
                                                 <tr>
                                                     <th class="text-center">#</th>
-                                                    <th class="text-center">Aciones</th>
-                                                    <th>Proveedor</th>
+                                                    <th class="text-center">Aciones</th>                                                    
                                                     <th>Nombre máquina</th>
                                                     <th>Modelo</th>
+                                                    <th>Proveedor</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>
@@ -93,10 +93,10 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">#</th>
-                                                    <th class="text-center">Aciones</th>
-                                                    <th>Proveedor</th>
+                                                    <th class="text-center">Aciones</th>                                                    
                                                     <th>Nombre equipo</th>
                                                     <th>Modelo</th>
+                                                    <th>Proveedor</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
@@ -104,10 +104,10 @@
                                             <tfoot>
                                                 <tr>
                                                     <th class="text-center">#</th>
-                                                    <th class="text-center">Aciones</th>
-                                                    <th>Proveedor</th>
+                                                    <th class="text-center">Aciones</th>                                                    
                                                     <th>Nombre equipo</th>
                                                     <th>Modelo</th>
+                                                    <th>Proveedor</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </tfoot>

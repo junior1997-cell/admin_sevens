@@ -77,7 +77,7 @@
       $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.cuenta_bancaria_format, 
       t.cci_format, t.telefono, t.imagen_perfil,  t.estado, b.nombre AS banco, tt.nombre AS nombre_tipo, o.nombre_ocupacion AS nombre_ocupacion 
       FROM trabajador AS t, bancos AS b,  tipo_trabajador as tt, ocupacion as o
-      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = 1;";
+      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = 1 ORDER BY  t.nombres ASC ;";
 
       return ejecutarConsulta($sql);		
     }

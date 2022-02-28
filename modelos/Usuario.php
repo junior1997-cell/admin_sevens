@@ -120,13 +120,13 @@ Class Usuario
 	{
 		$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
 		FROM usuario as u, trabajador as t
-		WHERE  u.idtrabajador = t.idtrabajador;";
+		WHERE  u.idtrabajador = t.idtrabajador 	ORDER BY t.nombres ASC;";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los permisos marcados
 	public function listarmarcados($idusuario)
 	{
-		$sql="SELECT * FROM usuario_permiso WHERE idusuario='$idusuario'";
+		$sql="SELECT * FROM usuario_permiso WHERE idusuario='$idusuario' ";
 		return ejecutarConsulta($sql);
 	}
 
