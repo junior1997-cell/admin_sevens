@@ -81,7 +81,7 @@
                                 <th>Nombre</th>
                                 <th class="text-center">Total Horas</th>
                                 <th class="text-center">Total Días</th>                                
-                                <th class="text-center">Pago / hora</th>
+                                <th class="text-center">Sueldo hora</th>
                                 <th class="text-center">Sueldo diario</th>
                                 <th class="text-center">Sueldo mensual</th>                                
                                 <th class="text-center">Sabatical</th>
@@ -232,6 +232,39 @@
                                 <th>Pago Hr. Extras</th>
                                 <th>Fecha Asistencia</th>
                                 <th>Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                        <!-- TBLA - QUINCENA SEMANA por Trabajdor -->
+                        <div id="detalle_qs" style="display: none;">
+                          <table id="tabla-detalle-qs-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">Op.</th>
+                                <th class="thead_num">Num.</th>
+                                <th class="thead_fecha">Fechas</th>
+                                <th>Pago Hr. Normal/Extra</th>
+                                <th>Adicional</th>
+                                <th>Sabatical</th>
+                                <th class="thead_pago">Pago</th>
+                                <th>Contador</th>
+                                <th>Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="text-gray-50">Op.</th>
+                                <th class="text-gray-50 thead_num">Num.</th>
+                                <th class="text-gray-50 thead_fecha">Fechas</th>
+                                <th class="text-gray-50">Pago Hr. Normal/Extra</th>
+                                <th class="text-gray-50">Adicional</th>
+                                <th class="text-gray-50">Sabatical</th>
+                                <th class="text-nowrap text-right h5" id="suma_qs_individual">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                <th class="text-gray-50">Contador</th>
+                                <th class="text-gray-50">Estado</th>
                               </tr>
                             </tfoot>
                           </table>

@@ -203,6 +203,20 @@ Class Asistencia_trabajador
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para desactivar categorías
+	public function desactivar_qs($id)
+	{
+		$sql="UPDATE resumen_q_s_asistencia SET estado='0' WHERE idresumen_q_s_asistencia='$id'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para activar categorías
+	public function activar_qs($id)
+	{
+		$sql="UPDATE resumen_q_s_asistencia SET estado='1' WHERE idresumen_q_s_asistencia='$id'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idasistencia_trabajador)
 	{
@@ -213,20 +227,25 @@ Class Asistencia_trabajador
 	}
 
 	//Implementar un método para listar asistencia
-	public function listar($nube_idproyecto)
+	public function tbla_principal($nube_idproyecto)
 	{
 		$trabajdor_resumen = Array();
-		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, 
-		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tp.sueldo_hora AS sueldo_hora, 
-		tp.sueldo_mensual AS sueldo_mensual, SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
+		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, 
+		t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tpp.sueldo_hora, tpp.sueldo_mensual, tpp.sueldo_diario,
+		SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
 		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
-		FROM trabajador AS t, trabajador_por_proyecto AS tp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
-		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tp.idproyecto = p.idproyecto AND at.estado=1 AND tp.idproyecto = '$nube_idproyecto' AND tp.idcargo_trabajador = c.idcargo_trabajador
-		GROUP BY tp.idtrabajador;";
+		FROM trabajador AS t, trabajador_por_proyecto AS tpp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
+		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND at.estado=1 AND tpp.idproyecto = '$nube_idproyecto' AND tpp.idcargo_trabajador = c.idcargo_trabajador
+		GROUP BY tpp.idtrabajador;";
 		$agrupar_trabajdor = ejecutarConsultaArray($sql);
 
 		foreach ($agrupar_trabajdor as $key => $value) {
-			$sql_2 ="SELECT SUM(sabatical) total_sabatical FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '".$value['idtrabajador_por_proyecto']."';";
+
+			$sql_2 ="SELECT SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
+			SUM(total_dias_asistidos) AS total_dias_asistidos, SUM(pago_quincenal) AS pago_quincenal
+			FROM resumen_q_s_asistencia 
+			WHERE idtrabajador_por_proyecto = '".$value['idtrabajador_por_proyecto']."' AND estado = '1';";
+
 			$sab = ejecutarConsultaSimpleFila($sql_2);
 
 			$data_array=array(
@@ -237,13 +256,15 @@ Class Asistencia_trabajador
 				'num_doc'=> $value['num_doc'],
 				'imagen'=> $value['imagen'],
 				'sueldo_hora'=> $value['sueldo_hora'],
+				'sueldo_diario'=> $value['sueldo_diario'],
 				'sueldo_mensual'=> $value['sueldo_mensual'],
-				'total_horas_normal'=> $value['total_horas_normal'],
-				'total_horas_extras'=> $value['total_horas_extras'],
+				'total_horas_normal'=> $sab['total_hn'],
+				'total_horas_extras'=> $sab['total_he'],
 				'estado'=> $value['estado'],
 				'fecha_inicio_proyect'=> $value['fecha_inicio_proyect'],
 				'cargo'=> $value['cargo'],
-				'total_sabatical'=> empty($sab) ? 0 : $sab['total_sabatical'] 
+				'total_sabatical'=> empty($sab) ? 0 : $sab['total_sabatical'],
+				'pago_quincenal'=> empty($sab) ? 0 : $sab['pago_quincenal']  
 			);
 
 			array_push($trabajdor_resumen, $data_array);
@@ -260,12 +281,33 @@ Class Asistencia_trabajador
 	}
 
 	//Implementar un método para listar asistencia
-	public function listar_asis_individual($idtrabajador_x_proyecto) {
+	public function tbla_asis_individual($idtrabajador_x_proyecto) {
 		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador,  atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, 
 		atra.pago_horas_extras, atra.fecha_asistencia, atra.nombre_dia, atra.estado, t.nombres as trabajador, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil 
 		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t 
 		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ORDER BY  atra.estado DESC; ";
 		return ejecutarConsulta($sql);		
+	}
+
+	//TABLA - QUINCENA SEMANA INDIVIDUAL
+	public function tbla_qs_individual($idtrabajador_x_proyecto) {
+		$sql="SELECT rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, 
+		rqsa.fecha_q_s_fin, rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, 
+		rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
+		rqsa.pago_quincenal, rqsa.estado_envio_contador, rqsa.recibos_x_honorarios, rqsa.estado, p.fecha_pago_obrero
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p
+		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND
+		 rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
+		ORDER BY  numero_q_s ASC; ";
+		return ejecutarConsulta($sql);		
+	}	
+
+	public function suma_qs_individual($idtrabajador_x_proyecto) {
+		$sql="SELECT  SUM(rqsa.pago_quincenal) AS pago_quincenal, p.fecha_pago_obrero
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p
+		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto 
+		AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado = '1';";
+		return ejecutarConsultaSimpleFila($sql);
 	}
 	
 	//traemos el sueldo po hora del trabajador - no se utiliza - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

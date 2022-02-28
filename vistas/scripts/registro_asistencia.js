@@ -1,6 +1,10 @@
-var tabla; var tabla2; var array_asistencia = []; var array_trabajador = [];
+var tabla_principal, tabla_horas, tabla_qs;
+
+var array_asistencia = []; var array_trabajador = [];
 
 var f1_r = 0, f2_r = 0, i_r = 0, cant_dias_asistencia_r = 0; var estado_editar_asistencia = false;
+
+var idtrabajador_por_proyecto_r = 0;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -13,7 +17,7 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar_tbla_principal(localStorage.getItem('nube_idproyecto')); 
+  tbla_principal(localStorage.getItem('nube_idproyecto')); 
 
   // submnit a adicional descuento
   $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });
@@ -74,15 +78,28 @@ function mostrar_form_table(estados) {
       estado_editar_asistencia = false;
       
     } else {
-      $("#card-registrar").hide();
-      $("#card-regresar").show();
-      $("#card-editar").hide();
-      $("#card-guardar").hide();
-      $("#tabla-asistencia-trab").hide();
-      $("#ver_asistencia").hide();
-      $("#detalle_asistencia").show();
-      estado_editar_asistencia = false;
-      
+      if (estados == 3) {
+        $("#card-registrar").hide();
+        $("#card-regresar").show();
+        $("#card-editar").hide();
+        $("#card-guardar").hide();
+        $("#tabla-asistencia-trab").hide();
+        $("#ver_asistencia").hide();
+        $("#detalle_asistencia").show();
+        estado_editar_asistencia = false;
+      } else {
+        if (estados == 4) {
+          $("#card-registrar").hide();
+          $("#card-regresar").show();
+          $("#card-editar").hide();
+          $("#card-guardar").hide();
+          $("#tabla-asistencia-trab").hide();
+          $("#ver_asistencia").hide();
+          $("#detalle_asistencia").hide();
+          $("#detalle_qs").show();
+          estado_editar_asistencia = false;
+        }
+      }
     }
   }
 }
@@ -224,11 +241,11 @@ sumaFecha = function(d, fecha){
 }
 
 //TBLA - PRINCIPAL
-function listar_tbla_principal(nube_idproyecto) {
+function tbla_principal(nube_idproyecto) {
 
   $('#Lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
 
-  tabla=$('#tabla-asistencia').dataTable({
+  tabla_principal = $('#tabla-asistencia').dataTable({
     "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -236,7 +253,7 @@ function listar_tbla_principal(nube_idproyecto) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'csvHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
     "ajax":{
-      url: '../ajax/registro_asistencia.php?op=listar&nube_idproyecto='+nube_idproyecto,
+      url: '../ajax/registro_asistencia.php?op=tbla_principal&nube_idproyecto='+nube_idproyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -247,7 +264,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
       // columna: opciones
       if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-center');         
+        $("td", row).eq(0).addClass('text-nowrap');         
       }
 
       // columna: total Horas
@@ -1227,7 +1244,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
       // $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
         
       //   if (e == 'ok') {
-      //     tabla.ajax.reload();
+      //     tabla_principal.ajax.reload();
       //     toastr.success(`<h5>Asignado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ASIGNADO con éxito.`);
       //   } else {
       //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
@@ -1242,7 +1259,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
       // $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia,  'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
         
       //   if (e == 'ok') { 
-      //     tabla.ajax.reload();
+      //     tabla_principal.ajax.reload();
       //     toastr.success(`<h5>Anulado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ANULADO con éxito.`);
       //   } else {
       //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
@@ -1278,7 +1295,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
           $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
-              tabla.ajax.reload();
+              tabla_principal.ajax.reload();
               Swal.fire("Asignado!", `El sabatical manual de: ${nombre_trabajador} a sido guardado con éxito.`, "success"); 
             } else {
               Swal.fire("Error!", e, "error");
@@ -1305,7 +1322,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
           $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
-              tabla.ajax.reload();
+              tabla_principal.ajax.reload();
               Swal.fire("Quitado!", `El sabatical de: ${nombre_trabajador} a sido QUITADO con éxito.`, "success");
             } else {
               Swal.fire("Error!", e, "error");
@@ -1387,13 +1404,13 @@ function justificar(idasistencia,horas, estado) {
 }
 
 // TBLA - ASISTENCIA INDIVIDUAL
-function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proyect) {
+function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proyect) {
 
   console.log(idtrabajador_por_proyecto,fecha_inicio_proyect);
   
   mostrar_form_table(3);
 
-  tabla2=$('#tabla-detalle-asistencia-individual').dataTable({
+  tabla_horas = $('#tabla-detalle-asistencia-individual').dataTable({
     "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -1456,6 +1473,95 @@ function ver_asistencias_individual(idtrabajador_por_proyecto,fecha_inicio_proye
   }).DataTable();   
 }
 
+// TBLA - QUINCENA SEMANA INDIVIDUAL
+function ver_q_s_individual(idtrabajador_por_proyecto) {
+
+  idtrabajador_por_proyecto_r = idtrabajador_por_proyecto;
+
+  mostrar_form_table(4);
+
+  tabla_qs = $('#tabla-detalle-qs-individual').dataTable({
+    "responsive": true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+      url: '../ajax/registro_asistencia.php?op=listar_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) { 
+
+      // columna: Horas normal
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass('text-center');         
+      }      
+
+      // columna: Pago por horas normal
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-nowrap text-right');         
+      }
+
+      // columna: Adicional
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-right');         
+      }
+
+      // columna: Sabatical
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-center');         
+      }
+
+      // columna: Pago quincenal o semanal
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-right');         
+      }   
+
+      // columna: Contador
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-center');         
+      }
+      // columna: Estado
+      if (data[8] != '') {
+        $("td", row).eq(8).addClass('text-center');         
+      }
+    },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+
+  //Suma ACUMULADO
+  $.post("../ajax/registro_asistencia.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (data, status) {
+
+    data =JSON.parse(data); //console.log(data);
+
+    if (data) {
+      $(".thead_num").html(`Num. ${data.fecha_pago_obrero}`);
+      $(".thead_fecha").html(`Fechas ${data.fecha_pago_obrero}`);
+      $(".thead_pago").html(`Pago ${data.fecha_pago_obrero}`);
+      $("#suma_qs_individual").html(`S/. <b>${formato_miles(data.pago_quincenal)}</b> `);
+    } else {
+      $("#suma_qs_individual").html("S/. 0.00");
+    }
+  });
+}
+
 init();
 
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------
@@ -1507,7 +1613,7 @@ function desactivar(idasistencia_trabajador) {
 
         Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
     
-        tabla.ajax.reload(); tabla2.ajax.reload();
+        tabla_principal.ajax.reload(); tabla_horas.ajax.reload();
       });      
     }
   });   
@@ -1530,11 +1636,67 @@ function activar(idasistencia_trabajador) {
 
         Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
 
-        tabla.ajax.reload(); tabla2.ajax.reload();
+        tabla_principal.ajax.reload(); tabla_horas.ajax.reload();
       });
       
     }
   });      
+}
+
+//Función para desactivar registros
+function desactivar_qs(id, tipo_pago) {
+  
+  Swal.fire({
+    title: `¿Está Seguro de  Desactivar la ${tipo_pago} ?`,
+    text: "Al desactivar, este registro no sera contado.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=desactivar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
+        
+        if (e == 'ok') {
+          Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
+          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
+          ver_q_s_individual(idtrabajador_por_proyecto_r);
+        } else {
+          Swal.fire("Error!", e, "error");
+        }        
+      });      
+    }
+  });  
+  $(".tooltip").removeClass('show'); 
+}
+
+//Función para activar registros
+function activar_qs(id, tipo_pago) {
+   
+  Swal.fire({
+    title: `¿Está Seguro de  Activar  la ${tipo_pago}?`,
+    text: "Al activar, este registro sera contado",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=activar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
+
+        if (e == 'ok') {
+          Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
+          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
+          ver_q_s_individual(idtrabajador_por_proyecto_r);
+        } else {
+          Swal.fire("Error!", e, "error");
+        }        
+      });      
+    }
+  });     
+  $(".tooltip").removeClass('show'); 
 }
 
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
@@ -1721,7 +1883,7 @@ function guardar_fechas_asistencia() {
              
       if (datos == 'ok') {
 
-        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); tabla.ajax.reload();
+        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); tabla_principal.ajax.reload();
         
         $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
 
