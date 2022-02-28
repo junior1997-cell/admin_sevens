@@ -559,12 +559,12 @@ switch ($_GET["op"]) {
                         $img='src="../dist/img/default/img_defecto_activo_fijo.png"';
                         $img_parametro="img_defecto_activo_fijo.png";
                     } else {
-                        $img='src="../dist/docs/activos_fijos_general/img_activos_fijos/'.$reg->imagen.'"';
+                        $img='src="../dist/docs/material/img_perfil/'.$reg->imagen.'"';
                         $img_parametro=$reg->imagen;
                     }
 
                     !empty($reg->ficha_tecnica)
-                        ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+                        ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
                         : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
                     $datas[] = [

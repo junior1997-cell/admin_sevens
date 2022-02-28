@@ -308,12 +308,12 @@
                                               <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
                                             </a>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <!--<div class="col-lg-6">
                                           <label for="" style="color: white;">.</label> <br />
                                           <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                                             <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
                                           </a>
-                                        </div>
+                                        </div>-->
                                       </div>
                                     </div>
                                   </div>
@@ -436,7 +436,7 @@
                   <!-- /.row -->
                 </div>
                 <!-- /.container-fluid -->
-                
+
                 <!--:::::::::AGREGAR PAGOS Y PROVEEDOR :::::::-->  
 
                 <!-- Modal agregar proveedores -->
@@ -1016,6 +1016,39 @@
 
                 <!--::::::::::: INSUMOS Y ACTIVOS FIJOS :::::::::::-->   
 
+                <!-- Modal elegir Activo -->
+                <div class="modal fade" id="modal-elegir-activos">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Seleccionar Activo - </h4>
+                        <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                          <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body table-responsive">
+                        <table id="tblaactivos" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
+                          <thead>
+                            <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                            <th>Nombre Activo</th>
+                            <th>Marca</th>
+                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
+                            <th>Descripción</th>
+                            <th data-toggle="tooltip" data-original-title="Ficha Técnica" >F.T.</th>
+                          </thead>
+                          <tbody></tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
                 <!--Agregar insumos o activos fijos-->            
                 <div class="modal fade" id="modal-agregar-material-activos-fijos">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -1035,7 +1068,10 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
-
+                            
+                              <!-- cont registro -->
+                              <input type="hidden" name="cont" id="cont" />      
+                              
                               <!-- Nombre -->
                               <div class="col-lg-8 class_pading">
                                 <div class="form-group">
@@ -1209,36 +1245,6 @@
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_materiales();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_material">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Modal elegir Activo -->
-                <div class="modal fade" id="modal-elegir-activos">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Seleccionar Activo</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body table-responsive">
-                        <table id="tblaactivos" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
-                          <thead>
-                            <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                            <th>Nombre Activo</th>
-                            <th>Marca</th>
-                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
-                            <th>Descripción</th>
-                            <th data-toggle="tooltip" data-original-title="Ficha Técnica" >F.T.</th>
-                          </thead>
-                          <tbody></tbody>
-                        </table>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>

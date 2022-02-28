@@ -784,17 +784,20 @@ function agregarDetalleCompraActivos(idactivos_fijos, nombre, unidad_medida, nom
 
       var fila = `
       <tr class="filas" id="fila${cont}">
-        <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(${cont})">X</button></td>
+        <td>
+          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idactivos_fijos}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
+        </td>
         <td>
           <input type="hidden" name="idactivos_fijos[]" value="${idactivos_fijos}">
           <input type="hidden" name="ficha_tecnica_activo[]" value="${ficha_tecnica_activo}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/img/materiales/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_activo('${img}', '${nombre}')">
-            <span class="username"><p style="margin-bottom: 0px !important;">${nombre}</p></span>
-            <span class="description"><b>Color: </b>${nombre_color}</span>
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_activo('${img}', '${nombre}')">
+            <span class="username"><p style="margin-bottom: 0px !important;"  class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
+            <span class="description" color_${cont}><b>Color: </b>${nombre_color}</span>
           </div>
         </td>
-        <td><span class="">${unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
+        <td><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
         <td class="form-group"><input class="producto_${idactivos_fijos} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class="hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
         <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
@@ -829,14 +832,19 @@ function evaluar() {
   } else {
     $("#guardar_registro_compras").hide();
     cont = 0;
+    
+    $("#subtotal").html("S/. 0.00");
+    $("#subtotal_compra").val(0);
+
+    $("#igv_comp").html("S/. 0.00");
+    $("#igv_compra").val(0);
+
+    $("#total").html("S/. 0.00");
+    $("#total_compra_af_g").val(0);
+
   }
 
-  if (detalles_p > 0) {
-    $("#guardar_registro_compras_p").show();
-  } else {
-    $("#guardar_registro_compras_p").hide();
-    cont_p = 0;
-  }
+
 }
 
 function modificarSubtotales() {
@@ -1068,22 +1076,25 @@ function editar_detalle_compras(idcompra_af_general) {
           if (element.imagen == "" || element.imagen == null) {
             img = `../dist/img/default/img_defecto_activo_fijo.png`;
           } else {
-            img =`../dist/docs/activos_fijos_general/img_activos_fijos/${element.imagen}`;
+            img =`${element.imagen}`;
           }
 
           var fila = `
           <tr class="filas" id="fila${cont}">
-            <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(${cont})">X</button></td>
+            <td>
+              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${element.idactivos_fijos}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
+            </td>
             <td>
               <input type="hidden" name="idactivos_fijos[]" value="${element.idactivos_fijos}">
               <input type="hidden" name="ficha_tecnica_activo[]" value="${element.ficha_tecnica}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" onclick="ver_img_activo('${element.imagen}', '${element.nombre}')">
-                <span class="username"><p style="margin-bottom: 0px !important;">${element.nombre}</p></span>
-                <span class="description"><b>Color: </b>${element.color}</span>
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${img}" alt="user image" onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" onclick="ver_img_activo('${img}', '${element.nombre}')">
+                <span class="username"><p style="margin-bottom: 0px !important;" class="mb-0 nombre_producto_${cont}">${element.nombre}</p></span>
+                <span class="description" color_${cont}><b>Color: </b>${element.color}</span>
               </div>
             </td>
-            <td> <span class="">${element.unidad_medida}</span> <input type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
+            <td> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
             <td class="form-group"><input class="producto_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
             <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
@@ -1786,7 +1797,9 @@ function guardar_y_editar_materiales(e) {
 
         tabla.ajax.reload();
         tablaactivos1.ajax.reload();
-        limpiar_materiales();
+        //limpiar_materiales();
+        
+        actualizar_producto();
 
         $("#modal-agregar-material-activos-fijos").modal("hide");
       } else {
@@ -1819,6 +1832,91 @@ function listaractivos() {
       order: [[0, "desc"]], //Ordenar (columna,orden)
     })
     .DataTable();
+}
+
+function mostrar_material(idproducto, cont) { 
+
+  $("#cargando-9-fomulario").hide();
+  $("#cargando-10-fomulario").show();
+  
+  limpiar_materiales();  
+
+  $("#modal-agregar-material-activos-fijos").modal("show");
+
+  $.post("../ajax/activos_fijos.php?op=mostrar", { 'idproducto': idproducto }, function (data, status) {
+    
+    data = JSON.parse(data); console.log(data);
+
+    $("#cargando-9-fomulario").show();
+    $("#cargando-10-fomulario").hide();
+
+    $("#idproducto_p").val(data.idproducto);
+    $("#cont").val(cont);
+
+    $("#nombre_p").val(data.nombre);
+    $("#modelo_p").val(data.modelo);
+    $("#serie_p").val(data.serie);
+    $("#marca_p").val(data.marca);
+    $("#descripcion_p").val(data.descripcion);
+
+    $('#precio_unitario_p').val(parseFloat(data.precio_unitario).toFixed(2));
+    $("#estado_igv_p").val(parseFloat(data.estado_igv).toFixed(2));
+    $("#precio_sin_igv_p").val(parseFloat(data.precio_sin_igv).toFixed(2));
+    $("#precio_igv_p").val(parseFloat(data.precio_igv).toFixed(2));
+    $("#precio_total_p").val(parseFloat(data.precio_total).toFixed(2));
+     
+    $("#unid_medida_p").val(data.idunidad_medida).trigger("change");
+    $("#color_p").val(data.idcolor).trigger("change");  
+    $("#categoria_insumos_af_p").val(data.idcategoria_insumos_af).trigger("change");    
+
+    if (data.estado_igv == "1") {
+      $("#my-switch_igv").prop("checked", true);
+    } else {
+      $("#my-switch_igv").prop("checked", false);
+    }
+     
+    if (data.imagen != "") {
+      
+      $("#fotop2_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
+
+      $("#fotop2_actual").val(data.imagen);
+    }
+
+    // FICHA TECNICA
+    if (data.ficha_tecnica == "" || data.ficha_tecnica == null  ) {
+
+      $("#doct2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+      $("#doct2_nombre").html('');
+
+      $("#doc_oldt_2").val(""); $("#doct2").val("");
+
+    } else {
+
+      $("#doc_oldt_2").val(data.ficha_tecnica); 
+
+      $("#doct2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(data.ficha_tecnica)}</i></div></div>`);
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.ficha_tecnica) == "pdf" ) {
+
+        $("#doct2_ver").html('<iframe src="../dist/docs/material/ficha_tecnica/'+data.ficha_tecnica+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+      }else{
+        if (
+          extrae_extencion(data.ficha_tecnica) == "jpeg" || extrae_extencion(data.ficha_tecnica) == "jpg" || extrae_extencion(data.ficha_tecnica) == "jpe" ||
+          extrae_extencion(data.ficha_tecnica) == "jfif" || extrae_extencion(data.ficha_tecnica) == "gif" || extrae_extencion(data.ficha_tecnica) == "png" ||
+          extrae_extencion(data.ficha_tecnica) == "tiff" || extrae_extencion(data.ficha_tecnica) == "tif" || extrae_extencion(data.ficha_tecnica) == "webp" ||
+          extrae_extencion(data.ficha_tecnica) == "bmp" || extrae_extencion(data.ficha_tecnica) == "svg" ) {
+
+          $("#doct2_ver").html(`<img src="../dist/docs/material/ficha_tecnica/${data.ficha_tecnica}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          
+        } else {
+          $("#doct2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+        }        
+      }      
+    } 
+  });
 }
 
 function precio_con_igv() {
@@ -1895,6 +1993,29 @@ $("#my-switch_igv").on("click ", function (e) {
   }
 });
 
+function actualizar_producto() {
+
+  var idproducto = $("#idproducto_p").val(); 
+  var cont = $("#cont").val(); 
+
+  var nombre_p = $("#nombre_p").val();  
+  var precio_total_p = $("#precio_total_p").val();
+  var unid_medida_p = $("#unidad_medida_p").find(':selected').text();
+  var color_p = $("#color_p").find(':selected').text();  
+
+  if (idproducto == "" || idproducto == null) {
+     
+  } else {
+    $(`.nombre_producto_${cont}`).html(nombre_p); 
+    $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
+    $(`.color_${cont}`).val(color_p); 
+    $(`.unidad_medida_${cont}`).html(unid_medida_p); 
+    $(`.unidad_medida_${cont}`).val(unid_medida_p);
+    $(`.precio_con_igv_${cont}`).val(precio_total_p);    
+  } 
+  
+  modificarSubtotales();
+}
 
 init();
 //::::::::::::::::::V A L I D A C I O N E S::::::::::::::::::
@@ -2724,7 +2845,7 @@ function validando_excedentes() {
 
 // ver imagen grande del producto agregado a la compra
 function ver_img_activo(img, nombre) {
-  $("#ver_img_activo").attr("src", `../dist/docs/activos_fijos_general/img_activos_fijos/${img}`);
+  $("#ver_img_activo").attr("src", `../dist/docs/material/img_perfil/${img}`);
   $(".nombre-img-activo").html(nombre);
   $("#modal-ver-img-activo").modal("show");
 }
