@@ -83,9 +83,14 @@
                             <table id="tbla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="">#</th>
+                                  <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
-                                  <th>Cantidad</th> 
+                                  <th class="">Color</th>
+                                  <th class="">Marca</th>
+                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
+                                  <th>Cantidad</th>
+                                  <th>Compra</th> 
                                   <th>Precio promedio</th> 
                                   <th>Precio actual</th>    
                                   <th>Suma Total</th>                      
@@ -96,9 +101,14 @@
                               </tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
+                                  <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th>Unidad de medida</th>
+                                  <th class="">Color</th>
+                                  <th class="">Marca</th>
+                                  <th>UM</th>
                                   <th class="text-center suma_total_productos h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-nowrap text-right suma_total_de_compras h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               

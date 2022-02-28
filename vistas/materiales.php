@@ -134,6 +134,23 @@
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
                                 </div>
                               </div>
+
+                              <!-- Modelo -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="modelo">Modelo <sup class="text-danger">*</sup> </label>
+                                  <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
+                                </div>
+                              </div>
+
+                              <!-- Serie -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="serie">Serie </label>
+                                  <input class="form-control" type="text" id="serie" name="serie" placeholder="Serie." />
+                                </div>
+                              </div>
+
                               <!--Marca-->
                               <div class="col-lg-6 class_pading">
                                 <div class="form-group">
@@ -141,6 +158,7 @@
                                   <input type="text" name="marca" class="form-control" id="marca" placeholder="Marca" />
                                 </div>
                               </div>
+
                               <!-- Color -->
                               <div class="col-lg-6">
                                 <div class="form-group">
@@ -149,6 +167,7 @@
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
                               </div>
+
                               <!-- Unnidad  onchange="mostrar_igv(); ocultar_comprob();"-->
                               <div class="col-lg-6" id="content-t-unidad">
                                 <div class="form-group">
@@ -157,6 +176,7 @@
                                   <!--<input type="hidden" name="unid_medida_old" id="unid_medida_old" />-->
                                 </div>
                               </div>
+
                               <!--Precio U-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
@@ -164,6 +184,7 @@
                                   <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                 </div>
                               </div>
+
                               <!-- Rounded switch -->
                               <div class="col-lg-2 class_pading">
                                 <div class="form-group">
@@ -179,6 +200,7 @@
                                   <input type="hidden" name="estado_igv" id="estado_igv" />
                                 </div>
                               </div>
+
                               <!--Sub Total precio_real monto_igv total-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
@@ -187,6 +209,7 @@
                                   <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
                                 </div>
                               </div>
+
                               <!--IGV-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
@@ -195,6 +218,7 @@
                                   <input type="hidden" name="monto_igv" class="form-control" id="monto_igv" />
                                 </div>
                               </div>
+
                               <!--Total-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
@@ -203,6 +227,7 @@
                                   <input type="hidden" name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                 </div>
                               </div>
+
                               <!--descripcion_material-->
                               <div class="col-lg-12 class_pading">
                                 <div class="form-group">
@@ -210,6 +235,7 @@
                                   <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
+                              
                               <!--iamgen-material-->
                               <div class="col-md-6 col-lg-6">
                                 <label for="imagen1">Imagen</label>

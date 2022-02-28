@@ -151,7 +151,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $rspta = $resumen_insumos->tbla_principal($idproyecto);
         //Vamos a declarar un array
-        $data = [];
+        $data = []; $count = 1;
 
         $imagen_error = "this.src='../dist/svg/default_producto.svg'";
 
@@ -159,17 +159,20 @@ if (!isset($_SESSION["nombre"])) {
 
           $precio_promedio = number_format($reg->precio_con_igv / $reg->count_productos, 2, ".", ",");
 
-          $data[] = [             
-            "0" => '<div class="user-block"> <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg->imagen . '" alt="User Image" onerror="' .  $imagen_error .  '">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombre_producto . '</p></span>
-                <span class="description"> <b>Color:</b> ' . $reg->nombre_color .'</span>
+          $data[] = [     
+            "0"  => $count++,       
+            "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar_insumo(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn btn-info btn-sm" onclick="mostrar_detalle_insumo(' . $reg->idproducto . ')"><i class="far fa-eye"></i></button>',       
+            "2" => '<div class="user-block"> <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $reg->imagen . '" alt="User Image" onerror="' .  $imagen_error .  '"><span class="username"><p class="text-primary" style="margin-bottom: 0.2rem !important"; >' . $reg->nombre_producto . '</p></span><span class="description"> <b class="hidden">-</b> <b class="hidden">Modelo:</b> ' . $reg->modelo .'</span>
               </div>',
-            "1" => $reg->nombre_medida,
-            "2" => $reg->cantidad_total,
-            "3" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button> 
-            <span> S/. ' . number_format($reg->promedio_precio, 2, ".", ",") . '</span>',
-            "4" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
-            "5" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+            "3" => $reg->nombre_color,
+            "4" => $reg->marca,
+            "5" => $reg->nombre_medida,
+            "6" => $reg->cantidad_total,
+            "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' . $reg->nombre_producto . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button>',
+            "8" => 'S/. ' . number_format($reg->promedio_precio, 2, ".", ","),
+            "9" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
+            "10" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
           ];
         }
 

@@ -70,6 +70,8 @@ function limpiar() {
   //Mostramos los Materiales
   $("#idproducto").val("");
   $("#nombre_material").val("");
+  $("#modelo").val("");
+  $("#serie").val("");
   $("#marca").val("");
   $("#descripcion_material").val("");
 
@@ -214,7 +216,9 @@ function mostrar(idproducto) {
 
     $("#idproducto").val(data.idproducto);
     $("#nombre_material").val(data.nombre);
-    $("#marca").val(data.marca);    
+    $("#modelo").val(data.modelo);
+    $("#serie").val(data.serie);
+    $("#marca").val(data.marca);            
     $("#descripcion_material").val(data.descripcion);
 
     $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2));

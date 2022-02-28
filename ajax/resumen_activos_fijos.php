@@ -428,8 +428,7 @@ if (!isset($_SESSION["nombre"])) {
         //Codificar el resultado utilizando json
         echo json_encode($rspta);
     
-      break;
-      
+      break;      
       
 
       // SELECT2

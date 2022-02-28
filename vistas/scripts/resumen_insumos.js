@@ -164,9 +164,9 @@ function tbla_principal(id_proyecto) {
 		"responsive": true,
 		lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
-	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
+	  "aServerSide": true,//Paginación y filtrado realizados por el servidor
+	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+	  buttons: [ { extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
 		"ajax":	{
       url: '../ajax/resumen_insumos.php?op=tbla_principal&id_proyecto='+id_proyecto,
       type : "get",
@@ -176,24 +176,33 @@ function tbla_principal(id_proyecto) {
       }
 		},
     createdRow: function (row, data, ixdex) {          
+      // columna: Cantidad
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass("text-nowrap");         
+      }
 
       // columna: Cantidad
-      if (data[2] != '') {
-        $("td", row).eq(2).addClass("text-center");         
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-center");         
+      }
+
+      // columna: Compra
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass("text-center");         
       }
 
       // columna: Precio promedio
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass("modal-footer justify-content-between");         
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass("text-right");         
       }
 
       // columna: Precio actual
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass("text-right");         
+      if (data[8] != '') {
+        $("td", row).eq(8).addClass("text-right");         
       }
       // columna: Suma Total
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass("text-right");         
+      if (data[9] != '') {
+        $("td", row).eq(9).addClass("text-right");         
       }
     },
 		"language": {
@@ -206,6 +215,9 @@ function tbla_principal(id_proyecto) {
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
 	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "columnDefs":[ { "targets": [ 3 ], "visible": false, "searchable": false },
+            
+    ]
 	}).DataTable();
 
   $.post("../ajax/resumen_insumos.php?op=suma_total_compras", { 'idproyecto': id_proyecto }, function (data, status) {
@@ -252,7 +264,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-		buttons: [	],
+		buttons: [ { extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
 		"ajax":	{
       url: `../ajax/resumen_insumos.php?op=tbla_facturas&idproyecto=${idproyecto}&idproducto=${idproducto}`,
       type : "get",

@@ -194,12 +194,10 @@ function fecha_actual() {
 
 //Función limpiar
 function limpiar() {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 
   //Mostramos los selectProveedor
-  $.post("../ajax/compra.php?op=selectProveedor", function (r) {
-    $("#idproveedor").html(r);
-  });
+  $.post("../ajax/compra.php?op=selectProveedor", function (r) { $("#idproveedor").html(r); });
 
   $("#idcompra_proyecto").val();
   $("#idproyecto").val();
@@ -267,7 +265,7 @@ function regresar() {
   $("#ttl_monto_pgs_detracc").html("");
   $("#pagos_con_detraccion").hide();
   limpiar();
-  limpiardatosproveedor();
+  limpiar_form_proveedor();
   tabla.ajax.reload();
 }
 
@@ -289,6 +287,7 @@ function tbla_principal(nube_idproyecto) {
         console.log(e.responseText);
       },
     },
+     
     createdRow: function (row, data, ixdex) {
       //console.log(data);
       if (data[0] != '') {
@@ -674,6 +673,14 @@ function evaluar() {
   } else {
     $("#guardar_registro_compras").hide();
     cont = 0;
+    $("#subtotal").html("S/. 0.00");
+    $("#subtotal_compra").val(0);
+
+    $("#igv_comp").html("S/. 0.00");
+    $("#igv_compra").val(0);
+
+    $("#total").html("S/. 0.00");
+    $("#total_compra_af_g").val(0);
   }
 }
 
@@ -1659,7 +1666,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/docs/compra/baucher/" + imagen);
   $("#descargar").attr("href", "../dist/docs/compra/baucher/" + imagen);
 
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 }
 
 function validar_forma_de_pago() {

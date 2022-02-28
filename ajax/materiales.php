@@ -20,6 +20,8 @@
       $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
 
       $nombre = isset($_POST["nombre_material"]) ? encodeCadenaHtml($_POST["nombre_material"] ) : "";
+      $modelo = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"] ) : "";
+      $serie = isset($_POST["serie"]) ? encodeCadenaHtml($_POST["serie"] ) : "";
       $marca = isset($_POST["marca"]) ? encodeCadenaHtml($_POST["marca"]) : "";
       $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
       $descripcion = isset($_POST["descripcion_material"]) ? encodeCadenaHtml($_POST["descripcion_material"]) : "";      
@@ -33,7 +35,7 @@
       $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
 
       $imagen1 = isset($_POST["imagen1"]) ? limpiarCadena($_POST["imagen1"]) : "";
-      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "";
+      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : ""; //$modelo, $serie
 
       switch ($_GET["op"]) {
 
