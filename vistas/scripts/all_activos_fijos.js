@@ -512,18 +512,18 @@ function listar() {
       },
       createdRow: function (row, data, ixdex) {
         //console.log(data);
-        if (quitar_formato_miles(data[7]) > 0) {
-          $("td", row).eq(7).css({
+        if (quitar_formato_miles(data[8]) > 0) {
+          $("td", row).eq(8).css({
             "background-color": "#ffc107",
             color: "black",
           });
-        } else if (quitar_formato_miles(data[7]) == 0) {
-          $("td", row).eq(7).css({
+        } else if (quitar_formato_miles(data[8]) == 0) {
+          $("td", row).eq(8).css({
             "background-color": "#28a745",
             color: "white",
           });
         } else {
-          $("td", row).eq(7).css({
+          $("td", row).eq(8).css({
             "background-color": "#ff5252",
             color: "white",
           });
@@ -541,7 +541,7 @@ function listar() {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[2, "desc"]], //Ordenar (columna,orden)
+      order: [[3, "desc"]], //Ordenar (columna,orden)
       columnDefs: [
         {
          // targets: [8],

@@ -142,6 +142,7 @@
                           <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th class="">#</th>
                                 <th class="">Acciones</th>
                                 <th>Descripción</th>
                                 <th>Fecha</th>
@@ -157,6 +158,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th class="">#</th>
                                 <th class="">Acciones</th>
                                 <th>Descripción</th>
                                 <th>Fecha</th>
