@@ -94,6 +94,7 @@
                           <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>                                
+                                <th class="text-center">#</th> 
                                 <th>Trabajdor</th> 
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
@@ -114,6 +115,7 @@
                             </tbody>
                             <tfoot>
                               <tr> 
+                                <th class="text-center">#</th> 
                                 <th class="text-gray">Trabajdor</th> 
                                 <th class="text-gray">Fecha inicio</th>
                                 <th class="text-center text-gray">Hoy</th>
