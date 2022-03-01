@@ -488,18 +488,22 @@ class Resumen_general
     $sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
 		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
 		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
-		AND tpp.idtrabajador=t.idtrabajador $consulta_filtro ";
+		AND tpp.idtrabajador=t.idtrabajador AND ra.estado = '1' $consulta_filtro  ";
 
     $trabaj_obrero = ejecutarConsultaArray($sql);
 
     if (!empty($trabaj_obrero)) {
+      
       foreach ($trabaj_obrero as $key => $value) {
+
         if (!empty($value['idtrabajador_por_proyecto'])) {
+
           $idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
 
           $sql_2 = "SELECT SUM(pqso.monto_deposito) AS total_deposito 
 					FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
-					WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
+					WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
+          AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
 
           $total_deposito = ejecutarConsultaSimpleFila($sql_2);
 
@@ -528,7 +532,8 @@ class Resumen_general
 		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
 		rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
-		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto;";
+		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' 
+    AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.estado = '1';";
     $q_s = ejecutarConsultaArray($sql_1);
 
     if (!empty($q_s)) {

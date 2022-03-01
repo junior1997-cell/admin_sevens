@@ -871,17 +871,17 @@
                         </div>
                         <div class="modal-body">
 
-                          <div class="class-style tabla_obrero" id="cargando-5-fomulario" style="text-align: center;">
-                            <div class="table-responsive" id="tbl-fechas">
+                          <div class="class-style " id="cargando-5-fomulario">
+                            <div class="table-responsive tabla_obrero" >
                               <div class="row-horizon disenio-scroll">
                                 <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
                                   <thead>
                                     <tr class="bg-gradient-info">
                                       <th rowspan="2" class="stile-celda">N°</th>
                                       <th colspan="3" class="stile-celda pt-0 pb-0 nombre-bloque-asistencia"><b> Quincena </b></th>
-                                      <th rowspan="2" class="stile-celda text-center">Sueldo Hora</th>
+                                      <th rowspan="2" class="stile-celda text-center">Sueldo <br> Hora</th>
                                       <th rowspan="2" class="stile-celda text-center">Horas Normal/Extra</th>
-                                      <th rowspan="2" class="stile-celda text-center">Sabatical</th>
+                                      <th rowspan="2" class="stile-celda text-center">Sab.</th>
                                       <th rowspan="2" class="stile-celda">Monto Normal/Extra</th>
                                       <th rowspan="2" class="stile-celda text-center">Adicional</th>
                                       <th rowspan="2" class="stile-celda">Monto total</th>
@@ -910,6 +910,13 @@
                                 </table>
                               </div>
                             </div>
+
+                            <div style="display: none;" class="alerta_obrero">
+                              <div class="alert alert-warning alert-dismissible">
+                                <h5><i class="icon fas fa-exclamation-triangle fa-3x text-white"></i> <b>No hay pagos!</b></h5>
+                                No hay detalles de pagos para mostrar, puede registrar pagos en el módulo <b>pagos trabajador.</b>
+                              </div>
+                            </div>
                           </div>
 
                           <div class="row" id="cargando-6-fomulario" style="display: none;">
@@ -920,12 +927,7 @@
                             </div>
                           </div>
 
-                          <div style="display: none;" class="alerta_obrero">
-                            <div class="alert alert-warning alert-dismissible">
-                              <h5><i class="icon fas fa-exclamation-triangle fa-3x text-white"></i> <b>No hay pagos!</b></h5>
-                              No hay detalles de pagos para mostrar, puede registrar pagos en el módulo <b>pagos trabajador.</b>
-                            </div>
-                          </div>
+                          
                         </div>
                       </div>
                     </div>

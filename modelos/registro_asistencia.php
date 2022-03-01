@@ -236,7 +236,7 @@ Class Asistencia_trabajador
 		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
 		FROM trabajador AS t, trabajador_por_proyecto AS tpp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
 		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND at.estado=1 AND tpp.idproyecto = '$nube_idproyecto' AND tpp.idcargo_trabajador = c.idcargo_trabajador
-		GROUP BY tpp.idtrabajador;";
+		GROUP BY tpp.idtrabajador ORDER BY t.nombres ASC;";
 		$agrupar_trabajdor = ejecutarConsultaArray($sql);
 
 		foreach ($agrupar_trabajdor as $key => $value) {
@@ -283,9 +283,11 @@ Class Asistencia_trabajador
 	//Implementar un método para listar asistencia
 	public function tbla_asis_individual($idtrabajador_x_proyecto) {
 		$sql="SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador,  atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, 
-		atra.pago_horas_extras, atra.fecha_asistencia, atra.nombre_dia, atra.estado, t.nombres as trabajador, t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil 
-		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t 
-		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador AND atra.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ORDER BY  atra.estado DESC; ";
+		atra.pago_horas_extras, atra.fecha_asistencia, atra.nombre_dia, atra.estado, t.nombres as trabajador, 
+		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil , atra.doc_justificacion
+		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t
+		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador 
+		AND atra.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ORDER BY  atra.fecha_asistencia DESC; ";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -537,7 +539,32 @@ Class Asistencia_trabajador
 			SET  idtrabajador_por_proyecto='$id_trabajador_x_proyecto', fecha_q_s_inicio='$fecha_q_s_inicio', estado_envio_contador= '$estado_envio_contador'
 			WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
 		return ejecutarConsulta($sql);
+	}	
+
+	public function editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc) {
+		$sql = "UPDATE asistencia_trabajador SET 
+		descripcion_justificacion='$detalle_j', 
+		doc_justificacion='$doc'
+		WHERE idasistencia_trabajador = '$idasistencia_trabajador_j';";
+		return ejecutarConsulta($sql);
 	}
+
+	public function mostrar_justificacion($idasistencia_trabajador_j) {
+
+		$sql = "SELECT idasistencia_trabajador, descripcion_justificacion, doc_justificacion 
+		FROM asistencia_trabajador
+		WHERE idasistencia_trabajador =  '$idasistencia_trabajador_j';";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	// obtebnemos los "DOC JUSTIFICACION para eliminar
+	public function imgJustificacion($id) {
+
+        $sql = "SELECT doc_justificacion FROM asistencia_trabajador WHERE idasistencia_trabajador = '$id'";
+
+        return ejecutarConsulta($sql);
+    }
 
 }
 

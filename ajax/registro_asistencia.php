@@ -15,13 +15,15 @@ ob_start();
 
       require_once "../modelos/registro_asistencia.php";
 
-      $asist_trabajador=new Asistencia_trabajador();
+      $asist_trabajador=new Asistencia_trabajador();      
 
-      //$idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
-      //$idproyecto		          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-      //$idasistencia_trabajador= isset($_POST["idasistencia_trabajador"])? limpiarCadena($_POST["idasistencia_trabajador"]):"";      
+      // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
       $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
 
+      // :::::::::::::::::::::::::::::::::::: D A T O S   J S U T I F I C A C I O N ::::::::::::::::::::::::::::::::::::::
+      $idasistencia_trabajador_j	= isset($_POST["idasistencia_trabajador_j"])? limpiarCadena($_POST["idasistencia_trabajador_j"]):"";
+      $detalle_j	= isset($_POST["detalle_j"])? limpiarCadena($_POST["detalle_j"]):"";
+      $doc1	= isset($_POST["doc1"])? $_POST["doc1"]:"";
       
       switch ($_GET["op"]){
         // Gurdamos cada dia de asistencia del OBRERO
@@ -89,6 +91,57 @@ ob_start();
           
         break;
 
+        case 'guardar_y_editar_justificacion':
+          	
+          //*DOC 2*//
+          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
+
+            $flat_doc1 = false;
+
+            $doc1      = $_POST["doc_old_1"];
+
+          } else {
+
+            $flat_doc1 = true;
+
+            $ext_doc1  = explode(".", $_FILES["doc1"]["name"]);
+              
+            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/asistencia_obrero/justificacion/" . $doc1);
+            
+          }	
+
+          // registramos un nuevo: recibo x honorario
+          if (empty($idasistencia_trabajador_j)){
+
+            $rspta = '0';
+            
+            echo $rspta ? "ok" : "No se logro registrar la justificación";
+
+          }else {
+
+            // eliminados si existe el "doc en la BD"
+            if ($flat_doc1 == true) {
+
+              $datos_f1 = $asist_trabajador->imgJustificacion($idasistencia_trabajador_j);
+
+              $doc1_ant = $datos_f1->fetch_object()->doc_justificacion;
+
+              if ( !empty($doc1_ant) ) {
+
+                unlink("../dist/docs/asistencia_obrero/justificacion/" . $doc1_ant);
+              }
+            }
+
+            // editamos un recibo x honorario existente
+            $rspta=$asist_trabajador->editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc1);
+            
+            echo $rspta ? "ok" : "La justificación no se pudo actualizar";
+          }
+
+        break;
+
         case 'desactivar':
 
           $rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
@@ -124,6 +177,14 @@ ob_start();
         case 'mostrar_editar':
 
           $rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
+        break;
+
+        case 'mostrar_justificacion':
+
+          $rspta=$asist_trabajador->mostrar_justificacion($_POST["idasistencia_trabajador"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -190,7 +251,7 @@ ob_start();
           
           $rspta=$asist_trabajador->tbla_principal($nube_idproyecto);
           //Vamos a declarar un array
-          $data= Array();
+          $data= Array(); $cont = 1;
 
           $jornal_diario = '';  $sueldo_acumudado=''; $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
@@ -199,25 +260,26 @@ ob_start();
             $ver_asistencia="'".$value['idtrabajador_por_proyecto']."','".$value['fecha_inicio_proyect']."'";
 
             $data[]=array(
-              "0"=>'<button class="btn btn-info btn-sm" onclick="ver_q_s_individual('.$value['idtrabajador_por_proyecto'].')">
+              "0"=> $cont++,
+              "1"=>'<button class="btn btn-info btn-sm" onclick="ver_q_s_individual('.$value['idtrabajador_por_proyecto'].')">
                 <i class="far fa-calendar-alt"></i>
               </button>
               <button class="btn btn-info btn-sm" onclick="ver_asistencias_individual('.$ver_asistencia.')">
                 <i class="far fa-clock"></i>
               </button>',
-              "1"=>'<div class="user-block text-nowrap">
+              "2"=>'<div class="user-block text-nowrap">
                 <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
                 style="color: #000000 !important;">'. $value['cargo'] .': </b> <br>'. $value['nombre'] .'</p></span>
                 <span class="description" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
               </div>',              
-              "2"=> round($value['total_horas_normal'] + $value['total_horas_extras'], 2),
-              "3"=> round(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 1),
-              "4"=> 'S/. '.$value['sueldo_hora'],
-              "5"=> 'S/. '.$value['sueldo_diario'],
-              "6"=> 'S/. '.number_format($value['sueldo_mensual'], 2, '.', ','),              
-              "7"=> $value['total_sabatical'],
-              "8"=> 'S/. '.number_format($value['pago_quincenal'], 1, '.', ',') ,
+              "3"=> round($value['total_horas_normal'] + $value['total_horas_extras'], 2),
+              "4"=> round(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 1),
+              "5"=> 'S/. '.$value['sueldo_hora'],
+              "6"=> 'S/. '.$value['sueldo_diario'],
+              "7"=> 'S/. '.number_format($value['sueldo_mensual'], 2, '.', ','),              
+              "8"=> $value['total_sabatical'],
+              "9"=> 'S/. '.number_format($value['pago_quincenal'], 1, '.', ',') ,
             );
 
             $jornal_diario=0;
@@ -261,7 +323,7 @@ ob_start();
             $justificacion = "$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
 
             $data[]=array(
-              "0"=> ' <button class="btn btn-info" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
+              "0"=> (empty($reg->doc_justificacion)) ? '<button class="btn btn-outline-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>' : '<button class="btn btn-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
               "1"=> '<div class="user-block text-nowrap">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > '.$reg->trabajador .'</p></span>

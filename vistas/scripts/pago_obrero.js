@@ -275,7 +275,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
   nombre_trabajador_r =nombre_trabajador; cuenta_bancaria_r = cuenta_bancaria;
   
   $('.data-q-s').html(`<tr>
-    <td colspan="10" >
+    <td colspan="13" >
       <div class="row">
         <div class="col-lg-12 text-center">
           <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
