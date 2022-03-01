@@ -108,7 +108,7 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
 
     tabla_1 = $('#tabla1_compras').dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -216,7 +216,7 @@ function tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
 
     tabla_2 = $("#tabla2_maquinaria").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -322,7 +322,7 @@ function tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
 
     tabla_3 = $("#tabla3_equipo").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -434,7 +434,7 @@ function tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaja
 
     tabla_4 = $("#tabla4_transporte").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -541,7 +541,7 @@ function tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
 
     tabla_5 = $("#tabla5_hospedaje").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -649,7 +649,7 @@ function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
 
     tabla_6 = $("#tabla6_comidas_ex").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -756,7 +756,7 @@ function tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
 
     tabla_7 = $("#tabla7_breaks").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -864,7 +864,7 @@ function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajado
 
     tabla_8 = $("#tabla8_pension").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -972,7 +972,7 @@ function tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
 
     tabla_9 = $("#tabla9_per_adm").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1081,7 +1081,7 @@ function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
 
     tabla_10 = $("#tabla10_per_obr").dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1238,7 +1238,7 @@ function table_all_sumas() {
     
   tabla_11 = $("#tabla11_all_sumas").dataTable({
     responsive: true,
-    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1441,7 +1441,7 @@ function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, p
   tabla2 = $("#tabla-detalle-m")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1500,7 +1500,7 @@ function mostrar_comprobantes_breaks(idsemana_break) {
   tabla1 = $("#t-comprobantes")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1537,7 +1537,7 @@ function mostrar_detalle_pension(idpension) {
   tabla_detalle_s = $("#tabla-detalles-semanal")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1574,7 +1574,7 @@ function mostrar_comprobantes_pension(idpension) {
   tabla2 = $("#t-comprobantes-pension")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1677,8 +1677,7 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
 
   $.post("../ajax/resumen_general.php?op=mostrar_detalle_obrero", { idtrabajador_por_proyecto: idtrabajador_por_proyecto }, function (data, status) {
     //obrero
-    data = JSON.parse(data);
-    console.log(data);
+    data = JSON.parse(data); console.log(data);
 
     $(".total_hn_he").html("");
     $(".total_sabatical").html("");
@@ -1697,14 +1696,14 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
                   <td>${value.numero_q_s}</td>
                   <td>${format_d_m_a(value.fecha_q_s_inicio)}</td>
                   <td>${format_d_m_a(value.fecha_q_s_fin)}</td>
-                  <td><sup>S/. </sup>${value.sueldo_hora}</td>
+                  <td>${value.sueldo_hora}</td>
                   <td>${value.total_hn}<b> / </b>${value.total_he}</td>
                   <td>${value.sabatical}</td>          
                   <td> ${formato_miles(value.pago_parcial_hn)}<b> / </b>${formato_miles(value.pago_parcial_he)}</td>
-                  <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.adicional_descuento)}</td>
-                  <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.pago_quincenal)}</td>
-                  <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(value.deposito)}</td>
-                  <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(parseFloat(value.pago_quincenal) - parseFloat(value.deposito))}</td>
+                  <td style="text-align: right !important;">${formato_miles(value.adicional_descuento)}</td>
+                  <td style="text-align: right !important;">${formato_miles(value.pago_quincenal)}</td>
+                  <td style="text-align: right !important;">${formato_miles(value.deposito)}</td>
+                  <td style="text-align: right !important;">${formato_miles(parseFloat(value.pago_quincenal) - parseFloat(value.deposito))}</td>
               </tr>`;
 
         $(".detalle-data-q-s").append(detalle);
@@ -1726,10 +1725,12 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
       $(".total_quincena").html("<sup>S/. </sup>" + formato_miles(pago_quincenal));
       $(".total_deposito").html("<sup>S/. </sup>" + formato_miles(deposito));
       $(".total_saldo").html("<sup>S/. </sup>" + formato_miles(saldo));
+
+      
     } else {
       $(".tabla_obrero").hide();
       $(".alerta_obrero").show();
-    }
+    }  
 
     $('#cargando-5-fomulario').show();
     $('#cargando-6-fomulario').hide();

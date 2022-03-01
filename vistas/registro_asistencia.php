@@ -77,6 +77,7 @@
                           <table id="tabla-asistencia" class="table table-bordered table-striped display " style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Opciones.">Op.</th>
                                 <th>Nombre</th>
                                 <th class="text-center">Total Horas</th>
@@ -91,6 +92,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th class="text-gray">Op</th>
                                 <th class="text-gray">Nombre</th>
                                 <th class="text-gray">total Horas</th>
@@ -279,7 +281,7 @@
                 </div>
                 <!-- /.container-fluid -->
               </div>
-              <!-- Modal agregar asistencia -->
+              <!-- Modal agregar asistencia - :::::::::::::::::::::::::::::::::: NO SE SE USA -->
               <div class="modal fade" id="modal-agregar-asistencia">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
@@ -346,7 +348,7 @@
                 </div>
               </div>
 
-              <!-- Modal editar asistencia -->
+              <!-- Modal editar asistencia - :::::::::::::::::::::::::::::::::::: NO SE SE USA -->
               <div class="modal fade" id="modal-editar-asistencia">
                 <div class="modal-dialog modal-dialog-scrollable modal-md">
                   <div class="modal-content">
@@ -418,42 +420,52 @@
                         <div class="row" id="cargando-3-fomulario">
                           
                           <!-- id asistencia -->
-                          <input type="hidden" name="idasistencia_trabajador3" id="idasistencia_trabajador3" />                                         
+                          <input type="hidden" name="idasistencia_trabajador_j" id="idasistencia_trabajador_j" /> 
                           
                           <!-- Descripcion -->
                           <div class="col-md-12 col-lg-12">
                             <div class="form-group">
                               <label for="nombre">Descripción</label>
-                              <textarea name="detalle" id="detalle" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
+                              <textarea name="detalle_j" id="detalle_j" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
                             </div>
                           </div>
 
                           <!-- Documento -->
-                          <div class="col-md-12 col-lg-12" >                               
+                          <div class="col-md-12 col-lg-12" > 
+                            <!-- linea divisoria -->
+                            <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
+
                             <div class="row text-center">
                               <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                 <label for="cip" class="control-label" > Evidencia </label>
                               </div>
-                              <div class="col-md-6 text-center">
-                                <button type="button" class="btn btn-success btn-block" id="doc1_i">
+                              <!-- Subir documento -->
+                              <div class="col-md-3 text-center">
+                                <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
                                   <i class="fas fa-file-upload"></i> Subir.
                                 </button>
                                 <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                <input style="display: none;" id="doc1" type="file" name="doc1" accept=".pdf" class="docpdf" /> 
+                                <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                               </div>
-                              <div class="col-md-6 text-center">
-                                <button type="button" class="btn btn-info btn-block" onclick="PreviewImage();">
+                              <!-- Recargar -->
+                              <div class="col-md-3 text-center">
+                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'justificacion');">
                                   <i class="fa fa-eye"></i> PDF.
                                 </button>
+                              </div>
+                              <!-- Dowload -->
+                              <div class="col-md-3 text-center descargar" style="display: none;">
+                                <a type="button" class="btn btn-warning btn-block btn-xs" id="descargar_rh" download="Justificacion"> <i class="fas fa-download"></i> Descargar. </a>
+                              </div>
+                              <!-- Ver grande -->
+                              <div class="col-md-3 text-center ver_completo" style="display: none;">
+                                <a type="button" class="btn btn-info btn-block btn-xs " target="_blank" id="ver_completo"> <i class="fas fa-expand"></i> Ver completo. </a>
                               </div>
                             </div>                              
                             <div id="doc1_ver" class="text-center mt-4">
                               <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
                             </div>
-                            <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
-
-                            <!-- linea divisoria -->
-                            <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
+                            <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>                            
                           </div> 
 
                         </div>
@@ -466,12 +478,12 @@
                           </div>
                         </div>
                         <!-- /.card-body -->
-                        <button type="submit" style="display: none;" id="submit-form-asistencia2">Submit</button>
+                        <button type="submit" style="display: none;" id="submit-form-justificacion">Submit</button>
                       </form>
                     </div>
                     <div class="modal-footer justify-content-between">
                       <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-success" id="guardar_registro2">Guardar Cambios</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_justificacion">Guardar Cambios</button>
                     </div>
                   </div>
                 </div>
