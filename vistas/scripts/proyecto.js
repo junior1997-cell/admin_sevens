@@ -53,19 +53,11 @@ function init(){
 
   $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
   // Inicializar - Date picker  
-  $('#fecha_fin').datetimepicker({
-    locale: 'es',     
-    // format: 'L',
-    format: 'DD-MM-YYYY',
-    daysOfWeekDisabled: [6],     
-    //defaultDate: "11/1/2013",
-    disabledDates: [
-      // moment("12/25/2013"),      
-      "11-11-2021",
-      "11-10-2021",
-      "11-05-2021"
-    ],     
-  }); 
+  // $('#fecha_fin').datetimepicker({
+  //   locale: 'es', 
+  //   format: 'DD-MM-YYYY',
+  //   daysOfWeekDisabled: [6],         
+  // }); 
   
   $('#fecha_inicio_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
   // Inicializar - Date picker  

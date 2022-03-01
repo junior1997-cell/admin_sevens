@@ -315,6 +315,8 @@ switch ($_GET["op"]) {
         //Vamos a declarar un array
         $data = [];
 
+        $cont = 1;
+
         while ($reg = $rspta->fetch_object()) {
           //empty($fecha_recojo)?setlocale(LC_ALL,"es_ES").''.date('l d-m-Y', strtotime($reg->fecha_entrega)):$reg->fecha_entrega.'/'.$reg->fecha_recojo,
           if (empty($reg->fecha_recojo) || $reg->fecha_recojo == '0000-00-00') {
@@ -328,47 +330,27 @@ switch ($_GET["op"]) {
 
             $fecha = '<b class="text-primary">' . $fecha_entreg . ', ' . format_d_m_a($reg->fecha_entrega) . '</b> / <br> <b  class="text-danger">' . $fecha_recoj . ', ' . format_d_m_a($reg->fecha_entrega) . '<b>';
           }
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
+           
 
           $tool = '"tooltip"';
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
           $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning" onclick="mostrar(' .
-                $reg->idservicio .
-                ',' .
-                $reg->idmaquinaria .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger" onclick="desactivar(' .
-                $reg->idservicio .
-                ',' .
-                $reg->idmaquinaria .
-                ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning" onclick="mostrar(' .
-                $reg->idservicio .
-                ',' .
-                $reg->idmaquinaria .
-                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary" onclick="activar(' .
-                $reg->idservicio .
-                ',' .
-                $reg->idmaquinaria .
-                ')"><i class="fa fa-check"></i></button>',
-            "1" => $fecha,
-            "2" => empty($reg->horometro_inicial) || $reg->horometro_inicial == '0.00' ? '-' : $reg->horometro_inicial,
-            "3" => empty($reg->horometro_final) || $reg->horometro_final == '0.00' ? '-' : $reg->horometro_final,
-            "4" => empty($reg->horas) || $reg->horas == '0.00' ? '-' : $reg->horas,
-            "5" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ? '-' : number_format($reg->costo_unitario, 2, '.', ','),
-            "6" => empty($reg->unidad_medida) ? '-' : $reg->unidad_medida,
-            "7" => empty($reg->cantidad) ? '-' : $reg->cantidad,
-            "8" => empty($reg->costo_parcial) ? '-' : number_format($reg->costo_parcial, 2, '.', ','),
-            "9" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "0" => $cont++,
+            "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idservicio . ',' . $reg->idmaquinaria . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idservicio . ',' . $reg->idmaquinaria . ')"><i class="far fa-trash-alt"></i></button>'
+              : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idservicio . ',' . $reg->idmaquinaria . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idservicio . ',' . $reg->idmaquinaria . ')"><i class="fa fa-check"></i></button>',
+            "2" => $fecha,
+            "3" => empty($reg->horometro_inicial) || $reg->horometro_inicial == '0.00' ? '-' : $reg->horometro_inicial,
+            "4" => empty($reg->horometro_final) || $reg->horometro_final == '0.00' ? '-' : $reg->horometro_final,
+            "5" => empty($reg->horas) || $reg->horas == '0.00' ? '-' : $reg->horas,
+            "6" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ? '-' : number_format($reg->costo_unitario, 2, '.', ','),
+            "7" => empty($reg->unidad_medida) ? '-' : $reg->unidad_medida,
+            "8" => empty($reg->cantidad) ? '-' : $reg->cantidad,
+            "9" => empty($reg->costo_parcial) ? '-' : number_format($reg->costo_parcial, 2, '.', ','),
+            "10" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+            "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         $results = [
@@ -549,56 +531,33 @@ switch ($_GET["op"]) {
         $data = [];
         $suma = 0;
         $imagen = '';
+        $cont = 1;
         while ($reg = $rspta->fetch_object()) {
           $suma = $suma + $reg->monto;
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
-          if (strlen($reg->titular_cuenta) >= 20) {
-            $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
-          } else {
-            $titular_cuenta = $reg->titular_cuenta;
-          }
+          
           empty($reg->imagen)
             ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
             : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
           $tool = '"tooltip"';
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
           $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fa fa-check"></i></button>',
-            "1" => $reg->forma_pago,
-            "2" => $reg->beneficiario,
-            "3" => $reg->cuenta_destino,
-            "4" => $reg->banco,
-            "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-            "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "8" => $reg->numero_operacion,
-            "9" => number_format($reg->monto, 2, '.', ','),
-            "10" => $imagen,
-            "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "0" => $cont++,
+            "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .  $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="far fa-trash-alt"></i></button>'
+              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .  $reg->idpago_servicio . ',' .  $reg->id_maquinaria . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fa fa-check"></i></button>',
+            "2" => $reg->forma_pago,
+            "3" => '<div class="user-block">
+              <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
+              <span class="description ml-0"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
+              <span class="description ml-0"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+            </div>',
+            "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+            "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+            "6" => $reg->numero_operacion,
+            "7" => number_format($reg->monto, 2, '.', ','),
+            "8" => $imagen,
+            "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         //$suma=array_sum($rspta->fetch_object()->monto);
@@ -634,56 +593,40 @@ switch ($_GET["op"]) {
         $data = [];
         $suma = 0;
         $imagen = '';
+
+        $cont = 1;
+
         while ($reg = $rspta->fetch_object()) {
+
           $suma = $suma + $reg->monto;
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
-          if (strlen($reg->titular_cuenta) >= 20) {
-            $titular_cuenta = substr($reg->titular_cuenta, 0, 20) . '...';
-          } else {
-            $titular_cuenta = $reg->titular_cuenta;
-          }
+         
           empty($reg->imagen)
             ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
             : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-          $tool = '"tooltip"';
+          
+            $tool = '"tooltip"';
+
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+
           $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fa fa-check"></i></button>',
-            "1" => $reg->forma_pago,
-            "2" => $reg->beneficiario,
-            "3" => $reg->cuenta_destino,
-            "4" => $reg->banco,
-            "5" => '<div data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '">' . $titular_cuenta . '</div>',
-            "6" => date("d/m/Y", strtotime($reg->fecha_pago)),
-            "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "8" => $reg->numero_operacion,
-            "9" => number_format($reg->monto, 2, '.', ','),
-            "10" => $imagen,
-            "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "0" => $cont++,
+            "1" => $reg->estado
+              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="far fa-trash-alt"></i></button>'
+              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_servicio . ',' .  $reg->id_maquinaria . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fa fa-check"></i></button>',
+            "2" => $reg->forma_pago,
+            "3" => '<div class="user-block">
+              <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
+              <span class="description ml-0"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
+              <span class="description ml-0"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+            </div>',
+            "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+            "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+            "6" => $reg->numero_operacion,
+            "7" => number_format($reg->monto, 2, '.', ','),
+            "8" => $imagen,
+            "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         //$suma=array_sum($rspta->fetch_object()->monto);
@@ -822,46 +765,34 @@ switch ($_GET["op"]) {
         $data = [];
         $suma = 0;
         $imagen = '';
+        $cont = 1;
         while ($reg = $rspta->fetch_object()) {
+
           $suma = $suma + $reg->monto;
-          if (strlen($reg->descripcion) >= 20) {
-            $descripcion = substr($reg->descripcion, 0, 20) . '...';
-          } else {
-            $descripcion = $reg->descripcion;
-          }
-          if (strlen($reg->nota) >= 20) {
-            $nota = substr($reg->nota, 0, 20) . '...';
-          } else {
-            $nota = $reg->nota;
-          }
+          
           empty($reg->imagen)
             ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
             : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_factura(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>');
+          
           $tool = '"tooltip"';
+
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+
           $data[] = [
-            "0" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_factura(' .
-                $reg->idfactura .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_factura(' .
-                $reg->idfactura .
-                ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_factura(' .
-                $reg->idfactura .
-                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_factura(' .
-                $reg->idfactura .
-                ')"><i class="fa fa-check"></i></button>',
-            "1" => $reg->codigo,
-            "2" => date("d/m/Y", strtotime($reg->fecha_emision)),
-            "3" => empty($reg->nota) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->nota . '">' . $nota . '</div>',
-            "4" => number_format($reg->subtotal, 4, '.', ','),
-            "5" => number_format($reg->igv, 4, '.', ','),
-            "6" => number_format($reg->monto, 2, '.', ','),
-            "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-            "8" => $imagen,
-            "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            "0" => $cont++,
+            "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_factura(' . $reg->idfactura . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_factura(' . $reg->idfactura . ')"><i class="far fa-trash-alt"></i></button>'
+              : '<button class="btn btn-warning btn-sm" onclick="mostrar_factura(' . $reg->idfactura . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-primary btn-sm" onclick="activar_factura(' . $reg->idfactura . ')"><i class="fa fa-check"></i></button>',
+            "2" => $reg->codigo,
+            "3" => date("d/m/Y", strtotime($reg->fecha_emision)),
+            "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->nota) ? '- - -' : $reg->nota ).'</textarea>',
+            "5" => number_format($reg->subtotal, 4, '.', ','),
+            "6" => number_format($reg->igv, 4, '.', ','),
+            "7" => number_format($reg->monto, 2, '.', ','),
+            "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+            "9" => $imagen,
+            "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
         }
         //$suma=array_sum($rspta->fetch_object()->monto);

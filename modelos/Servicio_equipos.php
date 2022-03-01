@@ -235,7 +235,8 @@ class ServicioEquipos
 		ps.imagen as imagen,
 		ps.estado as estado
 		FROM pago_servicio ps, bancos as bn 
-		WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND bn.idbancos=ps.id_banco AND ps.tipo_pago='$tipopago'";
+		WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND bn.idbancos=ps.id_banco 
+    AND ps.tipo_pago='$tipopago' ORDER BY ps.fecha_pago DESC";
     return ejecutarConsulta($sql);
   }
   //Implementamos un método para desactivar categorías
@@ -349,7 +350,7 @@ class ServicioEquipos
     //var_dump($idproyecto,$idmaquinaria);die();
     $sql = "SELECT *
 		FROM factura
-		WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria'";
+		WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria' ORDER BY fecha_emision DESC";
     return ejecutarConsulta($sql);
   }
   //mostrar_factura

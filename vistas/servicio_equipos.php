@@ -148,6 +148,7 @@
                           <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Acciones</th>
                                 <th>Fecha</th>
                                 <th>Horometro Inicial</th>
@@ -164,6 +165,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Fecha</th>
                                 <th>Horometro Inicial</th>
@@ -183,7 +185,7 @@
                         <!--===============Tabla Pagos =======--->
                         <div class="card-body" id="tabla_pagos" style="display: none;">
 
-                        <!-- TABLA PROVEDDOR -->
+                          <!-- TABLA PROVEDDOR -->
                           <div class="text-center" >
                             <div>
                               <h4>Total a pagar: <b id="total_costo_secc_pagos"></b></h4>
@@ -196,12 +198,10 @@
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Acciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -213,12 +213,10 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -230,7 +228,7 @@
                                 <th>Estado</th>
                               </tr>
                               <tr>
-                                <td colspan="8"></td>
+                                <td colspan="6"></td>
                                 <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                 <th style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_p"></b> <br />
@@ -251,12 +249,10 @@
                           <table id="tabla-pagos-detrecciones" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Acciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -268,12 +264,10 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -285,7 +279,7 @@
                                 <th>Estado</th>
                               </tr>
                               <tr>
-                                <td colspan="8"></td>
+                                <td colspan="6"></td>
                                 <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                 <th style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_d"></b> <br />
@@ -305,6 +299,7 @@
                           <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
                                 <th>Fecha Emisión</th>
@@ -320,6 +315,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
                                 <th>Fecha Emisión</th>

@@ -710,7 +710,7 @@ switch ($_GET["op"]) {
           <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
         </div>',             
         "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
-        "5" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
         "6" => $reg->numero_operacion,
         "7" => number_format($reg->monto, 2, '.', ','),
         "8" => $imagen,

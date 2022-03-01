@@ -343,6 +343,9 @@
                                 <input type="hidden" name="plazo_actividad" id="plazo_actividad" >
                               </div>
                             </div>
+
+                            <!-- linea divisoria -->
+                            <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
                             
                             <!-- FECHA INICIO -->
                             <div class="col-lg-4">
@@ -378,8 +381,8 @@
                               <div class="form-group">
                                 <label>Fecha fin: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
-                                  <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin"  data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask readonly/>
-                                  <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
+                                  <input type="text" class="form-control" id="fecha_fin" name="fecha_fin" readonly  data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask/>
+                                  <div class="input-group-append">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                   </div>
                                 </div>                                 
