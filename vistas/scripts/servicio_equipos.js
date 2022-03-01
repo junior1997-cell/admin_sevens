@@ -516,8 +516,7 @@ function tbla_principal(nube_idproyecto) {
       bDestroy: true,
       iDisplayLength: 10, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    }).DataTable();
 }
 //Función detalles po maquina
 function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
@@ -554,42 +553,40 @@ function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
       }*/
     ];
   }
+
   // console.log(hideen_colums);
-  tabla2 = $("#tabla-detalle-m")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [
-        [5, 10, 25, 75, 100, 200, -1],
-        [5, 10, 25, 75, 100, 200, "Todos"],
-      ], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_equipos.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla2 = $("#tabla-detalle-m").dataTable({
+    responsive: true,
+    lengthMenu: [ [5, 10, 25, 75, 100, 200, -1],[5, 10, 25, 75, 100, 200, "Todos"],
+    ], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/servicio_equipos.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      // "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
-      columnDefs: hideen_colums,
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    // "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
+    columnDefs: hideen_colums,
+  }).DataTable();
+
   suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
 }
 //Mostrar datos
@@ -790,81 +787,71 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
   $("#btn-regresar").show();
   $("#btn-pagar").show();
 
-  tabla3 = $("#tabla-pagos-proveedor")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [
-        [5, 10, 25, 75, 100, 200, -1],
-        [5, 10, 25, 75, 100, 200, "Todos"],
-      ], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_equipos.php?op=listar_pagos_proveedor&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-        /* success:function(data){
-          console.log(data);	
-        },*/
+  tabla3 = $("#tabla-pagos-proveedor").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1],[5, 10, 25, 75, 100, 200, "Todos"],], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/servicio_equipos.php?op=listar_pagos_proveedor&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
+      /* success:function(data){
+        console.log(data);	
+      },*/
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 
-  tabladetrecc = $("#tabla-pagos-detrecciones")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [
-        [5, 10, 25, 75, 100, 200, -1],
-        [5, 10, 25, 75, 100, 200, "Todos"],
-      ], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_equipos.php?op=listar_pagos_detraccion&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-        /* success:function(data){
-          console.log(data);	
-        },*/
+  tabladetrecc = $("#tabla-pagos-detrecciones").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"],], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/servicio_equipos.php?op=listar_pagos_detraccion&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
+      /* success:function(data){
+        console.log(data);	
+      },*/
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 
   total_pagos(idmaquinaria, idproyecto);
   most_datos_prov_pago(idmaquinaria, idproyecto);
@@ -1189,40 +1176,36 @@ function listar_facturas(idmaquinaria, idproyecto) {
   $("#btn-pagar").hide();
   $("#btn-factura").show();
 
-  tabla4 = $("#tabla_facturas")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [
-        [5, 10, 25, 75, 100, 200, -1],
-        [5, 10, 25, 75, 100, 200, "Todos"],
-      ], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_equipos.php?op=listar_facturas&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla4 = $("#tabla_facturas").dataTable({
+    responsive: true,
+    lengthMenu: [ [5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"], ], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/servicio_equipos.php?op=listar_facturas&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
+
   $("#idmaquina").val(idmaquinaria);
   $("#idproyectof").val(idproyecto);
   total_monto_f(idmaquinaria, idproyecto);
