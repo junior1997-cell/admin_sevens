@@ -184,6 +184,7 @@
               $subtotal=0;
               $igv=0;
               $monto=0;
+              $cont=1;
 
               while ($reg=$rspta->fetch_object()){
                 $subtotal=round($reg->subtotal, 2);
@@ -193,19 +194,22 @@
                 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
                 $data[]=array(
-                  "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-pencil-alt"></i></button>'.
+                  "0"=>$cont++,
+                  "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-danger btn-sm" onclick="desactivar_comprobante('.$reg->idfactura_pension  .')"><i class="far fa-trash-alt"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-check"></i></button>',
                   
-                  "1"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,	 				
-                  "2"=> empty($reg->tipo_comprobante)?' - ':$reg->tipo_comprobante,	 				
-                  "3"=> empty($reg->nro_comprobante)?' - ':$reg->nro_comprobante,	 				
+                  "2"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago, 
+                  "3"=>'<div class="user-block">
+                        <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg->tipo_comprobante.'</p> </span>
+                        <span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'</span>         
+                      </div>',			
                   "4"=>date("d/m/Y", strtotime($reg->fecha_emision)),
                   "5"=>number_format($subtotal, 2, '.', ','), 
                   "6"=>number_format($igv, 2, '.', ','),
                   "7"=>number_format($monto, 2, '.', ','),
-                  "8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+                  "8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
                   "9"=>$comprobante,
                   "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
                   '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
@@ -339,6 +343,7 @@
           $total=0;
           $total_pagos=0;
           $Saldo=0;
+          $cont=1;
 
           $c="";
           $nombre="";
@@ -382,19 +387,19 @@
             }
 
             $data[]=array(
-
-              "0"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg->idpension.')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>$cont++,
+              "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg->idpension.')"><i class="fas fa-pencil-alt"></i></button>'.
               ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.','.$reg->idproyecto.',\'' . $reg->razon_social.  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
-              "1"=>'<div class="user-block">
+              "2"=>'<div class="user-block">
                 <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Pensión. '.$reg->razon_social.'</p></span>
                 <span style="font-weight: bold; font-size: 15px;">'.$reg->direccion.' </span>
                 </div>',
-              "2"=>'<b>'.$reg->descripcion.'</b>', 
-              "3"=>'<b>'.number_format($total, 2, '.', ',').'</b>', 
-              "4"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
-              "5"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-sm m-t-2px" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
+              "3"=>'<textarea cols="30" rows="2" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+              "4"=>'<b>'.number_format($total, 2, '.', ',').'</b>', 
+              "5"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
+              "6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-sm m-t-2px" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
               <button class="btn btn-'.$cc.' btn-sm">'.number_format($total_pagos, 2, '.', ',').'</button></div>',
-              "6"=>number_format($saldo, 2, '.', ',')
+              "7"=>number_format($saldo, 2, '.', ',')
                 
             );
 
@@ -463,14 +468,15 @@
           $cont=1;
           while ($reg=$rspta->fetch_object()){ 
             $data[]=array(
-              "0"=>'<div class="user-block">
-                <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$cont.'. '.$reg->nombre_servicio .'</p></span></div>',
-              "1"=>'<b>'.number_format($reg->precio, 2, '.', ',').'</b>', 
-              "2"=>'<b>'.$reg->cantidad_total_platos.'</b>', 
-              "3"=>'<b>'.number_format($reg->adicional_descuento, 2, '.', ',').'</b>', 
-              "4"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>'
+              "0"=>$cont++,
+              "1"=>'<div class="user-block">
+                <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$reg->nombre_servicio .'</p></span></div>',
+              "2"=>'<b>'.number_format($reg->precio, 2, '.', ',').'</b>', 
+              "3"=>'<b>'.$reg->cantidad_total_platos.'</b>', 
+              "4"=>'<b>'.number_format($reg->adicional_descuento, 2, '.', ',').'</b>', 
+              "5"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>'
             );
-            $cont++;
+           
           }
           $results = array(
             "sEcho"=>1, //Información para el datatables

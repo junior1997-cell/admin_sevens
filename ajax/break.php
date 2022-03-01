@@ -34,8 +34,6 @@
 
       $imagen2             = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
 
-      //$idfactura_break,$idsemana_break,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
-
       switch ($_GET["op"]){
 
         case 'guardaryeditar':
@@ -81,16 +79,19 @@
           $rspta=$breaks->listar($_GET['nube_idproyecto']);
           //Vamos a declarar un array
           $data= Array();
-     
+          $cont = 1;
           while ($reg=$rspta->fetch_object()){ 
+
             $data[]=array(
-              "0"=>'<div class="user-block">
-              <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '.$reg->numero_semana.'</p></span>
-              <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicial)).' - '.date("d/m/Y", strtotime($reg->fecha_final)).' </span>
-              </div>',
-            "1"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
-            "2"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->idsemana_break.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',
-              );
+              "0"=>$cont++,
+              "1"=>'<div class="user-block">
+                    <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Semana. '.$reg->numero_semana.'</p></span>
+                    <span style="font-weight: bold; font-size: 15px;">'.date("d/m/Y", strtotime($reg->fecha_inicial)).' - '.date("d/m/Y", strtotime($reg->fecha_final)).' </span>
+                  </div>',
+              "2"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
+              "3"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->idsemana_break.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',   
+            );
+
           }
           $results = array(
             "sEcho"=>1, //Información para el datatables
@@ -206,6 +207,7 @@
               $subtotal=0;
               $igv=0;
               $monto=0;
+              $cont=1;
 
               while ($reg=$rspta->fetch_object()){
                 $subtotal=round($reg->subtotal, 2);
@@ -214,24 +216,30 @@
                 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
                 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
+               
                 $data[]=array(
-                  "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fas fa-pencil-alt"></i></button>'.
+
+                  "0"=>$cont++,
+                  "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fas fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-danger btn-sm" onclick="desactivar_comprobante('.$reg->idfactura_break .')"><i class="far fa-trash-alt"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fa fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_break .')"><i class="fa fa-check"></i></button>',
                   
-                  "1"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,	 				
-                  "2"=> empty($reg->tipo_comprobante)?' - ':$reg->tipo_comprobante,	 				
-                  "3"=> empty($reg->nro_comprobante)?' - ':$reg->nro_comprobante,	 				
+                  "2"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,
+                  "3"=>'<div class="user-block">
+                      <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg->tipo_comprobante.'</p> </span>
+                      <span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'</span>         
+                    </div>',	
                   "4"=>date("d/m/Y", strtotime($reg->fecha_emision)),
                   "5"=>number_format($subtotal, 2, '.', ','), 
                   "6"=>number_format($igv, 2, '.', ','),
                   "7"=>number_format($monto, 2, '.', ','),
-                  "8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+                  "8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
                   "9"=>$comprobante,
                   "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
                   '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
-                  );
+                
+                );
 
               }
               //$suma=array_sum($rspta->fetch_object()->monto);

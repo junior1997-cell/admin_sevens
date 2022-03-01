@@ -888,39 +888,46 @@ function listar(nube_idproyecto) {
         }
       },
       createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center text-nowrap');
+        }
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass('text-center text-nowrap');
+        }
         if (data[3]!="") {
-          $("td", row).eq(3).addClass('text-right');
-          sumatotal += parseFloat(data[3]);
+          $("td", row).eq(4).addClass('text-right');
+          sumatotal += parseFloat(data[4]);
         } else {
           sumatotal +=0;
         }
-        if (data[4]) {
-          $("td", row).eq(4).addClass('text-nowrap');
+        if (data[5]) {
           $("td", row).eq(5).addClass('text-nowrap');
+          $("td", row).eq(6).addClass('text-nowrap');
           
         }
-        if (data[6]!="") {$("td", row).eq(6).addClass('text-right');}
+        if (data[7]!="") {$("td", row).eq(7).addClass('text-right');}
         //console.log(data);
-        if (quitar_formato_miles(data[6]) > 0) {
-          $("td", row).eq(6).css({
+        if (quitar_formato_miles(data[7]) > 0) {
+          $("td", row).eq(7).css({
             "background-color": "#ffc107",
             color: "black",
           });
           
-        } else if (quitar_formato_miles(data[6]) == 0) {
-          $("td", row).eq(6).css({
+        } else if (quitar_formato_miles(data[7]) == 0) {
+          $("td", row).eq(7).css({
             "background-color": "#28a745",
             color: "white",
           });
         } else {
-          $("td", row).eq(6).css({
+          $("td", row).eq(7).css({
             "background-color": "#ff5252",
             color: "white",
           });
           
         }
-        if (data[6]!="") {
-          var saldo=quitar_formato_miles(data[6]);
+        if (data[7]!="") {
+          var saldo=quitar_formato_miles(data[7]);
         }
         totalsaldo += parseFloat(saldo);
       },
@@ -935,8 +942,8 @@ function listar(nube_idproyecto) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
   $.post("../ajax/pension.php?op=total_pension", { idproyecto: nube_idproyecto }, function (data, status) {
@@ -968,6 +975,13 @@ function ver_detalle_x_servicio(idpension) {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');
+        }
+
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -979,7 +993,7 @@ function ver_detalle_x_servicio(idpension) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
+    "iDisplayLength": 10,//Paginación
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
@@ -1124,6 +1138,25 @@ function listar_comprobantes(idpension) {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');
+        }
+        // columna: sub total
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass('text-nowrap text-right');
+        }
+        // columna: igv
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass('text-nowrap text-right');
+        }
+        // columna: total
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass('text-nowrap text-right');
+        }
+
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -1135,8 +1168,8 @@ function listar_comprobantes(idpension) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
   total_monto(localStorage.getItem('idpension_f_nube'));
 }

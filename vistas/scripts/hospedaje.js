@@ -300,6 +300,24 @@ function listar() {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {
+          // columna: #
+          if (data[0] != '') {
+            $("td", row).eq(0).addClass('text-center');
+          }
+          // columna: sub total
+          if (data[5] != '') {
+            $("td", row).eq(5).addClass('text-nowrap text-right');
+          }
+          // columna: igv
+          if (data[6] != '') {
+            $("td", row).eq(6).addClass('text-nowrap text-right');
+          }
+          // columna: total
+          if (data[7] != '') {
+            $("td", row).eq(7).addClass('text-nowrap text-right');
+          }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -312,7 +330,7 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
   total();
 }

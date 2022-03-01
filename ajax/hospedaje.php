@@ -208,6 +208,7 @@ switch ($_GET["op"]){
 		 		//Vamos a declarar un array
 		 		$data= Array();
 				$comprobante = '';
+				$cont=1;
 		 		while ($reg=$rspta->fetch_object()){
 
 					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_hospedajes/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
@@ -216,20 +217,23 @@ switch ($_GET["op"]){
 					 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
 					 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 					 $data[]=array(
-		 				"0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idhospedaje.')"><i class="fas fa-pencil-alt"></i></button>'.
+						"0"=>$cont++,
+		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idhospedaje.')"><i class="fas fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idhospedaje.')"><i class="far fa-trash-alt"></i></button>'.
 		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idhospedaje.')"><i class="far fa-eye"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idhospedaje.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idhospedaje.')"><i class="fa fa-check"></i></button>'.
 		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idhospedaje.')"><i class="far fa-eye"></i></button>',
-						"1"=>$reg->forma_de_pago, 
-						"2"=>$reg->tipo_comprobante, 
-						"3"=> empty($reg->numero_comprobante)?' - ':$reg->numero_comprobante, 
+						"2"=>$reg->forma_de_pago, 
+						"3"=>'<div class="user-block">
+								<span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg->tipo_comprobante.'</p> </span>
+								<span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->numero_comprobante)?" - ":$reg->numero_comprobante).'</span>         
+							</div>',
 						"4"=> date("d/m/Y", strtotime($reg->fecha_comprobante)), 
 						"5"=>number_format($reg->subtotal, 2, '.', ','),
 						"6"=>number_format($reg->igv, 2, '.', ','),
 						"7"=>number_format($reg->precio_parcial, 2, '.', ','),
-						"8"=>empty($reg->descripcion)?'-':'<div data-toggle="tooltip" data-original-title="'.$reg->descripcion.'">'.$descripcion.'</div>',
+						"8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
 						"9"=>$comprobante,
 		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
 						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip

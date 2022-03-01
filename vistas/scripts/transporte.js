@@ -251,6 +251,24 @@ function listar() {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');
+        }
+        // columna: sub total
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass('text-nowrap text-right');
+        }
+        // columna: igv
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass('text-nowrap text-right');
+        }
+        // columna: total
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass('text-nowrap text-right');
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -263,7 +281,7 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
   total();
 }
@@ -480,12 +498,12 @@ function ver_datos(idtransporte) {
 
 function total() {
   var idproyecto=localStorage.getItem('nube_idproyecto');
-  $("#total_monto").html("");
+  $(".total_monto").html("");
   $.post("../ajax/transporte.php?op=total", { idproyecto: idproyecto }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
-    $("#total_monto").html('S/. '+ formato_miles(data.precio_parcial));
+    $(".total_monto").html('S/. '+ formato_miles(data.precio_parcial));
   });
 }
 

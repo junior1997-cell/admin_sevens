@@ -114,8 +114,7 @@ Class Breaks
 	}*/
 	public function listar($nube_idproyecto)
 	{
-		$sql="SELECT * FROM semana_break 
-		WHERE idproyecto ='$nube_idproyecto'";
+		$sql="SELECT * FROM semana_break WHERE idproyecto ='$nube_idproyecto' ORDER BY numero_semana DESC";
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------
@@ -177,7 +176,7 @@ Class Breaks
 	}
 	
 	public function total_monto_comp($idsemana_break){
-		$sql="SELECT SUM(subtotal) as total FROM factura_break WHERE idsemana_break='$idsemana_break' AND estado='1'";
+		$sql="SELECT SUM(monto) as total FROM factura_break WHERE idsemana_break='$idsemana_break' AND estado='1'";
 		return ejecutarConsultaSimpleFila($sql);
 
 	}

@@ -69,32 +69,32 @@
                                         <table id="tabla-hospedaje" class="table table-bordered table-striped display" style="width: 100% !important;">
                                         <thead>
                                                 <tr>
+                                                    <th class="text-center">#</th>
                                                     <th class="">Acciones</th>
                                                     <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>
                                                     <th>Fecha</th>
                                                     <th>Sub total</th>
                                                     <th>Igv</th>
-                                                    <th>Monto Total </th>
+                                                    <th>Total </th>
                                                     <th>Descripción </th>
-                                                    <th>Comprobante</th>
+                                                    <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                                     <th>Estado</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                                 <tr>
+                                                    <th class="text-center">#</th>
                                                     <th class="">Acciones</th>
                                                     <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                                    <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                                    <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>
                                                     <th>Fecha</th>
                                                     <th>Sub total</th>
                                                     <th>Igv</th>
-                                                    <th>Monto Total </th>
+                                                    <th id="total_monto" class="text-nowrap"></th>
                                                     <th>Descripción </th>
-                                                    <th>Comprobante</th>
+                                                    <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                                     <th>Estado</th>                                            
                                                 </tr>
                                             </tfoot>
@@ -345,6 +345,18 @@
                 margin-left: 3px;
                 padding: 5px;
                 border-radius: 6px;
+            }
+            textarea.form-control {
+                height: auto;
+            }
+            .text_area_clss {
+                width: 100%;
+                background: rgb(215 224 225 / 22%);
+                border-block-color: inherit;
+                border-bottom: aliceblue;
+                border-left: aliceblue;
+                border-right: aliceblue;
+                border-top: hidden;
             }
         </style>
         <!-- Bootstrap 4 -->

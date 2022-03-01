@@ -69,7 +69,7 @@ Class Transporte
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM transporte WHERE idproyecto='$idproyecto' ORDER BY idtransporte DESC";
+		$sql="SELECT*FROM transporte WHERE idproyecto='$idproyecto' ORDER BY fecha_viaje DESC";
 		return ejecutarConsulta($sql);		
 	}
 

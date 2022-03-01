@@ -16,24 +16,7 @@
     <?php
     require 'head.php';
     ?>
-    <style>
-        .tablee {
-          width: 100%;
-          border: 1px solid #000;
-        }
-        th, td {
-          width: 25%;
-          text-align: left;
-          vertical-align: top;
-          border: 1px solid #000;
-          border-collapse: collapse;
-          padding: 0.3em;
-        }
-        caption {
-          padding: 0.3em;
-        }
-    </style>
-
+    
   </head>
   <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
     <!-- Content Wrapper. Contains page content -->
@@ -109,6 +92,7 @@
                         <table id="tabla-resumen-break-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="text-center">#</th>
                               <th><i class="fas fa-cogs"></i></th>
                               <th>Pension</th>
                               <th>Descripción</th>
@@ -122,6 +106,7 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
+                              <th class="text-center">#</th>
                               <th><i class="fas fa-cogs"></i></th>
                               <th>Pension</th>
                               <th>Descripción</th>
@@ -172,32 +157,32 @@
                         <table id="t-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                               <tr>
+                                  <th class="text-center">#</th>
                                   <th>Aciones</th>
                                   <th data-toggle="tooltip" data-original-title="Forma de pago">Forma </th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo </th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número </th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob </th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
-                                  <th>Monto</th>
+                                  <th>Total</th>
                                   <th>Descripción</th>
-                                  <th>Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Comprobante">Comprob </th>
                                   <th>Estado</th>
                               </tr>
                           </thead>
                           <tbody></tbody>
                           <tfoot>
                               <tr>
+                                  <th class="text-center">#</th>
                                   <th>Aciones</th>
                                   <th data-toggle="tooltip" data-original-title="Forma de pago">Forma </th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo </th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob </th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
-                                  <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th> 
+                                  <th class="text-nowrap text-right" id="monto_total_f"></th> 
                                   <th>Descripción</th>                                                   
-                                  <th>Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Comprobante">Comprob </th>
                                   <th>Estado</th>
                               </tr> 
                           </tfoot>
@@ -496,6 +481,7 @@
                       <table id="tabla-detalles-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                         <thead>
                           <tr>
+                            <th class="text-center">#</th>
                             <th class="">Tipo comida</th>
                             <th class="">Precio</th>
                             <th>Total platos</th>
@@ -506,6 +492,7 @@
                         <tbody></tbody>
                         <tfoot>
                           <tr>
+                            <th class="text-center">#</th>
                             <th class="">Tipo comida</th>
                             <th class="">Precio</th>
                             <th>Total platos</th>
@@ -563,6 +550,23 @@
     <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
     <script type="text/javascript" src="scripts/pension.js"></script>
+
+    <style>
+
+        textarea.form-control {
+            height: auto;
+        }
+        .text_area_clss {
+            width: 100%;
+            background: rgb(215 224 225 / 22%);
+            border-block-color: inherit;
+            border-bottom: aliceblue;
+            border-left: aliceblue;
+            border-right: aliceblue;
+            border-top: hidden;
+        }
+
+    </style>
 
     <script>
         $(function () {

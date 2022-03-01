@@ -217,6 +217,16 @@ function listar(nube_idproyecto) {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');
+        }
+        // columna:total
+        if (data[2] != '') {
+          $("td", row).eq(2).addClass('text-nowrap text-right');
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -228,8 +238,8 @@ function listar(nube_idproyecto) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -465,7 +475,7 @@ console.log(array_guardar_fi_ff);
 
     tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
 
-    tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+    tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
 
     //fila
     tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
@@ -526,7 +536,7 @@ console.log(array_guardar_fi_ff);
   
               tabla_bloc_precio_3 =  `<td><span class="span-visible">${costo_parcial_encontrado}</span><input type="number" value="${costo_parcial_encontrado}" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
   
-              tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="${descripcion_encontrado}" style="width: 430px;">${descripcion_encontrado}</textarea></td>`;
+              tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="${descripcion_encontrado}" style="width: 100%;;">${descripcion_encontrado}</textarea></td>`;
   
               tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
                 //
@@ -539,7 +549,7 @@ console.log(array_guardar_fi_ff);
           
               tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
           
-              tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+              tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
           
               //fila
               tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
@@ -562,7 +572,7 @@ console.log(array_guardar_fi_ff);
     
                 tabla_bloc_precio_3 =  `<td><span class="span-visible">-</span><input type="number" value="" class=" precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
     
-                tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width: 430px;"></textarea></td>`;
+                tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style=" width: 100%;"></textarea></td>`;
     
                 tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
                   //
@@ -575,7 +585,7 @@ console.log(array_guardar_fi_ff);
           
               tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
           
-              tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+              tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
           
               //fila
               tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
@@ -610,7 +620,7 @@ console.log(array_guardar_fi_ff);
 
             tabla_bloc_precio_3 =  `<td><span class="span-visible">-</span><input type="number" value="" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
 
-            tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width: 430px;"></textarea></td>`;
+            tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width:100%;"></textarea></td>`;
 
             tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
               //
@@ -624,7 +634,7 @@ console.log(array_guardar_fi_ff);
         
             tabla_bloc_precio_3 =`<td class="bg-color-b4bdbe47"><span> - </span></td>`;
         
-            tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 430px;"></textarea></td>`;
+            tabla_bloc_descripcion_4 =`<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
         
             //fila
             tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
@@ -799,6 +809,24 @@ function listar_comprobantes(idsemana_break) {
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');
+        }
+        // columna: sub total
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass('text-nowrap text-right');
+        }
+        // columna: igv
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass('text-nowrap text-right');
+        }
+        // columna: total
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass('text-nowrap text-right');
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -810,8 +838,8 @@ function listar_comprobantes(idsemana_break) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
   total_monto(localStorage.getItem('idsemana_break_nube'));
 }

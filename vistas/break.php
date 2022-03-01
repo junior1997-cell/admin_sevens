@@ -16,23 +16,6 @@
     <?php
     require 'head.php';
     ?>
-    <style>
-        .tablee {
-          width: 100%;
-          border: 1px solid #000;
-        }
-        th, td {
-          width: 25%;
-          text-align: left;
-          vertical-align: top;
-          border: 1px solid #000;
-          border-collapse: collapse;
-          padding: 0.3em;
-        }
-        caption {
-          padding: 0.3em;
-        }
-    </style>
 
   </head>
   <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
@@ -105,6 +88,7 @@
                         <table id="tabla-resumen-break-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="text-center">#</th>
                               <th class="">Fecha semana</th>
                               <th>Total</th>
                               <th>Comprobantes</th>
@@ -114,6 +98,7 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
+                              <th class="text-center">#</th>
                               <th class="">Fecha semana</th>
                               <th>Total</th>
                               <th>Comprobantes</th>
@@ -122,7 +107,7 @@
                         </table>
                       </div>
                       
-                      <!-- agregar trabajador al sistema -->
+                      <!-- agregar break al sistema -->
                       <div id="tabla-registro" style="display: none;">
                         <style>
                           table.colapsado {border-collapse: collapse;}
@@ -157,32 +142,32 @@
                         <table id="t-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                               <tr>
-                                  <th>Aciones</th>
+                                  <th class="text-center">#</th>
+                                  <th>op</th>
                                   <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">Fecha</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th>Monto</th>
                                   <th>Descripción</th>
-                                  <th>Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
                                   <th>Estado</th>
                               </tr>
                           </thead>
                           <tbody></tbody>
                           <tfoot>
                               <tr>
-                                  <th>Aciones</th>
+                                  <th class="text-center">#</th>
+                                  <th>op</th>
                                   <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">Fecha</th>
-                                  <th>Sub total</th>
+                                  <th class="text-nowrap text-right" >Sub total</th>
                                   <th>IGV</th>
-                                  <th id="monto_total_f" style="color:#ff0000;background-color:#f3e700;"></th> 
+                                  <th class="text-nowrap text-right" id="monto_total_f"></th> 
                                   <th>Descripción</th>                                                   
-                                  <th>Comprobante</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
                                   <th>Estado</th>
                               </tr> 
                           </tfoot>
@@ -391,15 +376,15 @@
     require 'script.php';
     ?>
     <style>
-        .class-style label{
-            font-size: 14px;
-        }
-        .class-style small {
-            background-color: #f4f7ee;
-            border: solid 1px #ce542a21;
-            margin-left: 3px;
-            padding: 5px;
-            border-radius: 6px;
+        .text_area_clss {
+            width: 100%;
+            height: auto;
+            background: rgb(215 224 225 / 22%);
+            border-block-color: inherit;
+            border-bottom: aliceblue;
+            border-left: aliceblue;
+            border-right: aliceblue;
+            border-top: hidden;
         }
     </style>
     <!-- Bootstrap 4 -->
