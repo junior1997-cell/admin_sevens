@@ -131,12 +131,14 @@
 
                         <!-- /.card-header -->
                         <div class="card-body">
+
                           <!-- TABLA - Lista de compras Por Facturas -->
                           <div id="div_tabla_compra">
                             <h5><b>Lista de compras Por Facturas</b></h5>
                             <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Fecha</th>
                                   <th>Proveedor</th>
@@ -153,6 +155,7 @@
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Fecha</th>
                                   <th>Proveedor</th>
@@ -172,16 +175,20 @@
                             <table id="tabla-compra-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Proveedor</th>
+                                  <th>Cel.</th>
                                   <th>Total</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Proveedor</th>
+                                  <th>Cel.</th>
                                   <th>Total</th>
                                 </tr>
                               </tfoot>
@@ -194,6 +201,7 @@
                             <table id="detalles-tabla-compra-prov" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Fecha</th>
                                   <th>Comprobante</th>
@@ -206,6 +214,7 @@
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Fecha</th>
                                   <th>Comprobante</th>
@@ -433,6 +442,7 @@
                               <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
                                   <tr>
+                                    <th>#</th>
                                     <th>Acciones</th>
                                     <th data-toggle="tooltip" data-original-title="Forma Pago">Forma</th>
                                     <th>Beneficiario</th>
@@ -447,6 +457,7 @@
                                 <tbody></tbody>
                                 <tfoot>
                                   <tr>
+                                    <th>#</th>
                                     <th>Aciones</th>
                                     <th>Forma</th>
                                     <th>Beneficiario</th>                                     
@@ -489,6 +500,7 @@
                             <table id="tbl-pgs-detrac-prov-cmprs" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th>#</th>
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
@@ -503,6 +515,7 @@
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
+                                  <th>#</th>
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
@@ -517,7 +530,7 @@
                                   <th>Estado</th>
                                 </tr>
                                 <tr>
-                                  <td colspan="5"></td>
+                                  <td colspan="6"></td>
                                   <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                   <th style="color: #ff0000; background-color: #f3e700;">
                                     <b id="saldo_p"></b> <br />
@@ -545,6 +558,7 @@
                             <table id="tbl-pgs-detrac-detracc-cmprs" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th>#</th>
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th> 
@@ -559,6 +573,7 @@
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
+                                  <th>#</th>
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th> 
@@ -573,7 +588,7 @@
                                   <th>Estado</th>
                                 </tr>
                                 <tr>
-                                  <td colspan="5"></td>
+                                  <td colspan="6"></td>
                                   <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
                                   <th style="color: #ff0000; background-color: #f3e700;">
                                     <b id="saldo_d"></b> <br />

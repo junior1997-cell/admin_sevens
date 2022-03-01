@@ -107,11 +107,13 @@
                             </div>
                           </div>
                         </div>
+
                         <!--===============Tabla Principal =========-->
                         <div class="card-body display" id="tabla_principal">
                           <table id="tabla-servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
                                 <th>Nombre Máquina</th>
                                 <th>Proveedor</th>
@@ -127,6 +129,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
                                 <th>Nombre Máquina</th>
                                 <th>Proveedor</th>
@@ -141,13 +144,13 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--=============== FIN Tabla Principal =======--->
 
                         <!--===============Tabla detalle por maquina  =======--->
                         <div class="card-body" id="tabla_detalles" style="display: none;">
                           <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Acciones</th>
                                 <th>Fecha</th>
                                 <th>Horometro Inicial</th>
@@ -164,6 +167,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Fecha</th>
                                 <th>Horometro Inicial</th>
@@ -179,7 +183,6 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--=============== FIN Tabla detalle por maquina =======--->
 
                         <!--===============Tabla Pagos =======--->
                         <div class="card-body" id="tabla_pagos" style="display: none;">
@@ -196,12 +199,10 @@
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Acciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -213,25 +214,10 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
-                                <!--<th  rowspan="2" style="padding: 48px 18px 6px 18px;">Aciones</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Forma pago</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Beneficiario</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Banco</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Descripción</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;" data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                                                <th  style="color:#ff0000;background-color:#45c920;"><b id="monto_total_prob"></b> <br> <b id="porcnt_prove" style="color: black;"></b> </th>
-
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Vaucher</th>
-                                                                <th  rowspan="2" style="padding: 48px 18px 6px 18px;">Estado</th>-->
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -243,9 +229,9 @@
                                 <th>Estado</th>
                               </tr>
                               <tr>
-                                <td colspan="8"></td>
-                                <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th style="color: #ff0000; background-color: #f3e700;">
+                                <td colspan="6"></td>
+                                <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_p"></b> <br />
                                   <b id="porcnt_sald_p" style="color: black;"></b>
                                 </th>
@@ -263,12 +249,10 @@
                           <table id="tabla-pagos-detrecciones" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Acciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -280,12 +264,10 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Forma pago</th>
                                 <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                <th>Banco</th>
-                                <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
@@ -297,9 +279,9 @@
                                 <th>Estado</th>
                               </tr>
                               <tr>
-                                <td colspan="8"></td>
-                                <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th style="color: #ff0000; background-color: #f3e700;">
+                                <td colspan="6"></td>
+                                <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_d"></b> <br />
                                   <b id="porcnt_sald_d" style="color: black;"></b>
                                 </th>
@@ -308,7 +290,6 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--===============FIN Tabla Pagos =======--->
 
                         <!--===============Tabla facturas =======--->
                         <div class="card-body" id="tabla_facturas_h" style="display: none;">
@@ -318,6 +299,7 @@
                           <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
                                 <th>Fecha Emisión</th>
@@ -333,6 +315,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
                                 <th>Fecha Emisión</th>
@@ -347,7 +330,7 @@
                             </tfoot>
                           </table>
                         </div>
-                        <!--===============FIN Tabla facturas =======--->
+                        
                       </div>
                       <!-- /.card -->
                     </div>

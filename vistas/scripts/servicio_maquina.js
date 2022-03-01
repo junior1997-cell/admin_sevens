@@ -156,6 +156,7 @@ function addImage(e, id) {
     $("#" + id + "_nombre").html("");
   }
 }
+
 function foto1_eliminar() {
   $("#foto1").val("");
 
@@ -163,6 +164,7 @@ function foto1_eliminar() {
 
   $("#foto1_nombre").html("");
 }
+
 function foto2_eliminar() {
   $("#foto2").val("");
   $("#ver_pdf").html("");
@@ -172,6 +174,7 @@ function foto2_eliminar() {
   $("#foto2_nombre").html("");
   $("#foto2_i").show();
 }
+
 function seleccion() {
   if ($("#maquinaria").select2("val") == null) {
     $("#maquinaria_validar").show(); //console.log($("#maquinaria").select2("val") + ", "+ $("#maquinaria_old").val());
@@ -179,6 +182,7 @@ function seleccion() {
     $("#maquinaria_validar").hide();
   }
 }
+
 function capture_unidad() {
   //Hora
   if ($("#unidad_m").select2("val") == "Hora") {
@@ -263,6 +267,7 @@ function capture_unidad() {
     $("#fecha_fin").val("");
   }
 }
+
 //Calculamos costo parcial.
 function costo_partcial() {
   var horometro_inicial = $("#horometro_inicial").val();
@@ -298,6 +303,7 @@ function costo_partcial() {
   $("#horas").val(horas);
   $("#costo_parcial").val(costo_parcial);
 }
+
 //funcion calcular dias
 function calculardia() {
   if ($("#fecha_inicio").val().length > 0) {
@@ -349,6 +355,7 @@ function calculardia() {
     $("#fecha-i-tutulo").html('Fecha: <b style="color: red;"> - </b>');
   }
 }
+
 //Funcion para los nombres de la día mes y año
 function diaSemana(fecha) {
   if (fecha != "") {
@@ -366,6 +373,7 @@ function diaSemana(fecha) {
     return "";
   }
 }
+
 //Función limpiar
 function limpiar() {
   //Mostramos los proveedores
@@ -399,6 +407,7 @@ function limpiar() {
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
 }
+
 //Función limpiar
 function limpiar_c_pagos() {
   //==========PAGO SERVICIOS=====
@@ -419,6 +428,7 @@ function limpiar_c_pagos() {
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
 }
+
 //regresar_principal
 function regresar_principal() {
   $("#tabla_principal").show();
@@ -440,6 +450,7 @@ function regresar_principal() {
   $("#t_detaccion").html("");
   $("#t_detacc_porc").html("");
 }
+
 /**
  * ================================================
                   SECCION SERVICIOS 
@@ -447,57 +458,47 @@ function regresar_principal() {
  */
 //Función Listar
 function listar(nube_idproyecto) {
-  tabla = $("#tabla-servicio")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_maquina.php?op=listar&nube_idproyecto=" + nube_idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla = $("#tabla-servicio").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    ajax: {
+      url: "../ajax/servicio_maquina.php?op=listar&nube_idproyecto=" + nube_idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      //console.log(data);
+      if (data[8] < 0) {
+        $("td", row).eq(8).addClass('bg-danger');
+      } else if (data[8] == 0) {
+        $("td", row).eq(8).addClass('bg-success');
+      } else {
+        $("td", row).eq(8).addClass('bg-warning');
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      createdRow: function (row, data, ixdex) {
-        //console.log(data);
-        if (data[7] < 0) {
-          $("td", row).eq(7).css({
-            "background-color": "#ff5252",
-            color: "white",
-          });
-        } else if (data[7] == 0) {
-          $("td", row).eq(7).css({
-            "background-color": "#28a745",
-            color: "white",
-          });
-        } else {
-          $("td", row).eq(7).css({
-            "background-color": "#ffc107",
-            color: "black",
-          });
-        }
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
+
 //Función detalles po maquina
 function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
   var hideen_colums;
@@ -512,17 +513,17 @@ function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
   } else {
     hideen_colums = [
       {
-        targets: [2],
-        visible: false,
-        searchable: false,
-      },
-      {
         targets: [3],
         visible: false,
         searchable: false,
       },
       {
         targets: [4],
+        visible: false,
+        searchable: false,
+      },
+      {
+        targets: [5],
         visible: false,
         searchable: false,
       },
@@ -534,40 +535,40 @@ function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
     ];
   }
   // console.log(hideen_colums);
-  tabla2 = $("#tabla-detalle-m")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla2 = $("#tabla-detalle-m").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    ajax: {
+      url: "../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      // order: [[0, "desc"]], //Ordenar (columna,orden)
-      columnDefs: hideen_colums,
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: hideen_colums,
+  }).DataTable();
+
   suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
 }
+
 //Mostrar datos
 function mostrar_datos_pago(idmaquinaria, idproyecto) {
   // console.log('qqqqqq  '+idmaquinaria,idproyecto);
@@ -576,6 +577,7 @@ function mostrar_datos_pago(idmaquinaria, idproyecto) {
     console.log(data);
   });
 }
+
 //Función para guardar o editar
 function suma_horas_costoparcial(idmaquinaria, idproyecto) {
   console.log("..." + idmaquinaria, idproyecto);
@@ -602,6 +604,7 @@ function suma_horas_costoparcial(idmaquinaria, idproyecto) {
     $("#costo-parcial").html(costo_parcial);
   });
 }
+
 //Guardar y editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -634,6 +637,7 @@ function guardaryeditar(e) {
     },
   });
 }
+
 //mostrar
 function mostrar(idservicio) {
   limpiar();
@@ -671,6 +675,7 @@ function mostrar(idservicio) {
     $("#costo_parcial").val(data.costo_parcial);
   });
 }
+
 //Función para desactivar registros
 function desactivar(idservicio, idmaquinaria) {
   Swal.fire({
@@ -692,6 +697,7 @@ function desactivar(idservicio, idmaquinaria) {
     }
   });
 }
+
 //Función para activar registros
 function activar(idservicio, idmaquinaria) {
   Swal.fire({
@@ -713,6 +719,7 @@ function activar(idservicio, idmaquinaria) {
     }
   });
 }
+
 /**
  * ================================================
             SECCION PAGOS SERVICIOS
@@ -751,6 +758,7 @@ function guardaryeditar_pago(e) {
     },
   });
 }
+
 //Listar pagos.
 function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
   //console.log(idmaquinaria,idproyecto,costo_parcial);
@@ -766,80 +774,77 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
   $("#btn-regresar").show();
   $("#btn-pagar").show();
 
-  tabla3 = $("#tabla-pagos-proveedor")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-        /* success:function(data){
-          console.log(data);	
-        },*/
+  tabla3 = $("#tabla-pagos-proveedor").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    ajax: {
+      url: "../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
+      /* success:function(data){
+        console.log(data);	
+      },*/
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 
-  tabladetrecc = $("#tabla-pagos-detrecciones")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-        /* success:function(data){
-          console.log(data);	
-        },*/
+  tabladetrecc = $("#tabla-pagos-detrecciones").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    ajax: {
+      url: "../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
+      /* success:function(data){
+        console.log(data);	
+      },*/
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 
   total_pagos(idmaquinaria, idproyecto);
   most_datos_prov_pago(idmaquinaria, idproyecto);
   total_costo_secc_pagoss(idmaquinaria, idproyecto);
 }
+
 //total_costo_secc_pagoss
 function total_costo_secc_pagoss(idmaquinaria, idproyecto) {
   $("#total_costo_secc_pagos").html("");
@@ -861,6 +866,7 @@ function total_costo_secc_pagoss(idmaquinaria, idproyecto) {
   });
   // monto_total_p=1000;
 }
+
 //-total Pagos
 function total_pagos(idmaquinaria, idproyecto) {
   var totattotal = localStorage.getItem("monto_total_p");
@@ -969,6 +975,7 @@ function most_datos_prov_pago(idmaquinaria, idproyecto) {
     localStorage.setItem("nube_c_d", data.cuenta_detracciones);
   });
 }
+
 //captura_opicion tipopago
 function captura_op() {
   cuenta_bancaria = localStorage.getItem("nube_c_b");
@@ -986,6 +993,7 @@ function captura_op() {
     $("#cuenta_destino_pago").val(cuenta_detracciones);
   }
 }
+
 //validando excedentes
 function validando_excedentes() {
   var totattotal = localStorage.getItem("monto_total_p");
@@ -1000,6 +1008,7 @@ function validando_excedentes() {
     toastr.success("Monto Aceptado.");
   }
 }
+
 //mostrar
 function mostrar_pagos(idpago_servicio, id_maquinaria) {
   limpiar_c_pagos();
@@ -1039,6 +1048,7 @@ function mostrar_pagos(idpago_servicio, id_maquinaria) {
     }
   });
 }
+
 //Función para desactivar registros
 function desactivar_pagos(idpago_servicio, idmaquinaria) {
   Swal.fire({
@@ -1063,6 +1073,7 @@ function desactivar_pagos(idpago_servicio, idmaquinaria) {
     }
   });
 }
+
 function activar_pagos(idpago_servicio, idmaquinaria) {
   Swal.fire({
     title: "¿Está Seguro de  Activar  Servicio?",
@@ -1086,6 +1097,7 @@ function activar_pagos(idpago_servicio, idmaquinaria) {
     }
   });
 }
+
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");
@@ -1159,42 +1171,41 @@ function listar_facturas(idmaquinaria, idproyecto) {
   $("#btn-pagar").hide();
   $("#btn-factura").show();
 
-  tabla4 = $("#tabla_facturas")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/servicio_maquina.php?op=listar_facturas&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla4 = $("#tabla_facturas").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    ajax: {
+      url: "../ajax/servicio_maquina.php?op=listar_facturas&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
   $("#idmaquina").val(idmaquinaria);
   $("#idproyectof").val(idproyecto);
   total_monto_f(idmaquinaria, idproyecto);
   total_costo_parcial(idmaquinaria, idproyecto);
 }
+
 //Calcular Igv y subtotal
 function calcula_igv_subt() {
   var subtotal = 0;
@@ -1208,6 +1219,7 @@ function calcula_igv_subt() {
   $("#subtotal").val(subtotal.toFixed(4));
   $("#igv").val(igv.toFixed(4));
 }
+
 //Función limpiar-factura
 function limpiar_factura() {
   $("#codigo").val("");
@@ -1225,6 +1237,7 @@ function limpiar_factura() {
   $("#foto2_actual").val("");
   $("#foto2_nombre").html("");
 }
+
 //mostrar
 function mostrar_factura(idfactura) {
   limpiar_factura();
@@ -1288,6 +1301,7 @@ function mostrar_factura(idfactura) {
     }
   });
 }
+
 //Función para desactivar registros
 function desactivar_factura(idfactura) {
   console.log(idfactura);
@@ -1382,6 +1396,7 @@ function total_costo_parcial(idmaquinaria, idproyecto) {
     $("#total_costo").html(formato_miles(data.costo_parcial));
   });
 }
+
 //========FIN=================
 init();
 

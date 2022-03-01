@@ -207,9 +207,10 @@ class Compra
         COUNT(cpp.idcompra_proyecto) as cantidad,
         SUM(cpp.monto_total) as total,
         p.idproveedor as idproveedor,
-        p.razon_social as razon_social
+        p.razon_social as razon_social, p.telefono
 		FROM compra_por_proyecto as cpp, proveedor as p 
-		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor GROUP BY cpp.idproveedor";
+		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor 
+    GROUP BY cpp.idproveedor ORDER BY p.razon_social ASC";
     return ejecutarConsulta($sql);
   }
   //Implementar un método para listar los registros x proveedor
@@ -339,7 +340,7 @@ class Compra
 		ps.imagen as imagen,
 		ps.estado as estado
 		FROM pago_compras ps, bancos as bn 
-		WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos";
+		WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos ORDER BY ps.fecha_pago DESC";
     return ejecutarConsulta($sql);
   }
   //Listar pagos1-con detraccion --tabla Proveedor
@@ -362,7 +363,7 @@ class Compra
         ps.imagen as imagen,
         ps.estado as estado
         FROM pago_compras ps, bancos as bn 
-        WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos AND ps.tipo_pago='$tipo_pago'";
+        WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos AND ps.tipo_pago='$tipo_pago' ORDER BY ps.fecha_pago DESC";
     return ejecutarConsulta($sql);
   }
   //Implementamos un método para desactivar categorías

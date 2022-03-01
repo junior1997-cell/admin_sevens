@@ -240,13 +240,13 @@ function listar( nube_idproyecto ) {
     },
     createdRow: function (row, data, ixdex) {  
 
-      // columna: sueldo mensual
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass("text-nowrap" );
+      // columna: 
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass("text-nowrap" );
       }
       // columna: sueldo mensual
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass("text-right" );
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right" );
       }
 
     },
@@ -261,8 +261,8 @@ function listar( nube_idproyecto ) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 //Función para guardar o editar
@@ -300,7 +300,14 @@ function verdatos(idtrabajador){
 
   console.log('id_verdatos'+idtrabajador);  
   
-  $('#datostrabajador').html('');
+  $('#datostrabajador').html(`<div class="row" >
+    <div class="col-lg-12 text-center">
+      <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+      <br />
+      <h4>Cargando...</h4>
+    </div>
+  </div>`);
+
   var verdatos='';
   var imagenver='';
 
@@ -311,81 +318,81 @@ function verdatos(idtrabajador){
     data = JSON.parse(data);  console.log(data); 
 
     var img =data.imagen != '' ? `<img src="../dist/img/usuarios/${data.imagen}" alt="" style="width: 90px;border-radius: 10px;" onerror="this.src='../dist/svg/user_default.svg';">` : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-     verdatos=''+                                                                            
-    '<div class="col-12">'+
-      '<div class="card">'+
-          '<div class="card-body ">'+
-              '<table class="table table-hover table-bordered">'+          
-                  '<tbody>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th rowspan="2">'+img+'</th>'+
-                          '<td>'+data.nombres+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<td>'+data.numero_documento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Dirección</th>'+
-                          '<td>'+data.direccion+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Correo</th>'+
-                          '<td>'+data.email+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Teléfono</th>'+
-                          '<td>'+data.telefono+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Fecha nacimiento</th>'+
-                          '<td>'+data.fecha_nacimiento+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Tipo trabajador</th>'+
-                          '<td>'+data.tipo_trabajador+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cargo</th>'+
-                          '<td>'+data.cargo_trabajador+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Desempeño</th>'+
-                          '<td>'+data.desempeno+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Cuenta bancaria</th>'+
-                          '<td>'+data.cuenta_bancaria+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Banco</th>'+
-                          '<td>'+data.banco+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Titular cuenta </th>'+
-                          '<td>'+data.titular_cuenta+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por mes</th>'+
-                          '<td>'+data.sueldo_mensual+'</td>'+ 
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por día</th>'+
-                          '<td>'+data.sueldo_diario+'</td>'+
-                      '</tr>'+
-                      '<tr data-widget="expandable-table" aria-expanded="false">'+
-                          '<th>Sueldo por hora</th>'+
-                          '<td>'+data.sueldo_hora+'</td>'+
-                      '</tr>'+
-                  '</tbody>'+
-              '</table>'+
-          '</div>'+
-      '</div>'+
-    '</div>';
+    
+    verdatos=`                                                                           
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body ">
+            <table class="table table-hover table-bordered">         
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th rowspan="2">${img}</th>
+                  <td>${data.nombres}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <td>${data.numero_documento}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Dirección</th>
+                  <td>${data.direccion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Correo</th>
+                  <td><a href="mailto:${data.email}" data-toggle="tooltip" data-original-title="Llamar al trabajador."> ${data.email} </a></td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Teléfono</th>
+                  <td> <a href="tel:+51${quitar_guion(data.telefono)}" data-toggle="tooltip" data-original-title="Llamar al trabajador."> ${data.telefono} </a></td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha nacimiento</th>
+                  <td>${format_d_m_a(data.fecha_nacimiento)}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo trabajador</th>
+                  <td>${data.tipo_trabajador}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Cargo</th>
+                  <td>${data.cargo_trabajador}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Desempeño</th>
+                  <td>${data.desempeno}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Cuenta bancaria</th>
+                  <td>${data.cuenta_bancaria}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Banco</th>
+                  <td>${data.banco}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Titular cuenta </th>
+                  <td>${data.titular_cuenta}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Sueldo por mes</th>
+                  <td>${data.sueldo_mensual}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Sueldo por día</th>
+                  <td>${data.sueldo_diario}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Sueldo por hora</th>
+                  <td>${data.sueldo_hora}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
   
-  $("#datostrabajador").append(verdatos);
+    $("#datostrabajador").html(verdatos);
 
-});
-
+  });
 }
 
 function mostrar(idtrabajador,idtipo) {
@@ -573,17 +580,31 @@ $(function () {
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
-  let splits = fecha.split("-"); //console.log(splits);
+  var format = "";
 
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
+  if (fecha == '' || fecha == null) {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
 }
 
 // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
 function format_a_m_d(fecha) {
 
-  let splits = fecha.split("-"); //console.log(splits);
+  var format = "";
 
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
+  if (fecha == '' || fecha == null) {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
 }
 
 function diferencia_de_dias(fecha_i, fecha_f) {
@@ -591,3 +612,7 @@ function diferencia_de_dias(fecha_i, fecha_f) {
   var fecha2 = moment(fecha_f); 
   return fecha2.diff(fecha1, 'days');
 }
+
+function quitar_guion(numero){ 
+  return numero.replace("-", ""); 
+} 

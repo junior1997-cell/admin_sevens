@@ -290,28 +290,28 @@ function tbla_principal(nube_idproyecto) {
      
     createdRow: function (row, data, ixdex) {
       //console.log(data);
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-nowrap');
-      }
-
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-center');
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass('text-nowrap');
       }
 
       if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-right');
+        $("td", row).eq(5).addClass('text-center');
       }
 
-      if (data[7] != "") {
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-right');
+      }
 
-        var num = parseFloat(quitar_formato_miles(data[7]));
+      if (data[8] != "") {
+
+        var num = parseFloat(quitar_formato_miles(data[8]));
 
         if (num > 0) {
-          $("td", row).eq(7).addClass('bg-warning text-right');
+          $("td", row).eq(8).addClass('bg-warning text-right');
         } else if (num == 0) {
-          $("td", row).eq(7).addClass('bg-success text-right');            
+          $("td", row).eq(8).addClass('bg-success text-right');            
         } else if (num < 0) {
-          $("td", row).eq(7).addClass('bg-danger text-right');
+          $("td", row).eq(8).addClass('bg-danger text-right');
         }
       }
       
@@ -328,10 +328,10 @@ function tbla_principal(nube_idproyecto) {
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
-    order: [[0, "desc"]], //Ordenar (columna,orden)
+    order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       {
-        targets: [9],
+        targets: [10],
         visible: false,
         searchable: false,
       },
@@ -339,37 +339,41 @@ function tbla_principal(nube_idproyecto) {
   }).DataTable();
 
   //console.log(idproyecto);
-  tabla_comp_prov = $("#tabla-compra-proveedor")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_compraxporvee&nube_idproyecto=" + nube_idproyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla_comp_prov = $("#tabla-compra-proveedor").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/compra.php?op=listar_compraxporvee&nube_idproyecto=" + nube_idproyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      //console.log(data);
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-right');
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 10, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 //facturas agrupadas por proveedor.
 function listar_facuras_proveedor(idproveedor, idproyecto) {
@@ -380,37 +384,35 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
   $("#regresar").show();
   $("#div_tabla_compra_proveedor").show();
 
-  tabla_list_comp_prov = $("#detalles-tabla-compra-prov")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_detalle_compraxporvee&idproyecto=" + idproyecto + "&idproveedor=" + idproveedor,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla_list_comp_prov = $("#detalles-tabla-compra-prov").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/compra.php?op=listar_detalle_compraxporvee&idproyecto=" + idproyecto + "&idproveedor=" + idproveedor,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 
 //Función para guardar o editar - COMPRAS
@@ -1239,47 +1241,45 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
   $("#btn-pagar").show();
   $("#pagos_con_detraccion").hide();
 
-  tabla_pagos1 = $("#tabla-pagos-proveedor")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_pagos_proveedor&idcompra_proyecto=" + idcompra_proyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla_pagos1 = $("#tabla-pagos-proveedor").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/compra.php?op=listar_pagos_proveedor&idcompra_proyecto=" + idcompra_proyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      //console.log(data);
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-left');
+      }  
+      
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-right');
+      }  
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      createdRow: function (row, data, ixdex) {
-        //console.log(data);
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass('text-left');
-        }  
-        
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass('text-right');
-        }  
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 
   total_pagos(idcompra_proyecto);
 }
@@ -1316,69 +1316,65 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
 
   $("#btn-pagar").show();
 
-  tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_proyecto=" + idcompra_proyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/compra.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_proyecto=" + idcompra_proyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
   //Tabla 3
-  tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_proyecto=" + idcompra_proyecto,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/compra.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_proyecto=" + idcompra_proyecto,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 
 //Función limpiar

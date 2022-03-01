@@ -279,28 +279,28 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
     createdRow: function (row, data, ixdex) {          
 
       // columna: Cantidad
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass("text-center");         
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass("text-center");         
       }
 
       // columna: Precio promedio
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass("text-right h5");         
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right h5");         
       }
 
       // columna: Precio actual
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass("text-right");         
-      }
-      
       if (data[6] != '') {
         $("td", row).eq(6).addClass("text-right");         
+      }
+      
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass("text-right");         
       }
     },
 		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
-		"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+		"order": [[ 0, "asc" ]]//Ordenar (columna,orden)
 	}).DataTable();  
 }
 

@@ -19,7 +19,7 @@
     </div>     -->
 
     <!-- SidebarSearch Form -->
-    <div class="form-inline">
+    <div class="form-inline mt-4">
       <div class="input-group" data-widget="sidebar-search">
         <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
         <div class="input-group-append">

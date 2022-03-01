@@ -269,7 +269,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $rspta = $resumen_insumos->tbla_facturas($idproyecto, $idproducto);
         //Vamos a declarar un array
-        $data = [];
+        $data = []; $cont = 1;
 
         $imagen_error = "this.src='../dist/svg/user_default.svg'";
         $ficha_tecnica = "";
@@ -281,13 +281,14 @@ if (!isset($_SESSION["nombre"])) {
             : ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-lg text-gray-50"></i></center>');
 
           $data[] = [    
-            "0" => '<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>',
-            "1" => '<span class="text-primary font-weight-bold" >' . $reg->proveedor . '</span>',      
-            "2" => date("d/m/Y", strtotime($reg->fecha_compra)),
-            "3" => $reg->cantidad,
-            "4" => '<b>' . number_format($reg->precio_igv, 2, ".", ",") . '</b>',
-            "5" => 'S/. ' . number_format($reg->descuento, 2, ".", ","),
-            "6" => 'S/. ' . number_format($reg->subtotal, 2, ".", ","),
+            "0" => $cont++,
+            "1" => '<button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>',
+            "2" => '<span class="text-primary font-weight-bold" >' . $reg->proveedor . '</span>',      
+            "3" => date("d/m/Y", strtotime($reg->fecha_compra)),
+            "4" => $reg->cantidad,
+            "5" => '<b>' . number_format($reg->precio_igv, 2, ".", ",") . '</b>',
+            "6" => 'S/. ' . number_format($reg->descuento, 2, ".", ","),
+            "7" => 'S/. ' . number_format($reg->subtotal, 2, ".", ","),
             // "7" => $ficha_tecnica,
           ];
         }

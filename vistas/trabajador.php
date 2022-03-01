@@ -65,6 +65,7 @@
                         <table id="tabla-trabajadors" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="">#</th>
                               <th class="">Aciones</th>
                               <th>Nombres</th>
                               <th>Fechas-Trabajo</th>
@@ -77,6 +78,7 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
+                            <th class="">#</th>
                               <th>Aciones</th>
                               <th>Nombres</th>
                               <th>Fechas-Trabajo</th>

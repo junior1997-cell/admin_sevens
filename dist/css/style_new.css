@@ -305,6 +305,39 @@ table th {
 .m-r-15px{ margin-right: 15px !important; }
 
 
+.m-0rem{ margin: 0rem !important; }
+.m-01rem{ margin: 0.1rem !important; }
+.m-02rem{ margin: 0.2rem !important; }
+.m-03rem{ margin: 0.3rem !important; }
+.m-04rem{ margin: 0.4rem !important; }
+.m-05rem{ margin: 0.5rem !important; }
+
+.m-b-0rem{ margin-bottom: 0rem !important; }
+.m-b-01rem{ margin-bottom: 0.1rem !important; }
+.m-b-02rem{ margin-bottom: 0.2rem !important; }
+.m-b-03rem{ margin-bottom: 0.3rem !important; }
+.m-b-04rem{ margin-bottom: 0.4rem !important; }
+.m-b-05rem{ margin-bottom: 0.5rem !important; }
+
+.m-b-5rem{ margin-bottom: 5rem !important; }
+
+.m-t-1rem{ margin-top: 1rem !important; }
+
+.m-t-2rem{ margin-top: 2rem !important; }
+
+.m-t-5rem{ margin-top: 5rem !important; }
+
+.m-r-1rem{ margin-right: 1rem !important; }
+
+.m-r-2rem{ margin-right: 2rem !important; }
+
+.m-r-5rem{ margin-right: 5rem !important; }
+
+.m-r-10rem{ margin-right: 10rem !important; }
+
+.m-r-15rem{ margin-right: 15rem !important; }
+
+
 /*  ══════════════════════════════════════════ - W I D T H   S I Z E - ══════════════════════════════════════════ */
 
 .w-px-30{ width: 30px !important; }
@@ -468,6 +501,16 @@ table th {
 #dp .ui-datepicker tbody td.highlight a{background-color: red; border-bottom: 3px blue solid;}
 
 .cursor-pointer{ cursor: pointer !important; }
+
+.textarea_datatable{
+  width: 100%;
+  background: rgb(215 224 225 / 22%);
+  border-block-color: inherit;
+  border-bottom: aliceblue;
+  border-left: aliceblue;
+  border-right: aliceblue;
+  border-top: hidden;
+}
 
 /*  ══════════════════════════════════════════ - @ M E D I A - ══════════════════════════════════════════ */
 /* min-width = como minimo */

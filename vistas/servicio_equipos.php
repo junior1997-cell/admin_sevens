@@ -111,6 +111,7 @@
                           <table id="tabla-servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
                                 <th>Nombre Máquina</th>
                                 <th>Proveedor</th>
@@ -126,6 +127,7 @@
                             <tbody></tbody>
                             <tfoot>
                               <tr>
+                                <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
                                 <th>Nombre Máquina</th>
                                 <th>Proveedor</th>

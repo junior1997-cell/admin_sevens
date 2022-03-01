@@ -320,7 +320,7 @@ switch ($_GET["op"]) {
     $nube_idproyecto = $_GET["nube_idproyecto"];
     $rspta = $compra->listar_compra($nube_idproyecto);
     //Vamos a declarar un array
-    $data = [];
+    $data = []; $cont = 1;
     $c = "";
     $cc = "";
     $nombre = "";
@@ -405,21 +405,22 @@ switch ($_GET["op"]) {
       $btn_tipo = (empty($reg->imagen_comprobante)) ? 'btn-outline-info' : 'btn-info';       
 
       $data[] = [
-        "0" => $reg->estado == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+        "0" => $cont++,
+        "1" => $reg->estado == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
               ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
               ' <button class="btn btn-danger btn-sm" onclick="anular(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
             : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .  $reg->idcompra_proyecto . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
               ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>',
-        "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-        "2" => '<span class="text-primary font-weight-bold" >' . $reg->razon_social . '</span>',
-        "3" =>'<span class="" ><b>' . $reg->tipo_comprovante .  '</b> '.(empty($reg->serie_comprovante) ?  "" :  '- '.$reg->serie_comprovante).'</span>',
-        "4" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
-        "5" => number_format($reg->monto_total, 2, '.', ','),
-        "6" => $list_segun_estado_detracc,
-        "7" => number_format($saldo, 2, '.', ','),
-        "8" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-        "9" => $reg->descripcion,
-        "10" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+        "2" => date("d/m/Y", strtotime($reg->fecha_compra)),
+        "3" => '<span class="text-primary font-weight-bold" >' . $reg->razon_social . '</span>',
+        "4" =>'<span class="" ><b>' . $reg->tipo_comprovante .  '</b> '.(empty($reg->serie_comprovante) ?  "" :  '- '.$reg->serie_comprovante).'</span>',
+        "5" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
+        "6" => number_format($reg->monto_total, 2, '.', ','),
+        "7" => $list_segun_estado_detracc,
+        "8" => number_format($saldo, 2, '.', ','),
+        "9" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+        "10" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+        "11" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
       ];
     }
     $results = [
@@ -436,7 +437,7 @@ switch ($_GET["op"]) {
     $nube_idproyecto = $_GET["nube_idproyecto"];
     $rspta = $compra->listar_compraxporvee($nube_idproyecto);
     //Vamos a declarar un array
-    $data = [];
+    $data = []; $cont = 1;
     $c = "info";
     $nombre = "Ver";
     $info = "info";
@@ -444,9 +445,11 @@ switch ($_GET["op"]) {
 
     while ($reg = $rspta->fetch_object()) {
       $data[] = [
-        "0" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
-        "1" => $reg->razon_social,
-        "2" => number_format($reg->total, 2, '.', ','),
+        "0" => $cont++,
+        "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
+        "2" => $reg->razon_social,
+        "3" => $reg->telefono,
+        "4" => number_format($reg->total, 2, '.', ','),
       ];
     }
     $results = [
@@ -466,17 +469,18 @@ switch ($_GET["op"]) {
      $idproveedor= '4';*/
     $rspta = $compra->listar_detalle_comprax_provee($idproyecto, $idproveedor);
     //Vamos a declarar un array
-    $data = [];
+    $data = []; $cont = 1;
 
     while ($reg = $rspta->fetch_object()) {
       $data[] = [
-        "0" => '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
-        "1" => date("d/m/Y", strtotime($reg->fecha_compra)),
-        "2" => $reg->tipo_comprovante,
-        "3" => $reg->serie_comprovante,
-        "4" => number_format($reg->monto_total, 2, '.', ','),
-        "5" => $reg->descripcion,
-        "6" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+        "0" => $cont++,
+        "1" => '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
+        "2" => date("d/m/Y", strtotime($reg->fecha_compra)),
+        "3" => $reg->tipo_comprovante,
+        "4" => $reg->serie_comprovante,
+        "5" => number_format($reg->monto_total, 2, '.', ','),
+        "6" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+        "7" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
       ];
     }
     $results = [
@@ -678,7 +682,7 @@ switch ($_GET["op"]) {
     $rspta = $compra->listar_pagos($idcompra_proyecto);
     //Vamos a declarar un array
       
-    $data = [];
+    $data = []; $cont = 1;
     $suma = 0;
     $imagen = '';
 
@@ -693,23 +697,24 @@ switch ($_GET["op"]) {
       $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
       
       $data[] = [
-        "0" => $reg->estado
+        "0" =>$cont++,
+        "1" => $reg->estado
           ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
           : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-        "1" => $reg->forma_pago,
-        "2" => '<div class="user-block">
+        "2" => $reg->forma_pago,
+        "3" => '<div class="user-block">
           <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
           <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
           <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
         </div>',             
-        "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
-        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-        "5" => $reg->numero_operacion,
-        "6" => number_format($reg->monto, 2, '.', ','),
-        "7" => $imagen,
-        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+        "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+        "5" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "6" => $reg->numero_operacion,
+        "7" => number_format($reg->monto, 2, '.', ','),
+        "8" => $imagen,
+        "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
       ];
     }
     //$suma=array_sum($rspta->fetch_object()->monto);
@@ -732,7 +737,7 @@ switch ($_GET["op"]) {
     
     $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
     //Vamos a declarar un array   
-    $data = [];
+    $data = []; $cont  =1;
 
     $imagen = '';
 
@@ -753,26 +758,30 @@ switch ($_GET["op"]) {
       empty($reg->imagen)
         ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
         : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+      
       $tool = '"tooltip"';
+
       $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+
       $data[] = [
-        "0" => $reg->estado
+        "0" =>$cont++,
+        "1" => $reg->estado
           ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .$reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
           : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-        "1" => $reg->forma_pago,
-        "2" => '<div class="user-block">
+        "2" => $reg->forma_pago,
+        "3" => '<div class="user-block">
           <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
           <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
           <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
         </div>',
-        "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
-        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-        "5" => $reg->numero_operacion,
-        "6" => number_format($reg->monto, 2, '.', ','),
-        "7" => $imagen,
-        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+        "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+        "5" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "6" => $reg->numero_operacion,
+        "7" => number_format($reg->monto, 2, '.', ','),
+        "8" => $imagen,
+        "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
       ];
     }
     //$suma=array_sum($rspta->fetch_object()->monto);
@@ -794,7 +803,7 @@ switch ($_GET["op"]) {
     $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
     //Vamos a declarar un array
     
-    $data = [];
+    $data = []; $cont = 1;
 
     $imagen = '';
 
@@ -820,22 +829,23 @@ switch ($_GET["op"]) {
       $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
       $data[] = [
-        "0" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
+        "0" => $cont++,
+        "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_compras . ')"><i class="far fa-trash-alt"></i></button>'
           : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
             ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-        "1" => $reg->forma_pago,
-        "2" => '<div class="user-block">
+        "2" => $reg->forma_pago,
+        "3" => '<div class="user-block">
           <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
           <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
           <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
         </div>',
-        "3" => date("d/m/Y", strtotime($reg->fecha_pago)),
-        "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-        "5" => $reg->numero_operacion,
-        "6" => number_format($reg->monto, 2, '.', ','),
-        "7" => $imagen,
-        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+        "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+        "5" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+        "6" => $reg->numero_operacion,
+        "7" => number_format($reg->monto, 2, '.', ','),
+        "8" => $imagen,
+        "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
       ];
     }
 

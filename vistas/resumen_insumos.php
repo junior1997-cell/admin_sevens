@@ -122,6 +122,7 @@
                             <table id="tbla-facura" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th>#</th>
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>Fecha compra</th>
@@ -137,6 +138,7 @@
                               </tbody>
                               <tfoot>
                                 <tr>
+                                  <th>#</th>
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th >Fecha compra</th>
