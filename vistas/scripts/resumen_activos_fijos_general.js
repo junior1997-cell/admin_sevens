@@ -215,7 +215,7 @@ function listar_tbla_principal_maq()
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras_maq", {}, function (data, status) {
 
-    data = JSON.parse(data); //console.log('-------'); console.log(data); 
+    data = JSON.parse(data); console.log('---maq----'); console.log(data.length); 
 
     if (data.length === 0) {
 

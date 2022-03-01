@@ -75,8 +75,8 @@ Class Resumen_activos_fijos_general
 
 			}
 
-			return $data_productos;
 		}
+		return $data_productos;
 
 	}
 
@@ -181,8 +181,8 @@ Class Resumen_activos_fijos_general
 	
 			);
 
-			return $data_totales;
 		}
+		return $data_totales;
 	}
 
 	//.METODOS PARA EDITAR COMPRA POR PROYECTO
