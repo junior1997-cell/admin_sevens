@@ -63,7 +63,7 @@
 
                             <div class="card-tools">
                               <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
+                                <i class="fas fa-plus"></i>
                               </button>
                             </div>
                           </div>
@@ -116,7 +116,7 @@
 
                             <div class="card-tools">
                               <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
+                                <i class="fas fa-plus"></i>
                               </button>
                             </div>
                           </div>
@@ -168,7 +168,7 @@
 
                             <div class="card-tools">
                               <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
+                                <i class="fas fa-plus"></i>
                               </button>
                             </div>
                           </div>
@@ -220,7 +220,7 @@
 
                             <div class="card-tools">
                               <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
+                                <i class="fas fa-plus"></i>
                               </button>
                             </div>
                           </div>
@@ -1047,7 +1047,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- MODAL - DETALLE MATERIALES O ACTIVOS FIJOS -->
               <div class="modal fade" id="modal-ver-detalle-material-activo-fijo">
                 <div class="modal-dialog modal-dialog-scrollable modal-xm">
