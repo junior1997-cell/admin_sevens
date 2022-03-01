@@ -355,6 +355,16 @@
             padding: 5px;
             border-radius: 6px;
         }
+        .text_area_clss {
+            width: 100%;
+            height: auto;
+            background: rgb(215 224 225 / 22%);
+            border-block-color: inherit;
+            border-bottom: aliceblue;
+            border-left: aliceblue;
+            border-right: aliceblue;
+            border-top: hidden;
+        }
     </style>
     <!-- Bootstrap 4 -->
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
