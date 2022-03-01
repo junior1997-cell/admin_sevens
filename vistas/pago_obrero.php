@@ -95,8 +95,8 @@
                           <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr> 
-                                <th>Trabajdor</th> 
-                               
+                                <th class="text-center">#</th> 
+                                <th>Trabajdor</th>                                
                                 <th class="text-center">Horas <br> Normal/Extra</th>
                                 <th>Sabaticales</th>                               
                                 <th>Sueldo Mensual</th>                                
@@ -115,8 +115,8 @@
                             </tbody>
                             <tfoot>
                               <tr> 
-                                <th>Trabajdor</th>  
-                                
+                                <th class="text-center">#</th>                                 
+                                <th>Trabajdor</th>                                 
                                 <th class="text-center text-gray">Horas Nrm/Extr</th>
                                 <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                                 <th class="text-center"><h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
@@ -182,6 +182,7 @@
                           <table id="tabla-ingreso-pagos" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr> 
+                                <th class="text-center">#</th> 
                                 <th>Op.</th> 
                                 <th>Cuenta depósito</th> 
                                 <th>Forma de pago</th>
@@ -196,6 +197,7 @@
                             </tbody>
                             <tfoot>
                               <tr> 
+                                <th class="text-center">#</th> 
                                 <th>Op.</th> 
                                 <th>Cuenta depósito</th>
                                 <th>Forma de pago</th>
@@ -473,7 +475,17 @@
          
 
         <script type="text/javascript" src="scripts/pago_obrero.js"></script>        
-         
+         <style>
+            .text_area_clss {
+              width: 100%;
+              background: rgb(215 224 225 / 22%);
+              border-block-color: inherit;
+              border-bottom: aliceblue;
+              border-left: aliceblue;
+              border-right: aliceblue;
+              border-top: hidden;
+            }
+         </style>
         <script>
           $(function () {
             $('[data-toggle="tooltip"]').tooltip();

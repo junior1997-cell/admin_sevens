@@ -52,7 +52,7 @@ Class PagoObrero
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct
 		WHERE rqsa.estado_envio_contador = '1' AND tpp.idproyecto = '$nube_idproyecto' AND  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  AND p.idproyecto = tpp.idproyecto
-		GROUP BY rqsa.idtrabajador_por_proyecto;";
+		GROUP BY rqsa.idtrabajador_por_proyecto ORDER BY t.nombres;";
 		$trabajdor = ejecutarConsultaArray($sql_1);
 
 		if ( !empty($trabajdor) ) {

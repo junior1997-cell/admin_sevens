@@ -89,7 +89,7 @@ Class PagoAdministrador
 		FROM trabajador_por_proyecto as tpp, cargo_trabajador AS ct, tipo_trabajador AS tt, trabajador as t, proyecto AS p, bancos AS b
 		WHERE tpp.idproyecto = p.idproyecto AND tpp.idproyecto = '$nube_idproyecto'   AND tpp.idtrabajador = t.idtrabajador AND 
 		t.idbancos = b.idbancos AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador 
-		AND tt.nombre != 'Obrero';";
+		AND tt.nombre != 'Obrero' ORDER BY t.nombres ASC ;";
 		$trabajador = ejecutarConsultaArray($sql_1);
 
 		if ( !empty($trabajador) ) {

@@ -177,71 +177,76 @@ function listar_tbla_principal(nube_idproyecto) {
       }
     },
     createdRow: function (row, data, ixdex) {
-
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).css({
+          "text-align": "center"
+        });
+      }  
       // columna: sueldo mensual
-      if (data[4] != '') {
-        $("td", row).eq(4).css({
+      if (data[5] != '') {
+        $("td", row).eq(5).css({
           "text-align": "center"
         });
       }      
 
       // columna: sueldo mensual
-      if (data[5] != '') {
-        $("td", row).eq(5).css({
+      if (data[6] != '') {
+        $("td", row).eq(6).css({
           "text-align": "right"
         });
       }
 
       // columna: pago total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({
+      if (data[7] != '') {
+        $("td", row).eq(7).css({
           "text-align": "right"
         });
         // acumulamos el PAGO TOTAL
-        var split = data[6].split(' '); console.log(split);
+        var split = data[7].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
         pago_total_x_proyecto += parseFloat(quitar_format_mil);
       }
 
       // columna: pago acumuldo       
-      if (data[7] != '') {
-        $("td", row).eq(7).css({
+      if (data[8] != '') {
+        $("td", row).eq(8).css({
           "text-align": "right"
         });
         // acumulamos el PAGO acumulado hasta hoy
-        var split = data[7].split(' '); console.log(split);
+        var split = data[8].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
         total_pago_acumulado_hoy += parseFloat(quitar_format_mil);
       }
 
       // columna: saldo
-      if (data[9] != '') {
-        $("td", row).eq(9).css({
+      if (data[10] != '') {
+        $("td", row).eq(10).css({
           "text-align": "right"
         });
         // acumulamos el SALDO
-        var split = data[9].split(' '); console.log(split);
+        var split = data[10].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
         saldo_total += parseFloat(quitar_format_mil);
       }
 
       // Validamos la comlumna: "Anterior pago"
-      if (data[10] == "En espera...") {
-        $("td", row).eq(10).css({
+      if (data[11] == "En espera...") {
+        $("td", row).eq(11).css({
           "background-color": "#ffffff00",
           "color": "black",
         });
-      }else if (data[10] == "Terminó") {        
+      }else if (data[11] == "Terminó") {        
         // $("td", row).eq(5).addClass('bg-success bg-gradient').css({ "color": "white",  "font-size": "18px" });        
       } else {
-        $("td", row).eq(10).css({
+        $("td", row).eq(11).css({
           "background-color": "#28a745",
           "color": "white",
         });
       } 
 
       // validamos si el trbajdor temino sus dias de trabajo #6e00e77a
-      if ( data[10] == "Terminó" && data[11] == "Terminó" ) {
+      if ( data[11] == "Terminó" && data[12] == "Terminó" ) {
         $("td", row).eq(0).css({ "background-color": "#58955a7a"});
         $("td", row).eq(1).css({ "background-color": "#58955a7a"});
         $("td", row).eq(2).css({ "background-color": "#58955a7a"});
@@ -258,15 +263,15 @@ function listar_tbla_principal(nube_idproyecto) {
       }
 
       // Validamos la comlumna: "Siguiente pago"
-      if (data[11] == "En espera...") {
-        $("td", row).eq(11).css({
+      if (data[12] == "En espera...") {
+        $("td", row).eq(12).css({
           "background-color": "#ffffff00",
           "color": "black",
         });
-      } else if (data[11] == "Terminó") {        
+      } else if (data[12] == "Terminó") {        
         // $("td", row).eq(6).addClass('bg-success bg-gradient').css({ "color": "white", "font-size": "18px" });        
       } else{
-        $("td", row).eq(11).css({
+        $("td", row).eq(12).css({
           "background-color": "#ffc107",
           "color": "black",
         });
@@ -284,8 +289,8 @@ function listar_tbla_principal(nube_idproyecto) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
   $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
@@ -609,6 +614,14 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #0
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -620,8 +633,8 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();  
 }
 
@@ -937,19 +950,27 @@ function reload_table_pagos_x_mes(id) {
           console.log(e.responseText);	
         }
       },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #0
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
         }
-      }
-    },
+      },
+      "language": {
+        "lengthMenu": "Mostrar : _MENU_ registros",
+        "buttons": {
+          "copyTitle": "Tabla Copiada",
+          "copySuccess": {
+            _: '%d líneas copiadas',
+            1: '1 línea copiada'
+          }
+        }
+      },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
