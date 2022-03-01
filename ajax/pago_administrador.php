@@ -161,7 +161,7 @@
           // $nube_idproyecto = 1;          
 
           $rspta=$pago_administrador->listar_tbla_principal($nube_idproyecto);
-
+          $cont=1;
           // echo $rspta;
 
           //Vamos a declarar un array
@@ -227,31 +227,32 @@
               }              
             }
             
-            $data[]=array(               
-              "0"=>'<div class="user-block">
+            $data[]=array(
+              "0"=>$cont++,               
+              "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
                 <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 <span class="description">'. $value['tipo'].' / '.$value['cargo'] .' </span>
               </div>',
-              "1"=> $fecha_inicio_nombre,
-              "2"=>$date_actual,
-              "3"=>$fecha_fin_nombre,
-              "4"=>$count_dia,
+              "2"=> $fecha_inicio_nombre,
+              "3"=>$date_actual,
+              "4"=>$fecha_fin_nombre,
+              "5"=>$count_dia,
               
-              "5"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
-              "6" =>'S/. ' . number_format( $pago_total , 2, '.', ',') ,
-              "7"=>'S/. '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
-              "8" =>'<div class="justify-content-between "> 
+              "6"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
+              "7" =>'S/. ' . number_format( $pago_total , 2, '.', ',') ,
+              "8"=>'S/. '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
+              "9" =>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/. '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
               </div>',
-              "9"=>'S/. ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
-              "10"=>$ultimo_mes_pago,
-              "11"=>$siguiente_mes_pago,
-              "12"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
+              "10"=>'S/. ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
+              "11"=>$ultimo_mes_pago,
+              "12"=>$siguiente_mes_pago,
+              "13"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
             );
           }
 
@@ -287,7 +288,7 @@
           $rspta=$pago_administrador->listar_pagos_x_mes($idfechas_mes_pagos);
           //Vamos a declarar un array
           $data= Array();
-
+          $cont=1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
           while ($reg=$rspta->fetch_object()){
@@ -296,16 +297,17 @@
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
             $data[]=array(    
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>$cont++,
+              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="far fa-trash-alt"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-check"></i></button>',           
-              "1"=>$reg->cuenta_deposito	,
-              "2"=>$reg->forma_de_pago	,
-              "3"=>'S/. '. number_format($reg->monto, 2, ".", ","),
-              "4"=>$baucher_deposito,
-              "5"=>$reg->descripcion,
-              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              "2"=>$reg->cuenta_deposito	,
+              "3"=>$reg->forma_de_pago	,
+              "4"=>'S/. '. number_format($reg->monto, 2, ".", ","),
+              "5"=>$baucher_deposito,
+              "6"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
           $results = array(

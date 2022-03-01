@@ -614,6 +614,14 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
           console.log(e.responseText);	
         }
       },
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #0
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
+        }
+      },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -625,8 +633,8 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();  
 }
 
@@ -942,19 +950,27 @@ function reload_table_pagos_x_mes(id) {
           console.log(e.responseText);	
         }
       },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #0
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
         }
-      }
-    },
+      },
+      "language": {
+        "lengthMenu": "Mostrar : _MENU_ registros",
+        "buttons": {
+          "copyTitle": "Tabla Copiada",
+          "copySuccess": {
+            _: '%d líneas copiadas',
+            1: '1 línea copiada'
+          }
+        }
+      },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 

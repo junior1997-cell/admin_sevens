@@ -140,7 +140,7 @@
           $rspta=$pagoobrero->listar_tbla_principal($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array();
-
+          $cont=1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
 
           $Object = new DateTime();
@@ -165,29 +165,30 @@
             }
 
             $data[]=array(
-              "0"=>'<div class="user-block">
+              "0"=>$cont++,
+              "1"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres_trabajador'] .'</p></span>
                 <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 <span class="description">'. $value['nombre_tipo'].' / '.$value['nombre_cargo'] .' </span>
               </div>',
               
-              "1"=>$value['total_hn'].' / '. $value['total_he'],
-              "2"=>$value['sabatical'],              
-              "3"=>'S/. '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
-              "4"=>'S/. '.  number_format($value['pago_quincenal'], 2, '.', ','),
-              "5"=>'<div class="justify-content-between "> 
+              "2"=>$value['total_hn'].' / '. $value['total_he'],
+              "3"=>$value['sabatical'],              
+              "4"=>'S/. '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
+              "5"=>'S/. '.  number_format($value['pago_quincenal'], 2, '.', ','),
+              "6"=>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' )">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/. '.number_format($value['total_deposito'], 2, '.', ',').'</button>
               </div>',
-              "6"=>'S./ ' . number_format($saldo, 2, '.', ','),
-              "7"=>$value['sum_estado_envio_contador'], 
-              "8"=>format_d_m_a($value['fecha_inicio']),
-              "9"=> $date_actual,
-              "10"=>format_d_m_a($value['fecha_fin']),
-              "11"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
+              "7"=>'S./ ' . number_format($saldo, 2, '.', ','),
+              "8"=>$value['sum_estado_envio_contador'], 
+              "9"=>format_d_m_a($value['fecha_inicio']),
+              "10"=> $date_actual,
+              "11"=>format_d_m_a($value['fecha_fin']),
+              "12"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
             );
           }
           $results = array(
@@ -219,7 +220,7 @@
           $rspta=$pagoobrero->listar_tbla_pagos_x_q_s($idresumen_q_s_asistencia);
           //Vamos a declarar un array
           $data= Array();
-
+          $cont = 1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
           while ($reg=$rspta->fetch_object()){
@@ -228,17 +229,20 @@
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
             $data[]=array(    
-              "0"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fas fa-pencil-alt"></i></button>'.
+              "0"=>$cont++,
+              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
-              "1"=>$reg->cuenta_deposito	,
-              "2"=>$reg->forma_de_pago	,
-              "3"=>'S/. '. number_format($reg->monto_deposito, 2, ".", ","),
-              "4"=>$baucher_deposito,
-              "5"=>$reg->descripcion,
-              "6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              "2"=>$reg->cuenta_deposito	,
+              "3"=>$reg->forma_de_pago	,
+              "4"=>'S/. '. number_format($reg->monto_deposito, 2, ".", ","),
+              "5"=>$baucher_deposito,
+              "6"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
               );
+
+              
           }
           $results = array(
             "sEcho"=>1, //Información para el datatables

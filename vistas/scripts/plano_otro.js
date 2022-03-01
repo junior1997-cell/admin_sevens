@@ -216,6 +216,12 @@ function listar_carpeta(nube_idproyecto) {
                     console.log(e.responseText);
                 },
             },
+            createdRow: function (row, data, ixdex) {
+                // columna: opciones
+                if (data[0] != '') {
+                  $("td", row).eq(0).addClass('text-center');
+                }
+            },
             language: {
                 lengthMenu: "Mostrar : _MENU_ registros",
                 buttons: {
@@ -227,8 +233,8 @@ function listar_carpeta(nube_idproyecto) {
                 },
             },
             bDestroy: true,
-            iDisplayLength: 5, //Paginación
-            order: [[0, "desc"]], //Ordenar (columna,orden)
+            iDisplayLength: 10, //Paginación
+            order: [[0, "asc"]], //Ordenar (columna,orden)
         })
         .DataTable();
 }
@@ -259,6 +265,12 @@ function listar_plano(nombre, id_carpeta) {
                     console.log(e.responseText);
                 },
             },
+            createdRow: function (row, data, ixdex) {
+                // columna: opciones
+                if (data[0] != '') {
+                  $("td", row).eq(0).addClass('text-center');
+                }
+            },
             language: {
                 lengthMenu: "Mostrar : _MENU_ registros",
                 buttons: {
@@ -270,8 +282,8 @@ function listar_plano(nombre, id_carpeta) {
                 },
             },
             bDestroy: true,
-            iDisplayLength: 5, //Paginación
-            order: [[0, "desc"]], //Ordenar (columna,orden)
+            iDisplayLength: 10, //Paginación
+            order: [[0, "asc"]], //Ordenar (columna,orden)
         })
         .DataTable();
 }

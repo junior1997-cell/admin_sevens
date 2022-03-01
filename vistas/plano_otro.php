@@ -70,6 +70,7 @@
                         <table id="tabla-carpeta" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="text-center">#</th>
                               <th class="">Aciones</th>
                               <th>Nombres</th>
                               <th>Descripción</th>
@@ -79,7 +80,8 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
-                            <th class="">Aciones</th>
+                              <th class="text-center">#</th>
+                              <th class="">Aciones</th>
                               <th>Nombres</th>
                               <th>Descripción</th>
                               <th>Estado</th>
@@ -93,6 +95,7 @@
                         <table id="tabla-planos-otros" class="table table-bordered table-striped display" style="width: 100% !important;">
                           <thead>
                             <tr>
+                              <th class="text-center">#</th>
                               <th class="">Aciones</th>
                               <th>Nombres</th>
                               <th>Descripción</th>
@@ -103,7 +106,8 @@
                           <tbody></tbody>
                           <tfoot>
                             <tr>
-                            <th class="">Aciones</th>
+                              <th class="text-center">#</th>
+                              <th class="">Aciones</th>
                               <th>Nombres</th>
                               <th>Descripción</th>
                               <th>Doc.</th>

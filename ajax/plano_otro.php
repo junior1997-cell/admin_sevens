@@ -153,25 +153,26 @@
           $rspta=$plano_otro->listar_carpeta($nube_proyecto);
           //Vamos a declarar un array
           $data= Array();         
-          
+          $cont = 1;
           while ($reg=$rspta->fetch_object()){           
             
             $docs= "'$reg->nombre', '$reg->idcarpeta'";
 
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar_carpeta('.$reg->idcarpeta.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>':
-                ' <button class="btn btn-warning" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>',
-              "1"=>'<div class="user-block">
+              "0"=>$cont++,
+              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar_carpeta('.$reg->idcarpeta.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>':
+                ' <button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary btn-sm" onclick="activar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>',
+              "2"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/svg/carpeta.svg" alt="User Image" ">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
                 <span class="description"><b>Creado el:</b> '. $reg->fecha .' </span>
               </div>',
-              "2"=> "<span >".$reg->descripcion." </span>",
-              "3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              "3"=> "<span >".$reg->descripcion." </span>",
+              "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
             );
           }
           $results = array(
@@ -192,7 +193,7 @@
           $data= Array();
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
+          $cont=1;
           while ($reg=$rspta->fetch_object()){
 
             $exten1 = explode(".", $reg->doc );  $exten2 = end($exten1); $img = ""; //$descripcion="";
@@ -245,22 +246,23 @@
             // echo $descripcion;
 
             $data[]=array(
-              "0"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger" onclick="desactivar_plano('.$reg->idplano_otro.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>':
-                ' <button class="btn btn-warning" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary" onclick="activar_plano('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
-              "1"=>$reg->nombre,
-              "2"=> "<span >".$descripcion." </span>",   
-              "3" => '<div ">
+              "0"=>$cont++,
+              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger  btn-sm" onclick="desactivar_plano('.$reg->idplano_otro.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>':
+                ' <button class="btn btn-warning  btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-primary  btn-sm" onclick="activar_plano('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
+                ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
+              "2"=>$reg->nombre,
+              "3"=> "<span >".$descripcion." </span>",   
+              "4" => '<div ">
                 <center>
                   <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
                     '.$img.'
                   </a>
                 </center>
               </div>',                      
-              "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
             );
           }
           $results = array(

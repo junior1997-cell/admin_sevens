@@ -171,68 +171,73 @@ function listar_tbla_principal(id_proyecto) {
       }
     },
     createdRow: function (row, data, ixdex) {          
-
+      // columna:# 0
+      if (data[0] != '') {
+        $("td", row).eq(0).css({
+          "text-align": "center"
+        });         
+      }  
       // columna: Horas Normal/Extra
-      if (data[1] != '') {
-        $("td", row).eq(1).css({
+      if (data[2] != '') {
+        $("td", row).eq(2).css({
           "text-align": "center"
         });         
       }   
       
       // columna: Sabaticales  
-      if (data[2] != '') {
-        sabatical_total += parseFloat(data[2]);
+      if (data[3] != '') {
+        sabatical_total += parseFloat(data[3]);
       }     
-      $("td", row).eq(2).css({
+      $("td", row).eq(3).css({
         "text-align": "center"
       });       
 
       // columna: Sueldo Mensual
-      if (data[3] != '') {
-        $("td", row).eq(3).css({
+      if (data[4] != '') {
+        $("td", row).eq(4).css({
           "text-align": "right"
         });
       }      
 
       // columna: Pago acumulado Semana/Quincena
-      if (data[4] != '') {
+      if (data[5] != '') {
 
-        var split = data[4].split(' '); console.log(split);
+        var split = data[5].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]);
         pago_acumulado_total += parseFloat(quitar_format_mil);
           
-        $("td", row).eq(4).css({
+        $("td", row).eq(5).css({
           "text-align": "right"
         });
       }
 
       // columna: Depositos
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('justify-content-between');
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('justify-content-between');
       }
 
       // columna: Saldo
-      if (data[6] != '') {
+      if (data[7] != '') {
 
-        var split = data[6].split(' '); console.log(split);
+        var split = data[7].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]);
         saldo_total += parseFloat(quitar_format_mil);
 
         if (parseFloat(quitar_format_mil) < 0) {
-          $("td", row).eq(6).css({
+          $("td", row).eq(7).css({
             "text-align": "right"            
           }).addClass('bg-danger');
         }else{
-          $("td", row).eq(6).css({
+          $("td", row).eq(7).css({
             "text-align": "right"
           });
         }        
       }
 
       // columna: Cantidad Semana/Quincena
-      if (data[7] != '') {
-        cant_q_s_total += parseFloat(data[7]);
-        $("td", row).eq(7).css({
+      if (data[8] != '') {
+        cant_q_s_total += parseFloat(data[8]);
+        $("td", row).eq(8).css({
           "text-align": "center"
         });
       }
@@ -249,8 +254,8 @@ function listar_tbla_principal(id_proyecto) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
   // suma totales x proyecto
@@ -433,18 +438,21 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
       }
     },
     createdRow: function (row, data, ixdex) {
-
       // columna: opciones
       if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-nowrap');
+        $("td", row).eq(0).addClass('text-center');
       }
-      // columna: cuenta deposito
+      // columna: opciones
       if (data[1] != '') {
         $("td", row).eq(1).addClass('text-nowrap');
       }
+      // columna: cuenta deposito
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass('text-nowrap');
+      }
       // columna: deposito
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-nowrap');
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-right text-nowrap');
       }
     },
     "language": {
@@ -458,8 +466,8 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 

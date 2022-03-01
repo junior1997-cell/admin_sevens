@@ -188,6 +188,7 @@
                           <table id="tabla-ingreso-pagos" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr> 
+                                <th class="text-center">#</th>
                                 <th>Opciones</th>
                                 <th>Cuenta depósito</th> 
                                 <th>Forma de pago</th>
@@ -202,6 +203,7 @@
                             </tbody>
                             <tfoot>
                               <tr> 
+                                <th class="text-center">#</th>
                                 <th>Opciones</th>
                                 <th>Cuenta depósito</th>
                                 <th>Forma de pago</th>
@@ -486,7 +488,17 @@
         ?>         
 
         <script type="text/javascript" src="scripts/pago_administrador.js"></script>
-         
+        <style>
+            .text_area_clss {
+              width: 100%;
+              background: rgb(215 224 225 / 22%);
+              border-block-color: inherit;
+              border-bottom: aliceblue;
+              border-left: aliceblue;
+              border-right: aliceblue;
+              border-top: hidden;
+            }
+         </style>
         <script>
           $(function () {
             $('[data-toggle="tooltip"]').tooltip();
