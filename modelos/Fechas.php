@@ -10,7 +10,7 @@ class FechaEs {
 
     public function __construct($mFecha)
     {
-            $this->objFecha=DateTime::createFromFormat('Y-m-d', $mFecha);
+        $this->objFecha=DateTime::createFromFormat('Y-m-d', $mFecha);
     }
 
     public function getDDDD()
@@ -38,9 +38,15 @@ class FechaEs {
     {
         return $this->objFecha->format('y');    
     }
+
     public function getdd()
     {
         return $this->objFecha->format('d');    
     }
+
+    // public function getHora12()
+    // {
+    //     return $this->objFecha->format('g:i a');    
+    // }
 
 }

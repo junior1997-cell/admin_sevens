@@ -60,7 +60,7 @@
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-12">
-                    <div class="hidden  card card-primary card-outline">
+                    <div class="card card-primary card-outline">
                       <div class="card-header"> 
 
                         <!-- agregar pago  -->
@@ -74,23 +74,17 @@
                       <div class="card-body">
 
                         <!-- tabla principal -->
-                        <div class=" pb-3" id="tbl-principal">
+                        <div class=" pb-3">
                           <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr> 
-                                <th>Trabajdor</th> 
-                                <th>Fecha inicio</th>
-                                <th>Hoy</th>
-                                <th class="text-center">Fecha <br> culminacion</th>
-                                <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
-                                <th>Sueldo Mensual</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
-                                <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
-                                <th>Cel:</th>                         
+                                <th>#</th> 
+                                <th>Acciones</th>
+                                <th>Módulo</th>
+                                <th>Archivo</th>
+                                <th>Descripcion</th>
+                                <th>Creado el</th>
+                                <th>Reciclado el</th>            
                               </tr>
                             </thead>
                             <tbody>                         
@@ -98,19 +92,13 @@
                             </tbody>
                             <tfoot>
                               <tr> 
-                                <th class="text-gray">Trabajdor</th> 
-                                <th class="text-gray">Fecha inicio</th>
-                                <th class="text-center text-gray">Hoy</th>
-                                <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
-                                <th class="text-center text-gray">Último <br> pago</th>
-                                <th class="text-center text-gray">Siguiente <br> pago</th>
-                                <th>Cel:</th>                            
+                                <th>#</th> 
+                                <th>Acciones</th>
+                                <th>Módulo</th>
+                                <th>Archivo</th>
+                                <th>Descripcion</th>
+                                <th>Creado el</th>
+                                <th>Reciclado el</th>                            
                               </tr>
                             </tfoot>
                           </table>
@@ -120,32 +108,6 @@
                       <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-
-                    <div class="error-page">
-                      <h2 class="headline text-danger">307</h2>
-
-                      <div class="error-content">
-                        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Estamos en <b class="text-danger">Desarrollo</b>.</h3>
-
-                        <p>
-                          Estamos trabajando para que lo utilice de inmediato.
-                          Mientras tanto, puede <a href="escritorio.php">volver al panel de control</a> o intentar usar el formulario de búsqueda.
-                        </p>
-
-                        <form class="search-form">
-                          <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search">
-
-                            <div class="input-group-append">
-                              <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
-                              </button>
-                            </div>
-                          </div>
-                          <!-- /.input-group -->
-                        </form>
-                      </div>
-                    </div>
-                    <!-- /.error-page -->
 
                   </div>
                   <!-- /.col -->
@@ -174,74 +136,12 @@
                             <!-- id idpagos_x_mes_administrador -->
                             <input type="hidden" name="idpagos_x_mes_administrador" id="idpagos_x_mes_administrador" />
 
-                            <!-- id idfechas_mes_pagos_administrador -->
-                            <input type="hidden" name="idfechas_mes_pagos_administrador_pxm" id="idfechas_mes_pagos_administrador_pxm" />
-                            <!-- id_tabajador_x_proyecto -->
-                            <input type="hidden" name="id_tabajador_x_proyecto_pxm" id="id_tabajador_x_proyecto_pxm" />
-                            <!-- fecha inicial -->
-                            <input type="hidden" name="fecha_inicial_pxm" id="fecha_inicial_pxm" />
-                            <!-- fecha final -->
-                            <input type="hidden" name="fecha_final_pxm" id="fecha_final_pxm" />
-                            <!-- nombre del mes -->
-                            <input type="hidden" name="mes_nombre_pxm" id="mes_nombre_pxm" />
-                            <!-- dias del mes -->
-                            <input type="hidden" name="dias_mes_pxm" id="dias_mes_pxm" />
-                            <!-- dias_regular -->
-                            <input type="hidden" name="dias_regular_pxm" id="dias_regular_pxm" />
-                            <!-- sueldo_mensual -->
-                            <input type="hidden" name="sueldo_mensual_pxm" id="sueldo_mensual_pxm" />
-                            <!-- monto_x_mes -->
-                            <input type="hidden" name="monto_x_mes_pxm" id="monto_x_mes_pxm" />                            
-
-                            <!-- Forma de pago hacia el trabajdor -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                              <label for="forma_pago">Forma Pago</label>
-                              <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                <option value="Transferencia">Transferencia</option>
-                                <option value="Efectivo">Efectivo</option>
-                              </select>
-                              </div>
-                            </div>
-
-                            <!-- Cuenta deposito enviada -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
-                                <input type="text" name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Cuenta deposito">  
-                              </div>                                                        
-                            </div>
-
-                            <!-- Monto (de cantidad a depositado) -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
-                                <input type="text" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
-                              </div>                                                        
-                            </div>
-                             
-                            <!-- Mes del pago -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="nombre_mes" class="text-gray">Mes </label>
-                                <span class="nombre_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
-                              </div>
-                            </div>
-
                             <!-- Monto faltante -->
                             <div class="col-lg-3">
                               <div class="form-group">
                                 <label for="nombre_mes" class="text-gray">Faltante </label>
                                 <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
                               </div>
-                            </div>
-                             
-                            <!-- Descripcion-->
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                <label for="descripcion">Descripción </label> <br>
-                                <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                              </div>                                                        
                             </div>
                              
                             <!-- Pdf 1 -->
