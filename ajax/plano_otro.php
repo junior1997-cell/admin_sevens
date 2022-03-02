@@ -169,7 +169,7 @@
               "2"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/svg/carpeta.svg" alt="User Image" ">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
-                <span class="description"><b>Creado el:</b> '. $reg->fecha .' </span>
+                <span class="description"><b>Creado el:</b> '. date("d/m/Y g:i a", strtotime($reg->created_at)) .' </span>
               </div>',
               "3"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
               "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'

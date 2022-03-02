@@ -19,7 +19,12 @@
     <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
       <!-- Content Wrapper. Contains page content -->
       <div class="wrapper">
-        <?php  require 'nav.php'; require 'aside.php'; if ($_SESSION['asistencia_trabajador']==1){  ?>
+        <?php  
+        require 'nav.php'; 
+        require 'aside.php'; 
+
+        if ($_SESSION['asistencia_trabajador']==1){  
+          ?>
           <!-- Content Wrapper. Contains page content -->
           <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -27,7 +32,10 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1>Asistencia</h1>
+                    <h1>Asistencia 
+                      <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();"><i class="fas fa-plus-circle"></i> Agregar</button>
+
+                    </h1>
                   </div>
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -569,13 +577,92 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Modal Fechas de Actividades -->
+              <div class="modal fade" id="modal-agregar-fechas-actividades">
+                <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Fechas de Actividades</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-fechas-actividades" name="form-fechas-actividades" method="POST">
+                        <div class="row" id="cargando-7-fomulario">
+                          
+                          <!-- id asistencia -->
+                          <input type="hidden" name="id_proyecto_f" id="id_proyecto_f" /> 
+
+                          <!-- FECHA INICIO DE ACTIVIDADES -->
+                          <div class="col-lg-12">
+                            <div class="form-group">
+                              <label>Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
+                              <div class="input-group date"  data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio_actividad" id="fecha_inicio_actividad" name="fecha_inicio_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();"  />
+                                <div class="input-group-append" data-target="#fecha_inicio_actividad" data-toggle="datetimepicker">
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                              </div>                                 
+                            </div>
+                          </div>
+                             
+                          <!-- FECHA INICIO FIN DE ACTIVIDADES -->
+                          <div class="col-lg-12">
+                            <div class="form-group">
+                              <label>Fecha Fin de actividades: <sup class="text-danger">*</sup></label>
+                              <div class="input-group date"  data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin_actividad" id="fecha_fin_actividad" name="fecha_fin_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();" />
+                                <div class="input-group-append" data-target="#fecha_fin_actividad" data-toggle="datetimepicker">
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                              </div>                                 
+                            </div>
+                          </div>
+
+                          <!-- Dias habiles -->
+                          <div class="col-lg-12">
+                            <div class="form-group">
+                              <label for="plazo_actividad">Plazo Actividades<sup class="text-danger">*</sup> <small class="text-orange">(días hábiles)</small> </label>
+                              <span class="form-control plazo_actividad"> 0 </span>
+                              <input type="hidden" name="plazo_actividad" id="plazo_actividad" >
+                            </div>
+                          </div>                                                     
+
+                        </div>
+
+                        <div class="row" id="cargando-8-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-fechas-actividades">Submit</button>
+                      </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_fechas_actividades">Guardar Cambios</button>
+                    </div>
+                  </div>
+                </div>
+              </div> 
               
 
             </section>
             <!-- /.content -->
           </div>
 
-        <?php  }else{ require 'noacceso.php'; } require 'footer.php'; ?>
+          <?php  
+        }else{ 
+          require 'noacceso.php'; 
+        } require 'footer.php'; 
+        ?>
       </div>
 
       <!-- /.content-wrapper -->
@@ -608,10 +695,12 @@
       <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
       <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
       <!-- InputMask -->
-      <script src="../plugins/moment/moment.min.js"></script>
+      <!-- <script src="../plugins/moment/moment.min.js"></script> -->
       <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
       <!-- sweetalert2 -->
       <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+      <!-- moment locale -->
+      <script src="../plugins/moment/locales.js"></script>
 
       <script type="text/javascript" src="scripts/registro_asistencia.js"></script>
 

@@ -566,6 +566,28 @@ Class Asistencia_trabajador
         return ejecutarConsulta($sql);
     }
 
+	// obtebnemos los "DOC JUSTIFICACION para eliminar
+	public function fechas_actividad($id) {
+
+        $sql = "SELECT idproyecto, fecha_inicio_actividad, fecha_fin_actividad, plazo_actividad
+		FROM proyecto 
+		WHERE idproyecto =  '$id'";
+
+        return ejecutarConsultaSimpleFila($sql);
+    }
+
+	// obtebnemos los "DOC JUSTIFICACION para eliminar
+	public function editar_fechas_actividad($id_proyecto_f, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad) {
+
+        $sql = "UPDATE proyecto SET 
+		fecha_inicio_actividad='$fecha_inicio_actividad',
+		fecha_fin_actividad= '$fecha_fin_actividad',
+		plazo_actividad = '$plazo_actividad'
+		WHERE idproyecto = '$id_proyecto_f'";
+
+        return ejecutarConsulta($sql);
+    }
+
 }
 
 ?>

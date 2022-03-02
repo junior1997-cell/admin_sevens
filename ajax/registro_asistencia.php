@@ -24,6 +24,13 @@ ob_start();
       $idasistencia_trabajador_j	= isset($_POST["idasistencia_trabajador_j"])? limpiarCadena($_POST["idasistencia_trabajador_j"]):"";
       $detalle_j	= isset($_POST["detalle_j"])? limpiarCadena($_POST["detalle_j"]):"";
       $doc1	= isset($_POST["doc1"])? $_POST["doc1"]:"";
+
+      // :::::::::::::::::::::::::::::::::::: D A T O S   F E C H A S   D E   A C T I V I D A D E S ::::::::::::::::::::::::::::::::::::::
+      $id_proyecto_f	= isset($_POST["id_proyecto_f"])? limpiarCadena($_POST["id_proyecto_f"]):"";
+      $fecha_inicio_actividad	= isset($_POST["fecha_inicio_actividad"])? limpiarCadena($_POST["fecha_inicio_actividad"]):"";
+      $fecha_fin_actividad	= isset($_POST["fecha_fin_actividad"])? limpiarCadena($_POST["fecha_fin_actividad"]):"";
+      $plazo_actividad	= isset($_POST["plazo_actividad"])? limpiarCadena($_POST["plazo_actividad"]):"";
+      
       
       switch ($_GET["op"]){
         // Gurdamos cada dia de asistencia del OBRERO
@@ -431,6 +438,33 @@ ob_start();
           $rspta=$asist_trabajador->descripcion_adicional_descuento($_POST["id_adicional"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
+        break;
+
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   F E C H A S   A C T I V I D A D ::::::::::::::::::::::::::::::::::::::
+        case 'fechas_actividad':
+
+          $rspta=$asist_trabajador->fechas_actividad($_POST["id_proyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+        break;
+
+        case 'guardar_y_editar_fechas_actividad':
+
+          // registramos un nuevo: recibo x honorario
+          if (empty($id_proyecto_f)){
+
+            $rspta = '0';
+            
+            echo $rspta ? "ok" : "No se logro registrar la justificación";
+
+          }else {             
+
+            // editamos un recibo x honorario existente
+            $rspta=$asist_trabajador->editar_fechas_actividad($id_proyecto_f, format_d_m_a($fecha_inicio_actividad), format_d_m_a($fecha_fin_actividad), $plazo_actividad);
+            
+            echo $rspta ? "ok" : "La fechas no se pudo actualizar";
+          }
+
         break;
       } // end switch
 

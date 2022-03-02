@@ -310,7 +310,7 @@
                             </div>  
                             
                             <!-- FECHA INICIO DE ACTIVIDADES -->
-                            <div class="col-lg-4">
+                            <!-- <div class="col-lg-4">
                               <div class="form-group">
                                 <label>Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
@@ -320,10 +320,10 @@
                                   </div>
                                 </div>                                 
                               </div>
-                            </div>
+                            </div> -->
                              
                             <!-- FECHA INICIO FIN DE ACTIVIDADES -->
-                            <div class="col-lg-4">
+                            <!-- <div class="col-lg-4">
                               <div class="form-group">
                                 <label>Fecha Fin de actividades: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
@@ -333,19 +333,19 @@
                                   </div>
                                 </div>                                 
                               </div>
-                            </div>
+                            </div> -->
 
                             <!-- Dias habiles -->
-                            <div class="col-lg-4">
+                            <!-- <div class="col-lg-4">
                               <div class="form-group">
                                 <label for="plazo_actividad">Plazo Actividades<sup class="text-danger">*</sup> <small class="text-orange">(días hábiles)</small> </label>
                                 <span class="form-control plazo_actividad"> 0 </span>
                                 <input type="hidden" name="plazo_actividad" id="plazo_actividad" >
                               </div>
-                            </div>
+                            </div> -->
 
                             <!-- linea divisoria -->
-                            <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
+                            <!-- <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div> -->
                             
                             <!-- FECHA INICIO -->
                             <div class="col-lg-4">

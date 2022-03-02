@@ -24,6 +24,9 @@ function init() {
 
   // submnit a JUSTIFICAR
   $("#guardar_registro_justificacion").on("click", function (e) { $("#submit-form-justificacion").submit(); });
+
+  // submnit a FECHAS DE ACTIVIDADES
+  $("#guardar_registro_fechas_actividades").on("click", function (e) { $("#submit-form-fechas-actividades").submit(); });
   
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -34,6 +37,22 @@ function init() {
     format:'HH:mm ',
     lang:'ru'
   })
+
+  $('#fecha_inicio_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_inicio_actividad').datetimepicker({
+    locale: 'es',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6]
+  });
+
+  $('#fecha_fin_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  // Inicializar - Date picker  
+  $('#fecha_fin_actividad').datetimepicker({
+    locale: 'es',
+    format: 'DD-MM-YYYY',
+    daysOfWeekDisabled: [6],
+  });
 
 }
 
@@ -54,10 +73,7 @@ function doc1_eliminar() {
 // retrazamos la ejecuccion de una funcion
 var delay = (function(){
   var timer = 0;
-  return function(callback, ms){
-      clearTimeout (timer);
-      timer = setTimeout(callback, ms);
-  };
+  return function(callback, ms){ clearTimeout (timer); timer = setTimeout(callback, ms); };
 })();
 
 function mostrar_form_table(estados) {
@@ -1907,8 +1923,6 @@ function l_m(){
   
 }
 
-
-
 function cerrar_modal() {
   $("#modal-cargando").modal("hide");
   $(".progress-bar").removeClass("bg-success bg-danger");
@@ -1986,6 +2000,77 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
   }  
 }
 
+function limpiar_form_fechas_actividades(params) {
+  $("#cargando-7-fomulario").hide();
+  $("#cargando-8-fomulario").show();
+
+  $('#id_proyecto_f').val(localStorage.getItem('nube_idproyecto'));
+
+  $('#fecha_inicio_actividad').val("");
+  $('#fecha_fin_actividad').val("");
+  $('#plazo_actividad').val("");
+
+  $.post("../ajax/registro_asistencia.php?op=fechas_actividad", { 'id_proyecto': localStorage.getItem('nube_idproyecto') }, function (data, status) {
+    
+    data = JSON.parse(data);  console.log(data);
+
+    $('#fecha_inicio_actividad').val(format_d_m_a(data.fecha_inicio_actividad));
+    $('#fecha_fin_actividad').val(format_d_m_a(data.fecha_fin_actividad));
+    $('#plazo_actividad').val(data.plazo_actividad);
+    $('.plazo_actividad').html(data.plazo_actividad);
+
+    $("#cargando-7-fomulario").show();
+    $("#cargando-8-fomulario").hide();
+  });
+}
+
+function calcular_plazo_actividad() {
+
+  var plazo = 0;  
+
+  if ($('#fecha_inicio_actividad').val() != "" && $('#fecha_fin_actividad').val() != "") {
+
+    var fecha1 = moment( format_a_m_d($('#fecha_inicio_actividad').val()) );
+
+    var fecha2 = moment( format_a_m_d($('#fecha_fin_actividad').val()) );
+
+    plazo = fecha2.diff(fecha1, 'days') + 1;
+  } 
+
+  $('.plazo_actividad').html(plazo);
+  $('#plazo_actividad').val(plazo);
+}
+
+function guardar_y_editar_fechas_actividades(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-fechas-actividades")[0]);
+
+  $.ajax({
+    url: "../ajax/registro_asistencia.php?op=guardar_y_editar_fechas_actividad",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (datos) {
+             
+      if (datos == 'ok') {        
+
+        Swal.fire("Correcto!", "Fechas registrada correctamente", "success");
+
+        $("#modal-agregar-fechas-actividades").modal("hide");
+
+        tbla_principal(localStorage.getItem('nube_idproyecto'));
+
+        mostrar_form_table(1);
+
+			}else{
+
+				Swal.fire("Error!", datos, "error");
+			}
+    },
+  });
+}
+
 $(function () {    
 
   $("#form-adicional-descuento").validate({
@@ -2059,6 +2144,53 @@ $(function () {
 
     submitHandler: function (form) {
       guardar_y_editar_justificar(form);
+    },
+  });
+
+  $("#form-fechas-actividades").validate({
+    
+    rules: {      
+      fecha_inicio_actividad: { required: true, minlength: 4},
+      fecha_fin_actividad: { required: true, minlength: 4},
+      plazo_actividad: { required: true,},
+    },
+
+    messages: {
+      fecha_inicio_actividad: {
+        required: "Este campo es requerido",
+        min:"Escriba almenos 4 caracteres."
+      },
+      fecha_fin_actividad: {
+        required: "Este campo es requerido",
+        min:"Escriba almenos 4 caracteres."
+      },
+      plazo_actividad: {
+        required: "Este campo es requerido",
+      },
+
+    },  
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (form) {
+      guardar_y_editar_fechas_actividades(form);
     },
   });
 });
