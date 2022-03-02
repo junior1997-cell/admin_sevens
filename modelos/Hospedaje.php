@@ -69,7 +69,7 @@ Class Hospedaje
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM hospedaje WHERE idproyecto='$idproyecto' ORDER BY idhospedaje DESC";
+		$sql="SELECT*FROM hospedaje WHERE idproyecto='$idproyecto' ORDER BY fecha_comprobante DESC";
 		return ejecutarConsulta($sql);		
 	}
 
