@@ -26,15 +26,19 @@ Class Resumenfacturas
 		p.razon_social as razon_social, p.telefono,
 		cpp.estado as estado
 		FROM compra_por_proyecto as cpp, proveedor as p 
-		WHERE cpp.idproyecto='$idproyecto' AND cpp.tipo_comprovante='Factura' AND cpp.idproveedor=p.idproveedor
+		WHERE cpp.idproyecto='$idproyecto' AND  cpp.estado=1 AND cpp.tipo_comprovante='Factura' AND cpp.idproveedor=p.idproveedor
 		ORDER BY cpp.fecha_compra DESC;";
 
 		return ejecutarConsulta($sql);	
 	}
-	public function suma_total_compras()
+
+	public function suma_total_compras($idproyecto)
 	{
-		# code...
+		$sql="SELECT SUM(monto_total) as monto_total FROM compra_por_proyecto WHERE idproyecto='$idproyecto' AND estado=1;";
+
+		return ejecutarConsultaSimpleFila($sql);
 	}
+
 	public function facturas_maquinarias_equipos($idproyecto,$tipo)
 	{
 		$sql="SELECT f.idfactura, f.idproyecto, f.idmaquinaria, f.codigo, f.fecha_emision, f.monto, f.descripcion, 
@@ -45,9 +49,13 @@ Class Resumenfacturas
 		
 		return ejecutarConsulta($sql);	
 	}
-	public function suma_total_maquinaria_equipos()
+
+	public function suma_total_maquinaria_equipos($idproyecto,$tipo)
 	{
-		# code...
+		$sql="SELECT  SUM(f.monto) as monto_total FROM factura as f, maquinaria as mq
+		WHERE f.idproyecto='$idproyecto' AND mq.tipo='$tipo' AND  f.estado =1  AND f.idmaquinaria=mq.idmaquinaria;";
+
+		return ejecutarConsultaSimpleFila($sql);
 	}
 
 

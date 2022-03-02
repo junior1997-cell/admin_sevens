@@ -90,7 +90,7 @@
                                   <th class="text-center">Fecha</th>
                                   <th class="text-center">Sub-total</th>                                
                                   <th class="text-center">IGV</th>
-                                  <th class="text-center monto-total-compras">S/. 0.00</th>                                                     
+                                  <th class="text-right monto-total-compras">S/. 0.00</th>                                                     
                                 </tr>
                             </tfoot>
                           </table>
@@ -119,7 +119,7 @@
                                   <th class="text-center">Fecha</th>
                                   <th class="text-center">Sub-total</th>                                
                                   <th class="text-center">IGV</th>
-                                  <th class="text-center monto-total-maquinaria">S/. 0.00</th>                                                     
+                                  <th class="text-right monto-total-maquinaria">S/. 0.00</th>                                                     
                                 </tr>
                             </tfoot>
                           </table>
@@ -148,7 +148,7 @@
                                   <th class="text-center">Fecha</th>
                                   <th class="text-center">Sub-total</th>                                
                                   <th class="text-center">IGV</th>
-                                  <th class="text-center monto-total-equipos">S/. 0.00</th>                                                     
+                                  <th class="text-right monto-total-equipos">S/. 0.00</th>                                                     
                                 </tr>
                             </tfoot>
                           </table>

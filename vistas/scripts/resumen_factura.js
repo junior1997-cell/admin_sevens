@@ -73,10 +73,11 @@ function listar_tbla_compras(nube_idproyecto) {
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
-  /*$.post("../ajax/resumen_facturas.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_facturas.php?op=total_facturas_compras", { 'id_proyecto': nube_idproyecto }, function (data, status) {
     data = JSON.parse(data);  console.log(data); 
+    $('.monto-total-compras').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
 
-  }); */
+  }); 
 
   
 }
@@ -134,10 +135,12 @@ function listar_tbla_maquinaria(nube_idproyecto) {
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
- /* $.post("../ajax/resumen_facturas.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_facturas.php?op=total_facturas_maquinaria", { 'id_proyecto': nube_idproyecto }, function (data, status) {
+    $('.monto-total-maquinaria').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
     data = JSON.parse(data);  console.log(data); 
+    $('.monto-total-maquinaria').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
 
-  }); */
+  }); 
 
   
 }
@@ -195,20 +198,12 @@ function listar_tbla_equipos(nube_idproyecto) {
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
- /* $.post("../ajax/resumen_facturas.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_facturas.php?op=total_facturas_equipos", { 'id_proyecto': nube_idproyecto }, function (data, status) {
     data = JSON.parse(data);  console.log(data); 
-
-  }); */
+    $('.monto-total-equipos').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
+  }); 
 
   
-}
-
-
-function l_m(){
-  
-  // limpiar();
-  $("#barra_progress").css({"width":'0%'});
-  $("#barra_progress").text("0%"); 
 }
 
 init();

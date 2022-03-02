@@ -62,7 +62,7 @@
 					} 
 
 				break;
-				case 'suma_total_compras_maq':
+				case 'total_facturas_compras':
 																																					
 					if (!isset($_SESSION["nombre"])) {
 						header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -70,8 +70,8 @@
 							//Validamos el acceso solo al usuario logueado y autorizado.
 						if ($_SESSION['resumen_activo_fijo_general'] == 1) {
 
-							$clacificacion =2;
-							$rspta = $resumen_fact->suma_total_compras($clacificacion);
+							
+							$rspta = $resumen_fact->suma_total_compras($_POST['id_proyecto']);
 
 							echo json_encode($rspta);
 
@@ -125,7 +125,7 @@
 					} 
 
 				break;
-				case 'suma_total_compras_equip':
+				case 'total_facturas_maquinaria':
 																																
 					if (!isset($_SESSION["nombre"])) {
 						header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -133,7 +133,7 @@
 							//Validamos el acceso solo al usuario logueado y autorizado.
 						if ($_SESSION['resumen_activo_fijo_general'] == 1) {
 
-							$rspta = $resumen_fact->suma_total_maquinaria_equipos();
+							$rspta = $resumen_fact->suma_total_maquinaria_equipos($_POST['id_proyecto'],'1');
 
 							echo json_encode($rspta);
 							//Fin de las validaciones de acceso
@@ -186,7 +186,7 @@
 					} 
 
 				break;
-				case 'suma_total_compras_herra':
+				case 'total_facturas_equipos':
 																						
 					if (!isset($_SESSION["nombre"])) {
 						header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -194,7 +194,7 @@
 							//Validamos el acceso solo al usuario logueado y autorizado.
 						if ($_SESSION['resumen_activo_fijo_general'] == 1) {
 
-							$rspta = $resumen_fact->suma_total_maquinaria_equipos();
+							$rspta = $resumen_fact->suma_total_maquinaria_equipos($_POST['id_proyecto'],'2');
 
 							echo json_encode($rspta);
 							//Fin de las validaciones de acceso
