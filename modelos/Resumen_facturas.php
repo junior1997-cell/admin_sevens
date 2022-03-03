@@ -106,7 +106,7 @@ Class Resumenfacturas
 
 	public function facturas_break($idproyecto)
 	{
-		$sql="SELECT fb.idfactura_break,fb.idsemana_break, fb.nro_comprobante, fb.fecha_emision, fb.monto, fb.igv, fb.subtotal, fb.tipo_comprobante, fb.descripcion 
+		$sql="SELECT fb.idfactura_break,fb.idsemana_break, fb.nro_comprobante, fb.fecha_emision, fb.monto, fb.igv, fb.subtotal, fb.tipo_comprobante, fb.descripcion, sb.numero_semana
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break=sb.idsemana_break AND fb.tipo_comprobante='Factura' AND fb.estado=1 AND sb.idproyecto='$idproyecto'  ORDER BY fecha_emision DESC;";
 

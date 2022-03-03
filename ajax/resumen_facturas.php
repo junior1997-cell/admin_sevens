@@ -468,7 +468,7 @@
 								$data[]=array(
 								"0"=>$cont++,
 								"1" => '<div> 
-											<span class="text-primary font-weight-bold">- - - </span>
+											<span class="text-primary font-weight-bold"> Semana. '.$reg->numero_semana.'</span>
 										</div>',
 								"2" =>$reg->nro_comprobante,
 								"3"=>$reg->fecha_emision,
