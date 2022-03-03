@@ -262,8 +262,107 @@ class Papelera
       }
     }
 
-    $sql_14 = "SELECT";
-    $sql_15 = "SELECT";
+    $sql_14 = "SELECT m.idmaquinaria,  m.nombre, p.razon_social AS proveedor, m.tipo, m.estado, m.created_at, m.updated_at
+    FROM maquinaria AS m, proveedor AS p
+    WHERE m.idproveedor = p.idproveedor AND m.estado = '0' AND m.estado_delete = '1';";
+    $maquinaria = ejecutarConsultaArray($sql_14);
+
+    if (!empty($maquinaria)) {
+      foreach ($maquinaria as $key => $value14) {
+        $data[] = array(
+          'nombre_tabla'    => 'maquinaria',
+          'nombre_id_tabla' => 'idmaquinaria',
+          'modulo'          => 'Maquinaria y Equipos',
+          'id_tabla'        => $value14['idmaquinaria'],
+          'nombre_archivo'  => $value14['nombre'] . ' ─ ' .  ($value14['tipo'] == '1' ? 'Maquina' : 'Equipo' ),
+          'descripcion'     => $value14['proveedor'],
+          'created_at'      => $value14['created_at'],
+          'updated_at'      => $value14['updated_at'],
+        );
+      }
+    }
+
+    $sql_15 = "SELECT idocupacion, nombre_ocupacion, estado, created_at, updated_at FROM ocupacion WHERE estado  = '0' AND estado_delete = '1';";
+    $ocupacion = ejecutarConsultaArray($sql_15);
+
+    if (!empty($ocupacion)) {
+      foreach ($ocupacion as $key => $value15) {
+        $data[] = array(
+          'nombre_tabla'    => 'ocupacion',
+          'nombre_id_tabla' => 'idocupacion',
+          'modulo'          => 'Ocupación',
+          'id_tabla'        => $value15['idocupacion'],
+          'nombre_archivo'  => $value15['nombre_ocupacion'],
+          'descripcion'     => '- - -',
+          'created_at'      => $value15['created_at'],
+          'updated_at'      => $value15['updated_at'],
+        );
+      }
+    }
+    
+    $sql_16 = "SELECT idotro_servicio, tipo_comprobante, numero_comprobante, descripcion, estado, created_at, updated_at 
+    FROM otro_servicio WHERE estado = '0' AND estado_delete = '1' AND  idproyecto  = '$nube_idproyecto';";
+    $otro_servicio = ejecutarConsultaArray($sql_16);
+
+    if (!empty($otro_servicio)) {
+      foreach ($otro_servicio as $key => $value16) {
+        $data[] = array(
+          'nombre_tabla'    => 'otro_servicio',
+          'nombre_id_tabla' => 'idotro_servicio',
+          'modulo'          => 'Otros Gastos',
+          'id_tabla'        => $value16['idotro_servicio'],
+          'nombre_archivo'  => $value16['tipo_comprobante'] . ' ─ ' . $value16['numero_comprobante'] ,
+          'descripcion'     => $value16['descripcion'],
+          'created_at'      => $value16['created_at'],
+          'updated_at'      => $value16['updated_at'],
+        );
+      }
+    }
+
+    $sql_17 = "SELECT pqso.idpagos_q_s_obrero, pqso.monto_deposito, t.nombres AS trabajador, pqso.descripcion, pqso.estado,  pqso.created_at, pqso.updated_at 
+    FROM pagos_q_s_obrero AS pqso, resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador AS t
+    WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador AND
+    tpp.idproyecto = '$nube_idproyecto' AND pqso.estado = '0' AND pqso.estado_delete = '1';";
+    $pagos_q_s_obrero = ejecutarConsultaArray($sql_17);
+
+    if (!empty($pagos_q_s_obrero)) {
+      foreach ($pagos_q_s_obrero as $key => $value17) {
+        $data[] = array(
+          'nombre_tabla'    => 'pagos_q_s_obrero',
+          'nombre_id_tabla' => 'idpagos_q_s_obrero',
+          'modulo'          => 'Pago Obrero',
+          'id_tabla'        => $value17['idpagos_q_s_obrero'],
+          'nombre_archivo'  => $value17['trabajador'] . ' ─ S/.' . $value17['monto_deposito'] ,
+          'descripcion'     => $value17['descripcion'],
+          'created_at'      => $value17['created_at'],
+          'updated_at'      => $value17['updated_at'],
+        );
+      }
+    }
+
+    $sql_18 = "SELECT pxma.idpagos_x_mes_administrador, t.nombres AS trabajador, pxma.monto, pxma.descripcion, pxma.estado, pxma.created_at, pxma.updated_at 
+    FROM pagos_x_mes_administrador AS pxma, fechas_mes_pagos_administrador AS fmpa, trabajador_por_proyecto AS tpp, trabajador AS t
+    WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 
+    AND tpp.idtrabajador = t.idtrabajador AND pxma.estado = '0' AND pxma.estado_delete = '1' AND tpp.idproyecto = '1';";
+    $pagos_x_mes_administrador = ejecutarConsultaArray($sql_18);
+
+    if (!empty($pagos_x_mes_administrador)) {
+      foreach ($pagos_x_mes_administrador as $key => $value18) {
+        $data[] = array(
+          'nombre_tabla'    => 'pagos_x_mes_administrador',
+          'nombre_id_tabla' => 'idpagos_x_mes_administrador',
+          'modulo'          => 'Pago Administrador',
+          'id_tabla'        => $value18['idpagos_x_mes_administrador'],
+          'nombre_archivo'  => $value18['trabajador'] . ' ─ S/.' . $value18['monto'] ,
+          'descripcion'     => $value18['descripcion'],
+          'created_at'      => $value18['created_at'],
+          'updated_at'      => $value18['updated_at'],
+        );
+      }
+    }
+
+    $sql_19 = "SELECT";
+    $sql_20 = "SELECT";
 
     
 
