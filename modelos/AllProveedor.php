@@ -53,6 +53,12 @@ Class Proveedor
 		$sql="UPDATE proveedor SET estado='1' WHERE idproveedor='$idproveedor'";
 		return ejecutarConsulta($sql);
 	}
+	//Implementamos un método para eliminar
+	public function eliminar($idproveedor)
+	{
+		$sql="UPDATE proveedor SET estado_delete='0' WHERE idproveedor='$idproveedor'";
+		return ejecutarConsulta($sql);
+	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idproveedor)
@@ -64,17 +70,17 @@ Class Proveedor
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM proveedor WHERE idproveedor>1 ORDER BY  razon_social ASC";
+		$sql="SELECT * FROM proveedor WHERE idproveedor>1 AND estado=1 AND estado_delete=1 ORDER BY  razon_social ASC";
 		return ejecutarConsulta($sql);		
 	}
 	public function listar_compra()
 	{
-		$sql="SELECT * FROM proveedor where estado=1";
+		$sql="SELECT * FROM proveedor where estado=1 AND estado_delete=1";
 		return ejecutarConsulta($sql);		
 	}
 
 	public function select2_banco() {
-		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1'  ORDER BY idbancos ASC;";
+		$sql="SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND estado_delete=1  ORDER BY idbancos ASC;";
 		return ejecutarConsulta($sql);		
 	}
 

@@ -48,6 +48,13 @@ Class Allmaquinarias
 		$sql="UPDATE maquinaria SET estado='1' WHERE idmaquinaria='$idmaquinaria'";
 		return ejecutarConsulta($sql);
 	}
+	
+	//Implementamos un método para activar categorías
+	public function eliminar($idmaquinaria)
+	{
+		$sql="UPDATE maquinaria SET estado_delete='0' WHERE idmaquinaria='$idmaquinaria'";
+		return ejecutarConsulta($sql);
+	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idmaquinaria)
@@ -75,13 +82,13 @@ Class Allmaquinarias
 		mq.tipo as tipo, 
 		mq.estado as estado
 		
-		FROM maquinaria as mq, proveedor as p WHERE mq.idproveedor=p.idproveedor AND mq.tipo='$tipo' ORDER BY  mq.nombre ASC";
+		FROM maquinaria as mq, proveedor as p WHERE mq.idproveedor=p.idproveedor AND mq.tipo='$tipo' AND mq.estado_delete='1'  AND mq.estado='1' ORDER BY  mq.nombre ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Seleccionar Trabajador Select2
 	public function select2_proveedor()
 	{
-		$sql="SELECT idproveedor,razon_social,ruc FROM proveedor WHERE estado='1'";
+		$sql="SELECT idproveedor,razon_social,ruc FROM proveedor WHERE estado='1' AND estado_delete='1'";
 		return ejecutarConsulta($sql);		
 	}
 

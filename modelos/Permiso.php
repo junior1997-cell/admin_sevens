@@ -21,9 +21,9 @@ Class Permiso
 
 	public function ver_usuarios($id_permiso)
 	{
-		$sql = "SELECT t.nombres, t.tipo_documento, t.numero_documento, t.imagen_perfil,  u.cargo , u.fecha
+		$sql = "SELECT t.nombres, t.tipo_documento, t.numero_documento, t.imagen_perfil,  u.cargo , u.created_at
 		FROM permiso as p, usuario_permiso as up, usuario as u, trabajador as t
-		WHERE p.idpermiso = up.idpermiso and up.idusuario = u.idusuario and u.idtrabajador = t.idtrabajador and p.idpermiso = '$id_permiso';";
+		WHERE p.idpermiso = up.idpermiso and up.idusuario = u.idusuario and u.idtrabajador = t.idtrabajador and u.estado='1' AND u.estado_delete='1' and p.idpermiso = '$id_permiso';";
 
 		return ejecutarConsulta($sql);	
 	}

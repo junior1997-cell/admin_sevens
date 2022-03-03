@@ -216,7 +216,7 @@ function desactivar(idusuario) {
   });   
 }
 
-//Función para activar registros
+//Función para activar registros ::: sin usar::::
 function activar(idusuario) {
 
   Swal.fire({
@@ -248,6 +248,34 @@ function activar(idusuario) {
       });      
     }
   });      
+}
+
+//Función para desactivar registros
+function eliminar(idusuario) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar  el Usuario?",
+    text: "Resgisto no se podrá restablecer!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/usuario.php?op=eliminar", { idusuario: idusuario }, function (e) {
+        if (e == 'ok') {
+
+          Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");		 
+  
+          tabla.ajax.reload();
+          
+        }else{
+  
+          Swal.fire("Error!", e, "error");
+        }
+      });      
+    }
+  });   
 }
 
 init();

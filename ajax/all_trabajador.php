@@ -219,7 +219,14 @@
 
           $rspta=$trabajador->activar($idtrabajador);
 
- 				  echo $rspta ? "Usuario activado" : "Trabajador no se puede activar";
+ 				  echo $rspta ? "Trabajador activado" : "Trabajador no se puede activar";
+
+        break;
+        case 'eliminar':
+
+          $rspta=$trabajador->eliminar($idtrabajador);
+
+ 				  echo $rspta ? "ok" : "Trabajador no se puede eliminado";
 
         break;
 
@@ -244,10 +251,9 @@
             $data[]=array(
               "0"=>$cont++,
               "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="fas fa-times"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$reg->idtrabajador.')"><i class="fas fa-skull-crossbones"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
               "2"=>'<div class="user-block">
                 <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">

@@ -85,6 +85,27 @@ switch ($_GET["op"]){
 		}		
 	break;
 
+	case 'activar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['recurso']==1)
+			{
+				$rspta=$all_maquinaria->eliminar($idmaquinaria);
+ 				echo $rspta ? "ok" : "Máquina o equipo se puede eliminar";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
 	case 'mostrar':
 		if (!isset($_SESSION["nombre"]))
 		{
@@ -128,7 +149,8 @@ switch ($_GET["op"]){
 		 			$data[]=array(
 						"0"=>$cont++,
 		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="fas fa-times"></i></button>'.
+							 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$reg->idmaquinaria.')"><i class="fas fa-skull-crossbones"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
 		 				"2"=>$reg->nombre,
@@ -172,7 +194,8 @@ switch ($_GET["op"]){
 		 			$data[]=array(
 						"0"=>$cont++,
 		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="far fa-trash-alt"></i></button>':
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idmaquinaria.')"><i class="fas fa-times"></i></button>'.
+							 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$reg->idmaquinaria.')"><i class="fas fa-skull-crossbones"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idmaquinaria.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idmaquinaria.')"><i class="fa fa-check"></i></button>',
 		 				"2"=>$reg->nombre,

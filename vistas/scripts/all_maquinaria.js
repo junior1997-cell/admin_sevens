@@ -80,7 +80,7 @@ function listar() {
         }
         // columna: #
         if (data[1] != '') {
-          $("td", row).eq(1).addClass("text-center");   
+          $("td", row).eq(1).addClass("text-nowrap");   
             
         }
       },
@@ -244,6 +244,29 @@ function activar(idmaquinaria) {
       
     }
   });      
+}
+
+//Función para desactivar registros
+function eliminar(idmaquinaria) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar Máquina o Equipo?",
+    text: "Resgisto no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_maquinaria.php?op=eliminar", { idmaquinaria: idmaquinaria }, function (e) {
+
+        Swal.fire("Eliminado!", "Tu máquinas o equipo ha sido eliminado.", "success");
+    
+        tabla.ajax.reload();
+	      tabla2.ajax.reload();
+      });      
+    }
+  });   
 }
 
 init();

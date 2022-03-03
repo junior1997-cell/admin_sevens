@@ -84,6 +84,36 @@ switch ($_GET["op"]) {
       }
     }
   break;
+    //case sun usar 
+  case 'activar':
+    if (!isset($_SESSION["nombre"])) {
+      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    } else {
+      //Validamos el acceso solo al usuario logueado y autorizado.
+      if ($_SESSION['acceso'] == 1) {
+        $rspta = $usuario->activar($idusuario);
+        echo $rspta ? "ok" : "Usuario no se puede activar";
+        //Fin de las validaciones de acceso
+      } else {
+        require 'noacceso.php';
+      }
+    }
+  break;
+
+  case 'eliminar':
+    if (!isset($_SESSION["nombre"])) {
+      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    } else {
+      //Validamos el acceso solo al usuario logueado y autorizado.
+      if ($_SESSION['acceso'] == 1) {
+        $rspta = $usuario->eliminar($idusuario);
+        echo $rspta ? "ok" : "Usuario no se puede eliminar";
+        //Fin de las validaciones de acceso
+      } else {
+        require 'noacceso.php';
+      }
+    }
+  break;
 
   case 'mostrar':
     if (!isset($_SESSION["nombre"])) {
@@ -115,35 +145,16 @@ switch ($_GET["op"]) {
         while ($reg = $rspta->fetch_object()) {
           $data[] = [
             "0"=>$cont++,
-            "1" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
-                $reg->idusuario .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger  btn-sm" onclick="desactivar(' .
-                $reg->idusuario .
-                ')"><i class="far fa-trash-alt  "></i></button>'
-              : '<button class="btn btn-warning  btn-sm" onclick="mostrar(' .
-                $reg->idusuario .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary  btn-sm" onclick="activar(' .
-                $reg->idusuario .
-                ')"><i class="fa fa-check"></i></button>',
-            "2" =>
-              '<div class="user-block">
-										<img class="img-circle" src="../dist/img/usuarios/' .
-              $reg->imagen_perfil .
-              '" alt="User Image" onerror="' .
-              $imagen_error .
-              '">
-										<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' .
-              $reg->nombres .
-              '</p></span>
-										<span class="description">' .
-              $reg->tipo_documento .
-              ': ' .
-              $reg->numero_documento .
-              ' </span>
-									</div>',
+            "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idusuario . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger  btn-sm" onclick="desactivar(' . $reg->idusuario . ')"><i class="fas fa-times"></i></button>'.
+                ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idusuario . ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                '<button class="btn btn-warning  btn-sm" onclick="mostrar(' . $reg->idusuario . ')"><i class="fas fa-pencil-alt"></i></button>' . 
+                ' <button class="btn btn-primary  btn-sm" onclick="activar(' . $reg->idusuario . ')"><i class="fa fa-check"></i></button>',
+            "2" => '<div class="user-block"> 
+                      <img class="img-circle" src="../dist/img/usuarios/' . $reg->imagen_perfil . '" alt="User Image" onerror="' . $imagen_error . '">
+                      <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombres . '</p></span> 
+                      <span class="description">' . $reg->tipo_documento .  ': ' . $reg->numero_documento . ' </span>
+                    </div>',
             "3" => $reg->telefono,
             "4" => $reg->login,
             "5" => $reg->cargo,
