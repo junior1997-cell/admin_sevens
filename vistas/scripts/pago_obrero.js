@@ -856,7 +856,7 @@ function format_d_m_a(fecha) {
 
   var format = "";
 
-  if (fecha == '' || fecha == null) {
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {
     format = "-";
   } else {
     let splits = fecha.split("-"); //console.log(splits);
@@ -871,7 +871,7 @@ function format_a_m_d(fecha) {
 
   var format = "";
 
-  if (fecha == '' || fecha == null) {
+  if (fecha == '' || fecha == null || fecha == '00-00-0000') {
     format = "-";
   } else {
     let splits = fecha.split("-"); //console.log(splits);

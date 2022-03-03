@@ -245,7 +245,7 @@
 
         <!-- <li class="nav-header bg-color-2c2c2c">LOGÍSTICA Y ADQUISICIONES</li> -->
         
-        <!-- COMPRAS -->      
+        <!-- LOGÍSTICA Y ADQUISICIONES -->      
         <li class="nav-item ver-otros-modulos-1" id="bloc_LogisticaAdquisiciones">
           <a href="#" class="nav-link bg-color-2c2c2c" id="mLogisticaAdquisiciones" style="padding-left: 7px;">
             <i class="nav-icon far fa-circle"></i>
@@ -353,10 +353,10 @@
               </li>
             <?php  }  ?>
 
-            <?php if ($_SESSION['otro_servicio']==1) {  ?>
+            <?php if ($_SESSION['otro_gasto']==1) {  ?>
               <!-- OTROS GASTOS -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="otros_servicios.php" class="nav-link" id="lOtroGasto">
+                <a href="otro_gasto.php" class="nav-link" id="lOtroGasto">
                   <i class="nav-icon fas fa-network-wired"></i>
                   <p>
                     Otros Gastos                

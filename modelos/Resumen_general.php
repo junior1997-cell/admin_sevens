@@ -584,21 +584,21 @@ class Resumen_general
     $filtro_fecha = "";   
 
     if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
-      $filtro_fecha = "AND os.fecha_o_s BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+      $filtro_fecha = "AND og.fecha_g BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
     } else {
       if (!empty($fecha_filtro_1)) {
-        $filtro_fecha = "AND os.fecha_o_s = '$fecha_filtro_1'";
+        $filtro_fecha = "AND og.fecha_g = '$fecha_filtro_1'";
       }else{
         if (!empty($fecha_filtro_2)) {
-          $filtro_fecha = "AND os.fecha_o_s = '$fecha_filtro_2'";
+          $filtro_fecha = "AND og.fecha_g = '$fecha_filtro_2'";
         }     
       }      
     }
 
-    $sql = "SELECT os.idotro_servicio, os.idproyecto,  os.fecha_o_s, os.costo_parcial, os.descripcion, os.comprobante, os.estado
-    FROM otro_servicio AS os, proyecto AS p
-    WHERE os.idproyecto = p.idproyecto AND os.idproyecto = '$idproyecto' AND os.estado = '1' AND os.estado_delete = '1' $filtro_fecha
-		ORDER BY os.fecha_o_s DESC";
+    $sql = "SELECT og.idotro_gasto, og.idproyecto,  og.fecha_g, og.costo_parcial, og.descripcion, og.comprobante, og.estado
+    FROM otro_gasto AS og, proyecto AS p
+    WHERE og.idproyecto = p.idproyecto AND og.idproyecto = '$idproyecto' AND og.estado = '1' AND og.estado_delete = '1' $filtro_fecha
+		ORDER BY og.fecha_g DESC";
     return ejecutarConsultaArray($sql);
   }
 

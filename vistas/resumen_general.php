@@ -1002,16 +1002,7 @@
           }
           .colorf0f8ff00 {
             color: #f0f8ff00;
-          }
-          .text_area_clss {
-            width: 100%;
-            background: rgb(215 224 225 / 22%);
-            border-block-color: inherit;
-            border-bottom: aliceblue;
-            border-left: aliceblue;
-            border-right: aliceblue;
-            border-top: hidden;
-          }
+          }          
           .bg-red-resumen {
             background-color: #ff2036 !important;
             color: #ffffff !important;

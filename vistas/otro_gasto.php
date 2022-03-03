@@ -24,7 +24,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['otro_servicio']==1){
+          if ($_SESSION['otro_gasto']==1){
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -55,13 +55,13 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otro_servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otro_gasto" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
                             Admnistra de manera eficiente otros Gastos.
                           </h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                          <table id="tabla-otro_servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <table id="tabla-otro_gasto" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
                                 <th class="text-center">#</th>
@@ -106,7 +106,7 @@
                 <!-- /.container-fluid -->
 
                 <!-- Modal agregar otros gastos -->
-                <div class="modal fade" id="modal-agregar-otro_servicio">
+                <div class="modal fade" id="modal-agregar-otro_gasto">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -118,13 +118,13 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-otro_servicio" name="form-otro_servicio" method="POST">
+                        <form id="form-otro_gasto" name="form-otro_gasto" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id proyecto -->
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id hospedaje -->
-                              <input type="hidden" name="idotro_servicio" id="idotro_servicio" />
+                              <input type="hidden" name="idotro_gasto" id="idotro_gasto" />
                               <!-- Tipo de comprobante -->
                               <!--forma pago-->
                               <div class="col-lg-6">
@@ -151,40 +151,37 @@
                               <!-- Código-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="codigo">Núm. comprobante </label>
+                                  <label class="nro_comprobante" for="nro_comprobante">Núm. comprobante </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
 
-                              <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
+                              <!-- Fecha 1  -->
                               <div class="col-lg-6 class_pading">
                                 <div class="form-group">
-                                  <label for="fecha">Fecha Emisión</label>
-                                  <input type="date" name="fecha_o_s" class="form-control" id="fecha_o_s" />
+                                  <label for="fecha_g">Fecha Emisión</label>
+                                  <input type="date" name="fecha_g" class="form-control" id="fecha_g" />
                                 </div>
                               </div>
                               <!-- Sub total -->
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="subtotal">Sub total</label>
-                                  <input class="form-control subtotal" type="number" placeholder="Sub total" readonly />
-                                  <input class="form-control" type="hidden" id="subtotal" name="subtotal" />
+                                  <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                                   
                                 </div>
                               </div>
                               <!-- IGV -->
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
-                                  <input class="form-control igv" type="number" placeholder="IGV" readonly />
-                                  <input class="form-control" type="hidden" id="igv" name="igv" />
+                                  <input class="form-control igv" type="number" id="igv" name="igv" placeholder="IGV" readonly />
                                 </div>
                               </div>
                               <!--Precio Parcial-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="marca">Monto total </label>
-                                  <input type="number" name="monto_validar" class="form-control precio_parcial" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
-                                  <input type="hidden" name="precio_parcial" id="precio_parcial" />
+                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />                                  
                                 </div>
                               </div>
 
@@ -195,17 +192,32 @@
                                   <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
+
                               <!-- Factura -->
-                              <div class="col-md-6 col-lg-6">
-                                <label for="foto2">Factura <b style="color: red;">(Imagen o PDF)</b></label> <br />
-                                <div class="text-center">
-                                  <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
-                                  <div id="ver_pdf"></div>
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" > Baucher de deposito </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc1_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
                                 </div>
-                                <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -217,7 +229,7 @@
                             </div>
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-otro_servicio">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-otro_gasto">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
@@ -230,7 +242,7 @@
 
                 <!--===============Modal-ver-comprobante =========-->
                 <div class="modal fade" id="modal-ver-comprobante">
-                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Comprobante otros gastos</h4>
@@ -238,20 +250,17 @@
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download=" Comprobante otro_servicio" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                        </div>
+                      <div class="modal-body ver-comprobante">
+                                                 
+                        
+                         
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!--Modal ver datos-->
-                <div class="modal fade" id="modal-ver-otro_servicio">
+                <div class="modal fade" id="modal-ver-otro_gasto">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -262,7 +271,7 @@
                       </div>
 
                       <div class="modal-body">
-                        <div id="datosotro_servicio" class="class-style">
+                        <div id="datosotro_gasto" class="class-style">
                           <!-- vemos los datos del trabajador -->
                         </div>
                       </div>
@@ -318,7 +327,7 @@
         <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
-        <script type="text/javascript" src="scripts/otros_servicios.js"></script>
+        <script type="text/javascript" src="scripts/otro_gasto.js"></script>
 
         <script>
           $(function () { $('[data-toggle="tooltip"]').tooltip(); });
