@@ -429,10 +429,43 @@
                                 </tfoot>
                               </table>
 
+                              <br>
+
+                              <!-- Otros Gastos -->
+                              <table id="tabla11_otros_gastos" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="cargando-otros-gastos text-center w-px-300 clas_pading backgff9100">Otros Gastos</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center clas_pading">FECHA</th>
+                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="otros_gastos"></tbody>                                 
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_otros_gastos"></th>
+                                    <th class="clas_pading text-right" id="pago_otros_gastos"></th>
+                                    <th class="clas_pading text-right" id="saldo_otros_gastos"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
                               <br />
 
                               <!--SUMAS TOTALES-->
-                              <table id="tabla11_all_sumas" class="display" style="width: 100%;">
+                              <table id="tabla12_all_sumas" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
                                     <th colspan="8" class="cargando-sumas text-center w-px-300 clas_pading backgff9100">Sumas totales</th>
@@ -449,7 +482,7 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="tbody11_all_sumas">
+                                <tbody id="tbody12_all_sumas">
                                   <tr>
                                     <td>--</td>
                                     <td>--</td>
@@ -549,6 +582,16 @@
                                     <td class="text-right monto_obrero_all">0.00</td>
                                     <td class="text-right pago_obrero_all">0.00</td>
                                     <td class="text-right saldo_obrero_all">0.00</td>
+                                  </tr>
+                                  <tr>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>Otros Gastos</td>
+                                    <td class="text-right monto_otros_gastos_all">0.00</td>
+                                    <td class="text-right pago_otros_gastos_all">0.00</td>
+                                    <td class="text-right saldo_otros_gastos_all">0.00</td>
                                   </tr>
                                 </tbody>
 

@@ -355,6 +355,7 @@ class Resumen_general
         ];
       }
     }
+
     return $serv_pension;
   }
 
@@ -435,6 +436,7 @@ class Resumen_general
         ];
       }
     }
+
     return $administrativo;
   }
 
@@ -474,7 +476,9 @@ class Resumen_general
 
   // TABLA
   public function tabla_obrero($idproyecto, $id_trabajador)  {
-    $obrero = [];
+
+    $obrero = Array();
+
     $total_deposito_obrero = 0;
 
     $consulta_filtro = "";
@@ -496,7 +500,7 @@ class Resumen_general
       
       foreach ($trabaj_obrero as $key => $value) {
 
-        if (!empty($value['idtrabajador_por_proyecto'])) {
+        if ( !empty($value['idtrabajador_por_proyecto']) ) {
 
           $idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
 
@@ -509,18 +513,20 @@ class Resumen_general
 
           $total_deposito_obrero = empty($total_deposito) ? 0 : ($retVal_1 = empty($total_deposito['total_deposito']) ? 0 : floatval($total_deposito['total_deposito']));
 
-          $obrero[] = [
+          $obrero[] = array(
             "idresumen_q_s_asistencia" => $value['idresumen_q_s_asistencia'],
             "idtrabajador_por_proyecto" => $value['idtrabajador_por_proyecto'],
             "nombres" => $value['nombres'],
             "pago_quincenal" => ($retVal = empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
 
             "deposito" => $total_deposito_obrero,
-          ];
+          );
         }
-      }
-      return $obrero;
+      }      
     }
+
+    return $obrero;
+
   }
 
   // detalle por cada obrero
@@ -570,6 +576,30 @@ class Resumen_general
     }
 
     return $data;
+  }
+
+  // TABLA
+  public function tabla_otros_gastos($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND os.fecha_o_s BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND os.fecha_o_s = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND os.fecha_o_s = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+
+    $sql = "SELECT os.idotro_servicio, os.idproyecto,  os.fecha_o_s, os.costo_parcial, os.descripcion, os.comprobante, os.estado
+    FROM otro_servicio AS os, proyecto AS p
+    WHERE os.idproyecto = p.idproyecto AND os.idproyecto = '$idproyecto' AND os.estado = '1' AND os.estado_delete = '1' $filtro_fecha
+		ORDER BY os.fecha_o_s DESC";
+    return ejecutarConsultaArray($sql);
   }
 
   // SELECT2

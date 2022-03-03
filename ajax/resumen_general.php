@@ -21,6 +21,7 @@ if (!isset($_SESSION["nombre"])) {
 
     switch ($_GET["op"]) {
 
+      // TABLA
       case 'tbla_compras':
 
         $data = Array(); $datatable = Array();
@@ -228,6 +229,7 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
+      // TABLA
       case 'tbla_maquinaria':
          
         $tipo = '1';
@@ -335,7 +337,8 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($data);
              
       break;
-
+      
+      // TABLA
       case 'tbla_equipos':
 
         $tipo = '2';
@@ -488,7 +491,8 @@ if (!isset($_SESSION["nombre"])) {
         ];
         echo json_encode($results);
       break;
-
+      
+      // TABLA
       case 'tbla_transportes':
 
         $data = Array(); $datatable = Array();
@@ -558,7 +562,8 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($data);
 
       break;
-
+      
+      // TABLA
       case 'tbla_hospedajes':
 
         $data = Array(); $datatable = Array();
@@ -628,7 +633,8 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($data);
 
       break;
-
+      
+      // TABLA
       case 'tbla_comidas_extras':
 
         $data = Array(); $datatable = Array();
@@ -698,7 +704,8 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($data);
 
       break;
-
+      
+      // TABLA
       case 'tbla_breaks':
 
         $data = Array(); $datatable = Array();
@@ -807,7 +814,8 @@ if (!isset($_SESSION["nombre"])) {
         ];
         echo json_encode($results);
       break;
-
+      
+      // TABLA
       case 'tbla_pensiones':
         $data = Array(); $datatable = Array();
 
@@ -995,7 +1003,8 @@ if (!isset($_SESSION["nombre"])) {
         ];
         echo json_encode($results);
       break;
-
+      
+      // TABLA
       case 'tbla_administrativo':
 
         $data = Array(); $datatable = Array();
@@ -1106,7 +1115,8 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($rspta);
 
       break;     
-
+      
+      // TABLA
       case 'tbla_obrero':
 
         $data = Array(); $datatable = Array();
@@ -1216,6 +1226,77 @@ if (!isset($_SESSION["nombre"])) {
 
         //Codificar el resultado utilizando json
         echo json_encode($rspta);
+
+      break;
+      
+      // TABLA
+      case 'tbla_otros_gastos':
+
+        $data = Array(); $datatable = Array();
+
+        $deuda = $_POST['deuda'];
+
+        $t_monto = 0;
+        $t_pagos = 0;
+        $t_saldo = 0;   
+        $saldo_x_fila = 0;
+
+        $rspta = $resumen_general->tabla_otros_gastos($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
+
+        foreach ($rspta as $key => $value) {
+
+          $saldo_x_fila = 0;
+          
+          if ( !empty($value['comprobante']) ) {
+            $comprobante = '<a target="_blank"  href="../dist/img/comprob_hospedajes/'.$value['comprobante'].'"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>';
+          } else {
+            $comprobante = '<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>';
+          }
+
+          if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+            $datatable[] = array(
+              '0' => $key+1, 
+              '1' => '- - -', 
+              '2' => format_d_m_a($value['fecha_o_s']),
+              '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+              '4' => $comprobante,
+              '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+              '6' => number_format($value['costo_parcial'], 2, '.', ',' ),
+              '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+            );
+  
+            $t_monto += floatval($value['costo_parcial']);
+            $t_pagos += floatval($value['costo_parcial']);
+            $t_saldo += floatval($saldo_x_fila);
+          } else {
+            if ($deuda == 'sindeuda') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => '- - -', 
+                '2' => $value['fecha_o_s'],
+                '3' => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+                '4' => $comprobante,
+                '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                '6' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['costo_parcial']);
+              $t_pagos += floatval($value['costo_parcial']);
+              $t_saldo += floatval($saldo_x_fila);
+            }
+          }                    
+        }
+
+        $data = array(
+          't_monto' => $t_monto, 
+          't_pagos' => $t_pagos,
+          't_saldo' => $t_saldo,
+          'datatable' => $datatable
+        );
+
+        //Codificar el resultado utilizando json
+        echo json_encode($data);
 
       break;
 
