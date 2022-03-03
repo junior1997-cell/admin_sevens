@@ -33,8 +33,9 @@
                 <div class="row mb-2">
                   <div class="col-sm-6">
                     <h1>Asistencia 
-                      <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();"><i class="fas fa-plus-circle"></i> Agregar</button>
-
+                      <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();">
+                      <i class="far fa-calendar-alt"></i> Agregar Fechas de Actividades
+                      </button>
                     </h1>
                   </div>
                   <div class="col-sm-6">
@@ -71,7 +72,7 @@
                           <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
                         </h3>
                         <!-- Botones de quincenas -->
-                        <div id="Lista_quincenas" class="row-horizon disenio-scroll " >
+                        <div id="lista_quincenas" class="row-horizon disenio-scroll" >
                           <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
                           <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                         </div>                        
@@ -571,7 +572,7 @@
                       <!-- boton -->
                       <div class="swal2-actions">
                         <div class="swal2-loader"></div>
-                        <button onclick="cerrar_modal()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>                         
+                        <button onclick="cerrar_modal_cargando()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>                         
                       </div>
                     </div>                     
                   </div>

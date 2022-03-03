@@ -70,6 +70,7 @@ function doc1_eliminar() {
 	$("#doc1_nombre").html("");
 }
 
+
 // retrazamos la ejecuccion de una funcion
 var delay = (function(){
   var timer = 0;
@@ -190,22 +191,10 @@ function guardaryeditar_adicional_descuento(e) {
 }
 
 
-
-//Función limpiar
-function limpiar() {
-  $("#idasistencia_trabajador").val(""); 
-  $("#trabajador").val("");
-  $("#horas_trabajo").val("");
-  
-  lista_trabajadores(localStorage.getItem('nube_idproyecto'));
-}
-
-
-
 //TBLA - PRINCIPAL
 function tbla_principal(nube_idproyecto) {
 
-  $('#Lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
+  $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
 
   tabla_principal = $('#tabla-asistencia').dataTable({
     "responsive": true,
@@ -307,133 +296,101 @@ function tbla_principal(nube_idproyecto) {
 
     // validamos la existencia de DATOS
     if (data) {
+      if (data.fecha_inicio == '0000-00-00' || data.fecha_inicio == null || data.fecha_fin == '0000-00-00' || data.fecha_fin == null) {
+        $('#lista_quincenas').html(`<div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
+          <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
+          No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
+        </div>`);
+      } else {        
+      
+        var dia_regular = 0; var weekday_regular = extraer_dia_semana(data.fecha_inicio); var estado_regular = false;
 
-      var dia_regular = 0; var weekday_regular = extraer_dia_semana(data.fecha_inicio); var estado_regular = false;
+        if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
+        // console.log(data.fecha_inicio, dia_regular, weekday_regular);
+        if (data.fecha_pago_obrero == "quincenal") {
 
-      if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
-      // console.log(data.fecha_inicio, dia_regular, weekday_regular);
-      if (data.fecha_pago_obrero == "quincenal") {
+          $('#lista_quincenas').html('');
 
-        $('#Lista_quincenas').html('');
+          var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
 
-        var fecha = format_d_m_a(data.fecha_inicio); //console.log(fecha);
+          var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/14;
 
-        var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = data.plazo/14;
+          var i=0; var cont=0; 
 
-        var i=0; var cont=0; 
+          while (i <= cal_quincena) {
 
-        while (i <= cal_quincena) {
-
-          cont=cont+1; var fecha_inicio = fecha_i;
-
-          if (estado_regular) {
-
-            fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
-
-          } else {
-
-            fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
-          }           
-
-          $('#Lista_quincenas').append(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_inicio}', '${fecha}', '${i}', 14);"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
-          
-          fecha_i =sumaFecha(1,fecha);
-
-          i++;
-        }
-      } else {
-        if (data.fecha_pago_obrero == "semanal") {
-
-          $('#Lista_quincenas').html('');
-
-          var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
-
-          var cal_mes  = false; var i=0;  var cont=0;
-
-          while (cal_mes == false) {
-
-            cont = cont+1; fecha_i = fecha;
+            cont=cont+1; var fecha_inicio = fecha_i;
 
             if (estado_regular) {
 
-              fecha_f = sumaFecha(6, fecha_i);
+              fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
 
             } else {
 
-              fecha_f = sumaFecha(7+dia_regular, fecha_i); estado_regular = true;
-            }            
+              fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
+            }           
 
-            let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(data.fecha_fin);
+            $('#lista_quincenas').append(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_inicio}', '${fecha}', '${i}', 14);"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
             
-            // console.log(fecha_f + ' - '+data.fecha_fin);
-
-            $('#Lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
-            
-            if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
-
-            fecha = sumaFecha(1,fecha_f);
+            fecha_i =sumaFecha(1,fecha);
 
             i++;
-          } 
-        } else { 
-          $('#Lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
+          }
+        } else {
+          if (data.fecha_pago_obrero == "semanal") {
+
+            $('#lista_quincenas').html('');
+
+            var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
+
+            var cal_mes  = false; var i=0;  var cont=0;
+
+            while (cal_mes == false) {
+
+              cont = cont+1; fecha_i = fecha;
+
+              if (estado_regular) {
+
+                fecha_f = sumaFecha(6, fecha_i);
+
+              } else {
+
+                fecha_f = sumaFecha(7+dia_regular, fecha_i); estado_regular = true;
+              }            
+
+              let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(data.fecha_fin);
+              
+              // console.log(fecha_f + ' - '+data.fecha_fin);
+
+              $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_quincena('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+              
+              if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
+
+              fecha = sumaFecha(1,fecha_f);
+
+              i++;
+            } 
+          } else { 
+            $('#lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
               <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
               <div class="info-box-content"> 
                 <span class="info-box-text">Alerta</span> 
                 <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
               </div> 
             </div>`);
+          }
         }
       }
     } else {
-      
+      $('#lista_quincenas').html(`<div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
+        <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
+        No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
+      </div>`);
     }
     
     //console.log(fecha);
-  });
-}
-
-// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
-function lista_trabajadores(nube_idproyecto) {
-
-  $("#lista-de-trabajadores").html(
-    '<div class="col-lg-12 text-center">'+  
-      '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />'+
-      '<br />'+
-      '<h4>Cargando...</h4>'+
-    '</div>'
-  );
-
-  $.post("../ajax/registro_asistencia.php?op=lista_trabajador", { nube_idproyecto: nube_idproyecto }, function (data, status) {
-
-    data = JSON.parse(data);  //console.log(data); 
-
-    $("#lista-de-trabajadores").html("");
-
-    $.each(data, function (index, value) {
-      // console.log(value.idtrabajador_por_proyecto);
-      var img =value.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+value.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
-      
-      $("#lista-de-trabajadores").append(
-        '<!-- Trabajador -->'+                         
-        '<div class="col-lg-6">'+
-          '<div class="user-block">'+
-            img+
-            '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+value.nombres+'</p></span>'+
-            '<span class="description">'+value.documento+': '+value.numero_documento+'</span>'+
-          '</div>'+                         
-          '<input type="hidden" name="trabajador[]" value="'+value.idtrabajador_por_proyecto+'" />'+
-        '</div>'+
-
-        '<!-- Horas de trabajo -->'+
-        '<div class="col-lg-6 mt-2">'+
-          '<div class="form-group">'+
-            '<input id="horas_trabajo" name="horas_trabajo[]" type="time"   class="form-control" value="00:00" />'+             
-          '</div>'+
-        '</div> '+
-        '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
-      );
-    });
   });
 }
 
@@ -1301,426 +1258,6 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
   
 }
 
-// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
-function mostrar(idasistencia_trabajador) {
-  $('#modal-editar-asistencia').modal('show')
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-  
-  $.post("../ajax/registro_asistencia.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);
-    
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-    $("#fecha2").val(data.fecha_asistencia);      
-    var suma = (parseFloat(data.horas_normal_dia) + parseFloat(data.horas_extras_dia)).toFixed(2).toString();
-    var hr_total_c =  convertir_a_hora(suma);
-
-    console.log(hr_total_c);
-
-    var img =data.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
-    
-    $("#lista-de-trabajadores2").html(
-      '<!-- Trabajador -->'+                         
-      '<div class="col-lg-12">'+
-        '<label >Trabajador</label> <br>'+
-        '<div class="user-block">'+
-          img+
-          '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+data.nombres+'</p></span>'+
-          '<span class="description">'+data.documento+': '+data.numero_documento+'</span>'+
-        '</div>'+                         
-        '<input type="hidden" name="trabajador2[]" value="'+data.idtrabajador_por_proyecto+'" />'+
-      '</div>'+
-
-      '<!-- Horas de trabajo -->'+
-      '<div class="col-lg-12 mt-3">'+
-        '<label for="fecha">Horas</label>'+
-        '<div class="form-group">'+
-          '<input id="horas_trabajo" name="horas_trabajo2[]" type="time"   class="form-control" value="'+hr_total_c+'" />'+             
-        '</div>'+
-      '</div> '+
-      '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
-    );
-
-  });
-}
-
-//Función para desactivar registros
-function justificar(idasistencia,horas, estado) {
-  $('#idasistencia_trabajador_j').val(idasistencia);
-
-  $('.descargar').hide();
-  $('.ver_completo').hide();
-  $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-  $("#doc1_nombre").html('');
-  $('#doc_old_1').val("");
-  $('#doc1').val("");
-  $('#detalle_j').val('');
-
-  if (estado == "0") {
-
-    Swal.fire("Activa este registro!", "Para usar esta opcion, active este registro.", "info");
-
-  } else {
-
-    if (horas >= 8) {
-
-      Swal.fire("No puedes Justificar!", "Este trabajador tiene 8 horas completas, las justificación es para compensar horas perdidas.", "info");
-    
-    } else {
-
-      $("#modal-justificar-asistencia").modal("show");
-
-      $.post("../ajax/registro_asistencia.php?op=mostrar_justificacion", { 'idasistencia_trabajador': idasistencia }, function (data, status) {
-        
-        data = JSON.parse(data);  console.log(data);
-
-        $('#detalle_j').val(data.descripcion_justificacion);
-
-        if (data.doc_justificacion == '' || data.doc_justificacion == null || data.doc_justificacion == 'null') {
-          $('.descargar').hide();
-          $('.ver_completo').hide();
-          $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-          $("#doc1_nombre").html('');
-          $('#doc_old_1').val("");
-          $('#doc1').val("");
-          
-        } else {
-      
-          $('.descargar').show();
-          $('.ver_completo').show();
-      
-          $('#descargar_rh').attr('href', `../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}`);
-                  
-          $('#descargar_rh').attr('download', `Justificacion`); 
-             
-
-          $('#ver_completo').attr('href', `../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}`);
-          $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Recibo-por-honorario.${extrae_extencion(data.doc_justificacion)}</i></div></div>`);
-      
-          $('#doc_old_1').val(data.doc_justificacion);
-          $('#doc1').val('');
-      
-          if ( extrae_extencion(data.doc_justificacion) == "pdf" ) {
-            $("#doc1_ver").html(`<iframe src="../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-          } else {
-            if ( extrae_extencion(data.doc_justificacion) == "jpeg" || extrae_extencion(data.doc_justificacion) == "jpg" || extrae_extencion(data.doc_justificacion) == "jpe" ||
-              extrae_extencion(data.doc_justificacion) == "jfif" || extrae_extencion(data.doc_justificacion) == "gif" || extrae_extencion(data.doc_justificacion) == "png" ||
-              extrae_extencion(data.doc_justificacion) == "tiff" || extrae_extencion(data.doc_justificacion) == "tif" || extrae_extencion(data.doc_justificacion) == "webp" ||
-              extrae_extencion(data.doc_justificacion) == "bmp" || extrae_extencion(data.doc_justificacion) == "svg" ) {
-      
-              $("#doc1_ver").html(`<img src="../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-              
-            } else {
-              $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-            }      
-          }
-        }
-
-      });
-    }
-  } 
-}
-
-function guardar_y_editar_justificar(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-justificar-asistencia")[0]);
-
-  $.ajax({
-    url: "../ajax/registro_asistencia.php?op=guardar_y_editar_justificacion",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-             
-      if (datos == 'ok') {        
-
-        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
-
-        $("#modal-justificar-asistencia").modal("hide");
-
-        tabla_horas.ajax.reload();
-
-			}else{
-
-				Swal.fire("Error!", datos, "error");
-			}
-    },
-  });
-}
-
-// TBLA - ASISTENCIA INDIVIDUAL
-function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proyect) {
-
-  console.log(idtrabajador_por_proyecto,fecha_inicio_proyect);
-  
-  mostrar_form_table(3);
-
-  tabla_horas = $('#tabla-detalle-asistencia-individual').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-      url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-    },
-    createdRow: function (row, data, ixdex) { 
-
-      // columna: Horas normal
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-center');         
-      }
-
-      // columna: Horas normal
-      if (data[2] != '') {
-        $("td", row).eq(2).addClass('text-center');         
-      }
-
-      // columna: Pago por horas normal
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-nowrap text-right');         
-      }
-
-      // columna: Horas normal
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-center');         
-      }
-
-      // columna: Pago por horas extras
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-right');         
-      }   
-
-      // columna: Pago por horas normal
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-nowrap');         
-      }
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();   
-}
-
-// TBLA - QUINCENA SEMANA INDIVIDUAL
-function ver_q_s_individual(idtrabajador_por_proyecto) {
-
-  idtrabajador_por_proyecto_r = idtrabajador_por_proyecto;
-
-  mostrar_form_table(4);
-
-  tabla_qs = $('#tabla-detalle-qs-individual').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-      url: '../ajax/registro_asistencia.php?op=listar_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-    },
-    createdRow: function (row, data, ixdex) { 
-      
-      // columna: Horas normal
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass('text-center');         
-      }      
-
-      // columna: Pago por horas normal
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-nowrap text-right');         
-      }
-
-      // columna: Adicional
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-right');         
-      }
-
-      // columna: Sabatical
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-center');         
-      }
-
-      // columna: Pago quincenal o semanal
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-right');         
-      }   
-
-      // columna: Contador
-      if (data[7] != '') {
-        $("td", row).eq(7).addClass('text-center');         
-      }
-      // columna: Estado
-      if (data[8] != '') {
-        $("td", row).eq(8).addClass('text-center');         
-      }
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  //Suma ACUMULADO
-  $.post("../ajax/registro_asistencia.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (data, status) {
-
-    data =JSON.parse(data); //console.log(data);
-
-    if (data) {
-      $(".thead_num").html(`Num. ${data.fecha_pago_obrero}`);
-      $(".thead_fecha").html(`Fechas ${data.fecha_pago_obrero}`);
-      $(".thead_pago").html(`Pago ${data.fecha_pago_obrero}`);
-      $("#suma_qs_individual").html(`S/. <b>${formato_miles(data.pago_quincenal)}</b> `);
-    } else {
-      $("#suma_qs_individual").html("S/. 0.00");
-    }
-  });
-}
-
-init();
-
-
-
-//Función para desactivar registros
-function desactivar(idasistencia_trabajador) {
-  $(".tooltip").removeClass('show');
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar la Asistencia?",
-    text: "Al desactivar, las horas de este registro no seran contado.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/registro_asistencia.php?op=desactivar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
-
-        Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
-    
-        tabla_principal.ajax.reload(); tabla_horas.ajax.reload();
-      });      
-    }
-  });   
-}
-
-//Función para activar registros
-function activar(idasistencia_trabajador) {
-  $(".tooltip").removeClass('show');
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  la Asistencia?",
-    text: "Al activar, las horas de este registro seran contados",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/registro_asistencia.php?op=activar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
-
-        Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
-
-        tabla_principal.ajax.reload(); tabla_horas.ajax.reload();
-      });
-      
-    }
-  });      
-}
-
-//Función para desactivar registros
-function desactivar_qs(id, tipo_pago) {
-  
-  Swal.fire({
-    title: `¿Está Seguro de  Desactivar la ${tipo_pago} ?`,
-    text: "Al desactivar, este registro no sera contado.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/registro_asistencia.php?op=desactivar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
-        
-        if (e == 'ok') {
-          Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
-          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
-          ver_q_s_individual(idtrabajador_por_proyecto_r);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }        
-      });      
-    }
-  });  
-  $(".tooltip").removeClass('show'); 
-}
-
-//Función para activar registros
-function activar_qs(id, tipo_pago) {
-   
-  Swal.fire({
-    title: `¿Está Seguro de  Activar  la ${tipo_pago}?`,
-    text: "Al activar, este registro sera contado",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/registro_asistencia.php?op=activar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
-
-        if (e == 'ok') {
-          Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
-          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
-          ver_q_s_individual(idtrabajador_por_proyecto_r);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }        
-      });      
-    }
-  });     
-  $(".tooltip").removeClass('show'); 
-}
-
-
-
 function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
 
   $("#cargando-5-fomulario").hide(); 
@@ -1748,31 +1285,6 @@ function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
 
   });
 }
-
-
-// function edit(element) {
-  
-//   var hora_Acual = $("#id2").text()
-//   $("#h_exra2").show();
-//   $("#h_exra1").hide();
-//    console.log( hora_Acual );
-// }
-
-// $(document).click(function(){
-//   $("#h_exra2").blur(function(){
-//     $(this).css("background-color", "#FFFFCC");
-//   });
-//   // $("#h_exra2").hide();
-//   // $("#h_exra1").show();
-//   console.log("click en cual quier parte");
-//   // alert("has pulsado en botón");
-
-//   // // si lo deseamos podemos eliminar el evento click
-//   // // una vez utilizado por primera vez
-//   // $(document).unbind("click");
-// })
-
-
 
 function pintar_boton_selecionado(i) {
   localStorage.setItem('i', i); //enviamos el ID-BOTON al localStorage
@@ -1923,7 +1435,7 @@ function l_m(){
   
 }
 
-function cerrar_modal() {
+function cerrar_modal_cargando() {
   $("#modal-cargando").modal("hide");
   $(".progress-bar").removeClass("bg-success bg-danger");
   $(".progress-bar").addClass("progress-bar-striped");
@@ -2000,6 +1512,378 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
   }  
 }
 
+// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   A S I S T E N C I A   I N D I V I D U A L  :::::::::::::::::::::::::::::::::::::::..
+// TBLA - ASISTENCIA INDIVIDUAL
+function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proyect) {
+
+  console.log(idtrabajador_por_proyecto,fecha_inicio_proyect);
+  
+  mostrar_form_table(3);
+
+  tabla_horas = $('#tabla-detalle-asistencia-individual').dataTable({
+    "responsive": true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+      url: '../ajax/registro_asistencia.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) { 
+
+      // columna: Horas normal
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-center');         
+      }
+
+      // columna: Horas normal
+      if (data[2] != '') {
+        $("td", row).eq(2).addClass('text-center');         
+      }
+
+      // columna: Pago por horas normal
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-nowrap text-right');         
+      }
+
+      // columna: Horas normal
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-center');         
+      }
+
+      // columna: Pago por horas extras
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-right');         
+      }   
+
+      // columna: Pago por horas normal
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-nowrap');         
+      }
+    },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();   
+}
+
+//Función para desactivar registros
+function justificar(idasistencia,horas, estado) {
+  $('#idasistencia_trabajador_j').val(idasistencia);
+
+  $('.descargar').hide();
+  $('.ver_completo').hide();
+  $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+  $("#doc1_nombre").html('');
+  $('#doc_old_1').val("");
+  $('#doc1').val("");
+  $('#detalle_j').val('');
+
+  if (estado == "0") {
+
+    Swal.fire("Activa este registro!", "Para usar esta opcion, active este registro.", "info");
+
+  } else {
+
+    if (horas >= 8) {
+
+      Swal.fire("No puedes Justificar!", "Este trabajador tiene 8 horas completas, las justificación es para compensar horas perdidas.", "info");
+    
+    } else {
+
+      $("#modal-justificar-asistencia").modal("show");
+
+      $.post("../ajax/registro_asistencia.php?op=mostrar_justificacion", { 'idasistencia_trabajador': idasistencia }, function (data, status) {
+        
+        data = JSON.parse(data);  console.log(data);
+
+        $('#detalle_j').val(data.descripcion_justificacion);
+
+        if (data.doc_justificacion == '' || data.doc_justificacion == null || data.doc_justificacion == 'null') {
+          $('.descargar').hide();
+          $('.ver_completo').hide();
+          $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+          $("#doc1_nombre").html('');
+          $('#doc_old_1').val("");
+          $('#doc1').val("");
+          
+        } else {
+      
+          $('.descargar').show();
+          $('.ver_completo').show();
+      
+          $('#descargar_rh').attr('href', `../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}`);
+                  
+          $('#descargar_rh').attr('download', `Justificacion`); 
+             
+
+          $('#ver_completo').attr('href', `../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}`);
+          $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Recibo-por-honorario.${extrae_extencion(data.doc_justificacion)}</i></div></div>`);
+      
+          $('#doc_old_1').val(data.doc_justificacion);
+          $('#doc1').val('');
+      
+          if ( extrae_extencion(data.doc_justificacion) == "pdf" ) {
+            $("#doc1_ver").html(`<iframe src="../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+          } else {
+            if ( extrae_extencion(data.doc_justificacion) == "jpeg" || extrae_extencion(data.doc_justificacion) == "jpg" || extrae_extencion(data.doc_justificacion) == "jpe" ||
+              extrae_extencion(data.doc_justificacion) == "jfif" || extrae_extencion(data.doc_justificacion) == "gif" || extrae_extencion(data.doc_justificacion) == "png" ||
+              extrae_extencion(data.doc_justificacion) == "tiff" || extrae_extencion(data.doc_justificacion) == "tif" || extrae_extencion(data.doc_justificacion) == "webp" ||
+              extrae_extencion(data.doc_justificacion) == "bmp" || extrae_extencion(data.doc_justificacion) == "svg" ) {
+      
+              $("#doc1_ver").html(`<img src="../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+              
+            } else {
+              $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+            }      
+          }
+        }
+
+      });
+    }
+  } 
+}
+
+function guardar_y_editar_justificar(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-justificar-asistencia")[0]);
+
+  $.ajax({
+    url: "../ajax/registro_asistencia.php?op=guardar_y_editar_justificacion",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {        
+
+        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
+
+        $("#modal-justificar-asistencia").modal("hide");
+
+        tabla_horas.ajax.reload();
+
+			}else{
+
+				Swal.fire("Error!", datos, "error");
+			}
+    },
+  });
+}
+
+//Función para desactivar registros
+function desactivar_dia_asistencia(idasistencia_trabajador) {
+  $(".tooltip").removeClass('show');
+  Swal.fire({
+    title: "¿Está Seguro de  Desactivar la Asistencia?",
+    text: "Al desactivar, las horas de este registro no seran contado.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=desactivar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+
+        Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
+    
+        tabla_principal.ajax.reload(); tabla_horas.ajax.reload();
+      });      
+    }
+  });   
+}
+
+//Función para activar registros
+function activar_dia_asistencia(idasistencia_trabajador) {
+  $(".tooltip").removeClass('show');
+  Swal.fire({
+    title: "¿Está Seguro de  Activar  la Asistencia?",
+    text: "Al activar, las horas de este registro seran contados",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=activar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+
+        Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
+
+        tabla_principal.ajax.reload(); tabla_horas.ajax.reload();
+      });
+      
+    }
+  });      
+}
+
+// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   Q U I N C E N A S   O   S E M A N A S  :::::::::::::::::::::::::::::::::::::::..
+// TBLA - QUINCENA SEMANA INDIVIDUAL
+function ver_q_s_individual(idtrabajador_por_proyecto) {
+
+  idtrabajador_por_proyecto_r = idtrabajador_por_proyecto;
+
+  mostrar_form_table(4);
+
+  tabla_qs = $('#tabla-detalle-qs-individual').dataTable({
+    "responsive": true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+      url: '../ajax/registro_asistencia.php?op=listar_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) { 
+      
+      // columna: Horas normal
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass('text-center');         
+      }      
+
+      // columna: Pago por horas normal
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-nowrap text-right');         
+      }
+
+      // columna: Adicional
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-right');         
+      }
+
+      // columna: Sabatical
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-center');         
+      }
+
+      // columna: Pago quincenal o semanal
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-right');         
+      }   
+
+      // columna: Contador
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-center');         
+      }
+      // columna: Estado
+      if (data[8] != '') {
+        $("td", row).eq(8).addClass('text-center');         
+      }
+    },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+
+  //Suma ACUMULADO
+  $.post("../ajax/registro_asistencia.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (data, status) {
+
+    data =JSON.parse(data); //console.log(data);
+
+    if (data) {
+      $(".thead_num").html(`Num. ${data.fecha_pago_obrero}`);
+      $(".thead_fecha").html(`Fechas ${data.fecha_pago_obrero}`);
+      $(".thead_pago").html(`Pago ${data.fecha_pago_obrero}`);
+      $("#suma_qs_individual").html(`S/. <b>${formato_miles(data.pago_quincenal)}</b> `);
+    } else {
+      $("#suma_qs_individual").html("S/. 0.00");
+    }
+  });
+}
+
+//Función para desactivar registros
+function desactivar_qs(id, tipo_pago) {
+  
+  Swal.fire({
+    title: `¿Está Seguro de  Desactivar la ${tipo_pago} ?`,
+    text: "Al desactivar, este registro no sera contado.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=desactivar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
+        
+        if (e == 'ok') {
+          Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
+          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
+          ver_q_s_individual(idtrabajador_por_proyecto_r);
+        } else {
+          Swal.fire("Error!", e, "error");
+        }        
+      });      
+    }
+  });  
+  $(".tooltip").removeClass('show'); 
+}
+
+//Función para activar registros
+function activar_qs(id, tipo_pago) {
+   
+  Swal.fire({
+    title: `¿Está Seguro de  Activar  la ${tipo_pago}?`,
+    text: "Al activar, este registro sera contado",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/registro_asistencia.php?op=activar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
+
+        if (e == 'ok') {
+          Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
+          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
+          ver_q_s_individual(idtrabajador_por_proyecto_r);
+        } else {
+          Swal.fire("Error!", e, "error");
+        }        
+      });      
+    }
+  });     
+  $(".tooltip").removeClass('show'); 
+}
+
+// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   F E C H A S   D E   A C T I V I D A D E S  :::::::::::::::::::::::::::::::::::::::..
+
 function limpiar_form_fechas_actividades(params) {
   $("#cargando-7-fomulario").hide();
   $("#cargando-8-fomulario").show();
@@ -2070,6 +1954,10 @@ function guardar_y_editar_fechas_actividades(e) {
     },
   });
 }
+
+init();
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M S  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {    
 
@@ -2256,17 +2144,31 @@ function extraer_dia_semana_complet(fecha) {
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
 
-  let splits = fecha.split("-"); //console.log(splits);
+  var format = "";
 
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
 }
 
 // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
 function format_a_m_d(fecha) {
 
-  let splits = fecha.split("-"); //console.log(splits);
+  var format = "";
 
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
+  if (fecha == '' || fecha == null || fecha == '00-00-0000') {
+    format = "-";
+  } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = splits[2]+'-'+splits[1]+'-'+splits[0];
+  } 
+
+  return format;
 }
 
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------
@@ -2555,4 +2457,94 @@ function re_visualizacion(id, carpeta) {
 
 function extrae_extencion(filename) {
   return filename.split('.').pop();
+}
+
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
+function mostrar(idasistencia_trabajador) {
+  $('#modal-editar-asistencia').modal('show')
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $.post("../ajax/registro_asistencia.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);
+    
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+
+    $("#fecha2").val(data.fecha_asistencia);      
+    var suma = (parseFloat(data.horas_normal_dia) + parseFloat(data.horas_extras_dia)).toFixed(2).toString();
+    var hr_total_c =  convertir_a_hora(suma);
+
+    console.log(hr_total_c);
+
+    var img =data.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
+    
+    $("#lista-de-trabajadores2").html(
+      '<!-- Trabajador -->'+                         
+      '<div class="col-lg-12">'+
+        '<label >Trabajador</label> <br>'+
+        '<div class="user-block">'+
+          img+
+          '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+data.nombres+'</p></span>'+
+          '<span class="description">'+data.documento+': '+data.numero_documento+'</span>'+
+        '</div>'+                         
+        '<input type="hidden" name="trabajador2[]" value="'+data.idtrabajador_por_proyecto+'" />'+
+      '</div>'+
+
+      '<!-- Horas de trabajo -->'+
+      '<div class="col-lg-12 mt-3">'+
+        '<label for="fecha">Horas</label>'+
+        '<div class="form-group">'+
+          '<input id="horas_trabajo" name="horas_trabajo2[]" type="time"   class="form-control" value="'+hr_total_c+'" />'+             
+        '</div>'+
+      '</div> '+
+      '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+    );
+
+  });
+}
+
+// voy a eliminar esta funcion cuando no lo NECESITE -----------------------
+function lista_trabajadores(nube_idproyecto) {
+
+  $("#lista-de-trabajadores").html(
+    '<div class="col-lg-12 text-center">'+  
+      '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />'+
+      '<br />'+
+      '<h4>Cargando...</h4>'+
+    '</div>'
+  );
+
+  $.post("../ajax/registro_asistencia.php?op=lista_trabajador", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+
+    data = JSON.parse(data);  //console.log(data); 
+
+    $("#lista-de-trabajadores").html("");
+
+    $.each(data, function (index, value) {
+      // console.log(value.idtrabajador_por_proyecto);
+      var img =value.imagen_perfil != '' ? '<img src="../dist/img/usuarios/'+value.imagen_perfil+'" alt="" >' : '<img src="../dist/svg/user_default.svg" alt="" >';
+      
+      $("#lista-de-trabajadores").append(
+        '<!-- Trabajador -->'+                         
+        '<div class="col-lg-6">'+
+          '<div class="user-block">'+
+            img+
+            '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'+value.nombres+'</p></span>'+
+            '<span class="description">'+value.documento+': '+value.numero_documento+'</span>'+
+          '</div>'+                         
+          '<input type="hidden" name="trabajador[]" value="'+value.idtrabajador_por_proyecto+'" />'+
+        '</div>'+
+
+        '<!-- Horas de trabajo -->'+
+        '<div class="col-lg-6 mt-2">'+
+          '<div class="form-group">'+
+            '<input id="horas_trabajo" name="horas_trabajo[]" type="time"   class="form-control" value="00:00" />'+             
+          '</div>'+
+        '</div> '+
+        '<div class="col-lg-12 borde-arriba-negro borde-arriba-verde mt-1 mb-3"> </div>'
+      );
+    });
+  });
 }
