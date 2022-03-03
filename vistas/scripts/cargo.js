@@ -62,6 +62,11 @@ function listar_cargo() {
           $("td", row).eq(0).addClass("text-center");   
            
         }
+        // columna: #
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-nowrap");   
+            
+        }
       },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -179,6 +184,27 @@ function activar_cargo(idcargo_trabajador) {
   });      
 }
 
+//Función para desactivar registros
+function eliminar_cargo(idcargo_trabajador) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    text: "Resgisto no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/cargo.php?op=eliminar", { idcargo_trabajador: idcargo_trabajador }, function (e) {
+
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+    
+        tabla_cargos.ajax.reload();
+      });      
+    }
+  });   
+}
 
 init();
 

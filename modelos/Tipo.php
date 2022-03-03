@@ -37,6 +37,13 @@ Class Tipo
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para eliminar tipo
+	public function eliminar($idtipo_trabajador)
+	{
+		$sql="UPDATE tipo_trabajador SET estado_delete='0' WHERE idtipo_trabajador='$idtipo_trabajador'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idtipo_trabajador)
 	{
@@ -47,7 +54,7 @@ Class Tipo
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM tipo_trabajador  ORDER BY nombre ASC";
+		$sql="SELECT * FROM tipo_trabajador WHERE estado=1 AND estado_delete=1 ORDER BY nombre ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

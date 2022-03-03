@@ -47,6 +47,11 @@ function listar_c_insumos_af () {
           $("td", row).eq(0).addClass("text-center");   
            
         }
+        // columna: #
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-nowrap");   
+            
+        }
       },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -143,7 +148,7 @@ function desactivar_c_insumos_af(idcategoria_insumos_af ) {
 function eliminar_c_insumos_af(idcategoria_insumos_af ) {
   Swal.fire({
     title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Categoría",
+    text: "Resgisto no se podrá restablecer",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",

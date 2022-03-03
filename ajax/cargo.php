@@ -33,6 +33,11 @@ switch ($_GET["op"]){
  		echo $rspta ? "Cargo activada" : "Cargo no se puede activar";
 	break;
 
+	case 'eliminar':
+		$rspta=$cargo->eliminar($idcargo_trabajador);
+ 		echo $rspta ? "Cargo Eliminado" : "Cargo no se puede Eliminar";
+	break;
+
 	case 'mostrar':
 		//$idcargo_trabajador='1';
 		$rspta=$cargo->mostrar($idcargo_trabajador);
@@ -49,7 +54,8 @@ switch ($_GET["op"]){
  			$data[]=array(
 				"0"=>$cont++,
  				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_cargo('.$reg->idcargo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar_cargo('.$reg->idcargo_trabajador.')"><i class="far fa-trash-alt"></i></button>':
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_cargo('.$reg->idcargo_trabajador.')"><i class="fas fa-times"></i></button>'.
+					 ' <button class="btn btn-danger  btn-sm" onclick="eliminar_cargo(' . $reg->idcargo_trabajador . ')"><i class="fas fa-skull-crossbones"></i> </button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar_cargo('.$reg->idcargo_trabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar_cargo('.$reg->idcargo_trabajador.')"><i class="fa fa-check"></i></button>',
  				"2"=>$reg->nombre_tipo_t,

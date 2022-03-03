@@ -118,6 +118,14 @@
           echo $rspta ? "Material activado" : "material no se puede activar";
 
         break;
+
+        case 'eliminar':
+
+          $rspta = $materiales->eliminar($idproducto);
+
+          echo $rspta ? "ok" : "material no se puede eliminar";
+
+        break;
     
         case 'mostrar':
 
@@ -148,9 +156,9 @@
             $data[] = [
               "0"=>$cont++,
               "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-              ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idproducto . ')"><i class="far fa-trash-alt"></i></button>' : 
-              '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
-              ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
+              ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idproducto . ')"><i class="fas fa-times"></i></button>'.
+              ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idproducto . ')"><i class="fas fa-skull-crossbones"></i></button>' : 
+              '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>',
               "2" =>
                 '<div class="user-block">
                   <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'">
@@ -159,10 +167,10 @@
                 </div>',
               "3" => $reg->nombre_medida,
               "4" => $reg->marca,
-              "5" => number_format($reg->precio_unitario, 2, '.', ','),
-              "6" => number_format($reg->precio_sin_igv, 2, '.', ','),
-              "7" => number_format($monto_igv, 2, '.', ','),
-              "8" => number_format($reg->precio_total, 2, '.', ','),
+              "5" =>'S/. '. number_format($reg->precio_unitario, 2, '.', ','),
+              "6" =>'S/. '.number_format($reg->precio_sin_igv, 2, '.', ','),
+              "7" =>'S/. '. number_format($monto_igv, 2, '.', ','),
+              "8" =>'S/. '.number_format($reg->precio_total, 2, '.', ','),
               "9" => $ficha_tecnica,
               "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
             ];

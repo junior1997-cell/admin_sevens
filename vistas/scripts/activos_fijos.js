@@ -125,36 +125,40 @@ function listar() {
         console.log(e.responseText);
       },
     },
-    createdRow: function (row, data, ixdex) {          
-
-      // columna: pago total
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-right');         
-      } 
-      
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-right');         
-      } 
-
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-right');         
-      } 
-
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-right');         
-      }
-
-      if (data[8] != '') {
-        $("td", row).eq(8).addClass('text-center');         
-      }
-    },
-    createdRow: function (row, data, ixdex) {    
-  
+    createdRow: function (row, data, ixdex) {   
+        
       // columna: #
       if (data[0] != '') {
         $("td", row).eq(0).addClass("text-center");   
          
+      } 
+      // columna: #
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass("text-nowrap");   
+          
+      }      
+
+      // columna: pago total
+      if (data[3] != '') {
+        $("td", row).eq(3).addClass('text-center');         
+      } 
+      
+      if (data[4] != '') {
+        $("td", row).eq(4).addClass('text-right  text-nowrap');         
+      } 
+
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-right  text-nowrap');         
+      } 
+
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-right  text-nowrap');         
       }
+
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-right  text-nowrap');         
+      }
+
     },
     language: {
       lengthMenu: "Mostrar : _MENU_ registros",
@@ -317,7 +321,7 @@ function mostrar(idproducto) {
 }
 
 //Función para desactivar registros
-function desactivar(idactivos_fijos) {
+function desactivar(idproducto) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar el registro?",
     text: "",
@@ -328,7 +332,7 @@ function desactivar(idactivos_fijos) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/activos_fijos.php?op=desactivar", { idactivos_fijos: idactivos_fijos }, function (e) {
+      $.post("../ajax/activos_fijos.php?op=desactivar", { idproducto: idproducto }, function (e) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
         tabla.ajax.reload();
@@ -338,7 +342,7 @@ function desactivar(idactivos_fijos) {
 }
 
 //Función para activar registros
-function activar(idactivos_fijos) {
+function activar(idproducto) {
   Swal.fire({
     title: "¿Está Seguro de  Activar el registro?",
     text: "Este proveedor tendra acceso al sistema",
@@ -349,7 +353,7 @@ function activar(idactivos_fijos) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/activos_fijos.php?op=activar", { idactivos_fijos: idactivos_fijos }, function (e) {
+      $.post("../ajax/activos_fijos.php?op=activar", { idproducto: idproducto }, function (e) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
         tabla.ajax.reload();
@@ -357,6 +361,29 @@ function activar(idactivos_fijos) {
     }
   });
 }
+
+
+//Función para desactivar registros
+function eliminar(idproducto) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    text: "Este registro no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/activos_fijos.php?op=eliminar", { idproducto: idproducto }, function (e) {
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+
+        tabla.ajax.reload();
+      });
+    }
+  });
+}
+
 
 function precio_con_igv() {
   var precio_total = 0;

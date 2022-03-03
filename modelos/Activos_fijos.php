@@ -46,6 +46,7 @@ class Activos_fijos
   //Implementamos un método para desactivar categorías
   public function desactivar($idproducto)
   {
+  
     $sql = "UPDATE producto SET estado='0' WHERE idproducto ='$idproducto'";
     return ejecutarConsulta($sql);
   }
@@ -57,13 +58,20 @@ class Activos_fijos
     return ejecutarConsulta($sql);
   }
 
+  //Implementamos un método para eliminar
+  public function eliminar($idproducto)
+  {
+    $sql = "UPDATE producto SET estado_delete='0' WHERE idproducto ='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
+
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idproducto)
   {
     $data = [];
 
     $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca, p.estado_igv, 
-    p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.fecha,
+    p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.created_at,
     um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria
 		FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
     WHERE p.idunidad_medida = um.idunidad_medida AND p.idcolor = c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af 
@@ -91,7 +99,7 @@ class Activos_fijos
       'descripcion' => decodeCadenaHtml($activos['descripcion']),
       'imagen' => $activos['imagen'],
       'estado' => $activos['estado'],
-      'fecha' => $activos['fecha'],
+      'fecha' => $activos['created_at'],
     ];
 
     return $data;
@@ -120,7 +128,7 @@ class Activos_fijos
 		um.nombre_medida AS nombre_medida
 		FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
 		WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND p.idcategoria_insumos_af != '1' AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af
-		ORDER BY p.nombre ASC";
+    AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC";
     return ejecutarConsulta($sql);
   }
 

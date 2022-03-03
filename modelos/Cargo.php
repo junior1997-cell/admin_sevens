@@ -38,6 +38,14 @@ Class Cargo
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para eliminar
+	public function eliminar($idcargo_trabajador)
+	{
+		$sql="UPDATE cargo_trabajador SET estado_delete='0' WHERE idcargo_trabajador='$idcargo_trabajador'";
+		return ejecutarConsulta($sql);
+	}
+	
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idcargo_trabajador)
 	{
@@ -55,7 +63,7 @@ Class Cargo
 		tt.nombre as nombre_tipo_t,
 		ct.estado as estado
 		FROM cargo_trabajador as ct, tipo_trabajador as tt
-		WHERE ct.idtipo_trabjador=tt.idtipo_trabajador";
+		WHERE ct.idtipo_trabjador=tt.idtipo_trabajador AND ct.estado=1 AND ct.estado_delete=1";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

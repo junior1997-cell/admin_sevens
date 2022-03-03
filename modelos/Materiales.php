@@ -56,6 +56,13 @@ class Materiales
     return ejecutarConsulta($sql);
   }
 
+  //Implementamos un método para activar categorías
+  public function eliminar($idproducto)
+  {
+    $sql = "UPDATE producto SET estado_delete='0' WHERE idproducto ='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
+
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idproducto)
   {
@@ -129,7 +136,7 @@ class Materiales
 			um.nombre_medida as nombre_medida
 			FROM producto p, unidad_medida as um, color as c  
 			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND idcategoria_insumos_af = '1' 
-			ORDER BY p.nombre ASC";
+			AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC";
     return ejecutarConsulta($sql);
   }
   

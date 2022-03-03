@@ -54,6 +54,11 @@ function listar_tipo() {
           $("td", row).eq(0).addClass("text-center");   
            
         }
+        // columna: #
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-nowrap");   
+            
+        }
       },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -169,6 +174,31 @@ function activar_tipo(idtipo_trabajador) {
       
     }
   });      
+}
+
+//Función para eliminar registros
+function eliminar_tipo(idtipo_trabajador) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    text: "Eliminar Tipo",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+
+      $.post("../ajax/tipo.php?op=eliminar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
+
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+    
+        tabla_tipo.ajax.reload();
+
+      });     
+
+    }
+  });   
 }
 
 

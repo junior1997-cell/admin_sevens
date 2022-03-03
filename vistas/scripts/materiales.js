@@ -129,6 +129,31 @@ function listar() {
           $("td", row).eq(0).addClass("text-center");   
            
         }
+        // columna: 1
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-center text-nowrap");   
+            
+        }
+        // columna: # 5
+        if (data[5] != '') {
+          $("td", row).eq(5).addClass("text-right text-nowrap");   
+            
+        }
+        // columna: # 6
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-right text-nowrap");   
+            
+        }
+        // columna: # 7
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right text-nowrap");   
+            
+        }
+        // columna: #8
+        if (data[8] != '') {
+          $("td", row).eq(8).addClass("text-right text-nowrap");   
+            
+        }
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -326,6 +351,27 @@ function activar(idproducto) {
     if (result.isConfirmed) {
       $.post("../ajax/materiales.php?op=activar", { idproducto: idproducto }, function (e) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
+
+        tabla.ajax.reload();
+      });
+    }
+  });
+}
+
+//Función para desactivar registros
+function eliminar(idproducto) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    text: "Este registro no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/materiales.php?op=eliminar", { idproducto: idproducto }, function (e) {
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
         tabla.ajax.reload();
       });

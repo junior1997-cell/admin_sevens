@@ -106,7 +106,7 @@
 
           $rspta = $activos_fijos->desactivar($idproducto);
 
-          echo $rspta ? "material Desactivado" : "material no se puede desactivar";
+          echo $rspta ? "ok" : "Activo no se puede desactivar";
 
         break;
 
@@ -114,7 +114,14 @@
 
           $rspta = $activos_fijos->activar($idproducto);
 
-          echo $rspta ? "Material activado" : "material no se puede activar";
+          echo $rspta ? "ok" : "Activo no se puede activar";
+
+        break;
+        case 'eliminar':
+
+          $rspta = $activos_fijos->eliminar($idproducto);
+
+          echo $rspta ? "ok" : "Activo no se puede eliminar";
 
         break;
 
@@ -145,7 +152,7 @@
             }
 
             empty($reg->ficha_tecnica)
-              ? ($ficha_tecnica = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
+              ? ($ficha_tecnica = '<div><center><a type="btn btn-danger" class=""><i class="far fa-file-pdf fa-2x text-gray-50"></i></a></center></div>')
               : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>');
             
             empty($reg->precio_igv) ? ($igv = '-') : ($igv = $reg->precio_igv);
@@ -153,19 +160,20 @@
             $data[] = [
               "0"=>$cont++,
               "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idproducto . ')"><i class="far fa-trash-alt"></i></button>'
-                :'<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
-              ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
+                ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idproducto . ')"><i class="fas fa-times"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idproducto . ')"><i class="fas fa-skull-crossbones"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
               "2" =>'<div class="user-block"> <img class="profile-user-img img-responsive img-circle" ' . $imagen . ' alt="user image" onerror="'.$imagen_error.'">
                 <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                 <span class="description"><b>Marca: </b>' . $reg->marca . '</span>
                 <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>
               </div>',
               "3" => $reg->categoria, 
-              "4" => number_format($reg->precio_unitario, 2, '.', ','),
-              "5" => number_format($reg->precio_sin_igv, 2, '.', ','),
-              "6" => number_format($igv, 2, '.', ','),
-              "7" => number_format($reg->precio_total, 2, '.', ','),
+              "4" =>'S/. '. number_format($reg->precio_unitario, 2, '.', ','),
+              "5" =>'S/. '. number_format($reg->precio_sin_igv, 2, '.', ','),
+              "6" =>'S/. '. number_format($igv, 2, '.', ','),
+              "7" =>'S/. '. number_format($reg->precio_total, 2, '.', ','),
               "8" => $ficha_tecnica,
               "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
             ];

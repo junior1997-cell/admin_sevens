@@ -14,22 +14,27 @@ switch ($_GET["op"]){
 	case 'guardaryeditar_tipo':
 		if (empty($idtipo_trabajador)){
 			$rspta=$tipo->insertar($nombre_tipo);
-			echo $rspta ? "ok" : "tipo de medida no se pudo registrar";
+			echo $rspta ? "ok" : "Tipoa no se pudo registrar";
 		}
 		else {
 			$rspta=$tipo->editar($idtipo_trabajador,$nombre_tipo);
-			echo $rspta ? "ok" : "tipo de medida no se pudo actualizar";
+			echo $rspta ? "ok" : "Tipo no se pudo actualizar";
 		}
 	break;
 
 	case 'desactivar_tipo':
 		$rspta=$tipo->desactivar($idtipo_trabajador);
- 		echo $rspta ? "tipo de medida Desactivada" : "tipo de medida no se puede desactivar";
+ 		echo $rspta ? "Tipo Desactivada" : "Tipo no se puede desactivar";
 	break;
 
 	case 'activar_tipo':
 		$rspta=$tipo->activar($idtipo_trabajador);
- 		echo $rspta ? "tipo de medida activada" : "tipo de medida no se puede activar";
+ 		echo $rspta ? "Tipo activada" : "Tipoida no se puede activar";
+	break;
+
+	case 'eliminar_tipo':
+		$rspta=$tipo->eliminar($idtipo_trabajador);
+ 		echo $rspta ? "Tipo de medida eliminado" : "Tipo  no se puede eliminar";
 	break;
 
 	case 'mostrar_tipo':
@@ -47,7 +52,8 @@ switch ($_GET["op"]){
  			$data[]=array(
 				"0"=>$cont++,
  				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar_tipo('.$reg->idtipo_trabajador.')"><i class="far fa-trash-alt"></i></button>':
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-times"></i></button>'.
+					' <button class="btn btn-danger  btn-sm" onclick="eliminar_tipo(' . $reg->idtipo_trabajador . ')"><i class="fas fa-skull-crossbones"></i> </button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar_tipo('.$reg->idtipo_trabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar_tipo('.$reg->idtipo_trabajador .')"><i class="fa fa-check"></i></button>',
  				"2"=>$reg->nombre,
