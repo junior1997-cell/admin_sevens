@@ -62,8 +62,8 @@
 								<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
 								<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
 							</div>',
-							"2"=>$reg->cargo,
-							"3"=>$reg->fecha
+							"2"=>$reg->cargo, 
+							"3"=>substr ( $reg->created_at , 0, ((strlen($reg->created_at))-3) )
 						);
 					}
 

@@ -93,6 +93,26 @@ switch ($_GET["op"]){
 			}
 		}		
 	break;
+	case 'eliminar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al usuario logueado y autorizado.
+			if ($_SESSION['recurso']==1)
+			{
+				$rspta=$proveedor->eliminar($idproveedor);
+ 				echo $rspta ? "ok" : "Proveedor no se puede Elimniar";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
 
 	case 'mostrar':
 		if (!isset($_SESSION["nombre"]))
@@ -137,7 +157,8 @@ switch ($_GET["op"]){
 		 			$data[]=array(
 						"0"=>$cont++,
 		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproveedor.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idproveedor.')"><i class="far fa-trash-alt"></i></button>':
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idproveedor.')"><i class="fas fa-times"></i></button>'.
+							 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$reg->idproveedor.')"><i class="fas fa-skull-crossbones"></i></button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idproveedor.')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idproveedor.')"><i class="fa fa-check"></i></button>',
 						"2"=>'<div class="user-block">

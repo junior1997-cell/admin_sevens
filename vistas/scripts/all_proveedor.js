@@ -78,6 +78,11 @@ function listar() {
           $("td", row).eq(0).addClass("text-center");   
            
         }
+        // columna: #0
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-nowrap");   
+            
+        }
       },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
@@ -195,7 +200,26 @@ function activar(idproveedor) {
     }
   });
 }
+//Función para elimar registros
+function eliminar(idproveedor) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar  el proveedor?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_proveedor.php?op=eliminar", { idproveedor: idproveedor }, function (e) {
+        Swal.fire("Eliminado!", "Tu proveedor ha sido eliminado.", "success");
 
+        tabla.ajax.reload();
+      });
+    }
+  });
+}
 // damos formato a: Cta, CCI
 function formato_banco() {
   if ($("#banco").select2("val") == null || $("#banco").select2("val") == "" || $("#banco").select2("val") == "1" ) {

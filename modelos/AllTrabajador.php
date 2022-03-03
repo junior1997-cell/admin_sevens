@@ -49,6 +49,14 @@
       return ejecutarConsulta($sql);
     }
 
+    //Implementamos un método para activar categorías
+    public function eliminar($idtrabajador)
+    {
+      $sql="UPDATE trabajador SET estado_delete='0' WHERE idtrabajador='$idtrabajador'";
+
+      return ejecutarConsulta($sql);
+    }
+
     //Implementar un método para mostrar los datos de un registro a modificar
     public function mostrar($idtrabajador)
     {
@@ -77,7 +85,7 @@
       $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.cuenta_bancaria_format, 
       t.cci_format, t.telefono, t.imagen_perfil,  t.estado, b.nombre AS banco, tt.nombre AS nombre_tipo, o.nombre_ocupacion AS nombre_ocupacion 
       FROM trabajador AS t, bancos AS b,  tipo_trabajador as tt, ocupacion as o
-      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = 1 ORDER BY  t.nombres ASC ;";
+      WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = 1 AND t.estado_delete = 1 ORDER BY  t.nombres ASC ;";
 
       return ejecutarConsulta($sql);		
     }

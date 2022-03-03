@@ -99,10 +99,18 @@ Class Usuario
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para activar categorías
+	//Implementamos un método para activar :: !!sin usar ::
 	public function activar($idusuario)
 	{
 		$sql="UPDATE usuario SET estado='1' WHERE idusuario='$idusuario'";
+
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para eliminar usuario
+	public function eliminar($idusuario)
+	{
+		$sql="UPDATE usuario SET estado_delete='0' WHERE idusuario='$idusuario'";
 
 		return ejecutarConsulta($sql);
 	}
@@ -120,7 +128,7 @@ Class Usuario
 	{
 		$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
 		FROM usuario as u, trabajador as t
-		WHERE  u.idtrabajador = t.idtrabajador 	ORDER BY t.nombres ASC;";
+		WHERE  u.idtrabajador = t.idtrabajador  AND u.estado=1 AND u.estado_delete=1 ORDER BY t.nombres ASC;";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los permisos marcados
@@ -135,7 +143,7 @@ Class Usuario
     {
     	$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento
 		FROM usuario as u, trabajador as t
-		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.idtrabajador = t.idtrabajador;"; 
+		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.estado_delete=1 and u.idtrabajador = t.idtrabajador;"; 
     	return ejecutarConsulta($sql);  
     }
 
@@ -143,7 +151,7 @@ Class Usuario
 	public function select2_trabajador()
 	{
 		$sql="SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento 
-		FROM trabajador WHERE estado='1' AND estado_usuario = '0' ;";
+		FROM trabajador WHERE estado='1' AND estado_delete='1' AND estado_usuario = '0' ;";
 		return ejecutarConsulta($sql);		
 	}
 }
