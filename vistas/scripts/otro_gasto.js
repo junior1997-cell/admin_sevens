@@ -145,8 +145,30 @@ function comprob_factura() {
           $("#igv").val(igv.toFixed(2));    
         }        
     
-      } else {      
-       
+      } else { 
+        
+        if ($("#tipo_comprobante").select2("val") == "Boleta") {
+
+          $(".nro_comprobante").html("Núm. Comprobante");
+  
+          $(".div_ruc").show(); $(".div_razon_social").show();
+          
+          if (precio_parcial == null || precio_parcial == "") {
+            $("#subtotal").val(0);
+            $("#igv").val(0);    
+          } else {
+            var subtotal = 0;
+            var igv = 0;
+        
+            $("#subtotal").val("");
+            $("#igv").val("");
+
+            $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
+            $("#igv").val(0);     
+          } 
+            
+        } else {
+                 
         $(".nro_comprobante").html("Núm. Comprobante");
 
         $(".div_ruc").hide(); $(".div_razon_social").hide();
@@ -160,6 +182,9 @@ function comprob_factura() {
           $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
           $("#igv").val(0);    
         } 
+          
+        }
+
       }
     }
   } 
@@ -947,7 +972,7 @@ function buscar_sunat() {
 
   let ruc = $("#ruc").val(); 
    
-  if (tipo_doc == "Factura") {
+  if (tipo_doc == "Factura" || tipo_doc == "Boleta" ) {
 
     if (ruc.length == "11") {
       $.post("../ajax/persona.php?op=sunat", { ruc: ruc }, function (data, status) {
