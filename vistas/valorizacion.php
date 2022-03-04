@@ -312,8 +312,12 @@
                         <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
                         <!-- nombre -->
                         <input type="hidden" name="nombre" id="nombre" />
-                        <!-- fecha quincena -->
-                        <input type="hidden" name="fecha_quincena" id="fecha_quincena" />                          
+                        <!-- fecha inicio -->
+                        <input type="hidden" name="fecha_inicio" id="fecha_inicio" />
+                        <!-- fecha fin -->
+                        <input type="hidden" name="fecha_fin" id="fecha_fin" />
+                        <!-- fecha numero_q_s -->
+                        <input type="hidden" name="numero_q_s" id="numero_q_s" />                          
 
                         <!-- Doc Valorizaciones -->
                         <div class="col-md-12 col-lg-12" >                               

@@ -986,7 +986,7 @@ function re_visualizacion(id) {
           toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
           if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html('<iframe src="../dist/pdf/'+antiguopdf+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+            $("#doc"+id+"_ver").html('<iframe src="../dist/docs/valorizacion/'+antiguopdf+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
             toastr.success('Documento vizualizado correctamente!!!')
           } else {
             if ( extrae_extencion(antiguopdf) == "csv" ) {
@@ -1152,46 +1152,46 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     if ( extrae_extencion(verdoc1) == "xls") {
 
       $("#verdoc1").html('<img src="../dist/svg/xls.svg" alt="" width="auto" height="206" >');
-      $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
     } else {
 
       if ( extrae_extencion(verdoc1) == "xlsx" ) {
 
         $("#verdoc1").html('<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="206" >');
-        $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+        $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
       }else{
 
         if ( extrae_extencion(verdoc1) == "csv" ) {
 
           $("#verdoc1").html('<img src="../dist/svg/csv.svg" alt="" width="auto" height="206" >');
-          $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+          $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
         }else{
 
           if ( extrae_extencion(verdoc1) == "xlsm" ) {
 
             $("#verdoc1").html('<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="206" >');
-            $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+            $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
           }else{
 
             if ( extrae_extencion(verdoc1) == "doc" || extrae_extencion(verdoc1) == "docx" ) {
 
               $("#verdoc1").html('<img src="../dist/svg/docx.svg" alt="" width="auto" height="206" >');
-              $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+              $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
             }else{
 
               if ( extrae_extencion(verdoc1) == "pdf" ) {
 
-                $("#verdoc1").html('<iframe src="../dist/pdf/'+verdoc1+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-                $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/pdf/'+ verdoc1 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc1").html('<iframe src="../dist/docs/valorizacion/'+verdoc1+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+ verdoc1 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }else{
 
                 $("#verdoc1").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="206" >');
-                $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc1_nombre").html("Contratro de obra."+ extrae_extencion(verdoc1) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc1+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }
             }
@@ -1199,7 +1199,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
         }
       }
     }
-    // $('#verdoc1').html('<embed src="../dist/pdf/'+verdoc1+'" type="application/pdf" width="100%" height="200px" />');
+    // $('#verdoc1').html('<embed src="../dist/docs/valorizacion/'+verdoc1+'" type="application/pdf" width="100%" height="200px" />');
     
   }
   
@@ -1229,46 +1229,46 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     if ( extrae_extencion(verdoc2) == "xls") {
 
       $("#verdoc2").html('<img src="../dist/svg/xls.svg" alt="" width="auto" height="206" >');
-      $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
     } else {
 
       if ( extrae_extencion(verdoc2) == "xlsx" ) {
 
         $("#verdoc2").html('<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="206" >');
-        $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+        $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
       }else{
 
         if ( extrae_extencion(verdoc2) == "csv" ) {
 
           $("#verdoc2").html('<img src="../dist/svg/csv.svg" alt="" width="auto" height="206" >');
-          $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+          $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
         }else{
 
           if ( extrae_extencion(verdoc2) == "xlsm" ) {
 
             $("#verdoc2").html('<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="206" >');
-            $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+            $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
           }else{
 
             if ( extrae_extencion(verdoc2) == "doc" || extrae_extencion(verdoc2) == "docx" ) {
 
               $("#verdoc2").html('<img src="../dist/svg/docx.svg" alt="" width="auto" height="206" >');
-              $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+              $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
             }else{
 
               if ( extrae_extencion(verdoc2) == "pdf" ) {
 
-                $("#verdoc2").html('<iframe src="../dist/pdf/'+verdoc2+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-                $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/pdf/'+ verdoc2 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc2").html('<iframe src="../dist/docs/valorizacion/'+verdoc2+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+ verdoc2 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }else{
 
                 $("#verdoc2").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="206" >');
-                $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc2_nombre").html("Entrega de terreno."+ extrae_extencion(verdoc2) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc2+'"  download="Entrega de terreno" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }
             }
@@ -1305,46 +1305,46 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     if ( extrae_extencion(verdoc3) == "xls") {
 
       $("#verdoc3").html('<img src="../dist/svg/xls.svg" alt="" width="auto" height="206" >');
-      $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
     } else {
 
       if ( extrae_extencion(verdoc3) == "xlsx" ) {
 
         $("#verdoc3").html('<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="206" >');
-        $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+        $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
       }else{
 
         if ( extrae_extencion(verdoc3) == "csv" ) {
 
           $("#verdoc3").html('<img src="../dist/svg/csv.svg" alt="" width="auto" height="206" >');
-          $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+          $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
         }else{
 
           if ( extrae_extencion(verdoc3) == "xlsm" ) {
 
             $("#verdoc3").html('<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="206" >');
-            $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+            $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
           }else{
 
             if ( extrae_extencion(verdoc3) == "doc" || extrae_extencion(verdoc3) == "docx" ) {
 
               $("#verdoc3").html('<img src="../dist/svg/docx.svg" alt="" width="auto" height="206" >');
-              $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+              $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
             }else{
 
               if ( extrae_extencion(verdoc3) == "pdf" ) {
 
-                $("#verdoc3").html('<iframe src="../dist/pdf/'+verdoc3+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-                $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/pdf/'+ verdoc3 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc3").html('<iframe src="../dist/docs/valorizacion/'+verdoc3+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+ verdoc3 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }else{
 
                 $("#verdoc3").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="206" >');
-                $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc3_nombre").html("Inicio de obra."+ extrae_extencion(verdoc3) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc3+'"  download="Inicio de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }
             }
@@ -1380,46 +1380,46 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     if ( extrae_extencion(verdoc4) == "xls") {
 
       $("#verdoc4").html('<img src="../dist/svg/xls.svg" alt="" width="auto" height="206" >');
-      $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
     } else {
 
       if ( extrae_extencion(verdoc4) == "xlsx" ) {
 
         $("#verdoc4").html('<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="206" >');
-        $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+        $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
       }else{
 
         if ( extrae_extencion(verdoc4) == "csv" ) {
 
           $("#verdoc4").html('<img src="../dist/svg/csv.svg" alt="" width="auto" height="206" >');
-          $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+          $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
         }else{
 
           if ( extrae_extencion(verdoc4) == "xlsm" ) {
 
             $("#verdoc4").html('<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="206" >');
-            $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+            $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
           }else{
 
             if ( extrae_extencion(verdoc4) == "doc" || extrae_extencion(verdoc4) == "docx" ) {
 
               $("#verdoc4").html('<img src="../dist/svg/docx.svg" alt="" width="auto" height="206" >');
-              $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+              $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
             }else{
 
               if ( extrae_extencion(verdoc4) == "pdf" ) {
 
-                $("#verdoc4").html('<iframe src="../dist/pdf/'+verdoc4+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-                $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/pdf/'+ verdoc4 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc4").html('<iframe src="../dist/docs/valorizacion/'+verdoc4+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+ verdoc4 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }else{
 
                 $("#verdoc4").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="206" >');
-                $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc4_nombre").html("Presupuesto."+ extrae_extencion(verdoc4) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc4+'"  download="Presupuesto" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }
             }
@@ -1455,46 +1455,46 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     if ( extrae_extencion(verdoc5) == "xls") {
 
       $("#verdoc5").html('<img src="../dist/svg/xls.svg" alt="" width="auto" height="206" >');
-      $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
     } else {
 
       if ( extrae_extencion(verdoc5) == "xlsx" ) {
 
         $("#verdoc5").html('<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="206" >');
-        $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+        $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
       }else{
 
         if ( extrae_extencion(verdoc5) == "csv" ) {
 
           $("#verdoc5").html('<img src="../dist/svg/csv.svg" alt="" width="auto" height="206" >');
-          $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+          $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
         }else{
 
           if ( extrae_extencion(verdoc5) == "xlsm" ) {
 
             $("#verdoc5").html('<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="206" >');
-            $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+            $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
           }else{
 
             if ( extrae_extencion(verdoc5) == "doc" || extrae_extencion(verdoc5) == "docx" ) {
 
               $("#verdoc5").html('<img src="../dist/svg/docx.svg" alt="" width="auto" height="206" >');
-              $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+              $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
             }else{
 
               if ( extrae_extencion(verdoc5) == "pdf" ) {
 
-                $("#verdoc5").html('<iframe src="../dist/pdf/'+verdoc5+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-                $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/pdf/'+ verdoc5 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc5").html('<iframe src="../dist/docs/valorizacion/'+verdoc5+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+ verdoc5 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }else{
 
                 $("#verdoc5").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="206" >');
-                $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc5_nombre").html("Analisis de costos unitarios."+ extrae_extencion(verdoc5) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc5+'"  download="Analisis de costos unitarios" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }
             }
@@ -1530,46 +1530,46 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
     if ( extrae_extencion(verdoc6) == "xls") {
 
       $("#verdoc6").html('<img src="../dist/svg/xls.svg" alt="" width="auto" height="206" >');
-      $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+      $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Contratro de obra" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
     } else {
 
       if ( extrae_extencion(verdoc6) == "xlsx" ) {
 
         $("#verdoc6").html('<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="206" >');
-        $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+        $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
       }else{
 
         if ( extrae_extencion(verdoc6) == "csv" ) {
 
           $("#verdoc6").html('<img src="../dist/svg/csv.svg" alt="" width="auto" height="206" >');
-          $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+          $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
         }else{
 
           if ( extrae_extencion(verdoc6) == "xlsm" ) {
 
             $("#verdoc6").html('<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="206" >');
-            $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+            $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
           }else{
 
             if ( extrae_extencion(verdoc6) == "doc" || extrae_extencion(verdoc6) == "docx" ) {
 
               $("#verdoc6").html('<img src="../dist/svg/docx.svg" alt="" width="auto" height="206" >');
-              $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+              $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
             }else{
 
               if ( extrae_extencion(verdoc6) == "pdf" ) {
 
-                $("#verdoc6").html('<iframe src="../dist/pdf/'+verdoc6+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-                $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/pdf/'+ verdoc6 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc6").html('<iframe src="../dist/docs/valorizacion/'+verdoc6+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+ verdoc6 +'" target="_blank"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }else{
 
                 $("#verdoc6").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="206" >');
-                $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/pdf/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
+                $("#verdoc6_nombre").html("Insumos."+ extrae_extencion(verdoc6) + '<div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+verdoc6+'"  download="Insumos" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div>  <div class="col-md-6 "> <a  class="btn btn-info  btn-block disabled" data-toggle="tooltip" data-original-title="Terminar proyecto" href="#"  style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>' );
 
               }
             }
@@ -1660,7 +1660,7 @@ function mostrar(idproyecto) {
 
       $("#doc1_nombre").html('Contrato de obra.' + extrae_extencion(data.doc1_contrato_obra));
 
-      // $("#doc1_ver").html('<iframe src="../dist/pdf/'+data.doc1_contrato_obra+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      // $("#doc1_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc1_contrato_obra+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.doc1_contrato_obra) == "xls") {
@@ -1695,7 +1695,7 @@ function mostrar(idproyecto) {
 
                 if ( extrae_extencion(data.doc1_contrato_obra) == "pdf" ) {
 
-                  $("#doc1_ver").html('<iframe src="../dist/pdf/'+data.doc1_contrato_obra+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc1_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc1_contrato_obra+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -1722,7 +1722,7 @@ function mostrar(idproyecto) {
 
       $("#doc2_nombre").html('Entrega de terreno.' + extrae_extencion(data.doc2_entrega_terreno) );
 
-      // $("#doc2_ver").html('<iframe src="../dist/pdf/'+data.doc2_entrega_terreno+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      // $("#doc2_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc2_entrega_terreno+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.doc2_entrega_terreno) == "xls") {
@@ -1757,7 +1757,7 @@ function mostrar(idproyecto) {
 
                 if ( extrae_extencion(data.doc2_entrega_terreno) == "pdf" ) {
 
-                  $("#doc2_ver").html('<iframe src="../dist/pdf/'+data.doc2_entrega_terreno+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc2_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc2_entrega_terreno+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -1784,7 +1784,7 @@ function mostrar(idproyecto) {
 
       $("#doc3_nombre").html('Inicio de obra.' + extrae_extencion(data.doc3_inicio_obra));
 
-      // $("#doc3_ver").html('<iframe src="../dist/pdf/'+data.doc3_inicio_obra+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      // $("#doc3_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc3_inicio_obra+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.doc3_inicio_obra) == "xls") {
@@ -1819,7 +1819,7 @@ function mostrar(idproyecto) {
 
                 if ( extrae_extencion(data.doc3_inicio_obra) == "pdf" ) {
 
-                  $("#doc3_ver").html('<iframe src="../dist/pdf/'+data.doc3_inicio_obra+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc3_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc3_inicio_obra+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -1846,7 +1846,7 @@ function mostrar(idproyecto) {
 
       $("#doc4_nombre").html('Presupuesto.' + extrae_extencion(data.doc4_presupuesto));
 
-      // $("#doc4_ver").html('<iframe src="../dist/pdf/'+data.doc4_presupuesto+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      // $("#doc4_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc4_presupuesto+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.doc4_presupuesto) == "xls") {
@@ -1881,7 +1881,7 @@ function mostrar(idproyecto) {
 
                 if ( extrae_extencion(data.doc4_presupuesto) == "pdf" ) {
 
-                  $("#doc4_ver").html('<iframe src="../dist/pdf/'+data.doc4_presupuesto+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc4_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc4_presupuesto+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -1908,7 +1908,7 @@ function mostrar(idproyecto) {
 
       $("#doc5_nombre").html('Analisis de costos unitarios.' + extrae_extencion(data.doc5_analisis_costos_unitarios));
 
-      // $("#doc5_ver").html('<iframe src="../dist/pdf/'+data.doc5_analisis_costos_unitarios+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      // $("#doc5_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc5_analisis_costos_unitarios+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.doc5_analisis_costos_unitarios) == "xls") {
@@ -1943,7 +1943,7 @@ function mostrar(idproyecto) {
 
                 if ( extrae_extencion(data.doc5_analisis_costos_unitarios) == "pdf" ) {
 
-                  $("#doc5_ver").html('<iframe src="../dist/pdf/'+data.doc5_analisis_costos_unitarios+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc5_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc5_analisis_costos_unitarios+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -1970,7 +1970,7 @@ function mostrar(idproyecto) {
 
       $("#doc6_nombre").html('Insumos.' + extrae_extencion(data.doc6_insumos));
 
-      // $("#doc5_ver").html('<iframe src="../dist/pdf/'+data.doc6_insumos+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      // $("#doc5_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc6_insumos+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.doc6_insumos) == "xls") {
@@ -2005,7 +2005,7 @@ function mostrar(idproyecto) {
 
                 if ( extrae_extencion(data.doc6_insumos) == "pdf" ) {
 
-                  $("#doc6_ver").html('<iframe src="../dist/pdf/'+data.doc6_insumos+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc6_ver").html('<iframe src="../dist/docs/valorizacion/'+data.doc6_insumos+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -2231,12 +2231,12 @@ function ver_modal_docs_valorizaciones(idproyecto, documento) {
     $("#verdoc7_nombre").html(nombredocs +
       '<div class="col-md-12 row mt-2">'+
           '<div class="col-md-6 ">'+
-            '<a  class="btn btn-warning  btn-block" href="../dist/pdf/'+documento+'"  download="Valorizaciones" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
+            '<a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/'+documento+'"  download="Valorizaciones" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
               '<i class="fas fa-download"></i>'+
             '</a>'+
           '</div>'+
           '<div class="col-md-6 ">'+
-            '<button  class="btn btn-info  btn-block " href="../dist/pdf/'+documento+'" disabled  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
+            '<button  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/'+documento+'" disabled  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
               'Ver completo <i class="fas fa-expand"></i>'+
             '</button>'+
           '</div>'+

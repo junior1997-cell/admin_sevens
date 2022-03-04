@@ -19,19 +19,24 @@ Class Valorizacion
 	}
 
 	//Editamos el DOC1 del proyecto
-	public function insertar_valorizacion($idproyecto, $nombre, $fecha_quincena, $doc) { 
+	public function insertar_valorizacion($idproyecto, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc) { 
 
-		$sql="INSERT INTO valorizacion ( idproyecto, nombre, fecha_quincena, doc_valorizacion ) VALUES ('$idproyecto', '$nombre', '$fecha_quincena', '$doc')"; 
+		$sql="INSERT INTO valorizacion ( idproyecto, nombre, fecha_inicio, fecha_fin, numero_q_s, doc_valorizacion ) 
+		VALUES ('$idproyecto', '$nombre', '$fecha_inicio', '$fecha_fin', '$numero_q_s', '$doc')"; 
 		
 		return ejecutarConsulta($sql); 
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar_valorizacion( $idproyecto, $idvalorizacion, $nombre, $fecha_quincena, $doc)
+	public function editar_valorizacion( $idproyecto, $idvalorizacion, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc)
 	{
 		//var_dump($idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 		
-		$sql="UPDATE valorizacion SET idproyecto = '$idproyecto', nombre = '$nombre', fecha_quincena = '$fecha_quincena', doc_valorizacion = '$doc'
+		$sql="UPDATE valorizacion SET idproyecto = '$idproyecto', nombre = '$nombre', 
+		fecha_inicio = '$fecha_inicio',
+		fecha_fin = '$fecha_fin' , 
+		numero_q_s = '$numero_q_s', 
+		doc_valorizacion = '$doc'
 		WHERE idvalorizacion = '$idvalorizacion'";	
 		
 		return ejecutarConsulta($sql);		
@@ -40,7 +45,8 @@ Class Valorizacion
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idasistencia_trabajador)
 	{
-		$sql="SELECT tp.idtrabajador_por_proyecto, t.nombres , t.tipo_documento as documento, t.numero_documento, tp.cargo, t.imagen_perfil, atr.fecha_asistencia, atr.horas_normal_dia, atr.horas_extras_dia 
+		$sql="SELECT tp.idtrabajador_por_proyecto, t.nombres , t.tipo_documento as documento, t.numero_documento, tp.cargo, t.imagen_perfil, 
+		atr.fecha_asistencia, atr.horas_normal_dia, atr.horas_extras_dia 
 		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS atr 
 		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto AND atr.idasistencia_trabajador = '$idasistencia_trabajador';";
 		return ejecutarConsultaSimpleFila($sql);
@@ -59,9 +65,9 @@ Class Valorizacion
 	//ver detalle quincena (cuando presiono el boton de cada quincena)
 	public function ver_detalle_quincena($f1, $f2, $nube_idproyect){
 
-		$sql="SELECT v.idvalorizacion, v.idproyecto, v.nombre, v.doc_valorizacion, v.fecha_quincena, v.estado
+		$sql="SELECT v.idvalorizacion, v.idproyecto, v.nombre, v.doc_valorizacion, v.fecha_inicio, v.estado
 		FROM valorizacion as v
-		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_quincena BETWEEN '$f1' AND '$f2';";
+		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_inicio BETWEEN '$f1' AND '$f2';";
 		$data1 = ejecutarConsultaArray($sql);
 
 		$sql2 = "SELECT p.idproyecto, p.doc1_contrato_obra AS doc1, p.doc2_entrega_terreno AS doc81, p.doc3_inicio_obra AS doc82, p.doc7_cronograma_obra_valorizad AS doc4, p.doc8_certificado_habilidad_ing_residnt AS doc83 

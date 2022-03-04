@@ -66,7 +66,7 @@
               
             $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
-            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pdf/" . $doc1);
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/valorizacion/" . $doc1);
             
           }	
 
@@ -85,7 +85,7 @@
               
             $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
 
-            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pdf/" . $doc2);
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/valorizacion/" . $doc2);
             
           }	
 
@@ -104,7 +104,7 @@
               
             $doc3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
 
-            move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/pdf/" . $doc3);
+            move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/valorizacion/" . $doc3);
             
           }	
 
@@ -123,7 +123,7 @@
               
             $doc4 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
 
-            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/pdf/" . $doc4);
+            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/valorizacion/" . $doc4);
             
           }	
 
@@ -142,7 +142,7 @@
               
             $doc5 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
 
-            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/pdf/" . $doc5);
+            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/valorizacion/" . $doc5);
             
           }	
 
@@ -162,7 +162,7 @@
             // echo json_encode($_FILES['doc6']); 
             $doc6 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
 
-            move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/pdf/" . $doc6);
+            move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/docs/valorizacion/" . $doc6);
             
           }          
 
@@ -182,7 +182,7 @@
 
               if ($doc1_ant != "") {
 
-                unlink("../dist/pdf/" . $doc1_ant);
+                unlink("../dist/docs/valorizacion/" . $doc1_ant);
               }
             }
 
@@ -194,7 +194,7 @@
 
               if ($doc2_ant != "") {
 
-                unlink("../dist/pdf/" . $doc2_ant);
+                unlink("../dist/docs/valorizacion/" . $doc2_ant);
               }
             }
 
@@ -206,7 +206,7 @@
 
               if ($doc3_ant != "") {
 
-                unlink("../dist/pdf/" . $doc3_ant);
+                unlink("../dist/docs/valorizacion/" . $doc3_ant);
               }
             }
 
@@ -218,7 +218,7 @@
 
               if ($doc4_ant != "") {
 
-                unlink("../dist/pdf/" . $doc4_ant);
+                unlink("../dist/docs/valorizacion/" . $doc4_ant);
               }
             }
 
@@ -230,7 +230,7 @@
 
               if ($doc5_ant != "") {
 
-                unlink("../dist/pdf/" . $doc5_ant);
+                unlink("../dist/docs/valorizacion/" . $doc5_ant);
               }
             }
 
@@ -242,7 +242,7 @@
 
               if ($doc6_ant != "") {
 
-                unlink("../dist/pdf/" . $doc6_ant);
+                unlink("../dist/docs/valorizacion/" . $doc6_ant);
               }
             }
 

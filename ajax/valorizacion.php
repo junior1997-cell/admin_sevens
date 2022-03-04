@@ -24,7 +24,9 @@
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";
       $nombre	        = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
-      $fecha_quincena	= isset($_POST["fecha_quincena"])? limpiarCadena($_POST["fecha_quincena"]):"";
+      $fecha_inicio	  = isset($_POST["fecha_inicio"])? limpiarCadena($_POST["fecha_inicio"]):"";
+      $fecha_fin	    = isset($_POST["fecha_fin"])? limpiarCadena($_POST["fecha_fin"]):"";
+      $numero_q_s	    = isset($_POST["numero_q_s"])? limpiarCadena($_POST["numero_q_s"]):"";
 
       $doc_old_7		  = isset($_POST["doc_old_7"])? limpiarCadena($_POST["doc_old_7"]):"";
       $doc7		        = isset($_POST["doc7"])? limpiarCadena($_POST["doc7"]):"";
@@ -44,7 +46,7 @@
 
             $doc  = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-            move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/pdf/" . $doc );
+            move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/docs/valorizacion/" . $doc ); 
 						
 					}
 
@@ -61,7 +63,7 @@
 
                 if ($doc1_ant != "") {
 
-                  unlink("../dist/pdf/" . $doc1_ant);
+                  unlink("../dist/docs/valorizacion/" . $doc1_ant);
                 }
               }
 
@@ -79,7 +81,7 @@
 
                   if ($doc1_ant != "") {
 
-                    unlink("../dist/pdf/" . $doc1_ant);
+                    unlink("../dist/docs/valorizacion/" . $doc1_ant);
                   }
                 }
 
@@ -97,7 +99,7 @@
 
                     if ($doc1_ant != "") {
 
-                      unlink("../dist/pdf/" . $doc1_ant);
+                      unlink("../dist/docs/valorizacion/" . $doc1_ant);
                     }
                   }
 
@@ -115,7 +117,7 @@
 
                       if ($doc1_ant != "") {
 
-                        unlink("../dist/pdf/" . $doc1_ant);
+                        unlink("../dist/docs/valorizacion/" . $doc1_ant);
                       }
                     }
 
@@ -133,7 +135,7 @@
 
                         if ($doc1_ant != "") {
 
-                          unlink("../dist/pdf/" . $doc1_ant);
+                          unlink("../dist/docs/valorizacion/" . $doc1_ant);
                         }
                       }
 
@@ -150,7 +152,7 @@
             // REGISTRAMOS EN VALORIZACIONES ::::::::::::
             if (empty($idvalorizacion)){
               // Registramos docs en valorización
-              $rspta=$valorizacion->insertar_valorizacion($idproyecto, $nombre, $fecha_quincena, $doc);
+              $rspta=$valorizacion->insertar_valorizacion($idproyecto, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
               
               echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Documento";
               
@@ -165,12 +167,12 @@
   
                 if ($doc1_ant != "") {
   
-                  unlink("../dist/pdf/" . $doc1_ant);
+                  unlink("../dist/docs/valorizacion/" . $doc1_ant);
                 }
               }
   
               // editamos un trabajador existente
-              $rspta=$valorizacion->editar_valorizacion($idproyecto, $idvalorizacion, $nombre, $fecha_quincena, $doc);
+              $rspta=$valorizacion->editar_valorizacion($idproyecto, $idvalorizacion, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
               
               echo $rspta ? "ok" : "Documento no se pudo actualizar";
             }
