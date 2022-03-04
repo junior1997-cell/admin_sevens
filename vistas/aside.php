@@ -164,14 +164,38 @@
           </li>
         <?php  }  ?>
 
-        <li class="nav-item ver-otros-modulos-1">
-          <a href="papelera.php" class="nav-link" id="mPapelera">
-            <i class="nav-icon fas fa-trash-alt"></i>
-            <p>
-              Papelera               
-            </p>
-          </a>
-        </li>
+        <?php if ($_SESSION['otra_factura']==1) {  ?>
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="otra_factura.php" class="nav-link" id="lOtraFactura">
+              <i class="nav-icon fas fa-receipt"></i>
+              <p>
+                Otras Facturas               
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+        
+        <?php if ($_SESSION['resumen_factura']==1) {  ?>
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="resumen_factura.php" class="nav-link" id="lResumenFacura">            
+              <i class="nav-icon fas fa-poll"></i>
+              <p>
+                Resumen de Facturas               
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
+        
+        <?php if ($_SESSION['papelera']==1) {  ?>
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="papelera.php" class="nav-link" id="mPapelera">
+              <i class="nav-icon fas fa-trash-alt"></i>
+              <p>
+                Papelera               
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
         
         <li class="nav-header">MÓDULOS</li>
 
@@ -486,25 +510,8 @@
                   Prestamos               
                 </p>
               </a>
-            </li>
-
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="otra_factura.php" class="nav-link" id="lOtraFactura">
-                <i class="nav-icon fas fa-receipt"></i>
-                <p>
-                  Otras Facturas               
-                </p>
-              </a>
-            </li>
-
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="resumen_factura.php" class="nav-link" id="lResumenFacura">            
-                <i class="nav-icon fas fa-poll"></i>
-                <p>
-                  Resumen de Facturas               
-                </p>
-              </a>
-            </li>
+            </li>           
+            
 
             <li class="nav-item ver-otros-modulos-1">
               <a href="estado_financiero.php" class="nav-link" id="lEstadoFinanciero">             
