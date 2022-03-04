@@ -38,6 +38,13 @@ Class Color
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para eliminar color
+	public function eliminar($idcolor)
+	{
+		$sql="UPDATE color SET estado_delete='0' WHERE idcolor='$idcolor'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idcolor)
 	{
@@ -48,7 +55,7 @@ Class Color
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM color WHERE idcolor>'1' ORDER BY nombre_color ASC";
+		$sql="SELECT * FROM color WHERE idcolor>'1' AND estado=1  AND estado_delete=1 ORDER BY nombre_color ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

@@ -262,6 +262,24 @@ switch ($_GET["op"]) {
             }
         }
     break;
+
+    case 'eliminar_compra':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+                //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                    //contenido
+
+                $rspta = $all_activos_fijos->eliminar_compra($idcompra_af_general);
+
+                echo $rspta ? "ok" : "Compra no se puede Eliminar";
+            //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }       
+    break;
     //listar facturas_compra activos
     case 'listar_compra_activos':
         if (!isset($_SESSION["nombre"])) {
@@ -326,14 +344,16 @@ switch ($_GET["op"]) {
                         "0" =>$cont,
                         "1" =>(empty($reg['idproyecto'])) ?($reg['estado'] == '1'? '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                                     ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
-                                    ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
-                                : '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                                    ' <button class="btn btn-danger btn-sm" onclick="anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'.
+                                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' .$reg['idtabla']. ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                                    '<button class="btn btn-info btn-sm" onclick="ver_compras_af_g(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
                                 ' <button class="btn btn-success btn-sm" onclick="des_anular('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>') :
                                 ($reg['estado'] == '1'? '<button class="btn btn-info btn-sm " onclick="ver_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                                     ' <button class="btn btn-warning btn-sm" disabled onclick="editar_detalle_compras_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'.
-                                    ' <button class="btn btn-danger btn-sm" disabled onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'
-                                : '<button class="btn btn-info btn-sm" disabled onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
-                                ' <button class="btn btn-success btn-sm" disabled onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
+                                    ' <button class="btn btn-danger btn-sm" disabled onclick="anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="far fa-trash-alt"></i></button>'.
+                                    ' <button class="btn btn-danger  btn-sm" disabled onclick="eliminar_compra(' .$reg['idtabla']. ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                                    '<button class="btn btn-info btn-sm" disabled onclick="ver_compras_af_p(' .$reg['idtabla']. ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' . 
+                                    ' <button class="btn btn-success btn-sm" disabled onclick="des_anular_af_p('.$reg['idtabla'].')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                         "2" => '<textarea class="form-control text_area_clss" cols="30" rows="2">'. $reg['descripcion'].'</textarea>',
                        
                         "3" => date("d/m/Y", strtotime($reg['fecha_compra'])),
@@ -347,7 +367,7 @@ switch ($_GET["op"]) {
                                 <span class="username" style="margin-left: 0px !important;"><p style="margin-bottom: 0.2rem !important"; >'.$tipo_comprobante1.'</p></span>
                                 <span class="description" style="margin-left: 0px !important;">Número: '. $serie_comprobante .' </span>
                             </div>',
-                        "6" => number_format($reg['total'], 2, '.', ','),
+                        "6" =>number_format($reg['total'], 2, '.', ','),
                         "7" => (empty($reg['idproyecto'])) ?'<div class="text-center text-nowrap"> <button class="btn btn-' .$c .' btn-xs m-t-2px" onclick="listar_pagos_af_g(' . $reg['idtabla'] . ',' . $reg['total'] .',' .floatval($reg['deposito']).')">
                                 <i class="fas fa-' .  $icon . ' nav-icon"></i> ' . $nombre .'</button>'.' 
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm">'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>':
@@ -356,8 +376,7 @@ switch ($_GET["op"]) {
                                 <button style="font-size: 14px;" class="btn btn-'.$cc.' btn-sm" disabled>'.number_format(floatval($reg['deposito']), 2, '.', ',').'</button></div>',
                         "8" => number_format($saldo, 2, '.', ','),
                         "9" => (empty($reg['idproyecto'])) ?'<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>':
-                        '<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>',
-                        "10" => $reg['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+                        '<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla']  .', \'' .  $reg['imagen_comprobante'] .  '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>'
                     ];
                     $cont++;
                 }
@@ -776,6 +795,21 @@ switch ($_GET["op"]) {
         }
     break;
 
+    case 'eliminar_pagos':
+        if (!isset($_SESSION["nombre"])) {
+            header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+        } else {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['activo_fijo_general'] == 1) {
+                $rspta = $all_activos_fijos->eliminar_pagos($idpago_af_general);
+                echo $rspta ? "Pago Anulado" : "Pago no se puede Anular";
+                //Fin de las validaciones de acceso
+            } else {
+                require 'noacceso.php';
+            }
+        }
+    break;
+
     case 'listar_pagos_proveedor':
 
         if (!isset($_SESSION["nombre"])) {
@@ -787,7 +821,7 @@ switch ($_GET["op"]) {
                 $rspta = $all_activos_fijos->listar_pagos_af_g( $_GET["idcompra_af_general"]);
                 //Vamos a declarar un array
                 $data = [];
-
+                $cont=1;
                 $suma = 0;
                 $imagen = '';
 
@@ -809,31 +843,25 @@ switch ($_GET["op"]) {
                     $tool = '"tooltip"';
                     $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
                     $data[] = [
-                        "0" => $reg->estado
-                            ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                                $reg->idpago_af_general.
-                                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
-                                $reg->idpago_af_general.
-                                ')"><i class="far fa-trash-alt"></i></button>'
-                            : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                                $reg->idpago_af_general.
-                                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                                $reg->idpago_af_general.
-                                ')"><i class="fa fa-check"></i></button>',
-                        "1" => $reg->forma_pago,
-                        "2" =>'<div class="user-block">
+                        "0"=>$cont++,
+                        "1" => $reg->estado
+                            ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .$reg->idpago_af_general.')"><i class="fas fa-pencil-alt"></i></button>' .
+                                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .$reg->idpago_af_general.')"><i class="fas fa-times"></i></button>'.
+                                ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pagos(' . $reg->idpago_af_general . ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                                '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .$reg->idpago_af_general.')"><i class="fa fa-pencil-alt"></i></button>' .
+                                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .$reg->idpago_af_general.')"><i class="fa fa-check"></i></button>',
+                        "2" => $reg->forma_pago,
+                        "3" =>'<div class="user-block">
                         <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario.'</p></span>
                         <span class="description" style="margin-left: 0px !important;" data-toggle="tooltip" data-original-title="' . $reg->titular_cuenta . '"><b>titular: </b>' . $titular_cuenta . '</span></div>',
-                        "3" => '<div class="user-block">
+                        "4" => '<div class="user-block">
                         <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'.$reg->banco.'</p></span>
                         <span class="description" style="margin-left: 0px !important;" data-toggle="tooltip" data-original-title="' . $reg->cuenta_destino . '"><b>C: </b>' . $reg->cuenta_destino . '</span></div>',
-                        "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
-                        "5" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-                        "6" => number_format($reg->monto, 2, '.', ','),
-                        "7" => $imagen,
-                        "8" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+                        "5" => date("d/m/Y", strtotime($reg->fecha_pago)),
+                        "6" => '<textarea class="form-control text_area_clss" cols="30" rows="1">'. $reg->descripcion.'</textarea>',
+                        "7" =>'S/. '. number_format($reg->monto, 2, '.', ','),
+                        "8" => $imagen,
+                        "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
                     ];
                 }
                 //$suma=array_sum($rspta->fetch_object()->monto);

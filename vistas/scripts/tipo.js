@@ -180,7 +180,7 @@ function activar_tipo(idtipo_trabajador) {
 function eliminar_tipo(idtipo_trabajador) {
   Swal.fire({
     title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Eliminar Tipo",
+    text: "Registo no se podrá restablecer",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",

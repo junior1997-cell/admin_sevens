@@ -511,22 +511,31 @@ function listar() {
         },
       },
       createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+            
+        }
+        // columna: #
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-nowrap");   
+            
+        }
+        // columna: #
+        if (data[6] != '') {
+          $("td", row).eq(6).addClass("text-nowrap");   
+            
+        }
         //console.log(data);
         if (quitar_formato_miles(data[8]) > 0) {
-          $("td", row).eq(8).css({
-            "background-color": "#ffc107",
-            color: "black",
-          });
+          $("td", row).eq(8).css({ "background-color": "#ffc107", color: "black", });
+          $("td", row).eq(8).addClass("text-nowrap");  
         } else if (quitar_formato_miles(data[8]) == 0) {
-          $("td", row).eq(8).css({
-            "background-color": "#28a745",
-            color: "white",
-          });
+          $("td", row).eq(8).css({ "background-color": "#28a745", color: "white", });
+          $("td", row).eq(8).addClass("text-nowrap");  
         } else {
-          $("td", row).eq(8).css({
-            "background-color": "#ff5252",
-            color: "white",
-          });
+          $("td", row).eq(8).css({ "background-color": "#ff5252", color: "white", });
+          $("td", row).eq(8).addClass("text-nowrap");  
         }
       },
       language: {
@@ -556,7 +565,7 @@ function listar() {
   tabla_comp_prov = $("#tabla-compra-proveedor")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -732,6 +741,7 @@ function anular(idcompra_af_general) {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
           tabla.ajax.reload();
+          tabla_comp_prov.ajax.reload();
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -754,6 +764,32 @@ function des_anular(idcompra_af_general) {
       $.post("../ajax/all_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
         tabla.ajax.reload();
+        tabla_comp_prov.ajax.reload();
+      });
+    }
+  });
+}
+
+function eliminar_compra(idcompra_af_general) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar la compra?",
+    text: "Registo no se podrá restablecer!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
+        if (e == "ok") {
+          Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");
+
+          tabla.ajax.reload();
+          tabla_comp_prov.ajax.reload();
+        } else {
+          Swal.fire("Error!", e, "error");
+        }
       });
     }
   });
@@ -1479,6 +1515,19 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
           console.log(e.responseText);
         },
       },
+      createdRow: function (row, data, ixdex) {    
+  
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass("text-center");   
+           
+        }
+        // columna: #
+        if (data[1] != '') {
+          $("td", row).eq(1).addClass("text-nowrap");   
+            
+        }
+      },
       language: {
         lengthMenu: "Mostrar : _MENU_ registros",
         buttons: {
@@ -1491,7 +1540,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
+      order: [[0, "asc"]], //Ordenar (columna,orden)
     })
     .DataTable();
 
@@ -1600,7 +1649,7 @@ function total_pagos(idcompra_af_general) {
     data = JSON.parse(data);
     //console.log(data);
 
-    $("#monto_total_general").html(formato_miles(data.total_monto));
+    $("#monto_total_general").html('S/. '+formato_miles(data.total_monto));
   });
 }
 
@@ -1688,6 +1737,29 @@ function activar_pagos(idpago_af_general) {
   });
 }
 
+//Función para eliminar registros
+function eliminar_pagos(idpago_af_general) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el pago?",
+    text: "Registo no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/all_activos_fijos.php?op=eliminar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+        Swal.fire("Eliminado!", "El pago ha sido Eliminado.", "success");
+
+        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+
+          tabla_pagos1.ajax.reload();
+        
+      });
+    }
+  });
+}
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");

@@ -19,28 +19,33 @@ switch ($_GET["op"]) {
   case 'guardaryeditar_bancos':
     if (empty($idbancos)) {
       $rspta = $bancos->insertar($nombre, $alias, $formato_cta, $formato_cci, $formato_detracciones);
-      echo $rspta ? "ok" : "Bancos no se pudo registrar";
+      echo $rspta ? "ok" : "Banco no se pudo registrar";
     } else {
       $rspta = $bancos->editar($idbancos, $nombre, $alias, $formato_cta, $formato_cci, $formato_detracciones);
-      echo $rspta ? "ok" : "Bancos no se pudo actualizar";
+      echo $rspta ? "ok" : "Banco no se pudo actualizar";
     }
-    break;
+  break;
 
   case 'desactivar_bancos':
     $rspta = $bancos->desactivar($idbancos);
-    echo $rspta ? "bancos Desactivada" : "bancos no se puede desactivar";
-    break;
+    echo $rspta ? "Banco Desactivada" : "Banco no se puede desactivar";
+  break;
 
   case 'activar_bancos':
     $rspta = $bancos->activar($idbancos);
-    echo $rspta ? "bancos activada" : "bancos no se puede activar";
-    break;
+    echo $rspta ? "Banco activada" : "Banco no se puede activar";
+  break;
+
+  case 'eliminar_bancos':
+    $rspta = $bancos->eliminar($idbancos);
+    echo $rspta ? "Banco Eliminado" : "Banco no se puede Eliminar";
+  break;
 
   case 'mostrar_bancos':
     $rspta = $bancos->mostrar($idbancos);
     //Codificar el resultado utilizando json
     echo json_encode($rspta);
-    break;
+  break;
 
   case 'listar':
     $rspta = $bancos->listar();
@@ -56,8 +61,9 @@ switch ($_GET["op"]) {
         "0"=>$cont++,
         "1" => $reg->estado
           ? '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' .
-            ' <button class="btn btn-danger btn-sm" onclick="desactivar_bancos(' . $reg->idbancos . ')"><i class="far fa-trash-alt"></i></button>'
-          : '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' . 
+            ' <button class="btn btn-danger btn-sm" onclick="desactivar_bancos(' . $reg->idbancos . ')"><i class="fas fa-times"></i></button>'.
+            ' <button class="btn btn-danger  btn-sm" onclick="eliminar_bancos(' . $reg->idbancos . ')"><i class="fas fa-skull-crossbones"></i> </button>':
+            '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' . 
             ' <button class="btn btn-primary btn-sm" onclick="activar_bancos(' . $reg->idbancos . ')"><i class="fa fa-check"></i></button>',
         "2" => '<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
           <span class="text-muted">'. $reg->alias .' </span>',
@@ -91,7 +97,7 @@ switch ($_GET["op"]) {
     ];
     echo json_encode($results);
 
-    break;
+  break;
   case "selectbancos":
     $rspta = $bancos->select();
 
@@ -105,7 +111,7 @@ switch ($_GET["op"]) {
     while ($reg = $rspta->fetch_object()) {
       echo '<option  value=' . $reg->idbancos . '>' . $reg->nombre . '</option>';
     }
-    break;
+  break;
   case 'salir':
     //Limpiamos las variables de sesión
     session_unset();
@@ -114,7 +120,7 @@ switch ($_GET["op"]) {
     //Redireccionamos al login
     header("Location: ../index.php");
 
-    break;
+  break;
 }
 
 function darFormatoBanco($numero, $formato)

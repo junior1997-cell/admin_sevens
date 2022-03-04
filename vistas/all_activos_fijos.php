@@ -152,7 +152,6 @@
                                 <th>Añadir pago</th>
                                 <th>Saldo</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
-                                <th>Estado</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -168,7 +167,6 @@
                                 <th>Añadir pago</th>
                                 <th>Saldo</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
-                                <th>Estado</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -388,6 +386,7 @@
                             <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class=" text-center">#</th>
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
@@ -402,6 +401,7 @@
                               <tbody></tbody>
                               <tfoot>
                                 <tr  class="tfoot_pago_general" >
+                                <th class=" text-center">#</th>
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
@@ -409,12 +409,13 @@
                                   <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
                                   <th style="color: #ff0000; background-color: #45c920;">
-                                    <b id="monto_total_general"></b>
+                                    <b class="text-nowrap" id="monto_total_general"></b>
                                   </th>
                                   <th>Vaucher</th>
                                   <th>Estado</th>
                                 </tr>
                                 <tr style="display: none;" class="tfoot_pago_proy"  >
+                                  <th class=" text-center">#</th>
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>

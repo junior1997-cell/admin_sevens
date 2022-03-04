@@ -367,7 +367,7 @@ function activar(idproducto) {
 function eliminar(idproducto) {
   Swal.fire({
     title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Este registro no se podrá restablecer",
+    text: "Registro no se podrá restablecer",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",

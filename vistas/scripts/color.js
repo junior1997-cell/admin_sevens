@@ -168,7 +168,27 @@ function activar(idcolor) {
     }
   });      
 }
+//Función para desactivar registros
+function eliminar_color(idcolor) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    text: "Registo no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/color.php?op=eliminar", { idcolor: idcolor }, function (e) {
 
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+    
+        tabla.ajax.reload();
+      });      
+    }
+  });   
+}
 
 init();
 

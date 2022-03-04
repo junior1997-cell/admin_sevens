@@ -39,6 +39,11 @@ switch ($_GET["op"]){
  		echo json_encode($rspta);
 	break;
 
+	case 'eliminar_unidades_m':
+		$rspta=$unidades_m->eliminar($idunidad_medida);
+ 		echo $rspta ? "Unidad de medida Eliminada" : "Unidad de medida no se puede Eliminar";
+	break;
+
 	case 'listar__unidades_m':
 		$rspta=$unidades_m->listar();
  		//Vamos a declarar un array
@@ -48,7 +53,8 @@ switch ($_GET["op"]){
  			$data[]=array(
 				"0"=>$cont++,
  				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar_unidades_m('.$reg->idunidad_medida.')"><i class="far fa-trash-alt"></i></button>':
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-times"></i></button>'.
+					' <button class="btn btn-danger  btn-sm" onclick="eliminar_unidades_m(' . $reg->idunidad_medida . ')"><i class="fas fa-skull-crossbones"></i> </button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar_unidades_m('.$reg->idunidad_medida.')"><i class="fa fa-check"></i></button>',
  				"2"=>$reg->nombre_medida,

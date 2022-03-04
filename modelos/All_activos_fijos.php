@@ -149,6 +149,15 @@ class All_activos_fijos
         return ejecutarConsulta($sql);
     }
 
+    //Implementamos un método para eliminar compra activos fijos
+    public function eliminar_compra($idcompra_af_general)
+    {
+        $sql = "UPDATE compra_af_general SET estado_delete='0' WHERE idcompra_af_general='$idcompra_af_general'";
+
+        return ejecutarConsulta($sql);
+    }
+
+
     //Implementar un método para mostrar los datos de un registro a modificar
     public function mostrar($idcompra_por_proyecto)
     {
@@ -175,7 +184,7 @@ class All_activos_fijos
             p.razon_social as razon_social, p.telefono,
             cafg.estado as estado
             FROM compra_af_general as cafg, proveedor as p 
-            WHERE cafg.idproveedor=p.idproveedor
+            WHERE cafg.idproveedor=p.idproveedor AND cafg.estado=1  AND cafg.estado_delete=1
             ORDER BY cafg.idcompra_af_general DESC";
 
         $general = ejecutarConsultaArray($sql_1);
@@ -186,7 +195,7 @@ class All_activos_fijos
 
                 $id_af_g=$value['idcompra_af_general'];
 
-                $sql_1_2 = "SELECT SUM(monto) as total_pago_compras_af FROM pago_af_general WHERE idcompra_af_general='$id_af_g' AND estado=1";
+                $sql_1_2 = "SELECT SUM(monto) as total_pago_compras_af FROM pago_af_general WHERE idcompra_af_general='$id_af_g' AND estado=1  AND estado_delete=1";
                 $total_pago= ejecutarConsultaSimpleFila($sql_1_2);
                 
 
@@ -227,7 +236,7 @@ class All_activos_fijos
             proy.nombre_codigo as nombre_codigo
             FROM compra_por_proyecto as cpp, proveedor as p, proyecto as proy
             WHERE cpp.idproveedor=p.idproveedor
-            AND cpp.idproyecto=proy.idproyecto 
+            AND cpp.idproyecto=proy.idproyecto AND cpp.estado=1  AND cpp.estado_delete=1
             ORDER BY cpp.idcompra_proyecto DESC";
 
         $proyecto  = ejecutarConsultaArray($sql_2);
@@ -238,7 +247,7 @@ class All_activos_fijos
                 
                 $idcompra=$value['idcompra_proyecto'];
 
-                $sql_2_2 = "SELECT SUM(monto) as total_pago_compras FROM pago_compras WHERE idcompra_proyecto='$idcompra' AND estado=1";
+                $sql_2_2 = "SELECT SUM(monto) as total_pago_compras FROM pago_compras WHERE idcompra_proyecto='$idcompra' AND estado=1  AND estado_delete=1";
                 $total_pago= ejecutarConsultaSimpleFila($sql_2_2);
                 
                 $sql_2_3 = "SELECT COUNT(dc.iddetalle_compra) as contador FROM detalle_compra dc, producto as p 
@@ -288,12 +297,12 @@ class All_activos_fijos
             $id=$value['idproveedor'];
             
             // activo fijos general
-            $sq_2 = "SELECT  SUM(total) as total_general FROM compra_af_general WHERE idproveedor=$id";
+            $sq_2 = "SELECT  SUM(total) as total_general FROM compra_af_general WHERE idproveedor=$id AND estado=1  AND estado_delete=1";
             $compra_general= ejecutarConsultaSimpleFila($sq_2);
 
             $total += (empty($compra_general)) ? 0 : $retVal = (empty($compra_general['total_general'])) ? 0 : floatval($compra_general['total_general']) ; 
 
-            $sql_3 = "SELECT `idcompra_proyecto` FROM `compra_por_proyecto` WHERE `idproveedor`='$id' AND `estado`=1";
+            $sql_3 = "SELECT `idcompra_proyecto` FROM `compra_por_proyecto` WHERE `idproveedor`='$id' AND  estado=1  AND estado_delete=1";
             $compras_proveedor = ejecutarConsultaArray($sql_3);
 
             foreach ($compras_proveedor as $key => $val) {
@@ -301,13 +310,13 @@ class All_activos_fijos
                 $idcompra_proyecto = $val['idcompra_proyecto'];
 
                 $sql_3_1 = "SELECT COUNT(dc.iddetalle_compra) as contador FROM detalle_compra dc, producto as p 
-                WHERE idcompra_proyecto='$idcompra_proyecto' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1";
+                WHERE idcompra_proyecto='$idcompra_proyecto' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1 AND dc.estado=1  AND dc.estado_delete=1";
                 $detalle_factura= ejecutarConsultaSimpleFila($sql_3_1);
 
                 if ( floatval($detalle_factura['contador'])>0) {
 
                     // activo fijos proyecto
-                    $sql_3 = "SELECT SUM(monto_total) as total_proyecto FROM compra_por_proyecto WHERE idcompra_proyecto='$idcompra_proyecto' AND estado =1";
+                    $sql_3 = "SELECT SUM(monto_total) as total_proyecto FROM compra_por_proyecto WHERE idcompra_proyecto='$idcompra_proyecto'  AND estado=1  AND estado_delete=1";
                     $compra_proyecto=  ejecutarConsultaSimpleFila($sql_3);
 
                     $total += (empty($compra_proyecto)) ? 0 : $retVal = (empty($compra_proyecto['total_proyecto'])) ? 0 : floatval($compra_proyecto['total_proyecto']) ; 
@@ -349,7 +358,7 @@ class All_activos_fijos
         p.razon_social as razon_social, p.telefono,
         cafg.estado as estado
         FROM compra_af_general as cafg, proveedor as p 
-        WHERE cafg.idproveedor=p.idproveedor AND  cafg.idproveedor=$idproveedor
+        WHERE cafg.idproveedor=p.idproveedor AND  cafg.idproveedor=$idproveedor  AND cafg.estado=1  AND cafg.estado_delete=1
         ORDER BY cafg.idcompra_af_general DESC";
         $compra_general= ejecutarConsultaArray($sql_1);
 
@@ -393,9 +402,8 @@ class All_activos_fijos
         proy.nombre_proyecto as nombre_proyecto,
         proy.nombre_codigo as nombre_codigo
         FROM compra_por_proyecto as cp, proveedor as p, proyecto as proy
-        WHERE cp.idproveedor=p.idproveedor AND  cp.idproveedor=$idproveedor
-        AND cp.idproyecto=proy.idproyecto 
-        ORDER BY cp.idcompra_proyecto DESC";
+        WHERE cp.idproveedor=p.idproveedor AND  cp.idproveedor=$idproveedor AND cp.estado=1  AND cp.estado_delete=1
+        AND cp.idproyecto=proy.idproyecto ORDER BY cp.idcompra_proyecto DESC";
 
         $compra_proyecto  = ejecutarConsultaArray($sql_2);
 
@@ -406,7 +414,7 @@ class All_activos_fijos
                 $idcompra_proyecto = $value['idcompra_proyecto'];
 
                 $sql_3_1 = "SELECT COUNT(dc.iddetalle_compra) as contador FROM detalle_compra dc, producto as p 
-                WHERE idcompra_proyecto='$idcompra_proyecto' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1";
+                WHERE idcompra_proyecto='$idcompra_proyecto' AND dc.idproducto=p.idproducto AND p.idcategoria_insumos_af!=1 AND dc.estado=1  AND dc.estado_delete=1";
                 $detalle_factura= ejecutarConsultaSimpleFila($sql_3_1);
 
                 if ( floatval($detalle_factura['contador'])>0) {
@@ -595,7 +603,7 @@ class All_activos_fijos
             pafg.imagen as imagen,
             pafg.estado as estado
             FROM pago_af_general pafg, bancos as bn 
-            WHERE pafg.idcompra_af_general='$idcompra_af_general' AND bn.idbancos=pafg.idbancos";
+            WHERE pafg.idcompra_af_general='$idcompra_af_general' AND bn.idbancos=pafg.idbancos AND  pafg.estado=1  AND  pafg.estado_delete=1 ORDER BY pafg.fecha_pago DESC";
         return ejecutarConsulta($sql);
     }
 
@@ -610,6 +618,13 @@ class All_activos_fijos
     public function activar_pagos($idcompra_af_general)
     {
         $sql = "UPDATE pago_af_general SET estado='1' WHERE idpago_af_general ='$idcompra_af_general'";
+        return ejecutarConsulta($sql);
+    }
+    //Implementamos un método para desactivar categorías
+    public function eliminar_pagos($idcompra_af_general)
+    {
+        //var_dump($idpago_compras);die();
+        $sql = "UPDATE pago_af_general SET estado_delete='0' WHERE idpago_af_general ='$idcompra_af_general'";
         return ejecutarConsulta($sql);
     }
     //Mostrar datos para editar Pago servicio.
@@ -642,7 +657,7 @@ class All_activos_fijos
     {
         $sql = "SELECT SUM(pafg.monto) as total_monto
 		FROM pago_af_general as pafg
-		WHERE  pafg.idcompra_af_general='$idcompra_af_general' AND pafg.estado='1'";
+		WHERE  pafg.idcompra_af_general='$idcompra_af_general' AND pafg.estado='1' AND pafg.estado_delete='1'";
         return ejecutarConsultaSimpleFila($sql);
     }
 

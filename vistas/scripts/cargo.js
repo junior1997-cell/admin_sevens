@@ -193,7 +193,7 @@ function eliminar_cargo(idcargo_trabajador) {
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
+    confirmButtonText: "Si, Eliminar!",
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/cargo.php?op=eliminar", { idcargo_trabajador: idcargo_trabajador }, function (e) {

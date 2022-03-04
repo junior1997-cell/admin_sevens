@@ -37,6 +37,13 @@ Class Unidades_m
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para eliminar unidad_medida
+	public function eliminar($idunidad_medida)
+	{
+		$sql="UPDATE unidad_medida SET estado_delete='0' WHERE idunidad_medida='$idunidad_medida'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idunidad_medida)
 	{
@@ -47,7 +54,7 @@ Class Unidades_m
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM unidad_medida ORDER BY nombre_medida ASC";
+		$sql="SELECT * FROM unidad_medida WHERE estado=1  AND estado_delete=1  ORDER BY nombre_medida ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

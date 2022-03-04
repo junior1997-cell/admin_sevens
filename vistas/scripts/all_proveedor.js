@@ -204,7 +204,7 @@ function activar(idproveedor) {
 function eliminar(idproveedor) {
   Swal.fire({
     title: "¿Está Seguro de  Eliminar  el proveedor?",
-    text: "",
+    text: "Registo no se podrá restablecer",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",

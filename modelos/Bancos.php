@@ -38,6 +38,12 @@ Class Bancos
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para eliminar bancos
+	public function eliminar($idbancos)
+	{
+		$sql="UPDATE bancos SET estado_delete='0' WHERE idbancos='$idbancos'";
+		return ejecutarConsulta($sql);
+	}
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idbancos)
 	{
@@ -48,7 +54,7 @@ Class Bancos
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM bancos WHERE idbancos > 1 ORDER BY nombre ASC";
+		$sql="SELECT * FROM bancos WHERE idbancos > 1 	AND estado=1  AND estado_delete=1 ORDER BY nombre ASC";
 		return ejecutarConsulta($sql);		
 	}
 	

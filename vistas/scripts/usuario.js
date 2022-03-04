@@ -254,7 +254,7 @@ function activar(idusuario) {
 function eliminar(idusuario) {
   Swal.fire({
     title: "¿Está Seguro de  Eliminar  el Usuario?",
-    text: "Resgisto no se podrá restablecer!",
+    text: "Registo no se podrá restablecer!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",

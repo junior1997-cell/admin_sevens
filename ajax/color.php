@@ -32,6 +32,11 @@ switch ($_GET["op"]){
  		echo $rspta ? "color activada" : "color no se puede activar";
 	break;
 
+	case 'eliminar':
+		$rspta=$color->eliminar($idcolor);
+ 		echo $rspta ? "color Eliminada" : "color no se puede Eliminar";
+	break;
+
 	case 'mostrar':
 		$rspta=$color->mostrar($idcolor);
  		//Codificar el resultado utilizando json
@@ -47,7 +52,8 @@ switch ($_GET["op"]){
  			$data[]=array(
 				"0"=>$cont++,
  				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcolor.')"><i class="far fa-trash-alt"></i></button>':
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcolor.')"><i class="fas fa-times"></i></button>'.
+					 ' <button class="btn btn-danger  btn-sm" onclick="eliminar_color(' . $reg->idcolor . ')"><i class="fas fa-skull-crossbones"></i> </button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fa fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcolor.')"><i class="fa fa-check"></i></button>',
  				"2"=>$reg->nombre_color,

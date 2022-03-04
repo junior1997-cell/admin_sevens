@@ -37,6 +37,13 @@ Class Ocupacion
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para desactivar ocupacion
+	public function eliminar($idocupacion)
+	{
+		$sql="UPDATE ocupacion SET estado_delete='0' WHERE idocupacion='$idocupacion'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idocupacion)
 	{
@@ -47,7 +54,7 @@ Class Ocupacion
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM ocupacion  ORDER BY nombre_ocupacion ASC";
+		$sql="SELECT * FROM ocupacion 	WHERE estado=1  AND estado_delete=1  ORDER BY nombre_ocupacion ASC";
 		return ejecutarConsulta($sql);		
 	}
 	//Implementar un método para listar los registros y mostrar en el select

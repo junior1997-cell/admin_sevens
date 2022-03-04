@@ -32,6 +32,11 @@ switch ($_GET["op"]){
  		echo $rspta ? "ocupacion de medida activada" : "ocupacion de medida no se puede activar";
 	break;
 
+	case 'eliminar_ocupacion':
+		$rspta=$ocupacion->eliminar($idocupacion);
+ 		echo $rspta ? "ocupacion de medida Desactivada" : "ocupacion de medida no se puede desactivar";
+	break;
+
 	case 'mostrar_ocupacion':
 		$rspta=$ocupacion->mostrar($idocupacion);
  		//Codificar el resultado utilizando json
@@ -47,7 +52,8 @@ switch ($_GET["op"]){
  			$data[]=array(
 				"0"=>$cont++,
  				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_ocupacion('.$reg->idocupacion.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar_ocupacion('.$reg->idocupacion.')"><i class="far fa-trash-alt"></i></button>':
+ 					' <button class="btn btn-danger btn-sm" onclick="desactivar_ocupacion('.$reg->idocupacion.')"><i class="fas fa-times"></i></button>'.
+					' <button class="btn btn-danger  btn-sm" onclick="eliminar_ocupacion(' . $reg->idocupacion . ')"><i class="fas fa-skull-crossbones"></i> </button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar_ocupacion('.$reg->idocupacion.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar_ocupacion('.$reg->idocupacion.')"><i class="fa fa-check"></i></button>',
  				"2"=>$reg->nombre_ocupacion,

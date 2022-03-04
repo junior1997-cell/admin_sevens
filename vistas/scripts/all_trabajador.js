@@ -998,7 +998,7 @@ function activar(idtrabajador) {
 function eliminar(idtrabajador) {
   Swal.fire({
     title: "¿Está Seguro de  Eliminar  el trabajador?",
-    text: "Resgisto no se podrá restablecer!",
+    text: "Registo no se podrá restablecer!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
