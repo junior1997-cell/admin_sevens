@@ -131,6 +131,14 @@
                                                 <!-- id hospedaje -->
                                                 <input type="hidden" name="idtransporte" id="idtransporte" />
                                                 <!-- Tipo de comprobante -->
+                                                <!--Proveedor-->
+                                                <div class="col-lg-12" >
+                                                    <div class="form-group">
+                                                    <label for="idproveedor">Proveedor</label>
+                                                    <select name="idproveedor" id="idproveedor" class="form-control select2"  placeholder="Seleccinar un proveedor">
+                                                    </select>
+                                                    </div>
+                                                </div>
                                                 <!--forma pago-->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
@@ -142,6 +150,7 @@
                                                     </select>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
                                                     <label for="tipo_comprobante">Tipo Comprobante</label>
@@ -156,7 +165,7 @@
                                                 <!-- Código-->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="codigo">Núm. comprobante </label>                               
+                                                        <label class="nro_comprobante" for="codigo">Núm. comprobante </label>                               
                                                         <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
                                                     </div>                                                        
                                                 </div>
@@ -180,8 +189,8 @@
                                                 <!--Precio Unitario-->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="marca">Precio Unitario</label>
-                                                        <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
+                                                        <label for="precio_unitario">Precio Unitario</label>
+                                                        <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
                                                     </div>                                                  
 
                                                 </div>
@@ -213,8 +222,8 @@
                                                 <!-- tipo_viajero-->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="unidad">Tipo clasificación</label>
-                                                        <select name="tipo_viajero"  id="tipo_viajero" class="form-control select2"  style="width: 100%;">
+                                                        <label for="tipo_viajero">Tipo clasificación</label>
+                                                        <select name="tipo_viajero"  id="tipo_viajero" class="form-control select2"  style="width: 100%;" onclick="selecct_glosa();" onchange="selecct_glosa();">
                                                         <option value="Personal">Personal</option>
                                                         <option value="Material">Material</option>
                                                         </select>
@@ -245,18 +254,38 @@
                                                         <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
+                                                <!--Descripcion-->
+                                                <div class="col-lg-12 class_pading">
+                                                    <div class="form-group">
+                                                        <label for="glosa">Glosa</label> <br>
+                                                        <textarea name="glosa" id="glosa" class="form-control" rows="1" readonly></textarea>
+                                                    </div>                                              
+                                                </div>                                              
                                                 <!-- Factura -->
-                                                <div class="col-md-6 col-lg-6">
-                                                    <label for="foto2">Factura <b style="color: red;">(Imagen o PDF)</b></label> <br>
-                                                      <div class="text-center">
-                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
-                                                          <div id="ver_pdf"></div>
-                                                      </div>
-                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                                <div class="col-md-6" >                               
+                                                    <div class="row text-center">
+                                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                                        <label for="cip" class="control-label" > Baucher de deposito </label>
+                                                    </div>
+                                                    <div class="col-md-6 text-center">
+                                                        <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                                        <i class="fas fa-upload"></i> Subir.
+                                                        </button>
+                                                        <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                                        <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                                    </div>
+                                                    <div class="col-md-6 text-center">
+                                                        <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');">
+                                                        <i class="fas fa-redo"></i> Recargar.
+                                                        </button>
+                                                    </div>
+                                                    </div>                              
+                                                    <div id="doc1_ver" class="text-center mt-4">
+                                                    <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                                    </div>
+                                                    <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                                                </div>
 
-                                                </div> 
                                             </div>
 
                                             <div class="row" id="cargando-2-fomulario" style="display: none;">

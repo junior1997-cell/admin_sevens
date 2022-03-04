@@ -16,14 +16,19 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
+  //Mostramos los proveedores
+  $.post("../ajax/transporte.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
+
   listar();  
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-transporte").submit();});
 
-  //ficha tecnica
-  $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
-  $("#foto2").change(function(e) { addficha(e,$("#foto2").attr("id")) });
-
+  //Initialize Select2 tipo_viajero
+  $("#idproveedor").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar un proveedor",
+    allowClear: true,
+  });
   //Initialize Select2 tipo_viajero
   $("#tipo_viajero").select2({
     theme: "bootstrap4",
@@ -49,109 +54,29 @@ function init() {
     allowClear: true,
   });
 
+  $("#idproveedor").val("null").trigger("change");
   $("#tipo_viajero").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#tipo_ruta").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
   
-
   // Formato para telefono
   $("[data-mask]").inputmask();
 
 
 }
-/* PREVISUALIZAR LOS PDF */
-function addficha(e,id) {
-  // colocamos cargando hasta que se vizualice
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+// abrimos el navegador de archivos
+$("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
+$("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
 
-	console.log(id);
+// Eliminamos el doc 1
+function doc1_eliminar() {
 
-	var file = e.target.files[0], imageType = /application.*/;
-	
-	if (e.target.files[0]) {
+	$("#doc1").val("");
 
-		var sizeByte = file.size;
+	$("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (extrae_extencion(file.name)=='pdf' || extrae_extencion(file.name)=='jpeg'|| extrae_extencion(file.name)=='jpg'|| extrae_extencion(file.name)=='png'|| extrae_extencion(file.name)=='webp'){
-      
-			if (sizekiloBytes <= 10240) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-          if (extrae_extencion(file.name) =='pdf') {
-            $('#foto2_i').hide();
-           $('#ver_pdf').html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          }else{
-					$("#"+id+"_i").attr("src", result);
-          $('#foto2_i').show();
-          }
-
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
-              file.name +
-              '</div>'+
-              '<div class="col-md-12">'+
-              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-          
-					toastr.success('Imagen aceptada.')
-        
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-
-				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-
-		}else{
-      // return;
-			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>');
-
-      $("#"+id+"_i").attr("src", "../dist/img/default/pdf.png");
-
-		}
-
-	}else{
-
-		toastr.error('Seleccione una Imagen');
-
-
-      $("#"+id+"_i").attr("src", "../dist/img/default/pdf.png");
-   
-		$("#"+id+"_nombre").html("");
-	}
-}
-
-function foto2_eliminar() {
-
-	$("#foto2").val("");
-
-	$("#ver_pdf").html("");
-
-	$("#foto2_i").attr("src", "../dist/img/default/pdf.png");
-
-	$("#foto2_nombre").html("");
-  $('#foto2_i').show();
+	$("#doc1_nombre").html("");
 }
 
 //Función limpiar
@@ -159,6 +84,7 @@ function limpiar() {
 
  // idtransporte,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion
   $("#idtransporte").val("");
+  $("#idproveedor").val("");
   $("#fecha_viaje").val(""); 
   $("#cantidad").val(""); 
  // $("#unidad").val(""); 
@@ -177,13 +103,10 @@ function limpiar() {
   $("#ruta").val(""); 
   $("#descripcion").val("");
 
-  $("#foto2_i").attr("src", "../dist/img/default/pdf.png");
-  $("#foto2").val("");
-	$("#foto2_actual").val("");  
-	$("#ver_pdf").val("");  
-  $("#foto2_nombre").html("");
-  $('#foto2_i').show();
-  $('#ver_pdf').hide();
+  $("#doc_old_1").val("");
+  $("#doc1").val("");  
+  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc1_nombre').html("");
 
   $("#tipo_viajero").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
@@ -206,7 +129,7 @@ function comprob_factura() {
  // console.log('monto '+ monto +' cantidad '+ cantidad +' precio_unitario '+ precio_unitario);
 
  if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' ) {
-
+  $(".nro_comprobante").html("Núm. Comprobante");
     var subtotal=0; var igv=0;
 
     $("#subtotal").val("");
@@ -222,14 +145,52 @@ function comprob_factura() {
     $("#igv").val(igv.toFixed(4));
 
   } else {
+    if ($("#tipo_comprobante").select2("val") =="Ninguno") {
+     
+      $(".nro_comprobante").html("Núm. de Operación");
+      
+      $(".subtotal").val(monto.toFixed(2));
+      $("#subtotal").val(monto);
 
-    $(".subtotal").val(monto.toFixed(2));
-    $("#subtotal").val(monto);
+      $(".igv").val("0.00");
+      $("#igv").val("0.00");
 
-    $(".igv").val("0.00");
-    $("#igv").val("0.00");
+    } else {
+      $(".nro_comprobante").html("Núm. Comprobante");
+        
+      $(".subtotal").val(monto.toFixed(2));
+      $("#subtotal").val(monto);
+
+      $(".igv").val("0.00");
+      $("#igv").val("0.00");
+    }
+
   }
   
+  
+}
+
+function selecct_glosa() {
+
+  if ($("#tipo_viajero").select2("val") =="" || $("#tipo_viajero").select2("val") ==null ) {
+   // toastr.error('debe seleccionar un tipo de clasificación');
+  }else{
+
+     $("#glosa").val("");
+   
+    if ($("#tipo_viajero").select2("val")=="Personal") {
+
+      $("#glosa").val("Transporte de personal");
+     
+
+    } else {
+
+      $("#glosa").val("Transporte de material y/o equipos");
+     
+    }
+    
+    toastr.success('Glosa Agregada correctamente !!');
+  }
   
 }
 
@@ -255,6 +216,10 @@ function listar() {
         // columna: #
         if (data[0] != '') {
           $("td", row).eq(0).addClass('text-center');
+        }
+        // columna: sub total
+        if (data[1] != "") {
+          $("td", row).eq(1).addClass("text-nowrap");
         }
         // columna: sub total
         if (data[5] != '') {
@@ -298,18 +263,18 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
   if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/img/comprob_transporte/"+comprobante);
+    $('#img-factura').attr("src", "../dist/docs/transporte/comprobante/"+comprobante);
 
-    $("#iddescargar").attr("href","../dist/img/comprob_transporte/"+comprobante);
+    $("#iddescargar").attr("href","../dist/docs/transporte/comprobante/"+comprobante);
 
   }else{
     $('#img-factura').hide();
     
     $('#ver_fact_pdf').show();
 
-    $('#ver_fact_pdf').html('<iframe src="../dist/img/comprob_transporte/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $('#ver_fact_pdf').html('<iframe src="../dist/docs/transporte/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
 
-    $("#iddescargar").attr("href","../dist/img/comprob_transporte/"+comprobante);
+    $("#iddescargar").attr("href","../dist/docs/transporte/comprobante/"+comprobante);
   }
 
 
@@ -358,6 +323,7 @@ function mostrar(idtransporte) {
 
   $("#modal-agregar-transporte").modal("show")
    //$tipo_comprobante,$nro_comprobante,$subtotal,$igv 
+  $("#idproveedor").val("").trigger("change"); 
   $("#tipo_ruta").val("").trigger("change"); 
   $("#tipo_comprobante").val("").trigger("change"); 
   $("#tipo_viajero").val("").trigger("change"); 
@@ -372,6 +338,7 @@ function mostrar(idtransporte) {
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
 
+    $("#idproveedor").val(data.idproveedor).trigger("change"); 
     $("#tipo_viajero").val(data.tipo_viajero).trigger("change"); 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change"); 
     $("#tipo_ruta").val(data.tipo_ruta).trigger("change"); 
@@ -380,6 +347,7 @@ function mostrar(idtransporte) {
     $("#idtransporte").val(data.idtransporte);
     $("#fecha_viaje").val(data.fecha_viaje); 
     $("#nro_comprobante").val(data.numero_comprobante);
+    $("#glosa").val(data.glosa);
 
     $("#cantidad").val(data.cantidad); 
     $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2)); 
@@ -396,29 +364,40 @@ function mostrar(idtransporte) {
     $("#ruta").val(data.ruta); 
     $("#descripcion").val(data.descripcion);
     /**-------------------------*/
-  if (data.comprobante != "") {
-    $("#foto2_actual").val(data.comprobante);
-    $('#ver_pdf').html('');
-    $('#foto2_i').attr("src", "");
+    if (data.comprobante == "" || data.comprobante == null  ) {
 
-    $('#foto2_i').hide();
-    $('#ver_pdf').show();
-    $('#ver_pdf').html('<iframe src="../dist/img/comprob_transporte/'+data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-    
-    $("#foto2_nombre").html(''+
-    '<div class="row">'+
-      '<div class="col-md-12">.</div>'+
-      '<div class="col-md-12">'+
-      '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-      '</div>'+
-    '</div>'+
-  '');
-  }else{
-    $('#foto2_i').show();
-    $('#ver_pdf').html('');
-    $("#foto2_nombre").html('');
-    $('#ver_pdf').hide();
-  }
+      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+      $("#doc1_nombre").html('');
+
+      $("#doc_old_1").val(""); $("#doc1").val("");
+
+    } else {
+
+      $("#doc_old_1").val(data.comprobante); 
+
+      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
+      
+      // cargamos la imagen adecuada par el archivo
+      if ( extrae_extencion(data.comprobante) == "pdf" ) {
+
+        $("#doc1_ver").html('<iframe src="../dist/docs/transporte/comprobante/'+data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+      }else{
+        if (
+          extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
+          extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
+          extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
+          extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
+
+          $("#doc1_ver").html(`<img src="../dist/docs/transporte/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          
+        } else {
+          $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+        }        
+      }      
+    }
+
   });
 }
 
@@ -436,9 +415,18 @@ function ver_datos(idtransporte) {
         <div class="card-body">
           <table class="table table-hover table-bordered">        
             <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Proveedor</th>
+                <td>${data.razon_social} <br>${data.ruc} </td>
+                
+              </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Descripción</th>
                 <td>${data.descripcion}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Glosa</th>
+                <td>${data.glosa}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo clasificación</th>
@@ -553,6 +541,30 @@ function activar(idtransporte) {
       
     }
   });      
+}
+
+
+//Función para desactivar registros
+function eliminar(idtransporte) {
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    text: "Registro no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/transporte.php?op=eliminar", { idtransporte: idtransporte }, function (e) {
+
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+    
+        tabla.ajax.reload();
+        total();
+      });      
+    }
+  });   
 }
 
 init();
@@ -680,5 +692,267 @@ function formato_miles(num) {
       num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
   return (((sign) ? '' : '-') + num + '.' + cents);
 }
+
+/* PREVISUALIZAR LOS DOCUMENTOS */
+function addDocs(e,id) {
+
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
+
+	var file = e.target.files[0], archivoType = /image.*|application.*/;
+	
+	if (e.target.files[0]) {
+    
+		var sizeByte = file.size; console.log(file.type);
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(archivoType) ){
+			// return;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .pdf, .png. .jpeg, .jpg, .jpe, .webp, .svg',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+
+		}else{
+
+			if (sizekiloBytes <= 40960) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+
+          // cargamos la imagen adecuada par el archivo
+				  if ( extrae_extencion(file.name) == "doc") {
+            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+          } else {
+            if ( extrae_extencion(file.name) == "docx" ) {
+              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+            }else{
+              if ( extrae_extencion(file.name) == "pdf" ) {
+                $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+              }else{
+                if ( extrae_extencion(file.name) == "csv" ) {
+                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+                } else {
+                  if ( extrae_extencion(file.name) == "xls" ) {
+                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                  } else {
+                    if ( extrae_extencion(file.name) == "xlsx" ) {
+                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                    } else {
+                      if ( extrae_extencion(file.name) == "xlsm" ) {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                      } else {
+                        if (
+                          extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
+                          extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
+                          extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
+                          extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
+
+                          $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+                          
+                        } else {
+                          $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                        }
+                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } 
+					$("#"+id+"_nombre").html(`<div class="row">
+            <div class="col-md-12">
+              <i> ${file.name} </i>
+            </div>
+            <div class="col-md-12">
+              <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
+            </div>
+          </div>`);
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: `El documento: ${file.name.toUpperCase()} es muy pesado.`,
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+        $("#"+id+"_nombre").html("");
+				$("#"+id).val("");
+			}
+		}
+	}else{
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    })
+		 
+    $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+		$("#"+id+"_nombre").html("");
+    $("#"+id).val("");
+	}	
+}
+
+// recargar un doc para ver
+function re_visualizacion(id, carpeta) {
+
+  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
+
+  pdffile     = document.getElementById("doc"+id+"").files[0];
+
+  var antiguopdf  = $("#doc_old_"+id+"").val();
+
+  if(pdffile === undefined){
+
+    if (antiguopdf == "") {
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Seleccione un documento',
+        showConfirmButton: false,
+        timer: 1500
+      })
+
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+		  $("#doc"+id+"_nombre").html("");
+
+    } else {
+      if ( extrae_extencion(antiguopdf) == "doc") {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      } else {
+        if ( extrae_extencion(antiguopdf) == "docx" ) {
+          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+        } else {
+          if ( extrae_extencion(antiguopdf) == "pdf" ) { 
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            toastr.success('Documento vizualizado correctamente!!!')
+          } else {
+            if ( extrae_extencion(antiguopdf) == "csv" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+            } else {
+              if ( extrae_extencion(antiguopdf) == "xls" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+              } else {
+                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                } else {
+                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                  } else {
+                    if (
+                      extrae_extencion(antiguopdf) == "jpeg" || extrae_extencion(antiguopdf) == "jpg" || extrae_extencion(antiguopdf) == "jpe" ||
+                      extrae_extencion(antiguopdf) == "jfif" || extrae_extencion(antiguopdf) == "gif" || extrae_extencion(antiguopdf) == "png" ||
+                      extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
+                      extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
+  
+                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
+                      toastr.success('Documento vizualizado correctamente!!!');
+                    } else {
+                      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                    }                    
+                  }
+                }
+              }
+            }
+          }
+        }
+      }      
+    }
+    // console.log('hola'+dr);
+  }else{
+
+    pdffile_url=URL.createObjectURL(pdffile);
+
+    // cargamos la imagen adecuada par el archivo
+    if ( extrae_extencion(pdffile.name) == "doc") {
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+    } else {
+      if ( extrae_extencion(pdffile.name) == "docx" ) {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      }else{
+        if ( extrae_extencion(pdffile.name) == "pdf" ) {
+          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="310"> </iframe>');
+          toastr.success('Documento vizualizado correctamente!!!');
+        }else{
+          if ( extrae_extencion(pdffile.name) == "csv" ) {
+            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+          } else {
+            if ( extrae_extencion(pdffile.name) == "xls" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+            } else {
+              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+              } else {
+                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+                } else {
+                  if (
+                    extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
+                    extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
+                    extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
+                    extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
+
+                    $("#doc"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="100%" >`);
+                    toastr.success('Documento vizualizado correctamente!!!');
+                  } else {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+                  }                  
+                }
+              }
+            }
+          }
+        }
+      }
+    }     	
+    console.log(pdffile);
+  }
+}
+
 
 
