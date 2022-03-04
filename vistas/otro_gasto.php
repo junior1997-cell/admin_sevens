@@ -148,8 +148,55 @@
                                   </select>
                                 </div>
                               </div>
+                              <!-- RUC style="display: none;"-->
+                              <div class="col-lg-4 div_ruc" style="display: none;"  >
+                                <div class="form-group">
+                                  <label for="ruc">R.U.C</label>
+                                  <div class="input-group">
+                                    <input type="number" name="ruc" class="form-control" id="ruc" placeholder="N° de documento" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat();">
+                                      <span class="input-group-text" style="cursor: pointer;">
+                                        <i class="fas fa-search text-primary" id="search"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Razón social--> 
+                              <div class="col-lg-8 div_razon_social" style="display: none;">
+                                <div class="form-group">
+                                  <label class="razon_social" for="razon_social">Razón social </label>
+                                  <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly />
+                                  <input type="hidden" name="direccion" id="direccion"   />
+                                </div>
+                              </div>
+                              <!-- Glosa-->
+                              <div class="col-lg-4" id="content-t-comprob">
+                                <div class="form-group">
+                                  <label for="glosa">Selecc. Glosa</label>
+                                  <select name="glosa" id="glosa" class="form-control select2" placeholder="Seleccinar">
+                                  
+                                    <option value="Alimentacion">Alimentacion</option>
+                                    <option value="Combustible">Combustible</option>
+                                    <option value="Material">Material</option>
+                                    <option value="Ploteo">Ploteo</option>
+                                    <option value="Agua">Agua</option>
+                                    <option value="Compras">Compras</option>
+                                    <option value="Sierra y exagonales">Sierra y exagonales</option>
+                                    <option value="Herramientas">Herramientas</option>
+                                    <option value="Acero y cemento">Acero y cemento</option>
+                                    <option value="Estacionamiento">Estacionamiento</option>
+                                    <option value="Personales">Personales</option>
+                                    <option value="Pasaje">Pasaje</option>
+                                    <option value="EPPS">EPPS</option>
+                                    <option value="Acero y cemento">Acero y cemento</option>
+                                    <option value="Otros">Otros</option>
+                                  </select>
+                                </div>
+                              </div>
                               <!-- Código-->
-                              <div class="col-lg-6">
+                              <div class="col-lg-4">
                                 <div class="form-group">
                                   <label class="nro_comprobante" for="nro_comprobante">Núm. comprobante </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
@@ -157,7 +204,7 @@
                               </div>
 
                               <!-- Fecha 1  -->
-                              <div class="col-lg-6 class_pading">
+                              <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="fecha_g">Fecha Emisión</label>
                                   <input type="date" name="fecha_g" class="form-control" id="fecha_g" />

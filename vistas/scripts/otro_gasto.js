@@ -29,6 +29,13 @@ function init() {
     allowClear: true,
   });
 
+  //Initialize Select2 glosa
+  $("#glosa").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar glosa",
+    allowClear: true,
+  });
+  $("#glosa").val("null").trigger("change");
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
@@ -52,6 +59,9 @@ function limpiar() {
   $("#idotro_gasto").val("");
   $("#fecha_g").val("");  
   $("#nro_comprobante").val("");
+  $("#ruc").val("");
+  $("#razon_social").val("");
+  $("#direccion").val("");
   $("#subtotal").val("");
   $("#igv").val("");
   $("#precio_parcial").val("");
@@ -64,6 +74,7 @@ function limpiar() {
 
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
+  $("#glosa").val("null").trigger("change");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -79,6 +90,10 @@ function comprob_factura() {
 
     $(".nro_comprobante").html("Núm. Comprobante");
 
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+
+    $("#ruc").val(""); $("#razon_social").val("");
+
     if (precio_parcial == null || precio_parcial == "") {
       $("#subtotal").val(0);
       $("#igv").val(0);    
@@ -93,6 +108,10 @@ function comprob_factura() {
 
       $(".nro_comprobante").html("Núm. de Operación");
 
+      $(".div_ruc").hide(); $(".div_razon_social").hide();
+
+      $("#ruc").val(""); $("#razon_social").val("");
+
       if (precio_parcial == null || precio_parcial == "") {
         $("#subtotal").val(0);
         $("#igv").val(0);    
@@ -106,6 +125,8 @@ function comprob_factura() {
       if ($("#tipo_comprobante").select2("val") == "Factura") {
 
         $(".nro_comprobante").html("Núm. Comprobante");
+
+        $(".div_ruc").show(); $(".div_razon_social").show();
 
         if (precio_parcial == null || precio_parcial == "") {
           $("#subtotal").val(0);
@@ -127,6 +148,10 @@ function comprob_factura() {
       } else {      
        
         $(".nro_comprobante").html("Núm. Comprobante");
+
+        $(".div_ruc").hide(); $(".div_razon_social").hide();
+
+        $("#ruc").val(""); $("#razon_social").val("");
 
         if (precio_parcial == null || precio_parcial == "") {
           $("#subtotal").val(0);
@@ -166,6 +191,10 @@ function listar() {
         // columna: #
         if (data[0] != "") {
           $("td", row).eq(0).addClass("text-center");
+        }
+        // columna: sub total
+        if (data[1] != "") {
+          $("td", row).eq(1).addClass("text-nowrap");
         }
         // columna: sub total
         if (data[5] != "") {
@@ -328,9 +357,14 @@ function mostrar(idotro_gasto) {
 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
     $("#forma_pago").val(data.forma_de_pago).trigger("change");
+    $("#glosa").val(data.glosa).trigger("change");
     $("#idotro_gasto").val(data.idotro_gasto);
     $("#fecha_g").val(data.fecha_g);
-    $("#nro_comprobante").val(data.numero_comprobante);    
+    $("#nro_comprobante").val(data.numero_comprobante);  
+    $("#ruc").val(data.ruc);
+    $("#razon_social").val(data.razon_social);
+    $("#direccion").val(data.direccion);
+
     $("#subtotal").val(data.subtotal);
     $("#igv").val(data.igv);
     $("#precio_parcial").val(data.costo_parcial);
@@ -496,6 +530,28 @@ function activar(idotro_gasto) {
     if (result.isConfirmed) {
       $.post("../ajax/otro_gasto.php?op=activar", { idotro_gasto: idotro_gasto }, function (e) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
+
+        tabla.ajax.reload();
+        total();
+      });
+    }
+  });
+}
+
+//Función para desactivar registros
+function eliminar(idotro_gasto) {
+  Swal.fire({
+    title: "¿Está Seguro de  eliminar el registro?",
+    text: "Registro no se podrá restablecer",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/otro_gasto.php?op=eliminar", { idotro_gasto: idotro_gasto }, function (e) {
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
         tabla.ajax.reload();
         total();
@@ -879,4 +935,97 @@ function re_visualizacion(id, carpeta) {
     }     	
     console.log(pdffile);
   }
+}
+
+// Buscar  SUNAT
+function buscar_sunat() {
+  $("#search").hide();
+
+  $("#charge").show();
+
+  let tipo_doc = $("#tipo_comprobante").val();
+
+  let ruc = $("#ruc").val(); 
+   
+  if (tipo_doc == "Factura") {
+
+    if (ruc.length == "11") {
+      $.post("../ajax/persona.php?op=sunat", { ruc: ruc }, function (data, status) {
+
+        data = JSON.parse(data);    console.log(data);
+
+        if (data == null) {
+          $("#search").show();
+  
+          $("#charge").hide();
+  
+          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+          
+        } else {
+
+          if (data.success == false) {
+
+            $("#search").show();
+
+            $("#charge").hide();
+
+            toastr.error("Datos no encontrados en la SUNAT!!!");
+            
+          } else {
+
+            if (data.estado == "ACTIVO") {
+
+              $("#search").show();
+
+              $("#charge").hide();
+
+              data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
+
+              data.razonSocial == null ? $("#razon_social").val(data.nombreComercial) : $("#razon_social").val(data.razonSocial);
+
+              var departamento = (data.departamento == null ? "" : data.departamento); 
+              var provincia = (data.provincia == null ? "" : data.provincia);
+              var distrito = (data.distrito == null ? "" : data.distrito);                
+
+              data.direccion == null ? $("#direccion").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion").val(data.direccion);
+
+              toastr.success("Razón social encontrado!!");
+
+            } else {
+
+              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+
+              $("#search").show();
+
+              $("#charge").hide();
+
+              $("#nombre").val(data.razonSocial);
+
+              data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
+
+              data.razonSocial == null ? $("#razon_social").val(data.nombreComercial) : $("#razon_social").val(data.razonSocial);
+              
+              data.direccion == null ? $("#direccion").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion").val(data.direccion);
+
+            }
+          }
+        }          
+      });
+    } else {
+      $("#search").show();
+
+      $("#charge").hide();
+
+      toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
+    }
+  } else {
+
+      $("#search").show();
+
+      $("#charge").hide();
+
+      toastr.error("Asegúrese que el tipo de comprobante sea Factura!!");
+
+  }
+  
 }

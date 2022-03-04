@@ -26,7 +26,12 @@
       $igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
       $precio_parcial = isset($_POST["precio_parcial"]) ? limpiarCadena($_POST["precio_parcial"]) : "";
       $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
-      
+
+      $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
+      $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
+      $direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
+      $glosa = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
+
       $foto2 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
       
       switch ($_GET["op"]) {
@@ -51,7 +56,7 @@
       
           if (empty($idotro_gasto)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otro_gasto->insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante);
+            $rspta = $otro_gasto->insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
       
@@ -69,7 +74,7 @@
               }
             }
       
-            $rspta = $otro_gasto->editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante);
+            $rspta = $otro_gasto->editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
             //var_dump($idotro_gasto,$idproveedor);
             echo $rspta ? "ok" : "No se pudo actualizar";
           }
@@ -79,7 +84,7 @@
       
           $rspta = $otro_gasto->desactivar($idotro_gasto);
       
-          echo $rspta ? "material Desactivado" : "material no se puede desactivar";
+          echo $rspta ? " Desactivado" : "No se puede desactivar";
       
         break;
       
@@ -87,7 +92,15 @@
       
           $rspta = $otro_gasto->activar($idotro_gasto);
       
-          echo $rspta ? "Material activado" : "material no se puede activar";
+          echo $rspta ? "Activado" : "No se puede activar";
+      
+        break;
+
+        case 'eliminar':
+      
+          $rspta = $otro_gasto->eliminar($idotro_gasto);
+      
+          echo $rspta ? "Elinado" : "No se puede Eliminar";
       
         break;
       
@@ -118,7 +131,7 @@
             // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
       
             empty($reg->comprobante)
-              ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
+              ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
               : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
             if (strlen($reg->descripcion) >= 20) {
               $descripcion = substr($reg->descripcion, 0, 20) . '...';
@@ -129,22 +142,13 @@
             $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
             $data[] = [
               "0" => $cont++,
-              "1" => $reg->estado
-                ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
-                  $reg->idotro_gasto .
-                  ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger btn-sm" onclick="desactivar(' .
-                  $reg->idotro_gasto .
-                  ')"><i class="far fa-trash-alt"></i></button>'
-                : '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
-                  $reg->idotro_gasto .
-                  ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' .
-                  $reg->idotro_gasto .
-                  ')"><i class="fa fa-check"></i></button>',
+              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idotro_gasto . ')"><i class="far fa-trash-alt"></i></button>'.
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_gasto . ')"><i class="fa fa-check"></i></button>',
               "2" => $reg->forma_de_pago,
-              "3" =>
-                '<div class="user-block">
+              "3" =>'<div class="user-block">
                   <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
                 $reg->tipo_comprobante .
                 '</p> </span>
@@ -153,9 +157,9 @@
                 '</span>         
                 </div>',
               "4" => date("d/m/Y", strtotime($reg->fecha_g)),
-              "5" => number_format($reg->subtotal, 2, '.', ','),
-              "6" => number_format($reg->igv, 2, '.', ','),
-              "7" => number_format($reg->costo_parcial, 2, '.', ','),
+              "5" =>'S/. '. number_format($reg->subtotal, 2, '.', ','),
+              "6" =>'S/. '. number_format($reg->igv, 2, '.', ','),
+              "7" =>'S/. '. number_format($reg->costo_parcial, 2, '.', ','),
               "8" => '<textarea cols="30" rows="1" class="text_area_clss" readonly="">' . $reg->descripcion . '</textarea>',
               "9" => $comprobante,
               "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
