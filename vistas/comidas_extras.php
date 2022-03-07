@@ -76,7 +76,7 @@
                                                     <th>Fecha</th>
                                                     <th>Sub total</th>
                                                     <th>Igv</th>
-                                                    <th>Monto Total </th>
+                                                    <th>Total </th>
                                                     <th>Descripción </th>
                                                     <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                                     <th>Estado</th>
@@ -92,7 +92,7 @@
                                                     <th>Fecha</th>
                                                     <th>Sub total</th>
                                                     <th>Igv</th>
-                                                    <th style="background-color: #ffdd00;" class="text-right" id="total_monto"></th>
+                                                    <th style="background-color: #ffdd00;" class="text-right text-nowrap" id="total_monto"></th>
                                                     <th>Descripción </th>
                                                     <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                                     <th>Estado</th>
@@ -134,7 +134,7 @@
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                    <label for="forma_pago">Forma Pago</label>
+                                                    <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
                                                     <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
                                                         <option value="Transferencia">Transferencia</option>
                                                         <option value="Efectivo">Efectivo</option>
@@ -145,7 +145,7 @@
                                                 <!-- Tipo de comprobante -->
                                                 <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
-                                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                                    <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
                                                     <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
                                                         <option value="Ninguno">Ninguno</option>
                                                         <option value="Boleta">Boleta</option>
@@ -154,17 +154,40 @@
                                                     </select>
                                                     </div>
                                                 </div>
+                                                <!-- RUC style="display: none;"-->
+                                                <div class="col-lg-4 div_ruc" style="display: none;"  >
+                                                    <div class="form-group">
+                                                    <label for="ruc">R.U.C</label>
+                                                    <div class="input-group">
+                                                        <input type="number" name="ruc" class="form-control" id="ruc" placeholder="N° de documento" />
+                                                        <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat();">
+                                                        <span class="input-group-text" style="cursor: pointer;">
+                                                            <i class="fas fa-search text-primary" id="search"></i>
+                                                            <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                                        </span>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Razón social--> 
+                                                <div class="col-lg-8 div_razon_social" style="display: none;">
+                                                    <div class="form-group">
+                                                    <label class="razon_social" for="razon_social">Razón social </label>
+                                                    <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly />
+                                                    <input type="hidden" name="direccion" id="direccion"   />
+                                                    </div>
+                                                </div>
                                                 <!-- Código-->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label for="codigo">Núm. comprobante </label>                               
+                                                        <label for="codigo" class="nro_comprobante">Núm. comprobante </label>                               
                                                         <input type="text"  name="nro_comprobante" id="nro_comprobante" class="form-control"  placeholder="Código"> 
                                                     </div>                                                        
                                                 </div>
                                                 <!--Fecha-->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="fecha">Fecha</label>
+                                                        <label for="fecha">Fecha <sup class="text-danger">*</sup></label>
                                                         <input type="date" name="fecha" class="form-control" id="fecha" />
                                                     </div>
                                                 </div>
@@ -196,22 +219,34 @@
                                                 <!--Descripcion-->
                                                 <div class="col-lg-12 class_pading">
                                                     <div class="form-group">
-                                                        <label for="descripcion_pago">Descripción <span style="font-size: 12px;font-weight: normal;" >ej. Almuerzo, aniversario de la empresa</span> </label> <br>
+                                                        <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup> <span style="font-size: 12px;font-weight: normal;" >ej. Almuerzo, aniversario de la empresa</span> </label> <br>
                                                         <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
                                                 <!-- Factura -->
-                                                <div class="col-md-6 col-lg-6">
-                                                    <label for="foto2">Factura <b style="color: red;">(Imagen o PDF)</b></label> <br>
-                                                      <div class="text-center">
-                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
-                                                          <div id="ver_pdf"></div>
-                                                      </div>
-                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
-
-                                                </div> 
+                                                <div class="col-md-6" >                               
+                                                    <div class="row text-center">
+                                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                                        <label for="cip" class="control-label" > Comprobante </label>
+                                                    </div>
+                                                    <div class="col-md-6 text-center">
+                                                        <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                                        <i class="fas fa-upload"></i> Subir.
+                                                        </button>
+                                                        <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                                        <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                                    </div>
+                                                    <div class="col-md-6 text-center">
+                                                        <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');">
+                                                        <i class="fas fa-redo"></i> Recargar.
+                                                        </button>
+                                                    </div>
+                                                    </div>                              
+                                                    <div id="doc1_ver" class="text-center mt-4">
+                                                    <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                                    </div>
+                                                    <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                                                </div>
                                             </div>
 
                                             <div class="row" id="cargando-2-fomulario" style="display: none;">

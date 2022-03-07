@@ -11,17 +11,17 @@ Class Comidas_extras
 	}
 	//$idcomida_extra,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion)
 	{
 	
-		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante) 
-		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
+		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante,ruc,razon_social,direccion) 
+		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante','$ruc','$razon_social','$direccion')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion)
 	{
 		$sql="UPDATE comida_extra SET 
 		idproyecto='$idproyecto',
@@ -33,8 +33,11 @@ Class Comidas_extras
 		tipo_comprobante='$tipo_comprobante',
 		numero_comprobante='$nro_comprobante',
 		subtotal='$subtotal',
-		igv='$igv'
-
+		igv='$igv',
+		ruc='$ruc',
+		razon_social='$razon_social',
+		direccion='$direccion'
+		
 		WHERE idcomida_extra ='$idcomida_extra'";	
 		return ejecutarConsulta($sql);	
 	}
@@ -52,19 +55,24 @@ Class Comidas_extras
 		$sql="UPDATE comida_extra SET estado='1' WHERE idcomida_extra ='$idcomida_extra'";
 		return ejecutarConsulta($sql);
 	}
+	//Implementamos un método para desactivar categorías
+	public function eliminar($idcomida_extra )
+	{
+		$sql="UPDATE comida_extra SET estado_delete='0' WHERE idcomida_extra ='$idcomida_extra'";
+		return ejecutarConsulta($sql);
+	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idcomida_extra )
 	{
-		$sql="SELECT*FROM comida_extra   
-		WHERE idcomida_extra ='$idcomida_extra'";
+		$sql="SELECT*FROM comida_extra WHERE idcomida_extra ='$idcomida_extra'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM comida_extra WHERE idproyecto='$idproyecto' ORDER BY idcomida_extra DESC";
+		$sql="SELECT*FROM comida_extra WHERE idproyecto='$idproyecto' AND estado_delete='1' AND  estado='1' ORDER BY idcomida_extra DESC";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -76,7 +84,7 @@ Class Comidas_extras
 	}
 	//total
 	public function total($idproyecto){
-		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM comida_extra WHERE idproyecto='$idproyecto' AND estado=1";
+		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM comida_extra WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

@@ -119,7 +119,7 @@
                                 <tr>
                                   <th class="text-center w-px-300">Día</th>
                                   <th class="text-center  w-px-135">Cantidad</th>
-                                  <th class="text-center"> Parcial</th>
+                                  <th class="text-center w-px-135"> Parcial</th>
                                   <th class="text-center"> Descripción</th>
                                 </tr>
                               </thead>

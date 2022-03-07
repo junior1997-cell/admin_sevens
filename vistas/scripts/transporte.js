@@ -474,6 +474,10 @@ function ver_datos(idtransporte) {
                 <th>Total</th>
                 <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
               </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <td colspan="2" > <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/docs/transporte/comprobante/${data.comprobante}" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -134,7 +134,7 @@
                                                 <!--Proveedor-->
                                                 <div class="col-lg-12" >
                                                     <div class="form-group">
-                                                    <label for="idproveedor">Proveedor</label>
+                                                    <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
                                                     <select name="idproveedor" id="idproveedor" class="form-control select2"  placeholder="Seleccinar un proveedor">
                                                     </select>
                                                     </div>
@@ -142,7 +142,7 @@
                                                 <!--forma pago-->
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                    <label for="forma_pago">Forma Pago</label>
+                                                    <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
                                                     <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
                                                         <option value="Transferencia">Transferencia</option>
                                                         <option value="Efectivo">Efectivo</option>
@@ -153,7 +153,7 @@
 
                                                 <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
-                                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                                    <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
                                                     <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
                                                         <option value="Ninguno">Ninguno</option>
                                                         <option value="Boleta">Boleta</option>
@@ -173,7 +173,7 @@
                                                 <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="fecha">Fecha Emisión</label>
+                                                        <label for="fecha">Fecha Emisión <sup class="text-danger">*</sup></label>
                                                         <input type="date" name="fecha_viaje" class="form-control" id="fecha_viaje" />
                                                     </div>
 
@@ -181,7 +181,7 @@
                                                 <!-- Cantidad  -->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="cantidad">Cantidad</label>
+                                                        <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
                                                         <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="comprob_factura();" onkeyup="comprob_factura();" />
                                                     </div>
 
@@ -189,7 +189,7 @@
                                                 <!--Precio Unitario-->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="precio_unitario">Precio Unitario</label>
+                                                        <label for="precio_unitario">Precio Unitario <sup class="text-danger">*</sup></label>
                                                         <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
                                                     </div>                                                  
 
@@ -242,7 +242,7 @@
                                                 <!-- ruta 2 -->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="ruta">Ruta <span style="font-size: 12px;font-weight: normal;" >ej. Juliaca-Lima</span></label>
+                                                        <label for="ruta">Ruta<sup class="text-danger">*</sup> <span style="font-size: 12px;font-weight: normal;" >ej. Juliaca-Lima</span></label>
                                                         <textarea name="ruta" id="ruta" class="form-control" rows="2"></textarea>
                                                     </div>
 
@@ -250,7 +250,7 @@
                                                 <!--Descripcion-->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
-                                                        <label for="descripcion_pago">Descripción <span style="font-size: 12px;font-weight: normal;" >ej. nombre,Lima,1 día</span> </label> <br>
+                                                        <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup> <span style="font-size: 12px;font-weight: normal;" >ej. nombre,Lima,1 día</span> </label> <br>
                                                         <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
@@ -334,7 +334,7 @@
                         <div class="modal-dialog modal-dialog-scrollable modal-xm">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Datos Transporte</h4>
+                                <h4 class="modal-title">Datos comprobante Transporte</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span class="text-danger" aria-hidden="true">&times;</span>
                                 </button>

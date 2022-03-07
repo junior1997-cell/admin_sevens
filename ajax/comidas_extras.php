@@ -19,7 +19,11 @@ $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_
 $subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
 $igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
 
-$foto2		      = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+$ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
+$razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
+$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
+
+$foto2		      = isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
 
 switch ($_GET["op"]){
 	case 'guardaryeditar':
@@ -33,24 +37,24 @@ switch ($_GET["op"]){
 			{
 
 				// Comprobante
-				if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
+				if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
-					$comprobante=$_POST["foto2_actual"]; $flat_ficha1 = false;
+					$comprobante=$_POST["doc_old_1"]; $flat_ficha1 = false;
 
 				} else {
 
-					$ext1 = explode(".", $_FILES["foto2"]["name"]); $flat_ficha1 = true;						
+					$ext1 = explode(".", $_FILES["doc1"]["name"]); $flat_ficha1 = true;						
 
 					$comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-					move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comidas_extras/" . $comprobante);
+					move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/comida_extra/comprobante/" . $comprobante);
 				
 				}
 
 
 				if (empty($idcomida_extra)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
+					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -63,13 +67,13 @@ switch ($_GET["op"]){
 			
 						if ($ficha1_ant != "") {
 			
-							unlink("../dist/img/comidas_extras/" . $ficha1_ant);
+							unlink("../dist/docs/comida_extra/comprobante/" . $ficha1_ant);
 						}
 					}
 
-					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante);
+					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion);
 					//var_dump($idcomida_extra,$idproveedor);
-					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+					echo $rspta ? "ok" : "Registro no se pudo actualizar";
 				}
 				//Fin de las validaciones de acceso
 			} else {
@@ -90,7 +94,7 @@ switch ($_GET["op"]){
 			if ($_SESSION['viatico']==1)
 			{
 				$rspta=$comidas_extras->desactivar($idcomida_extra);
- 				echo $rspta ? "material Desactivado" : "material no se puede desactivar";
+ 				echo $rspta ? " Desactivado" : "No se puede desactivar";
 			//Fin de las validaciones de acceso
 			}
 			else
@@ -111,7 +115,28 @@ switch ($_GET["op"]){
 			if ($_SESSION['viatico']==1)
 			{
 				$rspta=$comidas_extras->activar($idcomida_extra);
- 				echo $rspta ? "Material activado" : "material no se puede activar";
+ 				echo $rspta ? "Activado" : "No se puede activar";
+			//Fin de las validaciones de acceso
+			}
+			else
+			{
+		  	require 'noacceso.php';
+			}
+		}		
+	break;
+
+	case 'eliminar':
+		if (!isset($_SESSION["nombre"]))
+		{
+		  header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
+		}
+		else
+		{
+			//Validamos el acceso solo al material logueado y autorizado.
+			if ($_SESSION['viatico']==1)
+			{
+				$rspta=$comidas_extras->eliminar($idcomida_extra);
+ 				echo $rspta ? "Eliminado" : "No se puede Eliminado";
 			//Fin de las validaciones de acceso
 			}
 			else
@@ -184,7 +209,7 @@ switch ($_GET["op"]){
 				$cont=1;
 		 		while ($reg=$rspta->fetch_object()){
 
-					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comidas_extras/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
+					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/docs/comida_extra/comprobante/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 		 			
 					
 					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
@@ -193,7 +218,8 @@ switch ($_GET["op"]){
 					 $data[]=array(
 						"0"=>$cont++,
 		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcomida_extra .')"><i class="far fa-trash-alt"></i></button>':
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idcomida_extra .')"><i class="fas fa-times"></i></button>'.
+							 ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idcomida_extra . ')"><i class="fas fa-skull-crossbones"></i> </button>':
 							 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcomida_extra .')"><i class="fa fa-pencil-alt"></i></button>'.
 		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcomida_extra .')"><i class="fa fa-check"></i></button>',
 						"2"=>$reg->forma_de_pago,  
@@ -202,9 +228,9 @@ switch ($_GET["op"]){
 								<span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->numero_comprobante)?" - ":$reg->numero_comprobante).'</span>         
 							</div>',
 						"4"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
-		 				"5"=>number_format($reg->subtotal, 2, '.', ','),
-		 				"6"=>number_format($reg->igv, 2, '.', ','),
-		 				"7"=>number_format($reg->costo_parcial, 2, '.', ','),
+		 				"5"=>'S/. '.number_format($reg->subtotal, 2, '.', ','),
+		 				"6"=>'S/. '.number_format($reg->igv, 2, '.', ','),
+		 				"7"=>'S/. '.number_format($reg->costo_parcial, 2, '.', ','),
 						"8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
 		 				"9"=>$comprobante,
 		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
