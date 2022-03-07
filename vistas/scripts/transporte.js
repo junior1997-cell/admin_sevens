@@ -416,7 +416,7 @@ function ver_datos(idtransporte) {
         <div class="card-body">
           <table class="table table-hover table-bordered">        
             <tbody>
-                <tr data-widget="expandable-table" aria-expanded="false">
+              <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Proveedor</th>
                 <td>${data.razon_social} <br>${data.ruc} </td>
                 

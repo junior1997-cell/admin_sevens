@@ -11,17 +11,17 @@ Class Hospedaje
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function insertar($idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion)
 	{
 	
-		$sql="INSERT INTO hospedaje (idproyecto,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion,forma_de_pago,tipo_comprobante,fecha_comprobante,numero_comprobante,subtotal,igv,comprobante) 
-		VALUES ('$idproyecto','$fecha_inicio','$fecha_fin','$cantidad','$unidad','$precio_unitario','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$fecha_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante')";
+		$sql="INSERT INTO hospedaje (idproyecto,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion,forma_de_pago,tipo_comprobante,fecha_comprobante,numero_comprobante,subtotal,igv,comprobante,ruc,razon_social,direccion) 
+		VALUES ('$idproyecto','$fecha_inicio','$fecha_fin','$cantidad','$unidad','$precio_unitario','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$fecha_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante','$ruc','$razon_social','$direccion')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idhospedaje,$idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante)
+	public function editar($idhospedaje,$idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion)
 	{
 		$sql="UPDATE hospedaje SET 
 		idproyecto='$idproyecto',
@@ -38,7 +38,10 @@ Class Hospedaje
 		numero_comprobante='$nro_comprobante',
 		subtotal='$subtotal',
 		igv='$igv',
-		comprobante='$comprobante'
+		comprobante='$comprobante',
+		ruc='$ruc',
+		razon_social='$razon_social',
+		direccion='$direccion'
 
 		WHERE idhospedaje='$idhospedaje'";	
 		return ejecutarConsulta($sql);	
@@ -58,6 +61,12 @@ Class Hospedaje
 		return ejecutarConsulta($sql);
 	}
 
+	//Implementamos un método para desactivar categorías
+	public function eliminar($idhospedaje )
+	{
+		$sql="UPDATE hospedaje SET estado_delete='0' WHERE idhospedaje ='$idhospedaje'";
+		return ejecutarConsulta($sql);
+	}
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idhospedaje )
 	{
@@ -69,7 +78,7 @@ Class Hospedaje
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM hospedaje WHERE idproyecto='$idproyecto' ORDER BY fecha_comprobante DESC";
+		$sql="SELECT*FROM hospedaje WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' ORDER BY fecha_comprobante DESC";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -81,7 +90,7 @@ Class Hospedaje
 	}
 	//total
 	public function total($idproyecto){
-		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM hospedaje WHERE idproyecto='$idproyecto' AND estado=1";
+		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM hospedaje WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1' ";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
