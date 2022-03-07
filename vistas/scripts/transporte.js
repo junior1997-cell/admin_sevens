@@ -108,6 +108,7 @@ function limpiar() {
   $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc1_nombre').html("");
 
+  $("#idproveedor").val("null").trigger("change");
   $("#tipo_viajero").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#tipo_ruta").val("null").trigger("change");
@@ -582,6 +583,7 @@ $(function () {
  //transporte.js idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion
   $("#form-transporte").validate({
     rules: {
+      idproveedor: { required: true },
       forma_pago: { required: true },
       tipo_comprobante: { required: true },
       fecha_viaje: { required: true },
@@ -592,6 +594,9 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
+      idproveedor: {
+        required: "Por favor un proveedor", 
+      },
       forma_pago: {
         required: "Por favor una forma de pago", 
       },
