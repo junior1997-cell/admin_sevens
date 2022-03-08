@@ -15,17 +15,10 @@
         <?php
           require 'head.php';
         ?>
-        <!-- Theme style -->
-        <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed ">
         
         <div class="wrapper">
-          <!-- Preloader -->
-          <!-- <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="../dist/svg/logo-principal.svg" alt="AdminLTELogo" width="360" />
-          </div> -->
-        
           <?php
             require 'nav.php';
             require 'aside.php';
@@ -38,7 +31,7 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0 nombre-trabajador"><i class="nav-icon fas fa-trash-alt"></i> Sub Contrato</h1>
+                    <h1 class="m-0 nombre-trabajador"><i class="nav-icon fas fa-hands-helping"></i> Sub Contrato</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
@@ -60,13 +53,13 @@
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-12">
-                    <div class="hidden  card card-primary card-outline">
+                    <div class=" card card-primary card-outline">
                       <div class="card-header"> 
 
                         <!-- agregar pago  -->
                         <h3 class="card-title " id="btn-agregar" >
-                          Aqui podra ver todos los datos enviados a Sub Contrato 
-                                           
+                          <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            Administra tus sub contratos.
                         </h3> 
 
                       </div>
@@ -75,77 +68,44 @@
 
                         <!-- tabla principal -->
                         <div class=" pb-3" id="tbl-principal">
-                          <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                        <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
-                              <tr> 
-                                <th>Trabajdor</th> 
-                                <th>Fecha inicio</th>
-                                <th>Hoy</th>
-                                <th class="text-center">Fecha <br> culminacion</th>
-                                <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
-                                <th>Sueldo Mensual</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
-                                <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
-                                <th>Cel:</th>                         
-                              </tr>
+                                <tr>
+                                    <th class="text-center">#</th>                                                    
+                                    <th class="">Acciones</th>                                                    
+                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                    <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
+                                    <th>Fecha</th>
+                                    <th>Sub total</th>
+                                    <th>Igv</th>
+                                    <th>Total </th>
+                                    <th>Descripción </th>
+                                    <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                    <th>Estado</th>
+                                </tr>
                             </thead>
-                            <tbody>                         
-                              
-                            </tbody>
+                            <tbody></tbody>
                             <tfoot>
-                              <tr> 
-                                <th class="text-gray">Trabajdor</th> 
-                                <th class="text-gray">Fecha inicio</th>
-                                <th class="text-center text-gray">Hoy</th>
-                                <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
-                                <th class="text-center text-gray">Último <br> pago</th>
-                                <th class="text-center text-gray">Siguiente <br> pago</th>
-                                <th>Cel:</th>                            
-                              </tr>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="">Acciones</th>
+                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                    <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
+                                    <th>Fecha</th>
+                                    <th>Sub total</th>
+                                    <th>Igv</th>
+                                    <th class="text-nowrap total_monto"></th>
+                                    <th>Descripción </th>
+                                    <th>Comprob</th>
+                                    <th>Estado</th>                                            
+                                </tr>
                             </tfoot>
-                          </table>
+                        </table>
                         </div>                        
 
                       </div>
                       <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
-
-                    <div class="error-page">
-                      <h2 class="headline text-danger">307</h2>
-
-                      <div class="error-content">
-                        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Estamos en <b class="text-danger">Desarrollo</b>.</h3>
-
-                        <p>
-                          Estamos trabajando para que lo utilice de inmediato.
-                          Mientras tanto, puede <a href="escritorio.php">volver al panel de control</a> o intentar usar el formulario de búsqueda.
-                        </p>
-
-                        <form class="search-form">
-                          <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search">
-
-                            <div class="input-group-append">
-                              <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
-                              </button>
-                            </div>
-                          </div>
-                          <!-- /.input-group -->
-                        </form>
-                      </div>
-                    </div>
-                    <!-- /.error-page -->
 
                   </div>
                   <!-- /.col -->
@@ -154,12 +114,12 @@
               </div>
               <!-- /.container-fluid -->             
 
-              <!-- Modal agregar PAGOS POR MES -->
-              <div class="modal fade" id="modal-agregar-pago-trabajdor">
+              <!-- Modal agregar sub contrato -->
+              <div class="modal fade" id="modal-agregar-sub-contrato">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> <!-- NOMBRE DEL TRABAJDOR--> </b></h4>
+                      <h4 class="modal-title">Agregando: <b>Sub contrato</b></h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-danger" aria-hidden="true">&times;</span>
                       </button>
@@ -167,72 +127,90 @@
                     
                     <div class="modal-body">
                       <!-- form start -->
-                      <form id="form-pagos-x-mes" name="form-pagos-x-mes"  method="POST" >                      
+                      <form id="form-agregar-sub-contrato" name="form-agregar-sub-contrato"  method="POST" >                      
                         <div class="card-body">
                           <div class="row" id="cargando-1-fomulario">
 
-                            <!-- id idpagos_x_mes_administrador -->
-                            <input type="hidden" name="idpagos_x_mes_administrador" id="idpagos_x_mes_administrador" />
+                            <!-- id sub contratro  -->
+                            <input type="hidden" name="idproyecto" id="idproyecto" />     
+                            <input type="hidden" name="idsubcontrato" id="idsubcontrato" />     
 
-                            <!-- id idfechas_mes_pagos_administrador -->
-                            <input type="hidden" name="idfechas_mes_pagos_administrador_pxm" id="idfechas_mes_pagos_administrador_pxm" />
-                            <!-- id_tabajador_x_proyecto -->
-                            <input type="hidden" name="id_tabajador_x_proyecto_pxm" id="id_tabajador_x_proyecto_pxm" />
-                            <!-- fecha inicial -->
-                            <input type="hidden" name="fecha_inicial_pxm" id="fecha_inicial_pxm" />
-                            <!-- fecha final -->
-                            <input type="hidden" name="fecha_final_pxm" id="fecha_final_pxm" />
-                            <!-- nombre del mes -->
-                            <input type="hidden" name="mes_nombre_pxm" id="mes_nombre_pxm" />
-                            <!-- dias del mes -->
-                            <input type="hidden" name="dias_mes_pxm" id="dias_mes_pxm" />
-                            <!-- dias_regular -->
-                            <input type="hidden" name="dias_regular_pxm" id="dias_regular_pxm" />
-                            <!-- sueldo_mensual -->
-                            <input type="hidden" name="sueldo_mensual_pxm" id="sueldo_mensual_pxm" />
-                            <!-- monto_x_mes -->
-                            <input type="hidden" name="monto_x_mes_pxm" id="monto_x_mes_pxm" />                            
+                            <!-- proveedor -->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                              <label for="idproveedor">proveedor</label>
+                              <select name="idproveedor" id="idproveedor" class="form-control select2" style="width: 100%;"> </select>
+                              </div>
+                            </div>               
 
                             <!-- Forma de pago hacia el trabajdor -->
                             <div class="col-lg-6">
                               <div class="form-group">
                               <label for="forma_pago">Forma Pago</label>
-                              <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                              <select name="forma_de_pago" id="forma_de_pago" class="form-control select2" style="width: 100%;">
                                 <option value="Transferencia">Transferencia</option>
                                 <option value="Efectivo">Efectivo</option>
                               </select>
                               </div>
                             </div>
 
-                            <!-- Cuenta deposito enviada -->
+                            <!-- tipo de comprobante -->
                             <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
-                                <input type="text" name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Cuenta deposito">  
-                              </div>                                                        
-                            </div>
-
-                            <!-- Monto (de cantidad a depositado) -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
-                                <input type="text" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
-                              </div>                                                        
-                            </div>
-                             
-                            <!-- Mes del pago -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="nombre_mes" class="text-gray">Mes </label>
-                                <span class="nombre_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                              <label for="tipo_comprobante">Tipo Comprobante</label>
+                              <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" style="width: 100%;">
+                                <option value="Recibo por honorario">Recibo por honorario</option>
+                                <option value="Ninguno">Ninguno</option>
+                                <option value="Factura">Factura</option>
+                              </select>
                               </div>
                             </div>
 
-                            <!-- Monto faltante -->
+                            <!-- Número comprobante -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="numero_comprobante" class="nro_comprobante" >Núm. comprobante </label>                               
+                                <input type="text" name="numero_comprobante" id="numero_comprobante" class="form-control"  placeholder="Código"> 
+                              </div>                                                        
+                            </div>
+                             
+                            <!-- Fecha -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="Fecha" class="text-gray">Fecha </label>
+                                <input type="date" name="fecha_subcontrato" id="fecha_subcontrato" class="form-control"  placeholder="Fecha"> 
+                              </div>
+                            </div>
+
+                            <!-- Sub total -->
                             <div class="col-lg-3">
                               <div class="form-group">
-                                <label for="nombre_mes" class="text-gray">Faltante </label>
-                                <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                <label for="subtotal" class="text-gray">Sub total </label>
+                                <input type="text" name="subtotal" id="subtotal" class="form-control"  placeholder="Sub total" readonly> 
+                              </div>
+                            </div>
+
+                            <!-- IGV -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="igv" class="text-gray">IGV </label>
+                                <input type="text" name="igv" id="igv" class="form-control"  placeholder="IGV" readonly> 
+                              </div>
+                            </div>
+
+                            <!-- valor IGV -->
+                            <div class="col-lg-2">
+                              <div class="form-group">
+                                <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
+                                <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calculandototales_fact();"> 
+                              </div>
+                            </div>
+                            
+                            <!-- Total -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="costo_parcial" class="text-gray">Total </label>
+                                <input type="text" name="costo_parcial" id="costo_parcial" class="form-control"  onchange="comprob_factura();" onkeyup="comprob_factura();"  placeholder="Total"> 
                               </div>
                             </div>
                              
@@ -248,7 +226,7 @@
                             <div class="col-md-12" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                  <label for="cip" class="control-label" > Baucher de deposito </label>
+                                  <label for="cip" class="control-label" >Comprobante </label>
                                 </div>
                                 <div class="col-md-6 text-center">
                                   <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
@@ -289,16 +267,58 @@
                           
                         </div>
                         <!-- /.card-body -->                      
-                        <button type="submit" style="display: none;" id="submit-form-pagos-x-mes">Submit</button>                      
+                        <button type="submit" style="display: none;" id="submit-form-agregar-sub-contrato">Submit</button>                      
                       </form>
                     </div>
+
                     <div class="modal-footer justify-content-between">
                       <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                    </div>                  
+                    </div>    
+
                   </div>
                 </div>
-              </div>              
+              </div>
+              <!--===============Modal-ver-comprobante =========-->
+              <div class="modal fade" id="modal-ver-comprobante">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl ">
+                    <div class="modal-content">
+                        <div class="modal-header" style=" background-color: #73777b2e;">
+                            <h4 class="modal-title">Comprobante </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="text-danger" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div  class="class-style" style="text-align: center;"> 
+                            <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download=" _Comprobante sub contrato" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
+                              <br>
+                              <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
+                                <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div> 
+              <!--Modal ver datos-->
+              <div class="modal fade" id="modal-ver-datos-sub-contrato">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                      <div class="modal-content">
+                      <div class="modal-header">
+                          <h4 class="modal-title">Datos comprobante</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+
+                      <div class="modal-body">
+                          <div id="datos-sub-contrato" class="class-style">
+                          <!-- vemos los datos del trabajador -->
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+              </div>             
 
             </section>
             <!-- /.content -->
@@ -323,6 +343,23 @@
             $('[data-toggle="tooltip"]').tooltip();
           })
         </script>
+                
+        <style>
+
+          textarea.form-control {
+              height: auto;
+          }
+          .text_area_clss {
+              width: 100%;
+              background: rgb(215 224 225 / 22%);
+              border-block-color: inherit;
+              border-bottom: aliceblue;
+              border-left: aliceblue;
+              border-right: aliceblue;
+              border-top: hidden;
+          }
+
+        </style>
 
         <script>
           if ( localStorage.getItem('nube_idproyecto') ) {
