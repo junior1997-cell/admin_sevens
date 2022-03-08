@@ -4,3 +4,5 @@ TODO TIPO DE COMPRBANTE
 -NOTA DE VENTA
 -BAUCHER
 -FACTURA ELECTRONICA
+
+../dist/docs/break/comprobante/

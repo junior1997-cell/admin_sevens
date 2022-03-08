@@ -145,7 +145,7 @@
                                                 <div class="col-lg-6" id="content-t-comprob">
                                                     <div class="form-group">
                                                     <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
-                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="calculando_totales(); habilitar_r_oscial();" placeholder="Seleccinar un tipo de comprobante">
+                                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="calculando_totales(); habilitar_r_social();" placeholder="Seleccinar un tipo de comprobante">
                                                         <option value="Ninguno">Ninguno</option>
                                                         <option value="Boleta">Boleta</option>
                                                         <option value="Factura">Factura</option>

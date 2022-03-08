@@ -455,7 +455,11 @@ $(function () {
       
     },
   });
- //transporte.js fecha,precio_parcial,descripcion     //$tipo_comprobante,$nro_comprobante,$subtotal,$igv
+
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+
   $("#form-comidas_ex").validate({
     rules: {
       forma_pago: { required: true },
@@ -506,6 +510,11 @@ $(function () {
 
 
   });
+  
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 });
 
 function extrae_extencion(filename) {

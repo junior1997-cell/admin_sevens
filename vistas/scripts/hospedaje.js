@@ -104,7 +104,7 @@ function calculando_cantidad() {
   }
 }
 
-function habilitar_r_oscial(){
+function habilitar_r_social(){
 
   if ($("#tipo_comprobante").select2("val") =="Factura" || $("#tipo_comprobante").select2("val") =="Boleta"){
 
@@ -585,7 +585,11 @@ $(function () {
       
     },
   });
- // idhospedaje,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion
+
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+
   $("#form-hospedaje").validate({
     rules: {
       forma_pago: { required: true },
@@ -648,6 +652,11 @@ $(function () {
 
 
   });
+
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 });
 
 function extrae_extencion(filename) {

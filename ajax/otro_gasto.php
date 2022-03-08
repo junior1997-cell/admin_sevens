@@ -143,7 +143,7 @@
             $data[] = [
               "0" => $cont++,
               "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idotro_gasto . ')"><i class="far fa-trash-alt"></i></button>'.
+                  ' <button class="btn btn-danger btn-sm" onclick="desactivar(' . $reg->idotro_gasto . ')"><i class="fas fa-times"></i></button>'.
                   ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ')"><i class="fas fa-skull-crossbones"></i> </button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fa fa-pencil-alt"></i></button>' .
                   ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_gasto . ')"><i class="fa fa-check"></i></button>',

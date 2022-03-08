@@ -594,6 +594,11 @@ $(function () {
     },
   });
 
+  // Aplicando la validacion del select cada vez que cambie
+
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+
   $("#form-otro_gasto").validate({
     rules: {
       forma_pago: { required: true },
@@ -637,6 +642,11 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
   });
+
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin 
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
