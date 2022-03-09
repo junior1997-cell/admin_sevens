@@ -297,7 +297,7 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>Fecha compra</th>
-                                  <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
+                                  <th data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
                                   <th>Precio</th>  
                                   <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
                                   <th>SubTotal</th>
@@ -313,10 +313,10 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th >Fecha compra</th>
-                                  <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
-                                  <th class="text-right precio_promedio h5"> S/. --</th>  
-                                  <th>Dcto.</th> 
-                                  <th class="text-right subtotal_x_producto h5"> S/. --</th>
+                                  <th class="cantidad_x_producto"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-right precio_promedio text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>  
+                                  <th class="descuento_x_producto text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th class="text-right subtotal_x_producto text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
                                 </tr>
                               </tfoot>
@@ -334,9 +334,9 @@
                                   <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
 
                                   <!-- Tipo de Empresa -->
-                                  <div class="col-lg-7">
+                                  <div class="col-lg-5">
                                     <div class="form-group">
-                                      <label for="idproveedor">Proveedor</label>
+                                      <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
                                       <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
                                     </div>
                                   </div>
@@ -354,18 +354,29 @@
                                   </div>
 
                                   <!-- fecha -->
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-3">
                                     <div class="form-group">
-                                      <label for="fecha_compra">Fecha </label>
+                                      <label for="fecha_compra">Fecha <sup class="text-danger">*</sup></label>
                                       <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />
                                     </div>
                                   </div>
 
-                                  <!-- Tipo de comprobante -->
-                                  <div class="col-lg-4" id="content-t-comprob">
+                                  <!-- Glosa -->
+                                  <div class="col-lg-3">
                                     <div class="form-group">
-                                      <label for="tipo_comprovante">Tipo Comprobante</label>
-                                      <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
+                                      <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
+                                      <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
+                                        <option value="MATERIAL">MATERIAL</option>
+                                        <option value="CONBUSTIBLE">CONBUSTIBLE</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Tipo de comprobante -->
+                                  <div class="col-lg-4" id="content-tipo-comprobante">
+                                    <div class="form-group">
+                                      <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
+                                      <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2"  onchange="default_val_igv(); modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
                                         <option value="Ninguno">Ninguno</option>
                                         <option value="Boleta">Boleta</option>
                                         <option value="Factura">Factura</option>
@@ -374,29 +385,29 @@
                                     </div>
                                   </div>
 
-                                  <!-- serie_comprovante-->
-                                  <div class="col-lg-2" id="content-comprob">
+                                  <!-- serie_comprobante-->
+                                  <div class="col-lg-2" id="content-serie-comprobante">
                                     <div class="form-group">
-                                      <label for="serie_comprovante">N° de Comprobante</label>
-                                      <input type="text" name="serie_comprovante" id="serie_comprovante" class="form-control" placeholder="N° de Comprobante" />
+                                      <label for="serie_comprobante">N° de Comprobante</label>
+                                      <input type="text" name="serie_comprobante" id="serie_comprobante" class="form-control" placeholder="N° de Comprobante" />
                                     </div>
                                   </div>
 
                                   <!-- IGV-->
                                   <div class="col-lg-1" id="content-igv">
                                     <div class="form-group">
-                                      <label for="igv">IGV</label>
-                                      <input type="text" name="igv" id="igv" class="form-control" readonly value="0.18" />
+                                      <label for="val_igv">IGV <sup class="text-danger">*</sup></label>
+                                      <input type="text" name="val_igv" id="val_igv" class="form-control" value="0.18" onkeyup="modificarSubtotales();" />
                                     </div>
                                   </div>
 
                                   <!-- Descripcion-->
-                                  <div class="col-lg-5" id="content-descrp">
+                                  <div class="col-lg-5" id="content-descripcion">
                                     <div class="form-group">
                                       <label for="descripcion">Descripción </label> <br />
                                       <textarea name="descripcion" id="descripcion" class="form-control" rows="1"></textarea>
                                     </div>
-                                  </div>
+                                  </div>                                  
 
                                   <!--Boton agregar material-->
                                   <div class="row col-lg-12 justify-content-between">
@@ -422,7 +433,7 @@
                                       <div class="form-group">
                                         <div id="switch_detracc">
                                           <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
-                                          <div class="switch-holder myestilo-switch2" >
+                                          <div class="myestilo-switch2" >
                                             <div class="switch-toggle">
                                               <input type="checkbox" id="my-switch_detracc" />
                                               <label for="my-switch_detracc"></label>
@@ -431,8 +442,7 @@
                                         </div>
                                         <input type="hidden" name="estado_detraccion" id="estado_detraccion" value="0" />
                                       </div>
-                                    </div>                                      
-
+                                    </div>
                                   </div>
 
                                   <!--tabla detalles plantas-->
@@ -444,35 +454,35 @@
                                         <th>Material</th>
                                         <th>Unidad</th>
                                         <th>Cantidad</th>
-                                        <th class="hidden text-center" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
-                                        <th class="hidden text-center">IGV</th>
+                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
+                                        <th class="hidden">IGV</th>
                                         <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                         <th>Descuento</th>
                                         <th>Subtotal</th>
                                       </thead>
                                       <tfoot>
                                         <td colspan="5" id="colspan_subtotal"></td>
-                                        <th class="text-center">
-                                          <h5>Gravada</h5>
-                                          <h5>IGV (18%)</h5>
-                                          <h5>TOTAL</h5>
+                                        <th class="text-right">
+                                          <h6 class="tipo_gravada">GRAVADA</h6>
+                                          <h6 class="val_igv">IGV (18%)</h6>
+                                          <h5 class="font-weight-bold">TOTAL</h5>
                                         </th>
-                                        <th class=" "> 
-                                          <h5 class="text-right " id="subtotal" style="font-weight: bold;">S/. 0.00</h5>
+                                        <th class="text-right"> 
+                                          <h6 class="font-weight-bold subtotal_compra">S/. 0.00</h6>
                                           <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
+                                          <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                                          <h5 class="text-right" name="igv_comp" id="igv_comp" style="font-weight: bold;">S/. 0.00</h5>
+                                          <h6 class="font-weight-bold igv_compra">S/. 0.00</h6>
                                           <input type="hidden" name="igv_compra" id="igv_compra" />
-                                          <b>
-                                            <h4 class="text-right" id="total" style="font-weight: bold;">S/. 0.00</h4>
-                                            <input type="hidden" name="total_venta" id="total_venta" />
-                                          </b>
+                                          
+                                          <h5 class="font-weight-bold total_venta">S/. 0.00</h5>
+                                          <input type="hidden" name="total_venta" id="total_venta" />
+                                          
                                         </th>
                                       </tfoot>
                                       <tbody></tbody>
                                     </table>
-                                  </div>
-
+                                  </div>                                    
                                 </div>
 
                                 <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -690,7 +700,9 @@
                             <div class="row" id="cargando-3-fomulario">
 
                               <!-- idproducto -->
-                              <input type="hidden" name="idproducto_p" id="idproducto_p" />                               
+                              <input type="hidden" name="idproducto_p" id="idproducto_p" />    
+                              <!-- cont registro -->
+                              <input type="hidden" name="cont" id="cont" />                           
 
                               <!-- Nombre -->
                               <div class="col-lg-8 class_pading">
@@ -902,6 +914,38 @@
                       </div>
                       <div class="modal-body">                        
                         <img onerror="this.src='../dist/svg/default_producto.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="100%" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal Ver compras - charge -->
+                <div class="modal fade" id="modal-ver-compras">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Detalle Compra</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="row detalle_de_compra" id="cargando-5-fomulario">                            
+                          <!--detalle de la compra-->
+                        </div>
+
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>

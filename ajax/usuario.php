@@ -259,6 +259,7 @@ switch ($_GET["op"]) {
       in_array(19, $valores) ? ($_SESSION['otra_factura'] = 1) : ($_SESSION['otra_factura'] = 0);
       in_array(20, $valores) ? ($_SESSION['resumen_factura'] = 1) : ($_SESSION['resumen_factura'] = 0);
       in_array(21, $valores) ? ($_SESSION['papelera'] = 1) : ($_SESSION['papelera'] = 0);
+      in_array(22, $valores) ? ($_SESSION['subcontrato'] = 1) : ($_SESSION['subcontrato'] = 0);
     }
     echo json_encode($fetch);
   break;

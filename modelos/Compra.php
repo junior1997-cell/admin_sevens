@@ -84,6 +84,7 @@ class Compra
     cpp.subtotal, 
     cpp.igv , 
     cpp.total ,
+    cpp.estado_detraccion ,
     cpp.estado
     FROM compra_por_proyecto as cpp
     WHERE idcompra_proyecto='$id_compras_x_proyecto';";
@@ -116,6 +117,7 @@ class Compra
       "subtotal" => $compra['subtotal'],
       "igv" => $compra['igv'],
       "total" => $compra['total'],
+      "estado_detraccion" => $compra['estado_detraccion'],
       "estado" => $compra['estado'],
       "producto" => $producto,
     ];
@@ -222,12 +224,13 @@ class Compra
 		dp.idproducto as idproducto,
 		dp.ficha_tecnica_producto as ficha_tecnica,
 		dp.cantidad ,
+    dp.unidad_medida, dp.color,
 		dp.precio_sin_igv ,
     dp.igv ,
     dp.precio_con_igv ,
 		dp.descuento ,
     dp.subtotal ,
-		p.nombre as nombre
+		p.nombre as nombre, p.imagen
 		FROM detalle_compra  dp, producto as p
 		WHERE idcompra_proyecto='$id_compra' AND  dp.idproducto=p.idproducto";
 
@@ -456,6 +459,7 @@ class Compra
     um.nombre_medida AS nombre_medida
     FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
     WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor  AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af
+    AND p.estado = '1' AND p.estado_delete = '1'
     ORDER BY p.nombre ASC";
 
     return ejecutarConsulta($sql);

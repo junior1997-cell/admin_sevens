@@ -75,6 +75,12 @@ function init() {
     placeholder: "Selecione Glosa",
     allowClear: true,
   });
+  //Initialize Select2 TIPO DE COMPROBANTE
+  $("#tipo_comprobante").select2({
+    theme: "bootstrap4",
+    placeholder: "Selecione Comprobante",
+    allowClear: true,
+  });
 
   // ═══════════════════ SELECT2 - PAGO COMPRAS ═══════════════════
   //Initialize Select2 BANCO DE PAGO
@@ -82,13 +88,7 @@ function init() {
     theme: "bootstrap4",
     placeholder: "Selecione un banco",
     allowClear: true,
-  });
-  //Initialize Select2 TIPO DE COMPROBANTE
-  $("#tipo_comprobante").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione Comprobante",
-    allowClear: true,
-  });
+  });  
   //Initialize Select2 FORMA DE PAGO
   $("#forma_pago").select2({
     theme: "bootstrap4",
@@ -228,6 +228,9 @@ function limpiar_form_compra() {
 
   $(".total_venta").html("S/. 0.00");
   $("#total_venta").val("");
+
+  $("#estado_detraccion").val("0");
+  $('#my-switch_detracc').prop('checked', false); 
 
   $(".filas").remove();
 
@@ -684,11 +687,11 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
 
       var fila = `
       <tr class="filas" id="fila${cont}">         
-        <td class="p-5px">
+        <td class="">
           <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
           <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
         </td>
-        <td class="p-5px">         
+        <td class="">         
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
@@ -697,14 +700,14 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
         </td>
-        <td class="p-5px"><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td class="p-5px form-group"><input class="producto_${idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class="p-5px hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
-        <td class="p-5px hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
-        <td class="p-5px"><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td class="p-5px"><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class="p-5px text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
-        <td class="p-5px"><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+        <td class=""><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
+        <td class=" form-group"><input class="producto_${idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class=" hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
+        <td class=" hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
+        <td class=""><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+        <td class=""><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class=" text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
+        <td class=""><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
       </tr>`;
 
       detalles = detalles + 1;
@@ -1130,6 +1133,14 @@ function mostrar_compra(idcompra_proyecto) {
       $("#val_igv").val(data.val_igv);
       $("#descripcion").val(data.descripcion);
       $("#glosa").val(data.glosa).trigger("change");
+
+      if (data.estado_detraccion == 0) {
+        $("#estado_detraccion").val("0");
+        $('#my-switch_detracc').prop('checked', false); 
+      } else {
+        $("#estado_detraccion").val("1");
+        $('#my-switch_detracc').prop('checked', true); 
+      }
 
       if (data.producto) {
 

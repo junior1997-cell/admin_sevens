@@ -103,9 +103,8 @@ function init() {
   $("#tipo_pago").val("null").trigger("change");
 
   //::::::::::::::::V A U C H E R S  Y  F A C T U R A S::::::::::::
-    $("#foto1_i").click(function () {$("#foto1").trigger("click"); });
-  $("#foto1").change(function (e) {addImage(e, $("#foto1").attr("id"));
-  });
+  $("#foto1_i").click(function () {$("#foto1").trigger("click"); });
+  $("#foto1").change(function (e) {addImage(e, $("#foto1").attr("id")); });
 
   //subir factura modal
   $("#doc1_i").click(function () { $("#doc1").trigger("click");  });
@@ -117,8 +116,7 @@ function init() {
 
   //ficha tecnica
   $("#doct2_i").click(function() {  $('#doct2').trigger('click'); });
-  $("#doct2").change(function(e) {  addDocs(e,$("#doct2").attr("id")) });
-  
+  $("#doct2").change(function(e) {  addDocs(e,$("#doct2").attr("id")) });  
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -494,113 +492,109 @@ function regresar() {
 //Función Listar
 function listar() {
   //console.log(idproyecto);
-  tabla = $("#tabla-compra")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_compra_activos",
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla = $("#tabla-compra").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/all_activos_fijos.php?op=listar_compra_activos",
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+          
+      }
+      // columna: #
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass("text-nowrap");   
+          
+      }
+      // columna: #
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass("text-nowrap");   
+          
+      }
+      //console.log(data);
+      if (quitar_formato_miles(data[8]) > 0) {
+        $("td", row).eq(8).css({ "background-color": "#ffc107", color: "black", });
+        $("td", row).eq(8).addClass("text-nowrap");  
+      } else if (quitar_formato_miles(data[8]) == 0) {
+        $("td", row).eq(8).css({ "background-color": "#28a745", color: "white", });
+        $("td", row).eq(8).addClass("text-nowrap");  
+      } else {
+        $("td", row).eq(8).css({ "background-color": "#ff5252", color: "white", });
+        $("td", row).eq(8).addClass("text-nowrap");  
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      createdRow: function (row, data, ixdex) {
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-            
-        }
-        // columna: #
-        if (data[1] != '') {
-          $("td", row).eq(1).addClass("text-nowrap");   
-            
-        }
-        // columna: #
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-nowrap");   
-            
-        }
-        //console.log(data);
-        if (quitar_formato_miles(data[8]) > 0) {
-          $("td", row).eq(8).css({ "background-color": "#ffc107", color: "black", });
-          $("td", row).eq(8).addClass("text-nowrap");  
-        } else if (quitar_formato_miles(data[8]) == 0) {
-          $("td", row).eq(8).css({ "background-color": "#28a745", color: "white", });
-          $("td", row).eq(8).addClass("text-nowrap");  
-        } else {
-          $("td", row).eq(8).css({ "background-color": "#ff5252", color: "white", });
-          $("td", row).eq(8).addClass("text-nowrap");  
-        }
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      {
+        // targets: [8],
+        // visible: true,
+        // searchable: true,
       },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "asc"]], //Ordenar (columna,orden)
-      columnDefs: [
-        {
-         // targets: [8],
-         // visible: true,
-         // searchable: true,
-        },
-      ],
-    })
-    .DataTable();
+    ],
+  }).DataTable();
 
   //console.log(idproyecto);
-  tabla_comp_prov = $("#tabla-compra-proveedor")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_compraxporvee_af_g",
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
+  tabla_comp_prov = $("#tabla-compra-proveedor").dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    ajax: {
+      url: "../ajax/all_activos_fijos.php?op=listar_compraxporvee_af_g",
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {    
+
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+          
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar : _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
         },
       },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-      },
-      language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "asc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 //facturas agrupadas por proveedor.
 function listar_facuras_proveedor_af_g(idproveedor) {

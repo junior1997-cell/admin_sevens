@@ -501,7 +501,7 @@ if (!isset($_SESSION["nombre"])) {
         $subtotal = 0;    $ficha = ''; 
 
         echo '<!-- Tipo de Empresa -->
-          <div class="col-lg-5">
+          <div class="col-lg-6">
             <div class="form-group">
               <label class="font-size-15px" for="idproveedor">Proveedor</label>
               <h5 class="form-control form-control-sm" >'.$rspta['razon_social'].'</h5>
@@ -515,21 +515,21 @@ if (!isset($_SESSION["nombre"])) {
             </div>
           </div>
           <!-- fecha -->
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <div class="form-group">
               <label class="font-size-15px" for="fecha_compra">Glosa </label>
               <span class="form-control form-control-sm">'.$rspta['glosa'].' </span>
             </div>
           </div>
           <!-- Tipo de comprobante -->
-          <div class="col-lg-3 content-t-comprob">
+          <div class="col-lg-3">
             <div class="form-group">
               <label class="font-size-15px" for="tipo_comprovante">Tipo Comprobante</label>
               <span  class="form-control form-control-sm"> '. ((empty($rspta['tipo_comprobante'])) ? '- - -' :  $rspta['tipo_comprobante'])  .' </span>
             </div>
           </div>
           <!-- serie_comprovante-->
-          <div class="col-lg-2 content-comprob">
+          <div class="col-lg-2">
             <div class="form-group">
               <label class="font-size-15px" for="serie_comprovante">N° de Comprobante</label>
               <span  class="form-control form-control-sm"> '. ((empty($rspta['serie_comprobante'])) ? '- - -' :  $rspta['serie_comprobante']).' </span>
@@ -543,7 +543,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
           </div>
           <!-- Descripcion-->
-          <div class="col-lg-6 content-descrp">
+          <div class="col-lg-6">
             <div class="form-group">
               <label class="font-size-15px" for="descripcion">Descripción </label> <br />
               <textarea class="form-control form-control-sm" rows="1">'.((empty($rspta['descripcion'])) ? '- - -' :$rspta['descripcion']).'</textarea>
@@ -558,7 +558,14 @@ if (!isset($_SESSION["nombre"])) {
           
           $tbody .= '<tr class="filas">
             <td class="text-center p-6px">' . $ficha . '</td>
-            <td class="text-left p-6px">' . $reg->nombre . '</td>
+            <td class="text-left p-6px">
+              <div class="user-block text-nowrap">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/'.$reg->imagen.'" alt="user image" onerror="this.src=\'../dist/svg/default_producto.svg\';" >
+                <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
+                <span class="description"><b>Color: </b>' . $reg->color . '</span>
+              </div>
+            </td>
+            <td class="text-left p-6px">' . $reg->unidad_medida . '</td>
             <td class="text-center p-6px">' . $reg->cantidad . '</td>		
             <td class="text-right p-6px">' . number_format($reg->precio_sin_igv, 2, '.',',') . '</td>
             <td class="text-right p-6px">' . number_format($reg->igv, 2, '.',',') . '</td>
@@ -571,18 +578,19 @@ if (!isset($_SESSION["nombre"])) {
         echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
           <table class="table table-striped table-bordered table-condensed table-hover">
             <thead style="background-color:#ff6c046b">
-              <th class="text-center p-10px">Ficha técnica</th>
+              <th class="text-center p-10px">F.T.</th>
               <th class="p-10px">Material</th>
-              <th class="p-10px">Cantidad</th>
+              <th class="p-10px">U.M.</th>
+              <th class="p-10px">Cant.</th>
               <th class="p-10px">V/U</th>
               <th class="p-10px">IGV</th>
               <th class="p-10px">P/U</th>
-              <th class="p-10px">Descuento</th>
+              <th class="p-10px">Desct.</th>
               <th class="p-10px">Subtotal</th>
             </thead>
             <tbody>'.$tbody.'</tbody>          
             <tfoot>
-              <td colspan="6"></td>
+              <td colspan="7"></td>
               <th class="text-right">
                 <h6>Subtotal</h6>
                 <h6>IGV</h6>
