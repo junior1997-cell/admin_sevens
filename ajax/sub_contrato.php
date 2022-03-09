@@ -32,7 +32,7 @@ switch ($_GET["op"]){
 
 		} else {
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 
 				// Comprobante
@@ -90,7 +90,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al  logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 				$rspta=$sub_contrato->desactivar($idsubcontrato);
  				echo $rspta ? " Desactivado" : "No se puede desactivar";
@@ -111,7 +111,7 @@ switch ($_GET["op"]){
 		else
 		{
 			
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 				$rspta=$sub_contrato->activar($idsubcontrato);
  				echo $rspta ? "Activado" : "No se puede activar";
@@ -132,7 +132,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al  logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 				$rspta=$sub_contrato->eliminar($idsubcontrato);
  				echo $rspta ? " Eliminado" : "No se puede Eliminar";
@@ -153,7 +153,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 				//$idsubcontrato='1';
 				$rspta=$sub_contrato->mostrar($idsubcontrato);
@@ -175,7 +175,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 				//$idsubcontrato='1';
 				$rspta=$sub_contrato->verdatos($idsubcontrato);
@@ -197,7 +197,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 
 				$rspta=$sub_contrato->total($idproyecto);
@@ -220,7 +220,7 @@ switch ($_GET["op"]){
 		else
 		{
 			//Validamos el acceso solo al material logueado y autorizado.
-			if ($_SESSION['viatico']==1)
+			if ($_SESSION['subcontrato']==1)
 			{
 				$idproyecto= $_GET["idproyecto"];
 				$rspta=$sub_contrato->listar($idproyecto);
@@ -237,28 +237,28 @@ switch ($_GET["op"]){
 					 $saldo = $reg['costo_parcial'] - $reg['total_deposito']; 
 
 					if ($saldo == $reg['costo_parcial']) {
+
 						$estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
-						$c      = "danger";
-						$nombre = "Pagar";
-						$icon   = "dollar-sign";
+						$c      = "danger"; $nombre = "Pagar"; $icon   = "dollar-sign";
+
 					} else {
+
 						if ($saldo < $reg['costo_parcial'] && $saldo > "0") {
+
 							$estado = '<span class="text-center badge badge-warning">En proceso</span>';
-							$c = "warning";
-							$nombre = "Pagar";
-							$icon = "dollar-sign";
+							$c = "warning"; $nombre = "Pagar"; $icon = "dollar-sign";
+
 						} else {
 
 							if ($saldo <= "0" || $saldo == "0") {
+
 								$estado = '<span class="text-center badge badge-success">Pagado</span>';
-								$c = "success";
-								$nombre = "Ver";
-								$info = "success";
-								$icon = "eye";
+								$c = "success"; $nombre = "Ver"; $info = "success"; $icon = "eye";
+
 							} else {
+
 							    $estado = '<span class="text-center badge badge-success">Error</span>';
 							}
-							//$estado = '<span class="text-center badge badge-success">Terminado</span>';
 						}
 					}
 
