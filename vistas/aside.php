@@ -354,7 +354,7 @@
                 </a>
               </li>
             <?php  }  ?>
-
+            <?php if ($_SESSION['subcontrato']==1) {  ?>  
             <li class="nav-item ver-otros-modulos-1">
               <a href="sub_contrato.php" class="nav-link" id="lSubContrato">
                 <i class="nav-icon fas fa-hands-helping"></i>
@@ -363,7 +363,7 @@
                 </p>
               </a>
             </li>
-
+            <?php  }  ?>
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       
               <li class="nav-item ver-otros-modulos-1">

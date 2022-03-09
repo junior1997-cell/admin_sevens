@@ -13,13 +13,11 @@ function init() {
   //Activamos el "aside"
   $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
-  $("#bloc_Viaticos").addClass("menu-open");
+  $("#bloc_Compras").addClass("menu-open");
 
   $("#mLogisticaAdquisiciones").addClass("active");
 
-  $("#mViatico").addClass("active bg-primary");
-
-  $("#lTransporte").addClass("active");
+  $("#lSubContrato").addClass("active bg-primary");
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
