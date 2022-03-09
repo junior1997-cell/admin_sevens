@@ -1030,6 +1030,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
   $('#modal-ver-comprobante').modal("show");
 
   if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+
     $('#ver_fact_pdf').hide();    $('#img-factura').show();
 
     $('#img-factura').attr("src", "../dist/docs/sub_contrato/comprobante_pago/"+comprobante);
@@ -1037,7 +1038,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
     $("#iddescargar").attr("href","../dist/docs/sub_contrato/comprobante_pago/"+comprobante);
 
   }else{
-    
+
     $('#img-factura').hide();  $('#ver_fact_pdf').show();
 
     $('#ver_fact_pdf').html('<iframe src="../dist/docs/sub_contrato/comprobante_pago/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
@@ -1048,7 +1049,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 }
 
 
-//:::::::::::... FIN CRUD PAGOS....::::::::::::..:::::::::::... FIN CRUD PAGOS....::::::::::::..
+//:::::::::::... FIN CRUD PAGOS....::::::::::::..:::::::::::
 init();
 // funcion para validar antes de guardar sub contrato
 $(function () {
