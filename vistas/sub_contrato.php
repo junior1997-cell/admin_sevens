@@ -79,9 +79,10 @@
                                     <th>Sub total</th>
                                     <th>Igv</th>
                                     <th>Total </th>
+                                    <th>Añadir Pago </th>
+                                    <th>Saldo </th>
                                     <th>Descripción </th>
                                     <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                    <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -95,9 +96,10 @@
                                     <th>Sub total</th>
                                     <th>Igv</th>
                                     <th class="text-nowrap total_monto"></th>
+                                    <th>Añadir Pago </th>
+                                    <th>Saldo </th>
                                     <th>Descripción </th>
-                                    <th>Comprob</th>
-                                    <th>Estado</th>                                            
+                                    <th>Comprob</th>                                          
                                 </tr>
                             </tfoot>
                         </table>

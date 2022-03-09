@@ -290,6 +290,20 @@ function listar() {
         if (data[7] != '') {
           $("td", row).eq(7).addClass('text-nowrap text-right');
         }
+
+        if (data[9] != "") {
+
+          var num = parseFloat(quitar_formato_miles(data[9])); console.log(num);
+  
+          if (num > 0) {
+            $("td", row).eq(9).addClass('bg-warning text-right');
+          } else if (num == 0) {
+            $("td", row).eq(9).addClass('bg-success text-right');            
+          } else if (num < 0) {
+            $("td", row).eq(9).addClass('bg-danger text-right');
+          }
+        }
+
       },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -982,6 +996,12 @@ function re_visualizacion(id, carpeta) {
     console.log(pdffile);
   }
 }
+
+function quitar_formato_miles(numero) {
+  let inVal = numero.replace(/,/g, "");
+  return inVal;
+}
+
 
 
 

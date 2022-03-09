@@ -82,8 +82,44 @@ Class Sub_contrato
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM subcontrato WHERE idproyecto='$idproyecto' AND estado='1' AND  estado_delete='1' ORDER BY fecha_subcontrato DESC";
-		return ejecutarConsulta($sql);		
+		$list_subcontrato= Array(); 
+
+		$sql_1="SELECT*FROM subcontrato WHERE idproyecto='$idproyecto' AND estado='1' AND  estado_delete='1' ORDER BY fecha_subcontrato DESC";
+		$subcontrato =ejecutarConsultaArray($sql_1);
+
+		if (!empty($subcontrato)) {
+			
+			foreach ($subcontrato as $key => $value) {
+
+				$id=$value['idsubcontrato'];
+
+				$sql_2="SELECT SUM(monto) as total_deposito FROM pago_subcontrato WHERE idsubcontrato='$id';";
+
+				$total_deposito= ejecutarConsultaSimpleFila($sql_2);
+
+				$list_subcontrato[]= array(
+
+					"idsubcontrato"      => $value['idsubcontrato'],
+					"idproyecto"     	 => $value['idproyecto'],
+					"idproveedor"        => $value['idproveedor'],
+					"tipo_comprobante"   => $value['tipo_comprobante'],
+					"forma_de_pago"      => $value['forma_de_pago'],
+					"numero_comprobante" => $value['numero_comprobante'],
+					"fecha_subcontrato"  => $value['fecha_subcontrato'],
+					"subtotal"           => $value['subtotal'],
+					"igv"                => $value['igv'],
+					"costo_parcial"      => $value['costo_parcial'],
+					"descripcion"        => $value['descripcion'],
+					"estado"             => $value['estado'],
+
+					"total_deposito"     => ($retVal_2 = empty($total_deposito) ? 0 : ($retVal_3 = empty($total_deposito['total_deposito']) ? 0 : $total_deposito['total_deposito'])),
+
+				);	
+				
+			}
+		}
+
+		return $list_subcontrato;	
 	}
 
 	//Select2 Proveedor
