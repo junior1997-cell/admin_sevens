@@ -58,7 +58,9 @@
 
                         <!-- agregar pago  -->
                         <h3 class="card-title " id="btn-agregar" >
-                          <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                          <button type="button" class="btn bg-gradient-success" id="add_sub_contrato" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar(); regresar(1);"><i class="fas fa-plus-circle"></i> Agregar</button>
+                          <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
+                          <button type="button" class="btn bg-gradient-success" id="add_agregar_pago" style="display: none;" data-toggle="modal" data-target="#modal-agregar-pago" onclick="limpiar_pagos(); regresar(2);"><i class="fas fa-plus-circle"></i> Agregar Pago</button>
                             Administra tus sub contratos.
                         </h3> 
 
@@ -68,42 +70,81 @@
 
                         <!-- tabla principal -->
                         <div class=" pb-3" id="tbl-principal">
-                        <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                  <tr>
+                                      <th class="text-center">#</th>                                                    
+                                      <th class="">Acciones</th>                                                    
+                                      <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
+                                      <th>Fecha</th>
+                                      <th>Sub total</th>
+                                      <th>Igv</th>
+                                      <th>Total </th>
+                                      <th>Añadir Pago </th>
+                                      <th>Saldo </th>
+                                      <th>Descripción </th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                  </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                  <tr>
+                                      <th class="text-center">#</th>
+                                      <th class="">Acciones</th>
+                                      <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
+                                      <th>Fecha</th>
+                                      <th>Sub total</th>
+                                      <th>Igv</th>
+                                      <th class="text-nowrap total_monto"></th>
+                                      <th>Añadir Pago </th>
+                                      <th>Saldo </th>
+                                      <th>Descripción </th>
+                                      <th>Comprob</th>                                          
+                                  </tr>
+                              </tfoot>
+                          </table>
+                        </div>
+                        <!-- tabla pagos -->
+                        <div class=" pb-3" id="tbl-pagos" style="display: none;">
+                          <div style="text-align: center;">
+                              <div style="background-color: aliceblue;">
+                                <h4>Total a pagar: <b id="total_apagar"></b></h4>
+                              </div>
+                          </div>
+                          <table id="tabla-sub-contratos-pagos" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
-                                <tr>
-                                    <th class="text-center">#</th>                                                    
-                                    <th class="">Acciones</th>                                                    
-                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                    <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
-                                    <th>Fecha</th>
-                                    <th>Sub total</th>
-                                    <th>Igv</th>
-                                    <th>Total </th>
-                                    <th>Añadir Pago </th>
-                                    <th>Saldo </th>
-                                    <th>Descripción </th>
-                                    <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                </tr>
+                              <tr>
+                                <th>#</th>
+                                <th>Acciones</th>
+                                <th>Forma pago</th>
+                                <th>Beneficiario</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                <th>Monto</th>
+                                <th>Vaucher</th>
+                                <th>Estado</th>
+                              </tr>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
-                                <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="">Acciones</th>
-                                    <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                    <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
-                                    <th>Fecha</th>
-                                    <th>Sub total</th>
-                                    <th>Igv</th>
-                                    <th class="text-nowrap total_monto"></th>
-                                    <th>Añadir Pago </th>
-                                    <th>Saldo </th>
-                                    <th>Descripción </th>
-                                    <th>Comprob</th>                                          
-                                </tr>
+                              <tr>
+                                <th>#</th>
+                                <th>Aciones</th>
+                                <th>Forma pago</th>
+                                <th>Beneficiario</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                <th class="text-nowrap"> <b class="monto_total_deposito"></b> </th>
+                                <th>Vaucher</th>
+                                <th>Estado</th>
+                              </tr>
                             </tfoot>
-                        </table>
-                        </div>                        
+                          </table>
+                        </div>                          
 
                       </div>
                       <!-- /.card-body -->
@@ -281,7 +322,7 @@
                   </div>
                 </div>
               </div>
-              <!--===============Modal-ver-comprobante =========-->
+              <!--Modal-ver-comprobante-->
               <div class="modal fade" id="modal-ver-comprobante">
                 <div class="modal-dialog modal-dialog-scrollable modal-xl ">
                     <div class="modal-content">
@@ -320,7 +361,155 @@
                       </div>
                       </div>
                   </div>
-              </div>             
+              </div> 
+              <!--:...::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+                <!--Modal agregar Pagos-->
+                <div class="modal fade" id="modal-agregar-pago">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Agregar Pago</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-add-pago-subcontrato" name="form-add-pago-subcontrato" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-1-fomulario">
+                              <!-- id pago_subcontrato -->
+                              <input type="text" name="idpago_subcontrato" id="idpago_subcontrato" />
+                              <!-- id subcontrato -->
+                              <input type="text" name="idsubcontrato_pago" id="idsubcontrato_pago" />
+
+                              <!-- Beneficiario -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="beneficiario_pago">Beneficiario</label>
+                                  <input type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
+                                  <br />
+                                  <b id="h4_mostrar_beneficiario" class="class_ver_provee"></b>
+                                </div>
+                              </div>
+                              <!--Forma de pago -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="forma_pago">Forma Pago</label>
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <!--tipo de pago -->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="tipo_pago">Tipo Pago</label>
+                                  <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
+                                    <option value="Proveedor">Proveedor</option>
+                                    <option value="Detraccion">Detracción</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <!-- Cuenta de destino-->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="cuenta_destino_pago">Cuenta destino </label>
+                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
+                                </div>
+                              </div>
+                              <!-- banco -->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="banco_pago">Banco</label>
+                                  <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;"></select>
+                                 
+                                </div>
+                              </div>
+                              <!-- Titular Cuenta-->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="titular_cuenta_pago">Titular Cuenta </label>
+                                  <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
+                                </div>
+                              </div>
+
+                              <!-- Fecha Inicio-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_pago">Fecha Pago </label>
+                                  <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" />
+                                </div>
+                              </div>
+                              <!-- Monto-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="monto_pago">Monto </label>
+                                  <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
+                                </div>
+                              </div>
+                              <!-- Número de Operación-->
+                              <div class="col-lg-6 validar_fp">
+                                <div class="form-group">
+                                  <label for="numero_op_pago">Número de operación </label>
+                                  <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
+                                </div>
+                              </div>
+                              <!-- Descripcion-->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="descripcion_pago">Descripción </label> <br />
+                                  <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
+                                </div>
+                              </div>
+                              
+                              <!-- Pdf 2 -->
+                              <div class="col-md-12" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" >Comprobante </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'baucher_deposito');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc2_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                <div class="col-lg-12 text-center">
+                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                  <br />
+                                  <h4>Cargando...</h4>
+                                </div>
+                              </div>
+                            </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pagos();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>            
 
             </section>
             <!-- /.content -->
@@ -359,6 +548,22 @@
               border-left: aliceblue;
               border-right: aliceblue;
               border-top: hidden;
+          }
+          .class_ver_provee{
+            display: block;
+            width: 100%;
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            box-shadow: inset 0 0 0 transparent;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
           }
 
         </style>

@@ -93,7 +93,7 @@ Class Sub_contrato
 
 				$id=$value['idsubcontrato'];
 
-				$sql_2="SELECT SUM(monto) as total_deposito FROM pago_subcontrato WHERE idsubcontrato='$id';";
+				$sql_2="SELECT SUM(monto) as total_deposito FROM pago_subcontrato WHERE idsubcontrato='$id' AND estado='1' AND  estado_delete='1';";
 
 				$total_deposito= ejecutarConsultaSimpleFila($sql_2);
 
@@ -129,17 +129,111 @@ Class Sub_contrato
 	return ejecutarConsulta($sql);
 	}
 	
-
 	//Seleccionar un comprobante
 	public function ficha_tec($idsubcontrato)
 	{
 		$sql="SELECT comprobante FROM subcontrato WHERE idsubcontrato='$idsubcontrato'";
 		return ejecutarConsulta($sql);		
 	}
+	
 	//total
 	public function total($idproyecto){
 		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM subcontrato WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1";
 		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//:::::::::...........S E C C C I Ó N  P A G O S ....::::::::::::
+
+	public function datos_proveedor($idsubcontrato)
+	{
+	$sql = "SELECT sc.idsubcontrato, p.idbancos, p.razon_social, p.cuenta_bancaria, p.cuenta_detracciones, p.titular_cuenta
+	FROM subcontrato as sc, proveedor as p WHERE sc.idsubcontrato='$idsubcontrato' AND sc.idproveedor=p.idproveedor";
+	return ejecutarConsultaSimpleFila($sql);
+	}
+	
+	public function insertar_pago($idsubcontrato_pago, $beneficiario_pago, $forma_pago, $tipo_pago,
+		$cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 )
+	{
+		$sql="INSERT INTO pago_subcontrato( idsubcontrato, idbancos, forma_pago, tipo_pago, beneficiario, cuenta_destino, titular_cuenta, fecha_pago, numero_operacion, monto, descripcion, comprobante) 
+		VALUES ('$idsubcontrato_pago','$banco_pago','$forma_pago','$tipo_pago','$beneficiario_pago','$cuenta_destino_pago','$titular_cuenta_pago','$fecha_pago','$numero_op_pago','$monto_pago','$descripcion_pago','$imagen1')";
+	    return ejecutarConsulta($sql);
+    }
+
+	public function editar_pago($idpago_subcontrato,$idsubcontrato_pago, $beneficiario_pago, $forma_pago, $tipo_pago,
+		$cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 )
+	{
+		$sql="UPDATE pago_subcontrato SET 
+
+			idsubcontrato    ='$idsubcontrato_pago',
+			idbancos         ='$banco_pago',
+			forma_pago       ='$forma_pago',
+			tipo_pago        ='$tipo_pago',
+			beneficiario     ='$beneficiario_pago',
+			cuenta_destino   ='$cuenta_destino_pago',
+			titular_cuenta   ='$titular_cuenta_pago',
+			fecha_pago       ='$fecha_pago',
+			numero_operacion ='$numero_op_pago',
+			monto            ='$monto_pago',
+			descripcion      ='$descripcion_pago',
+			comprobante      ='$imagen1'
+
+			WHERE idpago_subcontrato='$idpago_subcontrato'";
+
+		return ejecutarConsulta($sql);
+	}
+	public function listar_pagos($idsubcontrato)
+	{
+		$sql="SELECT ps.idpago_subcontrato,ps.idbancos,ps.forma_pago,ps.tipo_pago,ps.beneficiario,ps.estado,
+		ps.cuenta_destino,ps.titular_cuenta,ps.fecha_pago,ps.numero_operacion,ps.monto,ps.descripcion,ps.comprobante, b.nombre as bancos
+		FROM pago_subcontrato as ps, bancos as b 
+		WHERE ps.idsubcontrato='$idsubcontrato' AND ps.idbancos=b.idbancos AND ps.estado=1 AND ps.estado_delete=1;";
+		return ejecutarConsulta($sql);
+	}
+   //------------------
+
+	public function desactivar_pagos($idpago_subcontrato )
+	{
+		$sql="UPDATE pago_subcontrato SET estado='0' WHERE idpago_subcontrato ='$idpago_subcontrato'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function activar_pagos($idpago_subcontrato )
+	{
+		$sql="UPDATE pago_subcontrato SET estado='1' WHERE idpago_subcontrato ='$idpago_subcontrato'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function eliminar_pagos($idpago_subcontrato )
+	{
+		$sql="UPDATE pago_subcontrato SET estado_delete='0' WHERE idpago_subcontrato ='$idpago_subcontrato'";
+		return ejecutarConsulta($sql);
+	}
+	
+	public function mostrar_pagos($idpago_subcontrato )
+	{
+		$sql="SELECT*FROM pago_subcontrato WHERE idpago_subcontrato ='$idpago_subcontrato'";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//total
+	public function total_pagos($idsubcontrato){
+
+		$sql="SELECT SUM(monto) as monto_parcial_deposito FROM pago_subcontrato 
+			 WHERE idsubcontrato='$idsubcontrato' AND estado=1 AND estado_delete=1;";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function obtenerImg($idpago_subcontrato)
+	{
+		$sql="SELECT comprobante FROM pago_subcontrato WHERE idpago_subcontrato='$idpago_subcontrato'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function select2_banco()
+	{
+		$sql = "SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' ORDER BY idbancos ASC;";
+		return ejecutarConsulta($sql);
 	}
 
 }
