@@ -228,37 +228,66 @@ switch ($_GET["op"]){
 		 		$data= Array();
 				$comprobante = '';
 				$cont=1;
-		 		while ($reg=$rspta->fetch_object()){
+				$saldo=0; $estado=''; $c=''; $nombre=''; $icon=''; $info=''; 
 
-					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/docs/sub_contrato/comprobante_subcontrato/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
-		 			
+				foreach ($rspta as $key => $reg) {
 					
-					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
-					 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
-					 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
-					 $data[]=array(
+					 empty($reg['comprobante'])?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg['comprobante']."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
+					
+					 $saldo = $reg['costo_parcial'] - $reg['total_deposito']; 
+
+					if ($saldo == $reg['costo_parcial']) {
+						$estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
+						$c      = "danger";
+						$nombre = "Pagar";
+						$icon   = "dollar-sign";
+					} else {
+						if ($saldo < $reg['costo_parcial'] && $saldo > "0") {
+							$estado = '<span class="text-center badge badge-warning">En proceso</span>';
+							$c = "warning";
+							$nombre = "Pagar";
+							$icon = "dollar-sign";
+						} else {
+
+							if ($saldo <= "0" || $saldo == "0") {
+								$estado = '<span class="text-center badge badge-success">Pagado</span>';
+								$c = "success";
+								$nombre = "Ver";
+								$info = "success";
+								$icon = "eye";
+							} else {
+							    $estado = '<span class="text-center badge badge-success">Error</span>';
+							}
+							//$estado = '<span class="text-center badge badge-success">Terminado</span>';
+						}
+					}
+
+					$data[]=array(
 						"0"=>$cont++,
-		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idsubcontrato.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idsubcontrato.')"><i class="fas fa-times"></i></button>'.
-							' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idsubcontrato . ')"><i class="fas fa-skull-crossbones"></i> </button>'.
-		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idsubcontrato.')"><i class="far fa-eye"></i></button>':
-							'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idsubcontrato.')"><i class="fa fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idsubcontrato.')"><i class="fa fa-check"></i></button>'.
-		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idsubcontrato.')"><i class="far fa-eye"></i></button>',
-						"2"=>$reg->forma_de_pago, 
+		 				"1"=>($reg['estado'])?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg['idsubcontrato'].')"><i class="fas fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg['idsubcontrato'].')"><i class="fas fa-times"></i></button>'.
+							' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg['idsubcontrato'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'.
+		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg['idsubcontrato'].')"><i class="far fa-eye"></i></button>':
+							'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg['idsubcontrato'].')"><i class="fa fa-pencil-alt"></i></button>'.
+		 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg['idsubcontrato'].')"><i class="fa fa-check"></i></button>'.
+		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg['idsubcontrato'].')"><i class="far fa-eye"></i></button>',
+						"2"=>$reg['forma_de_pago'], 
 						"3"=>'<div class="user-block">
-								<span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg->tipo_comprobante.'</p> </span>
-								<span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->numero_comprobante)?" - ":$reg->numero_comprobante).'</span>         
+								<span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg['tipo_comprobante'].'</p> </span>
+								<span class="description" style="margin-left: 0px !important;">N° '.(empty($reg['numero_comprobante'])?" - ":$reg['numero_comprobante']).'</span>         
+							 </div>',
+						"4"=> date("d/m/Y", strtotime($reg['fecha_subcontrato'])), 
+						"5"=>'S/. '.number_format($reg['subtotal'], 2, '.', ','),
+						"6"=>'S/. '.number_format($reg['igv'], 2, '.', ','),
+						"7"=>'S/. '.number_format($reg['costo_parcial'], 2, '.', ','),
+						"8"=>'<div class="text-center text-nowrap"> 
+								<button class="btn btn-' . $c . ' btn-xs" onclick="listar_pagos(' .$reg['idsubcontrato']. ')"><i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button> ' .
+								' <button style="font-size: 14px;" class="btn btn-' . $c . ' btn-xs">' . number_format($reg['total_deposito'], 2, '.', ',') . '</button> 
 							</div>',
-						"4"=> date("d/m/Y", strtotime($reg->fecha_subcontrato)), 
-						"5"=>'S/. '.number_format($reg->subtotal, 2, '.', ','),
-						"6"=>'S/. '.number_format($reg->igv, 2, '.', ','),
-						"7"=>'S/. '.number_format($reg->costo_parcial, 2, '.', ','),
-					   	"8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
-						"9"=>$comprobante,
-		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
-						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
-		 				);
+						"9"=>number_format($saldo, 2, '.', ','),
+					   	"10"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg['descripcion'].'</textarea>',
+						"11"=>$comprobante
+		 			);
 
 		 		}
 		 		$results = array(
