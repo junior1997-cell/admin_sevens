@@ -390,9 +390,9 @@ function listar() {
 
 function modal_comprobante(comprobante){
   var comprobante = comprobante;
-  console.log(comprobante);
-var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-//console.log(extencion);
+   
+  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+  //console.log(extencion);
   $('#ver_fact_pdf').html('');
   $('#img-factura').attr("src", "");
   $('#modal-ver-comprobante').modal("show");
@@ -527,7 +527,20 @@ function ver_datos(idsubcontrato) {
 
   $.post("../ajax/sub_contrato.php?op=verdatos", { idsubcontrato: idsubcontrato }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    data = JSON.parse(data); 
+
+    var img_doc = "";  var comprobante=data.comprobante;
+       
+    var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+
+    if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+
+      img_doc='<img onerror="this.src="../dist/img/default/img_defecto.png";" src="../dist/docs/sub_contrato/comprobante_subcontrato/'+comprobante+'" class="img-thumbnail" style="cursor: pointer !important;" width="auto"/>';
+               
+    } else {
+      
+      img_doc='<iframe src="../dist/docs/sub_contrato/comprobante_subcontrato/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>'
+    }
     
     verdatos=`                                                                            
     <div class="col-12">
@@ -573,8 +586,7 @@ function ver_datos(idsubcontrato) {
                 <td>${parseFloat(data.costo_parcial).toFixed(2)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <td colspan="2" > <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/docs/sub_contrato/comprobante_subcontrato/${data.comprobante}" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                </td>
+                <td colspan="2" >${img_doc}</td>
               </tr>
             </tbody>
           </table>
@@ -1421,7 +1433,7 @@ function re_visualizacion(id, carpeta) {
           toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
           if ( extrae_extencion(antiguopdf) == "pdf" ) { 
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/sub_contrato/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
             toastr.success('Documento vizualizado correctamente!!!')
           } else {
             if ( extrae_extencion(antiguopdf) == "csv" ) {
@@ -1446,7 +1458,7 @@ function re_visualizacion(id, carpeta) {
                       extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
                       extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
   
-                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
+                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/sub_contrato/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
                       toastr.success('Documento vizualizado correctamente!!!');
                     } else {
                       $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
