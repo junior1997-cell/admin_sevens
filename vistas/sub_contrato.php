@@ -380,9 +380,9 @@
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id pago_subcontrato -->
-                              <input type="text" name="idpago_subcontrato" id="idpago_subcontrato" />
+                              <input type="hidden" name="idpago_subcontrato" id="idpago_subcontrato" />
                               <!-- id subcontrato -->
-                              <input type="text" name="idsubcontrato_pago" id="idsubcontrato_pago" />
+                              <input type="hidden" name="idsubcontrato_pago" id="idsubcontrato_pago" />
 
                               <!-- Beneficiario -->
                               <div class="col-lg-12">
@@ -467,7 +467,7 @@
                               </div>
                               
                               <!-- Pdf 2 -->
-                              <div class="col-md-12" >                               
+                              <div class="col-md-6" >                               
                                 <div class="row text-center">
                                   <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                     <label for="cip" class="control-label" >Comprobante </label>
