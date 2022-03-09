@@ -367,6 +367,7 @@
                 <div class="modal fade" id="modal-agregar-pago">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
+
                       <div class="modal-header">
                         <h4 class="modal-title">Agregar Pago</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -426,7 +427,6 @@
                                 <div class="form-group">
                                   <label for="banco_pago">Banco</label>
                                   <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;"></select>
-                                 
                                 </div>
                               </div>
                               <!-- Titular Cuenta-->
@@ -436,7 +436,6 @@
                                   <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
                                 </div>
                               </div>
-
                               <!-- Fecha Inicio-->
                               <div class="col-lg-6">
                                 <div class="form-group">
@@ -498,15 +497,19 @@
                                   <h4>Cargando...</h4>
                                 </div>
                               </div>
+
                             </div>
+                          </div>
                           <!-- /.card-body -->
                           <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
                         </form>
                       </div>
+
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pagos();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
                       </div>
+
                     </div>
                   </div>
                 </div>            
