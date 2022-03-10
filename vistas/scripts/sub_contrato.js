@@ -82,12 +82,14 @@ function regresar(estado) {
 
   if (estado==1) {
 
-    $('#add_sub_contrato').show();
-    $('#tbl-principal').show();
-
+    $('#tbl-facturas').hide();
+    $('#add_agregar_facturas').hide();
     $('#tbl-pagos').hide();
     $('#regresar').hide();
     $('#add_agregar_pago').hide();
+
+    $('#add_sub_contrato').show();
+    $('#tbl-principal').show();
     
   } else {
 
@@ -95,10 +97,29 @@ function regresar(estado) {
 
     $('#add_sub_contrato').hide();
     $('#tbl-principal').hide();
+    $('#add_agregar_facturas').hide();
+    $('#tbl-facturas').hide();
 
     $('#tbl-pagos').show();
     $('#regresar').show();
     $('#add_agregar_pago').show();
+
+    }else{
+      
+      if (estado==3) {
+
+        $('#add_sub_contrato').hide();
+        $('#tbl-principal').hide();  
+        $('#tbl-pagos').hide();
+        $('#add_agregar_pago').hide();
+
+        $('#tbl-facturas').show();
+        $('#regresar').show();
+        $('#tbl-facturas').show();
+        $('#add_agregar_facturas').show();
+
+    
+      }
 
     }
     
@@ -1058,8 +1079,14 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
 }
 
-
 //:::::::::::... FIN CRUD PAGOS....::::::::::::..:::::::::::
+
+//:::::::::::...  CRUD FACTURAS....::::::::::::..:::::::::::
+function listar_facturas() {
+  regresar(3);
+  
+}
+//:::::::::::... FIN CRUD FACTURAS....::::::::::::..:::::::::::
 init();
 // funcion para validar antes de guardar sub contrato
 $(function () {

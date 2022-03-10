@@ -61,6 +61,7 @@
                           <button type="button" class="btn bg-gradient-success" id="add_sub_contrato" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar(); regresar(1);"><i class="fas fa-plus-circle"></i> Agregar</button>
                           <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
                           <button type="button" class="btn bg-gradient-success" id="add_agregar_pago" style="display: none;" data-toggle="modal" data-target="#modal-agregar-pago" onclick="limpiar_pagos(); regresar(2);"><i class="fas fa-plus-circle"></i> Agregar Pago</button>
+                          <button type="button" class="btn bg-gradient-success" id="add_agregar_facturas" style="display: none;" data-toggle="modal" data-target="#modal-agregar-facruas-sub-contrato" onclick="limpiar_pagos(); regresar(2);"><i class="fas fa-plus-circle"></i> Agregar Factura</button>
                             Administra tus sub contratos.
                         </h3> 
 
@@ -69,7 +70,7 @@
                       <div class="card-body">
 
                         <!-- tabla principal -->
-                        <div class=" pb-3" id="tbl-principal">
+                        <div class="pb-3" id="tbl-principal">
                           <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                   <tr>
@@ -83,6 +84,7 @@
                                       <th>Total </th>
                                       <th>Añadir Pago </th>
                                       <th>Saldo </th>
+                                      <th>Facturas </th>
                                       <th>Descripción </th>
                                       <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                   </tr>
@@ -100,6 +102,7 @@
                                       <th class="text-nowrap total_monto"></th>
                                       <th>Añadir Pago </th>
                                       <th>Saldo </th>
+                                      <th>Facturas </th>
                                       <th>Descripción </th>
                                       <th>Comprob</th>                                          
                                   </tr>
@@ -107,7 +110,7 @@
                           </table>
                         </div>
                         <!-- tabla pagos -->
-                        <div class=" pb-3" id="tbl-pagos" style="display: none;">
+                        <div class="pb-3" id="tbl-pagos" style="display: none;">
                           <div style="text-align: center;">
                               <div style="background-color: aliceblue;">
                                 <h4>Total a pagar: <b id="total_apagar"></b></h4>
@@ -145,6 +148,41 @@
                             </tfoot>
                           </table>
                         </div>                          
+                        <!-- tabla facturas -->
+                        <div class="pb-3" id="tbl-facturas" style="display: none;">
+
+                          <table id="tabla-sub-contratos-facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Acciones</th>
+                                <th>Forma pago</th>
+                                <th>Beneficiario</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                <th>Monto</th>
+                                <th>Vaucher</th>
+                                <th>Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th>#</th>
+                                <th>Aciones</th>
+                                <th>Forma pago</th>
+                                <th>Beneficiario</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                <th class="text-nowrap"> <b class="monto_total_deposito"></b> </th>
+                                <th>Vaucher</th>
+                                <th>Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div> 
 
                       </div>
                       <!-- /.card-body -->
@@ -362,157 +400,325 @@
                       </div>
                   </div>
               </div> 
+
               <!--:...::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-                <!--Modal agregar Pagos-->
-                <div class="modal fade" id="modal-agregar-pago">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
+              <!--Modal agregar Pagos-->
+              <div class="modal fade" id="modal-agregar-pago">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
 
-                      <div class="modal-header">
-                        <h4 class="modal-title">Agregar Pago</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
+                    <div class="modal-header">
+                      <h4 class="modal-title">Agregar Pago</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
 
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-add-pago-subcontrato" name="form-add-pago-subcontrato" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
-                              <!-- id pago_subcontrato -->
-                              <input type="hidden" name="idpago_subcontrato" id="idpago_subcontrato" />
-                              <!-- id subcontrato -->
-                              <input type="hidden" name="idsubcontrato_pago" id="idsubcontrato_pago" />
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-add-pago-subcontrato" name="form-add-pago-subcontrato" method="POST">
+                        <div class="card-body">
+                          <div class="row" id="cargando-1-fomulario">
+                            <!-- id pago_subcontrato -->
+                            <input type="hidden" name="idpago_subcontrato" id="idpago_subcontrato" />
+                            <!-- id subcontrato -->
+                            <input type="hidden" name="idsubcontrato_pago" id="idsubcontrato_pago" />
 
-                              <!-- Beneficiario -->
-                              <div class="col-lg-12">
-                                <div class="form-group">
-                                  <label for="beneficiario_pago">Beneficiario</label>
-                                  <input type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
-                                  <br />
-                                  <b id="h4_mostrar_beneficiario" class="class_ver_provee"></b>
-                                </div>
+                            <!-- Beneficiario -->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label for="beneficiario_pago">Beneficiario</label>
+                                <input type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
+                                <br />
+                                <b id="h4_mostrar_beneficiario" class="class_ver_provee"></b>
                               </div>
-                              <!--Forma de pago -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="forma_pago">Forma Pago</label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                    <option value="Transferencia">Transferencia</option>
-                                    <option value="Efectivo">Efectivo</option>
-                                    <option value="Crédito">Crédito</option>
-                                  </select>
-                                </div>
+                            </div>
+                            <!--Forma de pago -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="forma_pago">Forma Pago</label>
+                                <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                  <option value="Transferencia">Transferencia</option>
+                                  <option value="Efectivo">Efectivo</option>
+                                  <option value="Crédito">Crédito</option>
+                                </select>
                               </div>
-                              <!--tipo de pago -->
-                              <div class="col-lg-6 validar_fp">
-                                <div class="form-group">
-                                  <label for="tipo_pago">Tipo Pago</label>
-                                  <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
-                                    <option value="Proveedor">Proveedor</option>
-                                    <option value="Detraccion">Detracción</option>
-                                  </select>
-                                </div>
+                            </div>
+                            <!--tipo de pago -->
+                            <div class="col-lg-6 validar_fp">
+                              <div class="form-group">
+                                <label for="tipo_pago">Tipo Pago</label>
+                                <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
+                                  <option value="Proveedor">Proveedor</option>
+                                  <option value="Detraccion">Detracción</option>
+                                </select>
                               </div>
-                              <!-- Cuenta de destino-->
-                              <div class="col-lg-6 validar_fp">
-                                <div class="form-group">
-                                  <label for="cuenta_destino_pago">Cuenta destino </label>
-                                  <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
-                                </div>
+                            </div>
+                            <!-- Cuenta de destino-->
+                            <div class="col-lg-6 validar_fp">
+                              <div class="form-group">
+                                <label for="cuenta_destino_pago">Cuenta destino </label>
+                                <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                               </div>
-                              <!-- banco -->
-                              <div class="col-lg-6 validar_fp">
-                                <div class="form-group">
-                                  <label for="banco_pago">Banco</label>
-                                  <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;"></select>
-                                </div>
+                            </div>
+                            <!-- banco -->
+                            <div class="col-lg-6 validar_fp">
+                              <div class="form-group">
+                                <label for="banco_pago">Banco</label>
+                                <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;"></select>
                               </div>
-                              <!-- Titular Cuenta-->
-                              <div class="col-lg-6 validar_fp">
-                                <div class="form-group">
-                                  <label for="titular_cuenta_pago">Titular Cuenta </label>
-                                  <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
-                                </div>
+                            </div>
+                            <!-- Titular Cuenta-->
+                            <div class="col-lg-6 validar_fp">
+                              <div class="form-group">
+                                <label for="titular_cuenta_pago">Titular Cuenta </label>
+                                <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
                               </div>
-                              <!-- Fecha Inicio-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="fecha_pago">Fecha Pago </label>
-                                  <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" />
-                                </div>
+                            </div>
+                            <!-- Fecha Inicio-->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="fecha_pago">Fecha Pago </label>
+                                <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" />
                               </div>
-                              <!-- Monto-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="monto_pago">Monto </label>
-                                  <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
-                                </div>
+                            </div>
+                            <!-- Monto-->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="monto_pago">Monto </label>
+                                <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
                               </div>
-                              <!-- Número de Operación-->
-                              <div class="col-lg-6 validar_fp">
-                                <div class="form-group">
-                                  <label for="numero_op_pago">Número de operación </label>
-                                  <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
-                                </div>
+                            </div>
+                            <!-- Número de Operación-->
+                            <div class="col-lg-6 validar_fp">
+                              <div class="form-group">
+                                <label for="numero_op_pago">Número de operación </label>
+                                <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
                               </div>
-                              <!-- Descripcion-->
-                              <div class="col-lg-12">
-                                <div class="form-group">
-                                  <label for="descripcion_pago">Descripción </label> <br />
-                                  <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
-                                </div>
+                            </div>
+                            <!-- Descripcion-->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label for="descripcion_pago">Descripción </label> <br />
+                                <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
                               </div>
-                              
-                              <!-- Pdf 2 -->
-                              <div class="col-md-6" >                               
-                                <div class="row text-center">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label" >Comprobante </label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
-                                      <i class="fas fa-upload"></i> Subir.
-                                    </button>
-                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
-                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_pago');">
-                                    <i class="fas fa-redo"></i> Recargar.
-                                    </button>
-                                  </div>
-                                </div>                              
-                                <div id="doc2_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                            </div>
+                            
+                            <!-- Pdf 2 -->
+                            <div class="col-md-6" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="cip" class="control-label" >Comprobante </label>
                                 </div>
-                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                    <i class="fas fa-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                  <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_pago');">
+                                  <i class="fas fa-redo"></i> Recargar.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc2_ver" class="text-center mt-4">
+                                <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
                               </div>
+                              <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
 
-                              <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                <div class="col-lg-12 text-center">
-                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                  <br />
-                                  <h4>Cargando...</h4>
+                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
+                      </form>
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pagos();">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>     
+
+              <!--:...::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+              <!-- Modal agregar sub contrato -->
+              <div class="modal fade" id="modal-agregar-facruas-sub-contrato">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Agregando: <b>Facturas</b></h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-agregar-sub-contrato" name="form-agregar-sub-contrato"  method="POST" >                      
+                        <div class="card-body">
+                          <div class="row" id="cargando-1-fomulario">
+
+                            <!-- id sub contratro  -->
+                            <input type="hidden" name="idproyecto" id="idproyecto" />     
+                            <input type="hidden" name="idsubcontrato" id="idsubcontrato" />     
+
+                            <!-- proveedor -->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                              <label for="idproveedor">proveedor</label>
+                              <select name="idproveedor" id="idproveedor" class="form-control select2" style="width: 100%;"> </select>
+                              </div>
+                            </div>               
+
+                            <!-- Forma de pago hacia el trabajdor -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                              <label for="forma_pago">Forma Pago</label>
+                              <select name="forma_de_pago" id="forma_de_pago" class="form-control select2" style="width: 100%;">
+                                <option value="Transferencia">Transferencia</option>
+                                <option value="Efectivo">Efectivo</option>
+                              </select>
+                              </div>
+                            </div>
+
+                            <!-- tipo de comprobante -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                              <label for="tipo_comprobante">Tipo Comprobante</label>
+                              <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" style="width: 100%;">
+                                <option value="Recibo por honorario">Recibo por honorario</option>
+                                <option value="Ninguno">Ninguno</option>
+                                <option value="Factura">Factura</option>
+                              </select>
+                              </div>
+                            </div>
+
+                            <!-- Número comprobante -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="numero_comprobante" class="nro_comprobante" >Núm. comprobante </label>                               
+                                <input type="text" name="numero_comprobante" id="numero_comprobante" class="form-control"  placeholder="Código"> 
+                              </div>                                                        
+                            </div>
+                             
+                            <!-- Fecha -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="Fecha" class="text-gray">Fecha </label>
+                                <input type="date" name="fecha_subcontrato" id="fecha_subcontrato" class="form-control"  placeholder="Fecha"> 
+                              </div>
+                            </div>
+
+                            <!-- Sub total -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="subtotal" class="text-gray">Sub total </label>
+                                <input type="text" name="subtotal" id="subtotal" class="form-control"  placeholder="Sub total" readonly> 
+                              </div>
+                            </div>
+
+                            <!-- IGV -->
+                            <div class="col-lg-3">
+                              <div class="form-group">
+                                <label for="igv" class="text-gray">IGV </label>
+                                <input type="text" name="igv" id="igv" class="form-control"  placeholder="IGV" readonly> 
+                              </div>
+                            </div>
+
+                            <!-- valor IGV -->
+                            <div class="col-lg-2">
+                              <div class="form-group">
+                                <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
+                                <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calculandototales_fact();"> 
+                              </div>
+                            </div>
+                            
+                            <!-- Total -->
+                            <div class="col-lg-4">
+                              <div class="form-group">
+                                <label for="costo_parcial" class="text-gray">Total </label>
+                                <input type="text" name="costo_parcial" id="costo_parcial" class="form-control"  onchange="comprob_factura();" onkeyup="comprob_factura();"  placeholder="Total"> 
+                              </div>
+                            </div>
+                             
+                            <!-- Descripcion-->
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label for="descripcion">Descripción </label> <br>
+                                <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                              </div>                                                        
+                            </div>
+                             
+                            <!-- Pdf 1 -->
+                            <div class="col-md-12" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="cip" class="control-label" >Comprobante </label>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                    <i class="fas fa-upload"></i> Subir.
+                                  </button>
+                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                </div>
+                                <div class="col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_subcontrato');">
+                                  <i class="fas fa-redo"></i> Recargar.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc1_ver" class="text-center mt-4">
+                                <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
+                            <!-- barprogress -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                              <div class="progress" id="div_barra_progress">
+                                <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
                                 </div>
                               </div>
+                            </div>                                          
 
+                          </div>  
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                              <h4>Cargando...</h4>
                             </div>
                           </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
-                        </form>
-                      </div>
-
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pagos();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
-                      </div>
-
+                          
+                        </div>
+                        <!-- /.card-body -->                      
+                        <button type="submit" style="display: none;" id="submit-form-agregar-sub-contrato">Submit</button>                      
+                      </form>
                     </div>
+
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                    </div>    
+
                   </div>
-                </div>            
+                </div>
+              </div>
 
             </section>
             <!-- /.content -->

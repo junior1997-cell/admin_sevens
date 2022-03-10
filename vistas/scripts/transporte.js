@@ -181,12 +181,12 @@ function selecct_glosa() {
    
     if ($("#tipo_viajero").select2("val")=="Personal") {
 
-      $("#glosa").val("Transporte de personal");
+      $("#glosa").val("TRANSPORTE DE PERSONAL");
      
 
     } else {
 
-      $("#glosa").val("Transporte de material y/o equipos");
+      $("#glosa").val(" TRANSPORTE DE MATERIAL Y/O EQUIPOS");
      
     }
     

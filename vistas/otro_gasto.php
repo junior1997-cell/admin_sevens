@@ -177,21 +177,21 @@
                                   <label for="glosa">Selecc. Glosa</label>
                                   <select name="glosa" id="glosa" class="form-control select2" placeholder="Seleccinar">
                                   
-                                    <option value="Alimentacion">Alimentacion</option>
-                                    <option value="Combustible">Combustible</option>
-                                    <option value="Material">Material</option>
-                                    <option value="Ploteo">Ploteo</option>
-                                    <option value="Agua">Agua</option>
-                                    <option value="Compras">Compras</option>
-                                    <option value="Sierra y exagonales">Sierra y exagonales</option>
-                                    <option value="Herramientas">Herramientas</option>
-                                    <option value="Acero y cemento">Acero y cemento</option>
-                                    <option value="Estacionamiento">Estacionamiento</option>
-                                    <option value="Personales">Personales</option>
-                                    <option value="Pasaje">Pasaje</option>
+                                    <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
+                                    <option value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                    <option value="MATERIAL">MATERIAL</option>
+                                    <option value="PLOTEO">PLOTEO</option>
+                                    <option value="AGUA">AGUA</option>
+                                    <option value="COMPRAS">COMPRAS</option>
+                                    <option value="SIERRA Y EXAGONALES">SIERRA Y EXAGONALES</option>
+                                    <option value="HERRAMIENTAS">HERRAMIENTAS</option>
+                                    <option value="ACERO Y CEMENTO">ACERO Y CEMENTO</option>
+                                    <option value="ESTACIONAMIENTO">ESTACIONAMIENTO</option>
+                                    <option value="PERSONALES">PERSONALES</option>
+                                    <option value="PASAJE">PASAJE</option>
                                     <option value="EPPS">EPPS</option>
-                                    <option value="Acero y cemento">Acero y cemento</option>
-                                    <option value="Otros">Otros</option>
+                                    <option value="OTROS">OTROS</option>
+                                    
                                   </select>
                                 </div>
                               </div>
