@@ -188,7 +188,6 @@
             $data[]=array(
               "0"=>$cont++,
               "1"=>($reg['estado'])?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg['idsubcontrato'].')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg['idsubcontrato'].')"><i class="fas fa-times"></i></button>'.
                 ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg['idsubcontrato'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'.
                 ' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg['idsubcontrato'].')"><i class="far fa-eye"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg['idsubcontrato'].')"><i class="fa fa-pencil-alt"></i></button>'.
@@ -200,19 +199,16 @@
                   <span class="description" style="margin-left: 0px !important;">N° '.(empty($reg['numero_comprobante'])?" - ":$reg['numero_comprobante']).'</span>         
                 </div>',
               "4"=> date("d/m/Y", strtotime($reg['fecha_subcontrato'])), 
-              "5"=>'S/. '.number_format($reg['subtotal'], 2, '.', ','),
-              "6"=>'S/. '.number_format($reg['igv'], 2, '.', ','),
-              "7"=>'S/. '.number_format($reg['costo_parcial'], 2, '.', ','),
-              "8"=>'<div class="text-center text-nowrap"> 
+              "5"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg['descripcion'].'</textarea>',
+              "6"=>'S/. '.number_format($reg['subtotal'], 2, '.', ','),
+              "7"=>'S/. '.number_format($reg['igv'], 2, '.', ','),
+              "8"=>'S/. '.number_format($reg['costo_parcial'], 2, '.', ','),
+              "9"=>'<div class="text-center text-nowrap"> 
                   <button class="btn btn-' . $c . ' btn-xs" onclick="listar_pagos(' .$reg['idsubcontrato']. ' , '.$reg['costo_parcial'].' , '.$reg['total_deposito'].')"><i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button> ' .
                   ' <button style="font-size: 14px;" class="btn btn-' . $c . ' btn-xs">' . number_format($reg['total_deposito'], 2, '.', ',') . '</button> 
                 </div>',
-              "9"=>number_format($saldo, 2, '.', ','),
-              "10"=>'<div class="text-center text-nowrap"> 
-                  <button class="btn btn-outline-primary btn-sm" onclick="listar_facturas(' .$reg['idsubcontrato']. ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></button> 
-                </div>',
-              "11"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg['descripcion'].'</textarea>',
-              "12"=>$comprobante
+              "10"=>number_format($saldo, 2, '.', ','),
+              "11"=>$comprobante
             );
 
           }
@@ -290,9 +286,11 @@
 
 				break;
 
-				case 'listar_pagos':
+				case 'listar_pagos_proveedor':
 
-          $rspta=$sub_contrato->listar_pagos($_GET['idsubcontrato']);
+          $tipo_pago="Proveedor";
+
+          $rspta=$sub_contrato->listar_pagos($_GET['idsubcontrato'],$tipo_pago);
           //Vamos a declarar un array
           $data= Array();
 
@@ -309,7 +307,54 @@
 
             "0" => $cont++,
             "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                        ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fas fa-times"></i></button>'.
+                        ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                        '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                        ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-check"></i></button>', 
+            "2" => $reg->forma_pago,
+            "3" => '<div class="user-block">
+              <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
+              <span class="description ml-0"><b>'. $reg->bancos .'</b>: '. $reg->cuenta_destino .' </span>
+              <span class="description ml-0"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+            </div>',
+            "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
+            "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
+            "6" => $reg->numero_operacion,
+            "7" => number_format($reg->monto, 2, '.', ','),
+            "8" => $comprobante,
+            "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+            ];
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+          echo json_encode($results);
+          //Fin de las validaciones de acceso
+
+				break;
+
+        case 'listar_pagos_detraccion':
+
+          $tipo_pago="Detraccion";
+
+          $rspta=$sub_contrato->listar_pagos($_GET['idsubcontrato'],$tipo_pago);
+          //Vamos a declarar un array
+          $data= Array();
+
+          $cont=1;
+          $comprobante="";
+
+          while ($reg = $rspta->fetch_object()) {
+            
+            empty($reg->comprobante)
+            ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
+            : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher_pagos(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+
+            $data[] = [
+
+            "0" => $cont++,
+            "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fas fa-pencil-alt"></i></button>' .
                         ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fas fa-skull-crossbones"></i> </button>':
                         '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-pencil-alt"></i></button>' .
                         ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-check"></i></button>', 
@@ -366,9 +411,20 @@
 	
 				break;
 
-				case 'total_pagos':
+				case 'total_pagos_prov':
+          
+          $tipo_pago="Proveedor";
 
-          $rspta=$sub_contrato->total_pagos($_POST['idsubcontrato']);
+          $rspta=$sub_contrato->total_pagos($_POST['idsubcontrato'],$tipo_pago);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+		
+				break;
+        case 'total_pagos_detrac':
+
+          $tipo_pago="Detraccion";
+
+          $rspta=$sub_contrato->total_pagos($_POST['idsubcontrato'],$tipo_pago);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 		

@@ -61,7 +61,6 @@
                           <button type="button" class="btn bg-gradient-success" id="add_sub_contrato" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar(); regresar(1);"><i class="fas fa-plus-circle"></i> Agregar</button>
                           <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
                           <button type="button" class="btn bg-gradient-success" id="add_agregar_pago" style="display: none;" data-toggle="modal" data-target="#modal-agregar-pago" onclick="limpiar_pagos(); regresar(2);"><i class="fas fa-plus-circle"></i> Agregar Pago</button>
-                          <button type="button" class="btn bg-gradient-success" id="add_agregar_facturas" style="display: none;" data-toggle="modal" data-target="#modal-agregar-facruas-sub-contrato" onclick="limpiar_pagos(); regresar(2);"><i class="fas fa-plus-circle"></i> Agregar Factura</button>
                             Administra tus sub contratos.
                         </h3> 
 
@@ -79,13 +78,12 @@
                                       <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                       <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
                                       <th>Fecha</th>
+                                      <th>Descripción </th>
                                       <th>Sub total</th>
                                       <th>Igv</th>
                                       <th>Total </th>
                                       <th>Añadir Pago </th>
                                       <th>Saldo </th>
-                                      <th>Facturas </th>
-                                      <th>Descripción </th>
                                       <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                   </tr>
                               </thead>
@@ -97,13 +95,12 @@
                                       <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                       <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
                                       <th>Fecha</th>
+                                      <th>Descripción </th>
                                       <th>Sub total</th>
                                       <th>Igv</th>
                                       <th class="text-nowrap total_monto"></th>
                                       <th>Añadir Pago </th>
                                       <th>Saldo </th>
-                                      <th>Facturas </th>
-                                      <th>Descripción </th>
                                       <th>Comprob</th>                                          
                                   </tr>
                               </tfoot>
@@ -116,7 +113,8 @@
                                 <h4>Total a pagar: <b id="total_apagar"></b></h4>
                               </div>
                           </div>
-                          <table id="tabla-sub-contratos-pagos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <div> <h4>Pagos: <b>Proveedor</b></h4> </div>
+                          <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
                                 <th>#</th>
@@ -141,48 +139,45 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th class="text-nowrap"> <b class="monto_total_deposito"></b> </th>
+                                <th class="text-nowrap"> <b class="monto_total_deposito_prov"></b> </th>
+                                <th>Vaucher</th>
+                                <th>Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                          <div> <h4>Pagos: <b>Detracción</b></h4> </div>
+                          <table id="tabla-pagos-detraccion" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Acciones</th>
+                                <th>Forma pago</th>
+                                <th>Beneficiario</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                <th>Monto</th>
+                                <th>Vaucher</th>
+                                <th>Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th>#</th>
+                                <th>Aciones</th>
+                                <th>Forma pago</th>
+                                <th>Beneficiario</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                <th class="text-nowrap"> <b class="monto_total_deposito_detracc"></b> </th>
                                 <th>Vaucher</th>
                                 <th>Estado</th>
                               </tr>
                             </tfoot>
                           </table>
                         </div>                          
-                        <!-- tabla facturas -->
-                        <div class="pb-3" id="tbl-facturas" style="display: none;">
-
-                          <table id="tabla-sub-contratos-facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr>
-                                <th>#</th>
-                                <th>Acciones</th>
-                                <th>Forma pago</th>
-                                <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th>Monto</th>
-                                <th>Vaucher</th>
-                                <th>Estado</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th>#</th>
-                                <th>Aciones</th>
-                                <th>Forma pago</th>
-                                <th>Beneficiario</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th class="text-nowrap"> <b class="monto_total_deposito"></b> </th>
-                                <th>Vaucher</th>
-                                <th>Estado</th>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div> 
 
                       </div>
                       <!-- /.card-body -->

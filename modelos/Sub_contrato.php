@@ -182,12 +182,12 @@ Class Sub_contrato
 
 		return ejecutarConsulta($sql);
 	}
-	public function listar_pagos($idsubcontrato)
+	public function listar_pagos($idsubcontrato,$tipo)
 	{
 		$sql="SELECT ps.idpago_subcontrato,ps.idbancos,ps.forma_pago,ps.tipo_pago,ps.beneficiario,ps.estado,
 		ps.cuenta_destino,ps.titular_cuenta,ps.fecha_pago,ps.numero_operacion,ps.monto,ps.descripcion,ps.comprobante, b.nombre as bancos
 		FROM pago_subcontrato as ps, bancos as b 
-		WHERE ps.idsubcontrato='$idsubcontrato' AND ps.idbancos=b.idbancos AND ps.estado=1 AND ps.estado_delete=1;";
+		WHERE ps.idsubcontrato='$idsubcontrato' AND ps.idbancos=b.idbancos AND ps.estado=1 AND ps.estado_delete=1 AND ps.tipo_pago='$tipo'";
 		return ejecutarConsulta($sql);
 	}
    //------------------
@@ -218,10 +218,10 @@ Class Sub_contrato
 	}
 
 	//total
-	public function total_pagos($idsubcontrato){
+	public function total_pagos($idsubcontrato,$tipo){
 
 		$sql="SELECT SUM(monto) as monto_parcial_deposito FROM pago_subcontrato 
-			 WHERE idsubcontrato='$idsubcontrato' AND estado=1 AND estado_delete=1;";
+			 WHERE idsubcontrato='$idsubcontrato' AND estado=1 AND estado_delete=1 AND tipo_pago='$tipo';";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

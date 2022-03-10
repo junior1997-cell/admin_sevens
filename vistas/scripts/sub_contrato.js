@@ -1,5 +1,6 @@
 var tabla;
-var tabla_pagos;
+var tabla_pagos_proveedor;
+var tabla_pagos_detraccion;
 
 var cuenta_bancaria;
 var cuenta_detracciones;
@@ -366,28 +367,28 @@ function listar() {
           $("td", row).eq(1).addClass("text-nowrap");
         }
         // columna: sub total
+        if (data[4] != '') {
+          $("td", row).eq(4).addClass('text-nowrap text-right');
+        }
+        // columna: igv
         if (data[5] != '') {
           $("td", row).eq(5).addClass('text-nowrap text-right');
         }
-        // columna: igv
+        // columna: total
         if (data[6] != '') {
           $("td", row).eq(6).addClass('text-nowrap text-right');
         }
-        // columna: total
-        if (data[7] != '') {
-          $("td", row).eq(7).addClass('text-nowrap text-right');
-        }
 
-        if (data[9] != "") {
+        if (data[8] != "") {
 
-          var num = parseFloat(quitar_formato_miles(data[9])); console.log(num);
+          var num = parseFloat(quitar_formato_miles(data[10])); console.log(num);
   
           if (num > 0) {
-            $("td", row).eq(9).addClass('bg-warning text-right');
+            $("td", row).eq(8).addClass('bg-warning text-right');
           } else if (num == 0) {
-            $("td", row).eq(9).addClass('bg-success text-right');            
+            $("td", row).eq(8).addClass('bg-success text-right');            
           } else if (num < 0) {
-            $("td", row).eq(9).addClass('bg-danger text-right');
+            $("td", row).eq(8).addClass('bg-danger text-right');
           }
         }
 
@@ -404,7 +405,12 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs:[
+      { targets: [2], visible: false, searchable: false, },
+      { targets: [3], visible: false, searchable: false, }
+    ],
+
   }).DataTable();
   total();
 }
@@ -677,25 +683,46 @@ function activar(idsubcontrato) {
 }
 
 function eliminar(idsubcontrato) {
+
   Swal.fire({
-    title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Registro no se podrá restablecer",
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
   }).then((result) => {
+
     if (result.isConfirmed) {
+
+      $.post("../ajax/sub_contrato.php?op=desactivar", { idsubcontrato: idsubcontrato }, function (e) {
+
+        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+    
+        tabla.ajax.reload();
+        total();
+      }); 
+
+    }else if (result.isDenied) {
+
+
       $.post("../ajax/sub_contrato.php?op=eliminar", { idsubcontrato: idsubcontrato }, function (e) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
     
         tabla.ajax.reload();
         total();
-      });      
+      });
+
     }
-  });   
+
+  });
 }
 
 //:::::::::::... FIN CRUD SUB CONTRATO....::::::::::::..:::::::::::... FIN CRUD SUB CONTRATO....::::::::::::..
@@ -707,10 +734,10 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
   regresar(2);
   id_subcontrato=idsubcontrato;
   totattotal=total_pago; monto_total_dep=total_deposito;
-
+  //tabla_pagos_detraccion
   $('#total_apagar').html('S/. '+formato_miles(total_pago));
 
-  tabla_pagos=$('#tabla-sub-contratos-pagos').dataTable({
+  tabla_pagos_proveedor=$('#tabla-pagos-proveedor').dataTable({
    "responsive": true,
    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
    "aProcessing": true,//Activamos el procesamiento del datatables
@@ -718,7 +745,7 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
    "ajax":{
-       url: '../ajax/sub_contrato.php?op=listar_pagos&idsubcontrato='+idsubcontrato,
+       url: '../ajax/sub_contrato.php?op=listar_pagos_proveedor&idsubcontrato='+idsubcontrato,
        type : "get",
        dataType : "json",						
        error: function(e){
@@ -734,32 +761,10 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
        if (data[1] != "") {
          $("td", row).eq(1).addClass("text-nowrap");
        }
-       // columna: sub total
-       if (data[5] != '') {
-         $("td", row).eq(5).addClass('text-nowrap text-right');
-       }
-       // columna: igv
-       if (data[6] != '') {
-         $("td", row).eq(6).addClass('text-nowrap text-right');
-       }
        // columna: total
        if (data[7] != '') {
          $("td", row).eq(7).addClass('text-nowrap text-right');
        }
-
-       if (data[9] != "") {
-
-         var num = parseFloat(quitar_formato_miles(data[9])); console.log(num);
- 
-         if (num > 0) {
-           $("td", row).eq(9).addClass('bg-warning text-right');
-         } else if (num == 0) {
-           $("td", row).eq(9).addClass('bg-success text-right');            
-         } else if (num < 0) {
-           $("td", row).eq(9).addClass('bg-danger text-right');
-         }
-       }
-
      },
    "language": {
      "lengthMenu": "Mostrar : _MENU_ registros",
@@ -775,8 +780,54 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
    "iDisplayLength": 5,//Paginación
    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
  }).DataTable();
+ 
+ tabla_pagos_detraccion=$('#tabla-pagos-detraccion').dataTable({
+  "responsive": true,
+  lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+  "aProcessing": true,//Activamos el procesamiento del datatables
+  "aServerSide": true,//Paginación y filtrado realizados por el servidor
+  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+  buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+  "ajax":{
+      url: '../ajax/sub_contrato.php?op=listar_pagos_detraccion&idsubcontrato='+idsubcontrato,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-center');
+      }
+      // columna: sub total
+      if (data[1] != "") {
+        $("td", row).eq(1).addClass("text-nowrap");
+      }
+      // columna: total
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-nowrap text-right');
+      }
+    },
+  "language": {
+    "lengthMenu": "Mostrar : _MENU_ registros",
+    "buttons": {
+      "copyTitle": "Tabla Copiada",
+      "copySuccess": {
+        _: '%d líneas copiadas',
+        1: '1 línea copiada'
+      }
+    }
+  },
+  "bDestroy": true,
+  "iDisplayLength": 5,//Paginación
+  "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+}).DataTable();
+
   datos_proveedor(idsubcontrato);
-  total_pagos(id_subcontrato);
+  total_pagos_proveedor(id_subcontrato);
+  total_pagos_detraccion(id_subcontrato);
 }
 
 function datos_proveedor(idsubcontrato) {
@@ -882,9 +933,12 @@ function guardaryeditar_pago(e) {
 
         $("#modal-agregar-pago").modal("hide");
 
-        tabla_pagos.ajax.reload();
+        tabla.ajax.reload();
+        tabla_pagos_proveedor.ajax.reload();
+        tabla_pagos_detraccion.ajax.reload();
         limpiar_pagos();
-        total_pagos(id_subcontrato);
+        total_pagos_proveedor(id_subcontrato);
+        total_pagos_detraccion(id_subcontrato);
 
       } else {
         toastr.error(datos);
@@ -967,15 +1021,28 @@ function mostrar_pagos(idpago_subcontrato) {
   });
 }
 
-function total_pagos(id_subcontrato) {
+function total_pagos_proveedor(id_subcontrato) {
 
-  $(".monto_total_deposito").html("");
+  $(".monto_total_deposito_prov").html("");
 
-  $.post("../ajax/sub_contrato.php?op=total_pagos", { idsubcontrato: id_subcontrato }, function (data, status) {
+  $.post("../ajax/sub_contrato.php?op=total_pagos_prov", { idsubcontrato: id_subcontrato }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
 
-    $(".monto_total_deposito").html('S/. '+ formato_miles(data.monto_parcial_deposito));
+    $(".monto_total_deposito_prov").html('S/. '+ formato_miles(data.monto_parcial_deposito));
+
+  });
+
+}
+function total_pagos_detraccion(id_subcontrato) {
+
+  $(".monto_total_deposito_detracc").html("");
+
+  $.post("../ajax/sub_contrato.php?op=total_pagos_detrac", { idsubcontrato: id_subcontrato }, function (data, status) {
+
+    data = JSON.parse(data);  console.log(data);  
+
+    $(".monto_total_deposito_detracc").html('S/. '+ formato_miles(data.monto_parcial_deposito));
 
   });
 
@@ -996,9 +1063,11 @@ function desactivar_pagos(idpago_subcontrato) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
-        tabla_pagos.ajax.reload();
-        total_pagos(id_subcontrato);
+        tabla.ajax.reload();        
+        tabla_pagos_proveedor.ajax.reload();
+        tabla_pagos_detraccion.ajax.reload();
+        total_pagos_proveedor(id_subcontrato);
+        total_pagos_detraccion(id_subcontrato);
       });      
     }
   });   
@@ -1020,8 +1089,10 @@ function activar_pagos(idpago_subcontrato) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
         tabla.ajax.reload();
-        tabla_pagos.ajax.reload();
-        total_pagos(id_subcontrato);
+        tabla_pagos_proveedor.ajax.reload();
+        tabla_pagos_detraccion.ajax.reload();
+        total_pagos_proveedor(id_subcontrato);
+        total_pagos_detraccion(id_subcontrato);
       });
       
     }
@@ -1029,26 +1100,53 @@ function activar_pagos(idpago_subcontrato) {
 }
 
 function eliminar_pagos(idpago_subcontrato) {
+  
   Swal.fire({
-    title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Registro no se podrá restablecer",
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
   }).then((result) => {
+
     if (result.isConfirmed) {
+
+      $.post("../ajax/sub_contrato.php?op=desactivar_pagos", { idpago_subcontrato: idpago_subcontrato }, function (e) {
+
+        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+
+        tabla.ajax.reload();
+        tabla_pagos_proveedor.ajax.reload();
+        tabla_pagos_detraccion.ajax.reload();
+        total_pagos_proveedor(id_subcontrato);
+        total_pagos_detraccion(id_subcontrato);
+
+      });
+
+    }else if (result.isDenied) {
+
       $.post("../ajax/sub_contrato.php?op=eliminar_pagos", { idpago_subcontrato: idpago_subcontrato }, function (e) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
         tabla.ajax.reload();
-        tabla_pagos.ajax.reload();
-        total_pagos(id_subcontrato);
-      });      
+        tabla_pagos_proveedor.ajax.reload();
+        tabla_pagos_detraccion.ajax.reload();
+        total_pagos_proveedor(id_subcontrato);
+        total_pagos_detraccion(id_subcontrato);
+
+      });  
+
     }
-  });   
+    
+  });
 }
 
 function ver_modal_vaucher_pagos(comprobante){
