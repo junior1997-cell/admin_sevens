@@ -127,7 +127,7 @@
       
                   $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
       
-                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/comprob_pension/" . $imagen2);
+                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/pension/comprobante/" . $imagen2);
                 
               }
       
@@ -147,7 +147,7 @@
             
                   if ($img1_ant != "") {
             
-                    unlink("../dist/img/comprob_pension/" . $img1_ant);
+                    unlink("../dist/docs/pension/comprobante/" . $img1_ant);
                   }
                 }
                 
@@ -191,12 +191,12 @@
                 $igv=round($reg->igv, 2);
                 $monto=round($reg->monto, 2 );
                 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
-                empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
+                empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
                 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
                 $data[]=array(
                   "0"=>$cont++,
                   "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger btn-sm" onclick="desactivar_comprobante('.$reg->idfactura_pension  .')"><i class="far fa-trash-alt"></i></button>':
+                  ' <button class="btn btn-danger btn-sm" onclick="eliminar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-skull-crossbones"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-check"></i></button>',
                   
@@ -266,6 +266,27 @@
             {
               $rspta=$pension->activar_comprobante($idfactura_pension );
                echo $rspta ? "Comprobante Restablecido" : "Comprobante no se pudo Restablecido";
+            //Fin de las validaciones de acceso
+            }
+            else
+            {
+              require 'noacceso.php';
+            }
+          }		
+        break;
+
+        case 'eliminar_comprobante':
+          if (!isset($_SESSION["nombre"]))
+          {
+            header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
+          }
+          else
+          {
+            //Validamos el acceso solo al usuario logueado y autorizado.
+            if ($_SESSION['viatico']==1)
+            {
+              $rspta=$pension->eliminar_comprobante($idfactura_pension);
+               echo $rspta ? "Comprobante Anulado" : "Comprobante no se puede Anular";
             //Fin de las validaciones de acceso
             }
             else

@@ -948,25 +948,47 @@ function activar_comprobante(idfactura_break) {
 
 //Función para desactivar registros
 function eliminar_comprobante(idfactura_break) {
-
+  
   Swal.fire({
-    title: "¿Está Seguro de  eliminar  el comprobante?",
-    text: "Registo no se podrá restablecer",
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
   }).then((result) => {
+
     if (result.isConfirmed) {
+
+      //Desactivar
+      $.post("../ajax/break.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
+
+        Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
+        total_monto(localStorage.getItem('idsemana_break_nube'));
+        tabla.ajax.reload();
+      });
+
+    }else if (result.isDenied) {
+
+      // Eliminar
       $.post("../ajax/break.php?op=eliminar_comprobante", { idfactura_break: idfactura_break }, function (e) {
 
         Swal.fire("Eliminado!", "Comprobante a ha sido Eliminado.", "success");
         total_monto(localStorage.getItem('idsemana_break_nube'));
         tabla.ajax.reload();
-      });      
+      }); 
+
     }
-  });  
+
+  });
+  
+  
 }
 
 function ver_modal_comprobante(comprobante){

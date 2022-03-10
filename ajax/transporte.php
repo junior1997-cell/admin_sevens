@@ -243,7 +243,6 @@ switch ($_GET["op"]){
 					 $data[]=array(
 						"0"=>$cont++,
 		 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fas fa-pencil-alt"></i></button>'.
-		 					' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtransporte.')"><i class="fas fa-times"></i></button>'.
 							' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idtransporte . ')"><i class="fas fa-skull-crossbones"></i> </button>'.
 		 					' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idtransporte.')"><i class="far fa-eye"></i></button>':
 							'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtransporte.')"><i class="fa fa-pencil-alt"></i></button>'.

@@ -191,8 +191,7 @@ Class Pension
 
 	public function listar_comprobantes($idpension){
 
-		$sql="SELECT * FROM factura_pension 
-		WHERE idpension  ='$idpension'";
+		$sql="SELECT * FROM factura_pension WHERE idpension  ='$idpension' AND estado='1' AND  estado_delete='1'";
 		return ejecutarConsulta($sql);
 	}
 	//mostrar_comprobante
@@ -214,10 +213,17 @@ Class Pension
 	}
 	
 	public function total_monto_comp($idpension){
-		$sql="SELECT SUM(monto) as total FROM factura_pension WHERE idpension='$idpension' AND estado='1'";
+		$sql="SELECT SUM(monto) as total FROM factura_pension WHERE idpension='$idpension' AND estado='1' AND  estado_delete='1'";
 		return ejecutarConsultaSimpleFila($sql);
 
 	}
+	
+		//Implementamos un método para activar 
+		public function eliminar_comprobante($idfactura_pension){
+			//var_dump($idfactura_pension);die();
+			$sql="UPDATE factura_pension SET estado_delete='0' WHERE idfactura_pension ='$idfactura_pension'";
+			return ejecutarConsulta($sql);
+		}
 	//---------------------------pension-----------------------------------
 	public function insertar_pension($idproyecto_p,$proveedor,$p_desayuno,$p_almuerzo,$p_cena,$descripcion_pension,$servicio_p)
 	{
@@ -344,7 +350,7 @@ Class Pension
 	}
 	public function total_pago_x_pension($idpension)
 	{
-		$sql="SELECT SUM(fp.monto) AS total_pago FROM factura_pension fp, pension as p WHERE fp.idpension=p.idpension AND fp.idpension='$idpension' AND fp.estado=1";
+		$sql="SELECT SUM(fp.monto) AS total_pago FROM factura_pension fp, pension as p WHERE fp.idpension=p.idpension AND fp.idpension='$idpension' AND fp.estado=1 AND  fp.estado_delete='1'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 	public function ver_detalle_x_servicio($idpension)

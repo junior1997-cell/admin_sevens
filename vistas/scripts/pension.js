@@ -1242,7 +1242,7 @@ function mostrar_comprobante(idfactura_pension ) {
         if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
           $('#ver_pdf').hide();
           $('#foto2_i').show();
-          $('#foto2_i').attr("src", "../dist/img/comprob_pension/" +comprobante);
+          $('#foto2_i').attr("src", "../dist/docs/pension/comprobante/" +comprobante);
 
           $("#foto2_nombre").html(''+
           '<div class="row">'+
@@ -1256,7 +1256,7 @@ function mostrar_comprobante(idfactura_pension ) {
         }else{
           $('#foto2_i').hide();
           $('#ver_pdf').show();
-          $('#ver_pdf').html('<iframe src="../dist/img/comprob_pension/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+          $('#ver_pdf').html('<iframe src="../dist/docs/pension/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
           
           $("#foto2_nombre").html(''+
           '<div class="row">'+
@@ -1275,27 +1275,49 @@ function mostrar_comprobante(idfactura_pension ) {
   });
 }
 //Función para desactivar registros
-function desactivar_comprobante(idfactura_pension) {
-console.log(idfactura_pension);
+function eliminar_comprobante(idfactura_pension) {
+
   Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el comprobante?",
-    text: "",
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
   }).then((result) => {
+
     if (result.isConfirmed) {
+
+      //Desactivar
       $.post("../ajax/pension.php?op=desactivar_comprobante", {idfactura_pension:idfactura_pension}, function (e) {
 
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
         tabla.ajax.reload();
         listar( localStorage.getItem('nube_idproyecto'));
-      });      
+      });  
+
+
+    }else if (result.isDenied) {
+
+      // Eliminar
+      $.post("../ajax/pension.php?op=eliminar_comprobante", {idfactura_pension:idfactura_pension}, function (e) {
+
+        Swal.fire("Eliminado!", "Comprobante a ha sido Eliminado.", "success");
+        total_monto(localStorage.getItem('idpension_f_nube'));
+        tabla.ajax.reload();
+        listar( localStorage.getItem('nube_idproyecto'));
+      }); 
+
     }
-  });  
+
+  });
 
 }
 
@@ -1334,15 +1356,15 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
   if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/img/comprob_pension/" +comprobante);
+    $('#img-factura').attr("src", "../dist/docs/pension/comprobante/" +comprobante);
 
-    $("#iddescargar").attr("href","../dist/img/comprob_pension/" +comprobante);
+    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
 
   }else{
     $('#img-factura').hide();
     $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/img/comprob_pension/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/img/comprob_pension/" +comprobante);
+    $('#ver_fact_pdf').html('<iframe src="../dist/docs/pension/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
   } 
  // $(".tooltip").removeClass('show');
 }
