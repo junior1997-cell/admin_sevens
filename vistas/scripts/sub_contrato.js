@@ -105,23 +105,6 @@ function regresar(estado) {
     $('#regresar').show();
     $('#add_agregar_pago').show();
 
-    }else{
-      
-      if (estado==3) {
-
-        $('#add_sub_contrato').hide();
-        $('#tbl-principal').hide();  
-        $('#tbl-pagos').hide();
-        $('#add_agregar_pago').hide();
-
-        $('#tbl-facturas').show();
-        $('#regresar').show();
-        $('#tbl-facturas').show();
-        $('#add_agregar_facturas').show();
-
-    
-      }
-
     }
     
   }
@@ -732,9 +715,11 @@ function eliminar(idsubcontrato) {
 function listar_pagos(idsubcontrato, total_pago, total_deposito) {
  
   regresar(2);
+
   id_subcontrato=idsubcontrato;
+
   totattotal=total_pago; monto_total_dep=total_deposito;
-  //tabla_pagos_detraccion
+
   $('#total_apagar').html('S/. '+formato_miles(total_pago));
 
   tabla_pagos_proveedor=$('#tabla-pagos-proveedor').dataTable({
@@ -779,51 +764,51 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
    "bDestroy": true,
    "iDisplayLength": 5,//Paginación
    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
- }).DataTable();
+  }).DataTable();
  
- tabla_pagos_detraccion=$('#tabla-pagos-detraccion').dataTable({
-  "responsive": true,
-  lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-  "aProcessing": true,//Activamos el procesamiento del datatables
-  "aServerSide": true,//Paginación y filtrado realizados por el servidor
-  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-  buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-  "ajax":{
-      url: '../ajax/sub_contrato.php?op=listar_pagos_detraccion&idsubcontrato='+idsubcontrato,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
+  tabla_pagos_detraccion=$('#tabla-pagos-detraccion').dataTable({
+    "responsive": true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
+        url: '../ajax/sub_contrato.php?op=listar_pagos_detraccion&idsubcontrato='+idsubcontrato,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	
+        }
+      },
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') {
+          $("td", row).eq(0).addClass('text-center');
+        }
+        // columna: sub total
+        if (data[1] != "") {
+          $("td", row).eq(1).addClass("text-nowrap");
+        }
+        // columna: total
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass('text-nowrap text-right');
+        }
+      },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
       }
     },
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-center');
-      }
-      // columna: sub total
-      if (data[1] != "") {
-        $("td", row).eq(1).addClass("text-nowrap");
-      }
-      // columna: total
-      if (data[7] != '') {
-        $("td", row).eq(7).addClass('text-nowrap text-right');
-      }
-    },
-  "language": {
-    "lengthMenu": "Mostrar : _MENU_ registros",
-    "buttons": {
-      "copyTitle": "Tabla Copiada",
-      "copySuccess": {
-        _: '%d líneas copiadas',
-        1: '1 línea copiada'
-      }
-    }
-  },
-  "bDestroy": true,
-  "iDisplayLength": 5,//Paginación
-  "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-}).DataTable();
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+  }).DataTable();
 
   datos_proveedor(idsubcontrato);
   total_pagos_proveedor(id_subcontrato);
@@ -1022,27 +1007,110 @@ function mostrar_pagos(idpago_subcontrato) {
 }
 
 function total_pagos_proveedor(id_subcontrato) {
+  //limpiamos
+  $("#t_proveedor").html("");
+  $("#t_provee_porc").html("");
+
+  var monto_pagar_prov= ((totattotal * 90) / 100);
+
+  $("#t_proveedor").html(formato_miles(monto_pagar_prov.toFixed(2)));
+  $("#t_provee_porc").html(90);
+
+  var  porcentaj_saldo=0; var porcentaj_deposito_a_la_fecha=0; var total_saldo=0;
 
   $(".monto_total_deposito_prov").html("");
+  $(".porcnt_deposito_prov").html("");
+  $("#saldo_prov").html("");
+  $("#porcnt_sald_prov").html("");
 
   $.post("../ajax/sub_contrato.php?op=total_pagos_prov", { idsubcontrato: id_subcontrato }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);  
+    data = JSON.parse(data);  //console.log(data); 
+    
+    if (data.monto_parcial_deposito==null || data.monto_parcial_deposito=="" || data.monto_parcial_deposito==0 ) {
 
+      $(".monto_total_deposito_prov").html('S/. 0.00');
+
+      $(".porcnt_deposito_prov").html("0 %");
+      
+      $("#saldo_prov").html('S/. '+formato_miles(monto_pagar_prov.toFixed(2)));
+
+      $("#porcnt_sald_prov").html('100 %');
+      
+    } else {
+      
     $(".monto_total_deposito_prov").html('S/. '+ formato_miles(data.monto_parcial_deposito));
+
+    $(".porcnt_deposito_prov").html(((data.monto_parcial_deposito * 100) / monto_pagar_prov).toFixed(2) + " %");
+
+    porcentaj_deposito_a_la_fecha= ((data.monto_parcial_deposito * 100) / monto_pagar_prov).toFixed(4);
+
+    total_saldo=(parseFloat(monto_pagar_prov)- parseFloat(data.monto_parcial_deposito));
+
+    porcentaj_saldo=((total_saldo*porcentaj_deposito_a_la_fecha)/data.monto_parcial_deposito);
+
+    $("#saldo_prov").html('S/. '+total_saldo.toFixed(2));
+
+    $("#porcnt_sald_prov").html(porcentaj_saldo.toFixed(2)+' %');
+      
+    }
+
+    //calculando el porcentaje segun lo depositado
+
 
   });
 
 }
+
 function total_pagos_detraccion(id_subcontrato) {
 
+  $("#t_detaccion").html("");
+  $("#t_detacc_porc").html("");
+
+  var monto_pagar_detracc= ((totattotal * 10) / 100);
+
+  $("#t_detaccion").html(formato_miles(monto_pagar_detracc.toFixed(2)));
+  $("#t_detacc_porc").html(10);
+
+  var  porcentaj_saldo=0; var porcentaj_deposito_a_la_fecha=0; var total_saldo=0;
+
   $(".monto_total_deposito_detracc").html("");
+  $(".porcent_detracc").html("");
+  $("#saldo_detracc").html("");
+  $("#porcnt_saldo_detracc").html("");
+
 
   $.post("../ajax/sub_contrato.php?op=total_pagos_detrac", { idsubcontrato: id_subcontrato }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);  
+    
+    if (data.monto_parcial_deposito==null || data.monto_parcial_deposito==""  || data.monto_parcial_deposito==0) {
 
+      $(".monto_total_deposito_detracc").html('S/. 0.00');
+
+      $(".porcent_detracc").html("0 %");
+      
+      $("#saldo_detracc").html('S/. '+formato_miles(monto_pagar_detracc.toFixed(2)));
+
+      $("#porcnt_saldo_detracc").html('100 %');
+      
+    } else {
+      
     $(".monto_total_deposito_detracc").html('S/. '+ formato_miles(data.monto_parcial_deposito));
+
+    $(".porcent_detracc").html(((data.monto_parcial_deposito * 100) / monto_pagar_detracc).toFixed(2) + " %");
+
+    porcentaj_deposito_a_la_fecha= ((data.monto_parcial_deposito * 100) / monto_pagar_detracc).toFixed(4);
+
+    total_saldo=(parseFloat(monto_pagar_detracc)- parseFloat(data.monto_parcial_deposito));
+
+    porcentaj_saldo=((total_saldo*porcentaj_deposito_a_la_fecha)/data.monto_parcial_deposito);
+
+    $("#saldo_detracc").html('S/. '+total_saldo.toFixed(2));
+
+    $("#porcnt_saldo_detracc").html(porcentaj_saldo.toFixed(2)+' %');
+      
+    }
 
   });
 

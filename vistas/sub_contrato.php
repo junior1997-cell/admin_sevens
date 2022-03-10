@@ -108,12 +108,12 @@
                         </div>
                         <!-- tabla pagos -->
                         <div class="pb-3" id="tbl-pagos" style="display: none;">
-                          <div style="text-align: center;">
-                              <div style="background-color: aliceblue;">
-                                <h4>Total a pagar: <b id="total_apagar"></b></h4>
-                              </div>
+                          <div style="text-align: center;"><h4>Total a pagar: <b id="total_apagar"></b></h4></div>
+                          <br>
+                          <div class="text-center" style="background-color: aliceblue;">
+                            <h5>Proveedor S/ <b id="t_proveedor"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_provee_porc"></b> <b>%</b></h5>
                           </div>
-                          <div> <h4>Pagos: <b>Proveedor</b></h4> </div>
+                          <!--tabla-pagos-proveedor-->
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
@@ -139,13 +139,31 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th class="text-nowrap"> <b class="monto_total_deposito_prov"></b> </th>
+                                <th class="text-nowrap" style="color: #ff0000; background-color: #45c920;"> 
+                                  <b class="monto_total_deposito_prov"></b> <br>
+                                  <b class="porcnt_deposito_prov" style="color: black;"></b>
+                                </th>
                                 <th>Vaucher</th>
                                 <th>Estado</th>
                               </tr>
+                              <tr>
+                                <td colspan="6"></td>
+                                <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
+                                  <b id="saldo_prov"></b><br /> 
+                                  <b id="porcnt_sald_prov" style="color: black;"></b>
+                                </th>
+                                <td colspan="2"></td>
+                              </tr>
                             </tfoot>
                           </table>
-                          <div> <h4>Pagos: <b>Detracción</b></h4> </div>
+
+                          <br>
+                          
+                          <div class="text-center" style="background-color: aliceblue;">
+                            <h5>Detracciòn S/ <b id="t_detaccion"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_detacc_porc"></b> <b>%</b></h5>
+                          </div>
+                          <!--tabla-pagos-detraccion-->
                           <table id="tabla-pagos-detraccion" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
@@ -171,9 +189,21 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th class="text-nowrap"> <b class="monto_total_deposito_detracc"></b> </th>
+                                <th class="text-nowrap"  style="color: #ff0000; background-color: #45c920;"> 
+                                  <b class="monto_total_deposito_detracc"></b>  <br />
+                                  <b class="porcent_detracc" style="color: black;"></b>
+                                </th>
                                 <th>Vaucher</th>
                                 <th>Estado</th>
+                              </tr>
+                              <tr>
+                                <td colspan="6"></td>
+                                <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
+                                  <b id="saldo_detracc"></b> <br />
+                                  <b id="porcnt_saldo_detracc" style="color: black;"></b>
+                                </th>
+                                <td colspan="2"></td>
                               </tr>
                             </tfoot>
                           </table>
@@ -237,7 +267,7 @@
                               <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" style="width: 100%;">
                                 <option value="Recibo por honorario">Recibo por honorario</option>
                                 <option value="Ninguno">Ninguno</option>
-                                <option value="Factura">Factura</option>
+                                <option value="Comprobante">Comprobante</option>
                               </select>
                               </div>
                             </div>
@@ -299,7 +329,7 @@
                             </div>
                              
                             <!-- Pdf 1 -->
-                            <div class="col-md-12" >                               
+                            <div class="col-md-6" >                               
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label" >Comprobante </label>
