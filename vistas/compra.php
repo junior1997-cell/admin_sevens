@@ -338,7 +338,7 @@
                                     </div>
 
                                     <!-- Rounded switch -->
-                                    <div class="col-lg-1   col-xs-3 class_pading">
+                                    <div class="col-lg-1 col-xs-3">
                                       <div class="form-group">
                                         <div id="switch_detracc">
                                           <label for="" style="font-size: 13px;" >Detracción ?</label> <br />
@@ -939,7 +939,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal Ver compras - charge -->
+                  <!-- MODAL - DETALLE compras - charge -->
                   <div class="modal fade" id="modal-ver-compras">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -1109,7 +1109,7 @@
                                 <input type="hidden" name="cont" id="cont" />                                
 
                                 <!-- Nombre -->
-                                <div class="col-lg-8 class_pading">
+                                <div class="col-lg-8">
                                   <div class="form-group">
                                     <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
                                     <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto."  />
@@ -1166,7 +1166,7 @@
                                 </div>
 
                                 <!--Precio U-->
-                                <div class="col-lg-4 class_pading">
+                                <div class="col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
                                     <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
@@ -1174,7 +1174,7 @@
                                 </div>
 
                                 <!-- Rounded switch -->
-                                <div class="col-lg-2 class_pading">
+                                <div class="col-lg-2">
                                   <div class="form-group">
                                     <label for="" class="labelswitch">Sin o Con (Igv)</label>
                                     <div id="switch_igv">
@@ -1190,7 +1190,7 @@
                                 </div>
 
                                 <!--Sub Total subtotal igv total-->
-                                <div class="col-lg-4 class_pading">
+                                <div class="col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_sin_igv_p">Sub Total</label>
                                     <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
@@ -1198,7 +1198,7 @@
                                 </div>
 
                                 <!--IGV-->
-                                <div class="col-lg-4 class_pading">
+                                <div class="col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_igv_p">IGV</label>
                                     <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
@@ -1206,7 +1206,7 @@
                                 </div>
 
                                 <!--Total-->
-                                <div class="col-lg-4 class_pading">
+                                <div class="col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_total_p">Total</label>
                                     <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
@@ -1214,7 +1214,7 @@
                                 </div>
 
                                 <!--Descripcion-->
-                                <div class="col-lg-12 class_pading">
+                                <div class="col-lg-12">
                                   <div class="form-group">
                                     <label for="descripcion_p">Descripción </label> <br />
                                     <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>

@@ -32,103 +32,56 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
-  //Mostramos los proveedores
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   $.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
   
-  // Mostra,ps los bancos
   $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); $("#banco_prov").html(r); });
   
-  //Mostramos colores
   $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
-  //Mostramos las unidades de medida
   $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
-  //Mostramos las categorias del producto
   $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });  
 
-  // Guardar el registro de la compra
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
+
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
 
-  //Guardar registro proveedor
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
-  //Guardar pago
   $("#guardar_registro_pago").on("click", function (e) {  $("#submit-form-pago").submit(); });
-
-  //Guardar factura modal
+  //subir factura modal
   $("#guardar_registro_2").on("click", function (e) {  $("#submit-form-planootro").submit();  });  
 
-  //Guardar Material
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
 
-  // ═══════════════════ SELECT2 - COMPRAS ═══════════════════
-  //Initialize Select2 PROVEEDOR
-  $("#idproveedor").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
-    allowClear: true,
-  });
-  //Initialize Select2 GLOSA
-  $("#glosa").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione Glosa",
-    allowClear: true,
-  });
-  //Initialize Select2 TIPO DE COMPROBANTE
-  $("#tipo_comprobante").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione Comprobante",
-    allowClear: true,
-  });
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - COMPRAS ══════════════════════════════════════
 
-  // ═══════════════════ SELECT2 - PAGO COMPRAS ═══════════════════
-  //Initialize Select2 BANCO DE PAGO
-  $("#banco_pago").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione un banco",
-    allowClear: true,
-  });  
-  //Initialize Select2 FORMA DE PAGO
-  $("#forma_pago").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione una forma de pago",
-    allowClear: true,
-  });
-  //Initialize Select2 TIPO DE PAGO
-  $("#tipo_pago").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione un tipo de pago",
-    allowClear: true,
-  });
+  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
 
-  // ═══════════════════ SELECT2 - PROVEEDOR ═══════════════════
-  //Initialize Select2 BANCO DE PROVEEDOR
-  $("#banco_prov").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione un banco",
-    allowClear: true,
-  });
+  $("#glosa").select2({ theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
+
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione Comprobante", allowClear: true, });
+
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - PAGO COMPRAS ══════════════════════════════════════
+
+  $("#banco_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });  
+
+  $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione una forma de pago", allowClear: true, });
+
+  $("#tipo_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo de pago", allowClear: true, });
+
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - PROVEEDOR ══════════════════════════════════════
+
+  $("#banco_prov").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
   
-  // ═══════════════════ SELECT2 - MATERIAL ═══════════════════
-  //Initialize Select2 CATEGORIA
-  $("#categoria_insumos_af_p").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar color",
-    allowClear: true,
-  });
-  //Initialize Select2 COLOR
-  $("#color_p").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar color",
-    allowClear: true,
-  });
-  //Initialize Select2 UNIDAD DE MEDIDA
-  $("#unidad_medida_p").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar una unidad",
-    allowClear: true,
-  });
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - MATERIAL ══════════════════════════════════════
+
+  $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+
+  $("#color_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+
+  $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -207,8 +160,8 @@ function limpiar_form_compra() {
   //Mostramos los select2Proveedor
   //$.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
 
-  $("#idcompra_proyecto").val();
-  $("#idproyecto").val();
+  $("#idcompra_proyecto").val("");
+  $("#idproyecto").val("");
   $("#idproveedor").val("null").trigger("change");
   $("#tipo_comprobante").val("Ninguno").trigger("change");
   $("#glosa").val("null").trigger("change");
@@ -320,7 +273,7 @@ function tbla_principal(nube_idproyecto) {
 
       if (data[9] != "") {
 
-        var num = parseFloat(quitar_formato_miles(data[9])); console.log(num);
+        var num = parseFloat(quitar_formato_miles(data[9])); //console.log(num);
 
         if (num > 0) {
           $("td", row).eq(8).addClass('bg-warning text-right');
@@ -1073,15 +1026,6 @@ function l_m() {
   $("#barra_progress2").text("0%");
 }
 
-//Detraccion
-$("#my-switch_detracc").on("click ", function (e) {
-  if ($("#my-switch_detracc").is(":checked")) {
-    $("#estado_detraccion").val("1");
-  } else {
-    $("#estado_detraccion").val("0");
-  }
-});
-
 //mostramos para editar el datalle del comprobante de la compras
 function mostrar_compra(idcompra_proyecto) {
 
@@ -1100,8 +1044,6 @@ function mostrar_compra(idcompra_proyecto) {
     data = JSON.parse(data); // console.log(data);
 
     if (data) {
-
-      $(".subtotal").html("");   $(".igv_comp").html("");  $(".total").html("");
 
       if (data.tipo_comprobante == "Factura") {
         $(".content-igv").show();
@@ -1191,11 +1133,9 @@ function mostrar_compra(idcompra_proyecto) {
 
         modificarSubtotales();
       } else {
-        toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");
-        $(".subtotal").html("S/. 0.00");
-        $(".igv_comp").html("S/. 0.00");
-        $(".total").html("S/. 0.00");
+        toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");        
       }
+      
     } else {
       toastr.error("<h3>Error.</h3> <br> Este registro tiene errores, o esta vacio");
     }
@@ -1219,6 +1159,15 @@ function ver_detalle_compras(idcompra_proyecto) {
     $("#cargando-6-fomulario").hide();
   });
 }
+
+//Detraccion
+$("#my-switch_detracc").on("click ", function (e) {
+  if ($("#my-switch_detracc").is(":checked")) {
+    $("#estado_detraccion").val("1");
+  } else {
+    $("#estado_detraccion").val("0");
+  }
+});
 
 // .......:::::::::::::::::: - FIN - AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
 
