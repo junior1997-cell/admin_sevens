@@ -110,6 +110,7 @@ Class Sub_contrato
 					"igv"                => $value['igv'],
 					"costo_parcial"      => $value['costo_parcial'],
 					"descripcion"        => $value['descripcion'],
+					"comprobante"        => $value['comprobante'],
 					"estado"             => $value['estado'],
 
 					"total_deposito"     => ($retVal_2 = empty($total_deposito) ? 0 : ($retVal_3 = empty($total_deposito['total_deposito']) ? 0 : $total_deposito['total_deposito'])),
