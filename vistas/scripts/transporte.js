@@ -140,10 +140,10 @@ function comprob_factura() {
     igv= monto-subtotal;
 
     $(".subtotal").val(subtotal.toFixed(2));
-    $("#subtotal").val(subtotal.toFixed(4));
+    $("#subtotal").val(subtotal.toFixed(2));
 
     $(".igv").val(igv.toFixed(2));
-    $("#igv").val(igv.toFixed(4));
+    $("#igv").val(igv.toFixed(2));
 
   } else {
     if ($("#tipo_comprobante").select2("val") =="Ninguno") {

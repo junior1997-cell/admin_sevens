@@ -1191,15 +1191,16 @@ function comprob_factura() {
       igv= monto-subtotal;
 
       $(".subtotal").val(subtotal.toFixed(2));
-      $("#subtotal").val(subtotal.toFixed(4));
+      $("#subtotal").val(subtotal.toFixed(2));
       $(".igv").val(igv.toFixed(2));
-      $("#igv").val(igv.toFixed(4));
+      $("#igv").val(igv.toFixed(2));
 
   } else {
 
     $(".subtotal").val(monto.toFixed(2));
-    $("#subtotal").val(monto.toFixed(4));
+    $("#subtotal").val(monto.toFixed(2));
     $("#igv").val("0.00");
+    $(".igv").val(0);
   }
   
   

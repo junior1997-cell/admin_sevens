@@ -193,10 +193,10 @@ function comprob_factura() {
       igv= monto-subtotal;
 
       $(".subtotal").val(subtotal.toFixed(2));
-      $("#subtotal").val(subtotal.toFixed(4));
+      $("#subtotal").val(subtotal.toFixed(2));
 
       $(".igv").val(igv.toFixed(2));
-      $("#igv").val(igv.toFixed(4));
+      $("#igv").val(igv.toFixed(2));
 
   } else {
 
@@ -316,7 +316,7 @@ function mostrar(idcomida_extra ) {
     $("#descripcion").val(data.descripcion);
   
     $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
-    $("#subtotal").val(parseFloat(data.subtotal));
+    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
 
     $(".igv").val(parseFloat(data.igv).toFixed(2));
     $("#igv").val(data.igv);
