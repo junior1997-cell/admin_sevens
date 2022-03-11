@@ -1026,7 +1026,7 @@ function mostrar_pagos(idpago_servicio, id_maquinaria) {
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.imagen) == "pdf" ) {
 
-        $("#doc1_ver").html('<iframe src="../dist/docs/servicio_maquina/comprobantes_pago/'+data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc1_ver").html('<iframe src="../dist/docs/servicio_maquina/comprobante_pago/'+data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
       }else{
         if (
@@ -1035,7 +1035,7 @@ function mostrar_pagos(idpago_servicio, id_maquinaria) {
           extrae_extencion(data.imagen) == "tiff" || extrae_extencion(data.imagen) == "tif" || extrae_extencion(data.imagen) == "webp" ||
           extrae_extencion(data.imagen) == "bmp" || extrae_extencion(data.imagen) == "svg" ) {
 
-          $("#doc1_ver").html(`<img src="../dist/docs/servicio_maquina/comprobantes_pago/${data.imagen}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          $("#doc1_ver").html(`<img src="../dist/docs/servicio_maquina/comprobante_pago/${data.imagen}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
           
         } else {
           $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -1149,8 +1149,8 @@ function eliminar_pagos(idpago_servicio, idmaquinaria) {
 function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "");
   $("#modal-ver-vaucher").modal("show");
-  $("#img-vaucher").attr("src", "../dist/docs/servicio_maquina/comprobantes_pago/" + imagen);
-  $("#descargar").attr("href", "../dist/docs/servicio_maquina/comprobantes_pago/" + imagen);
+  $("#img-vaucher").attr("src", "../dist/docs/servicio_maquina/comprobante_pago/" + imagen);
+  $("#descargar").attr("href", "../dist/docs/servicio_maquina/comprobante_pago/" + imagen);
 
   // $(".tooltip").removeClass('show');
 }
@@ -1317,50 +1317,6 @@ function mostrar_factura(idfactura) {
     $("#igv").val(data.igv);
     $("#nota").val(data.nota);
 
-    if (data.imagen != "") {
-      var img = data.imagen;
-
-      $("#foto2_i").attr("src", "../dist/docs/servicio_maquina/imagens_pago/" + data.imagen);
-
-      var extencion = img.substr(img.length - 3); // => "1"
-      console.log(extencion);
-      $("#ver_pdf").html("");
-      $("#foto2_i").attr("src", "");
-
-      if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-        $("#ver_pdf").hide();
-        $("#foto2_i").show();
-        $("#foto2_i").attr("src", "../dist/img/facturas/" + img);
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      } else {
-        $("#foto2_i").hide();
-        $("#ver_pdf").show();
-        $("#ver_pdf").html('<iframe src="../dist/img/facturas/' + img + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-
-        $("#foto2_nombre").html(
-          "" +
-            '<div class="row">' +
-            '<div class="col-md-12">Factura</div>' +
-            '<div class="col-md-12">' +
-            '<button  class="btn btn-danger  btn-block" onclick="foto2_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-            "</div>" +
-            "</div>" +
-            ""
-        );
-      }
-
-      $("#foto2_actual").val(data.imagen);
-    }
     /**-------------------------*/
     if (data.imagen == "" || data.imagen == null  ) {
 
@@ -1379,7 +1335,7 @@ function mostrar_factura(idfactura) {
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.imagen) == "pdf" ) {
 
-        $("#doc2_ver").html('<iframe src="../dist/docs/servicio_maquina/comprobantes_facturas/'+data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc2_ver").html('<iframe src="../dist/docs/servicio_maquina/comprobante_servicio/'+data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
       }else{
         if (
@@ -1388,7 +1344,7 @@ function mostrar_factura(idfactura) {
           extrae_extencion(data.imagen) == "tiff" || extrae_extencion(data.imagen) == "tif" || extrae_extencion(data.imagen) == "webp" ||
           extrae_extencion(data.imagen) == "bmp" || extrae_extencion(data.imagen) == "svg" ) {
 
-          $("#doc2_ver").html(`<img src="../dist/docs/servicio_maquina/comprobantes_facturas/${data.imagen}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          $("#doc2_ver").html(`<img src="../dist/docs/servicio_maquina/comprobante_servicio/${data.imagen}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
           
         } else {
           $("#doc2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -1473,14 +1429,14 @@ function ver_modal_factura(imagen) {
   if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
     $("#ver_fact_pdf").hide();
     $("#img-factura").show();
-    $("#img-factura").attr("src", "../dist/docs/servicio_maquina/comprobantes_facturas/" + img);
+    $("#img-factura").attr("src", "../dist/docs/servicio_maquina/comprobante_servicio/" + img);
 
-    $("#iddescargar").attr("href", "../dist/docs/servicio_maquina/comprobantes_facturas/" + img);
+    $("#iddescargar").attr("href", "../dist/docs/servicio_maquina/comprobante_servicio/" + img);
   } else {
     $("#img-factura").hide();
     $("#ver_fact_pdf").show();
-    $("#ver_fact_pdf").html('<iframe src="../dist/docs/servicio_maquina/comprobantes_facturas/' + img + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href", "../dist/docs/servicio_maquina/comprobantes_facturas/" + img);
+    $("#ver_fact_pdf").html('<iframe src="../dist/docs/servicio_maquina/comprobante_servicio/' + img + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href", "../dist/docs/servicio_maquina/comprobante_servicio/" + img);
   }
 
   // $(".tooltip").removeClass('show');

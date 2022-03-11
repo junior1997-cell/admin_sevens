@@ -15,6 +15,7 @@
         <title>Admin Sevens | servicios</title>
         <?php
         require 'head.php';
+        
         ?>
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
       </head>
@@ -34,12 +35,12 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1>Servicios - Equipo</h1>
+                      <h1>Servicios - Equipos</h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Servicio-Equipo</li>
+                        <li class="breadcrumb-item active">Servicio-Equipos</li>
                       </ol>
                     </div>
                   </div>
@@ -106,8 +107,9 @@
                             </div>
                           </div>
                         </div>
+
                         <!--===============Tabla Principal =========-->
-                        <div class="card-body display " id="tabla_principal">
+                        <div class="card-body display" id="tabla_principal">
                           <table id="tabla-servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
@@ -174,7 +176,7 @@
                                 <th>Costo Unitario</th>
                                 <th>Unidad M.</th>
                                 <th>Cantidad</th>
-                                <th id="costo-parcial" style="color: #ff0000; background-color: #f3e700;"></th>
+                                <th class="text-nowrap text-right" id="costo-parcial" style="color: #ff0000; background-color: #f3e700;"></th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
                               </tr>
@@ -184,9 +186,7 @@
 
                         <!--===============Tabla Pagos =======--->
                         <div class="card-body" id="tabla_pagos" style="display: none;">
-
-                          <!-- TABLA PROVEDDOR -->
-                          <div class="text-center" >
+                          <div style="text-align: center;">
                             <div>
                               <h4>Total a pagar: <b id="total_costo_secc_pagos"></b></h4>
                             </div>
@@ -194,7 +194,8 @@
                             <div style="background-color: aliceblue;">
                               <h5>Proveedor S/ <b id="t_proveedor"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_provee_porc"></b> <b>%</b></h5>
                             </div>
-                          </div>                           
+                          </div>
+                          <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
@@ -220,7 +221,7 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th style="color: #ff0000; background-color: #45c920;">
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #45c920;">
                                   <b id="monto_total_prob"></b> <br />
                                   <b id="porcnt_prove" style="color: black;"></b>
                                 </th>
@@ -229,8 +230,8 @@
                               </tr>
                               <tr>
                                 <td colspan="6"></td>
-                                <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th style="color: #ff0000; background-color: #f3e700;">
+                                <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_p"></b> <br />
                                   <b id="porcnt_sald_p" style="color: black;"></b>
                                 </th>
@@ -238,10 +239,9 @@
                               </tr>
                             </tfoot>
                           </table>
+                          <!--Tabla 2-->
                           <br />
-
-                          <!-- TABLA DETRACCION -->
-                          <div class="text-center" style="text-align: center;">
+                          <div style="text-align: center;">
                             <div style="background-color: aliceblue;">
                               <h5>Detracción S/ <b id="t_detaccion"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_detacc_porc"></b> <b>%</b></h5>
                             </div>
@@ -271,7 +271,7 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th style="color: #ff0000; background-color: #45c920;">
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #45c920;">
                                   <b id="monto_total_detracc"></b> <br />
                                   <b id="porcnt_detrcc" style="color: black;"></b>
                                 </th>
@@ -280,8 +280,8 @@
                               </tr>
                               <tr>
                                 <td colspan="6"></td>
-                                <td style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th style="color: #ff0000; background-color: #f3e700;">
+                                <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_d"></b> <br />
                                   <b id="porcnt_sald_d" style="color: black;"></b>
                                 </th>
@@ -322,7 +322,7 @@
                                 <th>Nota</th>
                                 <th>Sub total</th>
                                 <th>IGV</th>
-                                <th id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
+                                <th class="text-nowrap text-right" id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
                                 <th>Descripción</th>
                                 <th>Factura</th>
                                 <th>Estado</th>
@@ -330,6 +330,7 @@
                             </tfoot>
                           </table>
                         </div>
+                        
                       </div>
                       <!-- /.card -->
                     </div>
@@ -385,7 +386,7 @@
                               <div class="col-lg-3" id="cantidad_ii">
                                 <div class="form-group">
                                   <label for="cantidad">Cantidad </label>
-                                  <input type="number" step="0.01" name="cantidad" id="cantidad" class="form-control" onclick="costo_partcial();" onkeyup="costo_partcial(); calculardia();" onchange="calculardia();" />
+                                  <input type="number" step="0.01" name="cantidad" id="cantidad" class="form-control" placeholder="Horometro Inicial" onclick="costo_partcial();" onkeyup="costo_partcial(); calculardia();" onchange="calculardia();" />
                                 </div>
                               </div>
 
@@ -524,7 +525,7 @@
                                 <div class="form-group">
                                   <label for="beneficiario_pago">Beneficiario</label>
                                   <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
-                                  <br />                                   
+                                  <br />
                                   <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
@@ -532,7 +533,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="forma_pago">Forma Pago</label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" onchange="validar_forma_de_pago();" style="width: 100%;">
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="validar_forma_de_pago();">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
                                     <option value="Crédito">Crédito</option>
@@ -602,15 +603,32 @@
                                   <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
-                              <!--vaucher-->
-                              <div class="col-md-6 col-lg-4">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
-                                <label for="foto1">Voucher</label> <br />
-                                <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
-                                <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
-                                <input type="hidden" name="foto1_actual" id="foto1_actual" />
-                                <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+
+                              <!-- Pdf 1 -->
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" >Comprobante </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_pago');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc1_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -745,29 +763,41 @@
                               <!-- Descripcion-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="descripcion_f">Descripción </label> <br />
+                                  <label for="descripcion_f">Glosa </label> <br />
                                   <textarea name="descripcion_f" id="descripcion_f" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
-                              <!--vaucher-->
-                              <div class="col-md-6 col-lg-12">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
-                                <label for="foto2">Factura en <b style="color: red;">(Imagen o PDF)</b></label> <br />
-                                <div class="text-center">
-                                  <img onerror="this.src='../dist/img/default/img_defecto2.png';" src="../dist/img/default/img_defecto2.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
-                                  <div id="ver_pdf"></div>
+                              <!-- Pdf 2 -->
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" >Comprobante </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_servicio');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc2_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
                                 </div>
-                                <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
-                            </div>
 
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
+                              <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                <div class="col-lg-12 text-center">
+                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                  <br />
+                                  <h4>Cargando...</h4>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -822,7 +852,7 @@
 
         <script>
           $(function () {
-              $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="tooltip"]').tooltip();
           });
         </script>
 

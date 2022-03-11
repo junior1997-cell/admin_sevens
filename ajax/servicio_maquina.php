@@ -455,7 +455,7 @@ switch ($_GET["op"]) {
 
           $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/servicio_maquina/comprobantes_pago/" . $imagen1);
+          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/servicio_maquina/comprobante_pago/" . $imagen1);
         }
 
         if (empty($idpago_servicio)) {
@@ -483,7 +483,7 @@ switch ($_GET["op"]) {
             $img1_ant = $datos_f1->fetch_object()->imagen;
 
             if ($img1_ant != "") {
-              unlink("../dist/docs/servicio_maquina/comprobantes_pago/" . $img1_ant);
+              unlink("../dist/docs/servicio_maquina/comprobante_pago/" . $img1_ant);
             }
           }
 
@@ -779,7 +779,7 @@ switch ($_GET["op"]) {
 
           $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-          move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/servicio_maquina/comprobantes_facturas/" . $imagen2);
+          move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/servicio_maquina/comprobante_servicio/" . $imagen2);
         }
 
         if (empty($idfactura)) {
@@ -793,7 +793,7 @@ switch ($_GET["op"]) {
             $img1_ant = $datos_f1->fetch_object()->imagen;
 
             if ($img1_ant != "") {
-              unlink("../dist/docs/servicio_maquina/comprobantes_facturas/" . $img1_ant);
+              unlink("../dist/docs/servicio_maquina/comprobante_servicio/" . $img1_ant);
             }
           }
 

@@ -618,7 +618,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobantes_pago');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_pago');">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                   </div>
@@ -781,7 +781,7 @@
                                     <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobantes_facturas');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_servicio');">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                   </div>
