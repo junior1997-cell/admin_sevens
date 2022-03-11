@@ -1,41 +1,27 @@
-var tabla_fact_compras; 
-var tabla_fact_maquinaria; 
-var tabla_fact_equipos; 
-var tabla_fact_otros_g;
-var tabla_fact_transporte;
-var tabla_fact_hospedaje;
-var tabla_fact_pension;
-var tabla_fact_break;
-var tabla_fact_comidas_ex;
+var tabla_principal;
 
 //Función que se ejecuta al inicio
 function init() {
 
-  $("#bloc_ContableFinanciero").addClass("menu-open");
+  // $("#bloc_ContableFinanciero").addClass("menu-open");
 
-  $("#mContableFinanciero").addClass("active");
+  // $("#mContableFinanciero").addClass("active");
 
   $("#lResumenFacura").addClass("active bg-primary");
   
-  listar_tbla_compras(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_maquinaria(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_equipos(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_otros_gastos(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_transporte(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_hospedaje(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_pension(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_break(localStorage.getItem('nube_idproyecto'));
-  listar_tbla_comidas_ex(localStorage.getItem('nube_idproyecto'));
+  tbla_principal(localStorage.getItem('nube_idproyecto'));
   // Formato para telefono
   $("[data-mask]").inputmask();   
 } 
 
 //Función Listar - tabla compras
-function listar_tbla_compras(nube_idproyecto) {
+function tbla_principal(nube_idproyecto) {
 
-  $('.monto-total-compras').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
-  tabla_fact_compras=$('#tabla-r-f-compras').dataTable({
+  tabla_principal = $('#tabla-r-f-compras').dataTable({
     "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -52,21 +38,21 @@ function listar_tbla_compras(nube_idproyecto) {
 		},
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass('text-center text-nowrap');
       }   
       // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass('text-right');
       }     
 
       // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
+      if (data[6] != '') {
+        $("td", row).eq(6).addClass('text-right');
       }  
        // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-right');
       }      
     },
     "language": {
@@ -80,518 +66,86 @@ function listar_tbla_compras(nube_idproyecto) {
       }
     },
     "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
+    "iDisplayLength": 10,//Paginación
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_compras", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-compras').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-
+  $.post("../ajax/resumen_facturas.php?op=suma_totales", { 'id_proyecto': nube_idproyecto }, function (data, status) {
+    
+    data = JSON.parse(data);  console.log(data);     
+    
+    $('.total-total').html(`S/. ${formato_miles(parseFloat(data.total).toFixed(2))}`);
+    $('.total-subtotal').html(`S/. ${formato_miles(parseFloat(data.subtotal).toFixed(2))}`);
+    $('.total-igv').html(`S/. ${formato_miles(parseFloat(data.igv).toFixed(2))}`);
   }); 
-
-  
-}
-//Función Listar - tabla maquinaria
-function listar_tbla_maquinaria(nube_idproyecto) {
-
-  $('.monto-total-maquinaria').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_maquinaria=$('#tabla-r-f-maquinaria').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_maquinaria&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_maquinaria", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    $('.monto-total-maquinaria').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-maquinaria').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-
-  }); 
-
-  
-}
-//Función Listar - tabla equipos
-function listar_tbla_equipos(nube_idproyecto) {
-
-  $('.monto-total-equipos').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_equipos=$('#tabla-r-f-equipos').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_equipos&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_equipos", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-equipos').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
-  
-}
-//Función Listar - tabla otros gastos
-function listar_tbla_otros_gastos(nube_idproyecto) {
-
-  $('.monto-total-otros_g').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_otros_g=$('#tabla-r-f-otros_g').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_otros_gastos&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_otros_gastos", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-otros_g').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
-  
-}
-//Función Listar - tabla transport
-function listar_tbla_transporte(nube_idproyecto) {
-
-  $('.monto-total-transporte').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_transporte=$('#tabla-r-f-transporte').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_transporte&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_transporte", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-transporte').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
-  
-}
-//Función Listar - tabla hospedaje
-function listar_tbla_hospedaje(nube_idproyecto) {
-
-  $('.monto-total-hospedaje').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_hospedaje=$('#tabla-r-f-hospedaje').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_hospedaje&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_hospedaje", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-hospedaje').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
   
 }
 
-//Función Listar - tabla pension
-function listar_tbla_pension(nube_idproyecto) {
+//ver ficha tecnica
+function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comprobante, ruta) {
 
-  $('.monto-total-pension').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_pension=$('#tabla-r-f-pension').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_pension&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_pension", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-pension').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
+  var data_comprobante = ""; var url = ""; var nombre_download = "Comprobante"; 
   
-}
+  $("#modal-ver-comprobante").modal("show");
 
-//Función Listar - tabla break
-function listar_tbla_break(nube_idproyecto) {
+  if (comprobante == '' || comprobante == null) {
 
-  $('.monto-total-break').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+    data_comprobante = `<div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="Alerta" aria-hidden="true">&times;</button><h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>No hay un documento para ver. Edite este registro en su modulo correspondiente.</div>`;
 
-  tabla_fact_break=$('#tabla-r-f-break').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_break&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
+  }else{
 
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
+    if ( extrae_extencion(comprobante) == "jpeg" || extrae_extencion(comprobante) == "jpg" || extrae_extencion(comprobante) == "jpe" ||
+      extrae_extencion(comprobante) == "jfif" || extrae_extencion(comprobante) == "gif" || extrae_extencion(comprobante) == "png" ||
+      extrae_extencion(comprobante) == "tiff" || extrae_extencion(comprobante) == "tif" || extrae_extencion(comprobante) == "webp" ||
+      extrae_extencion(comprobante) == "bmp" || extrae_extencion(comprobante) == "svg" ) {
+      
+      url = `${ruta}${comprobante}`;
+
+      nombre_download = `${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
+
+      data_comprobante = `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"><img src="${url}" alt="img" class="img-thumbnail" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" ></div>`;         
+      
+    } else { 
+
+      if (extrae_extencion(comprobante) == "pdf") {
+
+        url = `${ruta}${comprobante}`;
+
+        nombre_download = `${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
+
+        data_comprobante = `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"><iframe src="${url}" frameborder="0" scrolling="no" width="100%" height="410"> </iframe></div>`;      
+
+      } else {
+        
+        url = `${ruta}${comprobante}`;
+
+        nombre_download = `${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
+
+        data_comprobante = `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"><img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" ></div>`;
+        
       }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_break", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-break').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
+    }
+  } 
   
-}
+  $(".ver-comprobante").html(`<div class="row" >
+    <div class="col-md-6 text-center">
+      <a type="button" class="btn btn-warning btn-block btn-xs" href="${url}" download="${nombre_download}"> <i class="fas fa-download"></i> Descargar. </a>
+    </div>
+    <div class="col-md-6 text-center">
+      <a type="button" class="btn btn-info btn-block btn-xs" href="${url}" target="_blank" <i class="fas fa-expand"></i> Ver completo. </a>
+    </div>
+    <div class="col-md-12 mt-3">     
+      ${data_comprobante}
+    </div>
+  </div>`);
 
-//Función Listar - tabla hospedaje
-function listar_tbla_comidas_ex(nube_idproyecto) {
-
-  $('.monto-total-comidas_ex').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-
-  tabla_fact_comidas_ex=$('#tabla-r-f-comidas_ex').dataTable({
-    "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_comidas_ex&id_proyecto='+nube_idproyecto,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	
-      }
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({ "text-align": "center" });
-      }   
-      // columna: sub total
-      if (data[4] != '') {
-        $("td", row).eq(4).css({ "text-align": "right" });
-      }     
-
-      // columna: igv
-      if (data[5] != '') {
-        $("td", row).eq(5).css({ "text-align": "right" });
-      }  
-       // columna: total
-      if (data[6] != '') {
-        $("td", row).eq(6).css({ "text-align": "right" });
-      }      
-    },
-    "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  $.post("../ajax/resumen_facturas.php?op=total_facturas_comidas_ex", { 'id_proyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.monto-total-comidas_ex').html('S/. '+formato_miles(parseFloat(data.monto_total).toFixed(2)));
-  }); 
-
-  
+  // $(".tooltip").hide();
 }
 
 init();
 
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-
-
 
 // quitamos las comas de miles de un numero
 function quitar_formato_miles(numero) {
@@ -631,4 +185,7 @@ function format_a_m_d(fecha) {
   return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
 
+function extrae_extencion(filename) {
+  return filename.split(".").pop();
+}
 
