@@ -128,6 +128,21 @@ switch ($_GET["op"]) {
     }
   break;
 
+  case 'eliminar':
+    if (!isset($_SESSION["nombre"])) {
+      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    } else {
+      //Validamos el acceso solo al usuario logueado y autorizado.
+      if ($_SESSION['servicio_maquina'] == 1) {
+        $rspta = $serviciomaquina->eliminar($idservicio);
+        echo $rspta ? "Servicio Eliminado" : "Servicio no se puede Eliminar";
+        //Fin de las validaciones de acceso
+      } else {
+        require 'noacceso.php';
+      }
+    }
+  break;
+
   case 'activar':
     if (!isset($_SESSION["nombre"])) {
       header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -240,19 +255,14 @@ switch ($_GET["op"]) {
           $data[] = [
             "0" => $cont++,
             "1" => ' <button class="btn btn-info btn-sm" onclick="listar_detalle(' . $unidad_medida . ')"><i class="far fa-eye"></i></button>',
-            "2" =>
-              '<div class="user-block">
-						 <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' .
-              $reg->maquina .
-              '</p></span>
-						 <span class="description" style="margin-left: 0px !important;">' .
-              $reg->codigo_maquina .
-              ' </span>
-						 </div>',
+            "2" =>'<div class="user-block">
+                    <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' .$reg->maquina .'</p></span>
+                    <span class="description" style="margin-left: 0px !important;">' .$reg->codigo_maquina .' </span>
+                  </div>',
             "3" => $reg->razon_social,
             "4" => $reg->unidad_medida,
             "5" => $reg->cantidad_veces,
-            "6" => number_format($reg->costo_parcial, 2, '.', ','),
+            "6" =>'S/. '. number_format($reg->costo_parcial, 2, '.', ','),
             "7" =>
               '<div class="text-center text-nowrap"> <button class="btn btn-' .
               $c .
@@ -346,11 +356,11 @@ switch ($_GET["op"]) {
                 ',' .
                 $reg->idmaquinaria .
                 ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar(' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar(' .
                 $reg->idservicio .
                 ',' .
                 $reg->idmaquinaria .
-                ')"><i class="far fa-trash-alt"></i></button>'
+                ')"><i class="fas fa-skull-crossbones"></i></button>'
               : '<button class="btn btn-warning btn-sm" onclick="mostrar(' .
                 $reg->idservicio .
                 ',' .
@@ -365,10 +375,10 @@ switch ($_GET["op"]) {
             "3" => empty($reg->horometro_inicial) || $reg->horometro_inicial == '0.00' ? '-' : $reg->horometro_inicial,
             "4" => empty($reg->horometro_final) || $reg->horometro_final == '0.00' ? '-' : $reg->horometro_final,
             "5" => empty($reg->horas) || $reg->horas == '0.00' ? '-' : $reg->horas,
-            "6" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ? '-' : number_format($reg->costo_unitario, 2, '.', ','),
+            "6" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ?  'S/. 0.00 ' :'S/. '. number_format($reg->costo_unitario, 2, '.', ','),
             "7" => empty($reg->unidad_medida) ? '-' : $reg->unidad_medida,
             "8" => empty($reg->cantidad) ? '-' : $reg->cantidad,
-            "9" => empty($reg->costo_parcial) ? '-' : number_format($reg->costo_parcial, 2, '.', ','),
+            "9" => empty($reg->costo_parcial) ? 'S/. 0.00' : 'S/. '. number_format($reg->costo_parcial, 2, '.', ','),
             "10" => empty($reg->descripcion) ? '-' : '<textarea cols="30" rows="1" class="textarea_datatable" readonly >' . $reg->descripcion . '</textarea>',
             "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
@@ -533,6 +543,21 @@ switch ($_GET["op"]) {
     }
   break;
 
+  case 'eliminar_pagos':
+    if (!isset($_SESSION["nombre"])) {
+      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    } else {
+      //Validamos el acceso solo al usuario logueado y autorizado.
+      if ($_SESSION['servicio_maquina'] == 1) {
+        $rspta = $serviciomaquina->eliminar_pagos($idpago_servicio);
+        echo $rspta ? "Servicio Eliminado" : "Servicio no se puede Eliminar";
+        //Fin de las validaciones de acceso
+      } else {
+        require 'noacceso.php';
+      }
+    }
+  break;
+
   case 'listar_pagos_proveedor':
     if (!isset($_SESSION["nombre"])) {
       header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -562,26 +587,10 @@ switch ($_GET["op"]) {
           $data[] = [
             "0" => $cont++,
             "1" => $reg->estado
-              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="far fa-trash-alt"></i></button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                $reg->idpago_servicio .
-                ',' .
-                $reg->id_maquinaria .
-                ')"><i class="fa fa-check"></i></button>',
+              ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .')"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .')"><i class="fas fa-skull-crossbones"></i></button>'
+              : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .')"><i class="fa fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .')"><i class="fa fa-check"></i></button>',
             "2" => $reg->forma_pago,
             "3" => '<div class="user-block">
               <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
@@ -591,7 +600,7 @@ switch ($_GET["op"]) {
             "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
             "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
             "6" => $reg->numero_operacion,
-            "7" => number_format($reg->monto, 2, '.', ','),
+            "7" =>'S/. '. number_format($reg->monto, 2, '.', ','),
             "8" => $imagen,
             "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
@@ -648,11 +657,11 @@ switch ($_GET["op"]) {
                 ',' .
                 $reg->id_maquinaria .
                 ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_pagos(' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' .
                 $reg->idpago_servicio .
                 ',' .
                 $reg->id_maquinaria .
-                ')"><i class="far fa-trash-alt"></i></button>'
+                ')"><i class="fas fa-skull-crossbones"></i></button>'
               : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
                 $reg->idpago_servicio .
                 ',' .
@@ -672,7 +681,7 @@ switch ($_GET["op"]) {
             "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
             "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
             "6" => $reg->numero_operacion,
-            "7" => number_format($reg->monto, 2, '.', ','),
+            "7" =>'S/. '. number_format($reg->monto, 2, '.', ','),
             "8" => $imagen,
             "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
@@ -836,9 +845,9 @@ switch ($_GET["op"]) {
               ? '<button class="btn btn-warning btn-sm" onclick="mostrar_factura(' .
                 $reg->idfactura .
                 ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_factura(' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_factura(' .
                 $reg->idfactura .
-                ')"><i class="far fa-trash-alt"></i></button>'
+                ')"><i class="fas fa-skull-crossbones"></i></button>'
               : '<button class="btn btn-warning btn-sm" onclick="mostrar_factura(' .
                 $reg->idfactura .
                 ')"><i class="fa fa-pencil-alt"></i></button>' .
@@ -848,9 +857,9 @@ switch ($_GET["op"]) {
             "2" => $reg->codigo,
             "3" => date("d/m/Y", strtotime($reg->fecha_emision)),            
             "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->nota) ? '- - -' : $reg->nota ).'</textarea>',
-            "5" => number_format($reg->subtotal, 4, '.', ','),
-            "6" => number_format($reg->igv, 4, '.', ','),
-            "7" => number_format($reg->monto, 2, '.', ','),
+            "5" => 'S/. '.number_format($reg->subtotal, 2, '.', ','),
+            "6" => 'S/. '.number_format($reg->igv, 2, '.', ','),
+            "7" => 'S/. '.number_format($reg->monto, 2, '.', ','),
             "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
             "9" => $imagen,
             "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
@@ -895,6 +904,21 @@ switch ($_GET["op"]) {
       if ($_SESSION['servicio_maquina'] == 1) {
         $rspta = $serviciomaquina->activar_factura($idfactura);
         echo $rspta ? "Servicio Restablecido" : "Servicio no se pudo Restablecido";
+        //Fin de las validaciones de acceso
+      } else {
+        require 'noacceso.php';
+      }
+    }
+  break;
+
+  case 'eliminar_factura':
+    if (!isset($_SESSION["nombre"])) {
+      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    } else {
+      //Validamos el acceso solo al usuario logueado y autorizado.
+      if ($_SESSION['servicio_maquina'] == 1) {
+        $rspta = $serviciomaquina->eliminar_factura($idfactura);
+        echo $rspta ? "Servicio Aliminado" : "Servicio no se puede Aliminar";
         //Fin de las validaciones de acceso
       } else {
         require 'noacceso.php';

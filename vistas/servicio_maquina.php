@@ -176,7 +176,7 @@
                                 <th>Costo Unitario</th>
                                 <th>Unidad M.</th>
                                 <th>Cantidad</th>
-                                <th id="costo-parcial" style="color: #ff0000; background-color: #f3e700;"></th>
+                                <th class="text-nowrap text-right" id="costo-parcial" style="color: #ff0000; background-color: #f3e700;"></th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
                               </tr>
@@ -221,7 +221,7 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th style="color: #ff0000; background-color: #45c920;">
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #45c920;">
                                   <b id="monto_total_prob"></b> <br />
                                   <b id="porcnt_prove" style="color: black;"></b>
                                 </th>
@@ -231,7 +231,7 @@
                               <tr>
                                 <td colspan="6"></td>
                                 <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_p"></b> <br />
                                   <b id="porcnt_sald_p" style="color: black;"></b>
                                 </th>
@@ -271,7 +271,7 @@
                                 <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                <th style="color: #ff0000; background-color: #45c920;">
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #45c920;">
                                   <b id="monto_total_detracc"></b> <br />
                                   <b id="porcnt_detrcc" style="color: black;"></b>
                                 </th>
@@ -281,7 +281,7 @@
                               <tr>
                                 <td colspan="6"></td>
                                 <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
+                                <th class="text-nowrap text-right" style="color: #ff0000; background-color: #f3e700;">
                                   <b id="saldo_d"></b> <br />
                                   <b id="porcnt_sald_d" style="color: black;"></b>
                                 </th>
@@ -322,7 +322,7 @@
                                 <th>Nota</th>
                                 <th>Sub total</th>
                                 <th>IGV</th>
-                                <th id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
+                                <th class="text-nowrap text-right" id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
                                 <th>Descripción</th>
                                 <th>Factura</th>
                                 <th>Estado</th>
