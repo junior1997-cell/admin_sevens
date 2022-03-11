@@ -9,27 +9,43 @@ function init() {
 
   $("#lResumenFacura").addClass("active bg-primary");
   
-  tbla_principal(localStorage.getItem('nube_idproyecto'));
+  // tbla_principal(localStorage.getItem('nube_idproyecto'));
+
+  $.post("../ajax/resumen_facturas.php?op=select2_proveedores", function (r) {
+    $("#proveedor_filtro").html(r);    
+    $(".cargando_proveedor").html('Proveedor');
+  });
+
+  //Initialize: Select2 PROVEEDOR
+  $("#proveedor_filtro").select2({ theme: "bootstrap4", placeholder: "Selecionar proveedor", allowClear: true, });
+
+  //Initialize: Select2 PROVEEDOR
+  $("#tipo_comprobante_filtro").select2({ theme: "bootstrap4", placeholder: "Selecionar comprobante", allowClear: true, });
+  
   // Formato para telefono
-  $("[data-mask]").inputmask();   
+  $("[data-mask]").inputmask();  
+  
+  filtros();
 } 
 
 //Función Listar - tabla compras
-function tbla_principal(nube_idproyecto) {
+function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+
+  console.log(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) ;
 
   $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
-  tabla_principal = $('#tabla-r-f-compras').dataTable({
+  tabla_principal = $('#tabla-principal').dataTable({
     "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9], } }, "colvis"],
     "ajax":	{
-      url: '../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto='+nube_idproyecto,
+      url: `../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -67,10 +83,11 @@ function tbla_principal(nube_idproyecto) {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [ { targets: [11], visible: false, searchable: false, }, ],
   }).DataTable();
 
-  $.post("../ajax/resumen_facturas.php?op=suma_totales", { 'id_proyecto': nube_idproyecto }, function (data, status) {
+  $.post("../ajax/resumen_facturas.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (data, status) {
     
     data = JSON.parse(data);  console.log(data);     
     
@@ -140,6 +157,25 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
   </div>`);
 
   // $(".tooltip").hide();
+}
+
+function filtros() {
+  var fecha_1       = $("#fecha_filtro_1").val();
+  var fecha_2       = $("#fecha_filtro_2").val();  
+  var id_proveedor  = $("#proveedor_filtro").select2('val');
+  var comprobante   = $("#tipo_comprobante_filtro").select2('val');  
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; }
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; }  
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null) { comprobante = ""; }
+
+  tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante)
 }
 
 init();

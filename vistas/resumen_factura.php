@@ -61,15 +61,44 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="card card-primary card-outline">
-                      <div class="card-header"> 
+                      <div class="card-header">                         
+                        <div class="row">
+
+                          <!-- filtro por: fecha -->
+                          <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                            <label for="filtros" >Filtar por Fecha </label>
+                            <!-- fecha inicial -->
+                            <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                            <!-- fecha final -->
+                            <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
+                          </div>
+
+                          <!-- filtro por: proveedor -->
+                          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
+                            <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                            </select>
+                          </div>
+
+                          <!-- filtro por: proveedor -->
+                          <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                            <label for="filtros" >Tipo comprobante </label>
+                            <select name="tipo_comprobante_filtro" id="tipo_comprobante_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                              <option value="Todos">Todos</option>
+                              <option value="Factura">Factura</option>
+                              <option value="Boleta">Boleta</option>
+                            </select>
+                          </div>
+
+                        </div>                        
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
 
                         <!-- tabla resumen facturas compras -->
-                        <div class=" pb-3" id="tbl-r-f-compras">
-                           <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3>
-                          <table id="tabla-r-f-compras" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                        <div class="pb-3">
+                          <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3>
+                          <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr> 
                                 <th class="text-center">#</th> 
@@ -82,7 +111,8 @@
                                 <th class="text-center">IGV</th>
                                 <th class="text-center">Glosa</th> 
                                 <th class="text-center">Operación</th> 
-                                <th class="text-center">CFDI.</th>                                                     
+                                <th class="text-center">CFDI.</th>
+                                <th class="text-center">Módulo</th>                                                     
                               </tr>
                             </thead>
                             <tbody> </tbody>
@@ -98,7 +128,8 @@
                                 <th class="text-right text-nowrap total-igv">IGV</th>
                                 <th class="text-center text-black-50">Glosa</th> 
                                 <th class="text-center text-black-50">Operación</th> 
-                                <th class="text-center text-black-50">CFDI.</th>                                                    
+                                <th class="text-center text-black-50">CFDI.</th>
+                                <th class="text-center">Módulo</th>                                             
                               </tr>
                             </tfoot>
                           </table>
