@@ -1310,12 +1310,12 @@ function mostrar_factura(idfactura) {
 
     $("#idfactura").val(data.idfactura);
     $("#codigo").val(data.codigo);
-    $("#monto").val(data.monto);
+    $("#monto").val(parseFloat(data.monto).toFixed(2));
     $("#fecha_emision").val(data.fecha_emision);
     $("#descripcion_f").val(data.descripcion);
-    $("#subtotal").val(data.subtotal);
-    $("#igv").val(data.igv);
-    $("#nota").val(data.nota);
+    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
+    $("#igv").val(parseFloat(data.igv).toFixed(2));
+    $("#nota").val( data.nota);
 
     /**-------------------------*/
     if (data.imagen == "" || data.imagen == null  ) {
