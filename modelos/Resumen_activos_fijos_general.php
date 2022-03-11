@@ -28,7 +28,7 @@ Class Resumen_activos_fijos_general
 				$cantidad = 0; $descuento=0; $subtotal=0; $promedio_precio = 0; $promedio_total=0;
 				
 				$idproducto= $value['idproducto'];
-				$sql_2="SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_igv`) AS promedio_precio 
+				$sql_2="SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
 				FROM `detalle_compra` WHERE idproducto=$idproducto";
 				$compra_p = ejecutarConsultaSimpleFila($sql_2);
 
@@ -111,7 +111,7 @@ Class Resumen_activos_fijos_general
 		}
 
 		$sql_2="SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
-		pr.nombre AS nombre_producto, dc.cantidad, dc.precio_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
+		pr.nombre AS nombre_producto, dc.cantidad, dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
 		AND dc.idproducto = pr.idproducto AND cpp.estado = '1' AND cpp.idproveedor = prov.idproveedor 
@@ -130,7 +130,7 @@ Class Resumen_activos_fijos_general
 					'ficha_tecnica'=>$value['ficha_tecnica'],
 					'nombre_producto'=>$value['nombre_producto'],
 					'cantidad'=>$value['cantidad'],
-					'precio_con_igv'=>$value['precio_igv'],
+					'precio_con_igv'=>$value['precio_con_igv'],
 					'descuento'=>$value['descuento'],
 					'subtotal'=>$value['subtotal'],
 					'proveedor'=>$value['proveedor']
@@ -158,7 +158,7 @@ Class Resumen_activos_fijos_general
 			foreach ($producto as $key => $value) {
 				
 				$idproducto= $value['idproducto'];
-				$sql_2="SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_igv`) AS promedio_precio 
+				$sql_2="SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
 				FROM `detalle_compra` WHERE idproducto=$idproducto";
 				$compra_p = ejecutarConsultaSimpleFila($sql_2);
 
@@ -266,7 +266,7 @@ Class Resumen_activos_fijos_general
 
       while ($num_elementos < count($idproducto)) {
         $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_total[$num_elementos]) + $descuento[$num_elementos];
-        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_venta, igv,precio_igv, descuento, subtotal, ficha_tecnica_producto) 
+        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_venta, igv,  precio_con_igv, descuento, subtotal, ficha_tecnica_producto) 
                 VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_total[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
         ejecutarConsulta($sql_detalle) or ($sw = false);
 

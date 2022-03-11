@@ -29,7 +29,7 @@
           <?php
             require 'nav.php';
             require 'aside.php';
-            if ($_SESSION['pago_trabajador']==1){
+            if ($_SESSION['resumen_factura']==1){
           ?>           
           <!--Contenido-->
           <div class="content-wrapper">
@@ -73,261 +73,36 @@
                             <thead>
                               <tr> 
                                 <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
                                 <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
+                                <th>Comprobante</th>
+                                <th>Documento</th>
+                                <th>Razón social</th>
+                                <th class="text-center">Total</th> 
+                                <th class="text-center">Subtotal</th>                                
                                 <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
+                                <th class="text-center">Glosa</th> 
+                                <th class="text-center">Operación</th> 
+                                <th class="text-center">CFDI.</th>                                                     
                               </tr>
                             </thead>
                             <tbody> </tbody>
-                            <tfoot>
+                            <tfoot> 
                               <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-compras">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>  
-                        <!-- tabla resumen facturas maquinaria -->
-                        <div class=" pb-3" id="tbl-r-f-maquinaria">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Maquinaria</b>    </h3> 
-                          <table id="tabla-r-f-maquinaria" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
+                                <th class="text-center text-black-50">#</th> 
+                                <th class="text-center text-black-50">Fecha</th>
+                                <th class="text-black-50">Comprobante</th>
+                                <th class="text-black-50">Documento</th>
+                                <th class="text-black-50">Razón social</th>
+                                <th class="text-right text-nowrap total-total">Total</th>  
+                                <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
+                                <th class="text-right text-nowrap total-igv">IGV</th>
+                                <th class="text-center text-black-50">Glosa</th> 
+                                <th class="text-center text-black-50">Operación</th> 
+                                <th class="text-center text-black-50">CFDI.</th>                                                    
                               </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-maquinaria">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>    
-                        <!-- tabla resumen facturas equipos -->
-                        <div class=" pb-3" id="tbl-r-f-equipos">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Equipos</b>    </h3> 
-                          <table id="tabla-r-f-equipos" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-equipos">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>    
-                        <!-- tabla resumen facturas otros gastos -->
-                        <div class=" pb-3" id="tbl-r-f-otros_g">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Otros gastos</b>    </h3> 
-                          <table id="tabla-r-f-otros_g" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-otros_g">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>   
-                        <!-- tabla resumen facturas transporte -->
-                        <div class=" pb-3" id="tbl-r-f-transporte">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Transporte</b>    </h3> 
-                          <table id="tabla-r-f-transporte" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-transporte">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>                       
-                        <!-- tabla resumen facturas hospedaje -->
-                        <div class=" pb-3" id="tbl-r-f-hospedaje">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Hospedaje</b>    </h3> 
-                          <table id="tabla-r-f-hospedaje" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-hospedaje">S/. 0.00</th>                                                     
-                                </tr>
                             </tfoot>
                           </table>
                         </div>
-                        <!-- tabla resumen facturas pension -->
-                        <div class=" pb-3" id="tbl-r-f-pension">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Pensión</b>    </h3> 
-                          <table id="tabla-r-f-pension" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-pension">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-                        <!-- tabla resumen facturas breack -->
-                        <div class=" pb-3" id="tbl-r-f-break">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Breaks</b>    </h3> 
-                          <table id="tabla-r-f-break" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Fact. pertenece</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Fact. pertenece</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-break">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-                        <!-- tabla resumen facturas comidas-extras -->
-                        <div class=" pb-3" id="tbl-r-f-comidas_ex">
-                          <h3 class="card-title mb-2">Resumen facturas: <b>Comidas extras</b>    </h3> 
-                          <table id="tabla-r-f-comidas_ex" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr> 
-                                <th class="text-center">#</th> 
-                                <th>Razón social</th>
-                                <th>Número</th>
-                                <th class="text-center">Fecha</th>
-                                <th class="text-center">Sub-total</th>                                
-                                <th class="text-center">IGV</th>
-                                <th class="text-center">Total</th>                                                     
-                              </tr>
-                            </thead>
-                            <tbody> </tbody>
-                            <tfoot>
-                              <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th>Razón social</th>
-                                  <th>Número</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th class="text-center">Sub-total</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-right monto-total-comidas_ex">S/. 0.00</th>                                                     
-                                </tr>
-                            </tfoot>
-                          </table>
-                        </div>                        
-                    
 
                       </div>
                       <!-- /.card-body -->
@@ -338,7 +113,24 @@
                 </div>
                 <!-- /.row -->
               </div>
-              <!-- /.container-fluid -->                    
+              <!-- /.container-fluid -->      
+              
+              <!-- MODAL - COMPROBANTE  -->
+              <div class="modal fade" id="modal-ver-comprobante">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Comprobante</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body ver-comprobante">
+                      <!-- detalle de la factura -->
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             </section>
             <!-- /.content -->
