@@ -603,15 +603,32 @@
                                   <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
-                              <!--vaucher-->
-                              <div class="col-md-6 col-lg-4">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
-                                <label for="foto1">Voucher</label> <br />
-                                <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
-                                <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
-                                <input type="hidden" name="foto1_actual" id="foto1_actual" />
-                                <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+
+                              <!-- Pdf 1 -->
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" >Comprobante </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobantes_pago');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc1_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -746,29 +763,41 @@
                               <!-- Descripcion-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="descripcion_f">Descripción </label> <br />
+                                  <label for="descripcion_f">Glosa </label> <br />
                                   <textarea name="descripcion_f" id="descripcion_f" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
-                              <!--vaucher-->
-                              <div class="col-md-6 col-lg-12">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
-                                <label for="foto2">Factura en <b style="color: red;">(Imagen o PDF)</b></label> <br />
-                                <div class="text-center">
-                                  <img onerror="this.src='../dist/img/default/img_defecto2.png';" src="../dist/img/default/img_defecto2.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
-                                  <div id="ver_pdf"></div>
+                              <!-- Pdf 2 -->
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" >Comprobante </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobantes_facturas');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc2_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
                                 </div>
-                                <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
-                            </div>
 
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
+                              <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                <div class="col-lg-12 text-center">
+                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                  <br />
+                                  <h4>Cargando...</h4>
+                                </div>
                               </div>
                             </div>
                           </div>

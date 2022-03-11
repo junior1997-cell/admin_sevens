@@ -40,7 +40,7 @@ $id_maquinaria_pago = isset($_POST["id_maquinaria_pago"]) ? limpiarCadena($_POST
 $idpago_servicio = isset($_POST["idpago_servicio"]) ? limpiarCadena($_POST["idpago_servicio"]) : "";
 $idproyecto_pago = isset($_POST["idproyecto_pago"]) ? limpiarCadena($_POST["idproyecto_pago"]) : "";
 
-$imagen1 = isset($_POST["foto1"]) ? limpiarCadena($_POST["foto1"]) : "";
+$imagen1 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
 //============factura========================
 $idproyectof = isset($_POST["idproyectof"]) ? limpiarCadena($_POST["idproyectof"]) : "";
 $idfactura = isset($_POST["idfactura"]) ? limpiarCadena($_POST["idfactura"]) : "";
@@ -53,8 +53,8 @@ $subtotal = isset($_POST["subtotal"]) ? limpiarCadena($_POST["subtotal"]) : "";
 $igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
 $nota = isset($_POST["nota"]) ? limpiarCadena($_POST["nota"]) : "";
 
-$imagen2 = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "";
-//$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$foto2
+$imagen2 = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "";
+//$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$doc2
 switch ($_GET["op"]) {
   /*=====ECCION DE SERVICIOS=========*/
   case 'guardaryeditar':
@@ -436,16 +436,16 @@ switch ($_GET["op"]) {
       //Validamos el acceso solo al usuario logueado y autorizado.
       if ($_SESSION['servicio_maquina'] == 1) {
         // imgen de perfil
-        if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
-          $imagen1 = $_POST["foto1_actual"];
+        if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
+          $imagen1 = $_POST["doc_old_1"];
           $flat_img1 = false;
         } else {
-          $ext1 = explode(".", $_FILES["foto1"]["name"]);
+          $ext1 = explode(".", $_FILES["doc1"]["name"]);
           $flat_img1 = true;
 
           $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-          move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/img/vauchers_pagos/" . $imagen1);
+          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/servicio_maquina/comprobantes_pago/" . $imagen1);
         }
 
         if (empty($idpago_servicio)) {
@@ -473,7 +473,7 @@ switch ($_GET["op"]) {
             $img1_ant = $datos_f1->fetch_object()->imagen;
 
             if ($img1_ant != "") {
-              unlink("../dist/img/vauchers_pagos/" . $img1_ant);
+              unlink("../dist/docs/servicio_maquina/comprobantes_pago/" . $img1_ant);
             }
           }
 
@@ -543,8 +543,6 @@ switch ($_GET["op"]) {
         $idmaquinaria = $_GET["idmaquinaria"];
         $idproyecto = $_GET["idproyecto"];
         $tipopago = 'Proveedor';
-        //$idmaquinaria ='3';
-        //$idproyecto ='2';
         $rspta = $serviciomaquina->listar_pagos($idmaquinaria, $idproyecto, $tipopago);
         //Vamos a declarar un array
         //$banco='';
@@ -557,7 +555,7 @@ switch ($_GET["op"]) {
           $suma = $suma + $reg->monto;
           
           empty($reg->imagen)
-            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
+            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
             : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
           $tool = '"tooltip"';
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
@@ -638,7 +636,7 @@ switch ($_GET["op"]) {
           $suma = $suma + $reg->monto;
           
           empty($reg->imagen)
-            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
+            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
             : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
           $tool = '"tooltip"';
           $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
@@ -763,16 +761,16 @@ switch ($_GET["op"]) {
       //Validamos el acceso solo al usuario logueado y autorizado.
       if ($_SESSION['servicio_maquina'] == 1) {
         // imgen de perfil
-        if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
-          $imagen2 = $_POST["foto2_actual"];
+        if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
+          $imagen2 = $_POST["doc_old_2"];
           $flat_img1 = false;
         } else {
-          $ext1 = explode(".", $_FILES["foto2"]["name"]);
+          $ext1 = explode(".", $_FILES["doc2"]["name"]);
           $flat_img1 = true;
 
           $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-          move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/facturas/" . $imagen2);
+          move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/servicio_maquina/comprobantes_facturas/" . $imagen2);
         }
 
         if (empty($idfactura)) {
@@ -786,7 +784,7 @@ switch ($_GET["op"]) {
             $img1_ant = $datos_f1->fetch_object()->imagen;
 
             if ($img1_ant != "") {
-              unlink("../dist/img/facturas/" . $img1_ant);
+              unlink("../dist/docs/servicio_maquina/comprobantes_facturas/" . $img1_ant);
             }
           }
 
@@ -826,7 +824,7 @@ switch ($_GET["op"]) {
           $suma = $suma + $reg->monto;
           
           empty($reg->imagen)
-            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-sad-tear fa-2x"></i></a></center></div>')
+            ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
             : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_factura(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>');
           $tool = '"tooltip"';
 
