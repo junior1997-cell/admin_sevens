@@ -58,7 +58,7 @@
 
         case 'suma_totales':
           
-          $rspta = $resumen_factura->suma_totales($_POST['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante']);
+          $rspta = $resumen_factura->suma_totales($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante']);
 
           echo json_encode($rspta);
 

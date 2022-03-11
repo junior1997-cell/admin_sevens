@@ -185,6 +185,17 @@
             </a>
           </li>
         <?php  }  ?>
+
+        <?php if ($_SESSION['Resumen_recibo_por_honorario']==1) {  ?>
+          <li class="nav-item ver-otros-modulos-1">
+            <a href="resumen_rh.php" class="nav-link" id="lResumenRH">            
+              <i class="nav-icon fas fa-poll"></i>
+              <p>
+                Resumen de RH            
+              </p>
+            </a>
+          </li>
+        <?php  }  ?>
         
         <?php if ($_SESSION['papelera']==1) {  ?>
           <li class="nav-item ver-otros-modulos-1">
