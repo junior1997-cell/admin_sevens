@@ -267,7 +267,7 @@
                               <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" style="width: 100%;">
                                 <option value="Recibo por honorario">Recibo por honorario</option>
                                 <option value="Ninguno">Ninguno</option>
-                                <option value="Comprobante">Comprobante</option>
+                                <!--<option value="Comprobante">Comprobante</option>-->
                               </select>
                               </div>
                             </div>
