@@ -24,7 +24,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['otro_gasto']==1){
+          if ($_SESSION['otra_factura']==1){
             ?>
 
             <!-- Content Wrapper. Contains page content -->
