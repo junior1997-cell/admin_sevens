@@ -1,328 +1,352 @@
 <?php
   //Activamos el almacenamiento en el buffer
   ob_start();
-  session_start();
 
+  session_start();
   if (!isset($_SESSION["nombre"])){
     header("Location: login.html");
-  }else{ ?>
+  }else{
+    ?>
+
     <!DOCTYPE html>
     <html lang="es">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Otras Facturas</title>
-        <?php
-          require 'head.php';
-        ?>
-        <!-- Theme style -->
-        <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
+        <title>Admin Sevens | Otras facturas</title>
+        
+        <?php require 'head.php'; ?>
+          
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed ">
-        
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
+        <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
-          <!-- Preloader -->
-          <!-- <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="../dist/svg/logo-principal.svg" alt="AdminLTELogo" width="360" />
-          </div> -->
-        
           <?php
-            require 'nav.php';
-            require 'aside.php';
-            if ($_SESSION['pago_trabajador']==1){
-          ?>           
-          <!--Contenido-->
-          <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-              <div class="container-fluid">
-                <div class="row mb-2">
-                  <div class="col-sm-6">
-                    <h1 class="m-0 nombre-trabajador">Otras Facturas</h1>
+          require 'nav.php';
+          require 'aside.php';
+          if ($_SESSION['otro_gasto']==1){
+            ?>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+              <!-- Content Header (Page header) -->
+              <section class="content-header">
+                <div class="container-fluid">
+                  <div class="row mb-2">
+                    <div class="col-sm-6">
+                      <h1>Otras facturas</h1>
+                    </div>
+                    <div class="col-sm-6">
+                      <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Otras facturas</li>
+                      </ol>
+                    </div>
                   </div>
-                  <!-- /.col -->
-                  <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item"><a href="otra_factura.php">Home</a></li>
-                      <li class="breadcrumb-item active">Otras Facturas</li>
-                    </ol>
-                  </div>
-                  <!-- /.col -->
                 </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
-            
-            <!-- Main content -->
-            <section class="content">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="hidden  card card-primary card-outline">
-                      <div class="card-header"> 
+                <!-- /.container-fluid -->
+              </section>
 
-                        <!-- agregar pago  -->
-                        <h3 class="card-title " id="btn-agregar" >
-                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_x_mes();">
-                          <i class="fas fa-plus-circle"></i> Agregar Otras Facturas 
-                          </button>                     
-                        </h3> 
-
-                      </div>
-                      <!-- /.card-header -->
-                      <div class="card-body">
-
-                        <!-- tabla principal -->
-                        <div class=" pb-3" id="tbl-principal">
-                          <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
+              <!-- Main content -->
+              <section class="content">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="card card-primary card-outline">
+                        <div class="card-header">
+                          <h3 class="card-title">
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otras_facturas" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            Admnistra de manera eficiente otras facturas.
+                          </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="tabla-otras_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
-                              <tr> 
-                                <th>Trabajdor</th> 
-                                <th>Fecha inicio</th>
-                                <th>Hoy</th>
-                                <th class="text-center">Fecha <br> culminacion</th>
-                                <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
-                                <th>Sueldo Mensual</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
-                                <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
-                                <th>Cel:</th>                         
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="">Acciones</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
+                                <th>Fecha</th>
+                                <th>Subtotal</th>
+                                <th>IGV</th>
+                                <th>Monto Total</th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                <th>Estado</th>
                               </tr>
                             </thead>
-                            <tbody>                         
-                              
-                            </tbody>
+                            <tbody></tbody>
                             <tfoot>
-                              <tr> 
-                                <th class="text-gray">Trabajdor</th> 
-                                <th class="text-gray">Fecha inicio</th>
-                                <th class="text-center text-gray">Hoy</th>
-                                <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
-                                <th class="text-center text-gray">Último <br> pago</th>
-                                <th class="text-center text-gray">Siguiente <br> pago</th>
-                                <th>Cel:</th>                            
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="">Acciones</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
+                                <th>Fecha</th>
+                                <th>Subtotal</th>
+                                <th>IGV</th>
+                                <th class="text-nowrap" id="total_monto"></th>
+                                <th>Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                <th>Estado</th>
                               </tr>
                             </tfoot>
                           </table>
-                        </div>                        
-
+                        </div>
+                        <!-- /.card-body -->
                       </div>
-                      <!-- /.card-body -->
+                      <!-- /.card -->
                     </div>
-                    <!-- /.card -->
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
 
-                    <div class="error-page">
-                      <h2 class="headline text-danger">307</h2>
+                <!-- Modal agregar otros gastos -->
+                <div class="modal fade" id="modal-agregar-otras_facturas">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title"><b>Agregar:</b> comprobante Otra factura</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
 
-                      <div class="error-content">
-                        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Estamos en <b class="text-danger">Desarrollo</b>.</h3>
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-otras_facturas" name="form-otras_facturas" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-1-fomulario">
+                              <!-- id hospedaje -->
+                              <input type="hidden" name="idotra_factura" id="idotra_factura" />
+                              <!-- Proceedor -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="idproveedor">Proveedor</label>
+                                  <select name="idproveedor" id="idproveedor" class="form-control select2" placeholder="Seleccinar un proveedor"> </select>
+                                </div>
+                              </div>
+                              <!--forma pago-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="forma_pago">Forma Pago</label>
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <!--Tipo de comprobante-->
+                              <div class="col-lg-6" id="content-t-comprob">
+                                <div class="form-group">
+                                  <label for="tipo_comprobante">Tipo Comprobante</label>
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                    <option value="Ninguno">Ninguno</option>
+                                    <option value="Boleta">Boleta</option>
+                                    <option value="Factura">Factura</option>
+                                    <option value="Nota_de_venta">Nota de venta</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <!-- Glosa-->
+                              <div class="col-lg-4" id="content-t-comprob">
+                                <div class="form-group">
+                                  <label for="glosa">Selecc. Glosa</label>
+                                  <select name="glosa" id="glosa" class="form-control select2" placeholder="Seleccinar">
+                                  
+                                    <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
+                                    <option value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                    <option value="MATERIAL">MATERIAL</option>
+                                    <option value="PLOTEO">PLOTEO</option>
+                                    <option value="AGUA">AGUA</option>
+                                    <option value="COMPRAS">COMPRAS</option>
+                                    <option value="SIERRA Y EXAGONALES">SIERRA Y EXAGONALES</option>
+                                    <option value="HERRAMIENTAS">HERRAMIENTAS</option>
+                                    <option value="ACERO Y CEMENTO">ACERO Y CEMENTO</option>
+                                    <option value="ESTACIONAMIENTO">ESTACIONAMIENTO</option>
+                                    <option value="PERSONALES">PERSONALES</option>
+                                    <option value="PASAJE">PASAJE</option>
+                                    <option value="EPPS">EPPS</option>
+                                    <option value="OTROS">OTROS</option>
+                                    
+                                  </select>
+                                </div>
+                              </div>
+                              <!-- Código-->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label class="nro_comprobante" for="nro_comprobante">Núm. comprobante </label>
+                                  <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
+                                </div>
+                              </div>
 
-                        <p>
-                          Estamos trabajando para que lo utilice de inmediato.
-                          Mientras tanto, puede <a href="escritorio.php">volver al panel de control</a> o intentar usar el formulario de búsqueda.
-                        </p>
+                              <!-- Fecha 1  -->
+                              <div class="col-lg-4 class_pading">
+                                <div class="form-group">
+                                  <label for="fecha_emision">Fecha Emisión</label>
+                                  <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" />
+                                </div>
+                              </div>
+                              <!-- Sub total -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="subtotal">Sub total</label>
+                                  <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                                   
+                                </div>
+                              </div>
+                              <!-- IGV -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="igv">IGV</label>
+                                  <input class="form-control igv" type="number" id="igv" name="igv" placeholder="IGV" readonly />
+                                </div>
+                              </div>
+                              <!-- valor IGV -->
+                              <div class="col-lg-2">
+                                <div class="form-group">
+                                  <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calculandototales_fact();"> 
+                                  <input type="hidden" name="tipo_gravada" id="tipo_gravada"> 
+                                </div>
+                              </div>
+                              <!--Precio Parcial-->
+                              <div class="col-lg-4 class_pading">
+                                <div class="form-group">
+                                  <label for="precio_parcial">Monto total </label>
+                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />                                  
+                                </div>
+                              </div>
 
-                        <form class="search-form">
-                          <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search">
+                              <!--Descripcion-->
+                              <div class="col-lg-12 class_pading">
+                                <div class="form-group">
+                                  <label for="descripcion_pago">Descripción</label> <br />
+                                  <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                </div>
+                              </div>
 
-                            <div class="input-group-append">
-                              <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
-                              </button>
+                              <!-- Factura -->
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" > Baucher de deposito </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc1_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                            </div>
+
+                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
                             </div>
                           </div>
-                          <!-- /.input-group -->
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-otras_facturas">Submit</button>
                         </form>
                       </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                      </div>
                     </div>
-                    <!-- /.error-page -->
-
-                  </div>
-                  <!-- /.col -->
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.container-fluid -->             
-
-              <!-- Modal agregar PAGOS POR MES -->
-              <div class="modal fade" id="modal-agregar-pago-trabajdor">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> <!-- NOMBRE DEL TRABAJDOR--> </b></h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="text-danger" aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    
-                    <div class="modal-body">
-                      <!-- form start -->
-                      <form id="form-pagos-x-mes" name="form-pagos-x-mes"  method="POST" >                      
-                        <div class="card-body">
-                          <div class="row" id="cargando-1-fomulario">
-
-                            <!-- id idpagos_x_mes_administrador -->
-                            <input type="hidden" name="idpagos_x_mes_administrador" id="idpagos_x_mes_administrador" />
-
-                            <!-- id idfechas_mes_pagos_administrador -->
-                            <input type="hidden" name="idfechas_mes_pagos_administrador_pxm" id="idfechas_mes_pagos_administrador_pxm" />
-                            <!-- id_tabajador_x_proyecto -->
-                            <input type="hidden" name="id_tabajador_x_proyecto_pxm" id="id_tabajador_x_proyecto_pxm" />
-                            <!-- fecha inicial -->
-                            <input type="hidden" name="fecha_inicial_pxm" id="fecha_inicial_pxm" />
-                            <!-- fecha final -->
-                            <input type="hidden" name="fecha_final_pxm" id="fecha_final_pxm" />
-                            <!-- nombre del mes -->
-                            <input type="hidden" name="mes_nombre_pxm" id="mes_nombre_pxm" />
-                            <!-- dias del mes -->
-                            <input type="hidden" name="dias_mes_pxm" id="dias_mes_pxm" />
-                            <!-- dias_regular -->
-                            <input type="hidden" name="dias_regular_pxm" id="dias_regular_pxm" />
-                            <!-- sueldo_mensual -->
-                            <input type="hidden" name="sueldo_mensual_pxm" id="sueldo_mensual_pxm" />
-                            <!-- monto_x_mes -->
-                            <input type="hidden" name="monto_x_mes_pxm" id="monto_x_mes_pxm" />                            
-
-                            <!-- Forma de pago hacia el trabajdor -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                              <label for="forma_pago">Forma Pago</label>
-                              <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                <option value="Transferencia">Transferencia</option>
-                                <option value="Efectivo">Efectivo</option>
-                              </select>
-                              </div>
-                            </div>
-
-                            <!-- Cuenta deposito enviada -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
-                                <input type="text" name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Cuenta deposito">  
-                              </div>                                                        
-                            </div>
-
-                            <!-- Monto (de cantidad a depositado) -->
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
-                                <input type="text" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
-                              </div>                                                        
-                            </div>
-                             
-                            <!-- Mes del pago -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="nombre_mes" class="text-gray">Mes </label>
-                                <span class="nombre_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
-                              </div>
-                            </div>
-
-                            <!-- Monto faltante -->
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="nombre_mes" class="text-gray">Faltante </label>
-                                <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
-                              </div>
-                            </div>
-                             
-                            <!-- Descripcion-->
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                <label for="descripcion">Descripción </label> <br>
-                                <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                              </div>                                                        
-                            </div>
-                             
-                            <!-- Pdf 1 -->
-                            <div class="col-md-12" >                               
-                              <div class="row text-center">
-                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                  <label for="cip" class="control-label" > Baucher de deposito </label>
-                                </div>
-                                <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
-                                    <i class="fas fa-upload"></i> Subir.
-                                  </button>
-                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
-                                </div>
-                                <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'baucher_deposito');">
-                                  <i class="fas fa-redo"></i> Recargar.
-                                  </button>
-                                </div>
-                              </div>                              
-                              <div id="doc1_ver" class="text-center mt-4">
-                                <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
-                              </div>
-                              <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
-                            </div>
-
-                            <!-- barprogress -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                              <div class="progress" id="div_barra_progress">
-                                <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                  0%
-                                </div>
-                              </div>
-                            </div>                                          
-
-                          </div>  
-
-                          <div class="row" id="cargando-2-fomulario" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                              <h4>Cargando...</h4>
-                            </div>
-                          </div>
-                          
-                        </div>
-                        <!-- /.card-body -->                      
-                        <button type="submit" style="display: none;" id="submit-form-pagos-x-mes">Submit</button>                      
-                      </form>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                    </div>                  
                   </div>
                 </div>
-              </div>              
 
-            </section>
-            <!-- /.content -->
-          </div>
-          <!--Fin-Contenido-->
-          <?php
-            }else{
-              require 'noacceso.php';
-            }
-            require 'footer.php';
+                <!--Modal-ver-comprobante-->
+                <div class="modal fade" id="modal-ver-comprobante">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Comprobante otra factura</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body ver-comprobante">              
+                         
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </section>
+              <!-- /.content -->
+            </div>
+
+            <?php
+          }else{
+            require 'noacceso.php';
+          }
+          require 'footer.php';
           ?>
-
         </div>
-        <?php          
-          require 'script.php';
-        ?>         
+        <!-- /.content-wrapper -->
 
+        <?php require 'script.php'; ?>
+
+        <style>
+          .class-style label{
+            font-size: 14px;
+          }
+          .class-style small {
+            background-color: #f4f7ee;
+            border: solid 1px #ce542a21;
+            margin-left: 3px;
+            padding: 5px;
+            border-radius: 6px;
+          }
+          .text_area_clss {
+              width: 100%;
+              height: auto;
+              background: rgb(215 224 225 / 22%);
+              border-block-color: inherit;
+              border-bottom: aliceblue;
+              border-left: aliceblue;
+              border-right: aliceblue;
+              border-top: hidden;
+          }
+        </style>
+        <!-- Bootstrap 4 -->
+        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- jquery-validation -->
+        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
+        <!-- InputMask -->
+        <script src="../plugins/moment/moment.min.js"></script>
+        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
+        <!-- sweetalert2 -->
+        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+        <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
         <script type="text/javascript" src="scripts/otra_factura.js"></script>
-         
+
         <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          })
+          $(function () { $('[data-toggle="tooltip"]').tooltip(); });
         </script>
 
         <script>
@@ -345,7 +369,9 @@
         </script>
       </body>
     </html>
-    <?php    
+
+    <?php  
   }
   ob_end_flush();
+
 ?>

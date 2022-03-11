@@ -1347,7 +1347,7 @@ function re_visualizacion(id, carpeta) {
           toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
           if ( extrae_extencion(antiguopdf) == "pdf" ) { 
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/break/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
             toastr.success('Documento vizualizado correctamente!!!')
           } else {
             if ( extrae_extencion(antiguopdf) == "csv" ) {
@@ -1372,7 +1372,7 @@ function re_visualizacion(id, carpeta) {
                       extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
                       extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
   
-                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
+                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/break/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
                       toastr.success('Documento vizualizado correctamente!!!');
                     } else {
                       $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
