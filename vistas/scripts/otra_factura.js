@@ -1,5 +1,5 @@
 var tabla;
-var idproyecto=1;
+
 //Función que se ejecuta al inicio
 function init() {
   //Activamos el "aside"
@@ -283,7 +283,7 @@ function listar() {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/otra_factura.php?op=listar&idproyecto",
+        url: "../ajax/otra_factura.php?op=listar",
         type: "get",
         dataType: "json",
         error: function (e) {

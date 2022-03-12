@@ -10,7 +10,7 @@
     
   } else {
 
-    if ($_SESSION['otro_gasto'] == 1) {
+    if ($_SESSION['otra_factura'] == 1) {
 
       require_once "../modelos/Otra_factura.php";
 
