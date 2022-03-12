@@ -142,7 +142,7 @@ class Papelera
       }
     }
 
-    $sql_8 = "SELECT idcompra_proyecto, tipo_comprovante, serie_comprovante, descripcion,  estado, created_at, updated_at 
+    $sql_8 = "SELECT idcompra_proyecto, tipo_comprobante, serie_comprobante, descripcion,  estado, created_at, updated_at 
     FROM compra_por_proyecto WHERE estado = '0' AND estado_delete = '1' AND idproyecto = '$nube_idproyecto';";
     $compra_por_proyecto = ejecutarConsultaArray($sql_8);
 
@@ -153,7 +153,7 @@ class Papelera
           'nombre_id_tabla' => 'idcompra_proyecto',
           'modulo'          => 'Compras',
           'id_tabla'        => $value8['idcompra_proyecto'],
-          'nombre_archivo'  => $value8['tipo_comprovante'] . ' ─ ' . $value8['serie_comprovante'],
+          'nombre_archivo'  => $value8['tipo_comprobante'] . ' ─ ' . $value8['serie_comprobante'],
           'descripcion'     => $value8['descripcion'],
           'created_at'      => $value8['created_at'],
           'updated_at'      => $value8['updated_at'],

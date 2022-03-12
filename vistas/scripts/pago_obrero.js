@@ -508,27 +508,27 @@ function modal_recibos_x_honorarios(idresumen_q_s_asistencia, fecha_inicial, fec
     $('.descargar').show();
     $('.ver_completo').show();
 
-    $('#descargar_rh').attr('href', `../dist/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}`);
+    $('#descargar_rh').attr('href', `../dist/docs/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}`);
     if (tipo_pago == 'quicenal') {        
       $('#descargar_rh').attr('download', `Recibo-por-honorario - Quincena ${numero_q_s} - ${nombre_trabajador}`); 
     } else {        
       $('#descargar_rh').attr('download', `Recibo-por-honorario - Semana ${numero_q_s} - ${nombre_trabajador}`); 
     }    
-    $('#ver_completo').attr('href', `../dist/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}`);
+    $('#ver_completo').attr('href', `../dist/docs/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}`);
     $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Recibo-por-honorario.${extrae_extencion(recibos_x_honorarios)}</i></div></div>`);
 
     $('#doc_old_2').val(recibos_x_honorarios);
     $('#doc2').val('');
 
     if ( extrae_extencion(recibos_x_honorarios) == "pdf" ) {
-      $("#doc2_ver").html(`<iframe src="../dist/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+      $("#doc2_ver").html(`<iframe src="../dist/docs/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
     } else {
       if ( extrae_extencion(recibos_x_honorarios) == "jpeg" || extrae_extencion(recibos_x_honorarios) == "jpg" || extrae_extencion(recibos_x_honorarios) == "jpe" ||
         extrae_extencion(recibos_x_honorarios) == "jfif" || extrae_extencion(recibos_x_honorarios) == "gif" || extrae_extencion(recibos_x_honorarios) == "png" ||
         extrae_extencion(recibos_x_honorarios) == "tiff" || extrae_extencion(recibos_x_honorarios) == "tif" || extrae_extencion(recibos_x_honorarios) == "webp" ||
         extrae_extencion(recibos_x_honorarios) == "bmp" || extrae_extencion(recibos_x_honorarios) == "svg" ) {
 
-        $("#doc2_ver").html(`<img src="../dist/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+        $("#doc2_ver").html(`<img src="../dist/docs/pago_obrero/recibos_x_honorarios/${recibos_x_honorarios}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
         
       } else {
         $("#doc2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -1067,7 +1067,7 @@ function re_visualizacion(id, carpeta) {
           toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
           if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/pago_obrero/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/pago_obrero/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
             toastr.success('Documento vizualizado correctamente!!!')
           } else {
             if ( extrae_extencion(antiguopdf) == "csv" ) {
@@ -1092,7 +1092,7 @@ function re_visualizacion(id, carpeta) {
                       extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
                       extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
   
-                      $("#doc"+id+"_ver").html(`<img src="../dist/pago_obrero/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="50%" >`);
+                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/pago_obrero/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="50%" >`);
                       toastr.success('Documento vizualizado correctamente!!!');
                     } else {
                       $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');

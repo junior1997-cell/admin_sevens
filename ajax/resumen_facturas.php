@@ -71,14 +71,14 @@
 
           $estado = true;
 
-          while ($reg = $rspta->fetch_object()) {
+          foreach ($rspta as $key => $value) {         
 
             if ($estado) {
               echo '<option value="0" >Todos</option>';
               $estado = false;
             }
 
-            echo '<option  value=' . $reg->idproveedor . '>' . $reg->razon_social . ' - ' . $reg->ruc . '</option>';
+            echo '<option  value=' . $value['id'] . '>' . $value['razon_social'] . ' - ' . $value['ruc'] . '</option>';
           }
 
         break;

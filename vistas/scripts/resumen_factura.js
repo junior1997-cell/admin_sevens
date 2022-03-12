@@ -11,7 +11,7 @@ function init() {
   
   // tbla_principal(localStorage.getItem('nube_idproyecto'));
 
-  $.post("../ajax/resumen_facturas.php?op=select2_proveedores", function (r) {
+  $.get("../ajax/resumen_facturas.php?op=select2_proveedores", function (r) {
     $("#proveedor_filtro").html(r);    
     $(".cargando_proveedor").html('Proveedor');
   });

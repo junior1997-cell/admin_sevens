@@ -11,7 +11,37 @@ class Resumenfacturas
 
   public function facturas_compras($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante)
   {
-    $data = Array();
+    $data = Array();  $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND cpp.fecha_compra = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND cpp.fecha_compra = '$fecha_filtro_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND cpp.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_comprobante = "AND cpp.fecha_compra BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_comprobante = "AND cpp.fecha_compra = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_comprobante = "AND cpp.fecha_compra = '$fecha_filtro_2'";
+        }     
+      }      
+    } 
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
     cpp.subtotal, cpp.igv, cpp.total, p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante
@@ -375,8 +405,23 @@ class Resumenfacturas
 
   // SELECT2
   public function select_proveedores()  {
+
+    $data = Array();
+
     $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor";
-    return ejecutarConsulta($sql);
+    $proveedor = ejecutarConsultaArray($sql);
+
+    if ( !empty($proveedor) ) {
+      foreach ($proveedor as $key => $value) {
+        $data[] = array(
+          "id" =>  $value['idproveedor'],
+          "razon_social" =>  $value['razon_social'],
+          "ruc" =>  $value['ruc'],
+        );
+      }      
+    }    
+
+    return $data;
   }
 
 }

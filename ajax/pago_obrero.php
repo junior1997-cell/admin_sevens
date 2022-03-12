@@ -49,7 +49,7 @@
               
             $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
-            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/pago_obrero/baucher_deposito/" . $doc1);
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/pago_obrero/baucher_deposito/" . $doc1);
             
           }	
 
@@ -71,7 +71,7 @@
 
               if ($doc1_ant != "") {
 
-                unlink("../dist/pago_obrero/baucher_deposito/" . $doc1_ant);
+                unlink("../dist/docs/pago_obrero/baucher_deposito/" . $doc1_ant);
               }
             }
 
@@ -100,7 +100,7 @@
               
             $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
 
-            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/pago_obrero/recibos_x_honorarios/" . $doc2);
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/pago_obrero/recibos_x_honorarios/" . $doc2);
             
           }	
 
@@ -122,7 +122,7 @@
 
               if ( !empty($doc2_ant) ) {
 
-                unlink("../dist/pago_obrero/recibos_x_honorarios/" . $doc2_ant);
+                unlink("../dist/docs/pago_obrero/recibos_x_honorarios/" . $doc2_ant);
               }
             }
 
@@ -225,7 +225,7 @@
           
           while ($reg=$rspta->fetch_object()){
             !empty($reg->baucher)
-              ? ($baucher_deposito = '<center><a target="_blank" href="../dist/pago_obrero/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              ? ($baucher_deposito = '<center><a target="_blank" href="../dist/docs/pago_obrero/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
 
             $data[]=array(    
