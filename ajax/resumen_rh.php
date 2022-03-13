@@ -36,7 +36,7 @@
               "1" => $value['modulo'],
               "2" => '<span class="text-primary font-weight-bold">' . $value['trabajador_razon_social'] . '</span>',
               "3" =>'S/. '.number_format($value['total'], 2, ".", ",") ,
-              "4" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante( \'' . $value['comprobante'] .'\', \''. $value['ruta']  . '\')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+              "4" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante( \'' . $value['comprobante'] .'\', \''. $value['ruta']  . '\', \''. $value['trabajador_razon_social']  . '\')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
 
             ];
           }
