@@ -86,7 +86,14 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ { targets: [11], visible: false, searchable: false, }, ],
   }).DataTable();
+  
+  $( tabla_principal ).ready(function() {
+    sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+  });
+  
+}
 
+function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
   $.post("../ajax/resumen_facturas.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (data, status) {
     
     data = JSON.parse(data);  console.log(data);     
@@ -94,8 +101,10 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     $('.total-total').html(`S/. ${formato_miles(parseFloat(data.total).toFixed(2))}`);
     $('.total-subtotal').html(`S/. ${formato_miles(parseFloat(data.subtotal).toFixed(2))}`);
     $('.total-igv').html(`S/. ${formato_miles(parseFloat(data.igv).toFixed(2))}`);
+
+    $('.cargando').hide();
+
   }); 
-  
 }
 
 //ver ficha tecnica
@@ -160,6 +169,9 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
 }
 
 function filtros() {
+
+  $('.cargando').show();
+
   var fecha_1       = $("#fecha_filtro_1").val();
   var fecha_2       = $("#fecha_filtro_2").val();  
   var id_proveedor  = $("#proveedor_filtro").select2('val');

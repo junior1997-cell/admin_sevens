@@ -100,6 +100,9 @@
                           <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3>
                           <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando facturas o boletas... </th>
+                              </tr>
                               <tr> 
                                 <th class="text-center">#</th> 
                                 <th class="text-center">Fecha</th>
