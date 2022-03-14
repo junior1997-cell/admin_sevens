@@ -277,7 +277,7 @@ function addDocs(e,id) {
 }
 
 // recargar un doc para ver
-function re_visualizacion(id) {
+function re_visualizacion(id,carpeta) {
 
   $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
 
@@ -311,7 +311,7 @@ function re_visualizacion(id) {
           toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
         } else {
           if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html('<iframe src="../dist/pdf/'+antiguopdf+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/all_trabajador/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="210"></iframe>`);
             toastr.success('Documento vizualizado correctamente!!!')
           } else {
             if ( extrae_extencion(antiguopdf) == "csv" ) {
@@ -643,9 +643,9 @@ function verdatos(idtrabajador){
 
     data = JSON.parse(data);  //console.log(data); 
 
-    var imagen_perfil =data.imagen_perfil != '' || data.imagen_perfil != null ? '<img src="../dist/img/usuarios/'+data.imagen_perfil+'" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-    var imagen_dni_anverso =data.imagen_dni_anverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_anverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
-    var imagen_dni_reverso =data.imagen_dni_reverso != '' ? '<img src="../dist/img/usuarios/'+data.imagen_dni_reverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
+    var imagen_perfil =data.imagen_perfil != '' || data.imagen_perfil != null ? '<img src="../dist/docs/all_trabajador/perfil/'+data.imagen_perfil+'" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
+    var imagen_dni_anverso =data.imagen_dni_anverso != '' ? '<img src="../dist/docs/all_trabajador/dni_anverso/'+data.imagen_dni_anverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
+    var imagen_dni_reverso =data.imagen_dni_reverso != '' ? '<img src="../dist/docs/all_trabajador/dni_reverso/'+data.imagen_dni_reverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
     
     verdatos=`                                                                            
     <div class="col-12">
@@ -748,44 +748,31 @@ function mostrar(idtrabajador) {
     //cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado
     if (data.imagen_perfil!="") {
 
-			$("#foto1_i").attr("src", "../dist/img/usuarios/" + data.imagen_perfil);
+			$("#foto1_i").attr("src", "../dist/docs/all_trabajador/perfil/" + data.imagen_perfil);
 
 			$("#foto1_actual").val(data.imagen_perfil);
 		}
 
     if (data.imagen_dni_anverso != "") {
 
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen_dni_anverso);
+			$("#foto2_i").attr("src", "../dist/docs/all_trabajador/dni_anverso/" + data.imagen_dni_anverso);
 
 			$("#foto2_actual").val(data.imagen_dni_anverso);
 		}
 
     if (data.imagen_dni_reverso != "") {
 
-			$("#foto3_i").attr("src", "../dist/img/usuarios/" + data.imagen_dni_reverso);
+			$("#foto3_i").attr("src", "../dist/docs/all_trabajador/dni_reverso/" + data.imagen_dni_reverso);
 
 			$("#foto3_actual").val(data.imagen_dni_reverso);
 		}
     //cvs
-   /* if (data.cv_documentado != "") {
-
-			$("#doc4_i").attr("src", "../dist/img/cv_documentado/" + data.cv_documentado);
-
-			$("#doc_old_4").val(data.cv_documentado);
-		}
-
-    if (data.cv_no_documentado != "") {
-
-			$("#doc5_i").attr("src", "../dist/img/cv_no_documentado/" + data.cv_no_documentado);
-
-			$("#doc_old_5").val(data.cv_no_documentado);
-		}*/
     //validamoos DOC-4
     if (data.cv_documentado != "" ) {
 
       $("#doc_old_4").val(data.cv_documentado);
 
-      $("#doc4_nombre").html('Presupuesto.' + extrae_extencion(data.cv_documentado));
+      $("#doc4_nombre").html('CV.' + extrae_extencion(data.cv_documentado));
       
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(data.cv_documentado) == "xls") {
@@ -820,7 +807,7 @@ function mostrar(idtrabajador) {
 
                 if ( extrae_extencion(data.cv_documentado) == "pdf" ) {
 
-                  $("#doc4_ver").html('<iframe src="../dist/img/cv_documentado/'+data.cv_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc4_ver").html('<iframe src="../dist/docs/all_trabajador/cv_documentado/'+data.cv_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 
@@ -882,7 +869,7 @@ function mostrar(idtrabajador) {
 
                 if ( extrae_extencion(data.cv_no_documentado) == "pdf" ) {
 
-                  $("#doc5_ver").html('<iframe src="../dist/img/cv_no_documentado/'+data.cv_no_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                  $("#doc5_ver").html('<iframe src="../dist/docs/all_trabajador/cv_no_documentado/'+data.cv_no_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 }else{
 

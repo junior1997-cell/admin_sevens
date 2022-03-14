@@ -63,7 +63,7 @@
 
             $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-            move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/img/usuarios/" . $imagen1);
+            move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/all_trabajador/perfil/" . $imagen1);
 						
 					}
 
@@ -78,7 +78,7 @@
 
             $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext2);
 
-            move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/img/usuarios/" . $imagen2);
+            move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/all_trabajador/dni_anverso/" . $imagen2);
 						
 					}
 
@@ -93,7 +93,7 @@
             
             $imagen3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
 
-            move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/img/usuarios/" . $imagen3);
+            move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/docs/all_trabajador/dni_reverso/" . $imagen3);
 						
 					}
           // cv documentado
@@ -107,7 +107,7 @@
             
             $cv_documentado = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
 
-            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/img/cv_documentado/" .  $cv_documentado);
+            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/all_trabajador/cv_documentado/" .  $cv_documentado);
             
           }
           // cv  no documentado
@@ -121,7 +121,7 @@
             
             $cv_nodocumentado = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
 
-            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/img/cv_no_documentado/" . $cv_nodocumentado);
+            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/all_trabajador/cv_no_documentado/" . $cv_nodocumentado);
             
           }
 
@@ -142,10 +142,11 @@
 
               if ($img1_ant != "") {
 
-                unlink("../dist/img/usuarios/" . $img1_ant);
+                unlink("../dist/docs/all_trabajador/perfil/" . $img1_ant);
               }
             }
 
+            //imagen_dni_anverso
             if ($flat_img2 == true) {
 
               $datos_f2 = $trabajador->obtenerImg($idtrabajador);
@@ -154,10 +155,11 @@
 
               if ($img2_ant != "") {
 
-                unlink("../dist/img/usuarios/" . $img2_ant);
+                unlink("../dist/docs/all_trabajador/dni_anverso/" . $img2_ant);
               }
             }
 
+            //imagen_dni_reverso
             if ($flat_img3 == true) {
 
               $datos_f3 = $trabajador->obtenerImg($idtrabajador);
@@ -166,7 +168,7 @@
 
               if ($img3_ant != "") {
 
-                unlink("../dist/img/usuarios/" . $img3_ant);
+                unlink("../dist/docs/all_trabajador/dni_reverso/" . $img3_ant);
               }
             }
             //cvs
@@ -178,9 +180,10 @@
 
               if ($cv1_ant != "") {
 
-                unlink("../dist/img/cv_documentado/" . $cv1_ant);
+                unlink("../dist/docs/all_trabajador/cv_documentado/" . $cv1_ant);
               }
             }
+
             if ($flat_cv2 == true) {
 
               $datos_cv2 = $trabajador->obtenercv($idtrabajador);
@@ -189,7 +192,7 @@
 
               if ($cv2_ant != "") {
 
-                unlink("../dist/img/cv_no_documentado/" . $cv2_ant);
+                unlink("../dist/docs/all_trabajador/cv_no_documentado/" . $cv2_ant);
               }
             }
 
@@ -264,7 +267,7 @@
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
               "2"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
                 </div>',
@@ -303,7 +306,7 @@
                 ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
               "2"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
                 <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .'<br>'.format_d_m_a($reg->fecha_nacimiento).' : '.$reg->edad.' años</span>
                 </div>',

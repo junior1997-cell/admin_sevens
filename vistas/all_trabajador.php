@@ -328,7 +328,7 @@
                                 <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" /> 
                               </div>
                               <div class="col-md-6 text-center">
-                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4);">
+                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4,'cv_documentado');">
                                   <i class="fa fa-eye"></i> PDF.
                                 </button>
                               </div>
@@ -355,7 +355,7 @@
                                 <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" /> 
                               </div>
                               <div class="col-md-6 text-center">
-                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5);">
+                                <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5,'cv_no_documentado');">
                                   <i class="fa fa-eye"></i> PDF.
                                 </button>
                               </div>
