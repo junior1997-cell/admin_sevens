@@ -21,12 +21,12 @@
 
         case 'listar_resumen_rh':
 
-          $rspta = $resumen_rh->listar_resumen_rh();
+          $rspta = $resumen_rh->resumen_rh();
           $cont = 1;
           //Vamos a declarar un array
           $data = [];
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $btn_tipo = (empty($value['comprobante'])) ? 'btn-outline-info' : 'btn-info';       
             
@@ -49,6 +49,14 @@
           ];
           echo json_encode($results);
          
+
+        break;
+
+        case 'data_recibos_honorarios':                  
+
+          $rspta = $resumen_rh->resumen_rh();
+          
+          echo json_encode($rspta['data_recibos_honorarios']);
 
         break;
       

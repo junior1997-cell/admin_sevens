@@ -34,7 +34,12 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1>Resumen recibos por honorario</h1>
+                      <h1 class="m-0">
+                       Resumen recibos por honorario
+                      <button class="btn btn-success btn-md btn-zip" onclick="desccargar_zip_recibos_honorarios();">
+                        <i class="far fa-file-archive fa-lg"></i> Recibos por honorario.zip 
+                      </button>
+                    </h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
@@ -154,6 +159,9 @@
         <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
+        <script src="../plugins/jszip/jszip.js"></script>
+        <script src="../plugins/jszip/dist/jszip-utils.js"></script>
+        <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
         <script type="text/javascript" src="scripts/resumen_rh.js"></script>
 
         <script>

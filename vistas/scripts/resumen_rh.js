@@ -1,5 +1,7 @@
 var tabla;
 
+var zip = new JSZip();
+
 //Función que se ejecuta al inicio
 function init() {
   //Activamos el "aside"
@@ -116,9 +118,64 @@ function modal_comprobante(comprobante,ruta, proveedor) {
   // $(".tooltip").hide();
 }
 
+function desccargar_zip_recibos_honorarios() {   
+
+  $('.btn-zip').addClass('disabled btn-danger').removeClass('btn-success');
+  $('.btn-zip').html('<i class="fas fa-spinner fa-pulse fa-sm"></i> Comprimiendo datos');
+
+
+  $.post("../ajax/resumen_rh.php?op=data_recibos_honorarios", { }, function (data, status) {
+    
+    data = JSON.parse(data);  //console.log(data);    
+    
+    const zip = new JSZip();  let count = 0; const zipFilename = "Recibos_honorario.zip";
+    
+    if (data.length === 0) {
+      $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
+      $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Recibos honorario .zip');
+      toastr.error("No hay docs para descargar!!!");
+    }else{
+      data.forEach(async function (value){
+         
+        const urlArr = value.ruta_local.split('/');
+        const filename = urlArr[urlArr.length - 1];
+  
+        try {   
+           
+          const file = await JSZipUtils.getBinaryContent(value.ruta_local)
+          zip.file(filename, file, { binary: true});
+          count++;
+          if(count === data.length) {
+            zip.generateAsync({type:'blob'}).then(function(content) {
+              saveAs(content, zipFilename);
+              $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
+              $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Recibos honorario .zip');
+            });
+          }           
+          
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }    
+
+  });  
+}
+
+
 
 
 init();
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function UrlExists(url) {  
+  var http = new XMLHttpRequest();
+  http.open("HEAD", url, false);
+  http.send();
+  console.log(http.status);
+  return http.status;
+}
 
 function formato_miles(num) {
   if (!num || num == "NaN") return "-";
