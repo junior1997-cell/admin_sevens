@@ -4,7 +4,7 @@
   session_start();
 
   if (!isset($_SESSION["nombre"])){
-    header("Location: login.html");
+    header("Location: index.php");
   }else{ ?>
   <!DOCTYPE html>
   <html lang="es">

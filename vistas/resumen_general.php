@@ -39,7 +39,7 @@
                             <h1 style="font-weight: bold;">RESUMEN GENERAL</h1>
                           </div>
                           <div class="col-6">
-                            <button class="btn btn-success btn-md export_all_table" style="font-weight: bold;">Exportar <i class="fas fa-file-excel"></i></button>
+                            <button class="btn btn-success btn-md /*export_all_table*/" style="font-weight: bold;">Exportar <i class="fas fa-file-excel"></i></button>
                           </div>
                         </div>
                       </div>
