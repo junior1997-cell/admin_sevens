@@ -246,12 +246,12 @@ class Resumen_general
 
     $sql = "SELECT sb.idsemana_break, sb.idproyecto, sb.numero_semana, sb.fecha_inicial, sb.fecha_final, sb.total
 		FROM semana_break as sb, proyecto as p
-		WHERE sb.idproyecto ='$idproyecto' AND sb.estado=1 AND sb.idproyecto=p.idproyecto $filtro_fecha
+		WHERE sb.idproyecto ='$idproyecto' AND sb.estado='1' AND sb.estado_delete='1' AND sb.idproyecto=p.idproyecto $filtro_fecha
     ORDER BY sb.fecha_inicial DESC";
     return ejecutarConsultaArray($sql);
   }
 
-  // TABLA
+  // DETALLE
   public function listar_comprobantes_breaks($idsemana_break)  {
     $sql = "SELECT * FROM factura_break 
 		WHERE idsemana_break  ='$idsemana_break'";
@@ -260,12 +260,18 @@ class Resumen_general
 
   // TABLA
   public function tabla_pensiones($idproyecto, $id_proveedor)  {
-    $serv_pension = []; 
+    $serv_pension = [];   $filtro_proveedor = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND p.idproveedor = '$id_proveedor'";
+    }
 
     $sql = "SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
 		FROM pension as p, proyecto as py, proveedor as pr_v
-		WHERE p.estado=1 AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor 
-		AND p.idproveedor LIKE '%$id_proveedor%'";
+		WHERE p.estado='1' AND p.estado_delete='1' AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor 
+		$filtro_proveedor";
     $pension = ejecutarConsultaArray($sql);
 
     if (!empty($pension)) {
@@ -339,7 +345,7 @@ class Resumen_general
 		FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tt 
 		WHERE tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador 
 		AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador 
-		AND ct.idtipo_trabjador =tt.idtipo_trabajador $consulta_filtro";
+		AND ct.idtipo_trabjador =tt.idtipo_trabajador  AND tpp.estado = '1' AND tpp.estado_delete = '1' $consulta_filtro";
 
     $traba_adm = ejecutarConsultaArray($sql);
 
@@ -440,7 +446,7 @@ class Resumen_general
     $sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
 		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
 		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
-		AND tpp.idtrabajador=t.idtrabajador AND ra.estado = '1' $consulta_filtro  ";
+		AND tpp.idtrabajador=t.idtrabajador AND ra.estado = '1' AND ra.estado_delete='1' $consulta_filtro  ";
 
     $trabaj_obrero = ejecutarConsultaArray($sql);
 
@@ -477,7 +483,7 @@ class Resumen_general
 
   }
 
-  // detalle por cada obrero
+  // DETALLE por cada obrero
   public function r_detalle_x_obrero($idtrabajador_x_proyecto)  {
     $data = [];
 
@@ -552,14 +558,14 @@ class Resumen_general
 
   // SELECT2
   public function select_proveedores()  {
-    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor";
+    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado = '1' AND estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 
   // SELECT2
   public function selecct_trabajadores($idproyecto)  {
     $sql = "SELECT tpp.idtrabajador_por_proyecto, t.nombres, t.numero_documento FROM trabajador_por_proyecto as tpp, trabajador as t
-		WHERE tpp.idtrabajador= t.idtrabajador AND tpp.idproyecto='$idproyecto'";
+		WHERE tpp.idtrabajador= t.idtrabajador AND tpp.idproyecto='$idproyecto' AND tpp.estado = '1' AND tpp.estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 }

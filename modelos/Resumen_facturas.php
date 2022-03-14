@@ -846,7 +846,7 @@ class Resumenfacturas
 
     $data = Array();
 
-    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor;";
+    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado = '1' AND estado_delete = '1';";
     $proveedor = ejecutarConsultaArray($sql);    
 
     if ( !empty($proveedor) ) {
