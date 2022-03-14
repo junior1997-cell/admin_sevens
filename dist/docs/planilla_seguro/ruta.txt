@@ -1,0 +1,1 @@
+../dist/docs/planilla_seguro/comprobante/
