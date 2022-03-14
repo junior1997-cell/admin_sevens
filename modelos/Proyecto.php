@@ -16,8 +16,8 @@ Class Proyecto
 		$doc7 = ""; $doc8 = ""; $calendario_error = "No hay feriados, agregue alguno";		
 		
 		// prepoaramos la consulta del proyecto
-		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, fecha_inicio_actividad, fecha_fin_actividad, plazo_actividad, fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero) 
-		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$fecha_inicio_actividad', '$fecha_fin_actividad', '$plazo_actividad', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero');";
+		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero) 
+		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo',  '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero');";
 		
 		// ejecutamos la consulta, Insertamos el registro de proyecto
 		$id_proyect = ejecutarConsulta_retornarID($sql) ;
@@ -59,7 +59,7 @@ Class Proyecto
 		$sql="UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', 
 			empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', nombre_codigo = '$nombre_codigo',  ubicacion = '$ubicacion',
 			actividad_trabajo = '$actividad_trabajo', empresa_acargo = '$empresa_acargo', 
-			costo = '$costo', fecha_inicio_actividad = '$fecha_inicio_actividad', fecha_fin_actividad = '$fecha_fin_actividad', plazo_actividad = '$plazo_actividad', 
+			costo = '$costo',  
 			fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', dias_habiles='$dias_habiles',
 			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',
 			doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', doc6_insumos = '$doc6', 

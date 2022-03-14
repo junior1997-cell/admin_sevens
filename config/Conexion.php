@@ -1,5 +1,6 @@
 <?php 
 require_once "global.php";
+// require_once "global_local.php";
 
 $conexion = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 

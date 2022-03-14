@@ -161,7 +161,6 @@ function limpiar_form_compra() {
   //$.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
 
   $("#idcompra_proyecto").val("");
-  $("#idproyecto").val("");
   $("#idproveedor").val("null").trigger("change");
   $("#tipo_comprobante").val("Ninguno").trigger("change");
   $("#glosa").val("null").trigger("change");
