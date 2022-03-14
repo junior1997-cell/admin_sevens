@@ -22,7 +22,7 @@
         case 'listar_facturas_compras':
           
           $rspta = $resumen_factura->facturas_compras($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'] );
-          echo json_encode($rspta);
+          // echo json_encode($rspta);
           //Vamos a declarar un array
           $data = []; $cont = 1;           
           
@@ -52,7 +52,7 @@
             "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
             "aaData" => $data,
           ];
-          // echo json_encode($results);
+          echo json_encode($results);
 
         break;
 

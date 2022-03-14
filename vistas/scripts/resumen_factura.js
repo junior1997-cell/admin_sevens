@@ -217,30 +217,23 @@ function desccargar_zip_comprobantes() {
 
   $.post("../ajax/resumen_facturas.php?op=data_comprobantes", { 'id_proyecto': localStorage.getItem("nube_idproyecto"), 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (data, status) {
     
-    data = JSON.parse(data);  console.log(data);     
+    data = JSON.parse(data);  console.log(data);    
     
-    var urls = [
-      'http://localhost/admin_sevens/dist/docs/compra/comprobante_compra/18164558987327.png',
-      'http://localhost/admin_sevens/dist/docs/compra/comprobante_compra/0164671272121.pdf',
-    ];
+    const zip = new JSZip();  let count = 0; const zipFilename = "comprobantes.zip";
     
-    const zip = new JSZip();
-    let count = 0;
-    const zipFilename = "comprobantes.zip";
     if (data.length === 0) {
       $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
       $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
       toastr.error("No hay docs para descargar!!!");
     }else{
       data.forEach(async function (value){
-        var ruta = `${value.host}admin_sevens/${value.carpeta_file}${value.comprobante}`;
-        const urlArr = ruta.split('/');
+         
+        const urlArr = value.ruta_local.split('/');
         const filename = urlArr[urlArr.length - 1];
   
-        try {
-          
+        try {   
            
-          const file = await JSZipUtils.getBinaryContent(ruta)
+          const file = await JSZipUtils.getBinaryContent(value.ruta_local)
           zip.file(filename, file, { binary: true});
           count++;
           if(count === data.length) {
@@ -249,8 +242,7 @@ function desccargar_zip_comprobantes() {
               $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
               $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
             });
-          }
-           
+          }           
           
         } catch (err) {
           console.log(err);

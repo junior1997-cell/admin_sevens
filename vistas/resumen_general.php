@@ -61,30 +61,34 @@
 
                                   <!-- filtro por: fecha -->
                                   <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros" >Filtar por Fecha </label>
+                                    <label for="filtros" class="mb-0" >Filtar por Fecha </label>
                                     <!-- fecha inicial -->
                                     <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                  </div> 
+                                  <!-- filtro por: fecha -->
+                                  <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                                    <label for="filtros" class="mb-0" >Filtar por Fecha </label>
                                     <!-- fecha final -->
                                     <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
                                   </div>                                    
 
                                   <!-- filtro por: trabajador -->
                                   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros" class="cargando_trabajador">Trabajador &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
+                                    <label for="filtros" class="cargando_trabajador mb-0">Trabajador &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
                                     <select name="trabajador_filtro" id="trabajador_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
                                     </select>
                                   </div>
 
                                   <!-- filtro por: proveedor -->
-                                  <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
+                                  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                    <label for="filtros" class="cargando_proveedor mb-0">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
                                     <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
                                     </select>
                                   </div>
 
                                   <!-- filtro por: deuda - no deuda -->
-                                  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                                    <label for="filtros">Filtrar por.</label>
+                                  <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                                    <label for="filtros" class="mb-0">Filtrar por.</label>
                                     <select name="deuda_filtro" id="deuda_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;">
                                       <option value="todos">Todos</option>  
                                       <option value="sindeuda">Sin deuda</option>

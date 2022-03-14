@@ -16,8 +16,10 @@ if (!isset($_SESSION["nombre"])) {
 
     require_once "../modelos/Resumen_general.php";
     require_once "../modelos/Fechas.php";
+    require_once "../modelos/Compra.php";
 
     $resumen_general = new Resumen_general();
+    $compra = new Compra();
 
     switch ($_GET["op"]) {
 
@@ -125,103 +127,115 @@ if (!isset($_SESSION["nombre"])) {
         //Codificar el resultado utilizando json
         echo json_encode($data);
             
-      break;
+      break;       
 
       case 'mostrar_detalle_compras':
-        $rspta = $resumen_general->detalles_compras($_GET['id_compra']);
-        $rspta2 = $resumen_general->ver_compras($_GET['id_compra']);
-
-        $subtotal = 0;    $ficha = ''; $igv = ""; $row_descr = "col-lg-6";
-
-        if ($rspta2['tipo_comprovante'] == 'Factura') {
-          $igv = '<!-- IGV-->
-          <div class="col-lg-1 " >
-            <div class="form-group">
-              <label for="igv">IGV</label>
-              <span class="form-control form-control-sm"> 0.18 </span>                                 
-            </div>
-          </div>';
-          $row_descr = "col-lg-5";
-        }
         
+        $rspta = $compra->ver_compra($_GET['id_compra']);
+        $rspta2 = $compra->ver_detalle_compra($_GET['id_compra']);
+
+        $subtotal = 0;    $ficha = ''; 
 
         echo '<!-- Tipo de Empresa -->
-          <div class="col-lg-8">
+          <div class="col-lg-6">
             <div class="form-group">
-              <label for="idproveedor">Proveedor</label>
-              <h5 class="form-control form-control-sm" >'.$rspta2['razon_social'].'</h5>
+              <label class="font-size-15px" for="idproveedor">Proveedor</label>
+              <h5 class="form-control form-control-sm" >'.$rspta['razon_social'].'</h5>
             </div>
           </div>
           <!-- fecha -->
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <div class="form-group">
-              <label for="fecha_compra">Fecha </label>
-              <span class="form-control form-control-sm"> <i class="far fa-calendar-alt"></i> '.format_d_m_a($rspta2['fecha_compra']).' </span>
+              <label class="font-size-15px" for="fecha_compra">Fecha </label>
+              <span class="form-control form-control-sm"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;&nbsp;'.format_d_m_a($rspta['fecha_compra']).' </span>
+            </div>
+          </div>
+          <!-- fecha -->
+          <div class="col-lg-3">
+            <div class="form-group">
+              <label class="font-size-15px" for="fecha_compra">Glosa </label>
+              <span class="form-control form-control-sm">'.$rspta['glosa'].' </span>
             </div>
           </div>
           <!-- Tipo de comprobante -->
-          <div class="col-lg-4 content-t-comprob">
+          <div class="col-lg-3">
             <div class="form-group">
-              <label for="tipo_comprovante">Tipo Comprobante</label>
-              <span  class="form-control form-control-sm"> '. ((empty($rspta2['tipo_comprovante'])) ? '- - -' :  $rspta2['tipo_comprovante'])  .' </span>
+              <label class="font-size-15px" for="tipo_comprovante">Tipo Comprobante</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['tipo_comprobante'])) ? '- - -' :  $rspta['tipo_comprobante'])  .' </span>
             </div>
           </div>
           <!-- serie_comprovante-->
-          <div class="col-lg-2 content-comprob">
+          <div class="col-lg-2">
             <div class="form-group">
-              <label for="serie_comprovante">N° de Comprobante</label>
-              <span  class="form-control form-control-sm"> '. ((empty($rspta2['serie_comprovante'])) ? '- - -' :  $rspta2['serie_comprovante']).' </span>
+              <label class="font-size-15px" for="serie_comprovante">N° de Comprobante</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['serie_comprobante'])) ? '- - -' :  $rspta['serie_comprobante']).' </span>
             </div>
           </div>
-          '.$igv.'
-          <!-- Descripcion-->
-          <div class="'.$row_descr.' content-descrp">
+          <!-- IGV-->
+          <div class="col-lg-1 " >
             <div class="form-group">
-              <label for="descripcion">Descripción </label> <br />
-              <textarea class="form-control form-control-sm" rows="1">'.((empty($rspta2['descripcion'])) ? '- - -' :$rspta2['descripcion']).'</textarea>
+              <label class="font-size-15px" for="igv">IGV</label>
+              <span class="form-control form-control-sm"> '.$rspta['val_igv'].' </span>                                 
+            </div>
+          </div>
+          <!-- Descripcion-->
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label class="font-size-15px" for="descripcion">Descripción </label> <br />
+              <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['descripcion'])) ? '- - -' :$rspta['descripcion']).'</textarea>
             </div>
         </div>';
 
         $tbody = "";
 
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta2->fetch_object()) {
 
-          $subtotal = $reg->cantidad * $reg->precio_venta - $reg->descuento;
-
-          empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-2x text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/ficha_tecnica_materiales/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-primary"></i></a>');
+          empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
           
           $tbody .= '<tr class="filas">
-            <td class="text-center p-0px">' . $ficha . '</td>
-            <td class="text-left">' . $reg->nombre . '</td>
-            <td class="text-center">' . $reg->cantidad . '</td>		
-            <td class="text-right">' . number_format($reg->precio_venta, 2, '.',',') . '</td>
-            <td class="text-right">' . number_format($reg->descuento, 2, '.',',') . '</td>
-            <td class="text-right">' . number_format($subtotal, 2, '.',',') .'</td>
+            <td class="text-center p-6px">' . $ficha . '</td>
+            <td class="text-left p-6px">
+              <div class="user-block text-nowrap">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/'.$reg->imagen.'" alt="user image" onerror="this.src=\'../dist/svg/default_producto.svg\';" >
+                <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
+                <span class="description"><b>Color: </b>' . $reg->color . '</span>
+              </div>
+            </td>
+            <td class="text-left p-6px">' . $reg->unidad_medida . '</td>
+            <td class="text-center p-6px">' . $reg->cantidad . '</td>		
+            <td class="text-right p-6px">' . number_format($reg->precio_sin_igv, 2, '.',',') . '</td>
+            <td class="text-right p-6px">' . number_format($reg->igv, 2, '.',',') . '</td>
+            <td class="text-right p-6px">' . number_format($reg->precio_con_igv, 2, '.',',') . '</td>
+            <td class="text-right p-6px">' . number_format($reg->descuento, 2, '.',',') . '</td>
+            <td class="text-right p-6px">' . number_format($reg->subtotal, 2, '.',',') .'</td>
           </tr>';
         }         
 
         echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
           <table class="table table-striped table-bordered table-condensed table-hover">
-            <thead style="background-color:#A9D0F5">
-              <th class="text-center">Ficha técnica</th>
-              <th>Material</th>
-              <th>Cantidad</th>
-              <th>Precio Compra</th>
-              <th>Descuento</th>
-              <th>Subtotal</th>
+            <thead style="background-color:#ff6c046b">
+              <th class="text-center p-10px">F.T.</th>
+              <th class="p-10px">Material</th>
+              <th class="p-10px">U.M.</th>
+              <th class="p-10px">Cant.</th>
+              <th class="p-10px">V/U</th>
+              <th class="p-10px">IGV</th>
+              <th class="p-10px">P/U</th>
+              <th class="p-10px">Desct.</th>
+              <th class="p-10px">Subtotal</th>
             </thead>
             <tbody>'.$tbody.'</tbody>          
             <tfoot>
-              <td colspan="4"></td>
-              <th class="text-center">
-                <h5>Subtotal</h5>
-                <h5>IGV</h5>
-                <h5>TOTAL</h5>
+              <td colspan="7"></td>
+              <th class="text-right">
+                <h6>Subtotal</h6>
+                <h6>IGV</h6>
+                <h5 class="font-weight-bold">TOTAL</h5>
               </th>
-              <th>
-                <h5 class="text-right font-weight-bold">S/. ' . number_format($rspta2['subtotal_compras'], 2, '.',',') . '</h5>
-                <h5 class="text-right font-weight-bold">S/. ' . number_format($rspta2['igv_compras_proyect'], 2, '.',',') . '</h5>
-                <h4 class="text-right font-weight-bold">S/. ' . number_format($rspta2['monto_total'], 2, '.',',') . '</h4>
+              <th class="text-right">
+                <h6 class="font-weight-bold">S/. ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
+                <h6 class="font-weight-bold">S/. ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
+                <h5 class="font-weight-bold">S/. ' . number_format($rspta['total'], 2, '.',',') . '</h5>
               </th>
             </tfoot>
           </table>

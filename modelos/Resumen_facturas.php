@@ -66,7 +66,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/compra/comprobante_compra/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/compra/comprobante_compra/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/compra/comprobante_compra/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/compra/comprobante_compra/'.$value['comprobante'],
             );
           }          
         }        
@@ -124,7 +125,8 @@ class Resumenfacturas
               "comprobante"       => $value['imagen'],
               "carpeta_file"      => 'dist/docs/servicio_maquina/comprobante_servicio/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/servicio_maquina/comprobante_servicio/'.$value['imagen'],
+              "ruta_nube"         => $link_host.'dist/docs/servicio_maquina/comprobante_servicio/'.$value['imagen'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/servicio_maquina/comprobante_servicio/'.$value['imagen'],
             );
           }
           
@@ -183,7 +185,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/otro_gasto/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/otro_gasto/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/otro_gasto/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/otro_gasto/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -242,7 +245,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/transporte/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/transporte/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/transporte/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/transporte/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -301,7 +305,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/hospedaje/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/hospedaje/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/hospedaje/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/hospedaje/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -361,7 +366,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/pension/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/pension/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/pension/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/pension/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -421,7 +427,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/break/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/break/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/break/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/break/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -480,7 +487,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/comida_extra/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/comida_extra/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/comida_extra/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/comida_extra/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -539,7 +547,8 @@ class Resumenfacturas
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/otra_factura/comprobante/',
               "host"              => $link_host,
-              "ruta"              => $link_host.'dist/docs/otra_factura/comprobante/'.$value['comprobante'],
+              "ruta_nube"         => $link_host.'dist/docs/otra_factura/comprobante/'.$value['comprobante'],
+              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/otra_factura/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -801,13 +810,13 @@ class Resumenfacturas
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND of.fecha_comida BETWEEN '$fecha_1' AND '$fecha_2'";
+      $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
     } else {
       if (!empty($fecha_1)) {
-        $filtro_fecha = "AND of.fecha_comida = '$fecha_1'";
+        $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
       }else{
         if (!empty($fecha_2)) {
-          $filtro_fecha = "AND of.fecha_comida = '$fecha_2'";
+          $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
         }     
       }      
     }    
@@ -896,23 +905,31 @@ class Resumenfacturas
 
 function validar_url( $tipo, $host, $ruta, $file )  {
 
-  $retorno = false;
- 
-  if ($tipo == 'local_host') {
-    $armar_ruta = "http://localhost/admin_sevens/".$ruta.$file;
-    if (file_exists($armar_ruta)) {
-      return true;
-    }
-  } else {
-    $armar_ruta = $host.$ruta.$file;
-    if ($tipo == 'nube_host') {
-      if (file_exists($armar_ruta)) {
-        return true;
-      }
-    }
+  $armar_ruta = "";
+  if ($tipo == 'local_host') { $armar_ruta = "http://localhost/admin_sevens/" . $ruta . $file; } else { if ($tipo == 'nube_host') { $armar_ruta = $host . $ruta . $file; } }
+
+  if (empty($armar_ruta)) {
+    return false;
   }
 
-  return false;    
+  // get_headers() realiza una petición GET por defecto,
+  // cambiar el método predeterminadao a HEAD
+  // Ver http://php.net/manual/es/function.get-headers.php
+  stream_context_set_default([
+    'http' => [
+      'method' => 'HEAD',
+    ],
+  ]);
+  $headers = @get_headers($armar_ruta);
+  sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
+
+  // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
+  $accepted_response = [200, 301, 302];
+  if (in_array($httpcode, $accepted_response)) {
+    return true;
+  } else {
+    return false;
+  }    
 }
 
 ?>
