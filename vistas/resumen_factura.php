@@ -38,7 +38,12 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0 nombre-trabajador">Resumen de Factura</h1>
+                    <h1 class="m-0 nombre-trabajador">
+                      Resumen de Factura 
+                      <button class="btn btn-success btn-md btn-zip" onclick="desccargar_zip_comprobantes();">
+                        <i class="far fa-file-archive fa-lg"></i> Comprobantes .zip 
+                      </button>
+                    </h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
@@ -66,9 +71,12 @@
 
                           <!-- filtro por: fecha -->
                           <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
-                            <label for="filtros" >Filtar por Fecha </label>
+                            <label for="filtros" >Fecha inicio </label>
                             <!-- fecha inicial -->
                             <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                          </div>
+                          <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                            <label for="filtros" >Fecha fin </label>
                             <!-- fecha final -->
                             <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
                           </div>
@@ -84,7 +92,7 @@
                           <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                             <label for="filtros" >Tipo comprobante </label>
                             <select name="tipo_comprobante_filtro" id="tipo_comprobante_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
-                              <option value="Todos">Todos</option>
+                              <option value="0">Todos</option>
                               <option value="Factura">Factura</option>
                               <option value="Boleta">Boleta</option>
                             </select>
@@ -101,7 +109,7 @@
                           <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
-                                <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando facturas o boletas... </th>
+                                <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                               </tr>
                               <tr> 
                                 <th class="text-center">#</th> 
@@ -181,8 +189,12 @@
         <?php          
           require 'script.php';
         ?>         
-
+        <script src="../plugins/jszip/jszip.js"></script>
+        <script src="../plugins/jszip/dist/jszip-utils.js"></script>
+        <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
         <script type="text/javascript" src="scripts/resumen_factura.js"></script>
+        <!-- <script type="text/javascript" src="scripts/verificar_url.js"></script> -->
+
          
         <script>
           $(function () {

@@ -1,5 +1,7 @@
 var tabla_principal;
 
+var zip = new JSZip();
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -30,9 +32,7 @@ function init() {
 
 //Función Listar - tabla compras
 function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
-
-  console.log(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) ;
-
+   
   $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
@@ -94,6 +94,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
 }
 
 function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+  $('.btn-zip').addClass('disabled');
   $.post("../ajax/resumen_facturas.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (data, status) {
     
     data = JSON.parse(data);  console.log(data);     
@@ -103,6 +104,7 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
     $('.total-igv').html(`S/. ${formato_miles(parseFloat(data.igv).toFixed(2))}`);
 
     $('.cargando').hide();
+    $('.btn-zip').removeClass('disabled');
 
   }); 
 }
@@ -125,7 +127,7 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
       extrae_extencion(comprobante) == "tiff" || extrae_extencion(comprobante) == "tif" || extrae_extencion(comprobante) == "webp" ||
       extrae_extencion(comprobante) == "bmp" || extrae_extencion(comprobante) == "svg" ) {
       
-      url = `${ruta}${comprobante}`;
+      url = `../${ruta}${comprobante}`;
 
       nombre_download = `${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
 
@@ -135,7 +137,7 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
 
       if (extrae_extencion(comprobante) == "pdf") {
 
-        url = `${ruta}${comprobante}`;
+        url = `../${ruta}${comprobante}`;
 
         nombre_download = `${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
 
@@ -168,32 +170,109 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
   // $(".tooltip").hide();
 }
 
-function filtros() {
-
-  $('.cargando').show();
+function filtros() {  
 
   var fecha_1       = $("#fecha_filtro_1").val();
   var fecha_2       = $("#fecha_filtro_2").val();  
   var id_proveedor  = $("#proveedor_filtro").select2('val');
-  var comprobante   = $("#tipo_comprobante_filtro").select2('val');  
+  var comprobante   = $("#tipo_comprobante_filtro").select2('val');   
+  
+  var nombre_proveedor = $('#proveedor_filtro').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#tipo_comprobante_filtro').find(':selected').text();
 
   // filtro de fechas
   if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; }
   if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; }  
 
   // filtro de proveedor
-  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; }
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
 
   // filtro de trabajdor
-  if (comprobante == '' || comprobante == null) { comprobante = ""; }
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+  console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
   tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante)
+}
+
+function desccargar_zip_comprobantes() {   
+  var fecha_1       = $("#fecha_filtro_1").val();
+  var fecha_2       = $("#fecha_filtro_2").val();  
+  var id_proveedor  = $("#proveedor_filtro").select2('val');
+  var comprobante   = $("#tipo_comprobante_filtro").select2('val');  
+
+  $('.btn-zip').addClass('disabled btn-danger').removeClass('btn-success');
+  $('.btn-zip').html('<i class="fas fa-spinner fa-pulse fa-sm"></i> Comprimiendo datos');
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; }
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; }  
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = "";  }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; }
+
+  $.post("../ajax/resumen_facturas.php?op=data_comprobantes", { 'id_proyecto': localStorage.getItem("nube_idproyecto"), 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (data, status) {
+    
+    data = JSON.parse(data);  console.log(data);     
+    
+    var urls = [
+      'http://localhost/admin_sevens/dist/docs/compra/comprobante_compra/18164558987327.png',
+      'http://localhost/admin_sevens/dist/docs/compra/comprobante_compra/0164671272121.pdf',
+    ];
+    
+    const zip = new JSZip();
+    let count = 0;
+    const zipFilename = "comprobantes.zip";
+    if (data.length === 0) {
+      $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
+      $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
+      toastr.error("No hay docs para descargar!!!");
+    }else{
+      data.forEach(async function (value){
+        var ruta = `${value.host}admin_sevens/${value.carpeta_file}${value.comprobante}`;
+        const urlArr = ruta.split('/');
+        const filename = urlArr[urlArr.length - 1];
+  
+        try {
+          
+           
+          const file = await JSZipUtils.getBinaryContent(ruta)
+          zip.file(filename, file, { binary: true});
+          count++;
+          if(count === data.length) {
+            zip.generateAsync({type:'blob'}).then(function(content) {
+              saveAs(content, zipFilename);
+              $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
+              $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
+            });
+          }
+           
+          
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }    
+
+  });  
 }
 
 init();
 
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function UrlExists(url) {  
+  var http = new XMLHttpRequest();
+  http.open("HEAD", url, false);
+  http.send();
+  console.log(http.status);
+  return http.status;
+}
 
 // quitamos las comas de miles de un numero
 function quitar_formato_miles(numero) {

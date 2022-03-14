@@ -15,18 +15,18 @@
 
       require_once "../modelos/Resumen_facturas.php";
       
-      $resumen_factura = new Resumenfacturas();
+      $resumen_factura = new Resumenfacturas();      
 
       switch ($_GET["op"]) {
 
         case 'listar_facturas_compras':
           
           $rspta = $resumen_factura->facturas_compras($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'] );
-          $cont = 1;
+          echo json_encode($rspta);
           //Vamos a declarar un array
-          $data = [];
-
-          foreach ($rspta as $key => $value) {
+          $data = []; $cont = 1;           
+          
+          foreach ($rspta['data'] as $key => $value) {
 
             $btn_tipo = (empty($value['comprobante'])) ? 'btn-outline-info' : 'btn-info';       
             
@@ -52,7 +52,7 @@
             "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
             "aaData" => $data,
           ];
-          echo json_encode($results);
+          // echo json_encode($results);
 
         break;
 
@@ -61,6 +61,14 @@
           $rspta = $resumen_factura->suma_totales($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante']);
 
           echo json_encode($rspta);
+
+        break;
+
+        case 'data_comprobantes':                  
+
+          $rspta = $resumen_factura->facturas_compras($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'] );
+          
+          echo json_encode($rspta['data_comprobante']);
 
         break;
 
@@ -78,7 +86,7 @@
               $estado = false;
             }
 
-            echo '<option  value=' . $value['id'] . '>' . $value['razon_social'] . ' - ' . $value['ruc'] . '</option>';
+            echo '<option  value=' . $value['ruc'] . '>' . $value['razon_social'] . ' - ' . $value['ruc'] . '</option>';
           }
 
         break;
