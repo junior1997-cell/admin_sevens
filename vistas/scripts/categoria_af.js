@@ -122,48 +122,46 @@ function mostrar_c_insumos_af (idcategoria_insumos_af ) {
 
 }
 
-//Función para desactivar registros
-function desactivar_c_insumos_af(idcategoria_insumos_af ) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el registro?",
-    text: "Cargo",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/categoria_af.php?op=desactivar", { idcategoria_insumos_af : idcategoria_insumos_af  }, function (e) {
 
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-    
-        tabla_categorias_af.ajax.reload();
-      });      
-    }
-  });   
-}
-
-//Función para desactivar registros
+//Función para desactivar y eliminar registros
 function eliminar_c_insumos_af(idcategoria_insumos_af ) {
-  Swal.fire({
-    title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Resgisto no se podrá restablecer",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/categoria_af.php?op=delete", { idcategoria_insumos_af : idcategoria_insumos_af  }, function (e) {
+   //----------------------------
+ Swal.fire({
 
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-    
-        tabla_categorias_af.ajax.reload();
-      });      
-    }
-  });   
+  title: "!Elija una opción¡",
+  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+  icon: "warning",
+  showCancelButton: true,
+  showDenyButton: true,
+  confirmButtonColor: "#17a2b8",
+  denyButtonColor: "#d33",
+  cancelButtonColor: "#6c757d",    
+  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+}).then((result) => {
+
+  if (result.isConfirmed) {
+   //op=desactivar
+    $.post("../ajax/categoria_af.php?op=desactivar", { idcategoria_insumos_af : idcategoria_insumos_af  }, function (e) {
+
+      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+
+      tabla_categorias_af.ajax.reload();
+    });  
+
+  }else if (result.isDenied) {
+   //op=eliminar
+    $.post("../ajax/categoria_af.php?op=delete", { idcategoria_insumos_af : idcategoria_insumos_af  }, function (e) {
+
+      Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+
+      tabla_categorias_af.ajax.reload();
+    });  
+
+  }
+
+});
 }
 
 

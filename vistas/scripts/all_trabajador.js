@@ -996,30 +996,83 @@ function activar(idtrabajador) {
 
 //Función para desactivar registros
 function eliminar(idtrabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Eliminar  el trabajador?",
-    text: "Registo no se podrá restablecer!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_trabajador.php?op=eliminar", { idtrabajador: idtrabajador }, function (e) {
-        if (e == 'ok') {
+   //----------------------------
+ Swal.fire({
 
-          Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");		 
+  title: "!Elija una opción¡",
+  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+  icon: "warning",
+  showCancelButton: true,
+  showDenyButton: true,
+  confirmButtonColor: "#17a2b8",
+  denyButtonColor: "#d33",
+  cancelButtonColor: "#6c757d",    
+  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+}).then((result) => {
+
+  if (result.isConfirmed) {
   
+    Swal.fire({
+      icon: "warning",
+      title: 'Antes de expulsar ingrese una descripción',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: 'Si, expulsar!',
+      confirmButtonColor: "#28a745",
+      showLoaderOnConfirm: true,
+      preConfirm: (login) => {
+        // console.log(login);
+        return fetch(`../ajax/all_trabajador.php?op=desactivar&idtrabajador=${idtrabajador}&descripcion=${login}`)
+          .then(response => {
+            console.log(response);
+            if (!response.ok) {
+              throw new Error(response.statusText)
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `Request failed: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      console.log(result );
+      if (result.isConfirmed) {
+        if (result.value.ok) {
+          Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
           tabla.ajax.reload(); tabla2.ajax.reload();
-          
         }else{
-  
-          Swal.fire("Error!", e, "error");
-        }
-      });      
-    }
-  });   
+          Swal.fire("Error!", "No se pudo realizar la petición.", "error");
+        }     
+      }
+    })
+
+  }else if (result.isDenied) {
+   //op=eliminar
+    $.post("../ajax/all_trabajador.php?op=eliminar", { idtrabajador: idtrabajador }, function (e) {
+      if (e == 'ok') {
+
+        Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");		 
+
+        tabla.ajax.reload(); tabla2.ajax.reload();
+        
+      }else{
+
+        Swal.fire("Error!", e, "error");
+      }
+    }); 
+
+  }
+
+});
 }
 
 

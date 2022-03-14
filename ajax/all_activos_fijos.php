@@ -199,7 +199,9 @@
 
           foreach ($rspta as $key => $reg) {
 
-            $saldo = floatval($reg['total']) - floatval($reg['deposito']);             
+            $saldo = floatval($reg['total']) - floatval($reg['deposito']);  
+
+            $btn_tipo = (empty($value['imagen_comprobante'])) ? 'btn-outline-info' : 'btn-info';             
   
             if ($saldo == $reg['total']) {
               $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
@@ -232,13 +234,11 @@
               "0" => $cont++,
               "1" => empty($reg['idproyecto']) ? ($reg['estado'] == '1'  ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_general(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                     ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_general(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" onclick="anular(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="fas fa-times"></i></button>' .
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' . $reg['idtabla'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'
                   : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_general(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
                     ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>')
                 : ($reg['estado'] == '1' ? '<button class="btn btn-info btn-sm " onclick="ver_detalle_compras_proyecto(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                     ' <button class="btn btn-warning btn-sm" disabled onclick="mostrar_compra_proyecto(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" disabled onclick="anular_af_p(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Anular Compra"><i class="fas fa-times"></i></button>' .
                     ' <button class="btn btn-danger  btn-sm" disabled onclick="eliminar_compra(' . $reg['idtabla'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'
                   : '<button class="btn btn-info btn-sm" disabled onclick="ver_detalle_compras_proyecto(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
                     ' <button class="btn btn-success btn-sm" disabled onclick="des_anular_af_p(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
@@ -259,8 +259,8 @@
                 ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm" disabled>' . number_format(floatval($reg['deposito']), 2, '.', ',') . '</button>'.
               '</div>',
               "8" => number_format($saldo, 2, '.', ','),
-              "9" => empty($reg['idproyecto']) ? '<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>'.$toltip : 
-              '<center><button class="btn btn-outline-info btn-sm" onclick="comprobante_compras(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>'.$toltip,
+              "9" => empty($reg['idproyecto']) ? '<center><button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compra_af_g(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>'.$toltip : 
+              '<center><button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')"><i class="fas fa-file-invoice fa-lg"></i></button></center>'.$toltip,
             ];
             
           }

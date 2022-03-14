@@ -222,6 +222,15 @@
  				  echo $rspta ? "Trabajador activado" : "Trabajador no se puede activar";
 
         break;
+        
+        case 'desactivar_1':
+
+          $rspta=$trabajador->desactivar_1($idtrabajador);
+
+ 				  echo $rspta ? "Trabajador Descativado" : "Trabajador no se puede Descativar";
+
+        break;
+
         case 'eliminar':
 
           $rspta=$trabajador->eliminar($idtrabajador);
@@ -251,7 +260,6 @@
             $data[]=array(
               "0"=>$cont++,
               "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="fas fa-times"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$reg->idtrabajador.')"><i class="fas fa-skull-crossbones"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',

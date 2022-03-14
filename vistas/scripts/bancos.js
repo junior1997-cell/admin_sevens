@@ -184,24 +184,43 @@ function activar_bancos(idbancos) {
 
 //Función para desactivar registros
 function eliminar_bancos(idbancos) {
-  Swal.fire({
-    title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Registo no se podrá restablecer",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/bancos.php?op=eliminar_bancos", { idbancos: idbancos }, function (e) {
+   //----------------------------
+ Swal.fire({
 
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-    
-        tabla_bancos.ajax.reload();
-      });      
-    }
-  });   
+  title: "!Elija una opción¡",
+  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+  icon: "warning",
+  showCancelButton: true,
+  showDenyButton: true,
+  confirmButtonColor: "#17a2b8",
+  denyButtonColor: "#d33",
+  cancelButtonColor: "#6c757d",    
+  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+}).then((result) => {
+
+  if (result.isConfirmed) {
+   //op=desactivar
+    $.post("../ajax/bancos.php?op=desactivar_bancos", { idbancos: idbancos }, function (e) {
+
+      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+
+      tabla_bancos.ajax.reload();
+    }); 
+
+  }else if (result.isDenied) {
+   //op=eliminar
+    $.post("../ajax/bancos.php?op=eliminar_bancos", { idbancos: idbancos }, function (e) {
+
+      Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+
+      tabla_bancos.ajax.reload();
+    }); 
+
+  }
+
+});   
 }
 init();
 

@@ -61,7 +61,6 @@ switch ($_GET["op"]) {
         "0"=>$cont++,
         "1" => $reg->estado
           ? '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' .
-            ' <button class="btn btn-danger btn-sm" onclick="desactivar_bancos(' . $reg->idbancos . ')"><i class="fas fa-times"></i></button>'.
             ' <button class="btn btn-danger  btn-sm" onclick="eliminar_bancos(' . $reg->idbancos . ')"><i class="fas fa-skull-crossbones"></i> </button>':
             '<button class="btn btn-warning btn-sm" onclick="mostrar_bancos(' . $reg->idbancos . ')"><i class="fas fa-pencil-alt"></i></button>' . 
             ' <button class="btn btn-primary btn-sm" onclick="activar_bancos(' . $reg->idbancos . ')"><i class="fa fa-check"></i></button>',

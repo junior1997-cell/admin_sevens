@@ -365,23 +365,41 @@ function activar(idproducto) {
 
 //Función para desactivar registros
 function eliminar(idproducto) {
-  Swal.fire({
-    title: "¿Está Seguro de  Eliminar el registro?",
-    text: "Registro no se podrá restablecer",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/activos_fijos.php?op=eliminar", { idproducto: idproducto }, function (e) {
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+   //----------------------------
+ Swal.fire({
 
-        tabla.ajax.reload();
-      });
-    }
-  });
+  title: "!Elija una opción¡",
+  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+  icon: "warning",
+  showCancelButton: true,
+  showDenyButton: true,
+  confirmButtonColor: "#17a2b8",
+  denyButtonColor: "#d33",
+  cancelButtonColor: "#6c757d",    
+  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+}).then((result) => {
+
+  if (result.isConfirmed) {
+   //op=desactivar
+    $.post("../ajax/activos_fijos.php?op=desactivar", { idproducto: idproducto }, function (e) {
+      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+
+      tabla.ajax.reload();
+    });
+
+  }else if (result.isDenied) {
+   //op=eliminar
+    $.post("../ajax/activos_fijos.php?op=eliminar", { idproducto: idproducto }, function (e) {
+      Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+
+      tabla.ajax.reload();
+    });
+
+  }
+
+});
 }
 
 

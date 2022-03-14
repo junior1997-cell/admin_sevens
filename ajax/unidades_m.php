@@ -53,7 +53,6 @@ switch ($_GET["op"]){
  			$data[]=array(
 				"0"=>$cont++,
  				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-danger btn-sm" onclick="desactivar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-times"></i></button>'.
 					' <button class="btn btn-danger  btn-sm" onclick="eliminar_unidades_m(' . $reg->idunidad_medida . ')"><i class="fas fa-skull-crossbones"></i> </button>':
  					'<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m('.$reg->idunidad_medida.')"><i class="fas fa-pencil-alt"></i></button>'.
  					' <button class="btn btn-primary btn-sm" onclick="activar_unidades_m('.$reg->idunidad_medida.')"><i class="fa fa-check"></i></button>',

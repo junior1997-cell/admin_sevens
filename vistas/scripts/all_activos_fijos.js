@@ -710,16 +710,37 @@ function des_anular(idcompra_af_general) {
 }
 
 function eliminar_compra(idcompra_af_general) {
+  //----------------------------
   Swal.fire({
-    title: "¿Está Seguro de  Eliminar la compra?",
-    text: "Registo no se podrá restablecer!",
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
   }).then((result) => {
+
     if (result.isConfirmed) {
+     //op=desactivar
+      $.post("../ajax/all_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+        if (e == "ok") {
+          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
+
+          tabla.ajax.reload();
+          tabla_comp_prov.ajax.reload();
+        } else {
+          Swal.fire("Error!", e, "error");
+        }
+      });
+
+    }else if (result.isDenied) {
+     //op=eliminar
       $.post("../ajax/all_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");
@@ -730,8 +751,10 @@ function eliminar_compra(idcompra_af_general) {
           Swal.fire("Error!", e, "error");
         }
       });
+
     }
-  });
+
+  }); 
 }
 
 //Declaración de variables necesarias para trabajar con las compras y sus detalles

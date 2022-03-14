@@ -40,6 +40,13 @@
 
       return ejecutarConsulta($sql);
     }
+      //Implementamos un método para desactivar categorías
+    public function desactivar_1($idtrabajador)
+    {
+      $sql="UPDATE trabajador SET estado='0' WHERE idtrabajador='$idtrabajador'";
+
+      return ejecutarConsulta($sql);
+    }
 
     //Implementamos un método para activar categorías
     public function activar($idtrabajador)
