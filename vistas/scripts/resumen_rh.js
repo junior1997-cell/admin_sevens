@@ -39,7 +39,7 @@ function listar() {
         }
         // columna: sub total
         if (data[3] != "") {
-          $("td", row).eq(1).addClass("text-nowrap");
+          $("td", row).eq(3).addClass("text-nowrap text-right");
         }
 
       },
@@ -63,9 +63,6 @@ function listar() {
 
 //ver ficha tecnica
 function modal_comprobante(comprobante,ruta, proveedor) {
-
-  console.log('---hhhhhhhhhhhhhh--------');
-  console.log(comprobante,ruta);
 
   var data_comprobante = ""; var url = ""; var nombre_download = `RH_${proveedor}`; 
   

@@ -36,35 +36,42 @@ Class Planillas_seguros
 		comprobante='$comprobante'
 
 		WHERE idplanilla_seguro='$idplanilla_seguro'";	
+		
 		return ejecutarConsulta($sql);	
 	}
 
-	//Implementamos un método para desactivar categorías
+	//Implementamos un método para desactivar 
 	public function desactivar($idplanilla_seguro )
 	{
 		$sql="UPDATE planilla_seguro SET estado='0' WHERE idplanilla_seguro ='$idplanilla_seguro'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para activar categorías
+	//Implementamos un método para activar 
 	public function activar($idplanilla_seguro )
 	{
 		$sql="UPDATE planilla_seguro SET estado='1' WHERE idplanilla_seguro ='$idplanilla_seguro'";
 		return ejecutarConsulta($sql);
 	}
 
+	
+	//Implementamos un método para eliminar 
+	public function eliminar($idplanilla_seguro )
+	{
+		$sql="UPDATE planilla_seguro SET estado_delete='0' WHERE idplanilla_seguro ='$idplanilla_seguro'";
+		return ejecutarConsulta($sql);
+	}
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idplanilla_seguro )
 	{
-		$sql="SELECT*FROM planilla_seguro   
-		WHERE idplanilla_seguro ='$idplanilla_seguro'";
+		$sql="SELECT*FROM planilla_seguro WHERE idplanilla_seguro ='$idplanilla_seguro'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM planilla_seguro WHERE idproyecto='$idproyecto' ORDER BY idplanilla_seguro DESC";
+		$sql="SELECT*FROM planilla_seguro WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' ORDER BY idplanilla_seguro DESC";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -76,7 +83,7 @@ Class Planillas_seguros
 	}
 	//total
 	public function total($idproyecto){
-		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM planilla_seguro WHERE idproyecto='$idproyecto' AND estado=1";
+		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM planilla_seguro WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

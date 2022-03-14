@@ -88,7 +88,7 @@
                                                     <th>Fecha</th>
                                                     <th>Subtotal</th>
                                                     <th>IGV</th>
-                                                    <th class="text-nowrap" id="total_monto"></th>
+                                                    <th class="text-nowrap text-right" id="total_monto"></th>
                                                     <th>Descripción</th>
                                                     <th>Comprobante</th>
                                                     <th>Estado</th>                                            
@@ -198,18 +198,32 @@
                                                         <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                                     </div>                                              
                                                 </div>
-                                                <!-- Factura -->
-                                                <div class="col-md-6 col-lg-6">
-                                                    <label for="foto2">Factura <b style="color: red;">(Imagen o PDF)</b></label> <br>
-                                                      <div class="text-center">
-                                                          <img onerror="this.src='../dist/img/default/pdf.png';" src="../dist/img/default/pdf.png" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" height="150px" />
-                                                          <div id="ver_pdf"></div>
-                                                      </div>
-                                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*, .pdf" />
-                                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
-                                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
 
-                                                </div> 
+                                                <!-- Factura -->
+                                                <div class="col-md-6" >                               
+                                                    <div class="row text-center">
+                                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                                        <label for="cip" class="control-label" > Baucher de deposito </label>
+                                                    </div>
+                                                    <div class="col-md-6 text-center">
+                                                        <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                                        <i class="fas fa-upload"></i> Subir.
+                                                        </button>
+                                                        <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                                        <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                                    </div>
+                                                    <div class="col-md-6 text-center">
+                                                        <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');">
+                                                        <i class="fas fa-redo"></i> Recargar.
+                                                        </button>
+                                                    </div>
+                                                    </div>                              
+                                                    <div id="doc1_ver" class="text-center mt-4">
+                                                    <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                                    </div>
+                                                    <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                                                </div>
+
                                             </div>
 
                                             <div class="row" id="cargando-2-fomulario" style="display: none;">
