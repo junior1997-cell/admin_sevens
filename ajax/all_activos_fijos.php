@@ -201,7 +201,7 @@
 
             $saldo = floatval($reg['total']) - floatval($reg['deposito']);  
 
-            $btn_tipo = (empty($value['imagen_comprobante'])) ? 'btn-outline-info' : 'btn-info';             
+            $btn_tipo = (empty( $reg['imagen_comprobante'])) ? 'btn-outline-info' : 'btn-info';             
   
             if ($saldo == $reg['total']) {
               $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
