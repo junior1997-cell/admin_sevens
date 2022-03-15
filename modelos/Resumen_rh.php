@@ -37,7 +37,7 @@ class Resumen_rh
         );
         
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/sub_contrato/comprobante_subcontrato/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/sub_contrato/comprobante_subcontrato/', $value['comprobante']) ) {
             $data_recibos_honorarios[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/sub_contrato/comprobante_subcontrato/',
@@ -77,7 +77,7 @@ class Resumen_rh
           );
                  
           if (!empty($value['recibos_x_honorarios'])) {
-            if ( validar_url('local_host', $link_host, 'dist/docs/pago_administrador/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
+            if ( validar_url( $link_host, 'dist/docs/pago_administrador/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
               $data_recibos_honorarios[] = array(
                 "comprobante"       => $value['recibos_x_honorarios'],
                 "carpeta_file"      => 'dist/docs/pago_administrador/recibos_x_honorarios/',
@@ -116,7 +116,7 @@ class Resumen_rh
           );
 
           if (!empty($value['recibos_x_honorarios'])) {
-            if ( validar_url('local_host', $link_host, 'dist/docs/pago_obrero/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
+            if ( validar_url( $link_host, 'dist/docs/pago_obrero/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
               $data_recibos_honorarios[] = array(
                 "comprobante"       => $value['recibos_x_honorarios'],
                 "carpeta_file"      => 'dist/docs/pago_obrero/recibos_x_honorarios/',
@@ -141,8 +141,8 @@ class Resumen_rh
 }
 
 
-function validar_url( $tipo, $host, $ruta, $file )  {
-
+function validar_url( $host, $ruta, $file )  {
+  $tipo = 'nube_host';
   $armar_ruta = "";
   if ($tipo == 'local_host') { $armar_ruta = "http://localhost/admin_sevens/" . $ruta . $file; } else { if ($tipo == 'nube_host') { $armar_ruta = $host . $ruta . $file; } }
 

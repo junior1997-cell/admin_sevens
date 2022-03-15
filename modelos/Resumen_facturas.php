@@ -61,7 +61,7 @@ class Resumenfacturas
         );
 
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/compra/comprobante_compra/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/compra/comprobante_compra/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/compra/comprobante_compra/',
@@ -120,7 +120,7 @@ class Resumenfacturas
           "modulo"              => 'MAQUINA Y/O EQUIPO',
         );
         if (!empty($value['imagen'])) {
-          if (validar_url('local_host', $link_host, 'dist/docs/servicio_maquina/comprobante_servicio/', $value['imagen'])) {
+          if (validar_url( $link_host, 'dist/docs/servicio_maquina/comprobante_servicio/', $value['imagen'])) {
             $data_comprobante[] = array(
               "comprobante"       => $value['imagen'],
               "carpeta_file"      => 'dist/docs/servicio_maquina/comprobante_servicio/',
@@ -180,7 +180,7 @@ class Resumenfacturas
           "modulo"              => 'OTRO GASTO',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/otro_gasto/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/otro_gasto/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/otro_gasto/comprobante/',
@@ -240,7 +240,7 @@ class Resumenfacturas
           "modulo"              => 'TRANSPORTE',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/transporte/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/transporte/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/transporte/comprobante/',
@@ -300,7 +300,7 @@ class Resumenfacturas
           "modulo"              => 'HOSPEDAJE',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/hospedaje/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/hospedaje/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/hospedaje/comprobante/',
@@ -361,7 +361,7 @@ class Resumenfacturas
           "modulo"              => 'PENSION',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/pension/comprobante/',
@@ -422,7 +422,7 @@ class Resumenfacturas
           "modulo"              => 'BREAK',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/break/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/break/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/break/comprobante/',
@@ -482,7 +482,7 @@ class Resumenfacturas
           "modulo"              => 'COMIDA EXTRA',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/comida_extra/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/comida_extra/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/comida_extra/comprobante/',
@@ -542,7 +542,7 @@ class Resumenfacturas
           "modulo"              => 'OTRA FACTURA',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url('local_host', $link_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $link_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
               "carpeta_file"      => 'dist/docs/otra_factura/comprobante/',
@@ -903,8 +903,8 @@ class Resumenfacturas
 
 }
 
-function validar_url( $tipo, $host, $ruta, $file )  {
-
+function validar_url(  $host, $ruta, $file )  {
+  $tipo='nube_host';
   $armar_ruta = "";
   if ($tipo == 'local_host') { $armar_ruta = "http://localhost/admin_sevens/" . $ruta . $file; } else { if ($tipo == 'nube_host') { $armar_ruta = $host . $ruta . $file; } }
 

@@ -137,12 +137,12 @@ function desccargar_zip_recibos_honorarios() {
     }else{
       data.forEach(async function (value){
          
-        const urlArr = value.ruta_local.split('/');
+        const urlArr = value.ruta_nube.split('/');
         const filename = urlArr[urlArr.length - 1];
   
         try {   
            
-          const file = await JSZipUtils.getBinaryContent(value.ruta_local)
+          const file = await JSZipUtils.getBinaryContent(value.ruta_nube)
           zip.file(filename, file, { binary: true});
           count++;
           if(count === data.length) {
