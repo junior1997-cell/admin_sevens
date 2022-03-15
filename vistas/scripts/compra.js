@@ -395,6 +395,15 @@ function guardaryeditar_compras(e) {
   // $("#tabla-compra").hide();
   // $("#agregar_compras").show();
   var formData = new FormData($("#form-compras")[0]);
+  var sweet_loader = `<div class="row sweet_loader" >    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+      <div class="progress" id="div_barra_progress">
+        <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+          0%
+        </div>
+      </div>
+    </div>
+  </div>`;
 
   Swal.fire({
     title: "¿Está seguro que deseas guardar esta compra?",
@@ -412,6 +421,14 @@ function guardaryeditar_compras(e) {
         data: formData,
         contentType: false,
         processData: false,
+        beforeSend: function() {
+          Swal.fire({
+            title: "Guardando...",
+            html: 'Tu <b>información</b> se esta guradando en la <b>base de datos</b>.',
+            showConfirmButton: false,
+            didRender: function() { /* solo habrá un swal2 abierta.*/ $('.swal2-content').prepend(sweet_loader); }
+          });
+        },
         success: function (datos) {
           if (datos == "ok") {
             // toastr.success("Usuario registrado correctamente");
@@ -423,15 +440,35 @@ function guardaryeditar_compras(e) {
             limpiar_form_compra(); regresar();
             
             $("#modal-agregar-usuario").modal("hide");
+            l_m();
             
           } else {
             // toastr.error(datos);
             Swal.fire("Error!", datos, "error");
+            l_m();
           }
         },
+        xhr: function () {
+
+          var xhr = new window.XMLHttpRequest();
+    
+          xhr.upload.addEventListener("progress", function (evt) {
+    
+            if (evt.lengthComputable) {
+    
+              var percentComplete = (evt.loaded / evt.total)*100;
+              /*console.log(percentComplete + '%');*/
+              $("#barra_progress").css({"width": percentComplete+'%'});
+    
+              $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+            }
+          }, false);
+          return xhr;
+        }
       });
     }
   });
+  
 }
 
 //Función para desactivar registros
@@ -3001,4 +3038,12 @@ function format_d_m_a(fecha) {
   } 
 
   return format;
+}
+
+function l_m(){
+  
+  // limpiar();
+  $("#barra_progress").css({"width":'0%'});
+  $("#barra_progress").text("0%");
+  
 }
