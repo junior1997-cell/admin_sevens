@@ -123,7 +123,7 @@
                                   <th class="text-center"> Descripción</th>
                                 </tr>
                               </thead>
-                              <tbody id="data_table_body">
+                              <tbody class="tcuerpo" id="data_table_body">
                                 <!--aqui va el listado de los días-->
                               </tbody>
                               <tfoot>
@@ -418,6 +418,12 @@
             border-left: aliceblue;
             border-right: aliceblue;
             border-top: hidden;
+        }
+        .tcuerpo tr td {
+            text-align: center !important;
+            padding-top: 18px !important;
+            border: black 1px solid;
+            padding: 0.45rem 0.2rem 0.25rem 0.2rem !important;
         }
     </style>
     <!-- Bootstrap 4 -->

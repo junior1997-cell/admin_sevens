@@ -136,7 +136,7 @@
                             </tr>
                             <tr id="bloque_fechas"></tr>
                           </thead>
-                          <tbody id="data_table_body">
+                          <tbody class="tcuerpo" id="data_table_body">
                             <!--aqui va el listado de los días-->
                           </tbody>
                           <tfoot>
@@ -536,6 +536,12 @@
             margin-left: 3px;
             padding: 5px;
             border-radius: 6px;
+        }
+        .tcuerpo tr td {
+            text-align: center !important;
+            padding-top: 18px !important;
+            border: black 1px solid;
+            padding: 0.45rem 0.45rem 0.45rem 0.45rem !important;
         }
     </style>
     <!-- Bootstrap 4 -->
