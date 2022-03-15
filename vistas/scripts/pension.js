@@ -214,7 +214,7 @@ function mostrar_form_table(estados) {
       $("#card-editar").hide();
       $("#card-guardar").hide();
       $("#tabla-asistencia-trab").hide();
-      $("#ver_asistencia").hide();
+      $("#tabla-registro").hide();
       $("#detalle_asistencia").show();
       $("#tabla-comprobantes").hide();
       
@@ -440,8 +440,8 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
   // ocultamos las tablas
   mostrar_form_table(2);
-  $("#ver_asistencia").hide();
-  //$('#cargando-registro-asistencia').show();
+  $("#tabla-registro").hide();
+  $('#cargando-registro-pension').show();
 
   $("#card-editar").show(); $("#card-guardar").hide();  
 
@@ -685,11 +685,13 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
     }); // end foreach
     $("#parcial_total_x_semana").html(formato_miles(total_monto_x_semana));
+
+    $("#tabla-registro").show();
+    $('#cargando-registro-pension').hide();
     
   }); //end post - ver_datos_semana
 
-  $("#ver_asistencia").show();
-  $('#cargando-registro-asistencia').hide();
+
   $('[data-toggle="tooltip"]').tooltip();  
 
   count_dias_asistidos = 0;  horas_nomr_total = 0;   horas_extr_total = 0;

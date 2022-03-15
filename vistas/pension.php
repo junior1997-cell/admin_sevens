@@ -152,6 +152,16 @@
                         </div>
 
                       </div>
+
+                      <!-- cargando tabla registro de pension -->
+                      <div class="row" id="cargando-registro-pension" style="display: none;">
+                        <div class="col-lg-12 text-center">
+                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                          <br />
+                          <h4>Cargando...</h4>
+                        </div>
+                      </div>
+
                       <!-- Listar comprobantes-->
                       <div id="tabla-comprobantes" style="display: none;">
                         <table id="t-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
