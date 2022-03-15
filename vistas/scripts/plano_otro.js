@@ -411,108 +411,6 @@ function l_m() {
   $("#barra_progress2").text("0%");
 }
 
-// ver detallles del registro
-function verdatos(idplano_otro) {
-  console.log("id_verdatos" + idplano_otro);
-
-  $("#datostrabajador").html("" + '<div class="row" >' + '<div class="col-lg-12 text-center">' + '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />' + "<br />" + "<h4>Cargando...</h4>" + "</div>" + "</div>");
-
-  var verdatos = "";
-  var imagenver = "";
-
-  $("#modal-ver-trabajador").modal("show");
-
-  $.post("../ajax/all_trabajador.php?op=verdatos", { idplano_otro: idplano_otro }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
-
-    var imagen_perfil = data.imagen_perfil != "" ? '<img src="../dist/img/usuarios/' + data.imagen_perfil + '" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-    var imagen_dni_anverso = data.imagen_dni_anverso != "" ? '<img src="../dist/img/usuarios/' + data.imagen_dni_anverso + '" alt="" class="img-thumbnail">' : "No hay imagen";
-    var imagen_dni_reverso = data.imagen_dni_reverso != "" ? '<img src="../dist/img/usuarios/' + data.imagen_dni_reverso + '" alt="" class="img-thumbnail">' : "No hay imagen";
-
-    verdatos =
-      "" +
-      '<div class="col-12">' +
-      '<div class="card">' +
-      '<div class="card-body ">' +
-      '<table class="table table-hover table-bordered">' +
-      "<tbody>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      '<th rowspan="2">' +
-      imagen_perfil +
-      "</th>" +
-      "<td> <b>Nombre: </b> " +
-      data.nombres +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<td> <b>DNI: </b>  " +
-      data.numero_documento +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Dirección</th>" +
-      "<td>" +
-      data.direccion +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Correo</th>" +
-      "<td>" +
-      data.email +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Teléfono</th>" +
-      "<td>" +
-      data.telefono +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Fecha nacimiento</th>" +
-      "<td>" +
-      data.fecha_nacimiento +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Cuenta bancaria</th>" +
-      "<td>" +
-      data.cuenta_bancaria +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Banco</th>" +
-      "<td>" +
-      data.banco +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>Titular cuenta </th>" +
-      "<td>" +
-      data.titular_cuenta +
-      "</td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>DNI anverso</th>" +
-      "<td> " +
-      imagen_dni_anverso +
-      " </td>" +
-      "</tr>" +
-      '<tr data-widget="expandable-table" aria-expanded="false">' +
-      "<th>DNI reverso</th>" +
-      "<td> " +
-      imagen_dni_reverso +
-      " </td>" +
-      "</tr>" +
-      "</tbody>" +
-      "</table>" +
-      "</div>" +
-      "</div>" +
-      "</div>";
-
-    $("#datostrabajador").html(verdatos);
-  });
-}
 
 // mostramos los datos para editar
 function mostrar_carpeta(idplano_otro) {
@@ -572,7 +470,7 @@ function mostrar_plano(idplano_otro) {
               $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
             } else {
               if (extrae_extencion(data.doc) == "pdf") {
-                $("#doc1_ver").html('<iframe src="../dist/otros_docs/' + data.doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#doc1_ver").html('<iframe src="../dist/docs/plano_otro/archivos/' + data.doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
               } else {
                 if (extrae_extencion(data.doc) == "dwg") {
                   $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
@@ -592,7 +490,7 @@ function mostrar_plano(idplano_otro) {
                       extrae_extencion(data.doc) == "webp" ||
                       extrae_extencion(data.doc) == "bmp"
                     ) {
-                      $("#doc1_ver").html('<img src="../dist/otros_docs/' + data.doc + '" alt="" width="50%" >');
+                      $("#doc1_ver").html('<img src="../dist/docs/plano_otro/archivos/' + data.doc + '" alt="" width="50%" >');
                     } else {
                       if (
                         extrae_extencion(data.doc) == "docx" ||
@@ -667,6 +565,45 @@ function activar_carpeta(idplano_otro) {
 }
 
 //Función para desactivar registros
+function eliminar_carpeta(idplano_otro) {
+    
+  Swal.fire({
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+    icon: "warning",
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      $.post("../ajax/plano_otro.php?op=desactivar_carpeta", { idplano_otro: idplano_otro }, function (e) {
+        Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
+
+        tabla_carpeta.ajax.reload();
+      });
+
+    }else if (result.isDenied) {
+
+      $.post("../ajax/plano_otro.php?op=eliminar_carpeta", { idplano_otro: idplano_otro }, function (e) {
+        Swal.fire("Eliminado!", "Tu Documento ha sido Eliminado.", "success");
+
+        tabla_carpeta.ajax.reload();
+      });
+
+    }
+
+  });
+}
+
+//Función para desactivar registros
 function desactivar_plano(idplano_otro) {
   Swal.fire({
     title: "¿Está Seguro de  Desactivar  este Documento?",
@@ -708,6 +645,44 @@ function activar_plano(idplano_otro) {
   });
 }
 
+//Función para desactivar registros
+function eliminar_plano(idplano_otro) {
+
+  Swal.fire({
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+    icon: "warning",
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      $.post("../ajax/plano_otro.php?op=desactivar_plano", { idplano_otro: idplano_otro }, function (e) {
+        Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
+
+        tabla_plano.ajax.reload();
+      });
+
+    }else if (result.isDenied) {
+
+      $.post("../ajax/plano_otro.php?op=eliminar_plano", { idplano_otro: idplano_otro }, function (e) {
+        Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
+
+        tabla_plano.ajax.reload();
+      });
+
+    }
+
+  });
+}
 function ver_modal_docs(nombre, descripcion, doc) {
   // console.log(nombre, descripcion, doc);
   $("#modal-ver-docs").modal("show");
@@ -732,7 +707,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
           nombre +
           '.xls</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
           descripcion +
-          '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+          '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
           doc +
           '"  download="' +
           nombre +
@@ -747,7 +722,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
             nombre +
             '.xlsx</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
             descripcion +
-            '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+            '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
             doc +
             '"  download="' +
             nombre +
@@ -762,7 +737,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
               nombre +
               '.csv</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
               descripcion +
-              '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+              '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
               doc +
               '"  download="' +
               nombre +
@@ -777,7 +752,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
                 nombre +
                 '.xlsm</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
                 descripcion +
-                '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                 doc +
                 '"  download="' +
                 nombre +
@@ -785,18 +760,18 @@ function ver_modal_docs(nombre, descripcion, doc) {
             );
           } else {
             if (extrae_extencion(doc) == "pdf") {
-              $("#verdoc1").html('<iframe src="../dist/otros_docs/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+              $("#verdoc1").html('<iframe src="../dist/docs/plano_otro/archivos/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
               $("#verdoc1_nombre").html(
                 '<div class="col-md-12 text-left"><b>Nombre: <br> </b>' +
                   nombre +
                   '.pdf</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
                   descripcion +
-                  '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                  '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                   doc +
                   '"  download="' +
                   nombre +
-                  '" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block" href="../dist/otros_docs/' +
+                  '" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block" href="../dist/docs/plano_otro/archivos/' +
                   doc +
                   '"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>'
               );
@@ -809,7 +784,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
                     nombre +
                     '.dwg</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
                     descripcion +
-                    '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                    '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                     doc +
                     '"  download="' +
                     nombre +
@@ -826,7 +801,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
                       extrae_extencion(doc) +
                       '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
                       descripcion +
-                      '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                      '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                       doc +
                       '"  download="' +
                       nombre +
@@ -845,18 +820,18 @@ function ver_modal_docs(nombre, descripcion, doc) {
                     extrae_extencion(doc) == "webp" ||
                     extrae_extencion(doc) == "bmp"
                   ) {
-                    $("#verdoc1").html('<img src="../dist/otros_docs/' + doc + '" alt="" width="50%" >');
+                    $("#verdoc1").html('<img src="../dist/docs/plano_otro/archivos/' + doc + '" alt="" width="50%" >');
 
                     $("#verdoc1_nombre").html(
                       '<div class="col-md-12 text-left"><b>Nombre: <br> </b>' +
                         nombre +
                         '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
                         descripcion +
-                        '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                        '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                         doc +
                         '"  download="' +
                         nombre +
-                        '" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block" href="../dist/otros_docs/' +
+                        '" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-md-6 "> <a  class="btn btn-info  btn-block" href="../dist/docs/plano_otro/archivos/' +
                         doc +
                         '"  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div> '
                     );
@@ -871,7 +846,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
                           extrae_extencion(doc) +
                           '</div> <div class="col-md-12 mt-2 mb-2 text-left"><b>Descripcion: <br> </b>' +
                           descripcion +
-                          '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                          '</div> <div class="borde-arriba-naranja mb-2" > </div> <div class="col-md-12 row mt-2"> <div class="col-md-6 "> <a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                           doc +
                           '"  download="' +
                           nombre +
@@ -892,7 +867,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
                           '<div class="borde-arriba-naranja mb-2" > </div>' +
                           '<div class="col-md-12 row mt-2">' +
                           '<div class="col-md-6 ">' +
-                          '<a  class="btn btn-warning  btn-block" href="../dist/otros_docs/' +
+                          '<a  class="btn btn-warning  btn-block" href="../dist/docs/plano_otro/archivos/' +
                           doc +
                           '"  download="' +
                           nombre +
@@ -1050,7 +1025,7 @@ function re_visualizacion() {
               toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
             } else {
               if (extrae_extencion(dr) == "pdf") {
-                $("#doc1_ver").html('<iframe src="../dist/otros_docs/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+                $("#doc1_ver").html('<iframe src="../dist/docs/plano_otro/archivos/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
                 toastr.success("Documento vizualizado correctamente!!!");
               } else {
@@ -1076,7 +1051,7 @@ function re_visualizacion() {
                       extrae_extencion(dr) == "webp" ||
                       extrae_extencion(dr) == "bmp"
                     ) {
-                      $("#doc1_ver").html('<img src="../dist/otros_docs/' + dr + '" alt="" width="50%" >');
+                      $("#doc1_ver").html('<img src="../dist/docs/plano_otro/archivos/' + dr + '" alt="" width="50%" >');
 
                       toastr.success("Documento vizualizado correctamente!!!");
                     } else {

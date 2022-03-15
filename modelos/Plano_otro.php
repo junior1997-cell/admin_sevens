@@ -79,6 +79,22 @@
       return ejecutarConsulta($sql);
     }
 
+    //Implementamos un método para eliminar carpeta
+    public function eliminar_carpeta($idcarpeta)
+    {
+      $sql="UPDATE carpeta_plano_otro SET estado_delete='0' WHERE idcarpeta = '$idcarpeta'";
+
+      return ejecutarConsulta($sql);
+    }
+
+    //Implementamos un método para eliminar plano
+    public function eliminar_plano($idplano_otro)
+    {
+      $sql="UPDATE plano_otro SET estado_delete='0' WHERE idplano_otro='$idplano_otro'";
+
+      return ejecutarConsulta($sql);
+    }
+
     //Implementar un método para mostrar los datos de un registro a modificar
     public function mostrar_carpeta($idcarpeta)
     {
@@ -95,34 +111,11 @@
       return ejecutarConsultaSimpleFila($sql);
     }
 
-    //Implementar un método para mostrar los datos de un registro a modificar
-    public function verdatos($idtrabajador)
-    {
-      $sql="SELECT 
-      t.idbancos as idbancos, 
-      t.nombres as nombres, 
-      t.tipo_documento as tipo_documento, 
-      t.numero_documento as numero_documento,
-      t.fecha_nacimiento as fecha_nacimiento,
-      t.cuenta_bancaria as cuenta_bancaria,
-      t.titular_cuenta as titular_cuenta,
-      t.direccion as direccion,
-      t.telefono as telefono,
-      t.email as email,
-      t.imagen_perfil as imagen_perfil , 
-      t.imagen_dni_anverso as imagen_dni_anverso,
-      t.imagen_dni_reverso as imagen_dni_reverso,
-      b.nombre as banco 
-      FROM trabajador t, bancos b 
-      WHERE t.idtrabajador='$idtrabajador' AND t.idbancos =b.idbancos";
-
-      return ejecutarConsultaSimpleFila($sql);
-    }
 
     //Implementar un método para listar los registros
     public function listar_carpeta($nube_proyecto)
     {
-      $sql="SELECT * FROM carpeta_plano_otro AS cpo WHERE cpo.idproyecto = '$nube_proyecto'";
+      $sql="SELECT * FROM carpeta_plano_otro AS cpo WHERE cpo.idproyecto = '$nube_proyecto' AND estado_delete='1' AND estado='1' ";
 
       return ejecutarConsulta($sql);		
     }
@@ -130,7 +123,7 @@
     //Implementar un método para listar los registros
     public function listar_plano($id_carpeta)
     {
-      $sql="SELECT * FROM plano_otro AS po WHERE po.id_carpeta = '$id_carpeta'";
+      $sql="SELECT * FROM plano_otro AS po WHERE po.id_carpeta = '$id_carpeta'  AND estado_delete='1' AND estado='1'";
 
       return ejecutarConsulta($sql);		
     }

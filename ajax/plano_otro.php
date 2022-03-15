@@ -66,7 +66,7 @@
 
             $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/otros_docs/" . $imagen1);
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/plano_otro/archivos/" . $imagen1);
 						
 					}
 
@@ -86,7 +86,7 @@
 
               if ($doc1_ant != "") {
 
-                unlink("../dist/otros_docs/" . $doc1_ant);
+                unlink("../dist/docs/plano_otro/archivos/" . $doc1_ant);
               }
             }
 
@@ -113,6 +113,14 @@
  				  echo $rspta ? "Carpeta activada" : "Carpeta no se puede activar";
 
         break;
+        
+        case 'eliminar_carpeta':
+
+          $rspta = $plano_otro->eliminar_carpeta($idplano_otro);
+
+ 				  echo $rspta ? "Carpeta Eliminada" : "Carpeta no se puede Eliminar";
+
+        break;
 
         case 'desactivar_plano':
 
@@ -127,6 +135,14 @@
           $rspta = $plano_otro->activar_plano($idplano_otro);
 
  				  echo $rspta ? "Documento activado" : "Documento no se puede activar";
+
+        break;
+
+        case 'eliminar_plano':
+
+          $rspta = $plano_otro->eliminar_plano($idplano_otro);
+
+ 				  echo $rspta ? "Documento Eliminada" : "Documento no se puede Eliminada";
 
         break;
 
@@ -161,7 +177,7 @@
             $data[]=array(
               "0"=>$cont++,
               "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar_carpeta('.$reg->idcarpeta.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-skull-crossbones"></i></button>'.
                 ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i></button>':
                 ' <button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-check"></i></button>'.
@@ -222,7 +238,7 @@
                           $img ='<img src="../dist/img/default/zip.png" height="auto" width="60" >';
                         }else{
                           if ( $exten2 == "jpeg" || $exten2 == "jpg" || $exten2 == "jpe" || $exten2 == "jfif" || $exten2 == "gif" || $exten2 == "png" || $exten2 == "tiff" || $exten2 == "tif" || $exten2 == "webp" || $exten2 == "bmp" ) { 
-                            $img = '<img src="../dist/otros_docs/'.$reg->doc.'" height="auto" width="60" >';
+                            $img = '<img src="../dist/docs/plano_otro/archivos/'.$reg->doc.'" height="auto" width="60" >';
                           }else{
                             if ( $exten2 == "docx" || $exten2 == "docm" || $exten2 == "dotx" || $exten2 == "dotm" || $exten2 == "doc" || $exten2 == "dot"  ) {     
                               $img = '<img src="../dist/svg/docx.svg" height="auto" width="60" >';
@@ -248,7 +264,7 @@
             $data[]=array(
               "0"=>$cont++,
               "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger  btn-sm" onclick="desactivar_plano('.$reg->idplano_otro.')"><i class="far fa-trash-alt  "></i></button>'.
+                ' <button class="btn btn-danger  btn-sm" onclick="eliminar_plano('.$reg->idplano_otro.')"><i class="fas fa-skull-crossbones"></i></button>'.
                 ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>':
                 ' <button class="btn btn-warning  btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary  btn-sm" onclick="activar_plano('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
