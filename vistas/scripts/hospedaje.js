@@ -408,10 +408,56 @@ function mostrar(idhospedaje) {
 function ver_datos(idhospedaje) {
 
   $("#modal-ver-hospedaje").modal("show")
+  var comprobante=''; var btn_comprobante='';
 
   $.post("../ajax/hospedaje.php?op=verdatos", { idhospedaje: idhospedaje }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data); 
+
+    
+    if (data.comprobante != '') {
+
+      if ( extrae_extencion(data.comprobante) == "pdf" ) {
+
+        comprobante= `<iframe src="../dist/docs/hospedaje/comprobante/${data.comprobante}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`;
+
+      }else{
+
+        if (
+          extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
+          extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
+          extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
+          extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
+
+            comprobante=`<img src="../dist/docs/hospedaje/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`; 
+          
+        } else {
+          comprobante=`<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >`;
+        }  
+
+      }
+
+      btn_comprobante=``;
+    
+      btn_comprobante=`
+      <div class="row">
+        <div class="col-6"">
+           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/hospedaje/comprobante/${data.comprobante}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/hospedaje/comprobante/${data.comprobante}" download="comprobante_hospedaje"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
+
+
+    } else {
+
+      comprobante='Sin comprobante';
+      btn_comprobante='';
+
+    }
+    
+
     
     verdatos=`                                                                            
     <div class="col-12">
@@ -453,7 +499,7 @@ function ver_datos(idhospedaje) {
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo pago </th>
-                <td>${data.forma_de_pago}</td>
+                <td>${data.forma_de_pago!="" || data.forma_de_pago==null ?data.forma_de_pago:''}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo comprobante </th>
@@ -478,8 +524,7 @@ function ver_datos(idhospedaje) {
                 <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <td colspan="2" > <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/docs/hospedaje/comprobante/${data.comprobante}" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                </td>
+                <td colspan="2" > ${comprobante} <br> ${btn_comprobante} </td>
               </tr>
             </tbody>
           </table>

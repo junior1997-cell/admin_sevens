@@ -79,7 +79,7 @@
       t.idbancos as idbancos, t.nombres as nombres, t.tipo_documento as tipo_documento, t.numero_documento as numero_documento,
       t.fecha_nacimiento as fecha_nacimiento, t.cuenta_bancaria_format , t.cci_format,
       t.titular_cuenta as titular_cuenta, t.direccion as direccion, t.telefono as telefono, t.email as email,
-      t.imagen_perfil as imagen_perfil, t.imagen_dni_anverso as imagen_dni_anverso,
+      t.imagen_perfil as imagen_perfil, t.imagen_dni_anverso as imagen_dni_anverso, t.cv_documentado, t.cv_no_documentado,
       t.imagen_dni_reverso as imagen_dni_reverso, b.nombre as banco 
       FROM trabajador t, bancos b WHERE t.idtrabajador='$idtrabajador' AND t.idbancos =b.idbancos";
 

@@ -624,8 +624,6 @@ function guardaryeditar(e) {
 // ver detallles del registro
 function verdatos(idtrabajador){
 
-  console.log('id_verdatos'+idtrabajador);  
-  
   $('#datostrabajador').html(''+
   '<div class="row" >'+
     '<div class="col-lg-12 text-center">'+
@@ -635,18 +633,127 @@ function verdatos(idtrabajador){
     '</div>'+
   '</div>');
 
-  var verdatos=''; var imagenver='';
+  var verdatos=''; 
+
+  var imagen_perfil =''; btn_imagen_perfil=''; 
+
+  var imagen_dni_anverso =''; var btn_imagen_dni_anverso=''; 
+  var imagen_dni_reverso =''; var btn_imagen_dni_reverso=''; 
+  
+  var cv_documentado=''; var btn_cv_documentado=''; 
+  var cv_no_documentado ='';  var btn_cv_no_documentado='';
 
   $("#modal-ver-trabajador").modal("show")
 
   $.post("../ajax/all_trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (data, status) {
 
     data = JSON.parse(data);  //console.log(data); 
+   
+    if (data.imagen_perfil != '') {
 
-    var imagen_perfil =data.imagen_perfil != '' || data.imagen_perfil != null ? '<img src="../dist/docs/all_trabajador/perfil/'+data.imagen_perfil+'" alt="" class="img-thumbnail">' : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
-    var imagen_dni_anverso =data.imagen_dni_anverso != '' ? '<img src="../dist/docs/all_trabajador/dni_anverso/'+data.imagen_dni_anverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
-    var imagen_dni_reverso =data.imagen_dni_reverso != '' ? '<img src="../dist/docs/all_trabajador/dni_reverso/'+data.imagen_dni_reverso+'" alt="" class="img-thumbnail">' : 'No hay imagen';
+      imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${data.imagen_perfil}" alt="" class="img-thumbnail">`
+      
+      btn_imagen_perfil=`
+      <div class="row">
+        <div class="col-6"">
+           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/perfil/${data.imagen_perfil}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/perfil/${data.imagen_perfil}" download="PERFIL ${data.nombres}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
     
+    } else {
+
+      imagen_perfil='No hay imagen';
+      btn_imagen_perfil='';
+
+    }
+
+    if (data.imagen_dni_anverso != '') {
+
+      imagen_dni_anverso=`<img src="../dist/docs/all_trabajador/dni_anverso/${data.imagen_dni_anverso}" alt="" class="img-thumbnail">`
+      
+      btn_imagen_dni_anverso=`
+      <div class="row">
+        <div class="col-6"">
+           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_anverso/${data.imagen_dni_anverso}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_anverso/${data.imagen_dni_anverso}" download="DNI ${data.nombres}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
+    
+    } else {
+
+      imagen_dni_anverso='No hay imagen';
+      btn_imagen_dni_anverso='';
+
+    }
+
+    if (data.imagen_dni_reverso != '') {
+
+      imagen_dni_reverso=`<img src="../dist/docs/all_trabajador/dni_reverso/${data.imagen_dni_reverso}" alt="" class="img-thumbnail">`
+      
+      btn_imagen_dni_reverso=`
+      <div class="row">
+        <div class="col-6"">
+           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_reverso/${data.imagen_dni_reverso}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${data.imagen_dni_reverso}" download="DNI ${data.nombres}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
+    
+    } else {
+
+      imagen_dni_reverso='No hay imagen';
+      btn_imagen_dni_reverso='';
+
+    }
+
+    if (data.cv_documentado != '') {
+
+      cv_documentado=`<iframe src="../dist/docs/all_trabajador/cv_documentado/${data.cv_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+      
+      btn_cv_documentado=`
+      <div class="row">
+        <div class="col-6"">
+           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_documentado/${data.cv_documentado}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${data.cv_documentado}" download="CV DOCUMENTADO ${data.nombres}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
+    
+    } else {
+
+      cv_documentado='Sin CV documentado';
+      btn_cv_documentado='';
+
+    }
+
+    if (data.cv_no_documentado != '') {
+
+      cv_no_documentado=`<iframe src="../dist/docs/all_trabajador/cv_no_documentado/${data.cv_no_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+      
+      btn_cv_no_documentado=`
+      <div class="row">
+        <div class="col-6"">
+           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_no_documentado/${data.cv_no_documentado}"> <i class="fas fa-expand"></i> </a>
+        </div>
+        <div class="col-6"">
+           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${data.cv_no_documentado}" download="CV NO DOCUMENTADO ${data.nombres}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
+    
+    } else {
+
+      cv_no_documentado='Sin CV no documentado';
+      btn_cv_no_documentado='';
+
+    }
+
     verdatos=`                                                                            
     <div class="col-12">
       <div class="card">
@@ -654,7 +761,9 @@ function verdatos(idtrabajador){
           <table class="table table-hover table-bordered">        
             <tbody>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th rowspan="2">${imagen_perfil}</th>
+                <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}
+                
+                </th>
                 <td> <b>Nombre: </b> ${data.nombres}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
@@ -695,11 +804,19 @@ function verdatos(idtrabajador){
               
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>DNI anverso</th>
-                <td> ${imagen_dni_anverso} </td>
+                <td> ${imagen_dni_anverso} <br>${btn_imagen_dni_anverso}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>DNI reverso</th>
-                <td> ${imagen_dni_reverso} </td>
+                <td> ${imagen_dni_reverso}<br>${btn_imagen_dni_reverso}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>CV documentado</th>
+                <td> ${cv_documentado} <br>${btn_cv_documentado}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>CV no documentado</th>
+                <td> ${cv_no_documentado} <br>${btn_cv_no_documentado}</td>
               </tr>
             </tbody>
           </table>
@@ -987,14 +1104,14 @@ function eliminar(idtrabajador) {
  Swal.fire({
 
   title: "!Elija una opción¡",
-  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+  html: "Al <b>Expulsar</b> Padrá encontrar el registro en la tabla inferior! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
   icon: "warning",
   showCancelButton: true,
   showDenyButton: true,
   confirmButtonColor: "#17a2b8",
   denyButtonColor: "#d33",
   cancelButtonColor: "#6c757d",    
-  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+  confirmButtonText: `<i class="fas fa-times"></i> Expulsar`,
   denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
 
 }).then((result) => {
