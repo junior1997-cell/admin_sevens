@@ -27,6 +27,9 @@ function init() {
 
   // submnit a FECHAS DE ACTIVIDADES
   $("#guardar_registro_fechas_actividades").on("click", function (e) { $("#submit-form-fechas-actividades").submit(); });
+
+  // submnit a HORAS MULTIPLES
+  $(".horas-multiples").on("click", function (e) { $("#form-horas-multiples").submit(); });
   
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -70,13 +73,6 @@ function doc1_eliminar() {
 	$("#doc1_nombre").html("");
 }
 
-
-// retrazamos la ejecuccion de una funcion
-var delay = (function(){
-  var timer = 0;
-  return function(callback, ms){ clearTimeout (timer); timer = setTimeout(callback, ms); };
-})();
-
 function mostrar_form_table(estados) {
 
   if (estados == 1 ) {
@@ -87,6 +83,7 @@ function mostrar_form_table(estados) {
     $("#tabla-asistencia-trab").show();
     $("#ver_asistencia").hide();
     $("#detalle_asistencia").hide();
+    $("#detalle_qs").hide();
     estado_editar_asistencia = false;
   } else {
     if (estados == 2) {
@@ -97,6 +94,7 @@ function mostrar_form_table(estados) {
       $("#tabla-asistencia-trab").hide();
       $("#ver_asistencia").show();
       $("#detalle_asistencia").hide();
+      $("#detalle_qs").hide();
       estado_editar_asistencia = false;
       
     } else {
@@ -108,6 +106,7 @@ function mostrar_form_table(estados) {
         $("#tabla-asistencia-trab").hide();
         $("#ver_asistencia").hide();
         $("#detalle_asistencia").show();
+        $("#detalle_qs").hide();
         estado_editar_asistencia = false;
       } else {
         if (estados == 4) {
@@ -161,40 +160,10 @@ function editar_fechas_asistencia(flag){
   }  
 }
 
-function guardaryeditar_adicional_descuento(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-adicional-descuento")[0]);
-
-  $.ajax({
-    url: "../ajax/registro_asistencia.php?op=guardaryeditar_adicional_descuento",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-             
-      if (datos == 'ok') {
-
-        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
-
-        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
-
-        $("#modal-adicional-descuento").modal("hide");
-
-			}else{
-
-				Swal.fire("Error!", datos, "error");
-			}
-    },
-  });
-}
-
-
 //TBLA - PRINCIPAL
 function tbla_principal(nube_idproyecto) {
 
-  $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
+  $('#lista_quincenas').html('<div class="my-3" ><i class="fas fa-spinner fa-pulse fa-2x"></i>&nbsp;&nbsp;&nbsp;Cargando...</div>');
 
   tabla_principal = $('#tabla-asistencia').dataTable({
     "responsive": true,
@@ -388,21 +357,19 @@ function tbla_principal(nube_idproyecto) {
         <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
         No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
       </div>`);
-    }
-    
+    }    
     //console.log(fecha);
   });
 }
 
-
-
 // listamos la data de una quincena selecionada
 function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
+  mostrar_form_table(2);
+
   f1_r = f1; f2_r = f2; i_r = i; cant_dias_asistencia_r = cant_dias_asistencia;
 
-  // ocultamos las tablas
-  mostrar_form_table(2);
+  // ocultamos las tablas  
   $("#ver_asistencia").hide();
   $('#cargando-registro-asistencia').show();
 
@@ -537,7 +504,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
             if (weekday != 'sa') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist  span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 ); " type="text" value="${hora_n}" autocomplete="off" ></td>`);
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_n}</span> <input class="w-px-30 input_asist hr_multiple input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" onkeyup="delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 ); " type="text" value="${hora_n}" autocomplete="off" ></td>`);
               
               tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" >${hora_e}</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="${hora_e}" ></td>`);
              
@@ -626,7 +593,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
             if (weekday != 'sa') {
 
-              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );" type="text" value="" autocomplete="off" ></td>`);
+              tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist  span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist hr_multiple input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );" type="text" value="" autocomplete="off" ></td>`);
               
               tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
                 
@@ -758,7 +725,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
           if (weekday != 'sa') {
 
-            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 ); " type="text" value="" autocomplete="off"></td>`);
+            tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center"> <span class="span_asist span_HN_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_asist hr_multiple input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" onkeyup="delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 ); " type="text" value="" autocomplete="off"></td>`);
             
             tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center"> <span class=" span_HE_${value.idtrabajador_por_proyecto}_${fecha}" >-</span> <input class="w-px-30 input_HE_${value.idtrabajador_por_proyecto}_${i} input_HE_${value.idtrabajador_por_proyecto}_${fecha} hidden" type="text" value="" ></td>`);
             
@@ -969,11 +936,12 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
     $(".data_table_body").append(tabla_bloc_TOTAL_1);
 
-  }); //end post - ver_datos_quincena
+    $("#ver_asistencia").show();
+    $('#cargando-registro-asistencia').hide();    
 
-  $("#ver_asistencia").show();
-  $('#cargando-registro-asistencia').hide();
-  $('[data-toggle="tooltip"]').tooltip();  
+  }); //end post - ver_datos_quincena
+  
+  $('[data-toggle="tooltip"]').tooltip();
 
   count_dias_asistidos = 0;  horas_nomr_total = 0;   horas_extr_total = 0;
 }
@@ -1258,34 +1226,6 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
   
 }
 
-function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
-
-  $("#cargando-5-fomulario").hide(); 
-  $("#cargando-6-fomulario").show();
-
-  $("#idresumen_q_s_asistencia").val(id_adicional);
-  $("#idtrabajador_por_proyecto").val(id_trabjador);
-  $("#fecha_q_s").val(fecha_q_s);
-  // $("#detalle_adicional").val(descripcion);
-
-  $("#modal-adicional-descuento").modal("show");
-
-  $.post("../ajax/registro_asistencia.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(data){
-    data = JSON.parse(data);  console.log(data);  
-
-    if (data != null) {
-      if (data.length === 0 ) {  }else{
-
-        $("#detalle_adicional").val(data.descripcion_descuento);
-      }
-    }     
-    
-    $("#cargando-5-fomulario").show(); 
-    $("#cargando-6-fomulario").hide();
-
-  });
-}
-
 function pintar_boton_selecionado(i) {
   localStorage.setItem('i', i); //enviamos el ID-BOTON al localStorage
   // validamos el id para pintar el boton
@@ -1512,7 +1452,85 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
   }  
 }
 
+// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   H O R A S   M U L  T I P L E S  :::::::::::::::::::::::::::::::::::::::..
+
+function modal_horas_multiples() {
+  editar_fechas_asistencia(2)
+  $('#modal-agregar-horas-multiples').modal('show');
+}
+
+function agregar_horas_multiples(e) {
+  var horas = $('#horas_multiples').val();
+  $('.hr_multiple').val(horas);
+  $('#modal-agregar-horas-multiples').modal('hide');
+  toastr.success(`<h5>${horas} Horas.</h5> Se agregaron a todos los trabajadores.`);
+
+}
+// $('.horas-multiples').on('click', function (e) {
+//   console.log('guardando valores');
+//   $('.input_asist').val();
+// });
+
+// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   A D I C I O N A L   D E S C U E N T O  :::::::::::::::::::::::::::::::::::::::..
+function guardaryeditar_adicional_descuento(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-adicional-descuento")[0]);
+
+  $.ajax({
+    url: "../ajax/registro_asistencia.php?op=guardaryeditar_adicional_descuento",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+
+    success: function (datos) {
+             
+      if (datos == 'ok') {
+
+        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+
+        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
+
+        $("#modal-adicional-descuento").modal("hide");
+
+			}else{
+
+				Swal.fire("Error!", datos, "error");
+			}
+    },
+  });
+}
+
+function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
+
+  $("#cargando-5-fomulario").hide(); 
+  $("#cargando-6-fomulario").show();
+
+  $("#idresumen_q_s_asistencia").val(id_adicional);
+  $("#idtrabajador_por_proyecto").val(id_trabjador);
+  $("#fecha_q_s").val(fecha_q_s);
+  // $("#detalle_adicional").val(descripcion);
+
+  $("#modal-adicional-descuento").modal("show");
+
+  $.post("../ajax/registro_asistencia.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(data){
+    data = JSON.parse(data);  console.log(data);  
+
+    if (data != null) {
+      if (data.length === 0 ) {  }else{
+
+        $("#detalle_adicional").val(data.descripcion_descuento);
+      }
+    }     
+    
+    $("#cargando-5-fomulario").show(); 
+    $("#cargando-6-fomulario").hide();
+
+  });
+}
+
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   A S I S T E N C I A   I N D I V I D U A L  :::::::::::::::::::::::::::::::::::::::..
+
 // TBLA - ASISTENCIA INDIVIDUAL
 function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proyect) {
 
@@ -2081,9 +2099,53 @@ $(function () {
       guardar_y_editar_fechas_actividades(form);
     },
   });
+
+  $("#form-horas-multiples").validate({
+    
+    rules: {      
+      horas_multiples: { required: true, number: true, min:0, max:12},
+    },
+
+    messages: {
+      horas_multiples: {
+        required: "Este campo es requerido",
+        min:"Escriba almenos 1 digito positivo.",
+        max:"No explote a sus obreros."
+      },
+    },  
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (form) {
+      agregar_horas_multiples(form);
+    },
+  });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+// retrazamos la ejecuccion de una funcion
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){ clearTimeout (timer); timer = setTimeout(callback, ms); };
+})();
 
 /**formato_miles */
 function formato_miles(num) {

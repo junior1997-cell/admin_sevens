@@ -152,8 +152,18 @@
                               <th class="">Aciones</th>
                               <th>Empresa</th>
                               <th>Código proyecto</th>
-                              <th>Ubicación</th>
+                              <th>Ubicación</th>                              
                               <th>Costo</th>
+                              <th>Empresa</th>
+                              <th>Documento</th>
+                              <th>Ubicación</th>
+                              <th>Fecha Inicio</th>
+                              <th>Fecha Fin</th>
+                              <th>Plazo</th>
+                              <th>Dias Hábiles</th>
+                              <th>Valorizacion</th>
+                              <th>Pago Obrero</th>
+                              <th>Permanente</th>
                               <th>contractual</th>
                               <th>Estado</th>
                             </tr>
@@ -167,8 +177,18 @@
                               <th class="">Aciones</th>
                               <th>Empresa</th>
                               <th>Código proyecto</th>
-                              <th>Ubicación</th>
+                              <th>Ubicación</th>                              
                               <th>Costo</th>
+                              <th>Empresa</th>
+                              <th>Documento</th>
+                              <th>Ubicación</th>
+                              <th>Fecha Inicio</th>
+                              <th>Fecha Fin</th>
+                              <th>Plazo</th>
+                              <th>Dias Hábiles</th>
+                              <th>Valorizacion</th>
+                              <th>Pago Obrero</th>
+                              <th>Permanente</th>
                               <th>contractual</th>
                               <th>Estado</th>
                             </tr>
@@ -184,8 +204,18 @@
                                 <th class="">Aciones</th>
                                 <th>Empresa</th>
                                 <th>Código proyecto</th>
-                                <th>Ubicación</th>
+                                <th>Ubicación</th>                              
                                 <th>Costo</th>
+                                <th>Empresa</th>
+                                <th>Documento</th>
+                                <th>Ubicación</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Plazo</th>
+                                <th>Dias Hábiles</th>
+                                <th>Valorizacion</th>
+                                <th>Pago Obrero</th>
+                                <th>Permanente</th>
                                 <th>contractual</th>
                                 <th>Estado</th>
                               </tr>
@@ -199,8 +229,18 @@
                                 <th class="">Aciones</th>
                                 <th>Empresa</th>
                                 <th>Código proyecto</th>
-                                <th>Ubicación</th>
+                                <th>Ubicación</th>                              
                                 <th>Costo</th>
+                                <th>Empresa</th>
+                                <th>Documento</th>
+                                <th>Ubicación</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Plazo</th>
+                                <th>Dias Hábiles</th>
+                                <th>Valorizacion</th>
+                                <th>Pago Obrero</th>
+                                <th>Permanente</th>
                                 <th>contractual</th>
                                 <th>Estado</th>
                               </tr>
