@@ -395,7 +395,10 @@ function guardaryeditar_compras(e) {
   // $("#tabla-compra").hide();
   // $("#agregar_compras").show();
   var formData = new FormData($("#form-compras")[0]);
-  var sweet_loader = `<div class="row sweet_loader" >    
+
+  var swal2_header = `<img class="swal2-image bg-color-252e38 b-radio-7px p-15px m-10px" src="../dist/gif/cargando.gif">`;
+
+  var swal2_content = `<div class="row sweet_loader" >    
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
       <div class="progress" id="div_barra_progress">
         <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
@@ -426,7 +429,11 @@ function guardaryeditar_compras(e) {
             title: "Guardando...",
             html: 'Tu <b>información</b> se esta guradando en la <b>base de datos</b>.',
             showConfirmButton: false,
-            didRender: function() { /* solo habrá un swal2 abierta.*/ $('.swal2-content').prepend(sweet_loader); }
+            didRender: function() { 
+              /* solo habrá un swal2 abierta.*/               
+              $('.swal2-header').prepend(swal2_header); 
+              $('.swal2-content').prepend(swal2_content);
+            }
           });
         },
         success: function (datos) {
