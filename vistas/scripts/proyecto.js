@@ -3,79 +3,41 @@ var form_validate_proyecto;
 //Función que se ejecuta al inicio
 function init(){  
 
-  // Formato para telefono
-  $("[data-mask]").inputmask();
+  $('#mEscritorio').addClass("active");  
 
   listar(); listar2();
 
-  $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });
-
-  $("#guardar_registro_valorizaciones").on("click", function (e) { $("#form-valorizaciones").submit(); });
-  $("#form-valorizaciones").on("submit", function (e) { guardar_editar_valorizacion(e); });
-
-  $('#mEscritorio').addClass("active");
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });   
 
   // mostramos las fechas feriadas
   $.post("../ajax/proyecto.php?op=listar_feriados",  function (data, status) {
 
     data = JSON.parse(data);  //console.log(data);
     var colors = [];
-    $.each(data, function (index, value) { 
-      //console.log(value);
-      colors.push(value.fecha_invertida); 
-    });
-    //console.log(colors);
+    $.each(data, function (index, value) { colors.push(value.fecha_invertida); });
 
     $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
     // Inicializar - Date picker  
     $('#fecha_inicio').datetimepicker({
-      locale: 'es',       
-      // format: 'L',
+      locale: 'es',
       format: 'DD-MM-YYYY',
-      daysOfWeekDisabled: [6],     
-      //defaultDate: "",
+      daysOfWeekDisabled: [6],
       disabledDates: colors
+      //defaultDate: "",
+      // format: 'L',
     });
 
   });  
 
   //Initialize Select2 Elements
-  $('#fecha_pago_obrero').select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione",
-    allowClear: true}
-  );
-  $('#fecha_valorizacion').select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione",
-    allowClear: true}
-  );
+  $('#fecha_pago_obrero').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true });
 
-  $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
-  // Inicializar - Date picker  
-  // $('#fecha_fin').datetimepicker({
-  //   locale: 'es', 
-  //   format: 'DD-MM-YYYY',
-  //   daysOfWeekDisabled: [6],         
-  // }); 
-  
-  $('#fecha_inicio_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
-  // Inicializar - Date picker  
-  $('#fecha_inicio_actividad').datetimepicker({
-    locale: 'es',
-    format: 'DD-MM-YYYY',
-    daysOfWeekDisabled: [6]
-  });
+  $('#fecha_valorizacion').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true});
 
-  $('#fecha_fin_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
-  // Inicializar - Date picker  
-  $('#fecha_fin_actividad').datetimepicker({
-    locale: 'es',
-    format: 'DD-MM-YYYY',
-    daysOfWeekDisabled: [6],
-  });
-  
-  // $('#costo').inputmask('999,999,999.99', { reverse: true });
+  $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' });
+
+  // Formato para telefono
+  $("[data-mask]").inputmask();
 }
 
 init();
@@ -204,23 +166,27 @@ function listar() {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, {extend: "colvis"} ,        
+    ],
     "ajax":{
-        url: '../ajax/proyecto.php?op=listar',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-      },
+      url: '../ajax/proyecto.php?op=listar',
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");
+      }
+      // columna: costo
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");
+      }
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -233,10 +199,20 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-   
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs": [
+      { targets: [6], visible: false, searchable: false, },
+      { targets: [7], visible: false, searchable: false, },
+      { targets: [8], visible: false, searchable: false, },
+      { targets: [9], visible: false, searchable: false, },
+      { targets: [10], visible: false, searchable: false, },
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },
+      { targets: [14], visible: false, searchable: false, },
+      { targets: [15], visible: false, searchable: false, },      
+    ],
+  }).DataTable();   
   
 }
 
@@ -249,23 +225,27 @@ function listar2() {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, {extend: "colvis"} ,        
+    ],
     "ajax":{
-        url: '../ajax/proyecto.php?op=listar-proyectos-terminados',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-      },
+      url: '../ajax/proyecto.php?op=listar-proyectos-terminados',
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {    
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");
+      }
+      // columna: costo
+      if (data[5] != '') {
+        $("td", row).eq(5).addClass("text-right");
+      }
+    },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
       "buttons": {
@@ -278,7 +258,19 @@ function listar2() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs": [
+      { targets: [6], visible: false, searchable: false, },
+      { targets: [7], visible: false, searchable: false, },
+      { targets: [8], visible: false, searchable: false, },
+      { targets: [9], visible: false, searchable: false, },
+      { targets: [10], visible: false, searchable: false, },
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },
+      { targets: [14], visible: false, searchable: false, },
+      { targets: [15], visible: false, searchable: false, },      
+    ],
   }).DataTable();
 
    
@@ -506,295 +498,6 @@ function reiniciar_proyecto(idproyecto) {
   });      
 }
 
-
-$(function () {  
-
-  //Date range picker
-  // $('#fecha_inicio_fin').daterangepicker({
-  //   dateFormat: 'YYYY/MM/DD',
-  //   autoUpdateInput: false,
-  //   inline: true,
-  //   locale: {
-  //     cancelLabel: 'Clear'
-  //   },
-  //   isInvalidDate: function(date) {
-  //     if (date.day() == 0 || date.day() == 1 || date.day() == 2 || date.day() == 3 || date.day() == 4 || date.day() == 5)
-  //       return false;
-  //     return true;
-  //   },    
-  // });
-  // $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
-  //   $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
-  // });
-
-  // $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
-  //   $(this).val('');
-  // });
-  
-
-  // validamos el formulario
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      // $("#chat").animate({ scrollTop: $(this).prop("scrollHeight")}, 1000);
-      guardaryeditar(e);       
-    },
-  });
-
-  form_validate_proyecto = $("#form-proyecto").validate({
-    rules: {
-      tipo_documento: { maxlength: 45 },
-      numero_documento: { required: true, minlength: 6, maxlength: 20 },
-      empresa: { required: true, minlength: 6, maxlength: 200 },
-      nombre_proyecto: { required: true, minlength: 6 },
-      nombre_codigo: {minlength: 4 },
-      ubicacion: {minlength: 6, maxlength: 300},
-      actividad_trabajo: {minlength: 6},
-      empresa_acargo: {minlength: 6, maxlength: 200},
-      fecha_inicio: {required: true,minlength: 1, maxlength: 25},
-      fecha_fin:{required: true,minlength: 1, maxlength: 25},
-      fecha_inicio_actividad: {required: true, minlength: 1, maxlength: 25},
-      fecha_fin_actividad:{required: true, minlength: 1, maxlength: 25},
-      dias_habiles: {required: true,minlength: 1, maxlength: 11, digits: true, number: true},
-      plazo: {required: true,minlength: 1, maxlength: 11, number: true},
-      costo: { minlength: 1, maxlength: 20,  },
-      fecha_pago_obrero:{required: true},
-      fecha_valorizacion:{required: true}
-    },
-    messages: {
-      numero_documento: {
-        required: "Este campo es requerido.",
-        minlength: "El login debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
-      },
-      empresa: {
-        required: "Este campo es requerido.",
-        minlength: "La Empresa debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La Empresa debe tener como MÁXIMO 200 caracteres.",
-      },
-      nombre_proyecto: {
-        required: "Este campo es requerido.",
-        minlength: "El nombre de proyecto debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La nombre de proyecto debe tener como MÁXIMO 200 caracteres.",
-      },
-      nombre_codigo: {
-        minlength: "El nombre de proyecto debe tener MÍNIMO 4 caracteres.",
-      },
-      ubicacion: {
-        minlength: "La ubicación debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La ubicación debe tener como MÁXIMO 300 caracteres.",
-      },
-      actividad_trabajo: {
-        minlength: "La actividad de trabajo debe tener MÍNIMO 6 caracteres.",
-      },
-      empresa_acargo: {
-        minlength: "La Empresa a cargo debe tener MÍNIMO 6 caracteres.",
-        maxlength: "La Empresa a cargo debe tener como MÁXIMO 200 caracteres.",
-      },
-      fecha_inicio:{
-        required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
-      },
-      fecha_fin: {
-        required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
-      },
-      fecha_inicio_actividad: {
-        required: "Este campo es requerido.", minlength: "1 caracterer como minimo."
-      },
-      fecha_fin_actividad:{
-        required: "Este campo es requerido.", minlength: "1 caracterer como minimo."
-      },
-      dias_habiles: {
-        required: "Este campo es requerido.", 
-        minlength: "1 dígitos como minimo.",
-        maxlength: "11 dígitos como máximo.",
-        digits: "Solo números positivos"
-      },
-      plazo: {
-        required: "Este campo es requerido.", 
-        minlength: "1 dígitos como minimo.",
-        maxlength: "11 dígitos como máximo.",
-      },
-      costo: {         
-        minlength: "1 dígitos como minimo.",
-        maxlength: "20 dígitos como máximo.",
-        
-      },
-      fecha_pago_obrero:{required: "Campo requerido"},
-      fecha_valorizacion:{required: "Campo requerido"}
-    },
-    
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-
-      // if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-         
-      //   $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      // } else {
-
-      //   $("#trabajador_validar").hide();
-      // }       
-    },
-  });
-});
-
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#numero_documento").val(); 
-   
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/proyecto.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);  //console.log(data);
-        if (data == null) {
-          $("#search").show();
-  
-          $("#charge").hide();
-  
-          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-        } else {
-          if (data.success == false) {
-
-            $("#search").show();
-  
-            $("#charge").hide();
-  
-            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-  
-          } else {
-  
-            $("#search").show();
-  
-            $("#charge").hide();
-  
-            $("#empresa").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-  
-            toastr.success("Cliente encontrado!!!!");
-          }
-        }
-        
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/proyecto.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);  console.log(data);
-
-          if (data == null) {
-
-            $("#search").show();  
-            $("#charge").hide();  
-            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-            
-          } else {
-            if (data.success == false) {
-
-              $("#search").show();
-  
-              $("#charge").hide();
-  
-              toastr.error("Datos no encontrados en la SUNAT!!!");
-              
-            } else {
-  
-              if (data.estado == "ACTIVO") {
-  
-                $("#search").show();
-  
-                $("#charge").hide();
-  
-                $("#empresa").val(data.razonSocial);
-  
-                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-                
-                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
-                // $("#direccion").val(data.direccion);
-                toastr.success("Cliente encontrado");
-              } else {
-  
-                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-  
-                $("#search").show();
-  
-                $("#charge").hide();
-  
-                $("#empresa").val(data.razonSocial);
-  
-                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-                
-                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
-  
-                // $("#direccion").val(data.direccion);
-              }
-            }
-          }
-          
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
-}
-
 // caculamos el plazo CON DATE RANGER
 function calcular_palzo() {
 
@@ -805,7 +508,6 @@ function calcular_palzo() {
     $("#plazo").val( plazo_dia +' dias');    
   });
 }
-
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -825,244 +527,6 @@ $("#doc5").change(function(e) {  addDocs(e,$("#doc5").attr("id")) });
 
 $("#doc6_i").click(function() {  $('#doc6').trigger('click'); });
 $("#doc6").change(function(e) {  addDocs(e,$("#doc6").attr("id")) });
-
-/* PREVISUALIZAR LOS DOCUMENTOS */
-function addDocs(e,id) {
-
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
-
-	var file = e.target.files[0], imageType = /application.*/;
-	
-	if (e.target.files[0]) {
-    
-		var sizeByte = file.size; console.log(file.type);
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(imageType)){
-			// return;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.pdf',
-        showConfirmButton: false,
-        timer: 1500
-      });			 
-      $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		}else{
-
-			if (sizekiloBytes <= 40960) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-				 
-          // $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-
-          // cargamos la imagen adecuada par el archivo
-				  if ( extrae_extencion(file.name) == "doc") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "docx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "pdf" ) {
-                $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-              }else{
-                if ( extrae_extencion(file.name) == "csv" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(file.name) == "xls" ) {
-                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                  } else {
-                    if ( extrae_extencion(file.name) == "xlsx" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "xlsm" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                      } else {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } 
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
-                '<i>' + file.name + '</i>' +
-              '</div>'+
-              '<div class="col-md-12">'+
-                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'El documento: '+file.name.toUpperCase()+' es aceptado.',
-            showConfirmButton: false,
-            timer: 1500
-          });
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado.',
-          showConfirmButton: false,
-          timer: 1500
-        })
-
-        $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-		}
-	}else{
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    })
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-		$("#"+id+"_nombre").html("");
-	}	
-}
-
-// recargar un doc para ver
-function re_visualizacion(id) {
-
-  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
-
-  pdffile     = document.getElementById("doc"+id+"").files[0];
-
-  var antiguopdf  = $("#doc_old_"+id+"").val();
-
-  if(pdffile === undefined){
-
-    if (antiguopdf == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-		  $("#doc"+id+"_nombre").html("");
-
-    } else {
-      if ( extrae_extencion(antiguopdf) == "doc") {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      } else {
-        if ( extrae_extencion(antiguopdf) == "docx" ) {
-          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-        } else {
-          if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html('<iframe src="../dist/docs/valorizacion/'+antiguopdf+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-            toastr.success('Documento vizualizado correctamente!!!')
-          } else {
-            if ( extrae_extencion(antiguopdf) == "csv" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(antiguopdf) == "xls" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  } else {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  }
-                }
-              }
-            }
-          }
-        }
-      }      
-    }
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "doc") {
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else {
-      if ( extrae_extencion(pdffile.name) == "docx" ) {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      }else{
-        if ( extrae_extencion(pdffile.name) == "pdf" ) {
-          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-          toastr.success('Documento vizualizado correctamente!!!')
-        }else{
-          if ( extrae_extencion(pdffile.name) == "csv" ) {
-            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-          } else {
-            if ( extrae_extencion(pdffile.name) == "xls" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                }
-              }
-            }
-          }
-        }
-      }
-    }  
-    	
-    console.log(pdffile);
-
-  }
-}
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -2325,6 +1789,124 @@ function calcular_plazo_actividad() {
   $('#plazo_actividad').val(plazo);
 }
 
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M S  :::::::::::::::::::::::::::::::::::::::..
+
+$(function () {    
+
+  // validamos el formulario
+  $.validator.setDefaults({
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardaryeditar(e);       
+    },
+  });
+
+  form_validate_proyecto = $("#form-proyecto").validate({
+    rules: {
+      tipo_documento: { maxlength: 45 },
+      numero_documento: { required: true, minlength: 6, maxlength: 20 },
+      empresa: { required: true, minlength: 6, maxlength: 200 },
+      nombre_proyecto: { required: true, minlength: 6 },
+      nombre_codigo: {minlength: 4 },
+      ubicacion: {minlength: 6, maxlength: 300},
+      actividad_trabajo: {minlength: 6},
+      empresa_acargo: {minlength: 6, maxlength: 200},
+      fecha_inicio: {required: true,minlength: 1, maxlength: 25},
+      fecha_fin:{required: true,minlength: 1, maxlength: 25},
+      fecha_inicio_actividad: {required: true, minlength: 1, maxlength: 25},
+      fecha_fin_actividad:{required: true, minlength: 1, maxlength: 25},
+      dias_habiles: {required: true,minlength: 1, maxlength: 11, digits: true, number: true},
+      plazo: {required: true,minlength: 1, maxlength: 11, number: true},
+      costo: { minlength: 1, maxlength: 20,  },
+      fecha_pago_obrero:{required: true},
+      fecha_valorizacion:{required: true}
+    },
+    messages: {
+      numero_documento: {
+        required: "Este campo es requerido.",
+        minlength: "El login debe tener MÍNIMO 6 caracteres.",
+        maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
+      },
+      empresa: {
+        required: "Este campo es requerido.",
+        minlength: "La Empresa debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La Empresa debe tener como MÁXIMO 200 caracteres.",
+      },
+      nombre_proyecto: {
+        required: "Este campo es requerido.",
+        minlength: "El nombre de proyecto debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La nombre de proyecto debe tener como MÁXIMO 200 caracteres.",
+      },
+      nombre_codigo: {
+        minlength: "El nombre de proyecto debe tener MÍNIMO 4 caracteres.",
+      },
+      ubicacion: {
+        minlength: "La ubicación debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La ubicación debe tener como MÁXIMO 300 caracteres.",
+      },
+      actividad_trabajo: {
+        minlength: "La actividad de trabajo debe tener MÍNIMO 6 caracteres.",
+      },
+      empresa_acargo: {
+        minlength: "La Empresa a cargo debe tener MÍNIMO 6 caracteres.",
+        maxlength: "La Empresa a cargo debe tener como MÁXIMO 200 caracteres.",
+      },
+      fecha_inicio:{
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
+      },
+      fecha_fin: {
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo.",
+      },
+      fecha_inicio_actividad: {
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo."
+      },
+      fecha_fin_actividad:{
+        required: "Este campo es requerido.", minlength: "1 caracterer como minimo."
+      },
+      dias_habiles: {
+        required: "Este campo es requerido.", 
+        minlength: "1 dígitos como minimo.",
+        maxlength: "11 dígitos como máximo.",
+        digits: "Solo números positivos"
+      },
+      plazo: {
+        required: "Este campo es requerido.", 
+        minlength: "1 dígitos como minimo.",
+        maxlength: "11 dígitos como máximo.",
+      },
+      costo: {         
+        minlength: "1 dígitos como minimo.",
+        maxlength: "20 dígitos como máximo.",
+        
+      },
+      fecha_pago_obrero:{required: "Campo requerido"},
+      fecha_valorizacion:{required: "Campo requerido"}
+    },
+    
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+
+      $(element).removeClass("is-invalid").addClass("is-valid");
+             
+    },
+  });
+});
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
 // funcino para sumar dias
 sumaFecha = function(d, fecha) {
   var Fecha = new Date();
@@ -2460,3 +2042,407 @@ function formato_miles(num) {
   for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
   return (sign ? "" : "-") + num + "." + cents;
 }
+
+// Buscar Reniec SUNAT
+function buscar_sunat_reniec() {
+  $("#search").hide();
+
+  $("#charge").show();
+
+  let tipo_doc = $("#tipo_documento").val();
+
+  let dni_ruc = $("#numero_documento").val(); 
+   
+  if (tipo_doc == "DNI") {
+
+    if (dni_ruc.length == "8") {
+
+      $.post("../ajax/proyecto.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+
+        data = JSON.parse(data);  //console.log(data);
+        if (data == null) {
+          $("#search").show();
+  
+          $("#charge").hide();
+  
+          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+        } else {
+          if (data.success == false) {
+
+            $("#search").show();
+  
+            $("#charge").hide();
+  
+            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
+  
+          } else {
+  
+            $("#search").show();
+  
+            $("#charge").hide();
+  
+            $("#empresa").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+  
+            toastr.success("Cliente encontrado!!!!");
+          }
+        }
+        
+      });
+    } else {
+
+      $("#search").show();
+
+      $("#charge").hide();
+
+      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
+    }
+  } else {
+    if (tipo_doc == "RUC") {
+
+      if (dni_ruc.length == "11") {
+        $.post("../ajax/proyecto.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+
+          data = JSON.parse(data);  console.log(data);
+
+          if (data == null) {
+
+            $("#search").show();  
+            $("#charge").hide();  
+            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+            
+          } else {
+            if (data.success == false) {
+
+              $("#search").show();
+  
+              $("#charge").hide();
+  
+              toastr.error("Datos no encontrados en la SUNAT!!!");
+              
+            } else {
+  
+              if (data.estado == "ACTIVO") {
+  
+                $("#search").show();
+  
+                $("#charge").hide();
+  
+                $("#empresa").val(data.razonSocial);
+  
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                
+                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
+                // $("#direccion").val(data.direccion);
+                toastr.success("Cliente encontrado");
+              } else {
+  
+                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
+  
+                $("#search").show();
+  
+                $("#charge").hide();
+  
+                $("#empresa").val(data.razonSocial);
+  
+                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+                
+                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
+  
+                // $("#direccion").val(data.direccion);
+              }
+            }
+          }
+          
+        });
+      } else {
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
+      }
+    } else {
+      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
+
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.info("No necesita hacer consulta");
+
+      } else {
+
+        $("#tipo_doc").addClass("is-invalid");
+
+        $("#search").show();
+
+        $("#charge").hide();
+
+        toastr.error("Selecione un tipo de documento");
+      }
+    }
+  }
+}
+
+/* PREVISUALIZAR LOS DOCUMENTOS */
+function addDocs(e,id) {
+
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
+
+	var file = e.target.files[0], imageType = /application.*/;
+	
+	if (e.target.files[0]) {
+    
+		var sizeByte = file.size; console.log(file.type);
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(imageType)){
+			// return;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.pdf',
+        showConfirmButton: false,
+        timer: 1500
+      });			 
+      $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+
+		}else{
+
+			if (sizekiloBytes <= 40960) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+				 
+          // $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+
+          // cargamos la imagen adecuada par el archivo
+				  if ( extrae_extencion(file.name) == "doc") {
+            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+          } else {
+            if ( extrae_extencion(file.name) == "docx" ) {
+              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+            }else{
+              if ( extrae_extencion(file.name) == "pdf" ) {
+                $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+              }else{
+                if ( extrae_extencion(file.name) == "csv" ) {
+                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+                } else {
+                  if ( extrae_extencion(file.name) == "xls" ) {
+                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                  } else {
+                    if ( extrae_extencion(file.name) == "xlsx" ) {
+                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                    } else {
+                      if ( extrae_extencion(file.name) == "xlsm" ) {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                      } else {
+                        $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } 
+					$("#"+id+"_nombre").html(''+
+						'<div class="row">'+
+              '<div class="col-md-12">'+
+                '<i>' + file.name + '</i>' +
+              '</div>'+
+              '<div class="col-md-12">'+
+                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+              '</div>'+
+            '</div>'+
+					'');
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'El documento: '+file.name.toUpperCase()+' es aceptado.',
+            showConfirmButton: false,
+            timer: 1500
+          });
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado.',
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+        $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+
+				$("#"+id).val("");
+			}
+		}
+	}else{
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Seleccione un documento',
+      showConfirmButton: false,
+      timer: 1500
+    })
+		 
+    $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+		$("#"+id+"_nombre").html("");
+	}	
+}
+
+// recargar un doc para ver
+function re_visualizacion(id) {
+
+  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
+
+  pdffile     = document.getElementById("doc"+id+"").files[0];
+
+  var antiguopdf  = $("#doc_old_"+id+"").val();
+
+  if(pdffile === undefined){
+
+    if (antiguopdf == "") {
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Seleccione un documento',
+        showConfirmButton: false,
+        timer: 1500
+      })
+
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+		  $("#doc"+id+"_nombre").html("");
+
+    } else {
+      if ( extrae_extencion(antiguopdf) == "doc") {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      } else {
+        if ( extrae_extencion(antiguopdf) == "docx" ) {
+          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+        } else {
+          if ( extrae_extencion(antiguopdf) == "pdf" ) {
+            $("#doc"+id+"_ver").html('<iframe src="../dist/docs/valorizacion/'+antiguopdf+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+            toastr.success('Documento vizualizado correctamente!!!')
+          } else {
+            if ( extrae_extencion(antiguopdf) == "csv" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+            } else {
+              if ( extrae_extencion(antiguopdf) == "xls" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+              } else {
+                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                } else {
+                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                  } else {
+                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                  }
+                }
+              }
+            }
+          }
+        }
+      }      
+    }
+    // console.log('hola'+dr);
+  }else{
+
+    pdffile_url=URL.createObjectURL(pdffile);
+
+    // cargamos la imagen adecuada par el archivo
+    if ( extrae_extencion(pdffile.name) == "doc") {
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+    } else {
+      if ( extrae_extencion(pdffile.name) == "docx" ) {
+        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+      }else{
+        if ( extrae_extencion(pdffile.name) == "pdf" ) {
+          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+          toastr.success('Documento vizualizado correctamente!!!')
+        }else{
+          if ( extrae_extencion(pdffile.name) == "csv" ) {
+            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+          } else {
+            if ( extrae_extencion(pdffile.name) == "xls" ) {
+              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+            } else {
+              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
+                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+              } else {
+                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                } else {
+                  $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
+                }
+              }
+            }
+          }
+        }
+      }
+    }  
+    	
+    console.log(pdffile);
+
+  }
+}
+
+
+// $("#guardar_registro_valorizaciones").on("click", function (e) { $("#form-valorizaciones").submit(); });
+// $("#form-valorizaciones").on("submit", function (e) { guardar_editar_valorizacion(e); }); 
+//Date range picker
+// $('#fecha_inicio_fin').daterangepicker({
+//   dateFormat: 'YYYY/MM/DD',
+//   autoUpdateInput: false,
+//   inline: true,
+//   locale: {
+//     cancelLabel: 'Clear'
+//   },
+//   isInvalidDate: function(date) {
+//     if (date.day() == 0 || date.day() == 1 || date.day() == 2 || date.day() == 3 || date.day() == 4 || date.day() == 5)
+//       return false;
+//     return true;
+//   },    
+// });
+// $('input[name="fecha_inicio_fin"]').on('apply.daterangepicker', function(ev, picker) {
+//   $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+// });
+
+// $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
+//   $(this).val('');
+// });
