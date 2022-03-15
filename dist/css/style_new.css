@@ -1,69 +1,36 @@
-.text-white {
-  color: #fff !important;
-}
-.text-primary {
-  color: #007bff !important;
-}
+.text-white { color: #fff !important; }
 
-.text-orange {
-  color: #fd7e14 !important;
-}
+.text-primary { color: #007bff !important; }
 
-.text-secondary {
-  color: #71869d !important;
-}
+.text-orange { color: #fd7e14 !important; }
 
-.text-success {
-  color: #009551 !important;
-}
+.text-secondary { color: #71869d !important; }
 
-.text-info {
-  color: #09a5be !important;
-}
+.text-success { color: #009551 !important; }
 
-.text-warning {
-  color: #f5ca99 !important;
-}
+.text-info { color: #09a5be !important; }
 
-.text-danger {
-  color: #dc3545 !important;
-}
+.text-warning { color: #f5ca99 !important; }
 
-.text-light {
-  color: #f7faff !important;
-}
+.text-danger { color: #dc3545 !important; }
 
-.text-dark {
-  color: #21325b !important;
-}
+.text-light { color: #f7faff !important; }
 
-.text-dark-0 {
-  color: #000000 !important;
-}
+.text-dark { color: #21325b !important; }
 
-.text-indigo {
-  color: #2d1582 !important;
-}
+.text-dark-0 { color: #000000 !important; }
 
-.text-body {
-  color: #677788 !important;
-}
+.text-indigo { color: #2d1582 !important; }
 
-.text-muted {
-  color: #8c98a4 !important;
-}
+.text-body { color: #677788 !important; }
 
-.text-black-50 {
-  color: rgba(0, 0, 0, 0.5) !important;
-}
+.text-muted { color: #8c98a4 !important; }
 
-.text-white-50 {
-  color: rgba(255, 255, 255, 0.5) !important;
-}
+.text-black-50 { color: rgba(0, 0, 0, 0.5) !important; }
 
-.text-gray-50 {   
-  color: #6c757d80 !important;
-}
+.text-white-50 { color: rgba(255, 255, 255, 0.5) !important; }
+
+.text-gray-50 { color: #6c757d80 !important; }
 
 .text-hide {
   font: 0/0 a;
@@ -72,77 +39,47 @@
   background-color: transparent;
   border: 0;
 }
-.text-decoration-none {
-  text-decoration: none !important;
-}
-.text-break {
-  word-break: break-word !important;
-  word-wrap: break-word !important;
-}
-.text-reset {
-  color: inherit !important;
-}
+
+.text-decoration-none { text-decoration: none !important; }
+
+.text-break { word-break: break-word !important; word-wrap: break-word !important; }
+
+.text-reset { color: inherit !important; }
 
 /*  ══════════════════════════════════════════ - E S T Y L O   D E S A R R O L L A D O R - ══════════════════════════════════════════ */
-.desarrollador-whatsapp {
-  color: black !important;
-}
+.desarrollador-whatsapp { color: black !important; }
 
-.desarrollador-whatsapp:hover {
-  color: #28a745 !important;
-}
+.desarrollador-whatsapp:hover { color: #28a745 !important; }
 
-.desarrollador-facebook {
-  color: black !important;
-}
+.desarrollador-facebook { color: black !important; }
 
-.desarrollador-facebook:hover {
-  color: #007bff !important;
-}
+.desarrollador-facebook:hover { color: #007bff !important; }
 
-.desarrollador-linkedin {
-  color: black !important;
-}
+.desarrollador-linkedin { color: black !important; }
 
-.desarrollador-linkedin:hover {
-  color: #007bff !important;
-}
+.desarrollador-linkedin:hover { color: #007bff !important;}
 
-.paint_row_morado{
-  background-color: #88ef8642;
-}
+.paint_row_morado{ background-color: #88ef8642; }
 
-.no-doc{
-  background: #ff000017 !important;
-}
+.no-doc{ background: #ff000017 !important; }
 
-.hove-negrita:hover{
-  font-weight: bold;
-  color: #000000;
-}
+.hove-negrita:hover{ font-weight: bold; color: #000000; }
 
 /*  ══════════════════════════════════════════ - B A C K G R O U N D   P E R S O N A L I Z A D O - ══════════════════════════════════════════ */
 
-.bg-color-acc3c7{
-  background-color: #acc3c7;
-}
-.bg-color-b4bdbe47{
-  background-color: #71919547;
-}
+.bg-color-acc3c7{ background-color: #acc3c7; }
 
-.bg-color-eb0202{
-  background-color: #eb0202; 
-}
-.bg-color-408c98{
-  background-color: #408c98;
-}
-.bg-color-28a745{
-  background-color: #28a745;
-}
+.bg-color-b4bdbe47{ background-color: #71919547; }
 
-.bg-color-2c2c2c{
-  background-color: #2c2c2c !important;
-}
+.bg-color-eb0202{ background-color: #eb0202; }
+
+.bg-color-408c98{ background-color: #408c98; }
+
+.bg-color-28a745{ background-color: #28a745; }
+
+.bg-color-2c2c2c{ background-color: #2c2c2c !important; }
+
+.bg-color-acc3c775{ background-color: #acc3c775; }
 
 /*  ══════════════════════════════════════════ - E S T Y L O   P A R A   T A B L A - ══════════════════════════════════════════ */
 

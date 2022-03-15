@@ -79,7 +79,7 @@
                         </div>
                         <!-- /.card-header -->
 
-                        <div class="card-body">
+                        <div class="card-body" >
 
                           <!-- tabla principal -->
                           <div id="tabla-asistencia-trab" >
@@ -122,24 +122,24 @@
                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
                               <thead>
                                 <tr>
-                                  <th rowspan="2" class="stile-celda">#</th>
-                                  <th rowspan="2" class="stile-celda"><i class="far fa-clock"></i></th>
-                                  <th rowspan="2" class="stile-celda">Nombre del trabajador</th>
-                                  <th rowspan="2" class="stile-celda">Cargo</th>
-                                  <th colspan="14" id="dias_asistidos_s_q" class="text-center" style="border: black 1px solid;">
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">#</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775"><i class="far fa-clock"></i></th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Nombre del trabajador</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Cargo</th>
+                                  <th colspan="14" id="dias_asistidos_s_q" class="text-center bg-color-acc3c775" style="border: black 1px solid;">
                                     <span class="badge badge-info float-left cursor-pointer" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
                                     Horas de trabajo por día
                                   </th>
-                                  <th rowspan="2" class="stile-celda">Horas<br>normal/extras</th>
-                                  <th rowspan="2" class="stile-celda">Días<br>asistidos</th>
-                                  <th rowspan="2" class="stile-celda">Sueldo Mensual</th>
-                                  <th rowspan="2" class="stile-celda">Jornal</th>
-                                  <th rowspan="2" class="stile-celda">Sueldo <br> hora</th>
-                                  <th rowspan="2" class="stile-celda">Sabatical</th>
-                                  <th rowspan="2" class="stile-celda">Pago <br> parcial</th>
-                                  <th rowspan="2" class="stile-celda">Adicional <br> descuento</th>
-                                  <th rowspan="2" class="stile-celda head_pago_q_s">Pago quincenal</th> 
-                                  <th rowspan="2" class="stile-celda"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Horas<br>normal/extras</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Días<br>asistidos</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Sueldo Mensual</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Jornal</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Sueldo <br> hora</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Sabatical</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Pago <br> parcial</th>
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Adicional <br> descuento</th>
+                                  <th rowspan="2" class="stile-celda head_pago_q_s bg-color-acc3c775">Pago quincenal</th> 
+                                  <th rowspan="2" class="stile-celda bg-color-acc3c775"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
                                 </tr>
                                 
                                 <tr class="table-dias data-dia-semana">
