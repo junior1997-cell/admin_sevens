@@ -812,6 +812,50 @@ class Papelera
         );
       }
     }
+   //........................................
+    $sql39 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.created_at, of.updated_at,p.razon_social
+    FROM otra_factura as of, proveedor as p
+    WHERE of.estado='0' AND of.estado_delete='1' AND of.idproveedor=p.idproveedor";
+
+    $otra_factura = ejecutarConsultaArray($sql39);
+
+    if (!empty($otra_factura)) {
+      foreach ($otra_factura as $key => $value39) {
+        $data[] = array(
+          'nombre_tabla'    => 'otra_factura',
+          'nombre_id_tabla' => 'idotra_factura',
+          'modulo'          => 'Otra facturas',
+          'id_tabla'        => $value39['idotra_factura'],
+          'nombre_archivo'  => $value39['tipo_comprobante'].' - '.$value39['numero_comprobante'].'─ S/. ' .number_format($value39['costo_parcial'], 2, '.', ',') ,
+          'descripcion'     => ' - - - ',
+          'nombre_royecto'  => 'General',
+          'created_at'      => $value39['created_at'],
+          'updated_at'      => $value39['updated_at'],
+        );
+      }
+    }
+
+    $sql40 = "SELECT rqsa.idresumen_q_s_asistencia, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin,rqsa.created_at, rqsa.updated_at, t.nombres, p.nombre_codigo
+    FROM resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador as t, proyecto as p 
+    WHERE rqsa.estado='0' AND rqsa.estado_delete='1' AND tpp.idtrabajador_por_proyecto=rqsa.idtrabajador_por_proyecto AND  t.idtrabajador=tpp.idtrabajador AND p.idproyecto=tpp.idproyecto AND tpp.idproyecto=1";
+
+    $resumen_q_s_asistencia = ejecutarConsultaArray($sql40);
+
+    if (!empty($resumen_q_s_asistencia)) {
+      foreach ($resumen_q_s_asistencia as $key => $value40) {
+        $data[] = array(
+          'nombre_tabla'    => 'resumen_q_s_asistencia',
+          'nombre_id_tabla' => 'idresumen_q_s_asistencia',
+          'modulo'          => 'Asistencia por semanas',
+          'id_tabla'        => $value40['idresumen_q_s_asistencia'],
+          'nombre_archivo'  => $value40['nombres'].' - '.$value40['fecha_q_s_inicio'].'─'.$value40['fecha_q_s_fin'] ,
+          'descripcion'     => '- - - ',
+          'nombre_royecto'  => $value40['nombre_codigo'],
+          'created_at'      => $value40['created_at'],
+          'updated_at'      => $value40['updated_at'],
+        );
+      }
+    }
 
     return $data;
   }
