@@ -594,8 +594,8 @@ if (!isset($_SESSION["nombre"])) {
             <tfoot>
               <td colspan="7"></td>
               <th class="text-right">
-                <h6>Subtotal</h6>
-                <h6>IGV</h6>
+                <h6>'.$rspta['tipo_gravada'].'</h6>
+                <h6>IGV('.( ( empty($rspta['val_igv']) ? 0 : floatval($rspta['val_igv']) )  * 100 ).'%)</h6>
                 <h5 class="font-weight-bold">TOTAL</h5>
               </th>
               <th class="text-right">

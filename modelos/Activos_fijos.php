@@ -66,8 +66,7 @@ class Activos_fijos
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
-  public function mostrar($idproducto)
-  {
+  public function mostrar($idproducto) {
     $data = [];
 
     $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca, p.estado_igv, 

@@ -391,7 +391,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>',
             "2" => $reg->categoria,
             "3" => number_format($reg->precio_unitario, 2, '.', ','),
-            "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+            "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
             "5" => $ficha_tecnica . $toltip,
           ];
         }
@@ -579,8 +579,8 @@ if (!isset($_SESSION["nombre"])) {
             <tfoot>
               <td colspan="7"></td>
               <th class="text-right">
-                <h6>Subtotal</h6>
-                <h6>IGV</h6>
+                <h6>'.$rspta['tipo_gravada'].'</h6>
+                <h6>IGV('.( ( empty($rspta['val_igv']) ? 0 : floatval($rspta['val_igv']) )  * 100 ).'%)</h6>
                 <h5 class="font-weight-bold">TOTAL</h5>
               </th>
               <th class="text-right">

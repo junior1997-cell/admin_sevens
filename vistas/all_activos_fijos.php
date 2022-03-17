@@ -9,29 +9,14 @@
   <!DOCTYPE html>
   <html lang="es">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | All activos fijos</title>
-        <?php
-          require 'head.php';
-        ?>
-        <!--CSS  switch_MATERIALES-->
-        <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
-        <link rel="stylesheet" href="../dist/css/leyenda.css" />
-
-        <!-- Theme style -->
-        <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
-        <style>
-            .text_area_clss {
-              width: 100%;
-              background: rgb(215 224 225 / 22%);
-              border-block-color: inherit;
-              border-bottom: aliceblue;
-              border-left: aliceblue;
-              border-right: aliceblue;
-              border-top: hidden;
-              }
-        </style>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Admin Sevens | Compras de activos fijos</title>
+      <?php require 'head.php'; ?>
+      <!--CSS  switch_MATERIALES-->
+      <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
+      <link rel="stylesheet" href="../dist/css/leyenda.css" />
+         
     </head>
     <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
       <div class="wrapper">
@@ -52,13 +37,13 @@
               <div class="container-fluid">
                 <div class="row mb-2">
                   <div class="col-sm-6">
-                    <h1 class="m-0">All activos fijos</h1>
+                    <h1 class="m-0"> <i class="fas fa-hand-holding-usd"></i> Compras de Activos Fijos</h1>
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                       <li class="breadcrumb-item"><a href="#">Home</a></li>
-                      <li class="breadcrumb-item active">All activos fijos</li>
+                      <li class="breadcrumb-item active">Compras de activos fijos</li>
                     </ol>
                   </div>
                   <!-- /.col -->
@@ -225,7 +210,7 @@
                           </table>
                         </div>
 
-                        <!--agregar_compras-->
+                        <!-- FORM COMPRAS -->
                         <div id="agregar_compras" style="display: none;">
                           <div class="modal-body">
                             <!-- form start -->
@@ -352,7 +337,7 @@
                                 <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
                                   <br />
                                   <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
-                                    <thead style="background-color: #ff6c046b;">
+                                    <thead style="background-color: #127ab6ba;">
                                       <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                                       <th>Material</th>
                                       <th>Unidad</th>
@@ -406,7 +391,7 @@
                           </div>
                         </div>
 
-                        <!--LISTA DE PAGOS ALL ACTIVOS FIJOS-->
+                        <!-- TABLA - PAGOS ALL ACTIVOS FIJOS-->
                         <div id="pago_compras" style="display: none;">
                           <div style="text-align: center;">
                             <div>
@@ -1002,7 +987,7 @@
                           <thead>
                             <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                             <th>Nombre Activo</th>
-                            <th>Marca</th>
+                            <th>Clasificación</th>
                             <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
                             <th>Descripción</th>
                             <th data-toggle="tooltip" data-original-title="Ficha Técnica" >F.T.</th>
@@ -1219,11 +1204,11 @@
                 </div>
 
                 <!--Modal ver grande img producto -->
-                <div class="modal fade" id="modal-ver-img-activo">
+                <div class="modal fade" id="modal-ver-img-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #49a9ceb8;">
-                        <h4 class="modal-title nombre-img-activo">Img producto</h4>
+                        <h4 class="modal-title nombre-img-material">Img producto</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -1231,7 +1216,7 @@
                       <div class="modal-body">
                         <div class="class-style" style="text-align: center;">
                            
-                          <img onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" src="" class="img-thumbnail " id="ver_img_activo" style="cursor: pointer !important;" width="auto" />
+                          <img onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
                            
                         </div>
                       </div>

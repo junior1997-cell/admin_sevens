@@ -349,7 +349,7 @@
           $idcompra_af_general = $_GET['idcompra_af_general'];
 
           $rspta = $all_activos_fijos->ver_compra_general($idcompra_af_general);
-          $rspta2 = $all_activos_fijos->listarDetalleGeneral($idcompra_af_general);         
+          $rspta2 = $all_activos_fijos->ver_detalle_compra_general($idcompra_af_general);         
 
           $subtotal = 0;  $ficha = '';
 
@@ -445,8 +445,8 @@
               <tfoot>
                 <td colspan="7"></td>
                 <th class="text-right">
-                  <h6>Subtotal</h6>
-                  <h6>IGV</h6>
+                  <h6>'.$rspta['tipo_gravada'].'</h6>
+                  <h6>IGV('.( ( empty($rspta['val_igv']) ? 0 : floatval($rspta['val_igv']) )  * 100 ).'%)</h6>
                   <h5 class="font-weight-bold">TOTAL</h5>
                 </th>
                 <th class="text-right">
@@ -590,7 +590,7 @@
                 '<span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                 <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>'.
               '</div>',
-              "2" => $reg->marca,
+              "2" => $reg->categoria,
               "3" => number_format($reg->precio_con_igv, 2, '.', ','),
               "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="2">' . $reg->descripcion . '</textarea>',
               "5" => $ficha_tecnica . $toltip,
@@ -851,8 +851,8 @@
               <tfoot>
                 <td colspan="7"></td>
                 <th class="text-right">
-                  <h6>Subtotal</h6>
-                  <h6>IGV</h6>
+                  <h6>'.$rspta['tipo_gravada'].'</h6>
+                  <h6>IGV('.( ( empty($rspta['val_igv']) ? 0 : floatval($rspta['val_igv']) )  * 100 ).'%)</h6>
                   <h5 class="font-weight-bold">TOTAL</h5>
                 </th>
                 <th class="text-right">

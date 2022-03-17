@@ -807,7 +807,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1203,7 +1203,7 @@ function mostrar_compra_general(idcompra_af_general) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${encodeHtml(element.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                 <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
@@ -1600,7 +1600,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
   tabla_pagos1 = $("#tabla-pagos-proveedor")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1990,7 +1990,7 @@ function guardar_y_editar_materiales(e) {
 function listaractivos() {
   tablaactivos1 = $("#tblaactivos").dataTable({
     //responsive: true,
-    lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -3181,4 +3181,39 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+
+// Codificamos los caracteres: &, <, >, ", '
+function encodeHtml(str) {
+
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return str.replace(/[&<>"']/g, function(m) {return map[m];});
+}
+
+// Decodificamos los caracteres: &amp; &lt; &gt; &quot; &#039;
+function decodeHtml(str) {
+
+  var map = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#039;': "'"
+  };
+
+  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
+}
+
+// ver imagen grande del producto agregado a la compra
+function ver_img_material(img, nombre) {
+  $("#ver_img_material").attr("src", `../dist/docs/material/img_perfil/${img}`);
+  $(".nombre-img-material").html(nombre);
+  $("#modal-ver-img-material").modal("show");
 }

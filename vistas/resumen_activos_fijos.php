@@ -263,6 +263,7 @@
                         </div>
                       </div>
 
+                      <!-- TBLAS SECUNDARIAS  -->
                       <div class="card card-primary card-outline card-2" style="display: none !important;">
                         <div class="card-header">
 
@@ -315,7 +316,7 @@
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-right precio_promedio text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>  
-                                  <th class="descuento_x_producto text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th class="text-right descuento_x_producto text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
                                   <th class="text-right subtotal_x_producto text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
                                 </tr>

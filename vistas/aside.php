@@ -149,7 +149,7 @@
           <li class="nav-item">
             <a href="all_activos_fijos.php" class="nav-link" id="mAllactivos_fijos">
               <i class="nav-icon fas fa-hand-holding-usd"></i>
-              <p>All activos fijos</p>
+              <p>Compras de activos fijos</p>
             </a>
           </li>
         <?php  }  ?>

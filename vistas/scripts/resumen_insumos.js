@@ -133,7 +133,8 @@ function table_show_hide(flag) {
     $(".mensaje-tbla-principal").show();
     $("#btn-regresar").hide();
     $("#btn-regresar-todo").hide();
-    $("#btn-regresar-bloque").hide();    
+    $("#btn-regresar-bloque").hide();
+    $("#guardar_registro_compras").hide();    
 
     $(".nombre-insumo").html(`<img src="../dist/svg/palana-ico-negro.svg" class="nav-icon" alt="" style="width: 21px !important;"> Resumen de Insumos`);
 
@@ -146,7 +147,7 @@ function table_show_hide(flag) {
       $("#btn-regresar").show();
       $("#btn-regresar-todo").hide();
       $("#btn-regresar-bloque").hide();
-       
+      $("#guardar_registro_compras").hide();
 
       $("#tabla-principal").hide();
       $("#tabla-factura").show();
@@ -156,7 +157,8 @@ function table_show_hide(flag) {
         $(".mensaje-tbla-principal").hide();
         $("#btn-regresar").hide();
         $("#btn-regresar-todo").show();
-        $("#btn-regresar-bloque").show();         
+        $("#btn-regresar-bloque").show();   
+        $("#guardar_registro_compras").hide();      
 
         $("#tabla-principal").hide();
         $("#tabla-factura").hide();
@@ -482,7 +484,7 @@ function editar_detalle_compras(id) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${encodeHtml(element.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                 <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
@@ -568,7 +570,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -884,17 +886,6 @@ function eliminarDetalle(indice) {
   evaluar();
 
   toastr.warning("Material removido.");
-}
-
-function l_m() {
-  // limpiar();
-  $("#barra_progress").css({ width: "0%" });
-
-  $("#barra_progress").text("0%");
-
-  $("#barra_progress2").css({ width: "0%" });
-
-  $("#barra_progress2").text("0%");
 }
 
 // ver imagen grande del producto agregado a la compra
@@ -1574,7 +1565,7 @@ $(function () {
       categoria_insumos_af_p: { required: true },
       color_p: { required: true },
       unid_medida_p: { required: true },
-      modelo_p: { required: true },
+      modelo_p: { minlength: "Minimo 3 caracteres" },
       precio_unitario_p: { required: true },
       descripcion_p: { minlength: 3 },
     },
@@ -1583,7 +1574,7 @@ $(function () {
       categoria_insumos_af_p: { required: "Campo requerido", },
       color_p: { required: "Campo requerido" },
       unid_medida_p: { required: "Campo requerido" },
-      modelo_p: { required: "Por favor ingrese modelo", },
+      modelo_p: { minlength: "Minimo 3 caracteres", },
       precio_unitario_p: { required: "Ingresar precio compra", },      
       descripcion_p: { minlength: "Minimo 3 caracteres" },
     },
@@ -1619,6 +1610,18 @@ $(function () {
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
 });
+
+function l_m() {
+
+  $("#barra_progress").css({ width: "0%" });
+
+  $("#barra_progress").text("0%");
+
+  $("#barra_progress2").css({ width: "0%" });
+
+  $("#barra_progress2").text("0%");
+}
+
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 
@@ -2171,6 +2174,34 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+
+// Codificamos los caracteres: &, <, >, ", '
+function encodeHtml(str) {
+
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return str.replace(/[&<>"']/g, function(m) {return map[m];});
+}
+
+// Decodificamos los caracteres: &amp; &lt; &gt; &quot; &#039;
+function decodeHtml(str) {
+
+  var map = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#039;': "'"
+  };
+
+  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
 }
 
 init();

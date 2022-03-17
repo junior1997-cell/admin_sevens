@@ -105,7 +105,7 @@ class Compra
     $producto = ejecutarConsultaArray($sql_2);
 
     $results = [
-      "idcompra_x_proyecto" => $compra['idcompra_proyecto'],
+      "idcompra_x_proyecto" => $compra['idcompra_proyecto'],      
       "idproyecto" => $compra['idproyecto'],
       "idproveedor" => $compra['idproveedor'],
       "fecha_compra" => $compra['fecha_compra'],
@@ -210,6 +210,7 @@ class Compra
 		cpp.subtotal, 
 		cpp.igv , 
 		cpp.total ,
+    cpp.tipo_gravada ,
 		cpp.estado 
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE idcompra_proyecto='$idcompra_proyecto'  AND cpp.idproveedor = p.idproveedor";

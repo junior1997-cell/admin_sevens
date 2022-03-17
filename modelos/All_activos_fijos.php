@@ -77,29 +77,30 @@ class All_activos_fijos
   public function mostrar_compra_para_editar($idcompra_af_general)
   {
     $sql = "SELECT  cafg.idcompra_af_general , cafg.idproveedor, cafg.fecha_compra, cafg.tipo_comprobante , cafg.serie_comprobante , cafg.val_igv, 
-            cafg.descripcion , cafg.glosa , cafg.subtotal , cafg.igv , cafg.total , cafg.estado 
-            FROM compra_af_general as cafg
-            WHERE cafg.idcompra_af_general='$idcompra_af_general'";
+    cafg.descripcion , cafg.glosa , cafg.subtotal , cafg.igv , cafg.total , cafg.estado 
+    FROM compra_af_general as cafg
+    WHERE cafg.idcompra_af_general='$idcompra_af_general'";
 
     $compra_af_general = ejecutarConsultaSimpleFila($sql);
 
     $sql_2 = "SELECT dcafg.idproducto , dcafg.ficha_tecnica_producto ,
-            dcafg.cantidad as cantidad,
-            dcafg.precio_sin_igv,
-            dcafg.igv,
-            dcafg.precio_con_igv as precio_con_igv,
-            dcafg.descuento as descuento,
-            dcafg.unidad_medida,
-            dcafg.color,
-            p.nombre as nombre_producto,
-            p.imagen
-            FROM detalle_compra_af_g as dcafg, producto as p
-            WHERE dcafg.idcompra_af_general='$idcompra_af_general' AND  dcafg.idproducto=p.idproducto";
+    dcafg.cantidad as cantidad,
+    dcafg.precio_sin_igv,
+    dcafg.igv,
+    dcafg.precio_con_igv as precio_con_igv,
+    dcafg.descuento as descuento,
+    dcafg.unidad_medida,
+    dcafg.color,
+    p.nombre as nombre_producto,
+    p.imagen
+    FROM detalle_compra_af_g as dcafg, producto as p
+    WHERE dcafg.idcompra_af_general='$idcompra_af_general' AND  dcafg.idproducto=p.idproducto";
 
     $activos = ejecutarConsultaArray($sql_2);
 
     $results = [
-      "idcompra_af_general" => $compra_af_general['idcompra_af_general'],
+      "idcompra_af_general" => $compra_af_general['idcompra_af_general'],      
+      "idproyecto" => '',
       "idproveedor" => $compra_af_general['idproveedor'],
       "fecha_compra" => $compra_af_general['fecha_compra'],
       "tipo_comprobante" => $compra_af_general['tipo_comprobante'],
@@ -396,7 +397,7 @@ class All_activos_fijos
   public function ver_compra_general($idcompra_af_general)
   {
     $sql = "SELECT cafg.idcompra_af_general, cafg.idproveedor, cafg.fecha_compra,	cafg.tipo_comprobante, cafg.serie_comprobante,
-		cafg.descripcion, cafg.subtotal, cafg.igv,	cafg.total,	p.razon_social, p.telefono,	cafg.estado, cafg.glosa, cafg.val_igv
+		cafg.descripcion, cafg.subtotal, cafg.igv,	cafg.total,	p.razon_social, p.telefono,	cafg.estado, cafg.glosa, cafg.tipo_gravada, cafg.val_igv
     FROM compra_af_general as cafg, proveedor as p 
 		WHERE  cafg.idcompra_af_general='$idcompra_af_general' AND cafg.idproveedor=p.idproveedor";
 
@@ -404,7 +405,7 @@ class All_activos_fijos
   }
 
   //lismatamos los detalles
-  public function listarDetalleGeneral($id_compra_afg)
+  public function ver_detalle_compra_general($id_compra_afg)
   {
     $sql = "SELECT dcafg.idproducto, dcafg.ficha_tecnica_producto as ficha_tecnica,	dcafg.cantidad, dcafg.precio_sin_igv,	
     dcafg.igv, dcafg.precio_con_igv, dcafg.descuento, dcafg.subtotal,	p.nombre, p.imagen, dcafg.unidad_medida, dcafg.color
@@ -593,10 +594,11 @@ class All_activos_fijos
   public function lista_activos_para_compras()
   {
     $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
-        p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color
-        FROM producto as p, unidad_medida as um, color as c
-        WHERE p.idcategoria_insumos_af!='1' AND p.estado=1 AND p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor 
-        ORDER BY p.idproducto ASC";
+    p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+    ciaf.nombre AS categoria
+    FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
+    WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idcategoria_insumos_af!='1' AND p.estado=1
+    ORDER BY p.nombre ASC;";
     return ejecutarConsulta($sql);
   }
 

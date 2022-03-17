@@ -30,79 +30,45 @@ function init(){
   tbla_principal_herramienta(localStorage.getItem('nube_idproyecto'));
   tbla_principal_oficina(localStorage.getItem('nube_idproyecto'));	
 
-  //MOSTRAMOS - los proveedores
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+
   $.post("../ajax/resumen_activos_fijos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
   
-  // Mostra,ps los bancos
   $.post("../ajax/resumen_activos_fijos.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); $("#banco_prov").html(r); });
-  
-  //MOSTRAMOS - colores
+
   $.post("../ajax/resumen_activos_fijos.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
-  //MOSTRAMOS - las unidades de medida
   $.post("../ajax/resumen_activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
-  //MOSTRAMOS - las categorias del producto
   $.post("../ajax/resumen_activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
 
-  // GUARDAR COMPRAS
+ // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
+
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
 
-  //GUARDAR PROVEEDOR
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
-  //GUARDAR MATERIAL
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });
 
   // ═══════════════════ SELECT2 - COMPRAS ═══════════════════
-  //Initialize Select2 PROVEEDOR
-  $("#idproveedor").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
-    allowClear: true,
-  });
-  //Initialize Select2 TIPO DE COMPROBANTE
-  $("#tipo_comprobante").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione Comprobante",
-    allowClear: true,
-  });
-  //Initialize Select2 GLOSA
-  $("#glosa").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione Glosa",
-    allowClear: true,
-  });
+  
+  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione trabajador", allowClear: true, });
+  
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione Comprobante", allowClear: true, });
+  
+  $("#glosa").select2({ theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
 
   // ═══════════════════ SELECT2 - PROVEEDOR ═══════════════════
-  //Initialize Select2 BANCO PROVEEDOR
-  $("#banco_prov").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione banco",
-    allowClear: true,
-  });
-  // ═══════════════════ SELECT2 - MATERIAL ═══════════════════
   
-  //Initialize Select2 CATEGORIA
-  $("#categoria_insumos_af_p").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar color",
-    allowClear: true,
-  });
+  $("#banco_prov").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
 
-  //Initialize Select2 COLOR
-  $("#color_p").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar color",
-    allowClear: true,
-  });
+  // ═══════════════════ SELECT2 - MATERIAL ═══════════════════
 
-  //Initialize Select2 UNIDAD DE MEDIDA
-  $("#unidad_medida_p").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar una unidad",
-    allowClear: true,
-  });
+  $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+
+  $("#color_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+
+  $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -142,9 +108,10 @@ function table_show_hide(flag) {
     $(".mensaje-tbla-principal").show();
     $("#btn-regresar").hide();
     $("#btn-regresar-todo").hide();
-    $("#btn-regresar-bloque").hide();    
+    $("#btn-regresar-bloque").hide(); 
+    $("#guardar_registro_compras").hide();   
 
-    $(".nombre-insumo").html("Resumen de Insumos");
+    $(".nombre-insumo").html("Resumen de Activos Fijos");
 
     $("#tabla-principal").show();
     $('.card-2').hide();
@@ -156,7 +123,7 @@ function table_show_hide(flag) {
       $("#btn-regresar").show();
       $("#btn-regresar-todo").hide();
       $("#btn-regresar-bloque").hide();
-       
+      $("#guardar_registro_compras").hide();
 
       $("#tabla-principal").hide();
       $('.card-2').show();
@@ -167,7 +134,8 @@ function table_show_hide(flag) {
         $(".mensaje-tbla-principal").hide();
         $("#btn-regresar").hide();
         $("#btn-regresar-todo").show();
-        $("#btn-regresar-bloque").show();         
+        $("#btn-regresar-bloque").show();     
+        $("#guardar_registro_compras").hide();    
 
         $("#tabla-principal").hide();
         $('.card-2').show();
@@ -184,9 +152,9 @@ function tbla_principal_maquinaria(id_proyecto) {
 		"responsive": true,
 		lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
-	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-	    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-	    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdf' ],
 		"ajax":	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_maquinaria&id_proyecto='+id_proyecto,
       type : "get",
@@ -542,7 +510,7 @@ function tbla_principal_oficina(id_proyecto) {
   });
 }
 
-// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPRAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   C O M P R A S ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // TABLA - FACTURAS
 function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio, subtotal_x_producto ) {
@@ -767,7 +735,7 @@ function editar_detalle_compras(id) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${element.nombre_producto}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${encodeHtml(element.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                 <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
@@ -853,7 +821,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${nombre}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1171,19 +1139,6 @@ function eliminarDetalle(indice) {
   toastr.warning("Material removido.");
 }
 
-function l_m() {
-  // limpiar();
-  $("#barra_progress").css({ width: "0%" });
-
-  $("#barra_progress").text("0%");
-
-  $("#barra_progress2").css({ width: "0%" });
-
-  $("#barra_progress2").text("0%");
-}
-
-
-
 // ver imagen grande del producto agregado a la compra
 function ver_img_material(img, nombre) {
   $("#ver_img_material").attr("src", `../dist/docs/material/img_perfil/${img}`);
@@ -1262,7 +1217,7 @@ $("#my-switch_detracc").on("click ", function (e) {
   }
 });
 
-// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PRODUCTO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S ::::::::::::::::::::::::::::::::::::::::::::::::::::
 // TABLA - MATERIALES
 function tbla_materiales() {
 
@@ -1638,7 +1593,7 @@ function actualizar_producto() {
   modificarSubtotales();
 }
 
-// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PROVEEDOR ::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R ::::::::::::::::::::::::::::::::::::::::::::::::::::
 //Función limpiar
 function limpiar_form_proveedor() {
   $("#idproveedor_prov").val("");
@@ -1870,7 +1825,7 @@ $(function () {
       categoria_insumos_af_p: { required: true },
       color_p: { required: true },
       unid_medida_p: { required: true },
-      modelo_p: { required: true },
+      modelo_p: { minlength: 3 },
       precio_unitario_p: { required: true },
       descripcion_p: { minlength: 3 },
     },
@@ -1879,7 +1834,7 @@ $(function () {
       categoria_insumos_af_p: { required: "Campo requerido", },
       color_p: { required: "Campo requerido" },
       unid_medida_p: { required: "Campo requerido" },
-      modelo_p: { required: "Por favor ingrese modelo", },
+      modelo_p: { minlength: "Minimo 3 caracteres", },
       precio_unitario_p: { required: "Ingresar precio compra", },      
       descripcion_p: { minlength: "Minimo 3 caracteres" },
     },
@@ -1914,6 +1869,17 @@ $(function () {
   $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
+
+function l_m() {
+
+  $("#barra_progress").css({ width: "0%" });
+
+  $("#barra_progress").text("0%");
+
+  $("#barra_progress2").css({ width: "0%" });
+
+  $("#barra_progress2").text("0%");
+}
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
@@ -2467,6 +2433,34 @@ function buscar_sunat_reniec() {
       }
     }
   }
+}
+
+// Codificamos los caracteres: &, <, >, ", '
+function encodeHtml(str) {
+
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return str.replace(/[&<>"']/g, function(m) {return map[m];});
+}
+
+// Decodificamos los caracteres: &amp; &lt; &gt; &quot; &#039;
+function decodeHtml(str) {
+
+  var map = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#039;': "'"
+  };
+
+  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
 }
 
 init();
