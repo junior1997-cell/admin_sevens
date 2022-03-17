@@ -51,7 +51,10 @@ Class PagoObrero
 		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct
-		WHERE rqsa.estado_envio_contador = '1' AND tpp.idproyecto = '$nube_idproyecto' AND  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  AND p.idproyecto = tpp.idproyecto
+		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 
+		AND tpp.idtrabajador = t.idtrabajador AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  
+		AND p.idproyecto = tpp.idproyecto AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' 
+		AND tpp.idproyecto = '$nube_idproyecto' 
 		GROUP BY rqsa.idtrabajador_por_proyecto ORDER BY t.nombres;";
 		$trabajdor = ejecutarConsultaArray($sql_1);
 
@@ -63,7 +66,8 @@ Class PagoObrero
 
 				$sql_2 = "SELECT SUM(pqso.monto_deposito) AS total_deposito
 				FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
-				WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$id';";
+				WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia
+				AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idtrabajador_por_proyecto = '$id';";
 				$depositos = ejecutarConsultaSimpleFila($sql_2);
 
 				$data[] = array(
@@ -104,19 +108,21 @@ Class PagoObrero
 	// Obtenemos los totales - TABLA PRINCIPAL
 	public function mostrar_total_tbla_principal($id)
 	{
-		$sql_1 = "SELECT SUM(pqso.monto_deposito) AS total_deposito_x_proyecto
+		$sql_1 = "SELECT SUM(pqso.monto_deposito) AS total_deposito_x_proyecto 
 		FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
-		WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia AND pqso.estado = '1' AND tpp.idproyecto = '$id';";
+		WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
+		AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$id';";
 		$monto_1 = ejecutarConsultaSimpleFila($sql_1);
 		
-		$sql_2 = "SELECT SUM(tpp.sueldo_mensual) AS sueldo_mesual_x_proyecto
-		FROM trabajador_por_proyecto AS tpp,  cargo_trabajador AS ct, tipo_trabajador AS tt
-        WHERE tpp.idproyecto = '$id' AND  tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador AND tt.nombre = 'Obrero';";
-		$monto_2 = ejecutarConsultaSimpleFila($sql_2);
+		// $sql_2 = "SELECT 
+		// FROM trabajador_por_proyecto AS tpp,  cargo_trabajador AS ct, tipo_trabajador AS tt
+        // WHERE tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador 
+		// AND tt.nombre = 'Obrero' AND tpp.idproyecto = '$id' ;";
+		// $monto_2 = ejecutarConsultaSimpleFila($sql_2);
 
 		$data = array(
 			'total_deposito_x_proyecto' => $n1 = (empty($monto_1)) ? 0 : $retVal_1 = (empty($monto_1['total_deposito_x_proyecto'])) ? 0 : $monto_1['total_deposito_x_proyecto'] ,
-			'sueldo_mesual_x_proyecto' => $n2 = (empty($monto_2)) ? 0 : $retVal_2 = (empty($monto_2['sueldo_mesual_x_proyecto'])) ? 0 : $monto_2['sueldo_mesual_x_proyecto'] 
+			// 'sueldo_mesual_x_proyecto' => $n2 = (empty($monto_1)) ? 0 : $retVal_2 = (empty($monto_1['sueldo_mesual_x_proyecto'])) ? 0 : $monto_1['sueldo_mesual_x_proyecto'] 
 		);
 
 		return $data ;
@@ -132,7 +138,8 @@ Class PagoObrero
 		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
 		rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
-		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto;";
+		WHERE  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
+		AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' ;";
 		$q_s = ejecutarConsultaArray($sql_1);
 
 		if ( !empty($q_s) ) {

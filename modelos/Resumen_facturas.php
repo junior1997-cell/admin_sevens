@@ -15,6 +15,7 @@ class Resumenfacturas
 
     $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/';
 
+    // FACTURAS - COMPRAS ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
       $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
     } else {
@@ -27,17 +28,19 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; 
     } 
+
+    // var_dump($filtro_proveedor , $filtro_fecha ,$filtro_comprobante); die();
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
     cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' 
-    $filtro_comprobante $filtro_proveedor $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
+     $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
 
     $compra = ejecutarConsultaArray($sql);
 
@@ -74,6 +77,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - SERVICIO MAQUINA Y/O EQUIPO ════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -87,16 +91,16 @@ class Resumenfacturas
         }     
       }      
     }    
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; 
     } 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
     f.nota, mq.nombre, prov.razon_social, f.descripcion, f.imagen
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-    AND f.estado = '1' AND f.estado_delete = '1'  $filtro_fecha $filtro_proveedor $filtro_comprobante
+    AND f.estado = '1' AND f.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY f.fecha_emision DESC;";
 
     $maquinaria_equipo =  ejecutarConsultaArray($sql2);
@@ -134,6 +138,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - OTRO GASTO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -148,16 +153,16 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
     $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, tipo_comprobante, numero_comprobante, fecha_g, 
     costo_parcial, subtotal, igv, glosa, comprobante
     FROM otro_gasto 
-    WHERE  estado = '1' AND estado_delete = '1'  $filtro_fecha $filtro_proveedor $filtro_comprobante ORDER BY fecha_g DESC;";
+    WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
 
     $otro_gasto =  ejecutarConsultaArray($sql3);
 
@@ -193,6 +198,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - TRANSPORTE ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -207,16 +213,16 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND  t.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND  t.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; 
     }
 
     $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, 
     t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa 
     FROM transporte AS t, proveedor AS p
-    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' $filtro_fecha $filtro_proveedor $filtro_comprobante
+    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
 
     $transporte =  ejecutarConsultaArray($sql4);
@@ -253,6 +259,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - HOSPEDAJE ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -267,16 +274,16 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND  tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND  tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
     $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
     precio_parcial, glosa, comprobante
     FROM hospedaje 
-    WHERE estado = '1' AND estado_delete = '1' $filtro_fecha $filtro_proveedor $filtro_comprobante
+    WHERE estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
 
     $hospedaje =  ejecutarConsultaArray($sql5);
@@ -313,6 +320,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - PENSION ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -327,9 +335,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND fp.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND fp.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
     }
 
@@ -337,7 +345,7 @@ class Resumenfacturas
     fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa
 		FROM factura_pension as fp, pension as p, proveedor as prov
 		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.estado = '1' AND fp.estado_delete = '1'
-    $filtro_fecha $filtro_proveedor $filtro_comprobante
+     $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fp.fecha_emision DESC;";
 
     $factura_pension =  ejecutarConsultaArray($sql6);
@@ -374,6 +382,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - BRACK ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -388,9 +397,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND fb.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND fb.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; 
     }
 
@@ -398,7 +407,7 @@ class Resumenfacturas
     fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break  
-    AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' $filtro_fecha $filtro_proveedor $filtro_comprobante
+    AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fb.fecha_emision DESC;";
 
     $factura_break =  ejecutarConsultaArray($sql7);
@@ -435,6 +444,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - COMIDA EXTRA ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -449,16 +459,16 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
     $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
     costo_parcial, subtotal, igv, glosa, comprobante
 		FROM comida_extra
-		WHERE  estado = '1' AND estado_delete = '1' $filtro_fecha $filtro_proveedor $filtro_comprobante
+		WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
 
     $comida_extra =  ejecutarConsultaArray($sql8);
@@ -495,6 +505,7 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - OTRA FACTURA ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -509,16 +520,16 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
     }
 
     $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, of.costo_parcial, 
     of.subtotal, of.igv, of.glosa, of.comprobante 
     FROM otra_factura AS of, proveedor p
-    WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_fecha $filtro_proveedor $filtro_comprobante
+    WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY of.fecha_emision DESC;";
 
     $otra_factura =  ejecutarConsultaArray($sql9);
@@ -582,9 +593,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; 
     }
 
@@ -612,9 +623,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; 
     }
 
@@ -643,9 +654,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
@@ -673,9 +684,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND t.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND t.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; 
     }
 
@@ -703,9 +714,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
     $sql5 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
@@ -732,9 +743,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND fp.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND fp.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
     }
     $sql6 = "SELECT SUM(fp.monto) AS total, SUM(fp.subtotal) AS subtotal, SUM(fp.igv) AS igv
@@ -762,9 +773,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND fb.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND fb.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; 
     }
     $sql7 = "SELECT SUM(fb.monto) AS total, SUM(fb.subtotal) AS subtotal, SUM(fb.igv) AS igv
@@ -792,9 +803,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
     $sql8 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
@@ -821,9 +832,9 @@ class Resumenfacturas
       }      
     }    
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) || $comprobante == 0) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta')"; } else {
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta')"; } else {
       $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
     }
     $sql9 = "SELECT SUM(of.costo_parcial) AS total, SUM(of.subtotal) AS subtotal, SUM(of.igv) AS igv

@@ -268,25 +268,31 @@ ob_start();
 
             $data[]=array(
               "0"=> $cont++,
-              "1"=>'<button class="btn btn-info btn-sm" onclick="ver_q_s_individual('.$value['idtrabajador_por_proyecto'].')">
+              "1"=>'<center><button class="btn btn-info btn-sm" onclick="ver_q_s_individual('.$value['idtrabajador_por_proyecto'].')">
                 <i class="far fa-calendar-alt"></i>
               </button>
               <button class="btn btn-info btn-sm" onclick="ver_asistencias_individual('.$ver_asistencia.')">
                 <i class="far fa-clock"></i>
-              </button>',
+              </button></center>',
               "2"=>'<div class="user-block text-nowrap">
-                <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; ><b 
-                style="color: #000000 !important;">'. $value['cargo'] .': </b> <br>'. $value['nombre'] .'</p></span>
-                <span class="description" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
+                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" ><p class="text-primary mb-0" >
+                  <b class="text-dark-0"  >'. 
+                    $value['cargo'] .' - <span class="font-size-14px text-muted font-weight-normal" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
+                  </b> <br>'. $value['nombre'] .'</p>
+                </span>                
               </div>',              
-              "3"=> round($value['total_horas_normal'] + $value['total_horas_extras'], 2),
-              "4"=> round(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 1),
-              "5"=> 'S/. '.$value['sueldo_hora'],
-              "6"=> 'S/. '.$value['sueldo_diario'],
-              "7"=> 'S/. '.number_format($value['sueldo_mensual'], 2, '.', ','),              
-              "8"=> $value['total_sabatical'],
-              "9"=> 'S/. '.number_format($value['pago_quincenal'], 1, '.', ',') ,
+              "3"=> '<center>' . round($value['total_horas_normal'] + $value['total_horas_extras'], 2) . '</center>',
+              "4"=> '<center>' . number_format(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 2, '.', ',') . '</center>',
+              "5"=> 'S/ '.$value['sueldo_hora'],
+              "6"=> 'S/ '.$value['sueldo_diario'],
+              "7"=> 'S/ '.number_format($value['sueldo_mensual'], 2, '.', ','),              
+              "8"=> '<center>' . $value['total_sabatical'] . '</center>',
+              "9"=> 'S/ ' . number_format($value['adicional_descuento'], 2, '.', ','),
+              "10"=> 'S/ ' . number_format($value['pago_quincenal'], 1, '.', ',') ,
+              "11"=> $value['cargo'] ,
+              "12"=> $value['nombre'] ,
+              "13"=> $value['tipo_doc'] .': '. $value['num_doc'] ,
             );
 
             $jornal_diario=0;
@@ -375,16 +381,19 @@ ob_start();
             $opciones = "'$reg->idresumen_q_s_asistencia', '$pago' ";
 
             $data[]=array(
-              "0"=> ($reg->estado) ? '<button class="btn btn-danger btn-sm" onclick="desactivar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Desactivar"><i class="fas fa-trash-alt"></i></button>' :
-                '<button class="btn btn-success btn-sm" onclick="activar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Activar"><i class="fas fa-check"></i></button>',
-              "1"=> $reg->numero_q_s,
-              "2"=> format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin),
-              "3"=> 'S/. '. number_format($reg->pago_parcial_hn, 2, '.', ',') . ' / ' . number_format($reg->pago_parcial_he, 2, '.', ','),
-              "4"=> 'S/. '. number_format($reg->adicional_descuento, 2, '.', ','),
-              "5"=> $reg->sabatical,
-              "6"=> 'S/. '. number_format($reg->pago_quincenal, 2, '.', ','),
-              "7"=> ($reg->estado_envio_contador) ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>' ,
-              "8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
+              "0"=> '<center>' . ($reg->estado ? '<button class="btn btn-danger btn-sm" onclick="desactivar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Desactivar"><i class="fas fa-trash-alt"></i></button>' :
+                '<button class="btn btn-success btn-sm" onclick="activar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Activar"><i class="fas fa-check"></i></button>') . '</center>' ,
+              "1"=> '<center>' . $reg->numero_q_s . '</center>',
+              "2"=> '<center>' . format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin) . '</center>',
+              "3"=> $reg->total_hn . ' / ' . $reg->total_he,
+              "4"=> 'S/. '. number_format($reg->pago_parcial_hn, 2, '.', ',') . ' / ' . number_format($reg->pago_parcial_he, 2, '.', ','),
+              "5"=> 'S/. '. number_format($reg->adicional_descuento, 2, '.', ','),
+              "6"=> '<center>' . $reg->sabatical . '</center>',
+              "7"=> 'S/. '. number_format($reg->pago_quincenal, 2, '.', ','),
+              "8"=> '<center>' . ($reg->estado_envio_contador ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>') . '</center>' ,
+              "9"=> '<center>' . ($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . '</center>'.$toltip,
+              "10"=> $reg->trabajdor,
+              "11"=> $reg->tipo_documento . ': ' . $reg->numero_documento
             );
           }
 
@@ -477,7 +486,7 @@ ob_start();
   // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
   function format_d_m_a( $fecha ) {
 
-    if (!empty($fecha)) {
+    if (!empty($fecha) || $fecha != '0000-00-00') {
 
       $fecha_expl = explode("-", $fecha);
 
