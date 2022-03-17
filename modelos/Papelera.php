@@ -26,7 +26,7 @@ class Papelera
           'modulo'          => 'Bancos',
           'nombre_archivo'  => $value1['nombre'] .' - ' . $value1['alias'],
           'descripcion'     => '- - -',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value1['created_at'],
           'updated_at'      => $value1['updated_at'],
         );
@@ -45,7 +45,7 @@ class Papelera
           'modulo'          => 'Cargo Trabajdor',
           'nombre_archivo'  => $value2['nombre'],
           'descripcion'     => '- - -',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value2['created_at'],
           'updated_at'      => $value2['updated_at'],
         );
@@ -66,7 +66,7 @@ class Papelera
           'modulo'          => 'Carpeta planos y Otros',
           'nombre_archivo'  => $value3['nombre'],
           'descripcion'     => '- - -',
-          'nombre_royecto'  => $value3['nombre_codigo'],
+          'nombre_proyecto'  => $value3['nombre_codigo'],
           'created_at'      => $value3['created_at'],
           'updated_at'      => $value3['updated_at'],
         );
@@ -85,7 +85,7 @@ class Papelera
           'modulo'          => 'Clasificación de Productos',
           'nombre_archivo'  => $value4['nombre'],
           'descripcion'     => '- - -',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value4['created_at'],
           'updated_at'      => $value4['updated_at'],
         );
@@ -104,7 +104,7 @@ class Papelera
           'modulo'          => 'Color',
           'nombre_archivo'  => $value5['nombre_color'],
           'descripcion'     => '- - -',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value5['created_at'],
           'updated_at'      => $value5['updated_at'],
         );
@@ -125,7 +125,7 @@ class Papelera
           'modulo'          => 'Comida Extras',
           'nombre_archivo'  => $value6['tipo_comprobante'] . ' ─ ' . $value6['numero_comprobante'],
           'descripcion'     => $value6['descripcion'],
-          'nombre_royecto'  => $value6['nombre_codigo'],
+          'nombre_proyecto'  => $value6['nombre_codigo'],
           'created_at'      => $value6['created_at'],
           'updated_at'      => $value6['updated_at'],
         );
@@ -145,7 +145,7 @@ class Papelera
           'modulo'          => 'All Activos Fijo',
           'nombre_archivo'  => $value7['tipo_comprobante'] . ' ─ ' . $value7['serie_comprobante'],
           'descripcion'     => $value7['descripcion'],
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value7['created_at'],
           'updated_at'      => $value7['updated_at'],
         );
@@ -166,7 +166,7 @@ class Papelera
           'id_tabla'        => $value8['idcompra_proyecto'],
           'nombre_archivo'  => $value8['tipo_comprobante'] . ' ─ ' . $value8['serie_comprobante'],
           'descripcion'     => $value8['descripcion'],
-          'nombre_royecto'  => $value8['nombre_codigo'],
+          'nombre_proyecto'  => $value8['nombre_codigo'],
           'created_at'      => $value8['created_at'],
           'updated_at'      => $value8['updated_at'],
         );
@@ -188,7 +188,7 @@ class Papelera
           'id_tabla'        => $value9['idfactura'],
           'nombre_archivo'  => 'Factura ─ ' . $value9['codigo'],
           'descripcion'     => $value9['descripcion'],
-          'nombre_royecto'  => $value9['nombre_codigo'],
+          'nombre_proyecto'  => $value9['nombre_codigo'],
           'created_at'      => $value9['created_at'],
           'updated_at'      => $value9['updated_at'],
         );
@@ -211,7 +211,7 @@ class Papelera
           'id_tabla'        => $value10['idfactura'],
           'nombre_archivo'  => 'Factura ─ ' . $value10['codigo'],
           'descripcion'     => $value10['descripcion'],
-          'nombre_royecto'  => $value10['nombre_codigo'],
+          'nombre_proyecto'  => $value10['nombre_codigo'],
           'created_at'      => $value10['created_at'],
           'updated_at'      => $value10['updated_at'],
         );
@@ -232,7 +232,7 @@ class Papelera
           'id_tabla'        => $value11['idfactura_break'],
           'nombre_archivo'  => $value11['tipo_comprobante'] .' ─ ' . $value11['nro_comprobante'],
           'descripcion'     => $value11['descripcion'],
-          'nombre_royecto'  => $value11['nombre_codigo'],
+          'nombre_proyecto'  => $value11['nombre_codigo'],
           'created_at'      => $value11['created_at'],
           'updated_at'      => $value11['updated_at'],
         );
@@ -253,7 +253,7 @@ class Papelera
           'id_tabla'        => $value12['idfactura_pension'],
           'nombre_archivo'  => $value12['tipo_comprobante'] .' ─ ' . $value12['nro_comprobante'],
           'descripcion'     => $value12['descripcion'],
-          'nombre_royecto'  => $value12['nombre_codigo'],
+          'nombre_proyecto'  => $value12['nombre_codigo'],
           'created_at'      => $value12['created_at'],
           'updated_at'      => $value12['updated_at'],
         );
@@ -274,7 +274,7 @@ class Papelera
           'id_tabla'        => $value13['idhospedaje'],
           'nombre_archivo'  => $value13['tipo_comprobante'] .' ─ ' . $value13['numero_comprobante'],
           'descripcion'     => $value13['descripcion'],
-          'nombre_royecto'  => $value13['nombre_codigo'],
+          'nombre_proyecto'  => $value13['nombre_codigo'],
           'created_at'      => $value13['created_at'],
           'updated_at'      => $value13['updated_at'],
         );
@@ -295,7 +295,7 @@ class Papelera
           'id_tabla'        => $value14['idmaquinaria'],
           'nombre_archivo'  => $value14['nombre'] . ' ─ ' .  ($value14['tipo'] == '1' ? 'Maquina' : 'Equipo' ),
           'descripcion'     => $value14['proveedor'],
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value14['created_at'],
           'updated_at'      => $value14['updated_at'],
         );
@@ -314,7 +314,7 @@ class Papelera
           'id_tabla'        => $value15['idocupacion'],
           'nombre_archivo'  => $value15['nombre_ocupacion'],
           'descripcion'     => '- - -',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value15['created_at'],
           'updated_at'      => $value15['updated_at'],
         );
@@ -335,7 +335,7 @@ class Papelera
           'id_tabla'        => $value16['idotro_servicio'],
           'nombre_archivo'  => $value16['tipo_comprobante'] . ' ─ ' . $value16['numero_comprobante'] ,
           'descripcion'     => $value16['descripcion'],
-          'nombre_royecto'  => $value16['nombre_codigo'],
+          'nombre_proyecto'  => $value16['nombre_codigo'],
           'created_at'      => $value16['created_at'],
           'updated_at'      => $value16['updated_at'],
         );
@@ -357,7 +357,7 @@ class Papelera
           'id_tabla'        => $value17['idpagos_q_s_obrero'],
           'nombre_archivo'  => $value17['trabajador'] . ' ─ S/.' . number_format($value17['monto_deposito'], 2, '.', ','),
           'descripcion'     => $value17['descripcion'],
-          'nombre_royecto'  => $value17['nombre_codigo'],
+          'nombre_proyecto'  => $value17['nombre_codigo'],
           'created_at'      => $value17['created_at'],
           'updated_at'      => $value17['updated_at'],
         );
@@ -379,7 +379,7 @@ class Papelera
           'id_tabla'        => $value18['idpagos_x_mes_administrador'],
           'nombre_archivo'  => $value18['trabajador'] . ' ─ S/.' .  number_format($value18['monto'], 2, '.', ',') ,
           'descripcion'     => $value18['descripcion'],
-          'nombre_royecto'  => $value18['nombre_codigo'],
+          'nombre_proyecto'  => $value18['nombre_codigo'],
           'created_at'      => $value18['created_at'],
           'updated_at'      => $value18['updated_at'],
         );
@@ -399,7 +399,7 @@ class Papelera
           'id_tabla'        => $value19['idpago_af_general'],
           'nombre_archivo'  => $value19['beneficiario'] . ' ─ S/.' . number_format($value19['monto'], 2, '.', ',') ,
           'descripcion'     => $value19['descripcion'],
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value19['created_at'],
           'updated_at'      => $value19['updated_at'],
         );
@@ -421,7 +421,7 @@ class Papelera
           'id_tabla'        => $value20['idpago_compras'],
           'nombre_archivo'  => $value20['beneficiario'] . ' ─ S/.' . number_format($value20['monto'], 2, '.', ',') ,
           'descripcion'     => $value20['descripcion'],
-          'nombre_royecto'  => $value20['nombre_codigo'],
+          'nombre_proyecto'  => $value20['nombre_codigo'],
           'created_at'      => $value20['created_at'],
           'updated_at'      => $value20['updated_at'],
         );
@@ -443,7 +443,7 @@ class Papelera
           'id_tabla'        => $value21['idpago_servicio'],
           'nombre_archivo'  => $value21['beneficiario'] . ' ─ S/.' . number_format($value21['monto'], 2, '.', ',') ,
           'descripcion'     => $value21['descripcion'],
-          'nombre_royecto'  => $value21['nombre_codigo'],
+          'nombre_proyecto'  => $value21['nombre_codigo'],
           'created_at'      => $value21['created_at'],
           'updated_at'      => $value21['updated_at'],
         );
@@ -465,7 +465,7 @@ class Papelera
           'id_tabla'        => $value22['idpago_servicio'],
           'nombre_archivo'  => $value22['beneficiario'] . ' ─ S/.' . number_format($value22['monto'], 2, '.', ',') ,
           'descripcion'     => $value22['descripcion'],
-          'nombre_royecto'  => $value22['nombre_codigo'],
+          'nombre_proyecto'  => $value22['nombre_codigo'],
           'created_at'      => $value22['created_at'],
           'updated_at'      => $value22['updated_at'],
         );
@@ -487,7 +487,7 @@ class Papelera
           'id_tabla'        => $value23['idpago_subcontrato'],
           'nombre_archivo'  => $value23['beneficiario'] . ' ─ S/.' . number_format($value23['monto'], 2, '.', ',') ,
           'descripcion'     => $value23['descripcion'],
-          'nombre_royecto'  => $value23['nombre_codigo'],
+          'nombre_proyecto'  => $value23['nombre_codigo'],
           'created_at'      => $value23['created_at'],
           'updated_at'      => $value23['updated_at'],
         );
@@ -509,7 +509,7 @@ class Papelera
           'id_tabla'        => $value24['idplanilla_seguro'],
           'nombre_archivo'  => $value24['tipo_comprobante'] .' : ' . $value24['numero_comprobante'] .' ─ S/. ' .number_format($value24['costo_parcial'], 2, '.', ',') ,
           'descripcion'     => '- - -',
-          'nombre_royecto'  => $value24['nombre_codigo'],
+          'nombre_proyecto'  => $value24['nombre_codigo'],
           'created_at'      => $value24['created_at'],
           'updated_at'      => $value24['updated_at'],
         );
@@ -531,7 +531,7 @@ class Papelera
           'id_tabla'        => $value25['idplano_otro'],
           'nombre_archivo'  => $value25['nombre'] .'  -- carpera ' . $value25['nombre_capeta'],
           'descripcion'     => $value25['descripcion'],
-          'nombre_royecto'  => $value25['nombre_codigo'],
+          'nombre_proyecto'  => $value25['nombre_codigo'],
           'created_at'      => $value25['created_at'],
           'updated_at'      => $value25['updated_at'],
         );
@@ -552,7 +552,7 @@ class Papelera
           'id_tabla'        => $value26['idproducto'],
           'nombre_archivo'  => $value26['nombre'].' ─ S/. ' .number_format($value26['precio_total'], 2, '.', ',') ,
           'descripcion'     => $value26['descripcion'],
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value26['created_at'],
           'updated_at'      => $value26['updated_at'],
         );
@@ -573,7 +573,7 @@ class Papelera
           'id_tabla'        => $value27['idproducto'],
           'nombre_archivo'  => $value27['nombre'].' ─ S/. ' .number_format($value27['precio_total'], 2, '.', ',') ,
           'descripcion'     => $value27['descripcion'],
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value27['created_at'],
           'updated_at'      => $value27['updated_at'],
         );
@@ -593,7 +593,7 @@ class Papelera
           'id_tabla'        => $value28['idproveedor'],
           'nombre_archivo'  => $value28['razon_social'].' ─ '.$value28['ruc'] ,
           'descripcion'     => '- - - ',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value28['created_at'],
           'updated_at'      => $value28['updated_at'],
         );
@@ -615,7 +615,7 @@ class Papelera
           'id_tabla'        => $value29['idservicio'],
           'nombre_archivo'  => $value29['nombre'] .'  ─ S/. ' .number_format($value29['costo_parcial'], 2, '.', ',') ,
           'descripcion'     => $value29['descripcion'],
-          'nombre_royecto'  => $value29['nombre_codigo'],
+          'nombre_proyecto'  => $value29['nombre_codigo'],
           'created_at'      => $value29['created_at'],
           'updated_at'      => $value29['updated_at'],
         );
@@ -637,7 +637,7 @@ class Papelera
           'id_tabla'        => $value30['idservicio'],
           'nombre_archivo'  => $value30['nombre'] .'  ─ S/. ' .number_format($value30['costo_parcial'], 2, '.', ',') ,
           'descripcion'     => $value30['descripcion'],
-          'nombre_royecto'  => $value30['nombre_codigo'],
+          'nombre_proyecto'  => $value30['nombre_codigo'],
           'created_at'      => $value30['created_at'],
           'updated_at'      => $value30['updated_at'],
         );
@@ -659,7 +659,7 @@ class Papelera
           'id_tabla'        => $value31['idsubcontrato'],
           'nombre_archivo'  => $value31['tipo_comprobante'] .': '. $value31['numero_comprobante'].'─ S/. ' .number_format($value31['costo_parcial'], 2, '.', ',') ,
           'descripcion'     => $value31['descripcion'],
-          'nombre_royecto'  => $value31['nombre_codigo'],
+          'nombre_proyecto'  => $value31['nombre_codigo'],
           'created_at'      => $value31['created_at'],
           'updated_at'      => $value31['updated_at'],
         );
@@ -679,7 +679,7 @@ class Papelera
           'id_tabla'        => $value32['idtipo_trabajador'],
           'nombre_archivo'  => $value32['nombre'] ,
           'descripcion'     => '- - -',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value32['created_at'],
           'updated_at'      => $value32['updated_at'],
         );
@@ -699,7 +699,7 @@ class Papelera
           'id_tabla'        => $value33['idtrabajador'],
           'nombre_archivo'  => $value33['nombres'].'-'.$value33['ruc'] ,
           'descripcion'     =>  $value33['descripcion_expulsion'],
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value33['created_at'],
           'updated_at'      => $value33['updated_at'],
         );
@@ -721,7 +721,7 @@ class Papelera
           'id_tabla'        => $value34['idtrabajador_por_proyecto'],
           'nombre_archivo'  => $value34['nombres'] .'- -'. $value34['desempenio'],
           'descripcion'     => '- - - ',
-          'nombre_royecto'  => $value34['nombre_codigo'],
+          'nombre_proyecto'  => $value34['nombre_codigo'],
           'created_at'      => $value34['created_at'],
           'updated_at'      => $value34['updated_at'],
         );
@@ -744,7 +744,7 @@ class Papelera
           'id_tabla'        => $value35['idtransporte'],
           'nombre_archivo'  => $value35['tipo_comprobante'] .'  - -  '. $value35['numero_comprobante'],
           'descripcion'     => $value35['descripcion'],
-          'nombre_royecto'  => $value35['nombre_codigo'],
+          'nombre_proyecto'  => $value35['nombre_codigo'],
           'created_at'      => $value35['created_at'],
           'updated_at'      => $value35['updated_at'],
         );
@@ -764,7 +764,7 @@ class Papelera
           'id_tabla'        => $value36['idunidad_medida'],
           'nombre_archivo'  => $value36['nombre_medida'].'-'.$value36['abreviacion'] ,
           'descripcion'     => ' - - - ',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value36['created_at'],
           'updated_at'      => $value36['updated_at'],
         );
@@ -784,14 +784,13 @@ class Papelera
           'id_tabla'        => $value37['idusuario'],
           'nombre_archivo'  => $value37['nombres'].'-'.$value37['cargo'] ,
           'descripcion'     => ' - - - ',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value37['created_at'],
           'updated_at'      => $value37['updated_at'],
         );
       }
     }
-    //----------------
-    $sql38 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.created_at, of.updated_at,p.razon_social
+  $sql38 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.created_at, of.updated_at,p.razon_social
     FROM otra_factura as of, proveedor as p
     WHERE of.estado='0' AND of.estado_delete='1' AND of.idproveedor=p.idproveedor";
 
@@ -802,60 +801,150 @@ class Papelera
         $data[] = array(
           'nombre_tabla'    => 'otra_factura',
           'nombre_id_tabla' => 'idotra_factura',
-          'modulo'          => 'Otra facturas',
+          'modulo'          => 'Otras facturas',
           'id_tabla'        => $value38['idotra_factura'],
           'nombre_archivo'  => $value38['tipo_comprobante'].' - '.$value38['numero_comprobante'].'─ S/. ' .number_format($value38['costo_parcial'], 2, '.', ',') ,
           'descripcion'     => ' - - - ',
-          'nombre_royecto'  => 'General',
+          'nombre_proyecto'  => 'General',
           'created_at'      => $value38['created_at'],
           'updated_at'      => $value38['updated_at'],
         );
       }
     }
-   //........................................
-    $sql39 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.created_at, of.updated_at,p.razon_social
-    FROM otra_factura as of, proveedor as p
-    WHERE of.estado='0' AND of.estado_delete='1' AND of.idproveedor=p.idproveedor";
 
-    $otra_factura = ejecutarConsultaArray($sql39);
+    $sql39 = "SELECT rqsa.idresumen_q_s_asistencia, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin,rqsa.created_at, rqsa.updated_at, t.nombres, p.nombre_codigo
+    FROM resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador as t, proyecto as p 
+    WHERE rqsa.estado='0' AND rqsa.estado_delete='1' AND tpp.idtrabajador_por_proyecto=rqsa.idtrabajador_por_proyecto AND  t.idtrabajador=tpp.idtrabajador AND p.idproyecto=tpp.idproyecto AND tpp.idproyecto='$nube_idproyecto'";
 
-    if (!empty($otra_factura)) {
-      foreach ($otra_factura as $key => $value39) {
+    $resumen_q_s_asistencia = ejecutarConsultaArray($sql39);
+
+    if (!empty($resumen_q_s_asistencia)) {
+      foreach ($resumen_q_s_asistencia as $key => $value39) {
         $data[] = array(
-          'nombre_tabla'    => 'otra_factura',
-          'nombre_id_tabla' => 'idotra_factura',
-          'modulo'          => 'Otra facturas',
-          'id_tabla'        => $value39['idotra_factura'],
-          'nombre_archivo'  => $value39['tipo_comprobante'].' - '.$value39['numero_comprobante'].'─ S/. ' .number_format($value39['costo_parcial'], 2, '.', ',') ,
-          'descripcion'     => ' - - - ',
-          'nombre_royecto'  => 'General',
+          'nombre_tabla'    => 'resumen_q_s_asistencia',
+          'nombre_id_tabla' => 'idresumen_q_s_asistencia',
+          'modulo'          => 'Asistencia por semanas',
+          'id_tabla'        => $value39['idresumen_q_s_asistencia'],
+          'nombre_archivo'  => $value39['nombres'].' - '.$value39['fecha_q_s_inicio'].' ─ '.$value39['fecha_q_s_fin'] ,
+          'descripcion'     => '- - - ',
+          'nombre_proyecto' => $value39['nombre_codigo'],
           'created_at'      => $value39['created_at'],
           'updated_at'      => $value39['updated_at'],
         );
       }
     }
+    ///--------------------------------------
+    $sql40 = "SELECT sb.idsemana_break,sb.numero_semana, sb.fecha_inicial, sb.fecha_final, sb.total, sb.created_at, sb.updated_at, p.nombre_codigo
+    FROM semana_break as sb, proyecto as p 
+    WHERE sb.estado=0 AND sb.estado_delete=1 AND sb.idproyecto=p.idproyecto AND sb.idproyecto='$nube_idproyecto'";
 
-    $sql40 = "SELECT rqsa.idresumen_q_s_asistencia, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin,rqsa.created_at, rqsa.updated_at, t.nombres, p.nombre_codigo
-    FROM resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador as t, proyecto as p 
-    WHERE rqsa.estado='0' AND rqsa.estado_delete='1' AND tpp.idtrabajador_por_proyecto=rqsa.idtrabajador_por_proyecto AND  t.idtrabajador=tpp.idtrabajador AND p.idproyecto=tpp.idproyecto AND tpp.idproyecto=1";
+    $semana_break = ejecutarConsultaArray($sql40);
 
-    $resumen_q_s_asistencia = ejecutarConsultaArray($sql40);
-
-    if (!empty($resumen_q_s_asistencia)) {
-      foreach ($resumen_q_s_asistencia as $key => $value40) {
+    if (!empty($semana_break)) {
+      foreach ($semana_break as $key => $value40) {
         $data[] = array(
-          'nombre_tabla'    => 'resumen_q_s_asistencia',
-          'nombre_id_tabla' => 'idresumen_q_s_asistencia',
-          'modulo'          => 'Asistencia por semanas',
-          'id_tabla'        => $value40['idresumen_q_s_asistencia'],
-          'nombre_archivo'  => $value40['nombres'].' - '.$value40['fecha_q_s_inicio'].'─'.$value40['fecha_q_s_fin'] ,
+          'nombre_tabla'    => 'semana_break',
+          'nombre_id_tabla' => 'idsemana_break',
+          'modulo'          => 'Breaks por semanas',
+          'id_tabla'        => $value40['idsemana_break'],
+          'nombre_archivo'  => 'Semana Nº '.$value40['numero_semana'].' - '.$value40['fecha_inicial'].' ─ '.$value40['fecha_final'] ,
           'descripcion'     => '- - - ',
-          'nombre_royecto'  => $value40['nombre_codigo'],
+          'nombre_proyecto'  => $value40['nombre_codigo'],
           'created_at'      => $value40['created_at'],
           'updated_at'      => $value40['updated_at'],
         );
       }
     }
+
+    $sql41 = "SELECT sp.idsemana_pension, sp.fecha_inicio, sp.fecha_fin, sp.numero_semana, sp.created_at, sp.updated_at, ser_p.nombre_servicio, p.nombre_codigo, prov.razon_social
+    FROM semana_pension as sp, servicio_pension ser_p, pension as pen, proyecto as p, proveedor as prov
+    WHERE sp.estado='0' AND sp.estado_delete='1' AND sp.idservicio_pension=ser_p.idservicio_pension AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
+
+    $semana_pension = ejecutarConsultaArray($sql41);
+
+    if (!empty($semana_pension)) {
+      foreach ($semana_pension as $key => $value41) {
+        $data[] = array(
+          'nombre_tabla'    => 'semana_pension',
+          'nombre_id_tabla' => 'idsemana_pension',
+          'modulo'          => 'Pensión por semanas',
+          'id_tabla'        => $value41['idsemana_pension'],
+          'nombre_archivo'  => 'Semana Nº '.$value41['numero_semana'].' : '.$value41['fecha_inicio'].' ─ '.$value41['fecha_fin'].' - Servicio: '.$value41['nombre_servicio'].' -  Proveedor: '.$value41['razon_social'],
+          'descripcion'     => ' - - - ',
+          'nombre_proyecto'  => $value41['nombre_codigo'],
+          'created_at'      => $value41['created_at'],
+          'updated_at'      => $value41['updated_at'],
+        );
+      }
+    }
+
+    
+    $sql42 = "SELECT ser_p.idservicio_pension, ser_p.nombre_servicio, ser_p.precio, ser_p.created_at, ser_p.updated_at, p.nombre_codigo, prov.razon_social
+    FROM servicio_pension  as ser_p, pension as pen, proyecto as p, proveedor as prov 
+    WHERE ser_p.estado='0' AND ser_p.estado_delete='1' AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
+
+    $servicio_pension = ejecutarConsultaArray($sql42);
+
+    if (!empty($servicio_pension)) {
+      foreach ($servicio_pension as $key => $value42) {
+        $data[] = array(
+          'nombre_tabla'    => 'servicio_pension',
+          'nombre_id_tabla' => 'idservicio_pension',
+          'modulo'          => 'Servicio pensión',
+          'id_tabla'        => $value42['idservicio_pension'],
+          'nombre_archivo'  => 'Servicio: '.$value42['nombre_servicio'].'('.$value42['precio'].') - pertenece a: '.$value42['razon_social'], 
+          'descripcion'     => '- - - ',
+          'nombre_proyecto'  => $value42['nombre_codigo'],
+          'created_at'      => $value42['created_at'],
+          'updated_at'      => $value42['updated_at'],
+        );
+      }
+    }
+
+   $sql43 = "SELECT v.idvalorizacion,v.nombre, v.fecha_inicio, v.fecha_fin, v.created_at, v.updated_at, p.nombre_codigo FROM valorizacion as v, proyecto as p
+   WHERE v.estado='0' AND v.estado_delete='1' AND v.idproyecto=p.idproyecto AND v.idproyecto='$nube_idproyecto'";
+
+    $valorizacion = ejecutarConsultaArray($sql43);
+
+    if (!empty($valorizacion)) {
+      foreach ($valorizacion as $key => $value43) {
+        $data[] = array(
+          'nombre_tabla'    => 'valorizacion',
+          'nombre_id_tabla' => 'idvalorizacion',
+          'modulo'          => 'Valorización',
+          'id_tabla'        => $value43['idvalorizacion'],
+          'nombre_archivo'  => $value43['nombre'].'  -- documento que pertenece a las fechas: '.$value43['fecha_inicio'].'─'.$value43['fecha_fin'] ,
+          'descripcion'     => '- - - ',
+          'nombre_proyecto' => $value43['nombre_codigo'],
+          'created_at'      => $value43['created_at'],
+          'updated_at'      => $value43['updated_at'],
+        );
+      }
+    }
+
+    $sql44 = "SELECT fpa.idfechas_mes_pagos_administrador, fpa.fecha_inicial, fpa.fecha_final, fpa.monto_x_mes, fpa.created_at, fpa.updated_at, t.nombres, p.nombre_codigo
+    FROM fechas_mes_pagos_administrador AS fpa, trabajador_por_proyecto as tpp, trabajador as t, proyecto as p
+    WHERE fpa.estado='0' AND fpa.estado_delete='1' AND fpa.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND tpp.idtrabajador=t.idtrabajador AND tpp.idproyecto=p.idproyecto AND tpp.idproyecto='$nube_idproyecto'";
+
+    $fechas_mes_pagos_administrador = ejecutarConsultaArray($sql44);
+
+    if (!empty($fechas_mes_pagos_administrador)) {
+      foreach ($fechas_mes_pagos_administrador as $key => $value44) {
+        $data[] = array(
+          'nombre_tabla'    => 'fechas_mes_pagos_administrador',
+          'nombre_id_tabla' => 'idfechas_mes_pagos_administrador',
+          'modulo'          => 'Fechas mes pagos administrador',
+          'id_tabla'        => $value44['idfechas_mes_pagos_administrador'],
+          'nombre_archivo'  => $value44['nombres'].'('.$value44['monto_x_mes'].')  - '.$value44['fecha_inicial'].'─'.$value44['fecha_final'] ,
+          'descripcion'     => '- - - ',
+          'nombre_proyecto'  => $value44['nombre_codigo'],
+          'created_at'      => $value44['created_at'],
+          'updated_at'      => $value44['updated_at'],
+        );
+      }
+    }
+
+
 
     return $data;
   }

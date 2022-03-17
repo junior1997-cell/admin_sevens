@@ -33,6 +33,7 @@
 
           $rspta=$papelera->tabla_principal($nube_idproyecto);
           //Vamos a declarar un array
+          //echo json_encode($rspta);
           $data= Array();
 
           $cont=1;                          
@@ -43,7 +44,7 @@
               "0"=> $cont++,
               "1"=>'<button class="btn btn-success btn-sm" onclick="recuperar('.$info.')"><i class="fas fa-redo-alt"></i></button>'.
               ' <button class="btn btn-danger btn-sm" onclick="eliminar_permanente('.$info.')"><i class="far fa-trash-alt"></i></button>',
-              "2"=>'<span class="text-bold">'. $value['nombre_royecto'] .'</span>',  
+              "2"=>'<span class="text-bold">'. $value['nombre_proyecto'] .'</span>',  
               "3"=>'<span class="text-bold">'. $value['modulo'] .'</span>',  
               "4"=>'<span class="text-primary text-bold">'. $value['nombre_archivo'] .'</span>',  
               "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$value['descripcion'].'</textarea>',         
@@ -56,7 +57,7 @@
             "iTotalRecords"=>count($data), //enviamos el total registros al datatable
             "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
             "data"=>$data);
-          echo json_encode($results);
+         echo json_encode($results);
         break;        
 
         case 'recuperar':
