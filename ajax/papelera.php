@@ -43,11 +43,12 @@
               "0"=> $cont++,
               "1"=>'<button class="btn btn-success btn-sm" onclick="recuperar('.$info.')"><i class="fas fa-redo-alt"></i></button>'.
               ' <button class="btn btn-danger btn-sm" onclick="eliminar_permanente('.$info.')"><i class="far fa-trash-alt"></i></button>',
-              "2"=>'<span class="text-bold">'. $value['modulo'] .'</span>',  
-              "3"=>'<span class="text-primary text-bold">'. $value['nombre_archivo'] .'</span>',  
-              "4"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$value['descripcion'].'</textarea>',         
-              "5"=> nombre_dia_semana( date("Y-m-d", strtotime($value['created_at'])) ) .', '. date("d/m/Y", strtotime($value['created_at'])) .' - '. date("g:i a", strtotime($value['created_at'])) ,
-              "6"=> nombre_dia_semana( date("Y-m-d", strtotime($value['updated_at'])) ) .', '. date("d/m/Y", strtotime($value['updated_at'])) .' - '. date("g:i a", strtotime($value['updated_at']))
+              "2"=>'<span class="text-bold">'. $value['nombre_royecto'] .'</span>',  
+              "3"=>'<span class="text-bold">'. $value['modulo'] .'</span>',  
+              "4"=>'<span class="text-primary text-bold">'. $value['nombre_archivo'] .'</span>',  
+              "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$value['descripcion'].'</textarea>',         
+              "6"=> nombre_dia_semana( date("Y-m-d", strtotime($value['created_at'])) ) .', '. date("d/m/Y", strtotime($value['created_at'])) .' - '. date("g:i a", strtotime($value['created_at'])) ,
+              "7"=> nombre_dia_semana( date("Y-m-d", strtotime($value['updated_at'])) ) .', '. date("d/m/Y", strtotime($value['updated_at'])) .' - '. date("g:i a", strtotime($value['updated_at']))
             );
           }
           $results = array(

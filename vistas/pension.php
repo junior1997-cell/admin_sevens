@@ -270,7 +270,7 @@
                                     <!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Servicio <sup  class="text-danger">*</sup> <small class="text-danger">los compos que seleccione, al editar no se borrarar</small> </label>
+                                            <label>Servicio <sup  class="text-danger">*</sup> <small class="text-danger">los compos que seleccione, al editar no se borraran</small> </label>
                                             <div class="select2-purple">
                                               <select class="form-control select2" multiple="multiple" name="servicio_p[]"  id="servicio_p" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione"  style="width: 100%;">
                                                 <option value="Desayuno">Desayuno</option>
