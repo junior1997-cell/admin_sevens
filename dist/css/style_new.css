@@ -459,6 +459,15 @@ table th {
 .b-radio-9px{ border-radius: 9px; }
 .b-radio-10px{ border-radius: 10px; }
 
+/*  ══════════════════════════════════════════ - S H A D O W  C O L O R - ══════════════════════════════════════════ */
+.shadow-1px1rem2rem-rgb-52-174-193-77{
+  box-shadow: 1px 1rem 2rem rgb(52 174 193 / 77%);
+}
+
+.shadow-1px06rem09rem-rgb-52-174-193-77 {
+  box-shadow: 1px 0.6rem 0.9rem rgb(52 174 193 / 77%);
+}
+
 /*  ══════════════════════════════════════════ - I N P U T - ══════════════════════════════════════════ */
 
 .input-no-border{

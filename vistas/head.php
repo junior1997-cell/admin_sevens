@@ -35,5 +35,8 @@
 <!-- style nuevo -->
 <link rel="stylesheet" href="../dist/css/style_new.css" />
 
+<!-- style go-to -->
+<link rel="stylesheet" href="../dist/css/go-to.css">
+
 <!-- Print PDF -->
 <link rel="stylesheet" href="../plugins/Print.js-1.5.0/print.min.css">

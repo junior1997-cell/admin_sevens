@@ -81,7 +81,7 @@
 
                         <div class="card-body" >
 
-                          <!-- tabla principal -->
+                          <!-- TBLA - PRINCIPAL -->
                           <div id="tabla-asistencia-trab" >
                             <table id="tabla-asistencia" class="table table-bordered table-striped display " style="width: 100% !important;">
                               <thead>
@@ -124,30 +124,33 @@
                             </table>
                           </div>
 
-                          <!--registro-asistencia-->                         
+                          <!-- TBLA- REGISTRO DE ASISTENCIA-->                         
                           <div class="table-responsive disenio-scroll" id="ver_asistencia" style="display: none;">
                               
                             <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
                               <thead>
                                 <tr>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">#</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775"><i class="far fa-clock"></i></th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Nombre del trabajador</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Cargo</th>
-                                  <th colspan="14" id="dias_asistidos_s_q" class="text-center bg-color-acc3c775" style="border: black 1px solid;">
-                                    <span class="badge badge-info float-left cursor-pointer" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
+                                  <th rowspan="2" class="stile-celda inicio_tabla">#</th>
+                                  <th rowspan="2" class="stile-celda "><i class="far fa-clock"></i></th>
+                                  <th rowspan="2" class="stile-celda ">Nombre del trabajador</th>
+                                  <th rowspan="2" class="stile-celda ">Cargo</th>
+                                  <th colspan="14" id="dias_asistidos_s_q" class="text-center " style="border: black 1px solid;">
+                                    <span class="badge badge-info float-left cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
                                     Horas de trabajo por día
+                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 ir_a_right mr-1" data-toggle="tooltip" data-original-title="Deslizar al la derecha"><i class="far fa-arrow-alt-circle-right fa-lg m-1"></i></span>
+                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 ir_a_bottom mr-1" data-toggle="tooltip" data-original-title="Deslizar al final"><i class="far fa-arrow-alt-circle-down fa-lg m-1"></i></span>
+                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 ir_a_left mr-1" data-toggle="tooltip" data-original-title="Deslizar al la izquierda"><i class="far fa-arrow-alt-circle-left fa-lg m-1"></i></span>                                  
                                   </th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Horas<br>normal/extras</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Días<br>asistidos</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Sueldo Mensual</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Jornal</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Sueldo <br> hora</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Sabatical</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Pago <br> parcial</th>
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775">Adicional <br> descuento</th>
-                                  <th rowspan="2" class="stile-celda head_pago_q_s bg-color-acc3c775">Pago quincenal</th> 
-                                  <th rowspan="2" class="stile-celda bg-color-acc3c775"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
+                                  <th rowspan="2" class="stile-celda ">Horas<br>normal/extras</th>
+                                  <th rowspan="2" class="stile-celda ">Días<br>asistidos</th>
+                                  <th rowspan="2" class="stile-celda ">Sueldo Mensual</th>
+                                  <th rowspan="2" class="stile-celda ">Jornal</th>
+                                  <th rowspan="2" class="stile-celda ">Sueldo <br> hora</th>
+                                  <th rowspan="2" class="stile-celda ">Sabatical</th>
+                                  <th rowspan="2" class="stile-celda ">Pago <br> parcial</th>
+                                  <th rowspan="2" class="stile-celda ">Adicional <br> descuento</th>
+                                  <th rowspan="2" class="stile-celda head_pago_q_s ">Pago quincenal</th> 
+                                  <th rowspan="2" class="stile-celda final_tabla"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
                                 </tr>
                                 
                                 <tr class="table-dias data-dia-semana">
@@ -219,7 +222,7 @@
                               
                           </div>                         
 
-                          <!-- cargando tabla registro de asistencias -->
+                          <!-- CARGANDO - REGISTRO DE ASISTENCIA -->
                           <div class="row" id="cargando-registro-asistencia" style="display: none;">
                             <div class="col-lg-12 text-center">
                               <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
@@ -228,7 +231,7 @@
                             </div>
                           </div>
 
-                          <!-- Asistencia por Trabajdor -->
+                          <!-- TBLA - DIAS DE ASISTENCIA POR TRABAJADOR -->
                           <div id="detalle_asistencia" style="display: none;">
                             <table id="tabla-detalle-asistencia-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
@@ -259,7 +262,7 @@
                             </table>
                           </div>
 
-                          <!-- TBLA - QUINCENA SEMANA por Trabajdor -->
+                          <!-- TBLA - QUINCENA SEMANA POR TRABAJADOR  -->
                           <div id="detalle_qs" style="display: none;">
                             <table id="tabla-detalle-qs-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
@@ -744,26 +747,14 @@
             z-index: 10;
           }
         </style>
-        <!-- Bootstrap 4 -->
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- jquery-validation -->
-        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- InputMask -->
-        <!-- <script src="../plugins/moment/moment.min.js"></script> -->
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
-        <!-- sweetalert2 -->
-        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+        
         <!-- moment locale -->
         <script src="../plugins/moment/locales.js"></script>
 
         <script type="text/javascript" src="scripts/registro_asistencia.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
+        
         <script>
           if (localStorage.getItem("nube_idproyecto")) {
             console.log("icon_folder_" + localStorage.getItem("nube_idproyecto"));
