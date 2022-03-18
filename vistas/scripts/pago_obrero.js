@@ -156,7 +156,7 @@ function listar_tbla_principal(id_proyecto) {
   var sabatical_total = 0, pago_acumulado_total = 0, saldo_total = 0, cant_q_s_total = 0;
 
   tabla_principal=$('#tabla-principal').dataTable({
-    "responsive": true,
+    // "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
@@ -264,7 +264,7 @@ function listar_tbla_principal(id_proyecto) {
     data = JSON.parse(data); console.log(data); 
 
     $(".deposito_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.total_deposito_x_proyecto}</b>`);
-    $(".sueldo_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.sueldo_mesual_x_proyecto}</b>`);
+    // $(".sueldo_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.sueldo_mesual_x_proyecto}</b>`);
 
     $('.sabatical_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(sabatical_total)}</b>`);
     $('.pago_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(pago_acumulado_total)}</b>`);

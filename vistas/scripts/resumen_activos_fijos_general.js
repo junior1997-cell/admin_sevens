@@ -128,7 +128,7 @@ function tbla_principal_maquinaria() {
 
 	tabla_principal_maquinaria=$('#tabla-resumen-maquinarias').dataTable({
     "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -214,7 +214,7 @@ function tbla_principal_equipo() {
 
 	tabla_principal_equipo=$('#tabla-resumen-equipos').dataTable({
 		"responsive": true,
-	  lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+	  lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	  "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -300,7 +300,7 @@ function tbla_principal_herramienta() {
 
 	tabla_principal_herramienta=$('#tabla-resumen-herramientas').dataTable({
 		"responsive": true,
-	  lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+	  lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	  "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -387,7 +387,7 @@ function tbla_principal_oficina()
 
 	tabla_principal_oficina=$('#tabla-resumen-oficina').dataTable({
 		"responsive": true,
-	  lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+	  lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	  "aServerSide": true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -979,7 +979,7 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
 
 	tabla_factura = $('#tbla-facura').dataTable({
 		"responsive": true,
-		lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+		lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
 		"aProcessing": true,//Activamos el procesamiento del datatables
 		"aServerSide": true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla

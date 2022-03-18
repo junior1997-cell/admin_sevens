@@ -109,7 +109,7 @@ function listar() {
   tabla = $("#tabla-materiales")
     .dataTable({
       responsive: true,
-      lengthMenu: [5, 10, 25, 75, 100], //mostramos el menú de registros a revisar
+      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla

@@ -230,21 +230,23 @@ Class Asistencia_trabajador
 	public function tbla_principal($nube_idproyecto)
 	{
 		$trabajdor_resumen = Array();
-		$sql="SELECT at.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, 
+		$sql="SELECT atr.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, 
 		t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tpp.sueldo_hora, tpp.sueldo_mensual, tpp.sueldo_diario,
-		SUM(at.horas_normal_dia) AS total_horas_normal, SUM(at.horas_extras_dia) AS total_horas_extras, 
-		at.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
-		FROM trabajador AS t, trabajador_por_proyecto AS tpp, cargo_trabajador AS c, asistencia_trabajador AS at,  proyecto AS p
-		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = at.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND at.estado=1 AND tpp.idproyecto = '$nube_idproyecto' AND tpp.idcargo_trabajador = c.idcargo_trabajador
-		GROUP BY tpp.idtrabajador ORDER BY t.nombres ASC;";
+		SUM(atr.horas_normal_dia) AS total_horas_normal, SUM(atr.horas_extras_dia) AS total_horas_extras, 
+		atr.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
+		FROM trabajador AS t, trabajador_por_proyecto AS tpp, cargo_trabajador AS c, asistencia_trabajador AS atr,  proyecto AS p
+		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto 
+		AND tpp.idproyecto = p.idproyecto AND tpp.idcargo_trabajador = c.idcargo_trabajador AND atr.estado = '1' AND atr.estado_delete = '1' 
+		AND tpp.idproyecto = '$nube_idproyecto' 
+		GROUP BY tpp.idtrabajador_por_proyecto ORDER BY t.nombres ASC;";
 		$agrupar_trabajdor = ejecutarConsultaArray($sql);
 
 		foreach ($agrupar_trabajdor as $key => $value) {
 
-			$sql_2 ="SELECT SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
+			$sql_2 ="SELECT SUM(adicional_descuento) AS adicional_descuento, SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
 			SUM(total_dias_asistidos) AS total_dias_asistidos, SUM(pago_quincenal) AS pago_quincenal
 			FROM resumen_q_s_asistencia 
-			WHERE idtrabajador_por_proyecto = '".$value['idtrabajador_por_proyecto']."' AND estado = '1';";
+			WHERE  estado = '1' AND estado_delete = '1' AND idtrabajador_por_proyecto = '".$value['idtrabajador_por_proyecto']."';";
 
 			$sab = ejecutarConsultaSimpleFila($sql_2);
 
@@ -258,13 +260,14 @@ Class Asistencia_trabajador
 				'sueldo_hora'=> $value['sueldo_hora'],
 				'sueldo_diario'=> $value['sueldo_diario'],
 				'sueldo_mensual'=> $value['sueldo_mensual'],
-				'total_horas_normal'=> $sab['total_hn'],
-				'total_horas_extras'=> $sab['total_he'],
+				'total_horas_normal'=> empty($sab) ? 0 : ( empty($sab['total_hn'])  ? 0 : floatval($sab['total_hn']) ) ,
+				'total_horas_extras'=> empty($sab) ? 0 : ( empty($sab['total_he'])  ? 0 : floatval($sab['total_he']) ),
 				'estado'=> $value['estado'],
 				'fecha_inicio_proyect'=> $value['fecha_inicio_proyect'],
 				'cargo'=> $value['cargo'],
-				'total_sabatical'=> empty($sab) ? 0 : $sab['total_sabatical'],
-				'pago_quincenal'=> empty($sab) ? 0 : $sab['pago_quincenal']  
+				'total_sabatical'=>  empty($sab) ? 0 : ( empty($sab['total_sabatical'])  ? 0 : floatval($sab['total_sabatical']) ),
+				'pago_quincenal'=> empty($sab) ? 0 : ( empty($sab['pago_quincenal'])  ? 0 : floatval($sab['pago_quincenal']) ),
+				'adicional_descuento'=>  empty($sab) ? 0 : ( empty($sab['adicional_descuento'])  ? 0 : floatval($sab['adicional_descuento']) ),
 			);
 
 			array_push($trabajdor_resumen, $data_array);
@@ -273,10 +276,11 @@ Class Asistencia_trabajador
 		return json_encode($trabajdor_resumen, true);		
 	}
 
-	public function total_acumulado_trabajadores(){
-		$sql = "SELECT SUM(atr.pago_normal_dia) AS pagos_normal_dias, SUM(atr.pago_horas_extras) AS pagos_horas_extras 
-		FROM asistencia_trabajador AS atr, proyecto AS p, trabajador_por_proyecto AS tpp
-		WHERE atr.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND tpp.idproyecto = 1;";
+	public function total_acumulado_trabajadores($id_proyecto){		 
+		$sql = "SELECT SUM(rqsa.pago_quincenal) AS pago_quincenal
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p
+		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND rqsa.estado = '1' 
+		AND rqsa.estado_delete = '1' AND tpp.idproyecto = '$id_proyecto'; ";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -296,9 +300,10 @@ Class Asistencia_trabajador
 		$sql="SELECT rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, 
 		rqsa.fecha_q_s_fin, rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, 
 		rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
-		rqsa.pago_quincenal, rqsa.estado_envio_contador, rqsa.recibos_x_honorarios, rqsa.estado, p.fecha_pago_obrero
-		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p
-		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND
+		rqsa.pago_quincenal, rqsa.estado_envio_contador, rqsa.recibos_x_honorarios, rqsa.estado, p.fecha_pago_obrero, 
+		t.nombres AS trabajdor, t.tipo_documento, t.numero_documento
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t
+		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto AND tpp.idtrabajador = t.idtrabajador AND
 		 rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
 		ORDER BY  numero_q_s ASC; ";
 		return ejecutarConsulta($sql);		
@@ -354,7 +359,8 @@ Class Asistencia_trabajador
 		// extraemos todos lo trabajadores del proyecto
 		$sql2 = "SELECT tpp.idtrabajador_por_proyecto, ct.nombre as cargo, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, cargo_trabajador AS ct
-		WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$nube_idproyect' AND ct.idcargo_trabajador = tpp.idcargo_trabajador AND ct.idtipo_trabjador = tp.idtipo_trabajador AND tp.nombre ='Obrero';";
+		WHERE tpp.idtrabajador = t.idtrabajador  AND ct.idcargo_trabajador = tpp.idcargo_trabajador AND ct.idtipo_trabjador = tp.idtipo_trabajador 
+		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY t.nombres ASC ;";
 		$trabajador = ejecutarConsultaArray($sql2);
 
 		$data = array(); $extras= "";

@@ -115,11 +115,11 @@
                             </tbody>
                             <tfoot>
                               <tr> 
-                                <th class="text-center">#</th>                                 
-                                <th>Trabajdor</th>                                 
+                                <th class="text-center text-gray">#</th>                                 
+                                <th class="text-gray">Trabajdor</th>                                 
                                 <th class="text-center text-gray">Horas Nrm/Extr</th>
                                 <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
-                                <th class="text-center"><h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
+                                <th class="text-center text-gray">Sueldo Mensual</th>                                
                                 <th class="text-right"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
                                 <th class="text-right"><h5 class="deposito_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
                                 <th class="text-right"><h5 class="saldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>

@@ -65,7 +65,7 @@
                           </h3>
                           <!-- Editar -->
                           <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-orange" onclick="editar_fechas_asistencia(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
+                            <button type="button" class="btn bg-gradient-orange" onclick="show_hide_span_input(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
                           </h3>
                           <!-- Guardar -->
                           <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
@@ -94,8 +94,12 @@
                                   <th class="text-center">Sueldo hora</th>
                                   <th class="text-center">Sueldo diario</th>
                                   <th class="text-center">Sueldo mensual</th>                                
-                                  <th class="text-center">Sabatical</th>
+                                  <th class="text-center">Sáb.</th>
+                                  <th class="text-center">Adicional</th>
                                   <th class="text-center">Pago acumulado</th>
+                                  <th class="text-center">Cargo</th>
+                                  <th class="text-center">Trabajdor</th>
+                                  <th class="text-center">Documento</th> 
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -109,8 +113,12 @@
                                   <th class="text-gray">Pago / hora</th> 
                                   <th class="text-gray">Sueldo diario</th>                                
                                   <th class="text-gray">Sueldo mensual</th>                                
-                                  <th class="text-gray">Sabatical</th>
+                                  <th class="text-gray">Sáb.</th>
+                                  <th class="text-center">Adicional</th>
                                   <th class="text-nowrap text-right"> <h5 id="total_acumulado_trabjadores">  S/. <i class="fas fa-spinner fa-pulse fa-sm"></i><br><br></h5></th>
+                                  <th class="text-center">Cargo</th>
+                                  <th class="text-center">Trabajdor</th>
+                                  <th class="text-center">Documento</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -256,29 +264,35 @@
                             <table id="tabla-detalle-qs-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th class="">Op.</th>
-                                  <th class="thead_num">Num.</th>
-                                  <th class="thead_fecha">Fechas</th>
+                                  <th class="text-center">Op.</th>
+                                  <th class="text-center thead_num">Num.</th>
+                                  <th class="text-center thead_fecha">Fechas</th>
+                                  <th >Hr. Normal/Extra</th>
                                   <th>Pago Hr. Normal/Extra</th>
                                   <th>Adicional</th>
-                                  <th>Sabatical</th>
+                                  <th class="text-center">Sáb.</th>
                                   <th class="thead_pago">Pago</th>
-                                  <th>Contador</th>
-                                  <th>Estado</th>
+                                  <th class="text-center">Contador</th>
+                                  <th class="text-center">Estado</th>
+                                  <th class="text-center">Trabajador</th>
+                                  <th class="text-center">Documento</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
-                                  <th class="text-gray-50">Op.</th>
-                                  <th class="text-gray-50 thead_num">Num.</th>
-                                  <th class="text-gray-50 thead_fecha">Fechas</th>
+                                  <th class="text-gray-50 text-center">Op.</th>
+                                  <th class="text-gray-50 text-center thead_num">Num.</th>
+                                  <th class="text-gray-50 text-center thead_fecha">Fechas</th>
+                                  <th class="text-gray-50 ">Hr. Normal/Extra</th>
                                   <th class="text-gray-50">Pago Hr. Normal/Extra</th>
                                   <th class="text-gray-50">Adicional</th>
-                                  <th class="text-gray-50">Sabatical</th>
+                                  <th class="text-gray-50 text-center">Sáb.</th>
                                   <th class="text-nowrap text-right h5" id="suma_qs_individual">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-gray-50">Contador</th>
+                                  <th class="text-gray-50 text-center">Contador</th>
                                   <th class="text-gray-50">Estado</th>
+                                  <th class="text-center">Trabajador</th>
+                                  <th class="text-center">Documento</th>
                                 </tr>
                               </tfoot>
                             </table>

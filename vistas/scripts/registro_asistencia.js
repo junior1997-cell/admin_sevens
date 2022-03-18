@@ -19,16 +19,13 @@ function init() {
 
   tbla_principal(localStorage.getItem('nube_idproyecto')); 
 
-  // submnit a adicional descuento
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });
 
-  // submnit a JUSTIFICAR
   $("#guardar_registro_justificacion").on("click", function (e) { $("#submit-form-justificacion").submit(); });
 
-  // submnit a FECHAS DE ACTIVIDADES
   $("#guardar_registro_fechas_actividades").on("click", function (e) { $("#submit-form-fechas-actividades").submit(); });
 
-  // submnit a HORAS MULTIPLES
   $(".horas-multiples").on("click", function (e) { $("#form-horas-multiples").submit(); });
   
   // Formato para telefono
@@ -125,7 +122,7 @@ function mostrar_form_table(estados) {
   }
 }
 
-function editar_fechas_asistencia(flag){
+function show_hide_span_input(flag){
 
   if (flag == 1) {
     // ocultamos los span
@@ -167,11 +164,13 @@ function tbla_principal(nube_idproyecto) {
 
   tabla_principal = $('#tabla-asistencia').dataTable({
     "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'csvHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], }  } , {extend: "colvis"} ,
+    ],
     "ajax":{
       url: '../ajax/registro_asistencia.php?op=tbla_principal&nube_idproyecto='+nube_idproyecto,
       type : "get",
@@ -180,54 +179,27 @@ function tbla_principal(nube_idproyecto) {
         console.log(e.responseText);	
       }
     },
-    createdRow: function (row, data, ixdex) {          
+    createdRow: function (row, data, ixdex) {     
 
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-center');         
-      }
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
 
       // columna: opciones
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass('text-nowrap');         
-      }
-
-      // columna: total Horas
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-center');         
-      }
-
-      // columna: total Días
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-center');         
-      }
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
 
       // columna: Sueldo diario
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-nowrap text-right');         
-      }
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
 
       // columna: Sueldo diario
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-nowrap text-right');         
-      }
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
 
       // columna: Sueldo mensual
-      if (data[7] != '') {
-        $("td", row).eq(7).addClass('text-nowrap text-right');         
-      }
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
 
-      // columna: sabatical
-      if (data[8] != '') {
-        $("td", row).eq(8).addClass('text-center');         
-      }
-
+      // columna: Adicional descuento
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-nowrap text-right'); }
       // columna: Pago acumulado
-      if (data[9] != '') {
-        $("td", row).eq(9).addClass('text-nowrap text-right');         
-      }
-
-      
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-nowrap text-right'); }      
     },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -241,18 +213,22 @@ function tbla_principal(nube_idproyecto) {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    // "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },
+    ],
   }).DataTable();
 
   //Suma ACUMULADO
   $.post("../ajax/registro_asistencia.php?op=suma_total_acumulado", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
 
-    data =JSON.parse(data); //console.log(data);
+    data =JSON.parse(data); console.log(data);
 
     if (data) {
-      var normal = parseFloat(data.pagos_normal_dias); var extras = parseFloat(data.pagos_horas_extras);
-      var total = normal + extras;
-      $("#total_acumulado_trabjadores").html(`S/. <b>${formato_miles(total)}</b> `);
+       
+      $("#total_acumulado_trabjadores").html(`S/. <b>${formato_miles(data.pago_quincenal)}</b> `);
     } else {
       $("#total_acumulado_trabjadores").html("S/. 0.00");
     }
@@ -1308,7 +1284,7 @@ function guardar_fechas_asistencia() {
   console.log(array_extras);
   //console.log(array_datos_asistencia);
 
-  editar_fechas_asistencia(2);
+  show_hide_span_input(2);
 
   $.ajax({
     url: "../ajax/registro_asistencia.php?op=guardaryeditar",
@@ -1455,7 +1431,7 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   H O R A S   M U L  T I P L E S  :::::::::::::::::::::::::::::::::::::::..
 
 function modal_horas_multiples() {
-  editar_fechas_asistencia(2)
+  show_hide_span_input(2)
   $('#modal-agregar-horas-multiples').modal('show');
 }
 
@@ -1540,7 +1516,7 @@ function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proy
 
   tabla_horas = $('#tabla-detalle-asistencia-individual').dataTable({
     "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -1764,11 +1740,13 @@ function ver_q_s_individual(idtrabajador_por_proyecto) {
 
   tabla_qs = $('#tabla-detalle-qs-individual').dataTable({
     "responsive": true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [10,11,1,2,3,4,5,6,7], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [10,11,1,2,3,4,5,6,7], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [10,11,1,2,3,4,5,6,7], } }, {extend: "colvis"} ,
+    ],
     "ajax":{
       url: '../ajax/registro_asistencia.php?op=listar_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
       type : "get",
@@ -1777,41 +1755,13 @@ function ver_q_s_individual(idtrabajador_por_proyecto) {
         console.log(e.responseText);	
       }
     },
-    createdRow: function (row, data, ixdex) { 
-      
-      // columna: Horas normal
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass('text-center');         
-      }      
-
+    createdRow: function (row, data, ixdex) {
       // columna: Pago por horas normal
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-nowrap text-right');         
-      }
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-nowrap text-right'); }
 
       // columna: Adicional
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-right');         
-      }
-
-      // columna: Sabatical
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-center');         
-      }
-
-      // columna: Pago quincenal o semanal
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-right');         
-      }   
-
-      // columna: Contador
-      if (data[7] != '') {
-        $("td", row).eq(7).addClass('text-center');         
-      }
-      // columna: Estado
-      if (data[8] != '') {
-        $("td", row).eq(8).addClass('text-center');         
-      }
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-right'); }       
+       
     },
     "language": {
       "lengthMenu": "Mostrar : _MENU_ registros",
@@ -1825,7 +1775,11 @@ function ver_q_s_individual(idtrabajador_por_proyecto) {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "desc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [10],  visible: false,  searchable: false,  },
+      { targets: [11], visible: false, searchable: false, },
+    ],
   }).DataTable();
 
   //Suma ACUMULADO
@@ -1861,7 +1815,7 @@ function desactivar_qs(id, tipo_pago) {
         
         if (e == 'ok') {
           Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
-          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
+          tbla_principal(localStorage.getItem('nube_idproyecto')); 
           ver_q_s_individual(idtrabajador_por_proyecto_r);
         } else {
           Swal.fire("Error!", e, "error");
@@ -1889,7 +1843,7 @@ function activar_qs(id, tipo_pago) {
 
         if (e == 'ok') {
           Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
-          tabla_qs.ajax.reload(); tabla_principal.ajax.reload();
+          tbla_principal(localStorage.getItem('nube_idproyecto')); 
           ver_q_s_individual(idtrabajador_por_proyecto_r);
         } else {
           Swal.fire("Error!", e, "error");

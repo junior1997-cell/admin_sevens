@@ -240,7 +240,7 @@ function tbla_principal(nube_idproyecto) {
   //console.log(idproyecto);
   tabla_compra = $("#tabla-compra").dataTable({
     responsive: true, 
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -298,23 +298,15 @@ function tbla_principal(nube_idproyecto) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      {
-        targets: [8],
-        visible: false,
-        searchable: false,
-      },
-      {
-        targets: [11],
-        visible: false,
-        searchable: false,
-      },
+      { targets: [8],  visible: false,  searchable: false,  },
+      { targets: [11], visible: false, searchable: false, },
     ],
   }).DataTable();
 
   //console.log(idproyecto);
   tabla_compra_x_proveedor = $("#tabla-compra-proveedor").dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -360,7 +352,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
 
   tabla_detalle_compra_x_proveedor = $("#detalles-tabla-compra-prov").dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1353,7 +1345,7 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
 
   tabla_pagos1 = $("#tabla-pagos-proveedor").dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1428,7 +1420,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
 
   tabla_pagos2 = $("#tbl-pgs-detrac-prov-cmprs").dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1458,7 +1450,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
   //Tabla 3
   tabla_pagos3 = $("#tbl-pgs-detrac-detracc-cmprs").dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
@@ -1931,7 +1923,7 @@ function validar_forma_de_pago() {
 function listarmateriales() {
   tablamateriales = $("#tblamateriales").dataTable({
     // responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
