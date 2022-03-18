@@ -424,11 +424,12 @@ function listar_tbla_principal(nube_idproyecto) {
 
 function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
   $(".nombre_documento").html("");
+  var va
   // exraemos la fecha de HOY
   var tiempoTranscurrido = Date.now();
   var hoy = new Date(tiempoTranscurrido);
   var format = hoy.toLocaleDateString().split("/"); //console.log(format);
-  $(".nombre_documento").html(indice+' '+nombre+' - -  valorazación-'+numero_q_s);
+  $(".nombre_documento").html(indice+' '+nombre+' - -  valorización-'+numero_q_s);
   $("#modal-ver-comprobante").modal("show");
 
   if (doc_valorizacion=='' || doc_valorizacion==null) {
@@ -458,7 +459,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
       $('#ver-documento').html(
         '<div class="col-lg-6">'+
-        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
             '<i class="fas fa-download"></i> Descargar'+
         '</a>'+
         '</div>'+
@@ -480,7 +481,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
           
         $('#ver-documento').html(
           '<div class="col-lg-6">'+
-          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
               '<i class="fas fa-download"></i> Descargar'+
           '</a>'+
           '</div>'+
@@ -502,7 +503,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
             
           $('#ver-documento').html(
             '<div class="col-lg-6">'+
-            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                 '<i class="fas fa-download"></i> Descargar'+
             '</a>'+
             '</div>'+
@@ -524,7 +525,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
             $('#ver-documento').html(
               '<div class="col-lg-6">'+
-              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                   '<i class="fas fa-download"></i> Descargar'+
               '</a>'+
               '</div>'+
@@ -546,7 +547,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
               $('#ver-documento').html(
                 '<div class="col-lg-6">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                     '<i class="fas fa-download"></i> Descargar'+
                 '</a>'+
                 '</div>'+
@@ -567,7 +568,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
                   $('#ver-documento').html(
                     '<div class="col-lg-6">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                     '</div>'+
@@ -581,14 +582,15 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
                         '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
                         '</div>'+
                     '</div>'
-                  );     
+                  );  
+
               }else{
 
                 if ( extrae_extencion(doc_valorizacion) == "docx" ) {
 
                   $('#ver-documento').html(
                     '<div class="col-lg-6">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                     '</div>'+
@@ -608,7 +610,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
                   $('#ver-documento').html(
                     '<div class="col-lg-6">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+quitar_punto(indice)+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
                         '<i class="fas fa-download"></i> Descargar'+
                     '</a>'+
                     '</div>'+
@@ -5296,6 +5298,11 @@ function cantDiasEnUnMes(mes, año) {
 
   return diasMes; 
 }
+
 function despintar_btn_select() {  
   if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
 }
+
+function quitar_punto(string){ 
+  return string.replace(/\./g,'-');
+} 
