@@ -181,7 +181,23 @@
             }
           }                      
 
-        break;       
+        break; 
+
+        case 'desactivar':
+
+          $rspta=$valorizacion->desactivar( $_POST['nombre_tabla'],$_POST['nombre_columna'],$_POST['idtabla']);
+          echo $rspta ? " Desactivado" : "No se puede desactivar";
+
+        break;
+
+        case 'eliminar':
+
+          $rspta=$valorizacion->eliminar($_POST['nombre_tabla'],$_POST['nombre_columna'],$_POST['idtabla']);
+          echo $rspta ? " Eliminado" : "No se puede Eliminar";
+
+	
+        break;
+            
 
         case 'mostrar':
 
@@ -219,24 +235,31 @@
           $nube_idproyecto = $_GET["nube_idproyecto"];         
 
           $rspta=$valorizacion->tabla_principal($nube_idproyecto);
+          //echo json_encode($rspta);
           $data= Array();
           $btn_tipo="";
-          $info='';
+          $info_eliminar='';
+          $info_editar='';
           $parametros_ver_doc='';
           $cont=1;                          
 
-          foreach ( $rspta as $key => $value) { 
+          foreach ( $rspta as $key => $value) {
 
-            $info = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\'';
+            $info_eliminar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\',';
+
+            $info_editar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\', \''.$value['indice'].'\',
+                            \''.$value['nombre'].'\', \''.$value['doc_valorizacion'].'\', \''.$value['fecha'].'\', \''.$value['numero_q_s'].'\'';
+
             $parametros_ver_doc='\'' . $value['doc_valorizacion'] .'\', \'' . $value['indice'] .'\', \'' . $value['nombre'] .'\', \'' . $value['numero_q_s'] .'\'';
 
-            $btn_tipo = (empty($value['doc_valorizacion'])) ? 'btn-outline-info' : 'btn-info';       
-
+            $btn_tipo = (empty($value['doc_valorizacion'])) ? 'btn-outline-info' : 'btn-info'; 
+            
             $data[]=array(
 
               "0"=> $cont++,
-              "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info.')"><i class="fas fa-pencil-alt"></i></button>'.
-              ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info.')"><i class="fas fa-skull-crossbones"></i></button>',
+              "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info_editar.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ($value['numero_q_s']=='General'? ' <button class="btn btn-danger btn-sm disabled"><i class="fas fa-skull-crossbones"></i></button>': 
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info_eliminar.')"><i class="fas fa-skull-crossbones"></i></button>'),
               "2"=>'<span class="text-bold">Semana Nº '. $value['numero_q_s'] .'</span>',  
               "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
               "4"=>'<span class="text-primary text-bold">'. $value['fecha'] .'</span>',  
@@ -250,7 +273,7 @@
             "iTotalRecords"=>count($data), //enviamos el total registros al datatable
             "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
             "data"=>$data);
-         echo json_encode($results);
+          echo json_encode($results);
         break;        
       }
 

@@ -106,14 +106,14 @@ Class Valorizacion
 				'doc_valorizacion' => $value1['doc_valorizacion'],
 				'fecha'            => $value1['fecha_inicio'] .' - ' . $value1['fecha_fin'],
 				'numero_q_s'       => $value1['numero_q_s'],
-				'estado'           => $value1['estado'],
+				
 			  );
 			}
 
 		}
 
 		$sql2="SELECT  doc1_contrato_obra,doc2_entrega_terreno,doc3_inicio_obra,doc7_cronograma_obra_valorizad,doc8_certificado_habilidad_ing_residnt,estado, idproyecto
-		FROM proyecto WHERE estado=1 AND estado_delete=1 AND idproyecto='$nube_idproyecto'";
+		FROM proyecto WHERE estado_delete=1 AND idproyecto='$nube_idproyecto'";
 		$documentos_proyect = ejecutarConsultaSimpleFila($sql2);
 
 		if (!empty($documentos_proyect)) {
@@ -127,9 +127,8 @@ Class Valorizacion
 				'nombre'           => 'Acta de contrato de obra',
 				'doc_valorizacion' => $documentos_proyect['doc1_contrato_obra'],
 				'fecha'            => ' - - - ',
-				'numero_q_s'       => 'General ',
-				'estado'           => $documentos_proyect['estado'],
-
+				'numero_q_s'       => 'General',
+			
 			);
 			
 			$data[] = array(
@@ -141,9 +140,8 @@ Class Valorizacion
 				'nombre'           => 'Acta de entrega de terreno',
 				'doc_valorizacion' => $documentos_proyect['doc2_entrega_terreno'],
 				'fecha'            => ' - - - ',
-				'numero_q_s'       => 'General ',
-				'estado'           => $documentos_proyect['estado'],
-
+				'numero_q_s'       => 'General',
+			
 			);
       			
 			$data[] = array(
@@ -155,9 +153,8 @@ Class Valorizacion
 				'nombre'           => 'Acta de inicio de obra',
 				'doc_valorizacion' => $documentos_proyect['doc3_inicio_obra'],
 				'fecha'            => ' - - - ',
-				'numero_q_s'       => 'General ',
-				'estado'           => $documentos_proyect['estado'],
-
+				'numero_q_s'       => 'General',
+			
 			);
 
       $data[] = array(
@@ -169,12 +166,11 @@ Class Valorizacion
 				'nombre'           => 'Cronograma de obra valorizado',
 				'doc_valorizacion' => $documentos_proyect['doc7_cronograma_obra_valorizad'],
 				'fecha'            => ' - - - ',
-				'numero_q_s'       => 'General ',
-				'estado'           => $documentos_proyect['estado'],
-
+				'numero_q_s'       => 'General',
+				
 			);
       
-      $data[] = array(
+      $data[] = array( 
 
 				'nombre_tabla'     => 'proyecto',
 				'idtabla'          => $documentos_proyect['idproyecto'],
@@ -183,9 +179,8 @@ Class Valorizacion
 				'nombre'           => 'Certificado de habilidad del ingeniero residente',
 				'doc_valorizacion' => $documentos_proyect['doc8_certificado_habilidad_ing_residnt'],
 				'fecha'            => ' - - - ',
-				'numero_q_s'       => 'General ',
-				'estado'           => $documentos_proyect['estado'],
-
+				'numero_q_s'       => 'General',
+				
 			);
       
 		}
@@ -194,16 +189,16 @@ Class Valorizacion
 //---------------------------------------------------
 
   //Implementamos un método para desactivar 
-	public function desactivar($idtransporte )
+	public function desactivar($nombre_tabla,$nombre_columna,$idtabla)
 	{
-		$sql="UPDATE transporte SET estado='0' WHERE idtransporte ='$idtransporte'";
+		$sql="UPDATE $nombre_tabla SET estado='0' WHERE $nombre_columna ='$idtabla'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para elimnar
-	public function eliminar($idtransporte )
+	public function eliminar($nombre_tabla,$nombre_columna,$idtabla)
 	{
-		$sql="UPDATE transporte SET estado_delete='0' WHERE idtransporte ='$idtransporte'";
+		$sql="UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_columna ='$idtabla'";
 		return ejecutarConsulta($sql);
 	}
 //---------------------------------------------------

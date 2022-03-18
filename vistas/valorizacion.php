@@ -409,19 +409,19 @@
                   <form id="form-valorizacion" name="form-valorizacion" method="POST">
                     <div class="row" id="cargando-1-fomulario">
                       <!-- id proyecto -->
-                      <input type="hidden" name="idproyecto" id="idproyecto" />
+                      <input type="text" name="idproyecto" id="idproyecto" />
                       <!-- id valorizacion -->
-                      <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
+                      <input type="text" name="idvalorizacion" id="idvalorizacion" />
                       <!-- indice -->
-                      <input type="hidden" name="indice" id="indice" />
+                      <input type="text" name="indice" id="indice" />
                       <!-- nombre -->
-                      <input type="hidden" name="nombre" id="nombre" />
+                      <input type="text" name="nombre" id="nombre" />
                       <!-- fecha inicio -->
-                      <input type="hidden" name="fecha_inicio" id="fecha_inicio" />
+                      <input type="text" name="fecha_inicio" id="fecha_inicio" />
                       <!-- fecha fin -->
-                      <input type="hidden" name="fecha_fin" id="fecha_fin" />
+                      <input type="text" name="fecha_fin" id="fecha_fin" />
                       <!-- fecha numero_q_s -->
-                      <input type="hidden" name="numero_q_s" id="numero_q_s" />
+                      <input type="text" name="numero_q_s" id="numero_q_s" />
 
                       <!-- Doc Valorizaciones -->
                       <div class="col-md-12 col-lg-12">

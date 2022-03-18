@@ -318,6 +318,8 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-valorizacion").modal("hide");
 
+        tabla_principal.ajax.reload();
+
         fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'))
 
 			}else{
@@ -359,10 +361,9 @@ function l_m(){
   $("#barra_progress").text("0%");  
 }
 
-
 //Función Listar - tabla principal
 function listar_tbla_principal(nube_idproyecto) {
-
+  console.log(nube_idproyecto);
   tabla_principal = $('#tabla-principal').dataTable({
     "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
@@ -400,7 +401,7 @@ function listar_tbla_principal(nube_idproyecto) {
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();  
 }
-//-------------------------------------------
+
 function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
   $(".nombre_documento").html("");
   // exraemos la fecha de HOY
@@ -410,12 +411,10 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
   $(".nombre_documento").html(indice+' '+nombre+' - -  valorazación-'+numero_q_s);
   $("#modal-ver-comprobante").modal("show");
 
-  // cargamos la imagen adecuada par el archivo
-  if ( extrae_extencion(doc_valorizacion) == "xls") {
-
+  if (doc_valorizacion=='' || doc_valorizacion==null) {
     $('#ver-documento').html(
       '<div class="col-lg-6">'+
-      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+      '<a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" >'+
           '<i class="fas fa-download"></i> Descargar'+
       '</a>'+
       '</div>'+
@@ -425,16 +424,18 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
       '</a>'+
       '</div>'+
       '<div class="col-lg-12 ">'+
-      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-          '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-      '</div>'+
+        '<div class="embed-responsive" style="padding-bottom:30%" >'+
+            '<div class="alert alert-warning alert-dismissible">'+
+                '<button type="button" class="close" data-dismiss="Alerta" aria-hidden="true">×</button><h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>'+
+                'No hay un documento para ver. Edite este registro y vuelva a intentar.'+
+            '</div>'+
+        '</div>'+
       '</div>'
     );
-
   } else {
+    // cargamos la imagen adecuada par el archivo
+    if ( extrae_extencion(doc_valorizacion) == "xls") {
 
-    if ( extrae_extencion(doc_valorizacion) == "xlsx" ) {
-        
       $('#ver-documento').html(
         '<div class="col-lg-6">'+
         '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
@@ -442,20 +443,20 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
         '</a>'+
         '</div>'+
         '<div class="col-lg-6 mb-4">'+
-            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
             '<i class="fas fa-expand"></i> Ver completo'+
-            '</a>'+
+        '</a>'+
         '</div>'+
         '<div class="col-lg-12 ">'+
-            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-            '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-            '</div>'+
+        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+            '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
+        '</div>'+
         '</div>'
       );
 
-    }else{
+    } else {
 
-      if ( extrae_extencion(doc_valorizacion) == "csv" ) {
+      if ( extrae_extencion(doc_valorizacion) == "xlsx" ) {
           
         $('#ver-documento').html(
           '<div class="col-lg-6">'+
@@ -464,21 +465,21 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
           '</a>'+
           '</div>'+
           '<div class="col-lg-6 mb-4">'+
-          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
               '<i class="fas fa-expand"></i> Ver completo'+
-          '</a>'+
+              '</a>'+
           '</div>'+
           '<div class="col-lg-12 ">'+
-          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-              '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-          '</div>'+
+              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+              '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
+              '</div>'+
           '</div>'
         );
 
       }else{
 
-        if ( extrae_extencion(doc_valorizacion) == "xlsm" ) {
-
+        if ( extrae_extencion(doc_valorizacion) == "csv" ) {
+            
           $('#ver-documento').html(
             '<div class="col-lg-6">'+
             '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
@@ -486,20 +487,20 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
             '</a>'+
             '</div>'+
             '<div class="col-lg-6 mb-4">'+
-                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
                 '<i class="fas fa-expand"></i> Ver completo'+
-                '</a>'+
+            '</a>'+
             '</div>'+
             '<div class="col-lg-12 ">'+
-                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                '</div>'+
+            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
+            '</div>'+
             '</div>'
           );
 
         }else{
 
-          if ( extrae_extencion(doc_valorizacion) == "pdf" ) {
+          if ( extrae_extencion(doc_valorizacion) == "xlsm" ) {
 
             $('#ver-documento').html(
               '<div class="col-lg-6">'+
@@ -508,78 +509,101 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
               '</a>'+
               '</div>'+
               '<div class="col-lg-6 mb-4">'+
-              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
                   '<i class="fas fa-expand"></i> Ver completo'+
-              '</a>'+
+                  '</a>'+
               '</div>'+
               '<div class="col-lg-12 ">'+
-              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                  '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-              '</div>'+
-              '</div>'
-            );      
-          }else{
-            
-            if ( extrae_extencion(doc_valorizacion) == "doc" ) {
-
-                $('#ver-documento').html(
-                  '<div class="col-lg-6">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-6 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                      '</div>'+
-                  '</div>'
-                );     
-            }else{
-
-              if ( extrae_extencion(doc_valorizacion) == "docx" ) {
-
-                $('#ver-documento').html(
-                  '<div class="col-lg-6">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-6 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
                   '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                  '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
                   '</div>'+
-                  '</div>'
-                ); 
+              '</div>'
+            );
 
+          }else{
+
+            if ( extrae_extencion(doc_valorizacion) == "pdf" ) {
+
+              $('#ver-documento').html(
+                '<div class="col-lg-6">'+
+                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                    '<i class="fas fa-download"></i> Descargar'+
+                '</a>'+
+                '</div>'+
+                '<div class="col-lg-6 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+doc_valorizacion+'"  target="_blank"  type="button" >'+
+                    '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+                '</div>'+
+                '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                    '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+                '</div>'+
+                '</div>'
+              );      
+            }else{
+              
+              if ( extrae_extencion(doc_valorizacion) == "doc" ) {
+
+                  $('#ver-documento').html(
+                    '<div class="col-lg-6">'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                        '<i class="fas fa-download"></i> Descargar'+
+                    '</a>'+
+                    '</div>'+
+                    '<div class="col-lg-6 mb-4">'+
+                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                        '<i class="fas fa-expand"></i> Ver completo'+
+                        '</a>'+
+                    '</div>'+
+                    '<div class="col-lg-12 ">'+
+                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                        '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                        '</div>'+
+                    '</div>'
+                  );     
               }else{
 
-                $('#ver-documento').html(
-                  '<div class="col-lg-6">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-6 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                  '</div>'+
-                  '</div>'
-                );
+                if ( extrae_extencion(doc_valorizacion) == "docx" ) {
+
+                  $('#ver-documento').html(
+                    '<div class="col-lg-6">'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                        '<i class="fas fa-download"></i> Descargar'+
+                    '</a>'+
+                    '</div>'+
+                    '<div class="col-lg-6 mb-4">'+
+                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                        '<i class="fas fa-expand"></i> Ver completo'+
+                    '</a>'+
+                    '</div>'+
+                    '<div class="col-lg-12 ">'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                        '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                    '</div>'+
+                    '</div>'
+                  ); 
+
+                }else{
+
+                  $('#ver-documento').html(
+                    '<div class="col-lg-6">'+
+                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                        '<i class="fas fa-download"></i> Descargar'+
+                    '</a>'+
+                    '</div>'+
+                    '<div class="col-lg-6 mb-4">'+
+                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                        '<i class="fas fa-expand"></i> Ver completo'+
+                    '</a>'+
+                    '</div>'+
+                    '<div class="col-lg-12 ">'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                        '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                    '</div>'+
+                    '</div>'
+                  );
+                }
               }
             }
           }
@@ -589,6 +613,66 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
   }
 
 }
+
+function editar(nombre_tabla,nombre_columna,idtabla,indice,nombre,doc_valorizacion,fecha,numero_q_s) {
+  console.log('-----------------------');
+  console.log(nombre_tabla,nombre_columna,idtabla,indice,nombre,doc_valorizacion,fecha,numero_q_s);
+  $('#title-modal-1').html(indice+' '+nombre);
+  $("#idvalorizacion").val(idvalorizacion);
+  $("#nombre").val(nombre);
+
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+
+  $("#modal-agregar-valorizacion").modal('show'); 
+
+
+}
+
+function eliminar(nombre_tabla,nombre_columna,idtabla) {
+
+  Swal.fire({
+
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+    icon: "warning",
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      //Desactivar
+      $.post("../ajax/valorizacion.php?op=desactivar", { nombre_tabla: nombre_tabla, nombre_columna:nombre_columna, idtabla:idtabla }, function (e) {
+
+        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+    
+        tabla_principal.ajax.reload();
+
+      });   
+
+    }else if (result.isDenied) {
+
+      // Eliminar
+      $.post("../ajax/valorizacion.php?op=eliminar", { nombre_tabla: nombre_tabla, nombre_columna:nombre_columna, idtabla:idtabla  }, function (e) {
+
+        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
+    
+        tabla_principal.ajax.reload();
+        
+      });
+
+    }
+
+  });  
+}
+
 
 init();
 
@@ -634,8 +718,6 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
 
     },
-
-
 
   });
 });
@@ -834,8 +916,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
         $('#documento3-3').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
         $('#documento3-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
         $('#documento5-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + 'doc5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' );
-        $('#documento5-2-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + 'doc5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); 
+        $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' );
+        $('#documento5-2-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); 
         $('#documento6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
         $('#documento7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
         $('#documento8-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
@@ -2185,7 +2267,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
               
               $('#documento5-2').html(
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                     '<i class="fas fa-file-upload"></i> Subir'+
                   '</a>'+
                 '</div>'+
@@ -2212,7 +2294,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 
                 $('#documento5-2').html(
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                       '<i class="fas fa-file-upload"></i> Subir'+
                     '</a>'+
                   '</div>'+
@@ -2239,7 +2321,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   
                   $('#documento5-2').html(
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                         '<i class="fas fa-file-upload"></i> Subir'+
                       '</a>'+
                     '</div>'+
@@ -2266,7 +2348,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     
                     $('#documento5-2').html(
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                           '<i class="fas fa-file-upload"></i> Subir'+
                         '</a>'+
                       '</div>'+
@@ -2293,7 +2375,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                       $('#documento5-2').html(
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                             '<i class="fas fa-file-upload"></i> Subir'+
                           '</a>'+
                         '</div>'+
@@ -2318,7 +2400,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                         $('#documento5-2').html(
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                               '<i class="fas fa-file-upload"></i> Subir'+
                             '</a>'+
                           '</div>'+
@@ -2343,7 +2425,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                           $('#documento5-2').html(
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                                 '<i class="fas fa-file-upload"></i> Subir'+
                               '</a>'+
                             '</div>'+
@@ -2366,7 +2448,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         }else{
                           $('#documento5-2').html(
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2' + "'" + ');">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
                                 '<i class="fas fa-file-upload"></i> Subir'+
                               '</a>'+
                             '</div>'+
@@ -2401,7 +2483,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
               
               $('#documento5-2-1').html(
                 '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2.1' + "'" + ');">'+
+                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2.1' + "'" + ');">'+
                     '<i class="fas fa-file-upload"></i> Subir'+
                   '</a>'+
                 '</div>'+
@@ -2428,7 +2510,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 
                 $('#documento5-2-1').html(
                   '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2.1' + "'" + ');">'+
+                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2.1' + "'" + ');">'+
                       '<i class="fas fa-file-upload"></i> Subir'+
                     '</a>'+
                   '</div>'+
@@ -2455,7 +2537,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                   
                   $('#documento5-2-1').html(
                     '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + 'doc5.2.1' + "'" + ');">'+
+                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2.1' + "'" + ');">'+
                         '<i class="fas fa-file-upload"></i> Subir'+
                       '</a>'+
                     '</div>'+
@@ -2482,7 +2564,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     
                     $('#documento5-2-1').html(
                       '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
                           '<i class="fas fa-file-upload"></i> Subir'+
                         '</a>'+
                       '</div>'+
@@ -2509,7 +2591,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                       $('#documento5-2-1').html(
                         '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
                             '<i class="fas fa-file-upload"></i> Subir'+
                           '</a>'+
                         '</div>'+
@@ -2534,7 +2616,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                         $('#documento5-2-1').html(
                           '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
                               '<i class="fas fa-file-upload"></i> Subir'+
                             '</a>'+
                           '</div>'+
@@ -2559,7 +2641,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
 
                           $('#documento5-2-1').html(
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
                                 '<i class="fas fa-file-upload"></i> Subir'+
                               '</a>'+
                             '</div>'+
@@ -2582,7 +2664,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                         }else{
                           $('#documento5-2-1').html(
                             '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + 'doc5.2.1' + "'" + ');">'+
+                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
                                 '<i class="fas fa-file-upload"></i> Subir'+
                               '</a>'+
                             '</div>'+
@@ -3936,8 +4018,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
         if ($("#tabs-3-3-tab").hasClass("si-doc") == false ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-3').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
         if ($("#tabs-3-4-tab").hasClass("si-doc") == false ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
         if ($("#tabs-5-1-tab").hasClass("si-doc") == false ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-5-2-tab").hasClass("si-doc") == false ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + 'doc5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
-        if (respuestadoc5_2 == false) { $('#documento5-2-1').html('<div class="col-lg-4 "> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + 'doc5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
+        if ($("#tabs-5-2-tab").hasClass("si-doc") == false ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
+        if (respuestadoc5_2 == false) { $('#documento5-2-1').html('<div class="col-lg-4 "> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
         if ($("#tabs-6-tab").hasClass("si-doc") == false ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); $('#documento6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
         if ($("#tabs-7-tab").hasClass("si-doc") == false ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); $('#documento7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
         if ($("#tabs-8-4-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
@@ -5100,11 +5182,11 @@ function subir_doc(idvalorizacion) {
   $("#modal-agregar-valorizacion").modal('show'); 
 }
 
-function subir_doc_respuesta(idvalorizacion, nombre) {
+function subir_doc_respuesta(idvalorizacion, indice) {
 
   $("#idvalorizacion").val(idvalorizacion);
 
-  $("#nombre").val(nombre);
+  $("#indice").val(indice);
   
   $("#modal-agregar-valorizacion").modal('show'); 
 }
