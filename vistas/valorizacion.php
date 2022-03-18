@@ -61,9 +61,15 @@
             <div class="row">
               <div class="col-12">
                 <div class="card card-primary card-outline">
-                  <div class="card-header row-horizon disenio-scroll" id="lista_quincenas">
-                    <!-- Aqui van las fechas del proyecto -->
-                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                  <div class="card-header">
+                    <!-- regresar -->
+                    <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
+                      <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                    </h3>
+                     <!-- listar quincenas -->
+                    <div id="lista_quincenas" class="row-horizon disenio-scroll" >
+                         <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                    </div>  
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -409,19 +415,19 @@
                   <form id="form-valorizacion" name="form-valorizacion" method="POST">
                     <div class="row" id="cargando-1-fomulario">
                       <!-- id proyecto -->
-                      <input type="text" name="idproyecto" id="idproyecto" />
+                      <input type="hidden" name="idproyecto" id="idproyecto" />
                       <!-- id valorizacion -->
-                      <input type="text" name="idvalorizacion" id="idvalorizacion" />
+                      <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
                       <!-- indice -->
-                      <input type="text" name="indice" id="indice" />
+                      <input type="hidden" name="indice" id="indice" />
                       <!-- nombre -->
-                      <input type="text" name="nombre" id="nombre" />
+                      <input type="hidden" name="nombre" id="nombre" />
                       <!-- fecha inicio -->
-                      <input type="text" name="fecha_inicio" id="fecha_inicio" />
+                      <input type="hidden" name="fecha_inicio" id="fecha_inicio" />
                       <!-- fecha fin -->
-                      <input type="text" name="fecha_fin" id="fecha_fin" />
+                      <input type="hidden" name="fecha_fin" id="fecha_fin" />
                       <!-- fecha numero_q_s -->
-                      <input type="text" name="numero_q_s" id="numero_q_s" />
+                      <input type="hidden" name="numero_q_s" id="numero_q_s" />
 
                       <!-- Doc Valorizaciones -->
                       <div class="col-md-12 col-lg-12">

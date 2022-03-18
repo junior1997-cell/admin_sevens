@@ -104,7 +104,8 @@ Class Valorizacion
 				'indice'           => $value1['indice'],
 				'nombre'           => $value1['nombre'],
 				'doc_valorizacion' => $value1['doc_valorizacion'],
-				'fecha'            => $value1['fecha_inicio'] .' - ' . $value1['fecha_fin'],
+				'fecha_inicio'     => $value1['fecha_inicio'],
+				'fecha_fin'        => $value1['fecha_fin'],
 				'numero_q_s'       => $value1['numero_q_s'],
 				
 			  );
@@ -126,7 +127,8 @@ Class Valorizacion
 				'indice'           => '1',
 				'nombre'           => 'Acta de contrato de obra',
 				'doc_valorizacion' => $documentos_proyect['doc1_contrato_obra'],
-				'fecha'            => ' - - - ',
+        'fecha_inicio'     => ' - - - ',
+				'fecha_fin'        => ' - - - ',
 				'numero_q_s'       => 'General',
 			
 			);
@@ -139,7 +141,8 @@ Class Valorizacion
 				'indice'           => '2',
 				'nombre'           => 'Acta de entrega de terreno',
 				'doc_valorizacion' => $documentos_proyect['doc2_entrega_terreno'],
-				'fecha'            => ' - - - ',
+        'fecha_inicio'     => ' - - - ',
+				'fecha_fin'        => ' - - - ',
 				'numero_q_s'       => 'General',
 			
 			);
@@ -152,7 +155,8 @@ Class Valorizacion
 				'indice'           => '3',
 				'nombre'           => 'Acta de inicio de obra',
 				'doc_valorizacion' => $documentos_proyect['doc3_inicio_obra'],
-				'fecha'            => ' - - - ',
+        'fecha_inicio'     => ' - - - ',
+				'fecha_fin'        => ' - - - ',
 				'numero_q_s'       => 'General',
 			
 			);
@@ -165,7 +169,8 @@ Class Valorizacion
 				'indice'           => '7',
 				'nombre'           => 'Cronograma de obra valorizado',
 				'doc_valorizacion' => $documentos_proyect['doc7_cronograma_obra_valorizad'],
-				'fecha'            => ' - - - ',
+        'fecha_inicio'     => ' - - - ',
+				'fecha_fin'        => ' - - - ',
 				'numero_q_s'       => 'General',
 				
 			);
@@ -178,7 +183,8 @@ Class Valorizacion
 				'indice'           => '8',
 				'nombre'           => 'Certificado de habilidad del ingeniero residente',
 				'doc_valorizacion' => $documentos_proyect['doc8_certificado_habilidad_ing_residnt'],
-				'fecha'            => ' - - - ',
+        'fecha_inicio'     => ' - - - ',
+				'fecha_fin'        => ' - - - ',
 				'numero_q_s'       => 'General',
 				
 			);

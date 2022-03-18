@@ -247,8 +247,7 @@
 
             $info_eliminar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\',';
 
-            $info_editar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\', \''.$value['indice'].'\',
-                            \''.$value['nombre'].'\', \''.$value['doc_valorizacion'].'\', \''.$value['fecha'].'\', \''.$value['numero_q_s'].'\'';
+            $info_editar = '\''.$value['idtabla'].'\', \''.$value['indice'].'\',\''.$value['nombre'].'\', \''.$value['doc_valorizacion'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''.$value['numero_q_s'].'\'';
 
             $parametros_ver_doc='\'' . $value['doc_valorizacion'] .'\', \'' . $value['indice'] .'\', \'' . $value['nombre'] .'\', \'' . $value['numero_q_s'] .'\'';
 
@@ -262,7 +261,7 @@
                 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info_eliminar.')"><i class="fas fa-skull-crossbones"></i></button>'),
               "2"=>'<span class="text-bold">Semana Nº '. $value['numero_q_s'] .'</span>',  
               "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
-              "4"=>'<span class="text-primary text-bold">'. $value['fecha'] .'</span>',  
+              "4"=>'<span class="text-primary text-bold">'. $value['fecha_inicio'] .' - ' . $value['fecha_fin'] .'</span>',  
               "5"=>'<center> 
                       <button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante('.$parametros_ver_doc.')"><i class="fas fa-file-invoice fa-lg"></i> </button> 
                     </center>',       

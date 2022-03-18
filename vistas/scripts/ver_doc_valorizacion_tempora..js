@@ -183,3 +183,50 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
     }
 
 }
+
+if (doc != "") {
+  $("#doc_old_7").val(doc);
+
+  // cargamos la imagen adecuada par el archivo
+  if (extrae_extencion(doc) == "xls") {
+    $("#doc7_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+  } else {
+    if (extrae_extencion(doc) == "xlsx") {
+      $("#doc7_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+    } else {
+      if (extrae_extencion(doc) == "csv") {
+        $("#doc7_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+      } else {
+        if (extrae_extencion(doc) == "xlsm") {
+          $("#doc7_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+        } else {
+          if (extrae_extencion(doc) == "pdf") {
+            $("#doc7_ver").html('<iframe src="../dist/docs/valorizacion/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+          } else {
+            if (extrae_extencion(doc) == "dwg") {
+              $("#doc7_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
+            } else {
+              if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
+                $("#doc7_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
+              } else {
+                if ( extrae_extencion(doc) == "jpeg" || extrae_extencion(doc) == "jpg" || extrae_extencion(doc) == "jpe" ||
+                  extrae_extencion(doc) == "jfif" || extrae_extencion(doc) == "gif" || extrae_extencion(doc) == "png" ||
+                  extrae_extencion(doc) == "tiff" || extrae_extencion(doc) == "tif" || extrae_extencion(doc) == "webp" ||
+                  extrae_extencion(doc) == "svg" ||  extrae_extencion(doc) == "bmp"  ) {
+                  $("#doc7_ver").html('<img src=".../dist/docs/valorizacion/' + doc + '" alt="" width="50%" >');
+                } else {
+                  if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
+                    $("#doc7_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+                  } else {
+                    $("#doc7_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

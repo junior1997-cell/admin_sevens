@@ -25,7 +25,27 @@ function init() {
   $("#doc7").change(function(e) {  addDocs2(e,$("#doc7").attr("id")) });
 
 }
+function mostrar_form_table(estados) {
 
+  if (estados=='1') {
+
+    $('#tab-seleccione').hide(); 
+    $('#tab-contenido').hide(); 
+    $('#tab-info').show();
+    $('#card-regresar').hide();
+  } else {
+
+    if (estados=='2') {
+
+      $('#tab-seleccione').show(); 
+      $('#tab-contenido').show(); 
+      $('#tab-info').hide();
+      $('#card-regresar').show();
+    }
+    
+  }
+
+}
 // ver las echas de quincenas
 function ver_quincenas(nube_idproyecto) {
 
@@ -60,7 +80,7 @@ function ver_quincenas(nube_idproyecto) {
   
           let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
           
-          $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
+          $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
           
           fecha_i = sumaFecha(1,fecha);
     
@@ -88,7 +108,7 @@ function ver_quincenas(nube_idproyecto) {
             
             // console.log(fecha_f + ' - '+data.fecha_fin);
 
-            $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -103,7 +123,7 @@ function ver_quincenas(nube_idproyecto) {
 
             $(".h1-titulo").html("Valorización - Al finalizar");
 
-            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="btn bg-gradient-info text-center" onclick="fecha_quincena('${data.fecha_inicio}', '${data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(data.fecha_inicio)} // ${format_d_m_a(data.fecha_fin)}</button>`)
+            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${data.fecha_inicio}', '${data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(data.fecha_inicio)} // ${format_d_m_a(data.fecha_fin)}</button>`)
 
           } else {
             $('#lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
@@ -319,8 +339,8 @@ function guardaryeditar(e) {
         $("#modal-agregar-valorizacion").modal("hide");
 
         tabla_principal.ajax.reload();
-
-        fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'))
+        mostrar_form_table(1);
+       // fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'))
 
 			}else{
 
@@ -448,8 +468,8 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
         '</a>'+
         '</div>'+
         '<div class="col-lg-12 ">'+
-        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-            '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
+        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:10%" >'+
+            '<img src="../dist/svg/xls.svg" alt="" width="auto" height="400" >'+
         '</div>'+
         '</div>'
       );
@@ -470,8 +490,8 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
               '</a>'+
           '</div>'+
           '<div class="col-lg-12 ">'+
-              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-              '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
+              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:10%" >'+
+              '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="400" >'+
               '</div>'+
           '</div>'
         );
@@ -492,8 +512,8 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
             '</a>'+
             '</div>'+
             '<div class="col-lg-12 ">'+
-            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
+            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:10%" >'+
+                '<img src="../dist/svg/csv.svg" alt="" width="auto" height="400" >'+
             '</div>'+
             '</div>'
           );
@@ -514,8 +534,8 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
                   '</a>'+
               '</div>'+
               '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                  '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:10%" >'+
+                  '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="400">'+
                   '</div>'+
               '</div>'
             );
@@ -578,8 +598,8 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
                     '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:10%" >'+
+                        '<img src="../dist/svg/docx.svg" alt="" width="auto" height="400">'+
                     '</div>'+
                     '</div>'
                   ); 
@@ -598,8 +618,8 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
                     '</a>'+
                     '</div>'+
                     '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:10%" >'+
+                        '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="400">'+
                     '</div>'+
                     '</div>'
                   );
@@ -614,18 +634,67 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
 }
 
-function editar(nombre_tabla,nombre_columna,idtabla,indice,nombre,doc_valorizacion,fecha,numero_q_s) {
-  console.log('-----------------------');
-  console.log(nombre_tabla,nombre_columna,idtabla,indice,nombre,doc_valorizacion,fecha,numero_q_s);
+function editar(idtabla,indice,nombre,doc,fecha_i,fecha_f,numero_q_s) {
+  limpiar();
   $('#title-modal-1').html(indice+' '+nombre);
-  $("#idvalorizacion").val(idvalorizacion);
-  $("#nombre").val(nombre);
 
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
+ // $("#idproyecto").val();
+  $("#idvalorizacion").val(idtabla);
+  $("#indice").val(indice);
+  $("#nombre").val(nombre);
+  $("#fecha_inicio").val(fecha_i);
+  $("#fecha_fin").val(fecha_f);
+  $("#numero_q_s").val(numero_q_s);
 
   $("#modal-agregar-valorizacion").modal('show'); 
 
+  if (doc != "") {
+
+    $("#doc_old_7").val(doc);
+
+    // cargamos la imagen adecuada par el archivo
+    if (extrae_extencion(doc) == "xls") {
+      $("#doc7_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+    } else {
+      if (extrae_extencion(doc) == "xlsx") {
+        $("#doc7_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+      } else {
+        if (extrae_extencion(doc) == "csv") {
+          $("#doc7_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+        } else {
+          if (extrae_extencion(doc) == "xlsm") {
+            $("#doc7_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+          } else {
+            if (extrae_extencion(doc) == "pdf") {
+              $("#doc7_ver").html('<iframe src="../dist/docs/valorizacion/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+            } else {
+              if (extrae_extencion(doc) == "dwg") {
+                $("#doc7_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
+              } else {
+                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
+                  $("#doc7_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
+                } else {
+                  if ( extrae_extencion(doc) == "jpeg" || extrae_extencion(doc) == "jpg" || extrae_extencion(doc) == "jpe" ||
+                    extrae_extencion(doc) == "jfif" || extrae_extencion(doc) == "gif" || extrae_extencion(doc) == "png" ||
+                    extrae_extencion(doc) == "tiff" || extrae_extencion(doc) == "tif" || extrae_extencion(doc) == "webp" ||
+                    extrae_extencion(doc) == "svg" ||  extrae_extencion(doc) == "bmp"  ) {
+                    $("#doc7_ver").html('<img src=".../dist/docs/valorizacion/' + doc + '" alt="" width="50%" >');
+                  } else {
+                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
+                      $("#doc7_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+                    } else {
+                      $("#doc7_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
 
 }
 
@@ -755,7 +824,7 @@ function re_visualizacion() {
 
     } else {
 
-      $("#doc7_ver").html('<iframe src="'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
+      $("#doc7_ver").html('<iframe src="../dist/docs/valorizacion/'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
     }
 
     // console.log('hola'+dr);
@@ -829,9 +898,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
   let nube_idproyecto = localStorage.getItem('nube_idproyecto');
 
   var respuestadoc5_2 = false;
-
-  $('#tab-seleccione').show(); $('#tab-contenido').show(); $('#tab-info').hide();
-
+  mostrar_form_table(2);
+ 
   $("#fecha_inicio").val(fecha_i);
   $("#fecha_fin").val(fecha_f);  //console.log(fecha_i, fecha_f, i);
   $("#numero_q_s").val(cont_valor);
@@ -5227,4 +5295,7 @@ function cantDiasEnUnMes(mes, año) {
   var diasMes = new Date(año, mes, 0).getDate(); // console.log('mes:' + mes+ ' cant:' + diasMes);
 
   return diasMes; 
+}
+function despintar_btn_select() {  
+  if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
 }
