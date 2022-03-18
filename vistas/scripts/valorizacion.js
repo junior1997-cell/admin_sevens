@@ -1,4 +1,4 @@
-var tabla;
+var tabla_principal;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -11,7 +11,10 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+
   ver_quincenas(localStorage.getItem('nube_idproyecto'));  
+
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
 
@@ -356,57 +359,235 @@ function l_m(){
   $("#barra_progress").text("0%");  
 }
 
-// mostramos los datos para editar
-function mostrar(idtrabajador) {
 
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
+//Función Listar - tabla principal
+function listar_tbla_principal(nube_idproyecto) {
 
-  $("#modal-agregar-trabajador").modal("show")
+  tabla_principal = $('#tabla-principal').dataTable({
+    "responsive": true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    "ajax":{
+      url: `../ajax/valorizacion.php?op=listar_tbla_principal&nube_idproyecto=${nube_idproyecto}`,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: sueldo mensual
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-nowrap');
+      }
+           
+    },
+    "language": {
+      "lengthMenu": "Mostrar : _MENU_ registros",
+      "buttons": {
+        "copyTitle": "Tabla Copiada",
+        "copySuccess": {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        }
+      }
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+  }).DataTable();  
+}
+//-------------------------------------------
+function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
+  $(".nombre_documento").html("");
+  // exraemos la fecha de HOY
+  var tiempoTranscurrido = Date.now();
+  var hoy = new Date(tiempoTranscurrido);
+  var format = hoy.toLocaleDateString().split("/"); //console.log(format);
+  $(".nombre_documento").html(indice+' '+nombre+' - -  valorazación-'+numero_q_s);
+  $("#modal-ver-comprobante").modal("show");
 
-  $.post("../ajax/all_trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
+  // cargamos la imagen adecuada par el archivo
+  if ( extrae_extencion(doc_valorizacion) == "xls") {
 
-    data = JSON.parse(data);  console.log(data);   
+    $('#ver-documento').html(
+      '<div class="col-lg-6">'+
+      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+          '<i class="fas fa-download"></i> Descargar'+
+      '</a>'+
+      '</div>'+
+      '<div class="col-lg-6 mb-4">'+
+      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+          '<i class="fas fa-expand"></i> Ver completo'+
+      '</a>'+
+      '</div>'+
+      '<div class="col-lg-12 ">'+
+      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+          '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
+      '</div>'+
+      '</div>'
+    );
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+  } else {
 
+    if ( extrae_extencion(doc_valorizacion) == "xlsx" ) {
+        
+      $('#ver-documento').html(
+        '<div class="col-lg-6">'+
+        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+            '<i class="fas fa-download"></i> Descargar'+
+        '</a>'+
+        '</div>'+
+        '<div class="col-lg-6 mb-4">'+
+            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+            '<i class="fas fa-expand"></i> Ver completo'+
+            '</a>'+
+        '</div>'+
+        '<div class="col-lg-12 ">'+
+            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+            '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
+            '</div>'+
+        '</div>'
+      );
 
-    $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
-    $("#nombre").val(data.nombres);
-    $("#num_documento").val(data.numero_documento);
-    $("#direccion").val(data.direccion);
-    $("#telefono").val(data.telefono);
-    $("#email").val(data.email);
-    $("#nacimiento").val(data.fecha_nacimiento);
-    $("#c_bancaria").val(data.cuenta_bancaria);
-    $("#banco").val(data.idbancos).trigger("change");
-    $("#titular_cuenta").val(data.titular_cuenta);
-    $("#idtrabajador").val(data.idtrabajador);
+    }else{
 
-    if (data.imagen_perfil != "") {
+      if ( extrae_extencion(doc_valorizacion) == "csv" ) {
+          
+        $('#ver-documento').html(
+          '<div class="col-lg-6">'+
+          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+              '<i class="fas fa-download"></i> Descargar'+
+          '</a>'+
+          '</div>'+
+          '<div class="col-lg-6 mb-4">'+
+          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+              '<i class="fas fa-expand"></i> Ver completo'+
+          '</a>'+
+          '</div>'+
+          '<div class="col-lg-12 ">'+
+          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+              '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
+          '</div>'+
+          '</div>'
+        );
 
-			$("#foto1_i").attr("src", "../dist/img/usuarios/" + data.imagen_perfil);
+      }else{
 
-			$("#foto1_actual").val(data.imagen_perfil);
-		}
+        if ( extrae_extencion(doc_valorizacion) == "xlsm" ) {
 
-    if (data.imagen_dni_anverso != "") {
+          $('#ver-documento').html(
+            '<div class="col-lg-6">'+
+            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                '<i class="fas fa-download"></i> Descargar'+
+            '</a>'+
+            '</div>'+
+            '<div class="col-lg-6 mb-4">'+
+                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                '<i class="fas fa-expand"></i> Ver completo'+
+                '</a>'+
+            '</div>'+
+            '<div class="col-lg-12 ">'+
+                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
+                '</div>'+
+            '</div>'
+          );
 
-			$("#foto2_i").attr("src", "../dist/img/usuarios/" + data.imagen_dni_anverso);
+        }else{
 
-			$("#foto2_actual").val(data.imagen_dni_anverso);
-		}
+          if ( extrae_extencion(doc_valorizacion) == "pdf" ) {
 
-    if (data.imagen_dni_reverso != "") {
+            $('#ver-documento').html(
+              '<div class="col-lg-6">'+
+              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                  '<i class="fas fa-download"></i> Descargar'+
+              '</a>'+
+              '</div>'+
+              '<div class="col-lg-6 mb-4">'+
+              '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+doc_valorizacion+'"  target="_blank"  type="button" >'+
+                  '<i class="fas fa-expand"></i> Ver completo'+
+              '</a>'+
+              '</div>'+
+              '<div class="col-lg-12 ">'+
+              '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
+                  '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
+              '</div>'+
+              '</div>'
+            );      
+          }else{
+            
+            if ( extrae_extencion(doc_valorizacion) == "doc" ) {
 
-			$("#foto3_i").attr("src", "../dist/img/usuarios/" + data.imagen_dni_reverso);
+                $('#ver-documento').html(
+                  '<div class="col-lg-6">'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                      '<i class="fas fa-download"></i> Descargar'+
+                  '</a>'+
+                  '</div>'+
+                  '<div class="col-lg-6 mb-4">'+
+                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                      '<i class="fas fa-expand"></i> Ver completo'+
+                      '</a>'+
+                  '</div>'+
+                  '<div class="col-lg-12 ">'+
+                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                      '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
+                      '</div>'+
+                  '</div>'
+                );     
+            }else{
 
-			$("#foto3_actual").val(data.imagen_dni_reverso);
-		}
+              if ( extrae_extencion(doc_valorizacion) == "docx" ) {
 
-    edades();
-  });
+                $('#ver-documento').html(
+                  '<div class="col-lg-6">'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                      '<i class="fas fa-download"></i> Descargar'+
+                  '</a>'+
+                  '</div>'+
+                  '<div class="col-lg-6 mb-4">'+
+                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                      '<i class="fas fa-expand"></i> Ver completo'+
+                  '</a>'+
+                  '</div>'+
+                  '<div class="col-lg-12 ">'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                      '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
+                  '</div>'+
+                  '</div>'
+                ); 
+
+              }else{
+
+                $('#ver-documento').html(
+                  '<div class="col-lg-6">'+
+                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+doc_valorizacion+'" download="'+indice+' '+nombre+' - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+numero_q_s+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
+                      '<i class="fas fa-download"></i> Descargar'+
+                  '</a>'+
+                  '</div>'+
+                  '<div class="col-lg-6 mb-4">'+
+                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
+                      '<i class="fas fa-expand"></i> Ver completo'+
+                  '</a>'+
+                  '</div>'+
+                  '<div class="col-lg-12 ">'+
+                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
+                      '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
+                  '</div>'+
+                  '</div>'
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
 
 init();
@@ -680,7 +861,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
         
         $.each(data.data1, function (index, value) {
 
-          if (value.nombre == "doc2") {
+          if (value.indice == "2") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-2-tab").hasClass("no-doc") == false || $("#tabs-2-tab").hasClass("no-doc") == true) { $("#tabs-2-tab").removeClass('no-doc').addClass("si-doc"); }          
             
@@ -900,7 +1081,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                       
           }
 
-          if (value.nombre == "doc3.1") {
+          if (value.indice == "3.1") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-3-1-tab").hasClass("no-doc") == false || $("#tabs-3-1-tab").hasClass("no-doc") == true) { $("#tabs-3-1-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -1119,7 +1300,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }         
           }
 
-          if (value.nombre == "doc3.2") {
+          if (value.indice == "3.2") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-3-2-tab").hasClass("no-doc") == false || $("#tabs-3-2-tab").hasClass("no-doc") == true) { $("#tabs-3-2-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -1338,7 +1519,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc3.3") {
+          if (value.indice == "3.3") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-3-3-tab").hasClass("no-doc") == false || $("#tabs-3-3-tab").hasClass("no-doc") == true) { $("#tabs-3-3-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -1557,7 +1738,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc3.4") {
+          if (value.indice == "3.4") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-3-4-tab").hasClass("no-doc") == false || $("#tabs-3-4-tab").hasClass("no-doc") == true) { $("#tabs-3-4-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -1776,7 +1957,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }         
           }
 
-          if (value.nombre == "doc5.1") {
+          if (value.indice == "5.1") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-5-1-tab").hasClass("no-doc") == false || $("#tabs-5-1-tab").hasClass("no-doc") == true) { $("#tabs-5-1-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -1995,7 +2176,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }         
           }
 
-          if (value.nombre == "doc5.2") {
+          if (value.indice == "5.2") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-5-2-tab").hasClass("no-doc") == false || $("#tabs-5-2-tab").hasClass("no-doc") == true) { $("#tabs-5-2-tab").removeClass('no-doc').addClass("si-doc"); }          
              
@@ -2214,7 +2395,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }
           }
 
-          if (value.nombre == "doc5.2.1") {  
+          if (value.indice == "5.2.1") {  
             // cargamos la imagen adecuada par el archivo
             if ( extrae_extencion(value.doc_valorizacion) == "xls") {
               
@@ -2432,7 +2613,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             respuestadoc5_2 = true;
           }
 
-          if (value.nombre == "doc6") {
+          if (value.indice == "6") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-6-tab").hasClass("no-doc") == false || $("#tabs-6-tab").hasClass("no-doc") == true) { $("#tabs-6-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -2651,7 +2832,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc7") {
+          if (value.indice == "7") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-7-tab").hasClass("no-doc") == false || $("#tabs-7-tab").hasClass("no-doc") == true) { $("#tabs-7-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -2870,7 +3051,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc8.4") {
+          if (value.indice == "8.4") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-8-4-tab").hasClass("no-doc") == false || $("#tabs-8-4-tab").hasClass("no-doc") == true) { $("#tabs-8-4-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -3089,7 +3270,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc8.5") {
+          if (value.indice == "8.5") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-8-5-tab").hasClass("no-doc") == false || $("#tabs-8-5-tab").hasClass("no-doc") == true) { $("#tabs-8-5-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -3308,7 +3489,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc8.6") {
+          if (value.indice == "8.6") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-8-6-tab").hasClass("no-doc") == false || $("#tabs-8-6-tab").hasClass("no-doc") == true) { $("#tabs-8-6-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -3527,7 +3708,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
             }          
           }
 
-          if (value.nombre == "doc8.7") {
+          if (value.indice == "8.7") {
             // pintamos rojos los que no tienen docs
             if ($("#tabs-8-7-tab").hasClass("no-doc") == false || $("#tabs-8-7-tab").hasClass("no-doc") == true) { $("#tabs-8-7-tab").removeClass('no-doc').addClass("si-doc"); }          
   
@@ -4900,9 +5081,11 @@ function fecha_quincena(fecha_i, fecha_f, i) {
   });
 }
 
-function add_data_form(nombredoc,nom_title) {
+function add_data_form(indice,nom_title) {
+  $("#indice").val(indice); 
+  $("#nombre").val(nom_title); 
 
-  $("#nombre").val(nombredoc); $('#title-modal-1').html(nom_title);
+  $('#title-modal-1').html(nom_title);
 
   //console.log(nombredoc);  
 }

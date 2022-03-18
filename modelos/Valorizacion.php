@@ -12,6 +12,7 @@ Class Valorizacion
 
 	//Editamos el DOC1 del proyecto
 	public function editar_proyecto($idproyecto, $doc, $columna) { 
+		//var_dump($idproyecto, $doc, $columna, '1111');die();
 
 		$sql="UPDATE proyecto SET $columna = '$doc' WHERE idproyecto = '$idproyecto'"; 
 		
@@ -19,20 +20,22 @@ Class Valorizacion
 	}
 
 	//Editamos el DOC1 del proyecto
-	public function insertar_valorizacion($idproyecto, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc) { 
+	public function insertar_valorizacion($idproyecto,$indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc) { 
 
-		$sql="INSERT INTO valorizacion ( idproyecto, nombre, fecha_inicio, fecha_fin, numero_q_s, doc_valorizacion ) 
-		VALUES ('$idproyecto', '$nombre', '$fecha_inicio', '$fecha_fin', '$numero_q_s', '$doc')"; 
+		$sql="INSERT INTO valorizacion ( idproyecto,indice, nombre, fecha_inicio, fecha_fin, numero_q_s, doc_valorizacion ) 
+		VALUES ('$idproyecto', '$indice', '$nombre', '$fecha_inicio', '$fecha_fin', '$numero_q_s', '$doc')"; 
 		
 		return ejecutarConsulta($sql); 
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar_valorizacion( $idproyecto, $idvalorizacion, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc)
+	public function editar_valorizacion( $idproyecto, $idvalorizacion, $indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc)
 	{
-		//var_dump($idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 		
-		$sql="UPDATE valorizacion SET idproyecto = '$idproyecto', nombre = '$nombre', 
+		$sql="UPDATE valorizacion SET 
+		idproyecto = '$idproyecto', 
+		indice = '$indice', 
+		nombre = '$nombre', 
 		fecha_inicio = '$fecha_inicio',
 		fecha_fin = '$fecha_fin' , 
 		numero_q_s = '$numero_q_s', 
@@ -65,7 +68,7 @@ Class Valorizacion
 	//ver detalle quincena (cuando presiono el boton de cada quincena)
 	public function ver_detalle_quincena($f1, $f2, $nube_idproyect){
 
-		$sql="SELECT v.idvalorizacion, v.idproyecto, v.nombre, v.doc_valorizacion, v.fecha_inicio, v.estado
+		$sql="SELECT v.idvalorizacion, v.idproyecto, v.indice, v.nombre, v.doc_valorizacion, v.fecha_inicio, v.estado
 		FROM valorizacion as v
 		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_inicio BETWEEN '$f1' AND '$f2';";
 		$data1 = ejecutarConsultaArray($sql);
@@ -84,6 +87,126 @@ Class Valorizacion
 		return $results ;
 	}
 
+	public function tabla_principal($nube_idproyecto)
+	{
+		$data = Array();   
+
+		$sql1="SELECT * FROM valorizacion WHERE estado=1 AND estado_delete=1 AND idproyecto='$nube_idproyecto' ORDER BY  numero_q_s DESC, indice ASC";
+		$valorizacion = ejecutarConsultaArray($sql1);
+
+		if (!empty($valorizacion)) {
+
+			foreach ($valorizacion as $key => $value1) {
+			  $data[] = array(
+				'nombre_tabla'     => 'valorizacion',
+				'idtabla'          => $value1['idvalorizacion'],
+				'nombre_columna'   => 'idvalorizacion',
+				'indice'           => $value1['indice'],
+				'nombre'           => $value1['nombre'],
+				'doc_valorizacion' => $value1['doc_valorizacion'],
+				'fecha'            => $value1['fecha_inicio'] .' - ' . $value1['fecha_fin'],
+				'numero_q_s'       => $value1['numero_q_s'],
+				'estado'           => $value1['estado'],
+			  );
+			}
+
+		}
+
+		$sql2="SELECT  doc1_contrato_obra,doc2_entrega_terreno,doc3_inicio_obra,doc7_cronograma_obra_valorizad,doc8_certificado_habilidad_ing_residnt,estado, idproyecto
+		FROM proyecto WHERE estado=1 AND estado_delete=1 AND idproyecto='$nube_idproyecto'";
+		$documentos_proyect = ejecutarConsultaSimpleFila($sql2);
+
+		if (!empty($documentos_proyect)) {
+
+			$data[] = array(
+
+				'nombre_tabla'     => 'proyecto',
+				'idtabla'          => $documentos_proyect['idproyecto'],
+				'nombre_columna'   => 'doc1_contrato_obra',
+				'indice'           => '1',
+				'nombre'           => 'Acta de contrato de obra',
+				'doc_valorizacion' => $documentos_proyect['doc1_contrato_obra'],
+				'fecha'            => ' - - - ',
+				'numero_q_s'       => 'General ',
+				'estado'           => $documentos_proyect['estado'],
+
+			);
+			
+			$data[] = array(
+
+				'nombre_tabla'     => 'proyecto',
+				'idtabla'          => $documentos_proyect['idproyecto'],
+				'nombre_columna'   => 'doc2_entrega_terreno',
+				'indice'           => '2',
+				'nombre'           => 'Acta de entrega de terreno',
+				'doc_valorizacion' => $documentos_proyect['doc2_entrega_terreno'],
+				'fecha'            => ' - - - ',
+				'numero_q_s'       => 'General ',
+				'estado'           => $documentos_proyect['estado'],
+
+			);
+      			
+			$data[] = array(
+
+				'nombre_tabla'     => 'proyecto',
+				'idtabla'          => $documentos_proyect['idproyecto'],
+				'nombre_columna'   => 'doc3_inicio_obra',
+				'indice'           => '3',
+				'nombre'           => 'Acta de inicio de obra',
+				'doc_valorizacion' => $documentos_proyect['doc3_inicio_obra'],
+				'fecha'            => ' - - - ',
+				'numero_q_s'       => 'General ',
+				'estado'           => $documentos_proyect['estado'],
+
+			);
+
+      $data[] = array(
+
+				'nombre_tabla'     => 'proyecto',
+				'idtabla'          => $documentos_proyect['idproyecto'],
+				'nombre_columna'   => 'doc7_cronograma_obra_valorizad',
+				'indice'           => '7',
+				'nombre'           => 'Cronograma de obra valorizado',
+				'doc_valorizacion' => $documentos_proyect['doc7_cronograma_obra_valorizad'],
+				'fecha'            => ' - - - ',
+				'numero_q_s'       => 'General ',
+				'estado'           => $documentos_proyect['estado'],
+
+			);
+      
+      $data[] = array(
+
+				'nombre_tabla'     => 'proyecto',
+				'idtabla'          => $documentos_proyect['idproyecto'],
+				'nombre_columna'   => 'doc8_certificado_habilidad_ing_residnt',
+				'indice'           => '8',
+				'nombre'           => 'Certificado de habilidad del ingeniero residente',
+				'doc_valorizacion' => $documentos_proyect['doc8_certificado_habilidad_ing_residnt'],
+				'fecha'            => ' - - - ',
+				'numero_q_s'       => 'General ',
+				'estado'           => $documentos_proyect['estado'],
+
+			);
+      
+		}
+    return $data;
+	}
+//---------------------------------------------------
+
+  //Implementamos un método para desactivar 
+	public function desactivar($idtransporte )
+	{
+		$sql="UPDATE transporte SET estado='0' WHERE idtransporte ='$idtransporte'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para elimnar
+	public function eliminar($idtransporte )
+	{
+		$sql="UPDATE transporte SET estado_delete='0' WHERE idtransporte ='$idtransporte'";
+		return ejecutarConsulta($sql);
+	}
+//---------------------------------------------------
 	// obtebnemos los DOCS para eliminar
     public function obtenerDocV($idvalorizacion) {
 

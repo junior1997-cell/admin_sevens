@@ -63,7 +63,7 @@ function listar() {
 
 }
 
-//ver ficha tecnica
+//ver rh
 function modal_comprobante(comprobante,ruta, proveedor) {
 
   var data_comprobante = ""; var url = ""; var nombre_download = `RH_${proveedor}`; 

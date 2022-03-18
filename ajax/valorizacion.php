@@ -20,9 +20,9 @@
 
       $valorizacion = new Valorizacion();
 
-      //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";
+      $indice	        = isset($_POST["indice"])? limpiarCadena($_POST["indice"]):"";
       $nombre	        = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
       $fecha_inicio	  = isset($_POST["fecha_inicio"])? limpiarCadena($_POST["fecha_inicio"]):"";
       $fecha_fin	    = isset($_POST["fecha_fin"])? limpiarCadena($_POST["fecha_fin"]):"";
@@ -51,9 +51,9 @@
 					}
 
           // Resgistramos docs en proyecto ::::::::::::
-          if ($nombre == 'doc1' || $nombre == 'doc4' || $nombre == 'doc8.1' || $nombre == 'doc8.2' || $nombre == 'doc8.3' ) {
+          if ($nombre == 'Copia del contrato' || $nombre == 'Cronograma de obra valorizado' || $nombre == 'Acta de entrega de terreno' || $nombre == 'Acta de inicio de obra' || $nombre == 'Certificado de habilidad del ingeniero residente' ) {
 
-            if ($nombre == 'doc1') {
+            if ($nombre == 'Copia del contrato') {
               // validamos si existe EL DOC para eliminarlo
               if ($flat_doc1 == true) {
 
@@ -66,12 +66,12 @@
                   unlink("../dist/docs/valorizacion/" . $doc1_ant);
                 }
               }
-
+              //echo $idproyecto, $doc, 'doc1_contrato_obra';
               $rspta=$valorizacion->editar_proyecto($idproyecto, $doc, 'doc1_contrato_obra');
 
             } else {
 
-              if ($nombre == 'doc4') {
+              if ($nombre == 'Cronograma de obra valorizado') {
                 // validamos si existe EL DOC para eliminarlo
                 if ($flat_doc1 == true) {
 
@@ -89,7 +89,7 @@
 
               } else {
 
-                if ($nombre == 'doc8.1') {
+                if ($nombre == 'Acta de entrega de terreno') {
                   // validamos si existe EL DOC para eliminarlo
                   if ($flat_doc1 == true) {
 
@@ -107,7 +107,7 @@
 
                 } else {
 
-                  if ($nombre == 'doc8.2') {
+                  if ($nombre == 'Acta de inicio de obra') {
                     // validamos si existe EL DOC para eliminarlo
                     if ($flat_doc1 == true) {
 
@@ -125,7 +125,7 @@
 
                   } else {
 
-                    if ($nombre == 'doc8.3') {
+                    if ($nombre == 'Certificado de habilidad del ingeniero residente') {
                       // validamos si existe EL DOC para eliminarlo
                       if ($flat_doc1 == true) {
 
@@ -149,10 +149,12 @@
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Documento";
 
           } else {
+
             // REGISTRAMOS EN VALORIZACIONES ::::::::::::
+
             if (empty($idvalorizacion)){
               // Registramos docs en valorización
-              $rspta=$valorizacion->insertar_valorizacion($idproyecto, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
+              $rspta=$valorizacion->insertar_valorizacion($idproyecto, $indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
               
               echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Documento";
               
@@ -172,9 +174,10 @@
               }
   
               // editamos un trabajador existente
-              $rspta=$valorizacion->editar_valorizacion($idproyecto, $idvalorizacion, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
+              $rspta=$valorizacion->editar_valorizacion($idproyecto, $idvalorizacion, $indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
               
               echo $rspta ? "ok" : "Documento no se pudo actualizar";
+              
             }
           }                      
 
@@ -209,6 +212,45 @@
           //Codificar el resultado utilizando json
           echo json_encode($rspta);	
 
+        break; 
+
+        case 'listar_tbla_principal':
+
+          $nube_idproyecto = $_GET["nube_idproyecto"];         
+
+          $rspta=$valorizacion->tabla_principal($nube_idproyecto);
+          $data= Array();
+          $btn_tipo="";
+          $info='';
+          $parametros_ver_doc='';
+          $cont=1;                          
+
+          foreach ( $rspta as $key => $value) { 
+
+            $info = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\'';
+            $parametros_ver_doc='\'' . $value['doc_valorizacion'] .'\', \'' . $value['indice'] .'\', \'' . $value['nombre'] .'\', \'' . $value['numero_q_s'] .'\'';
+
+            $btn_tipo = (empty($value['doc_valorizacion'])) ? 'btn-outline-info' : 'btn-info';       
+
+            $data[]=array(
+
+              "0"=> $cont++,
+              "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info.')"><i class="fas fa-pencil-alt"></i></button>'.
+              ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info.')"><i class="fas fa-skull-crossbones"></i></button>',
+              "2"=>'<span class="text-bold">Semana Nº '. $value['numero_q_s'] .'</span>',  
+              "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
+              "4"=>'<span class="text-primary text-bold">'. $value['fecha'] .'</span>',  
+              "5"=>'<center> 
+                      <button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante('.$parametros_ver_doc.')"><i class="fas fa-file-invoice fa-lg"></i> </button> 
+                    </center>',       
+            );
+          }
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data);
+         echo json_encode($results);
         break;        
       }
 
