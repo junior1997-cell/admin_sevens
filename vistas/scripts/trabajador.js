@@ -317,7 +317,7 @@ function verdatos(idtrabajador){
 
     data = JSON.parse(data);  console.log(data); 
 
-    var img =data.imagen != '' ? `<img src="../dist/img/usuarios/${data.imagen}" alt="" style="width: 90px;border-radius: 10px;" onerror="this.src='../dist/svg/user_default.svg';">` : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
+    var img =data.imagen != '' ? `<img src="../dist/docs/all_trabajador/perfil/${data.imagen}" alt="" style="width: 90px;border-radius: 10px;" onerror="this.src='../dist/svg/user_default.svg';">` : '<img src="../dist/svg/user_default.svg" alt="" style="width: 90px;">';
     
     verdatos=`                                                                           
       <div class="col-12">
