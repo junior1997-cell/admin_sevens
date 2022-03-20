@@ -537,20 +537,29 @@ function ver_datos(idsubcontrato) {
 
   $.post("../ajax/sub_contrato.php?op=verdatos", { idsubcontrato: idsubcontrato }, function (data, status) {
 
-    data = JSON.parse(data); 
+    data = JSON.parse(data); console.log(data);
 
     var img_doc = "";  var comprobante=data.comprobante;
-       
-    var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
-    if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+    if (comprobante=="" || comprobante== null ) {
 
-      img_doc='<img onerror="this.src="../dist/img/default/img_defecto.png";" src="../dist/docs/sub_contrato/comprobante_subcontrato/'+comprobante+'" class="img-thumbnail" style="cursor: pointer !important;" width="auto"/>';
-               
-    } else {
-      
-      img_doc='<iframe src="../dist/docs/sub_contrato/comprobante_subcontrato/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>'
+      img_doc='<b class="text-danger">No hay comprobante</b>';
+
+    } else{
+
+      var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+
+      if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+  
+        img_doc='<img onerror="this.src="../dist/img/default/img_defecto.png";" src="../dist/docs/sub_contrato/comprobante_subcontrato/'+comprobante+'" class="img-thumbnail" style="cursor: pointer !important;" width="auto"/>';
+                 
+      } else {
+        
+        img_doc='<iframe src="../dist/docs/sub_contrato/comprobante_subcontrato/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>'
+      }
+
     }
+
     
     verdatos=`                                                                            
     <div class="col-12">

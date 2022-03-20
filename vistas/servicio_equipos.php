@@ -751,16 +751,18 @@
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
                                   <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" readonly />
+                                  <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
+                                  <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>
-                              <!-- Descripcion-->
+                              <!-- Descripcion o Nota-->
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="nota">Nota </label> <br />
                                   <textarea name="nota" id="nota" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
-                              <!-- Descripcion-->
+                              <!-- Glosa-->
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="descripcion_f">Glosa </label> <br />

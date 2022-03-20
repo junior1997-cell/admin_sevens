@@ -31,8 +31,10 @@
       $descripcion         = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
       $subtotal            = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
       $igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+      $val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+      $tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
 
-      $imagen2             = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+      $imagen2             = isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
       //------------------pension-------------
       $idproyecto_p        = isset($_POST["idproyecto_p"])? limpiarCadena($_POST["idproyecto_p"]):"";
       $idpension           = isset($_POST["idpension"])? limpiarCadena($_POST["idpension"]):"";
@@ -117,24 +119,24 @@
             if ($_SESSION['viatico']==1)
             {
                 // imgen de perfil
-              if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
+              if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
       
-                  $imagen2=$_POST["foto2_actual"]; $flat_img1 = false;
+                  $imagen2=$_POST["doc_old_1"]; $flat_img1 = false;
       
                 } else {
       
-                  $ext1 = explode(".", $_FILES["foto2"]["name"]); $flat_img1 = true;						
+                  $ext1 = explode(".", $_FILES["doc1"]["name"]); $flat_img1 = true;						
       
                   $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
       
-                  move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/pension/comprobante/" . $imagen2);
+                  move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/pension/comprobante/" . $imagen2);
                 
               }
       
       
               if (empty($idfactura_pension )){
                 
-                $rspta=$pension->insertar_comprobante($idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
+                $rspta=$pension->insertar_comprobante($idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2);
                 echo $rspta ? "ok" : "No se pudieron registrar todos los datos de Comprobante";
               }
               else {
@@ -151,7 +153,7 @@
                   }
                 }
                 
-                $rspta=$pension->editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);
+                $rspta=$pension->editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2);
                 
                 echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
               }

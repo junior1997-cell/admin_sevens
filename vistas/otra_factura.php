@@ -56,7 +56,7 @@
                         <div class="card-header">
                           <h3 class="card-title">
                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otras_facturas" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                            Admnistra de manera eficiente otras facturas.
+                            Administra de manera eficiente otras facturas.
                           </h3>
                         </div>
                         <!-- /.card-header -->

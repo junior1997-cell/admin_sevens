@@ -118,10 +118,10 @@ Class Breaks
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------
-	public function insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2,$ruc,$razon_social,$direccion){
+	public function insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion){
 		//var_dump($idsemana_break,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);die();
-		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante,ruc, razon_social, direccion) 
-		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$subtotal','$forma_pago','$tipo_comprobante','$descripcion','$imagen2','$ruc','$razon_social','$direccion')";
+		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, val_igv, tipo_gravada, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante,ruc, razon_social, direccion) 
+		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$val_igv','$tipo_gravada','$subtotal','$forma_pago','$tipo_comprobante','$descripcion','$imagen2','$ruc','$razon_social','$direccion')";
 		return ejecutarConsulta($sql);
 	}
 	// obtebnemos los DOCS para eliminar
@@ -132,7 +132,7 @@ Class Breaks
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para editar registros
-	public function editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2,$ruc,$razon_social,$direccion){
+	public function editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion){
 		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
 		$sql="UPDATE `factura_break` SET 
 		
@@ -142,6 +142,8 @@ Class Breaks
 		fecha_emision='$fecha_emision',
 		monto='$monto',
 		igv='$igv',
+		val_igv='$val_igv',
+		tipo_gravada='$tipo_gravada',
 		subtotal='$subtotal',
 		tipo_comprobante='$tipo_comprobante',
 		descripcion='$descripcion',

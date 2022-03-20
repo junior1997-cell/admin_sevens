@@ -56,7 +56,7 @@
                         <div class="card-header">
                           <h3 class="card-title">
                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otro_gasto" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                            Admnistra de manera eficiente otros Gastos.
+                            Administra de manera eficiente otros Gastos.
                           </h3>
                         </div>
                         <!-- /.card-header -->
@@ -222,6 +222,8 @@
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
                                   <input class="form-control igv" type="number" id="igv" name="igv" placeholder="IGV" readonly />
+                                  <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
+                                  <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>
                               <!--Precio Parcial-->

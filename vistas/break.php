@@ -305,6 +305,8 @@
                                             <div class="form-group">
                                                 <label for="igv">IGV</label>
                                                 <input class="form-control" type="number"  id="igv" name="igv" placeholder="IGV"  readonly />
+                                                <input class="form-control" type="text"  id="val_igv" name="val_igv" placeholder="IGV"  readonly />
+                                                <input class="form-control" type="text"  id="tipo_gravada" name="tipo_gravada" placeholder="IGV"  readonly />
                                               </div>
                                         </div>
                                         <!-- Monto-->

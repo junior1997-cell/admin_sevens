@@ -76,6 +76,9 @@ function limpiar() {
   $("#forma_pago").val("null").trigger("change");
   $("#glosa").val("null").trigger("change");
 
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val(""); 
+
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".is-invalid").removeClass("error is-invalid");
@@ -84,7 +87,9 @@ function limpiar() {
 //segun tipo de comprobante
 function comprob_factura() {
 
-  var precio_parcial = $("#precio_parcial").val();  
+  var precio_parcial = $("#precio_parcial").val(); 
+
+  $("#val_igv").val(""); $("#tipo_gravada").val(""); 
 
   if ($("#tipo_comprobante").select2("val") == "" || $("#tipo_comprobante").select2("val") == null) {
 
@@ -93,6 +98,8 @@ function comprob_factura() {
     $(".div_ruc").hide(); $(".div_razon_social").hide();
 
     $("#ruc").val(""); $("#razon_social").val("");
+
+    $("#val_igv").val(""); $("#tipo_gravada").val(""); 
 
     if (precio_parcial == null || precio_parcial == "") {
       $("#subtotal").val(0);
@@ -114,10 +121,18 @@ function comprob_factura() {
 
       if (precio_parcial == null || precio_parcial == "") {
         $("#subtotal").val(0);
-        $("#igv").val(0);    
+        $("#igv").val(0);
+        
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("No Grabada");  
+
       } else {
         $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-        $("#igv").val(0);    
+        $("#igv").val(0); 
+
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("No Grabada"); 
+
       }   
 
     } else {
@@ -130,13 +145,17 @@ function comprob_factura() {
 
         if (precio_parcial == null || precio_parcial == "") {
           $("#subtotal").val(0);
-          $("#igv").val(0);    
+          $("#igv").val(0);
+
         } else {
           var subtotal = 0;
           var igv = 0;
       
           $("#subtotal").val("");
           $("#igv").val("");
+
+          $("#val_igv").val("0.18"); 
+          $("#tipo_gravada").val("Grabada"); 
       
           subtotal = precio_parcial / 1.18;
           igv = precio_parcial - subtotal;
@@ -164,7 +183,10 @@ function comprob_factura() {
             $("#igv").val("");
 
             $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-            $("#igv").val(0);     
+            $("#igv").val(0); 
+            
+            $("#val_igv").val("0"); 
+            $("#tipo_gravada").val("No Grabada"); 
           } 
             
         } else {
@@ -176,11 +198,21 @@ function comprob_factura() {
         $("#ruc").val(""); $("#razon_social").val("");
 
         if (precio_parcial == null || precio_parcial == "") {
+          
           $("#subtotal").val(0);
-          $("#igv").val(0);    
+          $("#igv").val(0);
+
+          $("#val_igv").val("0"); 
+          $("#tipo_gravada").val("No Grabada");  
+
         } else {
+
           $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-          $("#igv").val(0);    
+          $("#igv").val(0); 
+
+          $("#val_igv").val("0"); 
+          $("#tipo_gravada").val("No Grabada");  
+
         } 
           
         }
@@ -389,6 +421,8 @@ function mostrar(idotro_gasto) {
 
     $("#subtotal").val(data.subtotal);
     $("#igv").val(data.igv);
+    $("#val_igv").val(data.val_igv);
+    $("#tipo_gravada").val(data.tipo_gravada);
     $("#precio_parcial").val(data.costo_parcial);
     $("#descripcion").val(data.descripcion);    
 

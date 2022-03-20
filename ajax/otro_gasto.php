@@ -24,6 +24,9 @@
       $nro_comprobante = isset($_POST["nro_comprobante"]) ? limpiarCadena($_POST["nro_comprobante"]) : "";
       $subtotal = isset($_POST["subtotal"]) ? limpiarCadena($_POST["subtotal"]) : "";
       $igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
+      $val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+      $tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
+      
       $precio_parcial = isset($_POST["precio_parcial"]) ? limpiarCadena($_POST["precio_parcial"]) : "";
       $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 
@@ -56,7 +59,7 @@
       
           if (empty($idotro_gasto)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otro_gasto->insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
+            $rspta = $otro_gasto->insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
       
@@ -74,7 +77,7 @@
               }
             }
       
-            $rspta = $otro_gasto->editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
+            $rspta = $otro_gasto->editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
             //var_dump($idotro_gasto,$idproveedor);
             echo $rspta ? "ok" : "No se pudo actualizar";
           }

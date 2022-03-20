@@ -574,7 +574,6 @@ function guardaryeditar(e) {
 //mostrar
 function mostrar(idservicio) {
   limpiar();
-
   $("#maquinaria").val("").trigger("change");
   $("#unidad_m").val("").trigger("change");
   $("#cargando-1-fomulario").hide();
@@ -1276,11 +1275,21 @@ function calcula_igv_subt() {
   $("#subtotal").val("");
   $("#igv").val("");
   var monto = parseFloat($("#monto").val());
+  if (monto=="" || monto==null) {
+    $("#val_igv").val(""); 
+    $("#tipo_gravada").val(""); 
+    $("#subtotal").val("");
+    $("#igv").val("");
+  } else {
 
-  subtotal = monto / 1.18;
-  igv = monto - subtotal;
-  $("#subtotal").val(subtotal.toFixed(2));
-  $("#igv").val(igv.toFixed(2));
+    $("#val_igv").val("0.18"); 
+    $("#tipo_gravada").val("Grabada"); 
+
+    subtotal = monto / 1.18;
+    igv = monto - subtotal;
+    $("#subtotal").val(subtotal.toFixed(2));
+    $("#igv").val(igv.toFixed(2));
+  }
 }
 
 //Función limpiar-factura
@@ -1293,7 +1302,9 @@ function limpiar_factura() {
   $("#subtotal").val("");
   $("#igv").val("");
   $("#nota").val("");
-  
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val(""); 
+
   $("#doc_old_2").val("");
   $("#doc2").val("");  
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
@@ -1315,6 +1326,9 @@ function mostrar_factura(idfactura) {
     $("#descripcion_f").val(data.descripcion);
     $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
     $("#igv").val(parseFloat(data.igv).toFixed(2));
+    $("#val_igv").val(data.val_igv); 
+    $("#tipo_gravada").val(data.tipo_gravada); 
+
     $("#nota").val(data.nota);
 
     /**-------------------------*/

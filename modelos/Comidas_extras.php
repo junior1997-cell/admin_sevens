@@ -11,17 +11,17 @@ Class Comidas_extras
 	}
 	//$idcomida_extra,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion)
+	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion)
 	{
 	
-		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,comprobante,ruc,razon_social,direccion) 
-		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$comprobante','$ruc','$razon_social','$direccion')";
+		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,val_igv,tipo_gravada,comprobante,ruc,razon_social,direccion) 
+		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$val_igv','$tipo_gravada','$comprobante','$ruc','$razon_social','$direccion')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion)
+	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion)
 	{
 		$sql="UPDATE comida_extra SET 
 		idproyecto='$idproyecto',
@@ -34,6 +34,8 @@ Class Comidas_extras
 		numero_comprobante='$nro_comprobante',
 		subtotal='$subtotal',
 		igv='$igv',
+		val_igv='$val_igv',
+		tipo_gravada='$tipo_gravada',
 		ruc='$ruc',
 		razon_social='$razon_social',
 		direccion='$direccion'

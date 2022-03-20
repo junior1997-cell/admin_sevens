@@ -57,7 +57,7 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otro_servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                            Admnistra de manera eficiente planillas y seguros.
+                                            Administra de manera eficiente planillas y seguros.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
@@ -106,7 +106,7 @@
                     </div>
                     <!-- /.container-fluid -->
 
-                    <!-- Modal agregar proveedores -->
+                    <!-- Modal agregar Planillas y seguros -->
                     <div class="modal fade" id="modal-agregar-otro_servicio">
                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content">
@@ -157,7 +157,7 @@
                                                     </div>                                                        
                                                 </div>
 
-                                                <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
+                                                <!-- Fecha 1 -->
                                                 <div class="col-lg-6 class_pading">
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha Emisión</label>
@@ -179,6 +179,8 @@
                                                         <label for="igv">IGV</label>
                                                         <input class="form-control igv" type="number" placeholder="IGV"  readonly />
                                                         <input class="form-control" type="hidden"  id="igv" name="igv"/>
+                                                        <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
+                                                        <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                                     </div>
                                                 </div>
                                                 <!--Precio Parcial-->

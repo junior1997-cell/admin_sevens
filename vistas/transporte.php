@@ -61,7 +61,7 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-transporte" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                            Admnistra de manera eficiente tus Transportes.
+                                            Administra de manera eficiente tus Transportes.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
@@ -208,6 +208,8 @@
                                                         <label for="igv">IGV</label>
                                                         <input class="form-control igv" type="number" placeholder="IGV"  readonly />
                                                         <input class="form-control" type="hidden"  id="igv" name="igv"/>
+                                                        <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
+                                                        <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                                     </div>
                                                 </div>
                                                 <!--Precio Parcial-->

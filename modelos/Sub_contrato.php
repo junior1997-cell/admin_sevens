@@ -73,7 +73,7 @@ Class Sub_contrato
 
 	public function verdatos($idsubcontrato)
 	{
-		$sql="SELECT sc.idsubcontrato,sc.idproyecto,sc.idproveedor,sc.tipo_comprobante,sc.numero_comprobante,sc.forma_de_pago,sc.fecha_subcontrato,sc.glosa,sc.subtotal,sc.igv,sc.costo_parcial,sc.descripcion,sc.comprobante, p.razon_social, p.ruc
+		$sql="SELECT sc.idsubcontrato,sc.idproyecto,sc.idproveedor,sc.tipo_comprobante,sc.numero_comprobante,sc.comprobante,sc.forma_de_pago,sc.fecha_subcontrato,sc.glosa,sc.subtotal,sc.igv,sc.costo_parcial,sc.descripcion,sc.comprobante, p.razon_social, p.ruc
 		FROM subcontrato as sc, proveedor as p WHERE sc.idsubcontrato='$idsubcontrato' AND sc.idproveedor=p.idproveedor;";
 
 		return ejecutarConsultaSimpleFila($sql);

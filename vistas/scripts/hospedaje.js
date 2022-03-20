@@ -126,29 +126,32 @@ function calculando_totales() {
   var cantidad = $("#cantidad").val();
   var precio_unitario = $("#precio_unitario").val();
   var precio_parcial=0;
-
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val("");
   var monto = cantidad*precio_unitario;
 
-if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' && $("#unidad").select2("val") !="") {
+  if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' && $("#unidad").select2("val") !="") {
 
-  var subtotal=0; var igv=0;
+    var subtotal=0; var igv=0;
 
-  $("#subtotal").val("");
-  $("#igv").val(""); 
+    $("#subtotal").val("");
+    $("#igv").val(""); 
 
-  subtotal= monto/1.18;
-  igv= monto-subtotal;
+    subtotal= monto/1.18;
+    igv= monto-subtotal;
 
-  $(".subtotal").val(subtotal.toFixed(2));
-  $("#subtotal").val(subtotal.toFixed(4));
+    $(".subtotal").val(subtotal.toFixed(2));
+    $("#subtotal").val(subtotal.toFixed(4));
 
-  $(".igv").val(igv.toFixed(2));
-  $("#igv").val(igv.toFixed(4));
+    $(".igv").val(igv.toFixed(2));
+    $("#igv").val(igv.toFixed(4));
 
-  $('.precio_parcial').val(monto);
-  $("#precio_parcial").val(monto);
+    $('.precio_parcial').val(monto);
+    $("#precio_parcial").val(monto);
+    $("#val_igv").val("0.18"); 
+    $("#tipo_gravada").val("Grabada"); 
 
-}else{
+  }else{
 
     $(".subtotal").val(monto.toFixed(2));
     $("#subtotal").val(monto);
@@ -158,11 +161,9 @@ if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='
 
     $('.precio_parcial').val(monto.toFixed(2));
     $("#precio_parcial").val(monto);  
-}
-
-
-
-  
+    $("#val_igv").val("0"); 
+    $("#tipo_gravada").val("No Grabada");  
+  }  
 }
 
 //Función limpiar
@@ -192,6 +193,9 @@ function limpiar() {
 
   $(".igv").val("");
   $("#igv").val("");
+  
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val("");
 
   $("#doc_old_1").val("");
   $("#doc1").val("");  
@@ -362,9 +366,11 @@ function mostrar(idhospedaje) {
   
     $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
     $("#subtotal").val(data.subtotal);
-  
+ 
     $(".igv").val(parseFloat(data.igv).toFixed(2));
     $("#igv").val(data.igv);
+    $("#val_igv").val(data.val_igv);
+    $("#tipo_gravada").val(data.tipo_gravada);
 
     $("#descripcion").val(data.descripcion);
   
@@ -456,9 +462,7 @@ function ver_datos(idhospedaje) {
       btn_comprobante='';
 
     }
-    
-
-    
+        
     verdatos=`                                                                            
     <div class="col-12">
       <div class="card">

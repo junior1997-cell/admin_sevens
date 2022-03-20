@@ -64,6 +64,8 @@ function limpiar() {
 
   $(".igv").val("");
   $("#igv").val("");
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val(""); 
 
   $("#descripcion").val("");
 
@@ -84,33 +86,47 @@ function comprob_factura() {
 
   $("#precio_parcial").val(precio_parcial);
 
- // console.log('monto '+ monto +' cantidad '+ cantidad +' precio_unitario '+ precio_unitario);
+  $("#subtotal").val("");
+  $("#igv").val(""); 
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val(""); 
 
-  if ($("#tipo_comprobante").select2("val") =="Factura" && $("#precio_parcial").val()!='' ) {
-
-    var subtotal=0; var igv=0;
+  if (precio_parcial=="" || precio_parcial==null) {
 
     $("#subtotal").val("");
     $("#igv").val(""); 
-
-    subtotal= precio_parcial/1.18;
-    igv= precio_parcial-subtotal;
-
-    $(".subtotal").val(subtotal.toFixed(2));
-    $("#subtotal").val(subtotal.toFixed(4));
-
-    $(".igv").val(igv.toFixed(2));
-    $("#igv").val(igv.toFixed(4));
+    $("#val_igv").val(""); 
+    $("#tipo_gravada").val(""); 
 
   } else {
+    
+    if ($("#tipo_comprobante").select2("val") =="Factura" && $("#precio_parcial").val()!='' ) {
 
-    $(".subtotal").val( parseFloat(precio_parcial).toFixed(2));
-    $("#subtotal").val(precio_parcial);
+      var subtotal=0; var igv=0;
 
-    $(".igv").val("0.00");
-    $("#igv").val("0.00");
+      subtotal= precio_parcial/1.18;
+      igv= precio_parcial-subtotal;
+
+      $(".subtotal").val(subtotal.toFixed(2));
+      $("#subtotal").val(subtotal.toFixed(4));
+
+      $(".igv").val(igv.toFixed(2));
+      $("#igv").val(igv.toFixed(2));
+      $("#val_igv").val("0.18"); 
+      $("#tipo_gravada").val("Grabada"); 
+
+    } else {
+
+      $(".subtotal").val( parseFloat(precio_parcial).toFixed(2));
+      $("#subtotal").val(precio_parcial);
+
+      $(".igv").val("0.00");
+      $("#igv").val("0.00");
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("No Grabada"); 
+    }
+
   }
-  
   
 }
 
@@ -264,6 +280,8 @@ function mostrar(idplanilla_seguro) {
 
     $(".igv").val(parseFloat(data.igv).toFixed(2));
     $("#igv").val(data.igv);
+    $("#val_igv").val(data.val_igv);
+    $("#tipo_gravada").val(data.tipo_gravada);
 
     $("#descripcion").val(data.descripcion);
     /**-------------------------*/

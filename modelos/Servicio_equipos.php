@@ -337,11 +337,11 @@ class ServicioEquipos
   /**
    * ==========SECCION FACTURAS=============
    */
-  public function insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $nota)
+  public function insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
   {
     //var_dump($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);die();
-    $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,nota) 
-		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv','$nota')";
+    $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota) 
+		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv','$val_igv','$tipo_gravada','$nota')";
     return ejecutarConsulta($sql);
   }
 
@@ -354,7 +354,7 @@ class ServicioEquipos
   }
 
   //Implementamos un método para editar registros
-  public function editar_factura($idfactura, $idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $nota)
+  public function editar_factura($idfactura, $idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
   {
     //$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
     $sql = "UPDATE factura SET
@@ -366,6 +366,8 @@ class ServicioEquipos
 		descripcion='$descripcion_f',
 		subtotal='$subtotal',
 		igv='$igv',
+		val_igv='$val_igv',
+		tipo_gravada='$tipo_gravada',
 		nota='$nota',
 		imagen='$imagen2'
 		WHERE idfactura ='$idfactura'";

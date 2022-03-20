@@ -10,15 +10,15 @@ class Otro_gasto
   }
   //$idotro_gasto,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
+  public function insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
   {
-    $sql = "INSERT INTO otro_gasto (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_g, costo_parcial,subtotal,igv,descripcion, comprobante,ruc,razon_social,direccion,glosa) 
-		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_g','$precio_parcial','$subtotal','$igv','$descripcion','$comprobante','$ruc', '$razon_social', '$direccion','$glosa')";
+    $sql = "INSERT INTO otro_gasto (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_g, costo_parcial,subtotal,igv,val_igv,tipo_gravada,descripcion, comprobante,ruc,razon_social,direccion,glosa) 
+		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_g','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante','$ruc', '$razon_social', '$direccion','$glosa')";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para editar registros
-  public function editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
+  public function editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
   {
     $sql = "UPDATE otro_gasto SET 
 		idproyecto='$idproyecto',
@@ -26,6 +26,8 @@ class Otro_gasto
 		costo_parcial='$precio_parcial',
 		subtotal='$subtotal',
 		igv='$igv',
+		val_igv='$val_igv',
+		tipo_gravada='$tipo_gravada',
 		descripcion='$descripcion',
 		forma_de_pago='$forma_pago',
 		tipo_comprobante='$tipo_comprobante',

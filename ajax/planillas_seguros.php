@@ -21,6 +21,8 @@ $tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tip
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
 $subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
 $igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+$val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+$tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";
 
 $foto2		      = isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
 //$subtotal,$igv  
@@ -53,7 +55,7 @@ switch ($_GET["op"]){
 
 				if (empty($idplanilla_seguro)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$planillas_seguros->insertar($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
+					$rspta=$planillas_seguros->insertar($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -70,7 +72,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$planillas_seguros->editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
+					$rspta=$planillas_seguros->editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);
 					//var_dump($idplanilla_seguro,$idproveedor);
 					echo $rspta ? "ok" : "No se pudo actualizar";
 				}

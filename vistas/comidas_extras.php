@@ -61,12 +61,12 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-comidas_ex" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                            Admnistra comidas extras.
+                                            Administra comidas extras.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <table id="tabla-hospedaje" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                        <table id="tabla-comidas_extras" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                                 <tr>
                                                     <th class="">#</th>
@@ -92,7 +92,9 @@
                                                     <th>Fecha</th>
                                                     <th>Sub total</th>
                                                     <th>Igv</th>
-                                                    <th style="background-color: #ffdd00;" class="text-right text-nowrap" id="total_monto"></th>
+                                                    <th style="background-color: #ffdd00;" class="text-right text-nowrap" id="total_monto">
+                                                    <i class="fas fa-spinner fa-pulse fa-1x">
+                                                    </th>
                                                     <th>Descripción </th>
                                                     <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                                     <th>Estado</th>
@@ -205,6 +207,8 @@
                                                         <label for="igv">IGV</label>
                                                         <input class="form-control igv" type="number" placeholder="IGV"  readonly />
                                                         <input class="form-control" type="hidden"  id="igv" name="igv"/>
+                                                        <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
+                                                        <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                                     </div>
                                                 </div>
                                                 <!--Precio Parcial-->

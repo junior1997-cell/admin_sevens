@@ -55,7 +55,7 @@
                                     <div class="card-header">
                                         <h3 class="card-title">
                                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-proveedor" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
-                                            Admnistra de manera eficiente a tus proveedores a tu proyecto.
+                                            Administra de manera eficiente a tus proveedores a tu proyecto.
                                         </h3>
                                     </div>
                                     <!-- /.card-header -->

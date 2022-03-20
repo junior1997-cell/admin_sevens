@@ -99,6 +99,8 @@ function limpiar() {
 
   $(".igv").val("");
   $("#igv").val("");
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val("");  
 
   $("#ruta").val(""); 
   $("#descripcion").val("");
@@ -130,11 +132,14 @@ function comprob_factura() {
  // console.log('monto '+ monto +' cantidad '+ cantidad +' precio_unitario '+ precio_unitario);
 
  if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' ) {
-  $(".nro_comprobante").html("Núm. Comprobante");
+
+   $(".nro_comprobante").html("Núm. Comprobante");
     var subtotal=0; var igv=0;
 
     $("#subtotal").val("");
     $("#igv").val(""); 
+    $("#val_igv").val(""); 
+    $("#tipo_gravada").val("");  
 
     subtotal= monto/1.18;
     igv= monto-subtotal;
@@ -144,8 +149,11 @@ function comprob_factura() {
 
     $(".igv").val(igv.toFixed(2));
     $("#igv").val(igv.toFixed(2));
+    $("#val_igv").val("0.18"); 
+    $("#tipo_gravada").val("Grabada"); 
 
   } else {
+
     if ($("#tipo_comprobante").select2("val") =="Ninguno") {
      
       $(".nro_comprobante").html("Núm. de Operación");
@@ -164,6 +172,8 @@ function comprob_factura() {
 
       $(".igv").val("0.00");
       $("#igv").val("0.00");
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("No Grabada"); 
     }
 
   }
@@ -361,6 +371,8 @@ function mostrar(idtransporte) {
 
     $(".igv").val(parseFloat(data.igv).toFixed(2));
     $("#igv").val(data.igv);
+    $("#val_igv").val(data.val_igv); 
+    $("#tipo_gravada").val(data.tipo_gravada); 
 
     $("#ruta").val(data.ruta); 
     $("#descripcion").val(data.descripcion);

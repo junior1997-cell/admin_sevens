@@ -11,17 +11,17 @@ Class Planillas_seguros
 	}
 	//$idplanilla_seguro,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
+	public function insertar($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
 	{
-	
-		$sql="INSERT INTO planilla_seguro (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, descripcion, comprobante) 
-		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv','$descripcion','$comprobante')";
+		//var_dump($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);die();
+		$sql="INSERT INTO planilla_seguro (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, val_igv, tipo_gravada, descripcion, comprobante) 
+		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante')";
 		return ejecutarConsulta($sql);
 			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
+	public function editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
 	{
 		$sql="UPDATE planilla_seguro SET 
 		idproyecto='$idproyecto',
@@ -29,6 +29,8 @@ Class Planillas_seguros
 		costo_parcial='$precio_parcial',
 		subtotal='$subtotal',
 		igv='$igv',
+		val_igv='$val_igv',
+		tipo_gravada='$tipo_gravada',
 		descripcion='$descripcion',
 		forma_de_pago='$forma_pago',
 		tipo_comprobante='$tipo_comprobante',

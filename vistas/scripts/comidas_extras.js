@@ -80,6 +80,8 @@ function limpiar() {
 
   $(".igv").val("");
   $("#igv").val("");
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val("");  
 
   $("#doc_old_1").val("");
   $("#doc1").val("");  
@@ -89,8 +91,12 @@ function limpiar() {
 
 //Función Listar
 function listar() {
+
+  $("#total_monto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
   var idproyecto=localStorage.getItem('nube_idproyecto');
-  tabla=$('#tabla-hospedaje').dataTable({
+  
+  tabla=$('#tabla-comidas_extras').dataTable({
     "responsive": true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
@@ -176,73 +182,92 @@ function modal_comprobante(comprobante){
 function comprob_factura() {
 
   var monto = parseFloat($('.precio_parcial').val());
-  $("#precio_parcial").val(monto);
- 
-  if ($("#tipo_comprobante").select2("val") =="Factura") {
-    
-      $(".nro_comprobante").html("Núm. Comprobante");
 
-      $(".div_ruc").show(); $(".div_razon_social").show();
+  if (monto=="" || monto==null) {
 
-      var subtotal=0; var igv=0;
-
-      $("#subtotal").val("");
-      $("#igv").val(""); 
-
-      subtotal= monto/1.18;
-      igv= monto-subtotal;
-
-      $(".subtotal").val(subtotal.toFixed(2));
-      $("#subtotal").val(subtotal.toFixed(2));
-
-      $(".igv").val(igv.toFixed(2));
-      $("#igv").val(igv.toFixed(2));
+    $("#subtotal").val("");
+    $(".subtotal").val("");
+    $("#igv").val(""); 
+    $("#val_igv").val(""); 
+    $("#tipo_gravada").val(""); 
 
   } else {
 
-    if ($("#tipo_comprobante").select2("val") =="Boleta") {
-            
-      $(".nro_comprobante").html("Núm. Comprobante");
-
-      $(".div_ruc").show(); $(".div_razon_social").show();
-
-      $(".subtotal").val(monto.toFixed(2));
-      $("#subtotal").val(monto);
-
-      $(".igv").val("0.00");
-      $("#igv").val("0.00");
-
-    }else{
-
-      if ($("#tipo_comprobante").select2("val") =="Ninguno") {
-            
-        $(".nro_comprobante").html("Núm. de Operación");
-
-        $(".div_ruc").hide(); $(".div_razon_social").hide();
-        
-        $(".subtotal").val(monto.toFixed(2));
-        $("#subtotal").val(monto);
-
-        $(".igv").val("0.00");
-        $("#igv").val("0.00");
-
-      } else {
-
+    $("#precio_parcial").val(monto);
+  
+    if ($("#tipo_comprobante").select2("val") =="Factura") {
+      
         $(".nro_comprobante").html("Núm. Comprobante");
 
-        $(".div_ruc").hide(); $(".div_razon_social").hide();
-                
+        $(".div_ruc").show(); $(".div_razon_social").show();
+
+        var subtotal=0; var igv=0;
+
+        $("#subtotal").val("");
+        $("#igv").val(""); 
+        $("#val_igv").val(""); 
+        $("#tipo_gravada").val(""); 
+
+        subtotal= monto/1.18;
+        igv= monto-subtotal;
+
+        $(".subtotal").val(subtotal.toFixed(2));
+        $("#subtotal").val(subtotal.toFixed(2));
+
+        $(".igv").val(igv.toFixed(2));
+        $("#igv").val(igv.toFixed(2));
+        $("#val_igv").val("0.18"); 
+        $("#tipo_gravada").val("Grabada"); 
+    } else {
+
+      if ($("#tipo_comprobante").select2("val") =="Boleta") {
+              
+        $(".nro_comprobante").html("Núm. Comprobante");
+
+        $(".div_ruc").show(); $(".div_razon_social").show();
+
         $(".subtotal").val(monto.toFixed(2));
         $("#subtotal").val(monto);
 
         $(".igv").val("0.00");
         $("#igv").val("0.00");
-        
-      }
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("No Grabada"); 
 
+      }else{
+
+        if ($("#tipo_comprobante").select2("val") =="Ninguno") {
+              
+          $(".nro_comprobante").html("Núm. de Operación");
+
+          $(".div_ruc").hide(); $(".div_razon_social").hide();
+          
+          $(".subtotal").val(monto.toFixed(2));
+          $("#subtotal").val(monto);
+
+          $(".igv").val("0.00");
+          $("#igv").val("0.00");
+          $("#val_igv").val("0"); 
+          $("#tipo_gravada").val("No Grabada"); 
+
+        } else {
+
+          $(".nro_comprobante").html("Núm. Comprobante");
+
+          $(".div_ruc").hide(); $(".div_razon_social").hide();
+                  
+          $(".subtotal").val(monto.toFixed(2));
+          $("#subtotal").val(monto);
+
+          $(".igv").val("0.00");
+          $("#igv").val("0.00");
+          $("#val_igv").val("0"); 
+          $("#tipo_gravada").val("No Grabada"); 
+          
+        }
+      }
     }
-  }
-  
+  } 
 }
 //Función para guardar o editar
 
@@ -320,6 +345,8 @@ function mostrar(idcomida_extra ) {
 
     $(".igv").val(parseFloat(data.igv).toFixed(2));
     $("#igv").val(data.igv);
+    $("#val_igv").val(data.val_igv);
+    $("#tipo_gravada").val(data.tipo_gravada);
     /**-------------------------*/
   
     if (data.comprobante == "" || data.comprobante == null  ) {
@@ -361,6 +388,7 @@ function mostrar(idcomida_extra ) {
 }
 
 function total() {
+  $("#total_monto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   var idproyecto=localStorage.getItem('nube_idproyecto');
   $("#total_monto").html("");
   $.post("../ajax/comidas_extras.php?op=total", { idproyecto: idproyecto }, function (data, status) {
@@ -368,6 +396,7 @@ function total() {
     data = JSON.parse(data);  console.log(data);  
 
     $("#total_monto").html('S/. '+ formato_miles(data.precio_parcial));
+   // $("#cargando").hide();
   });
 }
 

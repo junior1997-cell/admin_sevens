@@ -691,6 +691,8 @@ function limpiar_comprobante() {
   $("#descripcion").val("");
   $("#subtotal").val("");
   $("#igv").val("");
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val(""); 
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
@@ -805,14 +807,13 @@ function listar_comprobantes(idsemana_break) {
 
 function comprob_factura() {
   var monto = 0;
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val(""); 
 
-  if ($("#monto").val() == "" || $("#monto").val() == null) {
-    monto = 0;
-  } else {
-    var monto = parseFloat($("#monto").val());
-  }
+  if ($("#monto").val() == "" || $("#monto").val() == null) { monto = 0; } else { var monto = parseFloat($("#monto").val()); }
 
   if ($("#tipo_comprobante").select2("val") == "Factura") {
+
     var subtotal = 0;
     var igv = 0;
 
@@ -829,8 +830,13 @@ function comprob_factura() {
 
     $("#subtotal").val(subtotal.toFixed(2));
     $("#igv").val(igv.toFixed(2));
+    $("#val_igv").val("0.18"); 
+    $("#tipo_gravada").val("Grabada"); 
+
   } else {
+
     if ($("#tipo_comprobante").select2("val") == "Boleta") {
+
       $(".nro_comprobante").html("Núm. Comprobante");
 
       $(".div_ruc").show();
@@ -838,8 +844,13 @@ function comprob_factura() {
 
       $("#subtotal").val(monto);
       $("#igv").val("0.00");
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("No Grabada"); 
+
     } else {
+
       if ($("#tipo_comprobante").select2("val") == "Ninguno") {
+
         $(".nro_comprobante").html("Núm. de Operación");
 
         $(".div_ruc").hide();
@@ -847,7 +858,11 @@ function comprob_factura() {
 
         $("#subtotal").val(monto);
         $("#igv").val("0.00");
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("No Grabada"); 
+
       } else {
+
         $(".nro_comprobante").html("Núm. Comprobante");
 
         $(".div_ruc").hide();
@@ -855,7 +870,11 @@ function comprob_factura() {
 
         $("#subtotal").val(monto);
         $("#igv").val("0.00");
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("No Grabada"); 
+
       }
+
     }
   }
 }
@@ -883,6 +902,8 @@ function mostrar_comprobante(idfactura_break) {
 
     $("#subtotal").val(data.subtotal);
     $("#igv").val(data.igv);
+    $("#val_igv").val(data.val_igv); 
+    $("#tipo_gravada").val(data.tipo_gravada); 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
     $("#forma_pago").val(data.forma_de_pago).trigger("change");
 

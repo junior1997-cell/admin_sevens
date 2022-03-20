@@ -9,51 +9,54 @@ require_once "../modelos/Fechas.php";
 $servicioequipos = new ServicioEquipos();
 
 //============SERVICIOS========================
-$idservicio = isset($_POST["idservicio"]) ? limpiarCadena($_POST["idservicio"]) : "";
-$idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
-$maquinaria = isset($_POST["maquinaria"]) ? limpiarCadena($_POST["maquinaria"]) : "";
-$fecha_inicio = isset($_POST["fecha_inicio"]) ? limpiarCadena($_POST["fecha_inicio"]) : "";
-$fecha_fin = isset($_POST["fecha_fin"]) ? limpiarCadena($_POST["fecha_fin"]) : "";
+$idservicio        = isset($_POST["idservicio"]) ? limpiarCadena($_POST["idservicio"]) : "";
+$idproyecto        = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
+$maquinaria        = isset($_POST["maquinaria"]) ? limpiarCadena($_POST["maquinaria"]) : "";
+$fecha_inicio      = isset($_POST["fecha_inicio"]) ? limpiarCadena($_POST["fecha_inicio"]) : "";
+$fecha_fin         = isset($_POST["fecha_fin"]) ? limpiarCadena($_POST["fecha_fin"]) : "";
 $horometro_inicial = isset($_POST["horometro_inicial"]) ? limpiarCadena($_POST["horometro_inicial"]) : "";
-$horometro_final = isset($_POST["horometro_final"]) ? limpiarCadena($_POST["horometro_final"]) : "";
-$horas = isset($_POST["horas"]) ? limpiarCadena($_POST["horas"]) : "";
-$costo_unitario = isset($_POST["costo_unitario"]) ? limpiarCadena($_POST["costo_unitario"]) : "";
-$cantidad = isset($_POST["cantidad"]) ? limpiarCadena($_POST["cantidad"]) : "";
-$costo_adicional = isset($_POST["costo_adicional"]) ? limpiarCadena($_POST["costo_adicional"]) : "";
-$costo_parcial = isset($_POST["costo_parcial"]) ? limpiarCadena($_POST["costo_parcial"]) : "";
-$unidad_m = isset($_POST["unidad_m"]) ? limpiarCadena($_POST["unidad_m"]) : "";
-$dias = isset($_POST["dias"]) ? limpiarCadena($_POST["dias"]) : "";
-$mes = isset($_POST["mes"]) ? limpiarCadena($_POST["mes"]) : "";
-$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+$horometro_final   = isset($_POST["horometro_final"]) ? limpiarCadena($_POST["horometro_final"]) : "";
+$horas             = isset($_POST["horas"]) ? limpiarCadena($_POST["horas"]) : "";
+$costo_unitario    = isset($_POST["costo_unitario"]) ? limpiarCadena($_POST["costo_unitario"]) : "";
+$cantidad          = isset($_POST["cantidad"]) ? limpiarCadena($_POST["cantidad"]) : "";
+$costo_adicional   = isset($_POST["costo_adicional"]) ? limpiarCadena($_POST["costo_adicional"]) : "";
+$costo_parcial     = isset($_POST["costo_parcial"]) ? limpiarCadena($_POST["costo_parcial"]) : "";
+$unidad_m          = isset($_POST["unidad_m"]) ? limpiarCadena($_POST["unidad_m"]) : "";
+$dias              = isset($_POST["dias"]) ? limpiarCadena($_POST["dias"]) : "";
+$mes               = isset($_POST["mes"]) ? limpiarCadena($_POST["mes"]) : "";
+$descripcion       = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 //============PAGOS========================
-$beneficiario_pago = isset($_POST["beneficiario_pago"]) ? limpiarCadena($_POST["beneficiario_pago"]) : "";
-$forma_pago = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
-$tipo_pago = isset($_POST["tipo_pago"]) ? limpiarCadena($_POST["tipo_pago"]) : "";
+$beneficiario_pago   = isset($_POST["beneficiario_pago"]) ? limpiarCadena($_POST["beneficiario_pago"]) : "";
+$forma_pago          = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
+$tipo_pago           = isset($_POST["tipo_pago"]) ? limpiarCadena($_POST["tipo_pago"]) : "";
 $cuenta_destino_pago = isset($_POST["cuenta_destino_pago"]) ? limpiarCadena($_POST["cuenta_destino_pago"]) : "";
-$banco_pago = isset($_POST["banco_pago"]) ? limpiarCadena($_POST["banco_pago"]) : "";
+$banco_pago          = isset($_POST["banco_pago"]) ? limpiarCadena($_POST["banco_pago"]) : "";
 $titular_cuenta_pago = isset($_POST["titular_cuenta_pago"]) ? limpiarCadena($_POST["titular_cuenta_pago"]) : "";
-$fecha_pago = isset($_POST["fecha_pago"]) ? limpiarCadena($_POST["fecha_pago"]) : "";
-$monto_pago = isset($_POST["monto_pago"]) ? limpiarCadena($_POST["monto_pago"]) : "";
-$numero_op_pago = isset($_POST["numero_op_pago"]) ? limpiarCadena($_POST["numero_op_pago"]) : "";
-$descripcion_pago = isset($_POST["descripcion_pago"]) ? limpiarCadena($_POST["descripcion_pago"]) : "";
-$id_maquinaria_pago = isset($_POST["id_maquinaria_pago"]) ? limpiarCadena($_POST["id_maquinaria_pago"]) : "";
-$idpago_servicio = isset($_POST["idpago_servicio"]) ? limpiarCadena($_POST["idpago_servicio"]) : "";
-$idproyecto_pago = isset($_POST["idproyecto_pago"]) ? limpiarCadena($_POST["idproyecto_pago"]) : "";
+$fecha_pago          = isset($_POST["fecha_pago"]) ? limpiarCadena($_POST["fecha_pago"]) : "";
+$monto_pago          = isset($_POST["monto_pago"]) ? limpiarCadena($_POST["monto_pago"]) : "";
+$numero_op_pago      = isset($_POST["numero_op_pago"]) ? limpiarCadena($_POST["numero_op_pago"]) : "";
+$descripcion_pago    = isset($_POST["descripcion_pago"]) ? limpiarCadena($_POST["descripcion_pago"]) : "";
+$id_maquinaria_pago  = isset($_POST["id_maquinaria_pago"]) ? limpiarCadena($_POST["id_maquinaria_pago"]) : "";
+$idpago_servicio     = isset($_POST["idpago_servicio"]) ? limpiarCadena($_POST["idpago_servicio"]) : "";
+$idproyecto_pago     = isset($_POST["idproyecto_pago"]) ? limpiarCadena($_POST["idproyecto_pago"]) : "";
 
 $imagen1 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
 //============factura========================
-$idproyectof = isset($_POST["idproyectof"]) ? limpiarCadena($_POST["idproyectof"]) : "";
-$idfactura = isset($_POST["idfactura"]) ? limpiarCadena($_POST["idfactura"]) : "";
-$idmaquina = isset($_POST["idmaquina"]) ? limpiarCadena($_POST["idmaquina"]) : "";
-$codigo = isset($_POST["codigo"]) ? limpiarCadena($_POST["codigo"]) : "";
-$monto = isset($_POST["monto"]) ? limpiarCadena($_POST["monto"]) : "";
+$idproyectof   = isset($_POST["idproyectof"]) ? limpiarCadena($_POST["idproyectof"]) : "";
+$idfactura     = isset($_POST["idfactura"]) ? limpiarCadena($_POST["idfactura"]) : "";
+$idmaquina     = isset($_POST["idmaquina"]) ? limpiarCadena($_POST["idmaquina"]) : "";
+$codigo        = isset($_POST["codigo"]) ? limpiarCadena($_POST["codigo"]) : "";
+$monto         = isset($_POST["monto"]) ? limpiarCadena($_POST["monto"]) : "";
 $fecha_emision = isset($_POST["fecha_emision"]) ? limpiarCadena($_POST["fecha_emision"]) : "";
 $descripcion_f = isset($_POST["descripcion_f"]) ? limpiarCadena($_POST["descripcion_f"]) : "";
-$subtotal = isset($_POST["subtotal"]) ? limpiarCadena($_POST["subtotal"]) : "";
-$igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
-$nota = isset($_POST["nota"]) ? limpiarCadena($_POST["nota"]) : "";
+$subtotal      = isset($_POST["subtotal"]) ? limpiarCadena($_POST["subtotal"]) : "";
+$igv           = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
+$nota          = isset($_POST["nota"]) ? limpiarCadena($_POST["nota"]) : "";
 
-$imagen2 = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "";
+$val_igv       = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+$tipo_gravada  = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
+
+$imagen2       = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "";
 //$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$doc2
 switch ($_GET["op"]) {
   /*=====ECCION DE SERVICIOS=========*/
@@ -783,12 +786,12 @@ switch ($_GET["op"]) {
         }
 
         if (empty($idfactura)) {
-          $rspta = $servicioequipos->insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $nota);
+          $rspta = $servicioequipos->insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
         } else {
           // validamos si existe LA IMG para eliminarlo
           if ($flat_img1 == true) {
-            $datos_f1 = $servicioequipos->obtenerImg($idfactura);
+            $datos_f1 = $servicioequipos->obtenerDoc($idfactura);
 
             $img1_ant = $datos_f1->fetch_object()->imagen;
 
@@ -797,7 +800,7 @@ switch ($_GET["op"]) {
             }
           }
 
-          $rspta = $servicioequipos->editar_factura($idfactura, $idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $nota);
+          $rspta = $servicioequipos->editar_factura($idfactura, $idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);
 
           echo $rspta ? "ok" : "Servicio no se pudo actualizar";
         }

@@ -18,6 +18,8 @@ $forma_pago = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
 $subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
 $igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+$val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+$tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
 
 $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
 $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
@@ -54,7 +56,7 @@ switch ($_GET["op"]){
 
 				if (empty($idcomida_extra)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion);
+					$rspta=$comidas_extras->insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -71,7 +73,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion);
+					$rspta=$comidas_extras->editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion);
 					//var_dump($idcomida_extra,$idproveedor);
 					echo $rspta ? "ok" : "Registro no se pudo actualizar";
 				}
@@ -212,7 +214,7 @@ switch ($_GET["op"]){
 					// empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/docs/comida_extra/comprobante/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 		 			
 					
-					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
+					 empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>';
 					 if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
 					 $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
 					 $data[]=array(

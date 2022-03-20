@@ -25,6 +25,8 @@ $tipo_comprobante = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tip
 $nro_comprobante  = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
 $subtotal         = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
 $igv              = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+$val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+$tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
 
 $foto2 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
 
@@ -57,7 +59,7 @@ switch ($_GET["op"]){
 
 				if (empty($idtransporte)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$transporte->insertar($idproyecto,$idproveedor,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$glosa);
+					$rspta=$transporte->insertar($idproyecto,$idproveedor,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$glosa);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
 				}
 				else {
@@ -74,7 +76,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$transporte->editar($idtransporte,$idproyecto,$idproveedor,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$glosa);
+					$rspta=$transporte->editar($idtransporte,$idproyecto,$idproveedor,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$glosa);
 					//var_dump($idtransporte,$idproveedor);
 					echo $rspta ? "ok" : "No se pudo actualizar";
 				}

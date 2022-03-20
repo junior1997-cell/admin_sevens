@@ -55,7 +55,7 @@
                     <div class="card-header">
                       <h3 class="card-title">
                         <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(true); estado_editar(false);"><i class="fas fa-user-plus"></i> Agregar</button>
-                        Admnistra de manera eficiente a los trabajdores
+                        Administra de manera eficiente a los trabajdores
                       </h3>
                     </div>
                     <!-- /.card-header -->

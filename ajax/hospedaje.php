@@ -23,6 +23,8 @@ $fecha_comprobante = isset($_POST["fecha_comprobante"])? limpiarCadena($_POST["f
 $nro_comprobante   = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
 $subtotal          = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
 $igv               = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+$val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+$tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
 
 $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
 $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
@@ -59,7 +61,7 @@ switch ($_GET["op"]){
 
 				if (empty($idhospedaje)){
 					//var_dump($idproyecto,$idproveedor);
-					$rspta=$hospedaje->insertar($idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion);
+					$rspta=$hospedaje->insertar($idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion);
 					echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
 				}
 				else {
@@ -76,7 +78,7 @@ switch ($_GET["op"]){
 						}
 					}
 
-					$rspta=$hospedaje->editar($idhospedaje,$idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$comprobante,$ruc,$razon_social,$direccion);
+					$rspta=$hospedaje->editar($idhospedaje,$idproyecto,$fecha_inicio,$fecha_fin,$cantidad,$unidad,$precio_unitario,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$fecha_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion);
 					//var_dump($idhospedaje,$idproveedor);
 					echo $rspta ? "ok" : "Trabador no se pudo actualizar";
 				}

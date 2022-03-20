@@ -31,6 +31,8 @@
       $descripcion         = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
       $subtotal            = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
       $igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
+      $val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+      $tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";
       
       $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
       $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
@@ -100,7 +102,7 @@
         
         break;
                 
-      /////////////////////// F I N  B R E A K///////////////////////
+       /////////////////////// F I N  B R E A K///////////////////////
 
         /* case 'listar_totales_semana':
           $nube_idproyecto = $_POST["idproyecto"];
@@ -159,7 +161,7 @@
       
               if (empty($idfactura_break)){
                 
-                $rspta=$breaks->insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2,$ruc,$razon_social,$direccion);
+                $rspta=$breaks->insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion);
                 echo $rspta ? "ok" : "No se pudieron registrar todos los datos de Comprobante";
               }
               else {
@@ -176,7 +178,7 @@
                   }
                 }
                 
-                $rspta=$breaks->editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2,$ruc,$razon_social,$direccion);
+                $rspta=$breaks->editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion);
                 
                 echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
               }
