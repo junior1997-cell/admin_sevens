@@ -1162,143 +1162,6 @@ function calcular_he(fecha, span_class_he, input_class_hn, id_trabajador, cant_d
   $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
 }
 
-function adicional_descuento(cant_trabajador, id_trabajador) {
-
-  var suma_resta = 0; var pago_parcial_HN = 0; pago_parcial_HE = 0;
-
-  //console.log($(`.pago_quincenal_${id_trabajador}`).text());   console.log($(`.adicional_descuento_${id_trabajador}`).val());
-
-  // capturamos los pgos parciales
-  pago_parcial_HN = parseFloat( quitar_formato_miles( $(`.pago_parcial_HN_${id_trabajador}`).text())); pago_parcial_HE = parseFloat( quitar_formato_miles($(`.pago_parcial_HE_${id_trabajador}`).text()));
-
-  if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
-
-    suma_resta = (pago_parcial_HN + pago_parcial_HE) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
-
-    $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(1)));
-
-    var suma_total_quincena = 0;
-
-    // acumulamos todos los pagos quicenales
-    for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
-      console.log($(`.val_pago_quincenal_${k}`).text()); 
-      suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
-    }
-
-    $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
-
-  } else {
-
-    toastr.error(`El dato de adicional/descuento: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un numero cero o un positivo o un negativo.`);    
-  }  
-}
-
-// GUARDAR - SABATICAL
-function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nombre_trabajador, idresumen_q_s_asistencia, numero_sabado) {
-  
-  if (estado_editar_asistencia) {
-    // Asignamos un val:8 al sabatical
-    if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).is(':checked')) {
-
-      // $(`#input_HN_${id_trabajador_x_proyecto}_${fecha}`).val('8'); console.log("tienen 8");
-
-      // $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
-        
-      //   if (e == 'ok') {
-      //     tabla_principal.ajax.reload();
-      //     toastr.success(`<h5>Asignado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ASIGNADO con éxito.`);
-      //   } else {
-      //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
-      //     toastr.error(`<h5>Error</h5> Sabatical manual, no se registro correctamente.`);
-      //   }
-      // }); 
-      $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
-      toastr.error(`<h5>Guarda estos datos</h5> guarda estos datos para "asignar o quitar" un sabatical.`);
-
-    } else { // Asignamos un val:0 al sabatical
-      // $(`#input_HN_${id_trabajador_x_proyecto}_${fecha}`).val('0'); console.log("tienen 0");
-      // $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia,  'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
-        
-      //   if (e == 'ok') { 
-      //     tabla_principal.ajax.reload();
-      //     toastr.success(`<h5>Anulado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ANULADO con éxito.`);
-      //   } else {
-      //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
-      //     toastr.error(`<h5>Error</h5> Sabatical manual, no a sido ANULADO correctamente.`);
-      //   }
-      // });
-      $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
-      toastr.error(`<h5>Guarda estos datos</h5> guarda estos datos para "asignar o quitar" un sabatical.`);
-    }
-    var suma_sabatical = 0;
-    // verificamos los checks de: "sabado 1"
-    // if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_1`).is(':checked')){ suma_sabatical +=1; } else { suma_sabatical +=0; }
-    // verificamos los checks de: "sabado 2"
-    // if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_2`).is(':checked')) { suma_sabatical +=1; } else { suma_sabatical +=0; }
-
-    // enviamos la suma de sabatical
-    // $(`.sabatical_${id_trabajador_x_proyecto}`).html(suma_sabatical);
-  } else {
-    
-    if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).is(':checked')) {
-
-      Swal.fire({
-        title: "¿Está seguro asignar un sabatical manualmente?",
-        text: ``,
-        html:`El trabajador: <b>${nombre_trabajador}</b> tendra un sabatical para su "quincena" o "semana".`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#28a745",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, asignar!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
-            if (e == 'ok') {
-              datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
-              tabla_principal.ajax.reload();
-              Swal.fire("Asignado!", `El sabatical manual de: ${nombre_trabajador} a sido guardado con éxito.`, "success"); 
-            } else {
-              Swal.fire("Error!", e, "error");
-              $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
-            }
-          });    
-        }else{
-          $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
-        }
-      });  
-  
-    } else {
-  
-      Swal.fire({
-        title: "¿Está seguro ANULAR el sabatical manualmente?",
-        html: `Al trabajador: <b>${nombre_trabajador}</b> se le anulará un sabatical para su "quincena" o "semana".`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#28a745",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, anular!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
-            if (e == 'ok') {
-              datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
-              tabla_principal.ajax.reload();
-              Swal.fire("Quitado!", `El sabatical de: ${nombre_trabajador} a sido QUITADO con éxito.`, "success");
-            } else {
-              Swal.fire("Error!", e, "error");
-              $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
-            }            
-          });    
-        }else{
-          $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
-        }
-      });
-    }
-  }
-  
-}
-
 function pintar_boton_selecionado(i) {
   localStorage.setItem('i', i); //enviamos el ID-BOTON al localStorage
   // validamos el id para pintar el boton
@@ -1447,6 +1310,7 @@ function cerrar_modal_cargando() {
   $(".progress-bar").addClass("progress-bar-striped");
 }
 
+// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N  P A G O S   C O N T A D O R   M U L T I P L E S  :::::::::::::::::::::::::::::::::::::::..
 // GUARDAR - PAGO AL CONTADOR
 function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, nombre_trabajador, idresumen_q_s_asistencia, pago_quincenal) {
  
@@ -1466,7 +1330,7 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
       }).then((result) => {
         if (result.isConfirmed) {
 
-          $.post("../ajax/registro_asistencia.php?op=guardaryeditar_pago_al_contador", { 'fecha_q_s_inicio': fecha_q_s_inicio, 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"1"  }, function (e) {
+          $.post("../ajax/registro_asistencia.php?op=agregar_quitar_pago_al_contador", { 'fecha_q_s_inicio': fecha_q_s_inicio, 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"1"  }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
               Swal.fire("Enviado!", `El pago de: ${nombre_trabajador} a sido enviado con éxito.`, "success");
@@ -1495,7 +1359,7 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
       }).then((result) => {
         if (result.isConfirmed) {
 
-          $.post("../ajax/registro_asistencia.php?op=guardaryeditar_pago_al_contador", { 'fecha_q_s_inicio': fecha_q_s_inicio, 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"0" }, function (e) {
+          $.post("../ajax/registro_asistencia.php?op=agregar_quitar_pago_al_contador", { 'fecha_q_s_inicio': fecha_q_s_inicio, 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"0" }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
               Swal.fire("Quitado!", `El pago de: ${nombre_trabajador} a sido ANULADO con éxito.`, "success");
@@ -1519,8 +1383,7 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
   }  
 }
 
-// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N  P A G O S   C O N T A D O R   M U L T I P L E S  :::::::::::::::::::::::::::::::::::::::..
-
+// GUARDAR - PAGO AL CONTADOR - MULTIPLE
 function asignar_todos_pago_al_contador() {
   if ($(`#checkbox_asignar_pago_contador_todos`).is(':checked')) {
 
@@ -1564,12 +1427,114 @@ function asignar_todos_pago_al_contador() {
   }
 }
 
-// .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   H O R A S   M U L T I P L E S  :::::::::::::::::::::::::::::::::::::::..
-function calcular_todos_he() {
-  
-}
 
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   S A B A T I C A L   M U L T I P L E S  :::::::::::::::::::::::::::::::::::::::..
+// GUARDAR - SABATICAL
+function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nombre_trabajador, idresumen_q_s_asistencia, numero_sabado) {
+  
+  if (estado_editar_asistencia) {
+    // Asignamos un val:8 al sabatical
+    if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).is(':checked')) {
+
+      // $(`#input_HN_${id_trabajador_x_proyecto}_${fecha}`).val('8'); console.log("tienen 8");
+
+      // $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
+        
+      //   if (e == 'ok') {
+      //     tabla_principal.ajax.reload();
+      //     toastr.success(`<h5>Asignado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ASIGNADO con éxito.`);
+      //   } else {
+      //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
+      //     toastr.error(`<h5>Error</h5> Sabatical manual, no se registro correctamente.`);
+      //   }
+      // }); 
+      $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
+      toastr.error(`<h5>Guarda estos datos</h5> guarda estos datos para "asignar o quitar" un sabatical.`);
+
+    } else { // Asignamos un val:0 al sabatical
+      // $(`#input_HN_${id_trabajador_x_proyecto}_${fecha}`).val('0'); console.log("tienen 0");
+      // $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia,  'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
+        
+      //   if (e == 'ok') { 
+      //     tabla_principal.ajax.reload();
+      //     toastr.success(`<h5>Anulado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ANULADO con éxito.`);
+      //   } else {
+      //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
+      //     toastr.error(`<h5>Error</h5> Sabatical manual, no a sido ANULADO correctamente.`);
+      //   }
+      // });
+      $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
+      toastr.error(`<h5>Guarda estos datos</h5> guarda estos datos para "asignar o quitar" un sabatical.`);
+    }
+    var suma_sabatical = 0;
+    // verificamos los checks de: "sabado 1"
+    // if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_1`).is(':checked')){ suma_sabatical +=1; } else { suma_sabatical +=0; }
+    // verificamos los checks de: "sabado 2"
+    // if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_2`).is(':checked')) { suma_sabatical +=1; } else { suma_sabatical +=0; }
+
+    // enviamos la suma de sabatical
+    // $(`.sabatical_${id_trabajador_x_proyecto}`).html(suma_sabatical);
+  } else {
+    
+    if ($(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).is(':checked')) {
+
+      Swal.fire({
+        title: "¿Está seguro asignar un sabatical manualmente?",
+        text: ``,
+        html:`El trabajador: <b>${nombre_trabajador}</b> tendra un sabatical para su "quincena" o "semana".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, asignar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
+            if (e == 'ok') {
+              datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+              tabla_principal.ajax.reload();
+              Swal.fire("Asignado!", `El sabatical manual de: ${nombre_trabajador} a sido guardado con éxito.`, "success"); 
+            } else {
+              Swal.fire("Error!", e, "error");
+              $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
+            }
+          });    
+        }else{
+          $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
+        }
+      });  
+  
+    } else {
+  
+      Swal.fire({
+        title: "¿Está seguro ANULAR el sabatical manualmente?",
+        html: `Al trabajador: <b>${nombre_trabajador}</b> se le anulará un sabatical para su "quincena" o "semana".`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, anular!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.post("../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
+            if (e == 'ok') {
+              datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+              tabla_principal.ajax.reload();
+              Swal.fire("Quitado!", `El sabatical de: ${nombre_trabajador} a sido QUITADO con éxito.`, "success");
+            } else {
+              Swal.fire("Error!", e, "error");
+              $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
+            }            
+          });    
+        }else{
+          $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
+        }
+      });
+    }
+  }
+  
+}
+// GUARDAR - SABATICAL 1 MULTIPLE
 function calcular_todos_sabatical_1() {
 
   console.log(array_sabatical_1);
@@ -1603,10 +1568,10 @@ function calcular_todos_sabatical_1() {
         if (result.isConfirmed) {
 
           $.ajax({
-            url: "../ajax/registro_asistencia.php?op=guardar_y_editar_",
+            url: "../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual_todos",
             type: "POST",
             data:  {
-              'trabajador': JSON.stringify(array_sabatical_1), 
+              'sabatical_trabajador': JSON.stringify(array_sabatical_1), 
               'estado_sabatical_manual':'1',
             },
             success: function (datos) {
@@ -1664,9 +1629,49 @@ function calcular_todos_sabatical_1() {
       }).then((result) => {
         if (result.isConfirmed) {
            
-          Swal.fire("Quitado!", `Todos los sabaticales manuales a sido QUITADO con éxito.`, "success");
-            
-          $(`#checkbox_sabatical_todos_1`).prop('checked', false);
+          $.ajax({
+            url: "../ajax/registro_asistencia.php?op=agregar_quitar_sabatical_manual_todos",
+            type: "POST",
+            data:  {
+              'trabajador': JSON.stringify(array_sabatical_1), 
+              'estado_sabatical_manual':'0',
+            },
+            success: function (datos) {
+                     
+              if (datos == 'ok') {
+        
+                datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); tabla_principal.ajax.reload();               
+                // $(`#checkbox_sabatical_todos_1`).prop('checked', true); 
+                Swal.fire("Asignado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
+                
+              }else{
+        
+                Swal.fire("Error!", datos, "error");
+              }
+            },
+            xhr: function () {
+        
+              var xhr = new window.XMLHttpRequest();
+        
+              xhr.upload.addEventListener("progress", function (evt) {
+        
+                if (evt.lengthComputable) {
+        
+                  var percentComplete = (evt.loaded / evt.total)*100;
+                  /*console.log(percentComplete + '%');*/
+                  $("#barra_progress").css({"width": percentComplete+'%'});
+        
+                  $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+        
+                  if (percentComplete === 100) {
+        
+                    setTimeout(l_m, 600);
+                  }
+                }
+              }, false);
+              return xhr;
+            }
+          });
                  
         }else{
           $(`#checkbox_sabatical_todos_1`).prop('checked', true);
@@ -1675,7 +1680,7 @@ function calcular_todos_sabatical_1() {
     }
   }
 }
-
+// GUARDAR - SABATICAL 2 MULTIPLE
 function calcular_todos_sabatical_2() {
   console.log(array_sabatical_2);
 }
@@ -1694,12 +1699,43 @@ function agregar_horas_multiples(e) {
   toastr.success(`<h5>${horas} Horas.</h5> Se agregaron a todos los trabajadores.`);
 
 }
-// $('.horas-multiples').on('click', function (e) {
-//   console.log('guardando valores');
-//   $('.input_asist').val();
-// });
+
+function calcular_todos_he() {
+  
+}
 
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   A D I C I O N A L   D E S C U E N T O  :::::::::::::::::::::::::::::::::::::::..
+function adicional_descuento(cant_trabajador, id_trabajador) {
+
+  var suma_resta = 0; var pago_parcial_HN = 0; pago_parcial_HE = 0;
+
+  //console.log($(`.pago_quincenal_${id_trabajador}`).text());   console.log($(`.adicional_descuento_${id_trabajador}`).val());
+
+  // capturamos los pgos parciales
+  pago_parcial_HN = parseFloat( quitar_formato_miles( $(`.pago_parcial_HN_${id_trabajador}`).text())); pago_parcial_HE = parseFloat( quitar_formato_miles($(`.pago_parcial_HE_${id_trabajador}`).text()));
+
+  if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
+
+    suma_resta = (pago_parcial_HN + pago_parcial_HE) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
+
+    $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(1)));
+
+    var suma_total_quincena = 0;
+
+    // acumulamos todos los pagos quicenales
+    for (let k = 1; k <= parseInt(cant_trabajador); k++) {    
+      console.log($(`.val_pago_quincenal_${k}`).text()); 
+      suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); 
+    }
+
+    $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena.toFixed(2)));
+
+  } else {
+
+    toastr.error(`El dato de adicional/descuento: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un numero cero o un positivo o un negativo.`);    
+  }  
+}
+
 function guardaryeditar_adicional_descuento(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-adicional-descuento")[0]);
@@ -1948,7 +1984,7 @@ function desactivar_dia_asistencia(idasistencia_trabajador) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/registro_asistencia.php?op=desactivar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+      $.post("../ajax/registro_asistencia.php?op=desactivar_dia", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
 
         Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
     
@@ -1971,7 +2007,7 @@ function activar_dia_asistencia(idasistencia_trabajador) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/registro_asistencia.php?op=activar", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+      $.post("../ajax/registro_asistencia.php?op=activar_dia", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
 
         Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
 
@@ -1984,7 +2020,7 @@ function activar_dia_asistencia(idasistencia_trabajador) {
 
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   Q U I N C E N A S   O   S E M A N A S  :::::::::::::::::::::::::::::::::::::::..
 // TBLA - QUINCENA SEMANA INDIVIDUAL
-function ver_q_s_individual(idtrabajador_por_proyecto) {
+function tabla_qs_individual(idtrabajador_por_proyecto) {
 
   idtrabajador_por_proyecto_r = idtrabajador_por_proyecto;
 
@@ -2000,7 +2036,7 @@ function ver_q_s_individual(idtrabajador_por_proyecto) {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [10,11,1,2,3,4,5,6,7], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [10,11,1,2,3,4,5,6,7], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [10,11,1,2,3,4,5,6,7], } }, {extend: "colvis"} ,
     ],
     "ajax":{
-      url: '../ajax/registro_asistencia.php?op=listar_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      url: '../ajax/registro_asistencia.php?op=tabla_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -2068,7 +2104,7 @@ function desactivar_qs(id, tipo_pago) {
         if (e == 'ok') {
           Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
           tbla_principal(localStorage.getItem('nube_idproyecto')); 
-          ver_q_s_individual(idtrabajador_por_proyecto_r);
+          tabla_qs_individual(idtrabajador_por_proyecto_r);
         } else {
           Swal.fire("Error!", e, "error");
         }        
@@ -2096,7 +2132,7 @@ function activar_qs(id, tipo_pago) {
         if (e == 'ok') {
           Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
           tbla_principal(localStorage.getItem('nube_idproyecto')); 
-          ver_q_s_individual(idtrabajador_por_proyecto_r);
+          tabla_qs_individual(idtrabajador_por_proyecto_r);
         } else {
           Swal.fire("Error!", e, "error");
         }        

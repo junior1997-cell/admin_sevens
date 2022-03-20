@@ -10,101 +10,8 @@ Class Asistencia_trabajador
 
 	}
 
-	// voy a boorar la funcion cuando no la necesite  - no se utiliza - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	public function insertarrrrrr($idproyecto, $trabajador, $horas_trabajo_dia, $fecha)
-	{
-		$num_elementos=0;
-		$sw=true;		
-
-		while ($num_elementos < count($trabajador))
-		{
-			$horas_acumuladas='';
-			$horas_trabajo='';
-			$sabatical='';
-			$pago_dia='';
-			$horas_extras='';
-			$pago_horas_extras='';
-			$numero_validado = "";		 
-			
-			(floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60 >= 10 ? $numero_validado = (floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60 : $numero_validado = '0'.(floatval(substr($horas_trabajo_dia[$num_elementos], 3, 5))*100)/60 ;
-			
-			$horas_desglose = substr($horas_trabajo_dia[$num_elementos], 0, 2).'.'.$numero_validado;
-
-			$sql1="SELECT tp.sueldo_hora AS sueldo_hora FROM trabajador_por_proyecto AS tp WHERE tp.idtrabajador_por_proyecto = '$trabajador[$num_elementos]' AND tp.idproyecto = '$idproyecto';";
-			$sueldoxhora_trab = ejecutarConsultaSimpleFila($sql1);
-
-			$sql2 = "SELECT sum(atr.horas_normal_dia) as horas_trabajo,sum(atr.sabatical) as sabatical
-				FROM asistencia_trabajador as atr, trabajador_por_proyecto AS tp 
-				WHERE tp.idtrabajador_por_proyecto = '$trabajador[$num_elementos]' AND atr.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idproyecto = '$idproyecto';";
-			$datos = ejecutarConsultaSimpleFila($sql2);
-
-			if ($datos==NULL) {
-				if (floatval($horas_desglose)>8) {
-					$horas_extras = floatval($horas_desglose)-8;
-					$pago_horas_extras = round($horas_extras*$sueldoxhora_trab['sueldo_hora'],1);
-					$horas_trabajo=8;
-				}else{
-					$horas_extras=0;
-					$pago_horas_extras=0;
-					$horas_trabajo=floatval($horas_desglose);
-				}
-				$sabatical=0;
-				$pago_dia = round( floatval($horas_trabajo)*$sueldoxhora_trab['sueldo_hora'], 1);
-
-			}else{
-				$horas_acumuladas=floatval($horas_desglose)+$datos['horas_trabajo'];
-
-				$caculamos = floatval( substr($horas_acumuladas/44, 0, 1));
-
-				if ( $caculamos == $datos['sabatical'] && $horas_acumuladas < 44) {
-
-					$sabatical=0;
-
-				}else {
-
-					if ( $caculamos == $datos['sabatical'] && $horas_acumuladas >= 44) {
-
-						$sabatical=0;
-
-					}else {
-
-						$sabatical=1;
-					}						 
-				}
-
-				if (floatval($horas_desglose)>8) {
-
-					$horas_extras = floatval($horas_desglose)-8;
-					$pago_horas_extras = round( $horas_extras*$sueldoxhora_trab['sueldo_hora'], 1);
-					$horas_trabajo = 8;
-
-				}else{
-
-					$horas_extras=0;
-					$pago_horas_extras=0;
-					$horas_trabajo=floatval($horas_desglose);
-				}
-
-				$pago_dia = round( floatval($horas_trabajo)*$sueldoxhora_trab['sueldo_hora'], 1);
-			}
-
-			 
-			$sql_detalle="INSERT INTO asistencia_trabajador (	idtrabajador_por_proyecto, 	horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, sabatical, fecha_asistencia)
-			VALUES ('$trabajador[$num_elementos]', '$horas_trabajo', '$pago_dia', '$horas_extras', '$pago_horas_extras', '$sabatical', '$fecha')";
-			ejecutarConsulta($sql_detalle) or $sw = false;
-
-				
-			// echo "trabaja: $trabajador[$num_elementos], hn: $horas_trabajo, pn: $pago_dia, hx: $horas_extras, pago: $pago_horas_extras, sabat: $sabatical \n";
-			$num_elementos=$num_elementos + 1;
-		}
-		
-		return $sw;
-			
-	}
-
 	//Implementamos un método para insertar registros
-	public function insertar_asistencia_y_resumen_q_s_asistencia($asistencia, $extras, $fecha_i, $fecha_f)
-	{
+	public function insertar_asistencia_y_resumen_q_s_asistencia($asistencia, $extras, $fecha_i, $fecha_f) {
 		$data_asistencia = json_decode( $asistencia, true ); $data_extras = json_decode( $extras, true );   $pruebas = ""; $sw=true; 
 		
 		$buscar_asistencia = ""; $buscar_extras = "";
@@ -172,8 +79,7 @@ Class Asistencia_trabajador
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idasistencia_trabajador, $trabajador, $horas_trabajo, $pago_dia, $horas_extras, $pago_horas_extras, $sabatical)
-	{
+	public function editar($idasistencia_trabajador, $trabajador, $horas_trabajo, $pago_dia, $horas_extras, $pago_horas_extras, $sabatical)	{
 		//var_dump($idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 		
 		$sql="UPDATE asistencia_trabajador SET 
@@ -190,36 +96,31 @@ Class Asistencia_trabajador
 	}
 
 	//Implementamos un método para desactivar categorías
-	public function desactivar($idasistencia_trabajador)
-	{
+	public function desactivar($idasistencia_trabajador){
 		$sql="UPDATE asistencia_trabajador SET estado='0' WHERE idasistencia_trabajador='$idasistencia_trabajador'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para activar categorías
-	public function activar($idasistencia_trabajador)
-	{
+	public function activar($idasistencia_trabajador) {
 		$sql="UPDATE asistencia_trabajador SET estado='1' WHERE idasistencia_trabajador='$idasistencia_trabajador'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para desactivar categorías
-	public function desactivar_qs($id)
-	{
+	public function desactivar_qs($id){
 		$sql="UPDATE resumen_q_s_asistencia SET estado='0' WHERE idresumen_q_s_asistencia='$id'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para activar categorías
-	public function activar_qs($id)
-	{
+	public function activar_qs($id) {
 		$sql="UPDATE resumen_q_s_asistencia SET estado='1' WHERE idresumen_q_s_asistencia='$id'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idasistencia_trabajador)
-	{
+	public function mostrar($idasistencia_trabajador) {
 		$sql="SELECT tp.idtrabajador_por_proyecto, t.nombres , t.tipo_documento as documento, t.numero_documento, tp.cargo, t.imagen_perfil, atr.fecha_asistencia, atr.horas_normal_dia, atr.horas_extras_dia 
 		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS atr 
 		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto AND atr.idasistencia_trabajador = '$idasistencia_trabajador';";
@@ -227,8 +128,7 @@ Class Asistencia_trabajador
 	}
 
 	//Implementar un método para listar asistencia
-	public function tbla_principal($nube_idproyecto)
-	{
+	public function tbla_principal($nube_idproyecto) {
 		$trabajdor_resumen = Array();
 		$sql="SELECT atr.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, 
 		t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tpp.sueldo_hora, tpp.sueldo_mensual, tpp.sueldo_diario,
@@ -426,19 +326,7 @@ Class Asistencia_trabajador
 
 		return $data ;
 	}
-
-	//ver detalle quincena por trabador y por dìa
-	public function ver_detalle_quincena_dias($f1,$f2,$nube_idproyect,$idtrabajador){
-
-		$sql="SELECT atr.idasistencia_trabajador as idasistencia_trabajador, 
-		atr.idtrabajador as idtrabajador, 
-		atr.horas_trabajador as horas_trabajador,
-		atr.horas_extras_dia as horas_extras_dia,
-		atr.fecha_asistencia as fecha_asistencia
-		FROM asistencia_trabajador as atr, trabajador as t
-		WHERE atr.idtrabajador= t.idtrabajador AND t.idtrabajador='$idtrabajador' AND t.idproyecto='$nube_idproyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2'";
-		return ejecutarConsulta($sql);
-	}	
+	
 
 	//Seleccionar Trabajador Select2
 	public function lista_trabajador($nube_idproyecto){
@@ -473,7 +361,39 @@ Class Asistencia_trabajador
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	// insertamos el sabatical manual --------------
+	// insertamos el pago al contador --------------
+	public function insertar_pago_al_contador( $id_trabajador_x_proyecto, $fecha_q_s_inicio, $estado_envio_contador) {
+		$sql = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, fecha_q_s_inicio, estado_envio_contador) 
+				VALUES ('$id_trabajador_x_proyecto', '$fecha_q_s_inicio', '$estado_envio_contador' )";
+
+		return ejecutarConsulta($sql);
+	}
+	
+	public function quitar_editar_pago_al_contador($idresumen_q_s_asistencia, $id_trabajador_x_proyecto, $fecha_q_s_inicio, $estado_envio_contador)	{
+		$sql = "UPDATE resumen_q_s_asistencia 
+			SET  idtrabajador_por_proyecto='$id_trabajador_x_proyecto', fecha_q_s_inicio='$fecha_q_s_inicio', estado_envio_contador= '$estado_envio_contador'
+			WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
+		return ejecutarConsulta($sql);
+	}	
+
+	public function editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc) {
+		$sql = "UPDATE asistencia_trabajador SET 
+		descripcion_justificacion='$detalle_j', 
+		doc_justificacion='$doc'
+		WHERE idasistencia_trabajador = '$idasistencia_trabajador_j';";
+		return ejecutarConsulta($sql);
+	}
+
+	public function mostrar_justificacion($idasistencia_trabajador_j) {
+
+		$sql = "SELECT idasistencia_trabajador, descripcion_justificacion, doc_justificacion 
+		FROM asistencia_trabajador
+		WHERE idasistencia_trabajador =  '$idasistencia_trabajador_j';";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+    
+	// :::::::::::::::::::::::::::::::::::: S E C C I O N   S A B A T I C A L  ::::::::::::::::::::::::::::::::::::::
 	public function insertar_sabatical_manual($fecha_asist, $sueldo_x_hora, $fecha_q_s_inicio, $fecha_q_s_fin, $numero_q_s, $id_trabajador_x_proyecto, $numero_sabado, $estado_sabatical_manual){
 		$sql_1 = "SELECT atr.idasistencia_trabajador FROM asistencia_trabajador AS atr WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_x_proyecto' AND atr.fecha_asistencia = '$fecha_asist';";
 		$buscando_asist= ejecutarConsultaSimpleFila($sql_1);
@@ -532,37 +452,7 @@ Class Asistencia_trabajador
 		return ejecutarConsulta($sql);
 	}
 
-	// insertamos el pago al contador --------------
-	public function insertar_pago_al_contador( $id_trabajador_x_proyecto, $fecha_q_s_inicio, $estado_envio_contador) {
-		$sql = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, fecha_q_s_inicio, estado_envio_contador) 
-				VALUES ('$id_trabajador_x_proyecto', '$fecha_q_s_inicio', '$estado_envio_contador' )";
-
-		return ejecutarConsulta($sql);
-	}
-	
-	public function quitar_editar_pago_al_contador($idresumen_q_s_asistencia, $id_trabajador_x_proyecto, $fecha_q_s_inicio, $estado_envio_contador)	{
-		$sql = "UPDATE resumen_q_s_asistencia 
-			SET  idtrabajador_por_proyecto='$id_trabajador_x_proyecto', fecha_q_s_inicio='$fecha_q_s_inicio', estado_envio_contador= '$estado_envio_contador'
-			WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
-		return ejecutarConsulta($sql);
-	}	
-
-	public function editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc) {
-		$sql = "UPDATE asistencia_trabajador SET 
-		descripcion_justificacion='$detalle_j', 
-		doc_justificacion='$doc'
-		WHERE idasistencia_trabajador = '$idasistencia_trabajador_j';";
-		return ejecutarConsulta($sql);
-	}
-
-	public function mostrar_justificacion($idasistencia_trabajador_j) {
-
-		$sql = "SELECT idasistencia_trabajador, descripcion_justificacion, doc_justificacion 
-		FROM asistencia_trabajador
-		WHERE idasistencia_trabajador =  '$idasistencia_trabajador_j';";
-
-		return ejecutarConsultaSimpleFila($sql);
-	}
+    // :::::::::::::::::::::::::::::::::::: S E C C I O N   O B T E N E R   I M G ::::::::::::::::::::::::::::::::::::::
 
 	// obtebnemos los "DOC JUSTIFICACION para eliminar
 	public function imgJustificacion($id) {

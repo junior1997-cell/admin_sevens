@@ -42,27 +42,130 @@ ob_start();
 
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del trabajador";          
           
+        break;        
+
+              
+
+        case 'mostrar_editar':
+
+          $rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+
+        break;        
+
+        case 'ver_datos_quincena':
+          
+          $f1 = $_POST["f1"];
+          $f2 = $_POST["f2"];
+          $nube_idproyect = $_POST["nube_idproyect"];
+          // $f1 = '2021-07-09'; $f2 = '2021-07-23'; $nube_idproyect = '1';
+
+          $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
+
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);		
+        break;
+        
+        // listamos los botones de la quincena o semana
+        case 'listarquincenas_botones':
+
+          $nube_idproyecto = $_POST["nube_idproyecto"];
+
+          $rspta=$asist_trabajador->listarquincenas_botones($nube_idproyecto);
+          
+          echo json_encode($rspta);	 //Codificar el resultado utilizando json
+
         break;
 
-        // Agregamos o editamos el detalle adicional de: "resumen_q_s_asistencia"
-        case 'guardaryeditar_adicional_descuento':
+        // lista la tabla principal 
+        case 'tbla_principal':
+
+          $nube_idproyecto = $_GET["nube_idproyecto"];
+          
+          $rspta=$asist_trabajador->tbla_principal($nube_idproyecto);
+          //Vamos a declarar un array
+          $data= Array(); $cont = 1;
+
+          $jornal_diario = '';  $sueldo_acumudado=''; $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
+          foreach (json_decode($rspta, true) as $key => $value) {
+
+            $ver_asistencia="'".$value['idtrabajador_por_proyecto']."','".$value['fecha_inicio_proyect']."'";
+
+            $data[]=array(
+              "0"=> $cont++,
+              "1"=>'<center><button class="btn btn-info btn-sm" onclick="tabla_qs_individual('.$value['idtrabajador_por_proyecto'].')">
+                <i class="far fa-calendar-alt"></i>
+              </button>
+              <button class="btn btn-info btn-sm" onclick="ver_asistencias_individual('.$ver_asistencia.')">
+                <i class="far fa-clock"></i>
+              </button></center>',
+              "2"=>'<div class="user-block text-nowrap">
+                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" ><p class="text-primary mb-0" >
+                  <b class="text-dark-0"  >'. 
+                    $value['cargo'] .' - <span class="font-size-14px text-muted font-weight-normal" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
+                  </b> <br>'. $value['nombre'] .'</p>
+                </span>                
+              </div>',              
+              "3"=> '<center>' . round($value['total_horas_normal'] + $value['total_horas_extras'], 2) . '</center>',
+              "4"=> '<center>' . number_format(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 2, '.', ',') . '</center>',
+              "5"=> 'S/ '.$value['sueldo_hora'],
+              "6"=> 'S/ '.$value['sueldo_diario'],
+              "7"=> 'S/ '.number_format($value['sueldo_mensual'], 2, '.', ','),              
+              "8"=> '<center>' . $value['total_sabatical'] . '</center>',
+              "9"=> 'S/ ' . number_format($value['adicional_descuento'], 2, '.', ','),
+              "10"=> 'S/ ' . number_format($value['pago_quincenal'], 1, '.', ',') ,
+              "11"=> $value['cargo'] ,
+              "12"=> $value['nombre'] ,
+              "13"=> $value['tipo_doc'] .': '. $value['num_doc'] ,
+            );
+
+            $jornal_diario=0;
+
+            $sueldo_acumudado=0;
+          }           
+
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data
+          );
+
+          echo json_encode($results);
+          // echo $rspta;
+
+        break;
+
+        case 'suma_total_acumulado':
+          $rspta=$asist_trabajador->total_acumulado_trabajadores($_POST["nube_idproyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta);
+        break;               
+
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O   C O N T A D O R  ::::::::::::::::::::::::::::::::::::::
+
+        case 'guardaryeditar_pago_al_contador':
 
           if (empty($_POST["idresumen_q_s_asistencia"])) {
 
-            $rspta = $asist_trabajador->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
+            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
 
-            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento"; 
+            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
 
           } else {
 
-            $rspta = $asist_trabajador->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
 
-            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento";
+            echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";
           }
           
-        break;
+        break; 
 
-        // activamos el sabatical manual
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   S A B A T I C A L  ::::::::::::::::::::::::::::::::::::::
+
         case 'agregar_quitar_sabatical_manual':
 
           if (empty($_POST["idresumen_q_s_asistencia"])) {
@@ -80,24 +183,83 @@ ob_start();
           
         break;
 
-        // enviamos el pagos de quincena o semana al contador
-        case 'guardaryeditar_pago_al_contador':
+        case 'agregar_quitar_sabatical_manual_todos':
 
-          if (empty($_POST["idresumen_q_s_asistencia"])) {
+          if ( empty( json_decode($_POST["sabatical_trabajador"], true) ) ) {
 
-            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
-
-            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
+            echo "No hay trabajadores para asignar los sabaticales"; 
 
           } else {
 
-            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
+            $rspta = $asist_trabajador->quitar_editar_sabatical_manual($_POST["sabatical_trabajador"], $_POST["fecha_asist"] );
 
-            echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";
+            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador";
           }
           
         break;
 
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   D I A S   P O R   T R A B A J A D O R ::::::::::::::::::::::::::::::::::::::
+
+        case 'listar_asis_individual':
+
+          $idtrabajador_x_proyecto = $_GET["idtrabajadorproyecto"];
+          
+          $rspta=$asist_trabajador->tbla_asis_individual($idtrabajador_x_proyecto);
+          //Vamos a declarar un array
+          $data= Array(); 
+          
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
+          while ($reg=$rspta->fetch_object()){
+
+            $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+
+            $justificacion = "$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
+
+            $data[]=array(
+              "0"=> (empty($reg->doc_justificacion)) ? '<button class="btn btn-outline-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>' : '<button class="btn btn-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
+              "1"=> '<div class="user-block text-nowrap">
+                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > '.$reg->trabajador .'</p></span>
+                <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
+              </div>',
+              "2"=> $reg->horas_normal_dia,
+              "3"=> 'S/. '. $reg->pago_normal_dia,
+              "4"=> $reg->horas_extras_dia,
+              "5"=> 'S/. '. $reg->pago_horas_extras,
+              "6"=> '<b>Fecha: </b>'. format_d_m_a($reg->fecha_asistencia) ."<br> <b>Día: </b>". $reg->nombre_dia,
+              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
+            );
+          }
+
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data
+          );
+
+          echo json_encode($results);
+        break;
+
+        case 'desactivar_dia':
+
+          $rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
+
+          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
+
+        break;
+
+        case 'activar_dia':
+
+          $rspta=$asist_trabajador->activar($idasistencia_trabajador);
+
+          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+
+        break;  
+
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   J U S T I F I C A C I Ó N  ::::::::::::::::::::::::::::::::::::::
+        
         case 'guardar_y_editar_justificacion':
           	
           //*DOC 2*//
@@ -149,46 +311,6 @@ ob_start();
 
         break;
 
-        case 'desactivar':
-
-          $rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
-
-          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
-
-        break;
-
-        case 'activar':
-
-          $rspta=$asist_trabajador->activar($idasistencia_trabajador);
-
-          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
-
-        break;
-
-        case 'desactivar_qs':
-
-          $rspta=$asist_trabajador->desactivar_qs($_POST["idresumen_q_s_asistencia"]);
-
-          echo $rspta ? "ok" : "Semana no se puede desactivar";	
-
-        break;
-
-        case 'activar_qs':
-
-          $rspta=$asist_trabajador->activar_qs($_POST["idresumen_q_s_asistencia"]);
-
-          echo $rspta ? "ok" : "Semana no se puede activar";
-
-        break;
-
-        case 'mostrar_editar':
-
-          $rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-
-        break;
-
         case 'mostrar_justificacion':
 
           $rspta=$asist_trabajador->mostrar_justificacion($_POST["idasistencia_trabajador"]);
@@ -197,172 +319,9 @@ ob_start();
 
         break;
 
-        case 'ver_datos_quincena':
-          
-          $f1 = $_POST["f1"];
-          $f2 = $_POST["f2"];
-          $nube_idproyect = $_POST["nube_idproyect"];
-          // $f1 = '2021-07-09'; $f2 = '2021-07-23'; $nube_idproyect = '1';
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   Q-S  P O R   T R A B A J A D O R  ::::::::::::::::::::::::::::::::::::::
 
-          $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
-
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);		
-        break;
-
-        // lo voy a borrar cuando no lo nesecite
-        case 'ver_datos_quincena_xdia':
-          //$f1 = $_POST["f1"];
-          $f1 = $_POST["f1"];
-          $f2 = $_POST["f2"];
-          $nube_idproyect = $_POST["nube_idproyect"];
-          $idtrabajador = $_POST["idtrabajador"];
-          /*$f1 = '01/10/2021';
-          $f2 = '15/10/2021';
-          $nube_idproyect = '1';
-          $idtrabajador = '1';*/
-          $data= Array();
-
-          $rspta=$asist_trabajador->ver_detalle_quincena_dias($f1,$f2,$nube_idproyect,$idtrabajador);
-
-          while ($reg=$rspta->fetch_object()){
-
-            $data[]=array(
-              "idasistencia_trabajador"=>$reg->idasistencia_trabajador,
-              "idtrabajador"=>$reg->idtrabajador,
-              "horas_trabajador"=>$reg->horas_trabajador,
-              "horas_extras_dia"=>$reg->horas_extras_dia,
-              "fecha_asistencia"=>$reg->fecha_asistencia
-            );
-          }
-          
-          //Codificar el resultado utilizando json
-          echo json_encode($data);		
-        break;
-        
-        // listamos los botones de la quincena o semana
-        case 'listarquincenas_botones':
-
-          $nube_idproyecto = $_POST["nube_idproyecto"];
-
-          $rspta=$asist_trabajador->listarquincenas_botones($nube_idproyecto);
-          
-          echo json_encode($rspta);	 //Codificar el resultado utilizando json
-
-        break;
-
-        // lista la tabla principal 
-        case 'tbla_principal':
-
-          $nube_idproyecto = $_GET["nube_idproyecto"];
-          
-          $rspta=$asist_trabajador->tbla_principal($nube_idproyecto);
-          //Vamos a declarar un array
-          $data= Array(); $cont = 1;
-
-          $jornal_diario = '';  $sueldo_acumudado=''; $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
-          foreach (json_decode($rspta, true) as $key => $value) {
-
-            $ver_asistencia="'".$value['idtrabajador_por_proyecto']."','".$value['fecha_inicio_proyect']."'";
-
-            $data[]=array(
-              "0"=> $cont++,
-              "1"=>'<center><button class="btn btn-info btn-sm" onclick="ver_q_s_individual('.$value['idtrabajador_por_proyecto'].')">
-                <i class="far fa-calendar-alt"></i>
-              </button>
-              <button class="btn btn-info btn-sm" onclick="ver_asistencias_individual('.$ver_asistencia.')">
-                <i class="far fa-clock"></i>
-              </button></center>',
-              "2"=>'<div class="user-block text-nowrap">
-                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username" ><p class="text-primary mb-0" >
-                  <b class="text-dark-0"  >'. 
-                    $value['cargo'] .' - <span class="font-size-14px text-muted font-weight-normal" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
-                  </b> <br>'. $value['nombre'] .'</p>
-                </span>                
-              </div>',              
-              "3"=> '<center>' . round($value['total_horas_normal'] + $value['total_horas_extras'], 2) . '</center>',
-              "4"=> '<center>' . number_format(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 2, '.', ',') . '</center>',
-              "5"=> 'S/ '.$value['sueldo_hora'],
-              "6"=> 'S/ '.$value['sueldo_diario'],
-              "7"=> 'S/ '.number_format($value['sueldo_mensual'], 2, '.', ','),              
-              "8"=> '<center>' . $value['total_sabatical'] . '</center>',
-              "9"=> 'S/ ' . number_format($value['adicional_descuento'], 2, '.', ','),
-              "10"=> 'S/ ' . number_format($value['pago_quincenal'], 1, '.', ',') ,
-              "11"=> $value['cargo'] ,
-              "12"=> $value['nombre'] ,
-              "13"=> $value['tipo_doc'] .': '. $value['num_doc'] ,
-            );
-
-            $jornal_diario=0;
-
-            $sueldo_acumudado=0;
-          }           
-
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data
-          );
-
-          echo json_encode($results);
-          // echo $rspta;
-
-        break;
-
-        case 'suma_total_acumulado':
-          $rspta=$asist_trabajador->total_acumulado_trabajadores($_POST["nube_idproyecto"]);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-        break;
-
-        // lista la tabla individual por trabajador
-        case 'listar_asis_individual':
-
-          $idtrabajador_x_proyecto = $_GET["idtrabajadorproyecto"];
-          
-          $rspta=$asist_trabajador->tbla_asis_individual($idtrabajador_x_proyecto);
-          //Vamos a declarar un array
-          $data= Array(); 
-          
-          $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
-          while ($reg=$rspta->fetch_object()){
-
-            $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
-
-            $justificacion = "$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
-
-            $data[]=array(
-              "0"=> (empty($reg->doc_justificacion)) ? '<button class="btn btn-outline-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>' : '<button class="btn btn-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
-              "1"=> '<div class="user-block text-nowrap">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > '.$reg->trabajador .'</p></span>
-                <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
-              </div>',
-              "2"=> $reg->horas_normal_dia,
-              "3"=> 'S/. '. $reg->pago_normal_dia,
-              "4"=> $reg->horas_extras_dia,
-              "5"=> 'S/. '. $reg->pago_horas_extras,
-              "6"=> '<b>Fecha: </b>'. format_d_m_a($reg->fecha_asistencia) ."<br> <b>Día: </b>". $reg->nombre_dia,
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
-            );
-          }
-
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data
-          );
-
-          echo json_encode($results);
-        break;
-
-        // lista la tabla quincena semana por trabajador
-        case 'listar_qs_individual':
+        case 'tabla_qs_individual':
 
           $idtrabajador_x_proyecto = $_GET["idtrabajadorproyecto"];
           
@@ -406,8 +365,7 @@ ob_start();
 
           echo json_encode($results);
         break;
-        
-        // no se utiliza
+
         case 'suma_qs_individual':           
 
           $rspta=$asist_trabajador->suma_qs_individual($_POST["idtrabajadorproyecto"]);
@@ -416,30 +374,40 @@ ob_start();
 
         break;
 
-        // listamos para registrar asistencia
-        case 'lista_trabajador': 
+        case 'desactivar_qs':
 
-          // $nube_idproyecto = 1;
-          $nube_idproyecto = $_POST["nube_idproyecto"]; 
+          $rspta=$asist_trabajador->desactivar_qs($_POST["idresumen_q_s_asistencia"]);
 
-          $rspta = $asist_trabajador->lista_trabajador($nube_idproyecto);
+          echo $rspta ? "ok" : "Semana no se puede desactivar";	
 
-          $datos = Array();
+        break;
 
-          while ($reg = $rspta->fetch_object()){
+        case 'activar_qs':
 
-            $datos[]=array(
-              "idtrabajador_por_proyecto"=>$reg->idtrabajador_por_proyecto,
-              "imagen_perfil"=>$reg->imagen_perfil,
-              "nombres"=>$reg->nombres,
-              "documento"=>$reg->documento,
-              "numero_documento"=>$reg->numero_documento,
-              "cargo"=>$reg->cargo
-            );
+          $rspta=$asist_trabajador->activar_qs($_POST["idresumen_q_s_asistencia"]);
+
+          echo $rspta ? "ok" : "Semana no se puede activar";
+
+        break;
+
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   A D I C I O N A L   D E S C U E N T O ::::::::::::::::::::::::::::::::::::::
+        
+        // Agregamos o editamos el detalle adicional de: "resumen_q_s_asistencia"
+        case 'guardaryeditar_adicional_descuento':
+
+          if (empty($_POST["idresumen_q_s_asistencia"])) {
+
+            $rspta = $asist_trabajador->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
+
+            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento"; 
+
+          } else {
+
+            $rspta = $asist_trabajador->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+
+            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento";
           }
-          // enviamos los datos codificado
-          echo json_encode($datos);
-
+          
         break;
 
         case 'descripcion_adicional_descuento':
