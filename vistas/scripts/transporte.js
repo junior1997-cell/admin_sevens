@@ -150,7 +150,7 @@ function comprob_factura() {
     $(".igv").val(igv.toFixed(2));
     $("#igv").val(igv.toFixed(2));
     $("#val_igv").val("0.18"); 
-    $("#tipo_gravada").val("Grabada"); 
+    $("#tipo_gravada").val("GRAVADA"); 
 
   } else {
 
@@ -173,7 +173,7 @@ function comprob_factura() {
       $(".igv").val("0.00");
       $("#igv").val("0.00");
       $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("No Grabada"); 
+      $("#tipo_gravada").val("NO GRAVADA"); 
     }
 
   }

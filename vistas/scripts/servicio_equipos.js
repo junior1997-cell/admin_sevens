@@ -1283,7 +1283,7 @@ function calcula_igv_subt() {
   } else {
 
     $("#val_igv").val("0.18"); 
-    $("#tipo_gravada").val("Grabada"); 
+    $("#tipo_gravada").val("GRAVADA"); 
 
     subtotal = monto / 1.18;
     igv = monto - subtotal;

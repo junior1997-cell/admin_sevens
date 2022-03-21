@@ -124,14 +124,14 @@ function comprob_factura() {
         $("#igv").val(0);
         
         $("#val_igv").val("0"); 
-        $("#tipo_gravada").val("No Grabada");  
+        $("#tipo_gravada").val("NO GRAVADA");  
 
       } else {
         $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
         $("#igv").val(0); 
 
         $("#val_igv").val("0"); 
-        $("#tipo_gravada").val("No Grabada"); 
+        $("#tipo_gravada").val("NO GRAVADA"); 
 
       }   
 
@@ -155,7 +155,7 @@ function comprob_factura() {
           $("#igv").val("");
 
           $("#val_igv").val("0.18"); 
-          $("#tipo_gravada").val("Grabada"); 
+          $("#tipo_gravada").val("GRAVADA"); 
       
           subtotal = precio_parcial / 1.18;
           igv = precio_parcial - subtotal;
@@ -186,7 +186,7 @@ function comprob_factura() {
             $("#igv").val(0); 
             
             $("#val_igv").val("0"); 
-            $("#tipo_gravada").val("No Grabada"); 
+            $("#tipo_gravada").val("NO GRAVADA"); 
           } 
             
         } else {
@@ -203,7 +203,7 @@ function comprob_factura() {
           $("#igv").val(0);
 
           $("#val_igv").val("0"); 
-          $("#tipo_gravada").val("No Grabada");  
+          $("#tipo_gravada").val("NO GRAVADA");  
 
         } else {
 
@@ -211,7 +211,7 @@ function comprob_factura() {
           $("#igv").val(0); 
 
           $("#val_igv").val("0"); 
-          $("#tipo_gravada").val("No Grabada");  
+          $("#tipo_gravada").val("NO GRAVADA");  
 
         } 
           

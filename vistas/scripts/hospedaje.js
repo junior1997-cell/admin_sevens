@@ -149,7 +149,7 @@ function calculando_totales() {
     $('.precio_parcial').val(monto);
     $("#precio_parcial").val(monto);
     $("#val_igv").val("0.18"); 
-    $("#tipo_gravada").val("Grabada"); 
+    $("#tipo_gravada").val("GRAVADA"); 
 
   }else{
 
@@ -162,7 +162,7 @@ function calculando_totales() {
     $('.precio_parcial').val(monto.toFixed(2));
     $("#precio_parcial").val(monto);  
     $("#val_igv").val("0"); 
-    $("#tipo_gravada").val("No Grabada");  
+    $("#tipo_gravada").val("NO GRAVADA");  
   }  
 }
 
