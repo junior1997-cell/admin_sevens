@@ -240,19 +240,18 @@
               "4"=>$fecha_fin_nombre,
               "5"=>$count_dia,
               
-              "6"=>'S/. ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
-              "7" =>'S/. ' . number_format( $pago_total , 2, '.', ',') ,
-              "8"=>'S/. '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
+              "6"=>'S/ ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
+              "7" =>'S/ ' . number_format( $pago_total , 2, '.', ',') ,
+              "8"=>'S/ '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
               "9" =>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
-                <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/. '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
+                <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/ '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
               </div>',
-              "10"=>'S/. ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
+              "10"=>'S/ ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
               "11"=>$ultimo_mes_pago,
-              "12"=>$siguiente_mes_pago,
-              "13"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>'
+              "12"=>$siguiente_mes_pago,              
             );
           }
 

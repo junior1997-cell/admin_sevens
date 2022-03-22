@@ -20,7 +20,7 @@ ob_start();
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
       $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
 
-      // :::::::::::::::::::::::::::::::::::: D A T O S   J S U T I F I C A C I O N ::::::::::::::::::::::::::::::::::::::
+      // :::::::::::::::::::::::::::::::::::: D A T O S   J U S  T I F I C A C I O N ::::::::::::::::::::::::::::::::::::::
       $idasistencia_trabajador_j	= isset($_POST["idasistencia_trabajador_j"])? limpiarCadena($_POST["idasistencia_trabajador_j"]):"";
       $detalle_j	= isset($_POST["detalle_j"])? limpiarCadena($_POST["detalle_j"]):"";
       $doc1	= isset($_POST["doc1"])? $_POST["doc1"]:"";
@@ -30,7 +30,6 @@ ob_start();
       $fecha_inicio_actividad	= isset($_POST["fecha_inicio_actividad"])? limpiarCadena($_POST["fecha_inicio_actividad"]):"";
       $fecha_fin_actividad	= isset($_POST["fecha_fin_actividad"])? limpiarCadena($_POST["fecha_fin_actividad"]):"";
       $plazo_actividad	= isset($_POST["plazo_actividad"])? limpiarCadena($_POST["plazo_actividad"]):"";
-      
       
       switch ($_GET["op"]){
         // Gurdamos cada dia de asistencia del OBRERO
@@ -43,8 +42,6 @@ ob_start();
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del trabajador";          
           
         break;        
-
-              
 
         case 'mostrar_editar':
 
@@ -147,20 +144,28 @@ ob_start();
 
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O   C O N T A D O R  ::::::::::::::::::::::::::::::::::::::
 
-        case 'guardaryeditar_pago_al_contador':
+        case 'agregar_quitar_pago_al_contador':
 
           if (empty($_POST["idresumen_q_s_asistencia"])) {
 
-            $rspta = $asist_trabajador->insertar_pago_al_contador( $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
+            $rspta = false;
 
             echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
 
           } else {
 
-            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["id_trabajador_x_proyecto"], $_POST["fecha_q_s_inicio"], $_POST["estado_envio_contador"]);
+            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["estado_envio_contador"]);
 
             echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";
           }
+          
+        break; 
+
+        case 'agregar_quitar_pago_al_contador_todos':          
+
+          $rspta = $asist_trabajador->quitar_editar_pago_al_contador_todos($_POST["array_pago_contador"], $_POST["estado_envio_contador"]);
+
+          echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";          
           
         break; 
 
@@ -168,18 +173,9 @@ ob_start();
 
         case 'agregar_quitar_sabatical_manual':
 
-          if (empty($_POST["idresumen_q_s_asistencia"])) {
+          $rspta = $asist_trabajador->insertar_quitar_editar_sabatical_manual($_POST["idresumen_q_s_asistencia"], $_POST["fecha_asist"], $_POST["sueldo_x_hora"], $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
 
-            $rspta = $asist_trabajador->insertar_sabatical_manual( $_POST["fecha_asist"], $_POST["sueldo_x_hora"],  $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
-
-            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
-
-          } else {
-
-            $rspta = $asist_trabajador->quitar_editar_sabatical_manual($_POST["idresumen_q_s_asistencia"], $_POST["fecha_asist"], $_POST["sueldo_x_hora"], $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
-
-            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador";
-          }
+          echo $rspta ? "ok" : "No se pudieron GUARDAR el sabatical.";          
           
         break;
 
@@ -191,9 +187,9 @@ ob_start();
 
           } else {
 
-            $rspta = $asist_trabajador->quitar_editar_sabatical_manual($_POST["sabatical_trabajador"], $_POST["fecha_asist"] );
+            $rspta = $asist_trabajador->insertar_quitar_sabatical_manual_todos($_POST["sabatical_trabajador"], $_POST["estado_sabatical_manual"] );
 
-            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador";
+            echo $rspta ? "ok" : "No se pudieron GUARDAR los sabaticales";
           }
           
         break;
@@ -244,7 +240,7 @@ ob_start();
 
         case 'desactivar_dia':
 
-          $rspta=$asist_trabajador->desactivar($idasistencia_trabajador);
+          $rspta=$asist_trabajador->desactivar_dia($idasistencia_trabajador);
 
           echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
 
@@ -252,7 +248,7 @@ ob_start();
 
         case 'activar_dia':
 
-          $rspta=$asist_trabajador->activar($idasistencia_trabajador);
+          $rspta=$asist_trabajador->activar_dia($idasistencia_trabajador);
 
           echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 

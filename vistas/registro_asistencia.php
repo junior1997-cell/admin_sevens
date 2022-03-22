@@ -23,6 +23,7 @@
           require 'nav.php'; 
           require 'aside.php'; 
 
+          //if (false){
           if ($_SESSION['asistencia_trabajador']==1){  
             ?>
             <!-- Content Wrapper. Contains page content -->
@@ -114,7 +115,7 @@
                                   <th class="text-gray">Sueldo diario</th>                                
                                   <th class="text-gray">Sueldo mensual</th>                                
                                   <th class="text-gray">Sáb.</th>
-                                  <th class="text-center">Adicional</th>
+                                  <th class="text-center text-gray">Adicional</th>
                                   <th class="text-nowrap text-right"> <h5 id="total_acumulado_trabjadores">  S/. <i class="fas fa-spinner fa-pulse fa-sm"></i><br><br></h5></th>
                                   <th class="text-center">Cargo</th>
                                   <th class="text-center">Trabajdor</th>
@@ -718,35 +719,15 @@
 
             <?php  
           }else{ 
-            require 'noacceso.php'; 
-          } require 'footer.php'; 
+            require 'noacceso.php';
+            //require 'enmantenimiento.php'; 
+          } 
+          require 'footer.php'; 
           ?>
         </div>
 
         <!-- /.content-wrapper -->
-        <?php  require 'script.php';  ?>
-
-        <style>
-          .class-style label {
-            font-size: 14px;
-          }
-          .class-style small {
-            background-color: #f4f7ee;
-            border: solid 1px #ce542a21;
-            margin-left: 3px;
-            padding: 5px;
-            border-radius: 6px;
-          }
-          .fixed-celda{
-            background-color: #fff;
-            border-bottom: 0;
-            box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-          }
-        </style>
+        <?php  require 'script.php';  ?>          
         
         <!-- moment locale -->
         <script src="../plugins/moment/locales.js"></script>

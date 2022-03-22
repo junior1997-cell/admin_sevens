@@ -2226,8 +2226,8 @@ $(function () {
     messages: {
       idproveedor: { required: "Campo requerido", },
       tipo_comprobante: { required: "Campo requerido", },
-      serie_comprobante: { minlength: "mayor a 2 caracteres", },
-      descripcion: { minlength: "mayor a 4 caracteres", },
+      serie_comprobante: { minlength: "Minimo 2 caracteres", },
+      descripcion: { minlength: "Minimo 4 caracteres", },
       fecha_compra: { required: "Campo requerido", },
       glosa: { required: "Campo requerido", },
       val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },

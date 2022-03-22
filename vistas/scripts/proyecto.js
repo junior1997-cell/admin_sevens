@@ -1807,7 +1807,7 @@ $(function () {
       numero_documento: { required: true, minlength: 6, maxlength: 20 },
       empresa: { required: true, minlength: 6, maxlength: 200 },
       nombre_proyecto: { required: true, minlength: 6 },
-      nombre_codigo: {minlength: 4 },
+      nombre_codigo: {required: true, minlength: 4 },
       ubicacion: {minlength: 6, maxlength: 300},
       actividad_trabajo: {minlength: 6},
       empresa_acargo: {minlength: 6, maxlength: 200},
@@ -1838,7 +1838,8 @@ $(function () {
         maxlength: "La nombre de proyecto debe tener como MÁXIMO 200 caracteres.",
       },
       nombre_codigo: {
-        minlength: "El nombre de proyecto debe tener MÍNIMO 4 caracteres.",
+        required: "Este campo es requerido.",
+        minlength: "Minimo 4 caracteres.",
       },
       ubicacion: {
         minlength: "La ubicación debe tener MÍNIMO 6 caracteres.",
