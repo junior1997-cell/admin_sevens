@@ -339,7 +339,7 @@ class ServicioEquipos
    */
   public function insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
   {
-    //var_dump($idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2);die();
+   //var_dump($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);die();
     $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota) 
 		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv','$val_igv','$tipo_gravada','$nota')";
     return ejecutarConsulta($sql);

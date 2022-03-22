@@ -1271,26 +1271,62 @@ function listar_facturas(idmaquinaria, idproyecto) {
 
 //Calcular Igv y subtotal
 function calcula_igv_subt() {
+
   var subtotal = 0;
   var igv = 0;
   $("#subtotal").val("");
   $("#igv").val("");
+
+  var val_igv = $('#val_igv').val();
+
   var monto = parseFloat($("#monto").val());
+
   if (monto=="" || monto==null) {
+
     $("#val_igv").val(""); 
     $("#tipo_gravada").val(""); 
     $("#subtotal").val("");
     $("#igv").val("");
+
   } else {
 
-    $("#val_igv").val("0.18"); 
-    $("#tipo_gravada").val("GRAVADA"); 
-
-    subtotal = monto / 1.18;
+    subtotal =quitar_igv_del_precio(monto, val_igv, 'decimal');
     igv = monto - subtotal;
     $("#subtotal").val(subtotal.toFixed(2));
     $("#igv").val(igv.toFixed(2));
   }
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
 }
 
 //Función limpiar-factura
@@ -1302,7 +1338,7 @@ function limpiar_factura() {
   $("#descripcion_f").val("Por concepto de alquiler de maquinaria");
   $("#subtotal").val("");
   $("#igv").val("");
-  $("#val_igv").val(""); 
+ // $("#val_igv").val(""); 
   $("#tipo_gravada").val("");
   $("#nota").val("");
   

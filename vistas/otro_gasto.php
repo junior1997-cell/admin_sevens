@@ -140,7 +140,7 @@
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante</label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" onkeyup="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -218,12 +218,18 @@
                                 </div>
                               </div>
                               <!-- IGV -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
                                   <input class="form-control igv" type="number" id="igv" name="igv" placeholder="IGV" readonly />
-                                  <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
-                                  <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
+                                </div>
+                              </div>
+                              <!-- valor IGV -->
+                              <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
+                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();"> 
+                                    <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>
                               <!--Precio Parcial-->

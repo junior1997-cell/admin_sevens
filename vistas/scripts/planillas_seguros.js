@@ -54,15 +54,12 @@ function limpiar() {
   $("#idplanilla_seguro").val("");
   $("#fecha_p_s").val("");
 
-  $(".precio_parcial").val(""); 
   $("#precio_parcial").val(""); 
 
   $("#nro_comprobante").val("");
 
-  $(".subtotal").val("");
   $("#subtotal").val("");
 
-  $(".igv").val("");
   $("#igv").val("");
   $("#val_igv").val(""); 
   $("#tipo_gravada").val(""); 
@@ -82,45 +79,27 @@ function limpiar() {
 //segun tipo de comprobante
 function comprob_factura() {
 
-  var precio_parcial = $(".precio_parcial").val();
+  var precio_parcial = $("#precio_parcial").val();
 
-  $("#precio_parcial").val(precio_parcial);
-
-  $("#subtotal").val("");
-  $("#igv").val(""); 
-  $("#val_igv").val(""); 
-  $("#tipo_gravada").val(""); 
-
-  if (precio_parcial=="" || precio_parcial==null) {
+  if ($("#tipo_comprobante").select2("val") == "" || $("#tipo_comprobante").select2("val") == null) {
 
     $("#subtotal").val("");
     $("#igv").val(""); 
-    $("#val_igv").val(""); 
+    $("#val_igv").val("0"); 
     $("#tipo_gravada").val(""); 
+    $("#val_igv").prop("readonly",false);
 
   } else {
     
-    if ($("#tipo_comprobante").select2("val") =="Factura" && $("#precio_parcial").val()!='' ) {
+    if ($("#tipo_comprobante").select2("val") =="Factura") {
 
-      var subtotal=0; var igv=0;
+       console.log('si funciona');
 
-      subtotal= precio_parcial/1.18;
-      igv= precio_parcial-subtotal;
-
-      $(".subtotal").val(subtotal.toFixed(2));
-      $("#subtotal").val(subtotal.toFixed(4));
-
-      $(".igv").val(igv.toFixed(2));
-      $("#igv").val(igv.toFixed(2));
-      $("#val_igv").val("0.18"); 
-      $("#tipo_gravada").val("GRAVADA"); 
-
+        calculandototales_fact();
+    
     } else {
-
-      $(".subtotal").val( parseFloat(precio_parcial).toFixed(2));
-      $("#subtotal").val(precio_parcial);
-
-      $(".igv").val("0.00");
+      $("#val_igv").prop("readonly",false);
+      $("#subtotal").val( parseFloat(precio_parcial).toFixed(2));
       $("#igv").val("0.00");
       $("#val_igv").val("0"); 
       $("#tipo_gravada").val("NO GRAVADA"); 
@@ -129,6 +108,96 @@ function comprob_factura() {
   }
   
 }
+
+function validando_igv() {
+
+  if ($("#tipo_comprobante").select2("val") == "Factura") {
+
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+
+  }else {
+
+    $("#val_igv").val(0); 
+
+  }
+  
+}
+
+function calculandototales_fact() {
+  //----------------
+  $("#tipo_gravada").val("GRAVADA"); 
+         
+  $(".nro_comprobante").html("Núm. Comprobante");
+
+  var precio_parcial = $("#precio_parcial").val();
+
+  var val_igv = $('#val_igv').val();
+
+  if (precio_parcial == null || precio_parcial == "") {
+
+    $("#subtotal").val(0);
+    $("#igv").val(0); 
+
+  } else {
+ 
+    var subtotal = 0;
+    var igv = 0;
+
+    if (val_igv == null || val_igv == "") {
+
+      $("#subtotal").val(parseFloat(precio_parcial));
+      $("#igv").val(0);
+
+    }else{
+
+      $("subtotal").val("");
+      $("#igv").val("");
+
+      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
+      igv = precio_parcial - subtotal;
+
+      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
+      $("#igv").val(parseFloat(igv).toFixed(2));
+
+    }
+
+  }  
+
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
+}
+
 
 //Función Listar
 function listar() {
@@ -186,8 +255,8 @@ function listar() {
 function modal_comprobante(comprobante){
   var comprobante = comprobante;
   console.log(comprobante);
-var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-//console.log(extencion);
+  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+  //console.log(extencion);
   $('#ver_fact_pdf').html('');
   $('#img-factura').attr("src", "");
   $('#modal-ver-comprobante').modal("show");
@@ -209,9 +278,6 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
     $("#iddescargar").attr("href","../dist/docs/planilla_seguro/comprobante/"+comprobante);
   }
 
-
-  
- // $(".tooltip").hide();
 }
 //Función para guardar o editar
 
@@ -272,14 +338,12 @@ function mostrar(idplanilla_seguro) {
     $("#fecha_p_s").val(data.fecha_p_s); 
     $("#nro_comprobante").val(data.numero_comprobante);
 
-    $(".precio_parcial").val(parseFloat(data.costo_parcial).toFixed(2)); 
-    $("#precio_parcial").val(data.costo_parcial); 
+    $("#precio_parcial").val(parseFloat(data.costo_parcial).toFixed(2)); 
   
-    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
-    $("#subtotal").val(parseFloat(data.subtotal));
+    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
 
-    $(".igv").val(parseFloat(data.igv).toFixed(2));
-    $("#igv").val(data.igv);
+    $("#igv").val(parseFloat(data.igv).toFixed(2));
+
     $("#val_igv").val(data.val_igv);
     $("#tipo_gravada").val(data.tipo_gravada);
 
@@ -496,7 +560,7 @@ $(function () {
       tipo_comprobante: { required: true },
       fecha_p_s	: { required: true },
       cantidad:{required: true},
-      monto_validar:{required: true},
+      precio_parcial:{required: true},
       descripcion:{required: true}
       // terms: { required: true },
     },
@@ -510,7 +574,7 @@ $(function () {
       fecha_p_s	: {
         required: "Por favor ingrese una fecha", 
       },
-      monto_validar:  {
+      precio_parcial:  {
         required: "Ingresar monto", 
       },
       descripcion:  {

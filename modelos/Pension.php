@@ -154,10 +154,10 @@ Class Pension
 		return ejecutarConsulta($sql);
 	}
 	//----------------------comprobantes------------------------------
-	public function insertar_comprobante($idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2)
+	public function insertar_comprobante($idpension_f,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2)
 	{
 		$sql="INSERT INTO factura_pension (idpension ,nro_comprobante, fecha_emision, monto, igv,val_igv,tipo_gravada, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante) 
-		VALUES ('$idpension_f','$nro_comprobante','$fecha_emision','$monto','$igv','$val_igv','$tipo_gravada','$subtotal','$forma_pago','$tipo_comprovante','$descripcion','$imagen2')";
+		VALUES ('$idpension_f','$nro_comprobante','$fecha_emision','$monto','$igv','$val_igv','$tipo_gravada','$subtotal','$forma_pago','$tipo_comprobante','$descripcion','$imagen2')";
 		return ejecutarConsulta($sql);
 	}
 	// obtebnemos los DOCS para eliminar
@@ -169,7 +169,7 @@ Class Pension
 		return ejecutarConsulta($sql);
 	}
 	//Implementamos un método para editar registros
-	public function editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2)
+	public function editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2)
 	{
 
 		$sql="UPDATE `factura_pension` SET 
@@ -183,7 +183,7 @@ Class Pension
 		val_igv='$val_igv',
 		tipo_gravada='$tipo_gravada',
 		subtotal='$subtotal',
-		tipo_comprobante='$tipo_comprovante',
+		tipo_comprobante='$tipo_comprobante',
 		descripcion='$descripcion',
 		comprobante='$imagen2'
 		WHERE idfactura_pension='$idfactura_pension';";	
@@ -193,7 +193,7 @@ Class Pension
 
 	public function listar_comprobantes($idpension){
 
-		$sql="SELECT * FROM factura_pension WHERE idpension  ='$idpension' AND estado='1' AND  estado_delete='1'";
+		$sql="SELECT * FROM factura_pension WHERE idpension  ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_emision DESC";
 		return ejecutarConsulta($sql);
 	}
 	//mostrar_comprobante

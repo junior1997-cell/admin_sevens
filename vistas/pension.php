@@ -363,8 +363,8 @@
                                       <!-- Tipo de comprobante -->
                                       <div class="col-lg-6" id="content-t-comprob">
                                         <div class="form-group">
-                                          <label for="tipo_comprovante">Tipo Comprobante</label>
-                                          <select name="tipo_comprovante" id="tipo_comprovante" class="form-control select2" onchange="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                          <label for="tipo_comprobante">Tipo Comprobante</label>
+                                          <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
                                             <option value="Ninguno">Ninguno</option>
                                             <option value="Boleta">Boleta</option>
                                             <option value="Factura">Factura</option>
@@ -390,26 +390,29 @@
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label for="subtotal">Sub total</label>
-                                                <input class="form-control subtotal" type="number" placeholder="Sub total" readonly/>
-                                                <input type="hidden" id="subtotal"  name="subtotal"  readonly/>
+                                                <input class="form-control" type="number" id="subtotal"  name="subtotal" placeholder="Sub total" readonly/>
                                               </div>
                                         </div>
-                                        <!-- Fecha Emisión -->
-                                        <div class="col-lg-4">
+                                        <!-- Fecha IGV -->
+                                        <div class="col-lg-2">
                                             <div class="form-group">
                                                 <label for="igv">IGV</label>
-                                                <input class="form-control igv" type="number" placeholder="IGV"  readonly />
-                                                <input type="hidden"  id="igv" name="igv" readonly />
-                                                <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
-                                                <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
+                                                <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV"  readonly />
                                               </div>
+                                        </div>
+                                        <!-- valor IGV -->
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
+                                                <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();"> 
+                                                <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
+                                            </div>
                                         </div>
                                         <!-- Monto-->
                                         <div class="col-lg-4">
                                           <div class="form-group">
                                             <label for="monto">Total</label>                               
-                                            <input type="number" class="form-control monto"  placeholder="Monto"  onkeyup="comprob_factura();"> 
-                                            <input type="hidden" name="monto" id="monto" class="form-control"   onkeyup="comprob_factura();"> 
+                                            <input type="number" class="form-control" name="monto" id="monto" onkeyup="comprob_factura();" placeholder="Monto"> 
                                           </div>                                                        
                                         </div>
 

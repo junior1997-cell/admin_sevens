@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | servicios</title>
+        <title>Admin Sevens | Servicios</title>
         <?php
         require 'head.php';
         
@@ -59,7 +59,7 @@
                             <div class="card-header">
                               <h3 class="card-title display" id="btn-agregar">
                                 <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                Admnistra tus servicios.
+                                Administra tus servicios.
                               </h3>
                               <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
                               <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
@@ -115,7 +115,7 @@
                               <tr>
                                 <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
-                                <th>Nombre Máquina</th>
+                                <th>Nombre Equipos</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
@@ -131,7 +131,7 @@
                               <tr>
                                 <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
-                                <th>Nombre Máquina</th>
+                                <th>Nombre Equipos</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
@@ -733,7 +733,7 @@
                               </div>
 
                               <!-- Fecha Emisión -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="fecha_emision">Fecha Emisión</label>
                                   <input class="form-control" type="date" id="fecha_emision" name="fecha_emision" />
@@ -743,16 +743,22 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="subtotal">Sub total</label>
-                                  <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" readonly />
+                                  <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
-                              <!-- Fecha Emisión -->
+                              <!-- valor IGV -->
+                              <div class="col-lg-2">
+                                <div class="form-group">
+                                  <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calcula_igv_subt();"> 
+                                  <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
+                                </div>
+                              </div>
+                              <!-- IGV -->
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
-                                  <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" readonly />
-                                  <input class="form-control" type="hidden"  id="val_igv" name="val_igv"/>
-                                  <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
+                                  <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV"  readonly />
                                 </div>
                               </div>
                               <!-- Descripcion o Nota-->

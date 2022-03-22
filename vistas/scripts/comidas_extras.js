@@ -64,7 +64,6 @@ function limpiar() {
   $("#idcomida_extra").val("");
   $("#fecha").val(""); 
   $("#precio_parcial").val("");  
-  $(".precio_parcial").val("");
   
   $("#descripcion").val("");
   $("#tipo_comprobante").val("null").trigger("change");
@@ -75,10 +74,8 @@ function limpiar() {
   $("#razon_social").val("");
   $("#direccion").val("");
 
-  $(".subtotal").val("");
   $("#subtotal").val("");
 
-  $(".igv").val("");
   $("#igv").val("");
   $("#val_igv").val(""); 
   $("#tipo_gravada").val("");  
@@ -87,6 +84,10 @@ function limpiar() {
   $("#doc1").val("");  
   $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc1_nombre').html("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass("is-valid");
+  $(".is-invalid").removeClass("error is-invalid");
 }
 
 //Función Listar
@@ -181,19 +182,18 @@ function modal_comprobante(comprobante){
 //segun tipo de comprobante
 function comprob_factura() {
 
-  var monto = parseFloat($('.precio_parcial').val());
+  var monto = 0;
 
-  if (monto=="" || monto==null) {
+  if ($('#precio_parcial').val()=='' || $('#precio_parcial').val()==null) { monto=0;  } else { monto = parseFloat($('#precio_parcial').val());   }
+
+  if ($("#tipo_comprobante").select2("val") =="" || $("#tipo_comprobante").select2("val") ==null) {
 
     $("#subtotal").val("");
-    $(".subtotal").val("");
     $("#igv").val(""); 
     $("#val_igv").val(""); 
     $("#tipo_gravada").val(""); 
 
   } else {
-
-    $("#precio_parcial").val(monto);
   
     if ($("#tipo_comprobante").select2("val") =="Factura") {
       
@@ -201,24 +201,11 @@ function comprob_factura() {
 
         $(".div_ruc").show(); $(".div_razon_social").show();
 
-        var subtotal=0; var igv=0;
-
-        $("#subtotal").val("");
-        $("#igv").val(""); 
-        $("#val_igv").val(""); 
-        $("#tipo_gravada").val(""); 
-
-        subtotal= monto/1.18;
-        igv= monto-subtotal;
-
-        $(".subtotal").val(subtotal.toFixed(2));
-        $("#subtotal").val(subtotal.toFixed(2));
-
-        $(".igv").val(igv.toFixed(2));
-        $("#igv").val(igv.toFixed(2));
-        $("#val_igv").val("0.18"); 
         $("#tipo_gravada").val("GRAVADA"); 
+        calculandototales_fact();
+
     } else {
+
 
       if ($("#tipo_comprobante").select2("val") =="Boleta") {
               
@@ -226,10 +213,8 @@ function comprob_factura() {
 
         $(".div_ruc").show(); $(".div_razon_social").show();
 
-        $(".subtotal").val(monto.toFixed(2));
-        $("#subtotal").val(monto);
+        $("#subtotal").val(monto.toFixed(2));
 
-        $(".igv").val("0.00");
         $("#igv").val("0.00");
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA"); 
@@ -242,10 +227,8 @@ function comprob_factura() {
 
           $(".div_ruc").hide(); $(".div_razon_social").hide();
           
-          $(".subtotal").val(monto.toFixed(2));
-          $("#subtotal").val(monto);
+          $("#subtotal").val(monto.toFixed(2));
 
-          $(".igv").val("0.00");
           $("#igv").val("0.00");
           $("#val_igv").val("0"); 
           $("#tipo_gravada").val("NO GRAVADA"); 
@@ -256,10 +239,8 @@ function comprob_factura() {
 
           $(".div_ruc").hide(); $(".div_razon_social").hide();
                   
-          $(".subtotal").val(monto.toFixed(2));
-          $("#subtotal").val(monto);
+          $("#subtotal").val(monto.toFixed(2));
 
-          $(".igv").val("0.00");
           $("#igv").val("0.00");
           $("#val_igv").val("0"); 
           $("#tipo_gravada").val("NO GRAVADA"); 
@@ -269,6 +250,93 @@ function comprob_factura() {
     }
   } 
 }
+
+
+function validando_igv() {
+
+  if ($("#tipo_comprobante").select2("val") == "Factura") {
+
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+
+  }else {
+
+    $("#val_igv").val(0); 
+
+  }
+  
+}
+
+function calculandototales_fact() {
+
+  var precio_parcial =  $("#precio_parcial").val();
+
+  var val_igv = $('#val_igv').val();
+
+  if (precio_parcial == null || precio_parcial == "") {
+
+    $("#subtotal").val(0);
+    $("#igv").val(0); 
+
+  } else {
+ 
+    var subtotal = 0;
+    var igv = 0;
+
+    if (val_igv == null || val_igv == "") {
+
+      $("#subtotal").val(parseFloat(precio_parcial));
+      $("#igv").val(0);
+
+    }else{
+
+      $("subtotal").val("");
+      $("#igv").val("");
+
+      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
+      igv = precio_parcial - subtotal;
+
+      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
+      $("#igv").val(parseFloat(igv).toFixed(2));
+
+    }
+
+  }  
+
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
+}
+
 //Función para guardar o editar
 
 function guardaryeditar(e) {
@@ -335,16 +403,14 @@ function mostrar(idcomida_extra ) {
     $("#razon_social").val(data.razon_social);
     $("#direccion").val(data.direccion);
 
-    $(".precio_parcial").val(precio_p.toFixed(2));
-    $("#precio_parcial").val(precio_p);
+    $("#precio_parcial").val(precio_p.toFixed(2));
 
     $("#descripcion").val(data.descripcion);
   
-    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
     $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
 
-    $(".igv").val(parseFloat(data.igv).toFixed(2));
-    $("#igv").val(data.igv);
+    $("#igv").val(parseFloat(data.igv).toFixed(2));
+
     $("#val_igv").val(data.val_igv);
     $("#tipo_gravada").val(data.tipo_gravada);
     /**-------------------------*/

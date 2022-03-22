@@ -124,47 +124,146 @@ function habilitar_r_social(){
 function calculando_totales() {
 
   var cantidad = $("#cantidad").val();
+
   var precio_unitario = $("#precio_unitario").val();
-  var precio_parcial=0;
-  $("#val_igv").val(""); 
+
   $("#tipo_gravada").val("");
+
   var monto = cantidad*precio_unitario;
 
-  if ($("#tipo_comprobante").select2("val") =="Factura" && $("#cantidad").val()!='' && $("#precio_unitario").val()!='' && $("#unidad").select2("val") !="") {
+  $('#precio_parcial').val(monto);
 
-    var subtotal=0; var igv=0;
+  if ($("#tipo_comprobante").select2("val") =="" || $("#tipo_comprobante").select2("val") ==null) {
 
-    $("#subtotal").val("");
-    $("#igv").val(""); 
+    $("#subtotal").val('0.0');
 
-    subtotal= monto/1.18;
-    igv= monto-subtotal;
-
-    $(".subtotal").val(subtotal.toFixed(2));
-    $("#subtotal").val(subtotal.toFixed(4));
-
-    $(".igv").val(igv.toFixed(2));
-    $("#igv").val(igv.toFixed(4));
-
-    $('.precio_parcial').val(monto);
-    $("#precio_parcial").val(monto);
-    $("#val_igv").val("0.18"); 
-    $("#tipo_gravada").val("GRAVADA"); 
-
-  }else{
-
-    $(".subtotal").val(monto.toFixed(2));
-    $("#subtotal").val(monto);
-
-    $(".igv").val("0.00");
     $("#igv").val("0.00");
 
-    $('.precio_parcial').val(monto.toFixed(2));
-    $("#precio_parcial").val(monto);  
+    $('#precio_parcial').val('0.00');
     $("#val_igv").val("0"); 
     $("#tipo_gravada").val("NO GRAVADA");  
-  }  
+
+  } else {
+    
+    if ($("#tipo_comprobante").select2("val") =="Factura") {
+
+      $("#tipo_gravada").val("GRAVADA"); 
+
+      calculandototales_fact()
+
+    }else{
+
+      if ($("#tipo_comprobante").select2("val")!="Factura" && $("#precio_unitario").val()!='' && $("#unidad").select2("val") !="") {
+
+        $("#subtotal").val(monto.toFixed(2));
+
+        $("#igv").val("0.00");
+    
+        $('#precio_parcial').val(monto.toFixed(2));
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("NO GRAVADA");  
+
+      } else {
+
+        $("#subtotal").val('0.0');
+
+        $("#igv").val("0.00");
+    
+        $('#precio_parcial').val('0.00');
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("NO GRAVADA");  
+        
+      }
+    } 
+  } 
+  
 }
+
+function validando_igv() {
+
+  if ($("#tipo_comprobante").select2("val") == "Factura") {
+
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+
+  }else {
+
+    $("#val_igv").val(0); 
+
+  }
+  
+}
+
+function calculandototales_fact() {
+
+  var precio_parcial =  $("#precio_parcial").val();
+
+  var val_igv = $('#val_igv').val();
+
+  if (precio_parcial == null || precio_parcial == "") {
+
+    $("#subtotal").val(0);
+    $("#igv").val(0); 
+
+  } else {
+ 
+    var subtotal = 0;
+    var igv = 0;
+
+    if (val_igv == null || val_igv == "") {
+
+      $("#subtotal").val(parseFloat(precio_parcial));
+      $("#igv").val(0);
+
+    }else{
+
+      $("subtotal").val("");
+      $("#igv").val("");
+
+      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
+      igv = precio_parcial - subtotal;
+
+      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
+      $("#igv").val(parseFloat(igv).toFixed(2));
+
+    }
+
+  }  
+
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
+}
+
 
 //Función limpiar
 function limpiar() {
@@ -185,13 +284,10 @@ function limpiar() {
   $("#fecha_comprobante").val("");
   $("#nro_comprobante").val("");
 
-  $(".precio_parcial").val(""); 
   $("#precio_parcial").val("");
 
-  $(".subtotal").val("");
   $("#subtotal").val("");
 
-  $(".igv").val("");
   $("#igv").val("");
   
   $("#val_igv").val(""); 
@@ -205,6 +301,10 @@ function limpiar() {
   $("#unidad").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
 
 }
 
@@ -361,14 +461,12 @@ function mostrar(idhospedaje) {
     $("#razon_social").val(data.razon_social);
     $("#direccion").val(data.direccion);
 
-    $(".precio_parcial").val(parseFloat(data.precio_parcial).toFixed(2)); 
-    $("#precio_parcial").val(data.precio_parcial);
+    $("#precio_parcial").val(parseFloat(data.precio_parcial).toFixed(2)); 
   
-    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
-    $("#subtotal").val(data.subtotal);
+    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
  
-    $(".igv").val(parseFloat(data.igv).toFixed(2));
-    $("#igv").val(data.igv);
+    $("#igv").val(parseFloat(data.igv).toFixed(2));
+
     $("#val_igv").val(data.val_igv);
     $("#tipo_gravada").val(data.tipo_gravada);
 

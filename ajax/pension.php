@@ -23,7 +23,7 @@
       $idpension_f         = isset($_POST["idpension_f"])? limpiarCadena($_POST["idpension_f"]):"";
       $idfactura_pension   = isset($_POST["idfactura_pension"])? limpiarCadena($_POST["idfactura_pension"]):"";
       $forma_pago          = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
-      $tipo_comprovante    = isset($_POST["tipo_comprovante"])? limpiarCadena($_POST["tipo_comprovante"]):"";
+      $tipo_comprobante    = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
 
       $nro_comprobante     = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
       $monto               = isset($_POST["monto"])? limpiarCadena($_POST["monto"]):"";
@@ -44,7 +44,7 @@
       $p_cena              = isset($_POST["p_cena"])? limpiarCadena($_POST["p_cena"]):"";
       $descripcion_pension = isset($_POST["descripcion_pension"])? limpiarCadena($_POST["descripcion_pension"]):"";
       //$idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena
-      //$idfactura_pension ,$idpension_f,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
+      //$idfactura_pension ,$idpension_f,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
 
       switch ($_GET["op"]){
 
@@ -136,7 +136,7 @@
       
               if (empty($idfactura_pension )){
                 
-                $rspta=$pension->insertar_comprobante($idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2);
+                $rspta=$pension->insertar_comprobante($idpension_f,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2);
                 echo $rspta ? "ok" : "No se pudieron registrar todos los datos de Comprobante";
               }
               else {
@@ -153,7 +153,7 @@
                   }
                 }
                 
-                $rspta=$pension->editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprovante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2);
+                $rspta=$pension->editar_comprobante($idfactura_pension,$idpension_f,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2);
                 
                 echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
               }
@@ -208,9 +208,9 @@
                         <span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'</span>         
                       </div>',			
                   "4"=>date("d/m/Y", strtotime($reg->fecha_emision)),
-                  "5"=>number_format($subtotal, 2, '.', ','), 
-                  "6"=>number_format($igv, 2, '.', ','),
-                  "7"=>number_format($monto, 2, '.', ','),
+                  "5"=>'S/. '.number_format($subtotal, 2, '.', ','), 
+                  "6"=>'S/. '.number_format($igv, 2, '.', ','),
+                  "7"=>'S/. '.number_format($monto, 2, '.', ','),
                   "8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
                   "9"=>$comprobante,
                   "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:

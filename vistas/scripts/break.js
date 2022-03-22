@@ -807,31 +807,19 @@ function listar_comprobantes(idsemana_break) {
 
 function comprob_factura() {
   var monto = 0;
-  $("#val_igv").val(""); 
-  $("#tipo_gravada").val(""); 
+   $("#tipo_gravada").val(""); 
 
   if ($("#monto").val() == "" || $("#monto").val() == null) { monto = 0; } else { var monto = parseFloat($("#monto").val()); }
 
   if ($("#tipo_comprobante").select2("val") == "Factura") {
 
-    var subtotal = 0;
-    var igv = 0;
-
     $(".nro_comprobante").html("Núm. Comprobante");
 
-    $(".div_ruc").show();
-    $(".div_razon_social").show();
+    $(".div_ruc").show();  $(".div_razon_social").show();
 
-    $("#subtotal").val("");
-    $("#igv").val("");
-
-    subtotal = monto / 1.18;
-    igv = monto - subtotal;
-
-    $("#subtotal").val(subtotal.toFixed(2));
-    $("#igv").val(igv.toFixed(2));
-    $("#val_igv").val("0.18"); 
     $("#tipo_gravada").val("GRAVADA"); 
+
+    calculandototales_fact();
 
   } else {
 
@@ -879,6 +867,92 @@ function comprob_factura() {
   }
 }
 
+
+function validando_igv() {
+
+  if ($("#tipo_comprobante").select2("val") == "Factura") {
+
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+
+  }else {
+
+    $("#val_igv").val(0); 
+
+  }
+  
+}
+
+function calculandototales_fact() {
+
+  var precio_parcial =  $("#monto").val();
+
+  var val_igv = $('#val_igv').val();
+
+  if (precio_parcial == null || precio_parcial == "") {
+
+    $("#subtotal").val(0);
+    $("#igv").val(0); 
+
+  } else {
+ 
+    var subtotal = 0;
+    var igv = 0;
+
+    if (val_igv == null || val_igv == "") {
+
+      $("#subtotal").val(parseFloat(precio_parcial));
+      $("#igv").val(0);
+
+    }else{
+
+      $("subtotal").val("");
+      $("#igv").val("");
+
+      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
+      igv = precio_parcial - subtotal;
+
+      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
+      $("#igv").val(parseFloat(igv).toFixed(2));
+
+    }
+
+  }  
+
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
+}
+
 //mostrar
 function mostrar_comprobante(idfactura_break) {
   limpiar_comprobante();
@@ -892,7 +966,7 @@ function mostrar_comprobante(idfactura_break) {
 
     $("#idfactura_break ").val(data.idfactura_break);
     $("#nro_comprobante").val(data.nro_comprobante);
-    $("#monto").val(data.monto);
+    $("#monto").val(parseFloat(data.monto).toFixed(2));
     $("#fecha_emision").val(data.fecha_emision);
     $("#descripcion").val(data.descripcion);
 
@@ -900,8 +974,8 @@ function mostrar_comprobante(idfactura_break) {
     $("#razon_social").val(data.razon_social);
     $("#direccion").val(data.direccion);
 
-    $("#subtotal").val(data.subtotal);
-    $("#igv").val(data.igv);
+    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
+    $("#igv").val(parseFloat(data.igv).toFixed(2));
     $("#val_igv").val(data.val_igv); 
     $("#tipo_gravada").val(data.tipo_gravada); 
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
@@ -1048,7 +1122,7 @@ function total_monto(idsemana_break) {
     data = JSON.parse(data);
     console.log(data);
     num = data.total;
-    if (!num || num == "NaN") return "-";
+    if (!num || num == "NaN") return "0.00";
     if (num == "Infinity") return "&#x221e;";
     num = num.toString().replace(/\$|\,/g, "");
     if (isNaN(num)) num = "0";
@@ -1060,7 +1134,7 @@ function total_monto(idsemana_break) {
     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
     total_mont_f = (sign ? "" : "-") + num + "." + cents;
 
-    $("#monto_total_f").html(total_mont_f);
+    $("#monto_total_f").html('S/. '+total_mont_f);
   });
 }
 

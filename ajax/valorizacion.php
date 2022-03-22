@@ -259,7 +259,7 @@
               "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info_editar.')"><i class="fas fa-pencil-alt"></i></button>'.
                 ($value['numero_q_s']=='General'? ' <button class="btn btn-danger btn-sm disabled"><i class="fas fa-skull-crossbones"></i></button>': 
                 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info_eliminar.')"><i class="fas fa-skull-crossbones"></i></button>'),
-              "2"=>'<span class="text-bold">Semana Nº '. $value['numero_q_s'] .'</span>',  
+              "2"=>'<span class="text-bold">Valorización Nº '. $value['numero_q_s'] .'</span>',  
               "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
               "4"=>'<span class="text-primary text-bold">'. $value['fecha_inicio'] .' - ' . $value['fecha_fin'] .'</span>',  
               "5"=>'<center> 

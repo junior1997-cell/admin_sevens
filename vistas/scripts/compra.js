@@ -528,7 +528,9 @@ function eliminar_compra(idcompra_proyecto) {
     confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
     denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
   }).then((result) => {
+
     if (result.isConfirmed) {
+
       $.post("../ajax/compra.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         if (e == "ok") {
           Swal.fire("Papelera!", "Tu Compra sido enviado a la <b>PAPELERA</b>.", "success");
@@ -538,7 +540,9 @@ function eliminar_compra(idcompra_proyecto) {
           Swal.fire("Error!", e, "error");
         }
       });
+      
     }else if (result.isDenied) {
+
       $.post("../ajax/compra.php?op=eliminar_compra", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         if (e == "ok") {
           Swal.fire("ELIMINADO!", "Tu compra a sido <b>ELIMINADO</b> permanentemente.", "success");
@@ -548,7 +552,9 @@ function eliminar_compra(idcompra_proyecto) {
           Swal.fire("Error!", e, "error");
         }
       });
+
     }
+
   });
 }
 

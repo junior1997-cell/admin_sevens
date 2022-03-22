@@ -60,7 +60,7 @@ function init() {
   $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
 
   //Initialize Select2 Elements
-  $("#tipo_comprovante").select2({
+  $("#tipo_comprobante").select2({
     theme: "bootstrap4",
     placeholder: "Selecione tipo comprobante",
     allowClear: true,
@@ -1081,24 +1081,30 @@ function doc1_eliminar() {
 function limpiar_comprobante() {
   //idpension_f,idfactura_pension
   $("#nro_comprobante").val("");
-  $(".monto").val("");
-  $("#monto").val("");
   $("#idfactura_pension").val("");
   $("#fecha_emision").val("");
   $("#descripcion").val("");
-  $(".subtotal").val("");
+
   $("#subtotal").val("");
-  $(".igv").val("");
+
   $("#igv").val("");
+
+  $("#monto").val("");
+
   $("#val_igv").val(""); 
+
   $("#tipo_gravada").val("");
-  $("#tipo_comprovante").val("null").trigger("change");
+  $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
   $("#doc_old_1").val("");
   $("#doc1").val("");  
   $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc1_nombre').html("");
+
+    // Limpiamos las validaciones
+    $(".form-control").removeClass('is-valid');
+    $(".is-invalid").removeClass("error is-invalid");
 
 }
 //Guardar y editar
@@ -1193,57 +1199,132 @@ function listar_comprobantes(idpension) {
 
 function comprob_factura() {
 
-  var monto = parseFloat($('.monto').val());
+  var monto = parseFloat($('#monto').val());
 
-  if (monto=="" || monto==null) {
+  if ($("#tipo_comprobante").select2("val")=="" || $("#tipo_comprobante").select2("val")==null) {
 
-    $(".subtotal").val("");   
     $("#subtotal").val("");
-    $(".igv").val("");  
     $("#igv").val(""); 
     $("#val_igv").val("0"); 
     $("#tipo_gravada").val("NO GRAVADA"); 
-
+    $("#val_igv").prop("readonly",false);
   }else{
 
-    $('#monto').val(monto);
+    if ($("#tipo_comprobante").select2("val") =="Factura") {
 
-    if ($("#tipo_comprovante").select2("val") =="Factura") {
+      $("#tipo_gravada").val("GRAVADA");
 
-      var subtotal=0; var igv=0;
-
-      $(".subtotal").val("");   
-      $("#subtotal").val("");
-      $(".igv").val("");  
-      $("#igv").val(""); 
-      $("#val_igv").val(""); 
-      $("#tipo_gravada").val("");
-
-      subtotal= monto/1.18;
-      igv= monto-subtotal;
-
-      $(".subtotal").val(subtotal.toFixed(2));
-      $("#subtotal").val(subtotal.toFixed(2));
-      $(".igv").val(igv.toFixed(2));
-      $("#igv").val(igv.toFixed(2));
-      $("#val_igv").val("0.18"); 
-      $("#tipo_gravada").val("GRAVADA"); 
+      calculandototales_fact();
 
     } else {
 
-      $(".subtotal").val(monto.toFixed(2));
-      $("#subtotal").val(monto.toFixed(2));
-      $("#igv").val("0.00");
-      $(".igv").val(0);
-      $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("NO GRAVADA"); 
+      if ($("#tipo_comprobante").select2("val")!="Factura") {
+
+        $("#subtotal").val(monto.toFixed(2));
+        $("#igv").val("0.00");
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("NO GRAVADA"); 
+        $("#val_igv").prop("readonly",true);
+      } else {
+
+        $("#subtotal").val('0.00');
+        $("#igv").val("0.00");
+        $("#val_igv").val("0"); 
+        $("#tipo_gravada").val("NO GRAVADA"); 
+        $("#val_igv").prop("readonly",true);
+      }
 
     }
 
   }
   
+}
+
+function validando_igv() {
+
+  if ($("#tipo_comprobante").select2("val") == "Factura") {
+
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+
+  }else {
+
+    $("#val_igv").val(0); 
+
+  }
   
 }
+
+function calculandototales_fact() {
+
+  var precio_parcial =  $("#monto").val();
+
+  var val_igv = $('#val_igv').val();
+
+  if (precio_parcial == null || precio_parcial == "") {
+
+    $("#subtotal").val(0);
+    $("#igv").val(0); 
+
+  } else {
+ 
+    var subtotal = 0;
+    var igv = 0;
+
+    if (val_igv == null || val_igv == "") {
+
+      $("#subtotal").val(parseFloat(precio_parcial));
+      $("#igv").val(0);
+
+    }else{
+
+      $("subtotal").val("");
+      $("#igv").val("");
+
+      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
+      igv = precio_parcial - subtotal;
+
+      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
+      $("#igv").val(parseFloat(igv).toFixed(2));
+
+    }
+
+  }  
+
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
+}
+
 
 //mostrar
 function mostrar_comprobante(idfactura_pension ) {
@@ -1253,24 +1334,21 @@ function mostrar_comprobante(idfactura_pension ) {
 
   limpiar_comprobante();
   $("#modal-agregar-comprobante").modal("show");
-  $("#tipo_comprovante").val("null").trigger("change");
+  $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
   $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_pension : idfactura_pension  }, function (data, status) {
 
     data = JSON.parse(data);  //console.log(data);   
     
-    $("#tipo_comprovante").val(data.tipo_comprobante).trigger("change");
+    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
     $("#idfactura_pension  ").val(data.idfactura_pension);
     $("#nro_comprobante").val(data.nro_comprobante);
-    $(".monto").val(parseFloat(data.monto).toFixed(2));
-    $("#monto").val(data.monto);
+    $("#monto").val(parseFloat(data.monto).toFixed(2));
     $("#fecha_emision").val(data.fecha_emision);
     $("#descripcion").val(data.descripcion);
-    $(".subtotal").val(parseFloat(data.subtotal).toFixed(2));
-    $("#subtotal").val(data.subtotal);
-    $(".igv").val(parseFloat(data.igv).toFixed(2));
-    $("#igv").val(parseFloat(data.igv));
+    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
+    $("#igv").val(parseFloat(data.igv).toFixed(2));
     $("#val_igv").val(data.val_igv); 
     $("#tipo_gravada").val(data.tipo_gravada);
     $("#forma_pago").val(data.forma_de_pago).trigger("change");
@@ -1414,7 +1492,7 @@ function total_monto(idpension) {
     data = JSON.parse(data); 
    console.log(data);
    num= data.total;
-    if (!num || num == 'NaN') return '-';
+    if (!num || num == 'NaN') return '0.00';
     if (num == 'Infinity') return '&#x221e;';
     num = num.toString().replace(/\$|\,/g, '');
     if (isNaN(num))
@@ -1429,7 +1507,7 @@ function total_monto(idpension) {
         num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
         total_mont_f= (((sign) ? '' : '-') + num + '.' + cents);
 
-    $("#monto_total_f").html(total_mont_f);
+    $("#monto_total_f").html('S/. '+total_mont_f);
 
   });
 }
@@ -1451,7 +1529,7 @@ $(function () {
   $("#form-agregar-comprobante").validate({
     rules: {
       forma_pago:{required: true},
-      tipo_comprovante:{required: true},
+      tipo_comprobante:{required: true},
       monto:{required: true},
       fecha_emision:{required: true},
       descripcion:{minlength: 1},
@@ -1464,7 +1542,7 @@ $(function () {
       forma_pago: {
         required: "Seleccionar una forma de pago", 
       },
-      tipo_comprovante: {
+      tipo_comprobante: {
         required: "Seleccionar un tipo de comprobante", 
       },
       monto: {
