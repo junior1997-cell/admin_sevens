@@ -141,7 +141,7 @@ function comprob_factura() {
     $("#tipo_gravada").val("GRAVADA"); 
     $("#subtotal").val("");
     $("#igv").val("");
-    console.log('holaaa');
+
     calculandototales_fact();    
 
   } else {
@@ -155,8 +155,9 @@ function comprob_factura() {
       $("#igv").val("0.00");
       $("#val_igv").val("0"); 
       $("#tipo_gravada").val("NO GRAVADA"); 
-
+      $("#val_igv").prop("readonly",true);
     } else {
+
       $(".nro_comprobante").html("Núm. Comprobante");
         
       $("#subtotal").val(monto.toFixed(2));
@@ -164,6 +165,7 @@ function comprob_factura() {
       $("#igv").val("0.00");
       $("#val_igv").val("0"); 
       $("#tipo_gravada").val("NO GRAVADA"); 
+      $("#val_igv").prop("readonly",true);
     }
 
   }
@@ -749,34 +751,20 @@ $(function () {
       cantidad:{required: true},
       precio_unitario:{required: true},
       ruta:{required: true},
-      descripcion:{required: true}
+      descripcion:{required: true},
+      val_igv: { required: true, number: true, min:0, max:1 },
       // terms: { required: true },
     },
     messages: {
-      idproveedor: {
-        required: "Por favor un proveedor", 
-      },
-      forma_pago: {
-        required: "Por favor una forma de pago", 
-      },
-      tipo_comprobante: {
-        required: "Por favor seleccionar tipo comprobante", 
-      },
-      fecha_viaje: {
-        required: "Por favor ingrese una fecha", 
-      },
-      cantidad: {
-        required: "Ingrese Cantidad.",
-      },
-      precio_unitario:  {
-        required: "Ingresar precio unitario", 
-      },
-      ruta:  {
-        required: "Es necesario rellenar el campo ruta", 
-      },
-      descripcion:  {
-        required: "Es necesario rellenar el campo descripción", 
-      },
+      idproveedor: { required: "Por favor un proveedor", },
+      forma_pago: { required: "Por favor una forma de pago", },
+      tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
+      fecha_viaje: { required: "Por favor ingrese una fecha", },
+      cantidad: { required: "Ingrese Cantidad.", },
+      precio_unitario:  { required: "Ingresar precio unitario", },
+      ruta:  { required: "Es necesario rellenar el campo ruta", },
+      descripcion:  { required: "Es necesario rellenar el campo descripción", },
+      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
 
     },
         

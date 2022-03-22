@@ -77,7 +77,7 @@ function limpiar() {
   $("#subtotal").val("");
 
   $("#igv").val("");
-  $("#val_igv").val(""); 
+  //$("#val_igv").val(""); 
   $("#tipo_gravada").val("");  
 
   $("#doc_old_1").val("");
@@ -190,8 +190,9 @@ function comprob_factura() {
 
     $("#subtotal").val("");
     $("#igv").val(""); 
-    $("#val_igv").val(""); 
+    $("#val_igv").val("0"); 
     $("#tipo_gravada").val(""); 
+    $("#val_igv").prop("readonly",true);
 
   } else {
   
@@ -218,6 +219,7 @@ function comprob_factura() {
         $("#igv").val("0.00");
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA"); 
+        $("#val_igv").prop("readonly",true);
 
       }else{
 
@@ -232,6 +234,7 @@ function comprob_factura() {
           $("#igv").val("0.00");
           $("#val_igv").val("0"); 
           $("#tipo_gravada").val("NO GRAVADA"); 
+          $("#val_igv").prop("readonly",true);
 
         } else {
 
@@ -244,6 +247,7 @@ function comprob_factura() {
           $("#igv").val("0.00");
           $("#val_igv").val("0"); 
           $("#tipo_gravada").val("NO GRAVADA"); 
+          $("#val_igv").prop("readonly",true);
           
         }
       }
@@ -584,26 +588,18 @@ $(function () {
       tipo_comprobante: { required: true },
       fecha: { required: true },
       precio_parcial:{required: true},
-      descripcion:{required: true}
+      descripcion:{required: true},
+      val_igv: { required: true, number: true, min:0, max:1 },
       // terms: { required: true },
     },
     messages: {
-      forma_pago: {
-        required: "Por favor seleccionar una forma de pago", 
-      },
-      tipo_comprobante: {
-        required: "Por favor seleccionar tipo comprobante", 
-      },
-      fecha: {
-        required: "Por favor ingrese una fecha", 
-      },
-      precio_parcial:  {
-        required: "Ingresar precio unitario", 
-      },
-      descripcion:  {
-        required: "Es necesario rellenar el campo descripción", 
-      },
 
+      forma_pago: { required: "Por favor seleccionar una forma de pago",},
+      tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
+      fecha: { required: "Por favor ingrese una fecha", },
+      precio_parcial:  { required: "Ingresar precio unitario", },
+      descripcion:  { required: "Es necesario rellenar el campo descripción", },
+      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
     },
         
     errorElement: "span",

@@ -834,6 +834,7 @@ function comprob_factura() {
       $("#igv").val("0.00");
       $("#val_igv").val("0"); 
       $("#tipo_gravada").val("NO GRAVADA"); 
+      $("#val_igv").prop("readonly",true);
 
     } else {
 
@@ -848,6 +849,7 @@ function comprob_factura() {
         $("#igv").val("0.00");
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA"); 
+        $("#val_igv").prop("readonly",true);
 
       } else {
 
@@ -860,7 +862,7 @@ function comprob_factura() {
         $("#igv").val("0.00");
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA"); 
-
+        $("#val_igv").prop("readonly",true);
       }
 
     }
@@ -1153,20 +1155,14 @@ $(function () {
       fecha_emision: { required: true },
       descripcion: { minlength: 1 },
       foto2_i: { required: true },
+      val_igv: { required: true, number: true, min:0, max:1 },
     },
     messages: {
-      forma_pago: {
-        required: "Seleccionar una forma de pago",
-      },
-      tipo_comprobante: {
-        required: "Seleccionar un tipo de comprobante",
-      },
-      monto: {
-        required: "Por favor ingresar el monto",
-      },
-      fecha_emision: {
-        required: "Por favor ingresar la fecha de emisión",
-      },
+      forma_pago: { required: "Seleccionar una forma de pago", },
+      tipo_comprobante: { required: "Seleccionar un tipo de comprobante", },
+      monto: { required: "Por favor ingresar el monto", },
+      fecha_emision: { required: "Por favor ingresar la fecha de emisión", },
+      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
     },
 
     errorElement: "span",

@@ -142,6 +142,7 @@ function calculando_totales() {
     $('#precio_parcial').val('0.00');
     $("#val_igv").val("0"); 
     $("#tipo_gravada").val("NO GRAVADA");  
+    $("#val_igv").prop("readonly",true);
 
   } else {
     
@@ -162,7 +163,8 @@ function calculando_totales() {
         $('#precio_parcial').val(monto.toFixed(2));
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA");  
-
+        $("#val_igv").prop("readonly",true);
+        
       } else {
 
         $("#subtotal").val('0.0');
@@ -172,7 +174,7 @@ function calculando_totales() {
         $('#precio_parcial').val('0.00');
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA");  
-        
+        $("#val_igv").prop("readonly",true);
       }
     } 
   } 
@@ -769,34 +771,20 @@ $(function () {
       cantidad:{minlength: 1},
       precio_unitario:{required: true},
       descripcion:{required: true},
-      unidad:{required: true}
+      unidad:{required: true},
+      val_igv: { required: true, number: true, min:0, max:1 },
       // terms: { required: true },
     },
     messages: {
-      forma_pago: {
-        required: "Por favor seleccionar una forma de pago", 
-      },
-      tipo_comprobante: {
-        required: "Por favor seleccionar tipo comprobante", 
-      },
-      fecha_comprobante: {
-        required: "Por favor ingrese una fecha", 
-      },
-      fecha_inicio: {
-        required: "Por favor ingrese una fecha", 
-      },
-      cantidad: {
-        minlength: "Cantidad.",
-      },
-      precio_unitario:  {
-        required: "Ingresar precio unitario", 
-      },
-      descripcion:  {
-        required: "Es necesario rellenar el campo descripción", 
-      },
-      unidad:  {
-        required: "Seleccionar unidad", 
-      },
+      forma_pago: { required: "Por favor seleccionar una forma de pago", },
+      tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
+      fecha_comprobante: { required: "Por favor ingrese una fecha", },
+      fecha_inicio: { required: "Por favor ingrese una fecha", },
+      cantidad: { minlength: "Cantidad.", },
+      precio_unitario:  { required: "Ingresar precio unitario", },
+      descripcion:  { required: "Es necesario rellenar el campo descripción", },
+      unidad:  { required: "Seleccionar unidad", },
+      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
 
     },
         

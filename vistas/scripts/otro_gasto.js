@@ -158,7 +158,8 @@ function comprob_factura() {
           
           if (precio_parcial == null || precio_parcial == "") {
             $("#subtotal").val(0);
-            $("#igv").val(0);    
+            $("#igv").val(0); 
+            $("#val_igv").val("0");   
           } else {
                     
             $("#subtotal").val("");
@@ -731,24 +732,16 @@ $(function () {
       fecha_g: { required: true },
       precio_parcial: { required: true },
       descripcion: { required: true },
+      val_igv: { required: true, number: true, min:0, max:1 },
       // terms: { required: true },
     },
     messages: {
-      forma_pago: {
-        required: "Por favor una forma de pago",
-      },
-      tipo_comprobante: {
-        required: "Por favor seleccionar tipo comprobante",
-      },
-      fecha_g: {
-        required: "Por favor ingrese una fecha",
-      },
-      precio_parcial: {
-        required: "Ingresar monto",
-      },
-      descripcion: {
-        required: "Es necesario rellenar el campo descripción",
-      },
+      forma_pago: { required: "Por favor una forma de pago", },
+      tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
+      fecha_g: { required: "Por favor ingrese una fecha", },
+      precio_parcial: { required: "Ingresar monto",},
+      descripcion: { required: "Es necesario rellenar el campo descripción", },
+      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
     },
 
     errorElement: "span",
