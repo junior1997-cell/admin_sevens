@@ -1534,8 +1534,9 @@ function formato_miles(num) {
   for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
   return (sign ? "" : "-") + num + "." + cents;
 }
-
+/**==form-servicios== */
 $(function () {
+
   $.validator.setDefaults({
     submitHandler: function (e) {
       if ($("#maquinaria").select2("val") == null) {
@@ -1548,8 +1549,12 @@ $(function () {
       }
     },
   });
+  // Aplicando la validacion del select cada vez que cambie
+  $("#maquinaria").on("change", function () { $(this).trigger("blur"); });
+  $("#unidad_m").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-servicios").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       maquinaria: { required: true },
       fecha_inicio: { required: true },
@@ -1559,23 +1564,12 @@ $(function () {
       costo_unitario: { minlength: 1 },
       unidad_m: { required: true },
       descripcion: { minlength: 1 },
-      //=======SECCION PAGO=========
-      // terms: { required: true },
     },
     messages: {
-      maquinaria: {
-        required: "Por favor selecione una maquina",
-      },
-
-      fecha_inicio: {
-        required: "Por favor ingrese fecha inicial",
-      },
-      horometro_inicial: {
-        required: "Por favor ingrese horometro inicial",
-      },
-      unidad_m: {
-        required: "Por favor seleccione un tipo de unidad",
-      },
+      maquinaria: { required: "Por favor selecione una maquina", },
+      fecha_inicio: { required: "Por favor ingrese fecha inicial", },
+      horometro_inicial: { required: "Por favor ingrese horometro inicial", },
+      unidad_m: { required: "Por favor seleccione un tipo de unidad", },
     },
 
     errorElement: "span",
@@ -1592,25 +1586,33 @@ $(function () {
 
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
-
-      if ($("#maquinaria").select2("val") == null) {
-        $("#maquinaria_validar").show(); //console.log($("#maquinaria").select2("val") + ", "+ $("#maquinaria_old").val());
-      } else {
-        $("#maquinaria_validar").hide();
-      }
     },
+
   });
 
-  /**=======pagos */
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#maquinaria").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#unidad_m").rules("add", { required: true, messages: { required: "Campo requerido" } });
+});
+
+/**==form-servicios-pago== */
+$(function () {
+
   $.validator.setDefaults({
     submitHandler: function (e) {
       guardaryeditar_pago(e);
     },
   });
 
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#banco_pago").on("change", function () { $(this).trigger("blur"); });
+
   $("#form-servicios-pago").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
-      //=======SECCION PAGO=========
+
       forma_pago: { required: true },
       tipo_pago: { required: true },
       banco_pago: { required: true },
@@ -1623,22 +1625,12 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
-      //====================
-      forma_pago: {
-        required: "Por favor selecione una forma de pago",
-      },
-      tipo_pago: {
-        required: "Por favor selecione un tipo de pago",
-      },
-      banco_pago: {
-        required: "Por favor selecione un banco",
-      },
-      fecha_pago: {
-        required: "Por favor ingresar una fecha",
-      },
-      monto_pago: {
-        required: "Por favor ingresar el monto a pagar",
-      },
+     
+      forma_pago: { required: "Por favor selecione una forma de pago", },
+      tipo_pago: { required: "Por favor selecione un tipo de pago", },
+      banco_pago: { required: "Por favor selecione un banco", },
+      fecha_pago: { required: "Por favor ingresar una fecha", },
+      monto_pago: { required: "Por favor ingresar el monto a pagar", },
     },
 
     errorElement: "span",
@@ -1657,7 +1649,16 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
   });
-  /**=======Factura */
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#banco_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+});
+
+/**==form-agregar-factura== */
+$(function () {
+
   $.validator.setDefaults({
     submitHandler: function (e) {
       guardaryeditar_factura(e);
@@ -1676,7 +1677,7 @@ $(function () {
       // terms: { required: true },
     },
     messages: {
-      //====================
+
       forma_pago: { codigo: "Por favor ingresar el código", },
       monto: { required: "Por favor ingresar el monto", },
       fecha_emision: { required: "Por favor ingresar la fecha de emisión", },
@@ -1699,6 +1700,7 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
   });
+
 });
 
 // Buscar Reniec SUNAT

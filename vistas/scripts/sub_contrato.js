@@ -60,11 +60,16 @@ function init() {
 
   $("#guardar_registro_pago").on("click", function (e) {$("#submit-form-pago").submit();});
   //Initialize Select2 forma_pago
+  $("#banco_pago").select2({
+    theme: "bootstrap4",
+    placeholder: "Seleccinar banco",
+    allowClear: true,
+  });
   $("#forma_pago").select2({
     theme: "bootstrap4",
     placeholder: "Seleccinar forma de pago",
     allowClear: true,
-  });tipo_pago
+  });
 
   //Initialize Select2 tipo_pago
   $("#tipo_pago").select2({
@@ -897,7 +902,7 @@ function limpiar_pagos() {
   $("#descripcion_pago").val("");
   $("#fecha_pago").val("");
   $("#numero_op_pago").val("");
-
+  $("#banco_pago").val("").trigger("change");
 
   $("#doc_old_2").val("");
   $("#doc2").val("");  

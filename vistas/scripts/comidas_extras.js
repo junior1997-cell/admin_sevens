@@ -583,6 +583,7 @@ $(function () {
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-comidas_ex").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       forma_pago: { required: true },
       tipo_comprobante: { required: true },

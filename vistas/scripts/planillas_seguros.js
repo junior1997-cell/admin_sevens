@@ -553,8 +553,12 @@ $(function () {
       
     },
   });
-  
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+
   $("#form-otro_servicio").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       forma_pago: { required: true },
       tipo_comprobante: { required: true },
@@ -595,8 +599,12 @@ $(function () {
    
     },
 
-
   });
+
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 });
 
 function extrae_extencion(filename) {

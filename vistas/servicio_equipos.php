@@ -516,7 +516,7 @@
                                   <label for="id_maquinaria_pago">Maquinaria </label>
                                   <input type="hidden" name="id_maquinaria_pago" id="id_maquinaria_pago" class="form-control" placeholder="maquinaria" />
                                   <br />
-                                  <b id="maquinaria_pago" style="font-size: 16px; color: red;"></b>
+                                  <b  class="clase_nomb_maq_benef" id="maquinaria_pago" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
 
@@ -526,7 +526,7 @@
                                   <label for="beneficiario_pago">Beneficiario</label>
                                   <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
                                   <br />
-                                  <b id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
+                                  <b class="clase_nomb_maq_benef"  id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
                               <!--Forma de pago -->
@@ -844,6 +844,22 @@
                 margin-left: 3px;
                 padding: 5px;
                 border-radius: 6px;
+            }
+            .clase_nomb_maq_benef{
+              display: block;
+              width: 100%;
+              height:100%;
+              padding: 0.375rem 0.75rem;
+              font-size: 1rem;
+              font-weight: 400;
+              line-height: 1.5;
+              color: #495057;
+              background-color: #fff;
+              background-clip: padding-box;
+              border: 1px solid #ced4da;
+              border-radius: 0.25rem;
+              box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
+              transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             }
         </style>
         <!-- Bootstrap 4 -->

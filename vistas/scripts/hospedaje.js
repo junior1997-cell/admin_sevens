@@ -164,7 +164,7 @@ function calculando_totales() {
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA");  
         $("#val_igv").prop("readonly",true);
-        
+
       } else {
 
         $("#subtotal").val('0.0');
@@ -763,6 +763,7 @@ $(function () {
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-hospedaje").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       forma_pago: { required: true },
       tipo_comprobante: { required: true },

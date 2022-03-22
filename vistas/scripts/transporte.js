@@ -738,11 +738,11 @@ $(function () {
   });
   
   // Aplicando la validacion del select cada vez que cambie
-
   $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-transporte").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       idproveedor: { required: true },
       forma_pago: { required: true },

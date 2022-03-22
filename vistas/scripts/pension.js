@@ -1514,9 +1514,66 @@ function total_monto(idpension) {
 
 
 init();
-
+//pension
 $(function () {
 
+  $.validator.setDefaults({
+
+    submitHandler: function (e) {
+      guardaryeditar_pension(e)
+
+    },
+  });
+
+  // Aplicando la validacion del select cada vez que cambie
+  $("#proveedor").on("change", function () { $(this).trigger("blur"); });
+
+  $("#form-agregar-pension").validate({
+    ignore: '.select2-input, .select2-focusser',
+    rules: {
+      proveedor:{required: true},
+      'servicio_p[]':{required: true}
+    },
+    messages: {
+      //====================
+      proveedor: {
+        required: "Campo requerido", 
+      },
+      'servicio_p[]': {
+        required: "Campo requerido", 
+      },
+
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+
+      $(element).removeClass("is-invalid").addClass("is-valid");
+     
+    },
+
+
+  });
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#proveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+});
+
+//comprobantes.
+$(function () {
   
   $.validator.setDefaults({
 
@@ -1526,7 +1583,12 @@ $(function () {
     },
   });
 
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+
   $("#form-agregar-comprobante").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       forma_pago:{required: true},
       tipo_comprobante:{required: true},
@@ -1569,52 +1631,9 @@ $(function () {
 
   });
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-      guardaryeditar_pension(e)
-
-    },
-  });
-
-  $("#form-agregar-pension").validate({
-    rules: {
-      proveedor:{required: true},
-      'servicio_p[]':{required: true}
-    },
-    messages: {
-      //====================
-      proveedor: {
-        required: "Campo requerido", 
-      },
-      'servicio_p[]': {
-        required: "Campo requerido", 
-      },
-
-    },
-        
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-
-      error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-
-      $(element).addClass("is-invalid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-     
-    },
-
-
-  });
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
 });
 
