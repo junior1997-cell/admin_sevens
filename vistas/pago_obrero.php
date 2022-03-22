@@ -107,7 +107,6 @@
                                 <th>Fecha inicio</th>
                                 <th>Hoy</th>
                                 <th class="text-center">Fecha <br> culminacion</th>
-                                <th>Cel:</th>                         
                               </tr>
                             </thead>
                             <tbody>                         
@@ -126,8 +125,7 @@
                                 <th class="text-right"><h5 class="cant_s_q_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
                                 <th class="text-center text-gray">Fecha inicio</th>
                                 <th class="text-center text-gray">Hoy</th>
-                                <th class="text-center text-gray">Fecha fin</th>
-                                <th class="text-center text-gray" >Cel:</th>                            
+                                <th class="text-center text-gray">Fecha fin</th>                       
                               </tr>
                             </tfoot>
                           </table>

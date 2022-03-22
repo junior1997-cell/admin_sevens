@@ -107,7 +107,6 @@
                                 <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
-                                <th>Cel:</th>                         
                               </tr>
                             </thead>
                             <tbody>                         
@@ -128,7 +127,6 @@
                                 <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
                                 <th class="text-center text-gray">Último <br> pago</th>
                                 <th class="text-center text-gray">Siguiente <br> pago</th>
-                                <th>Cel:</th>                            
                               </tr>
                             </tfoot>
                           </table>

@@ -160,7 +160,7 @@ class Resumenfacturas
     }
 
     $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, tipo_comprobante, numero_comprobante, fecha_g, 
-    costo_parcial, subtotal, igv, glosa, comprobante
+    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
     FROM otro_gasto 
     WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
 
@@ -179,7 +179,7 @@ class Resumenfacturas
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/otro_gasto/comprobante/',
           "modulo"              => 'OTRO GASTO',
@@ -220,7 +220,7 @@ class Resumenfacturas
     }
 
     $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, 
-    t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa 
+    t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
@@ -240,7 +240,7 @@ class Resumenfacturas
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/transporte/comprobante/',
           "modulo"              => 'TRANSPORTE',
@@ -281,7 +281,7 @@ class Resumenfacturas
     }
 
     $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
-    precio_parcial, glosa, comprobante
+    precio_parcial, glosa, comprobante , tipo_gravada
     FROM hospedaje 
     WHERE estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
@@ -301,7 +301,7 @@ class Resumenfacturas
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/hospedaje/comprobante/',
           "modulo"              => 'HOSPEDAJE',
@@ -342,7 +342,7 @@ class Resumenfacturas
     }
 
     $sql6 = "SELECT p.idproyecto, fp.idfactura_pension, prov.razon_social, fp.tipo_comprobante, fp.nro_comprobante, fp.fecha_emision, 
-    fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa
+    fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa , fp.tipo_gravada
 		FROM factura_pension as fp, pension as p, proveedor as prov
 		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.estado = '1' AND fp.estado_delete = '1'
      $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -363,7 +363,7 @@ class Resumenfacturas
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/pension/comprobante/',
           "modulo"              => 'PENSION',
@@ -404,7 +404,7 @@ class Resumenfacturas
     }
 
     $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social,  
-    fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante
+    fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante, fb.tipo_gravada
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break  
     AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -425,7 +425,7 @@ class Resumenfacturas
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/break/comprobante/',
           "modulo"              => 'BREAK',
@@ -466,7 +466,7 @@ class Resumenfacturas
     }
 
     $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
-    costo_parcial, subtotal, igv, glosa, comprobante
+    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
@@ -486,7 +486,7 @@ class Resumenfacturas
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/comida_extra/comprobante/',
           "modulo"              => 'COMIDA EXTRA',
@@ -527,7 +527,7 @@ class Resumenfacturas
     }
 
     $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, of.costo_parcial, 
-    of.subtotal, of.igv, of.glosa, of.comprobante 
+    of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada
     FROM otra_factura AS of, proveedor p
     WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY of.fecha_emision DESC;";
@@ -547,7 +547,7 @@ class Resumenfacturas
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],
           "glosa"             => $value['glosa'],
-          "tipo_gravada"      => 'GRAVADA',
+          "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "ruta"              => 'dist/docs/otra_factura/comprobante/',
           "modulo"              => 'OTRA FACTURA',

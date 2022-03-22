@@ -30,7 +30,7 @@
 <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 
 <!-- Theme style -->
-<link rel="stylesheet" href="../dist/css/adminlte.min.css" />
+<link rel="stylesheet" href="../dist/css/adminlte.css" />
 
 <!-- style nuevo -->
 <link rel="stylesheet" href="../dist/css/style_new.css" />

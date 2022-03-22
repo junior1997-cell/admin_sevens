@@ -162,7 +162,7 @@ function listar_tbla_principal(nube_idproyecto) {
   var total_pago_acumulado_hoy = 0, pago_total_x_proyecto = 0, saldo_total = 0;
 
   tabla_principal=$('#tabla-principal').dataTable({
-    "responsive": true,
+    //"responsive": true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
