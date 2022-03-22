@@ -35,9 +35,9 @@ ob_start();
         // Gurdamos cada dia de asistencia del OBRERO
         case 'guardaryeditar':
 
-          $data_asistencia = $_POST["asistencia"];  $extras = $_POST["extras"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
+          $data_asistencia = $_POST["asistencia"];  $resumen_qs = $_POST["resumen_qs"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
                      
-          $rspta=$asist_trabajador->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $extras, $fecha_i, $fecha_f);
+          $rspta=$asist_trabajador->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $resumen_qs, $fecha_i, $fecha_f);
 
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del trabajador";          
           

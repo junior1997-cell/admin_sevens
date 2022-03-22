@@ -10,9 +10,9 @@ class Asistencia_trabajador
   }
 
   //Implementamos un método para insertar registros
-  public function insertar_asistencia_y_resumen_q_s_asistencia($asistencia, $extras, $fecha_i, $fecha_f) {
+  public function insertar_asistencia_y_resumen_q_s_asistencia($asistencia, $resumen_qs, $fecha_i, $fecha_f) {
     $data_asistencia = json_decode($asistencia, true);
-    $data_extras = json_decode($extras, true);
+    $data_resumen_qs = json_decode($resumen_qs, true);
     $pruebas = "";
     $sw = true;
 
@@ -29,46 +29,17 @@ class Asistencia_trabajador
 
       if (empty($buscar_asistencia)) {
         // insertamos un nuevo registro
-        $sql_2 =
-          "INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia)
-			
-				VALUES ('" .
-          $key['id_trabajador'] .
-          "', '" .
-          $key['horas_normal_dia'] .
-          "', '" .
-          $key['pago_normal_dia'] .
-          "', '" .
-          $key['horas_extras_dia'] .
-          "', '" .
-          $key['pago_horas_extras'] .
-          "', '" .
-          $key['fecha_asistida'] .
-          "', '" .
-          $key['nombre_dia'] .
-          "' )";
+        $sql_2 = "INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia)			
+				VALUES ('" . $key['id_trabajador'] . "', '" . $key['horas_normal_dia'] . "', '" . $key['pago_normal_dia'] . "', '" .
+        $key['horas_extras_dia'] . "', '" . $key['pago_horas_extras'] . "', '" . $key['fecha_asistida'] . "', '" . $key['nombre_dia'] . "' )";
 
         ejecutarConsulta($sql_2) or ($sw = false);
       } else {
         # editamos el registro existente
-        $sql_3 =
-          "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto='" .
-          $key['id_trabajador'] .
-          "', horas_normal_dia='" .
-          $key['horas_normal_dia'] .
-          "', pago_normal_dia='" .
-          $key['pago_normal_dia'] .
-          "', horas_extras_dia='" .
-          $key['horas_extras_dia'] .
-          "', pago_horas_extras='" .
-          $key['pago_horas_extras'] .
-          "', fecha_asistencia = '" .
-          $key['fecha_asistida'] .
-          "', nombre_dia = '" .
-          $key['nombre_dia'] .
-          "' WHERE idasistencia_trabajador='" .
-          $buscar_asistencia['idasistencia_trabajador'] .
-          "';";
+        $sql_3 =  "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto='" . $key['id_trabajador'] . "', horas_normal_dia='" . $key['horas_normal_dia'] .
+          "', pago_normal_dia='" . $key['pago_normal_dia'] . "', horas_extras_dia='" . $key['horas_extras_dia'] .
+          "', pago_horas_extras='" . $key['pago_horas_extras'] . "', fecha_asistencia = '" . $key['fecha_asistida'] .
+          "', nombre_dia = '" . $key['nombre_dia'] . "' WHERE idasistencia_trabajador='" . $buscar_asistencia['idasistencia_trabajador'] . "';";
 
         ejecutarConsulta($sql_3) or ($sw = false);
         // $pruebas = $buscar_asistencia['idasistencia_trabajador'];
@@ -76,84 +47,28 @@ class Asistencia_trabajador
     }
 
     // registramos o editamos las "resumen q s asistencia"
-    foreach ($data_extras as $indice => $keys) {
-      $sql_4 = "SELECT idresumen_q_s_asistencia FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '" . $keys['id_trabajador'] . "' AND fecha_q_s_inicio = '" . $keys['fecha_q_s_inicio'] . "';";
+    foreach ($data_resumen_qs as $indice => $keys) {
+      $sql_4 = "SELECT idresumen_q_s_asistencia FROM resumen_q_s_asistencia 
+      WHERE idtrabajador_por_proyecto = '" . $keys['id_trabajador'] . "' AND fecha_q_s_inicio = '" . $keys['fecha_q_s_inicio'] . "';";
 
       $buscar_extras = ejecutarConsultaSimpleFila($sql_4);
 
       if (empty($buscar_extras)) {
         # insertamos un nuevo registro
-        $sql_5 =
-          "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, pago_quincenal) 
-				VALUES ('" .
-          $keys['id_trabajador'] .
-          "', '" .
-          $keys['num_semana'] .
-          "', '" .
-          $keys['fecha_q_s_inicio'] .
-          "', '" .
-          $keys['fecha_q_s_fin'] .
-          "', '" .
-          $keys['total_hn'] .
-          "', '" .
-          $keys['total_he'] .
-          "', '" .
-          $keys['dias_asistidos'] .
-          "', '" .
-          $keys['sabatical'] .
-          "', '" .
-          $keys['pago_parcial_hn'] .
-          "', '" .
-          $keys['pago_parcial_he'] .
-          "', '" .
-          $keys['adicional_descuento'] .
-          "', '" .
-          $keys['pago_quincenal'] .
-          "')";
+        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, pago_quincenal) 
+				VALUES ('" . $keys['id_trabajador'] . "', '" . $keys['num_semana'] . "', '" . $keys['fecha_q_s_inicio'] . "', '" . $keys['fecha_q_s_fin'] .
+        "', '" . $keys['total_hn'] . "', '" . $keys['total_he'] . "', '" . $keys['dias_asistidos'] . "', '" . $keys['sabatical'] . "', '" .
+        $keys['pago_parcial_hn'] . "', '" . $keys['pago_parcial_he'] . "', '" . $keys['adicional_descuento'] . "', '" . $keys['pago_quincenal'] . "')";
 
         ejecutarConsulta($sql_5) or ($sw = false);
       } else {
         # editamos el registro encontrado
-        $sql_6 =
-          "UPDATE resumen_q_s_asistencia SET  idtrabajador_por_proyecto='" .
-          $keys['id_trabajador'] .
-          "', 
-				numero_q_s='" .
-          $keys['num_semana'] .
-          "',
-				fecha_q_s_inicio='" .
-          $keys['fecha_q_s_inicio'] .
-          "',
-				fecha_q_s_fin='" .
-          $keys['fecha_q_s_fin'] .
-          "', 
-				total_hn='" .
-          $keys['total_hn'] .
-          "', 
-				total_he='" .
-          $keys['total_he'] .
-          "', 
-				total_dias_asistidos='" .
-          $keys['dias_asistidos'] .
-          "', 
-				sabatical='" .
-          $keys['sabatical'] .
-          "', 
-				pago_parcial_hn='" .
-          $keys['pago_parcial_hn'] .
-          "', 
-				pago_parcial_he='" .
-          $keys['pago_parcial_he'] .
-          "', 
-				adicional_descuento='" .
-          $keys['adicional_descuento'] .
-          "', 
-				pago_quincenal='" .
-          $keys['pago_quincenal'] .
-          "' 
-				WHERE idresumen_q_s_asistencia = '" .
-          $buscar_extras['idresumen_q_s_asistencia'] .
-          "';";
+        $sql_6 = "UPDATE resumen_q_s_asistencia SET  idtrabajador_por_proyecto='" . $keys['id_trabajador'] . "', numero_q_s='" . $keys['num_semana'] .
+        "', fecha_q_s_inicio='" .  $keys['fecha_q_s_inicio'] . "', fecha_q_s_fin='" . $keys['fecha_q_s_fin'] . "', total_hn='" . $keys['total_hn'] .
+        "', total_he='" . $keys['total_he'] . "', total_dias_asistidos='" . $keys['dias_asistidos'] . "', sabatical='" . $keys['sabatical'] .
+        "', pago_parcial_hn='" . $keys['pago_parcial_hn'] . "', pago_parcial_he='" . $keys['pago_parcial_he'] . "', 
+        adicional_descuento='" . $keys['adicional_descuento'] . "', pago_quincenal='" . $keys['pago_quincenal'] .
+        "' WHERE idresumen_q_s_asistencia = '" . $buscar_extras['idresumen_q_s_asistencia'] . "';";
         ejecutarConsulta($sql_6) or ($sw = false);
       }
     }
