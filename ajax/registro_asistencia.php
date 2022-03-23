@@ -113,7 +113,7 @@ ob_start();
               "7"=> 'S/ '.number_format($value['sueldo_mensual'], 2, '.', ','),              
               "8"=> '<center>' . $value['total_sabatical'] . '</center>',
               "9"=> 'S/ ' . number_format($value['adicional_descuento'], 2, '.', ','),
-              "10"=> 'S/ ' . number_format($value['pago_quincenal'], 1, '.', ',') ,
+              "10"=> 'S/ ' . number_format($value['pago_quincenal'], 2, '.', ',') ,
               "11"=> $value['cargo'] ,
               "12"=> $value['nombre'] ,
               "13"=> $value['tipo_doc'] .': '. $value['num_doc'] ,
@@ -338,9 +338,10 @@ ob_start();
             $data[]=array(
               "0"=> '<center>' . ($reg->estado ? '<button class="btn btn-danger btn-sm" onclick="desactivar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Desactivar"><i class="fas fa-trash-alt"></i></button>' :
                 '<button class="btn btn-success btn-sm" onclick="activar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Activar"><i class="fas fa-check"></i></button>') . '</center>' ,
-              "1"=> '<center>' . $reg->numero_q_s . '</center>',
-              "2"=> '<center>' . format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin) . '</center>',
-              "3"=> $reg->total_hn . ' / ' . $reg->total_he,
+               
+              "1"=> '<center><b>' . $reg->numero_q_s . '</b> ─ '. format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin) . '</center>',
+              "2"=> $reg->total_hn . ' / ' . $reg->total_he,
+              "3"=> '<center>' . $reg->total_dias_asistidos . '</center>',
               "4"=> 'S/ '. number_format($reg->pago_parcial_hn, 2, '.', ',') . ' / ' . number_format($reg->pago_parcial_he, 2, '.', ','),
               "5"=> 'S/ '. number_format($reg->adicional_descuento, 2, '.', ','),
               "6"=> '<center>' . $reg->sabatical . '</center>',
@@ -348,7 +349,8 @@ ob_start();
               "8"=> '<center>' . ($reg->estado_envio_contador ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>') . '</center>' ,
               "9"=> '<center>' . ($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . '</center>'.$toltip,
               "10"=> $reg->trabajdor,
-              "11"=> $reg->tipo_documento . ': ' . $reg->numero_documento
+              "11"=> $reg->tipo_documento . ': ' . $reg->numero_documento,
+              "12"=> $reg->numero_q_s
             );
           }
 

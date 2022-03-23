@@ -593,7 +593,8 @@ class Asistencia_trabajador
   }
 
   public function suma_qs_individual($idtrabajador_x_proyecto) {
-    $sql = "SELECT  SUM(rqsa.pago_quincenal) AS pago_quincenal, p.fecha_pago_obrero
+    $sql = "SELECT  SUM(rqsa.pago_quincenal) AS pago_quincenal, SUM(rqsa.sabatical) AS sabatical, 
+    SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.adicional_descuento) AS adicional_descuento, p.fecha_pago_obrero
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p
 		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto = p.idproyecto 
 		AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado = '1';";

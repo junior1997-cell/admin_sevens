@@ -363,7 +363,7 @@ function buscar_sunat_reniec() {
 
     if (dni_ruc.length == "8") {
 
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+      $.post("../ajax/ajax_general.php?op=reniec", { dni: dni_ruc }, function (data, status) {
 
         data = JSON.parse(data);
 
@@ -400,7 +400,7 @@ function buscar_sunat_reniec() {
     if (tipo_doc == "RUC") {
 
       if (dni_ruc.length == "11") {
-        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+        $.post("../ajax/ajax_general.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
 
           data = JSON.parse(data);
 

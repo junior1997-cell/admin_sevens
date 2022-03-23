@@ -2050,41 +2050,45 @@ function buscar_sunat_reniec() {
 
   $("#charge").show();
 
-  let tipo_doc = $("#tipo_documento").val();
+  let tipo_doc = $("#tipo_documento_prov").val();
 
-  let dni_ruc = $("#numero_documento").val(); 
+  let dni_ruc = $("#num_documento_prov").val(); 
    
   if (tipo_doc == "DNI") {
 
     if (dni_ruc.length == "8") {
 
-      $.post("../ajax/proyecto.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+      $.post("../ajax/ajax_general.php?op=reniec", { dni: dni_ruc }, function (data, status) {
 
-        data = JSON.parse(data);  //console.log(data);
+        data = JSON.parse(data);  console.log(data);
+
         if (data == null) {
+
           $("#search").show();
   
           $("#charge").hide();
   
           toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
+          
         } else {
           if (data.success == false) {
 
             $("#search").show();
-  
+
             $("#charge").hide();
-  
+
             toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-  
+
           } else {
-  
+
             $("#search").show();
-  
+
             $("#charge").hide();
-  
-            $("#empresa").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-  
-            toastr.success("Cliente encontrado!!!!");
+
+            $("#nombre_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            $("#titular_cuenta_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+
+            toastr.success("Persona encontrada!!!!");
           }
         }
         
@@ -2101,59 +2105,68 @@ function buscar_sunat_reniec() {
     if (tipo_doc == "RUC") {
 
       if (dni_ruc.length == "11") {
-        $.post("../ajax/proyecto.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+        $.post("../ajax/ajax_general.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
 
-          data = JSON.parse(data);  console.log(data);
+          data = JSON.parse(data);    console.log(data);
 
           if (data == null) {
-
-            $("#search").show();  
-            $("#charge").hide();  
+            $("#search").show();
+    
+            $("#charge").hide();
+    
             toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
             
           } else {
+
             if (data.success == false) {
 
               $("#search").show();
-  
+
               $("#charge").hide();
-  
+
               toastr.error("Datos no encontrados en la SUNAT!!!");
               
             } else {
-  
+
               if (data.estado == "ACTIVO") {
-  
+
                 $("#search").show();
-  
+
                 $("#charge").hide();
-  
-                $("#empresa").val(data.razonSocial);
-  
-                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-                
-                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
-                // $("#direccion").val(data.direccion);
-                toastr.success("Cliente encontrado");
+
+                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
+
+                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
+
+                var departamento = (data.departamento == null ? "" : data.departamento); 
+                var provincia = (data.provincia == null ? "" : data.provincia);
+                var distrito = (data.distrito == null ? "" : data.distrito);                
+
+                data.direccion == null ? $("#direccion_prov").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion_prov").val(data.direccion);
+
+                toastr.success("Persona encontrada!!");
+
               } else {
-  
-                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-  
+
+                toastr.info("Se recomienda NO generar FACTURAS ó BOLETAS!!!");
+
                 $("#search").show();
-  
+
                 $("#charge").hide();
-  
-                $("#empresa").val(data.razonSocial);
-  
-                data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
+
+                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
+
+                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
                 
-                data.direccion == null ? $("#ubicacion").val("-") : $("#ubicacion").val(data.direccion);
-  
-                // $("#direccion").val(data.direccion);
+                var departamento = (data.departamento == null ? "" : data.departamento); 
+                var provincia = (data.provincia == null ? "" : data.provincia);
+                var distrito = (data.distrito == null ? "" : data.distrito);
+
+                data.direccion == null ? $("#direccion_prov").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion_prov").val(data.direccion);
+
               }
             }
-          }
-          
+          }          
         });
       } else {
         $("#search").show();

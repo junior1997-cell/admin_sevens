@@ -57,20 +57,20 @@
                     <div class="col-12">
                       <div class="card card-primary card-outline">
                         <div class="card-header">
-                          <h3 class="card-title" id="card-registrar">
+                          <h3 class="card-title" id="btn-registrar">
                             <!-- <button type="button" class="btn bg-gradient-success"  data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();" style="margin-right: 10px; height: 61px;"><i class="fas fa-user-plus"></i> Agregar </button> -->
                           </h3>
                           <!-- regresar -->
-                          <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
+                          <h3 class="card-title mr-3" id="btn-regresar" style="display: none; padding-left: 2px;">
                             <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>
                           <!-- Editar -->
-                          <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
+                          <h3 class="card-title mr-3" id="btn-editar" style="display: none; padding-left: 2px;">
                             <button type="button" class="btn bg-gradient-orange" onclick="show_hide_span_input(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
                           </h3>
                           <!-- Guardar -->
-                          <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
+                          <h3 class="card-title mr-3" id="btn-guardar" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
                           </h3>
                           <!-- Botones de quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >
@@ -116,7 +116,7 @@
                                   <th class="text-gray">Sueldo mensual</th>                                
                                   <th class="text-gray">Sáb.</th>
                                   <th class="text-center text-gray">Adicional</th>
-                                  <th class="text-nowrap text-right"> <h5 id="total_acumulado_trabjadores">  S/. <i class="fas fa-spinner fa-pulse fa-sm"></i><br><br></h5></th>
+                                  <th class="text-nowrap text-right h5 total_acumulado_trabjadores"> S/<i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-center">Cargo</th>
                                   <th class="text-center">Trabajdor</th>
                                   <th class="text-center">Documento</th>
@@ -268,10 +268,10 @@
                             <table id="tabla-detalle-qs-individual" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th class="text-center">Op.</th>
-                                  <th class="text-center thead_num">Num.</th>
+                                  <th class="text-center">Op.</th>                                  
                                   <th class="text-center thead_fecha">Fechas</th>
                                   <th >Hr. Normal/Extra</th>
+                                  <th class="text-center">Dias</th>
                                   <th>Pago Hr. Normal/Extra</th>
                                   <th>Adicional</th>
                                   <th class="text-center">Sáb.</th>
@@ -280,23 +280,25 @@
                                   <th class="text-center">Estado</th>
                                   <th class="text-center">Trabajador</th>
                                   <th class="text-center">Documento</th>
+                                  <th class="text-center thead_num">Num.</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
-                                  <th class="text-gray-50 text-center">Op.</th>
-                                  <th class="text-gray-50 text-center thead_num">Num.</th>
+                                  <th class="text-gray-50 text-center">Op.</th>                                  
                                   <th class="text-gray-50 text-center thead_fecha">Fechas</th>
                                   <th class="text-gray-50 ">Hr. Normal/Extra</th>
+                                  <th class="text-nowrap text-center h5 suma_qs_dias_asistidos"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-gray-50">Pago Hr. Normal/Extra</th>
-                                  <th class="text-gray-50">Adicional</th>
-                                  <th class="text-gray-50 text-center">Sáb.</th>
-                                  <th class="text-nowrap text-right h5" id="suma_qs_individual">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-nowrap text-right h5 suma_qs_adicional">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-nowrap text-center h5 suma_qs_sabatical"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-nowrap text-right h5 suma_qs_pago_quincenal">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-gray-50 text-center">Contador</th>
                                   <th class="text-gray-50">Estado</th>
                                   <th class="text-center">Trabajador</th>
                                   <th class="text-center">Documento</th>
+                                  <th class="text-center thead_num">Num.</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -588,10 +590,10 @@
                               0%
                             </div>
                           </div>
-                        </div>
+                        </div> 
                         
                         <!-- boton -->
-                        <div class="swal2-actions">
+                        <div class="swal2-actions" >
                           <div class="swal2-loader"></div>
                           <button onclick="cerrar_modal_cargando()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>                         
                         </div>
@@ -676,7 +678,7 @@
                 </div> 
                 
                 <!-- Modal Horas Multiples -->
-                <div class="modal fade" id="modal-agregar-horas-multiples">
+                <div class="modal fade" id="modal-agregar-horas-multiples" data-keyboard="false" data-backdrop="static">
                   <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
                     <div class="modal-content">
 
@@ -688,18 +690,25 @@
                       </div>
 
                       <div class="modal-body"> 
-                        <form id="form-horas-multiples" name="form-horas-multiples" method="POST">
-                          <div class="row">
+                        <form id="form-horas-multiples" name="form-horas-multiples" method="POST">                         
                           
-                            <!-- Horas -->
-                            <div class="col-lg-12"> 
-                              <div class="form-group">
-                                <label for="horas_multiples">Horas<sup class="text-danger">*</sup> <small class="text-danger">(para todos los trabajadores)</small> </label>
-                                <input class="form-control" type="number" name="horas_multiples" id="horas_multiples" >
+                          <!-- Horas -->
+                          <div class="col-lg-12"> 
+                            <div class="form-group">
+                              <label for="horas_multiples">Horas<sup class="text-danger">*</sup> <small class="text-danger">(para todos los trabajadores)</small> </label>
+                              <input class="form-control" type="number" name="horas_multiples" id="horas_multiples" >
+                            </div>
+                          </div>
+
+                          <!-- barprogress -->
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                            <div class="progress_h_multiple h-px-30" id="div_barra_progress_h_multiple">
+                              <div id="barra_progress_h_multiple" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                0%
                               </div>
                             </div>
-
-                          </div>
+                          </div> 
+                          
                           <button type="submit" style="display: none;" id="submit-form-horas-multiples">Submit</button>
                         </form>
                       </div>

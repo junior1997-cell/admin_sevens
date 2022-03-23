@@ -19,10 +19,10 @@ function init() {
   $("[data-mask]").inputmask();
 
   //Mostramos los trabajadores
-  $.post("../ajax/trabajador.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
+  $.post("../ajax/ajax_general.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
-    //Mostramos los tipo
-    $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#tipo_trabajador").html(r); });
+  //Mostramos los tipo
+  $.post("../ajax/ajax_general.php?op=select2TipoTrabajador", function (r) { $("#tipo_trabajador").html(r); });
 
   //Initialize Select2 Elements
   $("#trabajador").select2({
@@ -95,19 +95,18 @@ function capture_idtrabajador() {
 //captura id del tipo
 
 function captura_idtipo() {
+
   if (editando==false) {
 
     var idtipo= $("#tipo_trabajador").select2("val");
+
     if (idtipo != null || idtipo != ' ' ) {
-       //console.log(idtipo);
-       $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
-     }else{
-   
-     }
-
+       
+      $.post('../ajax/ajax_general.php?op=select2CargoTrabajdorId', { idtipo: idtipo } , function (r) { $("#cargo").html(r); });
+    }
   }
-  editando=false;
 
+  editando=false;
 }
 
 function estado_editar(estado) {
@@ -199,7 +198,7 @@ function limpiar() {
   } else {
     fecha_final_proyecto = format_d_m_a(localStorage.getItem('nube_fecha_final_proyecto')) ;
   }
-
+  $("#idtrabajador_por_proyecto").val("");   
   $("#trabajador").val("").trigger("change");
 
   $("#tipo_trabajador").val("").trigger("change");
@@ -396,14 +395,19 @@ function verdatos(idtrabajador){
 }
 
 function mostrar(idtrabajador,idtipo) {
+
   limpiar();
+
   $("#cargando-1-fomulario").hide();
+
   $("#cargando-2-fomulario").show();
- // $("#tipo_trabajador").val('null').trigger("change");
- // $("#cargo").val('null').trigger("change");
+
   show_hide_form(true);
-  $.post('../ajax/trabajador.php?op=select_cargo&id_tipo='+idtipo+'', function (r) { $("#cargo").html(r); });
+
+  $.post('../ajax/ajax_general.php?op=select2CargoTrabajdorId', { idtipo: idtipo }, function (r) { $("#cargo").html(r); });
+
   estado_editar(true);
+
   $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);   
