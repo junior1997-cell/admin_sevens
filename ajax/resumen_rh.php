@@ -52,11 +52,20 @@
 
         break;
 
+
         case 'data_recibos_honorarios':                  
 
           $rspta = $resumen_rh->resumen_rh();
           
           echo json_encode($rspta['data_recibos_honorarios']);
+
+        break;
+
+        case 'monto_total_rh':                  
+
+          $rspta = $resumen_rh->resumen_rh();
+          
+          echo json_encode($rspta['monto_total_rh']);
 
         break;
       

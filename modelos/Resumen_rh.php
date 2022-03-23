@@ -12,7 +12,7 @@ class Resumen_rh
   {
     $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/';
 
-    $data = Array();  $data_recibos_honorarios = Array();
+    $data = Array();  $data_recibos_honorarios = Array(); $monto_total= 0;
 
     $sql_1="SELECT sc.idsubcontrato, sc.idproyecto, sc.idproveedor,sc.costo_parcial, sc.comprobante, p.nombre_codigo, prv.razon_social
     FROM subcontrato as sc, proyecto as p, proveedor as prv 
@@ -47,6 +47,14 @@ class Resumen_rh
             );
           }          
         } 
+
+        if (!empty($value['costo_parcial'])) {
+
+          $monto_total+= $value['costo_parcial'];
+
+        } 
+        
+          
 
       }  
 
@@ -88,6 +96,11 @@ class Resumen_rh
             }          
           } 
 
+          if (!empty($value['monto_x_mes'])) {
+            
+            $monto_total+= $value['monto_x_mes'];
+          } 
+
         }  
       }
 
@@ -126,14 +139,20 @@ class Resumen_rh
               );
             }          
           } 
+          
+          if (!empty($value['pago_quincenal'])) {
+
+            $monto_total+= $value['pago_quincenal'];
+          } 
 
         }  
       }
 
       
     $retorno = array(
-      "data"              => $data,
+      "data"                     => $data,
       "data_recibos_honorarios"  => $data_recibos_honorarios,
+      "monto_total_rh"           => $monto_total,
     );
     return $retorno;
   }

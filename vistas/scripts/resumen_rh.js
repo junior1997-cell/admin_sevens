@@ -15,6 +15,9 @@ function init() {
 }
 //Función Listar
 function listar() {
+
+  $(".total_monto").html( `<i class="fas fa-spinner fa-pulse fa-sm"></i>`);
+ 
   tabla = $("#tabla_resumen_rh")
     .dataTable({
       responsive: true,
@@ -57,6 +60,13 @@ function listar() {
       order: [[0, "asc"]], //Ordenar (columna,orden)
     })
     .DataTable();
+
+    $.post("../ajax/resumen_rh.php?op=monto_total_rh", {}, function (data, status) {
+
+      data = JSON.parse(data); // console.log(data);   console.log('--------------');  
+      console.log(data);
+      $(".total_monto").html('S/. '+ formato_miles(data));
+    });
 
 }
 
@@ -175,7 +185,7 @@ function UrlExists(url) {
 }
 
 function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
+  if (!num || num == "NaN") return "0.00";
   if (num == "Infinity") return "&#x221e;";
   num = num.toString().replace(/\$|\,/g, "");
   if (isNaN(num)) num = "0";

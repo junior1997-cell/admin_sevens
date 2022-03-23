@@ -77,7 +77,7 @@
                                 <th class="text-center">#</th>
                                 <th class="">Módulo</th>
                                 <th>Trabajador y/ proveedor</th>
-                                <th>Monto</th>
+                                <th class="total_monto text-nowrap text-right"></th>
                                 <th>Documento</th>
                               </tr>
                             </tfoot>
