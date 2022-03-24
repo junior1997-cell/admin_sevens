@@ -533,7 +533,7 @@
             </li>
 
             <li class="nav-item ver-otros-modulos-1">
-              <a href="#" class="nav-link" id="lOtroIngreso">             
+              <a href="otro_ingreso.php" class="nav-link" id="lOtroIngreso">             
                 <i class="nav-icon fas fa-hand-holding-usd"></i>
                 <p>
                   Otro ingreso             

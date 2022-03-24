@@ -1016,29 +1016,13 @@
         <!-- <script src="../plugins/moment/moment.min.js"></script> -->
         <script src="../plugins/moment/locales.js"></script>
         <!-- <script src="../plugins/moment/locale/es.js"></script> -->
-        <script type="text/javascript" src="scripts/proyecto.js"></script>        
-        
-        <script>
-          if ( localStorage.getItem('nube_idproyecto') ) {
-
-            console.log("icon_folder_"+localStorage.getItem('nube_idproyecto'));
-
-            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' +  localStorage.getItem('nube_nombre_proyecto'));
-
-            $(".ver-otros-modulos-1").show();
-
-            // $('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
-
-          }else{
-            $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
-
-            $(".ver-otros-modulos-1").hide();
-          }          
-        </script>
+        <script type="text/javascript" src="scripts/proyecto.js"></script>
 
         <script>
           $(function () { $('[data-toggle="tooltip"]').tooltip(); });
         </script>
+
+        <?php require 'extra_script.php'; ?>
         
       </body>
     </html>

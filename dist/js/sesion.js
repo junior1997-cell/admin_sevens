@@ -20,7 +20,7 @@ $(document).ready(function () {
       hora_inicial_sesion = resta_hora;
     } 
 
-    $('#ver-sesion').html(hora_inicial_sesion);  console.log(hora_inicial_sesion);
+    $('#ver-sesion').html(hora_inicial_sesion);  //console.log(hora_inicial_sesion);
 
   },1000); 
         

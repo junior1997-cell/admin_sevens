@@ -555,9 +555,7 @@ table th {
 
 /* min-width = como minimo ─|──────── */
 @media (min-width: 1080px) {
-  .hide-nav-link{
-    display: inline !important;
-  }
+  
 }
 
 /* min-width = como minimo ─|──────── */
@@ -568,6 +566,10 @@ table th {
 
   .w-xl-25{
     width: 25% !important;
+  }
+
+  .show-min-width-1200px{
+    display: inline-block !important;
   }
 }
 
@@ -610,13 +612,18 @@ table th {
 
 /* max-width = como maximo ────────| */
 @media (max-width: 1080px) {
-  .hide-nav-link{
+  .hide-max-width-1080px{
     display: none !important;
   }
 }
 
 /* max-width = como maximo  ────────| */
 @media (max-width: 1199.98px) {
+  
+}
+
+/* max-width = como maximo  ────────| */
+@media (max-width: 1200px) {
   
 }
 

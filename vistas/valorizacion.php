@@ -510,10 +510,9 @@
       ?>
     </div>
     <!-- /.content-wrapper -->
-    <?php
-    
-    require 'script.php';
-    ?>
+
+    <?php require 'script.php'; ?>
+
     <style>
       .class-style label {
         font-size: 14px;
@@ -544,21 +543,9 @@
         $('[data-toggle="tooltip"]').tooltip();
       });
     </script>
-    <script>
-      if (localStorage.getItem("nube_idproyecto")) {
-        console.log("icon_folder_" + localStorage.getItem("nube_idproyecto"));
 
-        $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' + localStorage.getItem("nube_nombre_proyecto"));
+    <?php require 'extra_script.php'; ?>
 
-        $(".ver-otros-modulos-1").show();
-
-        // $('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
-      } else {
-        $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
-
-        $(".ver-otros-modulos-1").hide();
-      }
-    </script>
   </body>
 </html>
 

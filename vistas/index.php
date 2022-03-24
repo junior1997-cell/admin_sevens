@@ -1,4 +1,6 @@
-<?php     
+<?php  
+
+    $ruta = "";
 
     function enrutamiento($tipo) {
         if ($tipo == 'nube') {
@@ -11,7 +13,11 @@
         return $link_host;
     }
 
-    $ruta = enrutamiento('local');
+    if ($_SERVER['HTTP_HOST'] == "localhost") {
+        $ruta = enrutamiento('local');
+    } else {
+        $ruta = enrutamiento('nube');
+    }  
 
     header("Location: $ruta");
 ?>

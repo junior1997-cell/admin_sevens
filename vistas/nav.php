@@ -6,13 +6,13 @@
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="escritorio.php" class="nav-link"> <i class="fas fa-home"></i> <p class="hide-nav-link">Home</p> </a>
+      <a href="escritorio.php" class="nav-link"> <i class="fas fa-home"></i> <p class="d-inline-block hide-max-width-1080px">Home</p> </a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> <p class="hide-nav-link">Contacto</p></a>
+      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> <p class="d-inline-block hide-max-width-1080px">Contacto</p></a>
     </li>
 
-    <li class="nav-item d-none d-sm-inline-block b-radio-10px font-size-18px font-weight-bold mr-1" style=" background-color: #8eff27;">
+    <li class="nav-item b-radio-10px font-size-18px font-weight-bold mr-1" style=" background-color: #8eff27;">
       <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </a>
     </li>
 
@@ -24,9 +24,9 @@
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
     <!-- Navbar Search -->
-    <!-- <li class="nav-item">
+    <li class="nav-item" style="display: none !important;">
       <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-        <i class="fas fa-search">sasassas</i>
+        <i class="fas fa-search">Buscar</i>
       </a>
       <div class="navbar-search-block">
         <form class="form-inline">
@@ -43,14 +43,14 @@
           </div>
         </form>
       </div>
-    </li> -->
+    </li>
 
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown ">
       <a class="nav-link" data-toggle="dropdown" href="#">
         <img src="../dist/docs/all_trabajador/perfil/<?php echo $_SESSION['imagen']; ?>" class="user-image img-circle" alt="User Image" width="30" onerror="this.src='../dist/svg/user_default.svg';"> 
              
-        <span class="hidden-xs"><?php echo $_SESSION['nombre']; ?></span>
+        <span class="hidden-xs d-none show-min-width-1200px"><?php echo $_SESSION['nombre']; ?></span>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <!-- Widget: user widget style 1 -->
@@ -89,7 +89,7 @@
       </div>
     </li>
     <!-- Notifications Dropdown Menu -->
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown d-none d-sm-inline-block">
       <a class="nav-link" data-toggle="dropdown" href="#">
         <i class="far fa-bell"></i>
         <span class="badge badge-warning navbar-badge">15</span>
@@ -117,7 +117,7 @@
     </li>
 
     <!-- Pantalla completa -->
-    <li class="nav-item">
+    <li class="nav-item d-none d-sm-inline-block">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
       </a>
