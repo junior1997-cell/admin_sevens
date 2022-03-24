@@ -63,6 +63,9 @@
 <!-- Consola alerta -->
 <script src="../dist/js/consola_alerta.js"></script>
 
+<!-- hora sesion-->
+<script src="../dist/js/sesion.js"></script> 
+
 <?php require 'contacto_desarrollador.php'; ?>
 
 <div id="js-go-to"> 

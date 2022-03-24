@@ -511,8 +511,8 @@ table th {
   border-top: hidden;
 }
 
-/*  ══════════════════════════════════════════ - @ M E D I A - ══════════════════════════════════════════ */
-/* min-width = como minimo */
+/*  ══════════════════════════════════════════ - @ M E D I A  - M I N - ══════════════════════════════════════════ */
+/* min-width = como minimo ─|──────── */
 @media (min-width: 576px) {
   .w-sm-100{
     width: 100% !important;
@@ -523,7 +523,7 @@ table th {
   }
 }
 
-/* min-width = como minimo */
+/* min-width = como minimo ─|──────── */
 @media (min-width: 768px) {
   .w-md-100{
     width: 100% !important;
@@ -534,7 +534,7 @@ table th {
   }
 }
 
-/* min-width = como minimo */
+/* min-width = como minimo ─|──────── */
 @media (min-width: 992px) {
 
   .w-lg-100{
@@ -553,7 +553,14 @@ table th {
   }
 }
 
-/* min-width = como minimo */
+/* min-width = como minimo ─|──────── */
+@media (min-width: 1080px) {
+  .hide-nav-link{
+    display: inline !important;
+  }
+}
+
+/* min-width = como minimo ─|──────── */
 @media (min-width: 1200px) {
   .w-xl-100{
     width: 100% !important;
@@ -564,7 +571,9 @@ table th {
   }
 }
 
-/* max-width = como maximo */
+/*  ══════════════════════════════════════════ - @ M E D I A  - M I N - ══════════════════════════════════════════ */
+
+/* max-width = como maximo ────────|─ */
 @media (max-width: 575.98px) {
   .w-sm-100{
     width: 100% !important;
@@ -575,7 +584,7 @@ table th {
   }
 }
 
-/* max-width = como maximo */
+/* max-width = como maximo  ────────| */
 @media (max-width: 576px) {
   .w-sm-100{
     width: 100% !important;
@@ -585,11 +594,12 @@ table th {
     width: 25% !important;
   }
 }
-/* max-width = como maximo */
+/* max-width = como maximo  ────────| */
 @media (max-width: 767.98px) {
   
 }
-/* max-width = como maximo */
+
+/* max-width = como maximo ────────| */
 @media (max-width: 991.98px) {
   .borde-arriba-verde{
     border-top: 3px solid #109e38;
@@ -597,7 +607,15 @@ table th {
 
   
 }
-/* max-width = como maximo */
+
+/* max-width = como maximo ────────| */
+@media (max-width: 1080px) {
+  .hide-nav-link{
+    display: none !important;
+  }
+}
+
+/* max-width = como maximo  ────────| */
 @media (max-width: 1199.98px) {
   
 }

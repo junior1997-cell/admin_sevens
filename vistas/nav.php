@@ -6,18 +6,18 @@
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="escritorio.php" class="nav-link"> <i class="fas fa-home"></i> Home</a>
+      <a href="escritorio.php" class="nav-link"> <i class="fas fa-home"></i> <p class="hide-nav-link">Home</p> </a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> Contacto</a>
+      <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> <p class="hide-nav-link">Contacto</p></a>
     </li>
 
-    <li class="nav-item d-none d-sm-inline-block" style="
-    background-color: #8eff27;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: bold;">
+    <li class="nav-item d-none d-sm-inline-block b-radio-10px font-size-18px font-weight-bold mr-1" style=" background-color: #8eff27;">
       <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </a>
+    </li>
+
+    <li class="nav-item d-none  d-md-inline-block b-radio-10px font-size-18px font-weight-bold bg-warning" >
+      <a href="#" data-toggle="modal" data-target="#modal-ver---" class="nav-link" id="ver-sesion"><i class="fas fa-spinner fa-pulse "></i> </a>
     </li>
   </ul>
 

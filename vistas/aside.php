@@ -521,14 +521,31 @@
                   Prestamos               
                 </p>
               </a>
-            </li>           
-            
+            </li>
 
             <li class="nav-item ver-otros-modulos-1">
               <a href="estado_financiero.php" class="nav-link" id="lEstadoFinanciero">             
                 <i class="nav-icon fas fa-balance-scale-left"></i>
                 <p>
                   Estado Financiero               
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="#" class="nav-link" id="lOtroIngreso">             
+                <i class="nav-icon fas fa-hand-holding-usd"></i>
+                <p>
+                  Otro ingreso             
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="#" class="nav-link" id="lPagoValorizacion">             
+                <i class="fas fa-dollar-sign nav-icon"></i>
+                <p>
+                  Pago Valorización               
                 </p>
               </a>
             </li>
