@@ -263,13 +263,13 @@ function listar_tbla_principal(id_proyecto) {
 
     data = JSON.parse(data); console.log(data); 
 
-    $(".deposito_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.total_deposito_x_proyecto}</b>`);
-    // $(".sueldo_total_tbla_principal").html(`<sup>S/.</sup> <b>${data.sueldo_mesual_x_proyecto}</b>`);
+    $(".deposito_total_tbla_principal").html(`<sup>S/</sup> <b>${data.total_deposito_x_proyecto}</b>`);
+    // $(".sueldo_total_tbla_principal").html(`<sup>S/</sup> <b>${data.sueldo_mesual_x_proyecto}</b>`);
 
-    $('.sabatical_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(sabatical_total)}</b>`);
-    $('.pago_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(pago_acumulado_total)}</b>`);
-    $('.saldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(saldo_total)}</b>`);  
-    $('.cant_s_q_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(cant_q_s_total)}</b>`);
+    $('.sabatical_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(sabatical_total)}</b>`);
+    $('.pago_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(pago_acumulado_total)}</b>`);
+    $('.saldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(saldo_total)}</b>`);  
+    $('.cant_s_q_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(cant_q_s_total)}</b>`);
   });
 }
 
@@ -343,17 +343,17 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
           <td> ${element.numero_q_s}</td>
           <td>${format_d_m_a(element.fecha_q_s_inicio)}</td>
           <td>${format_d_m_a(element.fecha_q_s_fin)}</td>
-          <td><sup>S/. </sup>${element.sueldo_hora}</td>
+          <td><sup>S/ </sup>${element.sueldo_hora}</td>
           <td>${formato_miles(element.total_hn)}<b> / </b>${formato_miles(element.total_he)}</td>
           <td>${element.sabatical}</td>          
-          <td><sup>S/. </sup>${formato_miles(element.pago_parcial_hn)}<b> / </b><sup>S/. </sup>${formato_miles(element.pago_parcial_he)}</td>
-          <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(element.adicional_descuento)}</td>
-          <td style="text-align: right !important;"><sup>S/. </sup>${formato_miles(element.pago_quincenal)}</td>
+          <td><sup>S/ </sup>${formato_miles(element.pago_parcial_hn)}<b> / </b><sup>S/ </sup>${formato_miles(element.pago_parcial_he)}</td>
+          <td style="text-align: right !important;"><sup>S/ </sup>${formato_miles(element.adicional_descuento)}</td>
+          <td style="text-align: right !important;"><sup>S/ </sup>${formato_miles(element.pago_quincenal)}</td>
           <td>
             <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s('${element.idresumen_q_s_asistencia}', '${format_d_m_a(element.fecha_q_s_inicio)}', '${format_d_m_a(element.fecha_q_s_fin)}', '${element.pago_quincenal}', '${element.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}','${cuenta_bancaria}', '${saldo}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
             <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(element.deposito)}</button></div>
           </td>
-          <td style="text-align: right !important;" class="${bg_saldo}"><sup>S/. </sup>${formato_miles(saldo)}</td>
+          <td style="text-align: right !important;" class="${bg_saldo}"><sup>S/ </sup>${formato_miles(saldo)}</td>
           <td> 
             <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${element.idresumen_q_s_asistencia}', '${element.fecha_q_s_inicio}', '${element.fecha_q_s_fin}', '${element.numero_q_s}', '${element.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
               <i class="fas fa-file-invoice fa-lg"></i>
@@ -377,11 +377,11 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
       $('.data-q-s').html(data_s_q);
       $('.total_hn_he').html(`${formato_miles(total_hn)} / ${formato_miles(total_he)}`);
       $('.total_sabatical').html(`${formato_miles(total_sabatical)} `);
-      $('.total_monto_hn_he').html(`<sup>S/. </sup>${formato_miles(total_monto_hn)} / <sup>S/. </sup>${formato_miles(total_monto_he)}`);
-      $('.total_descuento').html(`<sup>S/. </sup>${formato_miles(total_descuento)}`);
-      $('.total_quincena').html(`<sup>S/. </sup>${formato_miles(total_quincena)}`);
-      $('.total_deposito').html(`<sup>S/. </sup>${formato_miles(total_deposito)}`); 
-      $('.total_saldo').html(`<sup>S/. </sup>${formato_miles(total_saldo)}`); 
+      $('.total_monto_hn_he').html(`<sup>S/ </sup>${formato_miles(total_monto_hn)} / <sup>S/ </sup>${formato_miles(total_monto_he)}`);
+      $('.total_descuento').html(`<sup>S/ </sup>${formato_miles(total_descuento)}`);
+      $('.total_quincena').html(`<sup>S/ </sup>${formato_miles(total_quincena)}`);
+      $('.total_deposito').html(`<sup>S/ </sup>${formato_miles(total_deposito)}`); 
+      $('.total_saldo').html(`<sup>S/ </sup>${formato_miles(total_saldo)}`); 
       $('.rh_total').html(`${rh_total} <small class="text-gray">(docs.)</small>`);
     }     
   });   
@@ -392,18 +392,18 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
 
   table_show_hide(3);
 
-  $('#btn-nombre-mes').html(`&nbsp; &nbsp; <i class="fas fa-calendar-check text-gray-50"></i> <b>${fecha_inicio}  <i class="fas fa-arrow-right"></i>  ${fecha_final}</b> - <sup>S/.</sup><b>${formato_miles(pago_q_s)}</b>`);
+  $('#btn-nombre-mes').html(`&nbsp; &nbsp; <i class="fas fa-calendar-check text-gray-50"></i> <b>${fecha_inicio}  <i class="fas fa-arrow-right"></i>  ${fecha_final}</b> - <sup>S/</sup><b>${formato_miles(pago_q_s)}</b>`);
   
   if ( parseFloat(saldo_q_s) < 0) {
     $('.faltante_mes_modal').css({'background-color' : 'red', 'color':'white'});
-    $('.faltante_mes_modal').html(`<sup>S/. </sup>${formato_miles(saldo_q_s)}`);
+    $('.faltante_mes_modal').html(`<sup>S/ </sup>${formato_miles(saldo_q_s)}`);
   } else {
     if (parseFloat(saldo_q_s) == 0) {
       $('.faltante_mes_modal').css({'background-color' : 'green', 'color':'white'});
-      $('.faltante_mes_modal').html(`<sup>S/. </sup><b>${formato_miles(saldo_q_s)}</b>`);  
+      $('.faltante_mes_modal').html(`<sup>S/ </sup><b>${formato_miles(saldo_q_s)}</b>`);  
     } else {
       $('.faltante_mes_modal').css({'background-color' : '#ffc107', 'color':'black'});
-      $('.faltante_mes_modal').html(`<sup>S/. </sup><b>${formato_miles(saldo_q_s)}</b>`);
+      $('.faltante_mes_modal').html(`<sup>S/ </sup><b>${formato_miles(saldo_q_s)}</b>`);
     }    
   }  
 

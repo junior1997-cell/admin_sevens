@@ -117,10 +117,10 @@
                                   <th><i class="fas fa-cogs"></i></th>
                                   <th>Pension</th>
                                   <th>Descripción</th>
-                                  <th id="total_pension" class="text-right">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_pension" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th>Servicios</th>
                                   <th>Comprobantes</th>
-                                  <th id="total_saldo" class="text-right">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_saldo" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -139,8 +139,8 @@
                               <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;">
                                 <thead style="background-color: #bebebe1f; color: black;">
                                   <tr>
-                                    <th rowspan="2" colspan="1" class="text-center w-px-300">Descripción</th>
-                                    <th rowspan="2" colspan="1" class="text-center w-px-135">Precio actual</th>
+                                    <th rowspan="2" colspan="1" class="text-center w-300px">Descripción</th>
+                                    <th rowspan="2" colspan="1" class="text-center w-135px">Precio actual</th>
                                     <th colspan="7" class="text-center clas_pading">Días de la semana</th>
                                     <th rowspan="2" colspan="1" class="text-center">Cantidad</th>
                                     <th rowspan="2" colspan="1" class="text-center">Adicional</th>

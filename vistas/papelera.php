@@ -142,7 +142,7 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="nombre_mes" class="text-gray">Faltante </label>
-                                  <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                  <span class="faltante_mes_modal text-gray form-control"> <sup>S/</sup> 0.00</span>
                                 </div>
                               </div>
                               

@@ -172,13 +172,13 @@ function limpiar_form_compra() {
   $("#total_venta").val("");  
   $(".total_venta").html("0");
 
-  $(".subtotal_compra").html("S/. 0.00");
+  $(".subtotal_compra").html("S/ 0.00");
   $("#subtotal_compra").val("");
 
-  $(".igv_compra").html("S/. 0.00");
+  $(".igv_compra").html("S/ 0.00");
   $("#igv_compra").val("");
 
-  $(".total_venta").html("S/. 0.00");
+  $(".total_venta").html("S/ 0.00");
   $("#total_venta").val("");
 
   $("#estado_detraccion").val("0");
@@ -695,11 +695,11 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           </div>
         </td>
         <td class=""><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td class=" form-group"><input class="producto_${idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class=" hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
-        <td class=" hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
-        <td class=""><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td class=""><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class=" form-group"><input class="producto_${idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class=" hidden"><input type="number" class="w-135px input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
+        <td class=" hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
+        <td class=""><input class="w-135px precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+        <td class=""><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class=" text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
         <td class=""><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
       </tr>`;
@@ -729,13 +729,13 @@ function evaluar() {
   } else {
     $("#guardar_registro_compras").hide();
     cont = 0;
-    $(".subtotal_compra").html("S/. 0.00");
+    $(".subtotal_compra").html("S/ 0.00");
     $("#subtotal_compra").val(0);
 
-    $(".igv_compra").html("S/. 0.00");
+    $(".igv_compra").html("S/ 0.00");
     $("#igv_compra").val(0);
 
-    $(".total_venta").html("S/. 0.00");
+    $(".total_venta").html("S/ 0.00");
     $("#total_compra").val(0);
 
   }
@@ -878,14 +878,14 @@ function calcularTotalesSinIgv() {
       total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
     });
 
-    $(".subtotal_compra").html("S/. " + formato_miles(total));
+    $(".subtotal_compra").html("S/ " + formato_miles(total));
     $("#subtotal_compra").val(redondearExp(total, 4));
 
-    $(".igv_compra").html("S/. 0.00");
+    $(".igv_compra").html("S/ 0.00");
     $("#igv_compra").val(0.0);
     $(".val_igv").html('IGV (0%)');
 
-    $(".total_venta").html("S/. " + formato_miles(total.toFixed(2)));
+    $(".total_venta").html("S/ " + formato_miles(total.toFixed(2)));
     $("#total_venta").val(redondearExp(total, 4));
   }
 }
@@ -906,13 +906,13 @@ function calcularTotalesConIgv() {
   subotal_sin_igv = quitar_igv_del_precio(total, val_igv, 'decimal').toFixed(2);
   igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
 
-  $(".subtotal_compra").html(`S/. ${formato_miles(subotal_sin_igv)}`);
+  $(".subtotal_compra").html(`S/ ${formato_miles(subotal_sin_igv)}`);
   $("#subtotal_compra").val(redondearExp(subotal_sin_igv, 4));
 
-  $(".igv_compra").html("S/. " + formato_miles(igv));
+  $(".igv_compra").html("S/ " + formato_miles(igv));
   $("#igv_compra").val(igv);
 
-  $(".total_venta").html("S/. " + formato_miles(total.toFixed(2)));
+  $(".total_venta").html("S/ " + formato_miles(total.toFixed(2)));
   $("#total_venta").val(redondearExp(total, 4));
 
   total = 0.0;
@@ -1153,11 +1153,11 @@ function mostrar_compra(idcompra_proyecto) {
               </div>
             </td>
             <td> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
-            <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-            <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="hidden"><input class="w-135px input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
+            <td class="hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
+            <td ><input type="number" class="w-135px precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
             <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
           </tr>`;

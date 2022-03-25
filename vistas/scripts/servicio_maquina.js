@@ -534,7 +534,7 @@ function suma_horas_costoparcial(idmaquinaria, idproyecto) {
     if (cents < 10) cents = "0" + cents;
     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
     costo_parcial = (sign ? "" : "-") + num + "." + cents;
-    $("#costo-parcial").html('S/. '+costo_parcial);
+    $("#costo-parcial").html('S/ '+costo_parcial);
   });
 }
 
@@ -831,7 +831,7 @@ function total_costo_secc_pagoss(idmaquinaria, idproyecto) {
     if (cents < 10) cents = "0" + cents;
     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
     costo_parcial = (sign ? "" : "-") + num + "." + cents;
-    $("#total_costo_secc_pagos").html('S/. '+formato_miles(costo_parcial));
+    $("#total_costo_secc_pagos").html('S/ '+formato_miles(costo_parcial));
   });
   // monto_total_p=1000;
 }
@@ -1501,7 +1501,7 @@ function total_monto_f(idmaquinaria, idproyecto) {
     
     data = JSON.parse(data);  // console.log(data);     
 
-    $("#monto_total_f").html('S/. '+formato_miles(data.total_mont_f));
+    $("#monto_total_f").html('S/ '+formato_miles(data.total_mont_f));
   });
 }
 
@@ -1514,7 +1514,7 @@ function total_costo_parcial(idmaquinaria, idproyecto) {
    
     data = JSON.parse(data); // console.log(data);   
      
-    $("#total_costo").html('S/. '+formato_miles(data.costo_parcial));
+    $("#total_costo").html('S/ '+formato_miles(data.costo_parcial));
   });
 }
 

@@ -110,11 +110,11 @@
                               <table id="tabla1_compras" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-compras text-center w-px-300 clas_pading backgff9100">Compras</th>
+                                    <th colspan="8" class="cargando-compras text-center w-300px clas_pading backgff9100">Compras</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -143,11 +143,11 @@
                               <table id="tabla2_maquinaria" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-maquinas text-center w-px-300 clas_pading backgff9100">Servicios-Maquinaria</th>
+                                    <th colspan="8" class="cargando-maquinas text-center w-300px clas_pading backgff9100">Servicios-Maquinaria</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -176,11 +176,11 @@
                               <table id="tabla3_equipo" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-equipos text-center w-px-300 clas_pading backgff9100">Servicios-Equipo</th>
+                                    <th colspan="8" class="cargando-equipos text-center w-300px clas_pading backgff9100">Servicios-Equipo</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -209,11 +209,11 @@
                               <table id="tabla4_transporte" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-transporte text-center w-px-300 clas_pading backgff9100">Transporte</th>
+                                    <th colspan="8" class="cargando-transporte text-center w-300px clas_pading backgff9100">Transporte</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -242,11 +242,11 @@
                               <table id="tabla5_hospedaje" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-hospedaje text-center w-px-300 clas_pading backgff9100">Hospedaje</th>
+                                    <th colspan="8" class="cargando-hospedaje text-center w-300px clas_pading backgff9100">Hospedaje</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -275,11 +275,11 @@
                               <table id="tabla6_comidas_ex" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-comida-extra text-center w-px-300 clas_pading backgff9100">Comidas extras</th>
+                                    <th colspan="8" class="cargando-comida-extra text-center w-300px clas_pading backgff9100">Comidas extras</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -308,11 +308,11 @@
                               <table id="tabla7_breaks" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-breaks text-center w-px-300 clas_pading backgff9100">Breaks</th>
+                                    <th colspan="8" class="cargando-breaks text-center w-300px clas_pading backgff9100">Breaks</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -341,11 +341,11 @@
                               <table id="tabla8_pension" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-pension text-center w-px-300 clas_pading backgff9100">Pensión</th>
+                                    <th colspan="8" class="cargando-pension text-center w-300px clas_pading backgff9100">Pensión</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -374,11 +374,11 @@
                               <table id="tabla9_per_adm" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-administrativo text-center w-px-300 clas_pading backgff9100">Personal Administrativo</th>
+                                    <th colspan="8" class="cargando-administrativo text-center w-300px clas_pading backgff9100">Personal Administrativo</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">TRABAJADOR</th>
+                                    <th class="text-center w-300px clas_pading">TRABAJADOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -407,11 +407,11 @@
                               <table id="tabla10_per_obr" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-obrero text-center w-px-300 clas_pading backgff9100">Personal Obrero</th>
+                                    <th colspan="8" class="cargando-obrero text-center w-300px clas_pading backgff9100">Personal Obrero</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">TRABAJADOR</th>
+                                    <th class="text-center w-300px clas_pading">TRABAJADOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -440,11 +440,11 @@
                               <table id="tabla11_otros_gastos" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-otros-gastos text-center w-px-300 clas_pading backgff9100">Otros Gastos</th>
+                                    <th colspan="8" class="cargando-otros-gastos text-center w-300px clas_pading backgff9100">Otros Gastos</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">PROVEEDOR</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>
@@ -473,11 +473,11 @@
                               <table id="tabla12_all_sumas" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-sumas text-center w-px-300 clas_pading backgff9100">Sumas totales</th>
+                                    <th colspan="8" class="cargando-sumas text-center w-300px clas_pading backgff9100">Sumas totales</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-px-300 clas_pading">---</th>
+                                    <th class="text-center w-300px clas_pading">---</th>
                                     <th class="text-center clas_pading">---</th>
                                     <th class="text-center clas_pading">---</th>
                                     <th class="text-center clas_pading">DETALLE</th>

@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-class All_activos_fijos
+class Compra_activos_fijos
 {
   //Implementamos nuestro constructor
   public function __construct()

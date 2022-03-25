@@ -20,15 +20,15 @@ function init() {
   tbla_principal();  
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
-  $.post("../ajax/all_activos_fijos.php?op=select2Proveedor", function (r) {$("#idproveedor").html(r);  });
+  $.post("../ajax/Compra_activos_fijos.php?op=select2Proveedor", function (r) {$("#idproveedor").html(r);  });
 
-  $.post("../ajax/all_activos_fijos.php?op=select2Color", function (r) { $("#color_p").html(r); });
+  $.post("../ajax/Compra_activos_fijos.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
-  $.post("../ajax/all_activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
+  $.post("../ajax/Compra_activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
-  $.post("../ajax/all_activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
+  $.post("../ajax/Compra_activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
 
-  $.post("../ajax/all_activos_fijos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); $("#banco_prov").html(r); });
+  $.post("../ajax/Compra_activos_fijos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); $("#banco_prov").html(r); });
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════ 
   $("#guardar_registro_compras").on("click", function (e) { $("#submit-form-compra-activos-f").submit(); });
@@ -382,13 +382,13 @@ function limpiar_form_compra() {
   $("#total_venta").val("");  
   $(".total_venta").html("0");
 
-  $(".subtotal_compra").html("S/. 0.00");
+  $(".subtotal_compra").html("S/ 0.00");
   $("#subtotal_compra").val("");
 
-  $(".igv_compra").html("S/. 0.00");
+  $(".igv_compra").html("S/ 0.00");
   $("#igv_compra").val("");
 
-  $(".total_venta").html("S/. 0.00");
+  $(".total_venta").html("S/ 0.00");
   $("#total_venta").val("");
 
   $("#estado_detraccion").val("0");
@@ -480,7 +480,7 @@ function tbla_principal() {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, {extend: "colvis"} ,      
     ],
     ajax: {
-      url: "../ajax/all_activos_fijos.php?op=listar_compra_activos",
+      url: "../ajax/Compra_activos_fijos.php?op=listar_compra_activos",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -546,7 +546,7 @@ function tbla_principal() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/all_activos_fijos.php?op=listar_compraxporvee_af_g",
+      url: "../ajax/Compra_activos_fijos.php?op=listar_compraxporvee_af_g",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -594,7 +594,7 @@ function listar_facuras_proveedor_af_g(idproveedor) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/all_activos_fijos.php?op=listar_detalle_compraxporvee&idproveedor=" + idproveedor,
+      url: "../ajax/Compra_activos_fijos.php?op=listar_detalle_compraxporvee&idproveedor=" + idproveedor,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -637,7 +637,7 @@ function guardaryeditar_compras(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/all_activos_fijos.php?op=guardaryeditarcompraactivo",
+        url: "../ajax/Compra_activos_fijos.php?op=guardaryeditarcompraactivo",
         type: "POST",
         data: formData,
         contentType: false,
@@ -675,7 +675,7 @@ function anular(idcompra_af_general) {
     confirmButtonText: "Si, Anular!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
@@ -700,7 +700,7 @@ function des_anular(idcompra_af_general) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
         tabla.ajax.reload();
         tabla_comp_prov.ajax.reload();
@@ -728,7 +728,7 @@ function eliminar_compra(idcompra_af_general) {
 
     if (result.isConfirmed) {
      //op=desactivar
-      $.post("../ajax/all_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
@@ -741,7 +741,7 @@ function eliminar_compra(idcompra_af_general) {
 
     }else if (result.isDenied) {
      //op=eliminar
-      $.post("../ajax/all_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");
 
@@ -813,11 +813,11 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           </div>
         </td>
         <td class=""><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td class=" form-group"><input class="producto_${idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class=" hidden"><input type="number" class="w-px-135 input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
-        <td class=" hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
-        <td class=""><input class="w-px-135 precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td class=""><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class=" form-group"><input class="producto_${idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+        <td class=" hidden"><input type="number" class="w-135px input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
+        <td class=" hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
+        <td class=""><input class="w-135px precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+        <td class=""><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class=" text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
         <td class=""><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
       </tr>`;
@@ -847,13 +847,13 @@ function evaluar() {
   } else {
     $("#guardar_registro_compras").hide();
     cont = 0;
-    $(".subtotal_compra").html("S/. 0.00");
+    $(".subtotal_compra").html("S/ 0.00");
     $("#subtotal_compra").val(0);
 
-    $(".igv_compra").html("S/. 0.00");
+    $(".igv_compra").html("S/ 0.00");
     $("#igv_compra").val(0);
 
-    $(".total_venta").html("S/. 0.00");
+    $(".total_venta").html("S/ 0.00");
     $("#total_compra").val(0);
 
   }
@@ -996,14 +996,14 @@ function calcularTotalesSinIgv() {
       total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
     });
 
-    $(".subtotal_compra").html("S/. " + formato_miles(total));
+    $(".subtotal_compra").html("S/ " + formato_miles(total));
     $("#subtotal_compra").val(redondearExp(total, 4));
 
-    $(".igv_compra").html("S/. 0.00");
+    $(".igv_compra").html("S/ 0.00");
     $("#igv_compra").val(0.0);
     $(".val_igv").html('IGV (0%)');
 
-    $(".total_venta").html("S/. " + formato_miles(total.toFixed(2)));
+    $(".total_venta").html("S/ " + formato_miles(total.toFixed(2)));
     $("#total_venta").val(redondearExp(total, 4));
   }
 }
@@ -1024,13 +1024,13 @@ function calcularTotalesConIgv() {
   subotal_sin_igv = quitar_igv_del_precio(total, val_igv, 'decimal').toFixed(2);
   igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
 
-  $(".subtotal_compra").html(`S/. ${formato_miles(subotal_sin_igv)}`);
+  $(".subtotal_compra").html(`S/ ${formato_miles(subotal_sin_igv)}`);
   $("#subtotal_compra").val(redondearExp(subotal_sin_igv, 4));
 
-  $(".igv_compra").html("S/. " + formato_miles(igv));
+  $(".igv_compra").html("S/ " + formato_miles(igv));
   $("#igv_compra").val(igv);
 
-  $(".total_venta").html("S/. " + formato_miles(total.toFixed(2)));
+  $(".total_venta").html("S/ " + formato_miles(total.toFixed(2)));
   $("#total_venta").val(redondearExp(total, 4));
 
   total = 0.0;
@@ -1137,7 +1137,7 @@ function mostrar_compra_general(idcompra_af_general) {
   detalles = 0;
   ver_form_add();
 
-  $.post("../ajax/all_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/Compra_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     
     data = JSON.parse(data); console.log(data);
     
@@ -1209,11 +1209,11 @@ function mostrar_compra_general(idcompra_af_general) {
               </div>
             </td>
             <td> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-px-100 cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
-            <td ><input type="number" class="w-px-135 precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-            <td><input type="number" class="w-px-135 descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="hidden"><input class="w-135px input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
+            <td class="hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
+            <td ><input type="number" class="w-135px precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
             <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
           </tr>`;
@@ -1250,7 +1250,7 @@ function ver_detalle_compras_general(idcompra_af_general) {
 
   $("#modal-ver-compras-general").modal("show");
 
-  $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_general&idcompra_af_general=" + idcompra_af_general, function (r) {
+  $.post("../ajax/Compra_activos_fijos.php?op=ver_detalle_compras_general&idcompra_af_general=" + idcompra_af_general, function (r) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
@@ -1266,7 +1266,7 @@ function ver_detalle_compras_proyecto(id_compra) {
 
   $("#modal-ver-compras-general").modal("show");
   
-  $.post("../ajax/all_activos_fijos.php?op=ver_detalle_compras_proyecto&id_compra=" + id_compra, function (r) {
+  $.post("../ajax/Compra_activos_fijos.php?op=ver_detalle_compras_proyecto&id_compra=" + id_compra, function (r) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
@@ -1497,7 +1497,7 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/all_activos_fijos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/Compra_activos_fijos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
       
       data = JSON.parse(data);  // console.log(data);
 
@@ -1545,7 +1545,7 @@ function guardar_proveedor(e) {
   var formData = new FormData($("#form-proveedor")[0]);
 
   $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardar_proveedor",
+    url: "../ajax/Compra_activos_fijos.php?op=guardar_proveedor",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1606,7 +1606,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/all_activos_fijos.php?op=listar_pagos_proveedor&idcompra_af_general=" + idcompra_af_general,
+        url: "../ajax/Compra_activos_fijos.php?op=listar_pagos_proveedor&idcompra_af_general=" + idcompra_af_general,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -1668,7 +1668,7 @@ function most_datos_prov_pago(idcompra_af_general) {
   $("#h4_mostrar_beneficiario").html("");
 
   $("#banco_pago").val("").trigger("change");
-  $.post("../ajax/all_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/Compra_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
     $("#idcompra_af_general_p").val(data.idcompra_af_general);
@@ -1710,7 +1710,7 @@ function guardaryeditar_pago(e) {
   var formData = new FormData($("#form-servicios-pago")[0]);
 
   $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_pago",
+    url: "../ajax/Compra_activos_fijos.php?op=guardaryeditar_pago",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1740,14 +1740,14 @@ function guardaryeditar_pago(e) {
 function total_pagos(idcompra_af_general) {
   $(".tfoot_pago_general").show();
   $(".tfoot_pago_proy").hide();
-  $.post("../ajax/all_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/Compra_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     $("#monto_total_general").html("");
     $("#monto_total_proy").html("");
 
     data = JSON.parse(data);
     //console.log(data);
 
-    $("#monto_total_general").html('S/. '+formato_miles(data.total_monto));
+    $("#monto_total_general").html('S/ '+formato_miles(data.total_monto));
   });
 }
 
@@ -1761,7 +1761,7 @@ function mostrar_pagos(idpago_af_general) {
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
-  $.post("../ajax/all_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
+  $.post("../ajax/Compra_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
     data = JSON.parse(data);
     console.log(data);
 
@@ -1800,7 +1800,7 @@ function desactivar_pagos(idpago_af_general) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1823,7 +1823,7 @@ function activar_pagos(idpago_af_general) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Activado!", "Pago ha sido activado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1847,7 +1847,7 @@ function eliminar_pagos(idpago_af_general) {
     confirmButtonText: "Si, Eliminar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_activos_fijos.php?op=eliminar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/Compra_activos_fijos.php?op=eliminar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Eliminado!", "El pago ha sido Eliminado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1875,7 +1875,7 @@ function guardaryeditar_comprobante(e) {
   var formData = new FormData($("#form-comprobante")[0]);
 
   $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardaryeditar_comprobante",
+    url: "../ajax/Compra_activos_fijos.php?op=guardaryeditar_comprobante",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1961,7 +1961,7 @@ function guardar_y_editar_materiales(e) {
   var formData = new FormData($("#form-materiales")[0]);
 
   $.ajax({
-    url: "../ajax/all_activos_fijos.php?op=guardar_y_editar_materiales",
+    url: "../ajax/Compra_activos_fijos.php?op=guardar_y_editar_materiales",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1996,7 +1996,7 @@ function listaractivos() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/all_activos_fijos.php?op=listarActivoscompra",
+      url: "../ajax/Compra_activos_fijos.php?op=listarActivoscompra",
       type: "get",
       dataType: "json",
       error: function (e) {

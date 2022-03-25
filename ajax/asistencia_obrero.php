@@ -13,9 +13,9 @@ ob_start();
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['asistencia_trabajador'] == 1) {
 
-      require_once "../modelos/registro_asistencia.php";
+      require_once "../modelos/Asistencia_obrero.php";
 
-      $asist_trabajador=new Asistencia_trabajador();      
+      $asistencia_obrero=new Asistencia_obrero();      
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
       $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
@@ -37,7 +37,7 @@ ob_start();
 
           $data_asistencia = $_POST["asistencia"];  $resumen_qs = $_POST["resumen_qs"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
                      
-          $rspta=$asist_trabajador->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $resumen_qs, $fecha_i, $fecha_f);
+          $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $resumen_qs, $fecha_i, $fecha_f);
 
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del trabajador";          
           
@@ -45,7 +45,7 @@ ob_start();
 
         case 'mostrar_editar':
 
-          $rspta=$asist_trabajador->mostrar($idasistencia_trabajador);
+          $rspta=$asistencia_obrero->mostrar($idasistencia_trabajador);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -58,7 +58,7 @@ ob_start();
           $nube_idproyect = $_POST["nube_idproyect"];
           // $f1 = '2021-07-09'; $f2 = '2021-07-23'; $nube_idproyect = '1';
 
-          $rspta=$asist_trabajador->ver_detalle_quincena($f1,$f2,$nube_idproyect);
+          $rspta=$asistencia_obrero->ver_detalle_quincena($f1,$f2,$nube_idproyect);
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta);		
@@ -69,7 +69,7 @@ ob_start();
 
           $nube_idproyecto = $_POST["nube_idproyecto"];
 
-          $rspta=$asist_trabajador->listarquincenas_botones($nube_idproyecto);
+          $rspta=$asistencia_obrero->listarquincenas_botones($nube_idproyecto);
           
           echo json_encode($rspta);	 //Codificar el resultado utilizando json
 
@@ -80,7 +80,7 @@ ob_start();
 
           $nube_idproyecto = $_GET["nube_idproyecto"];
           
-          $rspta=$asist_trabajador->tbla_principal($nube_idproyecto);
+          $rspta=$asistencia_obrero->tbla_principal($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array(); $cont = 1;
 
@@ -137,7 +137,7 @@ ob_start();
         break;
 
         case 'suma_total_acumulado':
-          $rspta=$asist_trabajador->total_acumulado_trabajadores($_POST["nube_idproyecto"]);
+          $rspta=$asistencia_obrero->total_acumulado_trabajadores($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
         break;               
@@ -154,7 +154,7 @@ ob_start();
 
           } else {
 
-            $rspta = $asist_trabajador->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["estado_envio_contador"]);
+            $rspta = $asistencia_obrero->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["estado_envio_contador"]);
 
             echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";
           }
@@ -163,7 +163,7 @@ ob_start();
 
         case 'agregar_quitar_pago_al_contador_todos':          
 
-          $rspta = $asist_trabajador->quitar_editar_pago_al_contador_todos($_POST["array_pago_contador"], $_POST["estado_envio_contador"]);
+          $rspta = $asistencia_obrero->quitar_editar_pago_al_contador_todos($_POST["array_pago_contador"], $_POST["estado_envio_contador"]);
 
           echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";          
           
@@ -173,7 +173,7 @@ ob_start();
 
         case 'agregar_quitar_sabatical_manual':
 
-          $rspta = $asist_trabajador->insertar_quitar_editar_sabatical_manual($_POST["idresumen_q_s_asistencia"], $_POST["fecha_asist"], $_POST["sueldo_x_hora"], $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
+          $rspta = $asistencia_obrero->insertar_quitar_editar_sabatical_manual($_POST["idresumen_q_s_asistencia"], $_POST["fecha_asist"], $_POST["sueldo_x_hora"], $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
 
           echo $rspta ? "ok" : "No se pudieron GUARDAR el sabatical.";          
           
@@ -187,7 +187,7 @@ ob_start();
 
           } else {
 
-            $rspta = $asist_trabajador->insertar_quitar_sabatical_manual_todos($_POST["sabatical_trabajador"], $_POST["estado_sabatical_manual"] );
+            $rspta = $asistencia_obrero->insertar_quitar_sabatical_manual_todos($_POST["sabatical_trabajador"], $_POST["estado_sabatical_manual"] );
 
             echo $rspta ? "ok" : "No se pudieron GUARDAR los sabaticales";
           }
@@ -200,7 +200,7 @@ ob_start();
 
           $idtrabajador_x_proyecto = $_GET["idtrabajadorproyecto"];
           
-          $rspta=$asist_trabajador->tbla_asis_individual($idtrabajador_x_proyecto);
+          $rspta=$asistencia_obrero->tbla_asis_individual($idtrabajador_x_proyecto);
           //Vamos a declarar un array
           $data= Array(); 
           
@@ -220,9 +220,9 @@ ob_start();
                 <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
               </div>',
               "2"=> $reg->horas_normal_dia,
-              "3"=> 'S/. '. $reg->pago_normal_dia,
+              "3"=> 'S/ '. $reg->pago_normal_dia,
               "4"=> $reg->horas_extras_dia,
-              "5"=> 'S/. '. $reg->pago_horas_extras,
+              "5"=> 'S/ '. $reg->pago_horas_extras,
               "6"=> '<b>Fecha: </b>'. format_d_m_a($reg->fecha_asistencia) ."<br> <b>Día: </b>". $reg->nombre_dia,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
             );
@@ -240,7 +240,7 @@ ob_start();
 
         case 'desactivar_dia':
 
-          $rspta=$asist_trabajador->desactivar_dia($idasistencia_trabajador);
+          $rspta=$asistencia_obrero->desactivar_dia($idasistencia_trabajador);
 
           echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
 
@@ -248,7 +248,7 @@ ob_start();
 
         case 'activar_dia':
 
-          $rspta=$asist_trabajador->activar_dia($idasistencia_trabajador);
+          $rspta=$asistencia_obrero->activar_dia($idasistencia_trabajador);
 
           echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
 
@@ -289,7 +289,7 @@ ob_start();
             // eliminados si existe el "doc en la BD"
             if ($flat_doc1 == true) {
 
-              $datos_f1 = $asist_trabajador->imgJustificacion($idasistencia_trabajador_j);
+              $datos_f1 = $asistencia_obrero->imgJustificacion($idasistencia_trabajador_j);
 
               $doc1_ant = $datos_f1->fetch_object()->doc_justificacion;
 
@@ -300,7 +300,7 @@ ob_start();
             }
 
             // editamos un recibo x honorario existente
-            $rspta=$asist_trabajador->editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc1);
+            $rspta=$asistencia_obrero->editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc1);
             
             echo $rspta ? "ok" : "La justificación no se pudo actualizar";
           }
@@ -309,7 +309,7 @@ ob_start();
 
         case 'mostrar_justificacion':
 
-          $rspta=$asist_trabajador->mostrar_justificacion($_POST["idasistencia_trabajador"]);
+          $rspta=$asistencia_obrero->mostrar_justificacion($_POST["idasistencia_trabajador"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -321,7 +321,7 @@ ob_start();
 
           $idtrabajador_x_proyecto = $_GET["idtrabajadorproyecto"];
           
-          $rspta=$asist_trabajador->tbla_qs_individual($idtrabajador_x_proyecto);
+          $rspta=$asistencia_obrero->tbla_qs_individual($idtrabajador_x_proyecto);
           //Vamos a declarar un array
           $data= Array(); 
           
@@ -366,7 +366,7 @@ ob_start();
 
         case 'suma_qs_individual':           
 
-          $rspta=$asist_trabajador->suma_qs_individual($_POST["idtrabajadorproyecto"]);
+          $rspta=$asistencia_obrero->suma_qs_individual($_POST["idtrabajadorproyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);		
 
@@ -374,7 +374,7 @@ ob_start();
 
         case 'desactivar_qs':
 
-          $rspta=$asist_trabajador->desactivar_qs($_POST["idresumen_q_s_asistencia"]);
+          $rspta=$asistencia_obrero->desactivar_qs($_POST["idresumen_q_s_asistencia"]);
 
           echo $rspta ? "ok" : "Semana no se puede desactivar";	
 
@@ -382,7 +382,7 @@ ob_start();
 
         case 'activar_qs':
 
-          $rspta=$asist_trabajador->activar_qs($_POST["idresumen_q_s_asistencia"]);
+          $rspta=$asistencia_obrero->activar_qs($_POST["idresumen_q_s_asistencia"]);
 
           echo $rspta ? "ok" : "Semana no se puede activar";
 
@@ -395,13 +395,13 @@ ob_start();
 
           if (empty($_POST["idresumen_q_s_asistencia"])) {
 
-            $rspta = $asist_trabajador->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
+            $rspta = $asistencia_obrero->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
 
             echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento"; 
 
           } else {
 
-            $rspta = $asist_trabajador->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
+            $rspta = $asistencia_obrero->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
 
             echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento";
           }
@@ -410,7 +410,7 @@ ob_start();
 
         case 'descripcion_adicional_descuento':
 
-          $rspta=$asist_trabajador->descripcion_adicional_descuento($_POST["id_adicional"]);
+          $rspta=$asistencia_obrero->descripcion_adicional_descuento($_POST["id_adicional"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
         break;
@@ -418,7 +418,7 @@ ob_start();
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   F E C H A S   A C T I V I D A D ::::::::::::::::::::::::::::::::::::::
         case 'fechas_actividad':
 
-          $rspta=$asist_trabajador->fechas_actividad($_POST["id_proyecto"]);
+          $rspta=$asistencia_obrero->fechas_actividad($_POST["id_proyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
         break;
@@ -435,7 +435,7 @@ ob_start();
           }else {             
 
             // editamos un recibo x honorario existente
-            $rspta=$asist_trabajador->editar_fechas_actividad($id_proyecto_f, format_d_m_a($fecha_inicio_actividad), format_d_m_a($fecha_fin_actividad), $plazo_actividad);
+            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_d_m_a($fecha_inicio_actividad), format_d_m_a($fecha_fin_actividad), $plazo_actividad);
             
             echo $rspta ? "ok" : "La fechas no se pudo actualizar";
           }

@@ -239,7 +239,7 @@ function listar_botoness(nube_idproyecto) {
         i++;
       }
     } else {
-      $("#Lista_breaks").html(`<div class="info-box shadow-lg w-px-600"> 
+      $("#Lista_breaks").html(`<div class="info-box shadow-lg w-600px"> 
         <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
         <div class="info-box-content"> 
           <span class="info-box-text">Alerta</span> 
@@ -1136,7 +1136,7 @@ function total_monto(idsemana_break) {
     for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
     total_mont_f = (sign ? "" : "-") + num + "." + cents;
 
-    $("#monto_total_f").html('S/. '+total_mont_f);
+    $("#monto_total_f").html('S/ '+total_mont_f);
   });
 }
 

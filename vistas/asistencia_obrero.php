@@ -743,7 +743,7 @@
         <!-- moment locale -->
         <script src="../plugins/moment/locales.js"></script>
 
-        <script type="text/javascript" src="scripts/registro_asistencia.js"></script>
+        <script type="text/javascript" src="scripts/asistencia_obrero.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

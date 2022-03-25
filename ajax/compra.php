@@ -187,7 +187,7 @@ if (!isset($_SESSION["nombre"])) {
             "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' . htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->precio_igv . '\', \'' . $reg->precio_total . '\', \'' . $reg->imagen . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Producto">
               <span class="fa fa-plus"></span>
             </button>',
-            "1" => '<div class="user-block w-px-200"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
+            "1" => '<div class="user-block w-250px"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
               <span class="username"><p style="margin-bottom: 0px !important;">' .   $reg->nombre . '</p></span> 
               <span class="description"><b>Color: </b>' .$reg->nombre_color . '</span>
               <span class="description"><b>Marca: </b>' .$reg->marca . '</span>
@@ -599,9 +599,9 @@ if (!isset($_SESSION["nombre"])) {
                 <h5 class="font-weight-bold">TOTAL</h5>
               </th>
               <th class="text-right">
-                <h6 class="font-weight-bold">S/. ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                <h6 class="font-weight-bold">S/. ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                <h5 class="font-weight-bold">S/. ' . number_format($rspta['total'], 2, '.',',') . '</h5>
+                <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
+                <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
+                <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
               </th>
             </tfoot>
           </table>

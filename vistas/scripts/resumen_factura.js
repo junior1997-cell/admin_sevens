@@ -99,9 +99,9 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
     
     data = JSON.parse(data);  console.log(data);     
     
-    $('.total-total').html(`S/. ${formato_miles(parseFloat(data.total).toFixed(2))}`);
-    $('.total-subtotal').html(`S/. ${formato_miles(parseFloat(data.subtotal).toFixed(2))}`);
-    $('.total-igv').html(`S/. ${formato_miles(parseFloat(data.igv).toFixed(2))}`);
+    $('.total-total').html(`S/ ${formato_miles(parseFloat(data.total).toFixed(2))}`);
+    $('.total-subtotal').html(`S/ ${formato_miles(parseFloat(data.subtotal).toFixed(2))}`);
+    $('.total-igv').html(`S/ ${formato_miles(parseFloat(data.igv).toFixed(2))}`);
 
     $('.cargando').hide();
     $('.btn-zip').removeClass('disabled');

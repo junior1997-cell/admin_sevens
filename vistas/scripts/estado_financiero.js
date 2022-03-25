@@ -86,11 +86,11 @@ function listar_tbla_principal(nube_idproyecto) {
 
   $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
     data = JSON.parse(data);  console.log(data); 
-    // $('.sueldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
-    // $('.pago_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
-    // $('.pago_hoy_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
-    // $('.deposito_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);  
-    // $('.saldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(saldo_total)}</b>`);   
+    // $('.sueldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
+    // $('.pago_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
+    // $('.pago_hoy_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
+    // $('.deposito_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);  
+    // $('.saldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(saldo_total)}</b>`);   
   }); 
 
   

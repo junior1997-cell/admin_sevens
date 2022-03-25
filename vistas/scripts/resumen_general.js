@@ -1752,8 +1752,8 @@ function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
                   <td>${format_d_m_a(value.fecha_inicial)}</td>
                   <td>${format_d_m_a(value.fecha_final)}</td>
                   <td>${value.cant_dias_laborables}</td>
-                  <td class="m-r-10px" style="text-align: end !important;">S/. ${formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
-                  <td class="m-r-10px" style="text-align: end !important;">S/. ${formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
+                  <td class="m-r-10px" style="text-align: end !important;">S/ ${formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
+                  <td class="m-r-10px" style="text-align: end !important;">S/ ${formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
               </tr>`;
 
         $(".data-detalle-pagos-administador").append(detalle);
@@ -1762,8 +1762,8 @@ function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
         depositos += parseFloat(value.return_monto_pago);
       });
 
-      $(".sueldo_estimado").html("S/. " + formato_miles(sueldo_estimado));
-      $(".depositos").html("S/. " + formato_miles(depositos));
+      $(".sueldo_estimado").html("S/ " + formato_miles(sueldo_estimado));
+      $(".depositos").html("S/ " + formato_miles(depositos));
     } else {
       $(".tabla").hide();
       $(".alerta").show();
@@ -1839,11 +1839,11 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
 
       $(".total_hn_he").html(total_hn_he);
       $(".total_sabatical").html(sabatical);
-      $(".total_monto_hn_he").html("<sup>S/. </sup>" + formato_miles(pago_parcial_hn + pago_parcial_he));
-      $(".total_descuento").html("<sup>S/. </sup>" + formato_miles(adicional_descuento));
-      $(".total_quincena").html("<sup>S/. </sup>" + formato_miles(pago_quincenal));
-      $(".total_deposito").html("<sup>S/. </sup>" + formato_miles(deposito));
-      $(".total_saldo").html("<sup>S/. </sup>" + formato_miles(saldo));
+      $(".total_monto_hn_he").html("<sup>S/ </sup>" + formato_miles(pago_parcial_hn + pago_parcial_he));
+      $(".total_descuento").html("<sup>S/ </sup>" + formato_miles(adicional_descuento));
+      $(".total_quincena").html("<sup>S/ </sup>" + formato_miles(pago_quincenal));
+      $(".total_deposito").html("<sup>S/ </sup>" + formato_miles(deposito));
+      $(".total_saldo").html("<sup>S/ </sup>" + formato_miles(saldo));
 
       
     } else {

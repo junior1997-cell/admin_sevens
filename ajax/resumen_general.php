@@ -233,9 +233,9 @@ if (!isset($_SESSION["nombre"])) {
                 <h5 class="font-weight-bold">TOTAL</h5>
               </th>
               <th class="text-right">
-                <h6 class="font-weight-bold">S/. ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                <h6 class="font-weight-bold">S/. ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                <h5 class="font-weight-bold">S/. ' . number_format($rspta['total'], 2, '.',',') . '</h5>
+                <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
+                <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
+                <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
               </th>
             </tfoot>
           </table>

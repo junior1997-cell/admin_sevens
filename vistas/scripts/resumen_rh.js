@@ -65,7 +65,7 @@ function listar() {
 
       data = JSON.parse(data); // console.log(data);   console.log('--------------');  
       console.log(data);
-      $(".total_monto").html('S/. '+ formato_miles(data));
+      $(".total_monto").html('S/ '+ formato_miles(data));
     });
 
 }

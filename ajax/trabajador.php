@@ -115,7 +115,7 @@
               "3"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : format_d_m_a($reg->fecha_inicio) ). '<br> 
                 <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : format_d_m_a($reg->fecha_fin) ) . '</div>',
               "4"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "5"=>'S/. '.number_format( $reg->sueldo_mensual, 2, '.', ','),
+              "5"=>'S/ '.number_format( $reg->sueldo_mensual, 2, '.', ','),
               "6"=>$reg->nombre_tipo.' / '.$reg->cargo,
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
               '<span class="text-center badge badge-danger">Desactivado</span>'

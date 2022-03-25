@@ -166,7 +166,7 @@ switch ($_GET["op"]){
 							<span class="description" style="margin-left: 0px !important;"><b>Cel.:</b>'. '<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al PROVEEDOR.">'. $reg->telefono . '</a>' .' </span>
 							</div>',
 		 				"3"=>$reg->direccion,
-		 				"4"=> '<div class="w-px-250"><b>Cta. Banc.:</b>'. $reg->cuenta_bancaria. '<br> <b>CCI:</b> '. $reg->cci.' <br> <b>Cta. Dtrac.:</b> '.$reg->cuenta_detracciones. '</div>',
+		 				"4"=> '<div class="w-250px"><b>Cta. Banc.:</b>'. $reg->cuenta_bancaria. '<br> <b>CCI:</b> '. $reg->cci.' <br> <b>Cta. Dtrac.:</b> '.$reg->cuenta_detracciones. '</div>',
 		 				"5"=>$reg->titular_cuenta,
 		 				"6"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
 		 				);

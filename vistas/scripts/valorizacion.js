@@ -126,7 +126,7 @@ function ver_quincenas(nube_idproyecto) {
             $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${data.fecha_inicio}', '${data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(data.fecha_inicio)} // ${format_d_m_a(data.fecha_fin)}</button>`)
 
           } else {
-            $('#lista_quincenas').html(`<div class="info-box shadow-lg w-px-600"> 
+            $('#lista_quincenas').html(`<div class="info-box shadow-lg w-600px"> 
               <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
               <div class="info-box-content"> 
                 <span class="info-box-text">Alerta</span> 
@@ -139,7 +139,7 @@ function ver_quincenas(nube_idproyecto) {
       
 
     } else {
-      $('#lista_quincenas').html('<div class="info-box shadow-lg w-px-300">'+
+      $('#lista_quincenas').html('<div class="info-box shadow-lg w-300px">'+
         '<span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span>'+
         '<div class="info-box-content">'+
           '<span class="info-box-text">Alerta</span>'+

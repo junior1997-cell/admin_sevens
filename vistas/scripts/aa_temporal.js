@@ -59,18 +59,18 @@ function agregarDetalleCompraActivos_p(idactivos_fijos, nombre, unidad_medida, n
             <input type="hidden" name="nombre_color_p[]" id="nombre_color_p[]" value="${element.color}">
           </td>
           <td class="form-group">
-            <input class="producto_p_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_p_${cont_p} form-control " type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+            <input class="producto_p_${element.idactivos_fijos} producto_selecionado w-100px cantidad_p_${cont_p} form-control " type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
           /td>
           <td class="hidden">
-            <input class="w-px-135 input-no-border precio_sin_igv_p_${cont_p}" type="number" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${element.precio_sin_igv}" readonly >
+            <input class="w-135px input-no-border precio_sin_igv_p_${cont_p}" type="number" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${element.precio_sin_igv}" readonly >
           </td>
-            <td class="hidden"><input class="w-px-135 input-no-border precio_igv_p_${cont_p}" type="number"  name="precio_igv_p[]" id="precio_igv_p[]" value="${element.igv}" readonly >
+            <td class="hidden"><input class="w-135px input-no-border precio_igv_p_${cont_p}" type="number"  name="precio_igv_p[]" id="precio_igv_p[]" value="${element.igv}" readonly >
           </td>
           <td >
-            <input type="number" class="w-px-135 precio_con_igv_p_${cont_p}" type="number"  name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales_p();" onchange="modificarSubtotales_p();">
+            <input type="number" class="w-135px precio_con_igv_p_${cont_p}" type="number"  name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales_p();" onchange="modificarSubtotales_p();">
           </td>
           <td>
-            <input type="number" class="w-px-135 descuento_p_${cont_p}" name="descuento_p[]" value="${element.descuento}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+            <input type="number" class="w-135px descuento_p_${cont_p}" name="descuento_p[]" value="${element.descuento}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
           </td>
           <td class="text-right">
             <span class="text-right subtotal_producto_p_${cont_p}" name="subtotal_producto_p" id="subtotal_producto_p">0.00</span>
@@ -177,18 +177,18 @@ function editar_detalle_compras_af_p(idcompra_af_proyecto) {
                 <input type="hidden" name="nombre_color_p[]" id="nombre_color_p[]" value="${element.color}">
               </td>
               <td class="form-group">
-                <input class="producto_p_${element.idactivos_fijos} producto_selecionado w-px-100 cantidad_p_${cont_p} form-control " type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+                <input class="producto_p_${element.idactivos_fijos} producto_selecionado w-100px cantidad_p_${cont_p} form-control " type="number" name="cantidad_p[]" id="cantidad_p[]" min="1" value="${element.cantidad}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
               /td>
               <td class="hidden">
-                <input class="w-px-135 input-no-border precio_sin_igv_p_${cont_p}" type="number" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${element.precio_sin_igv}" readonly >
+                <input class="w-135px input-no-border precio_sin_igv_p_${cont_p}" type="number" name="precio_sin_igv_p[]" id="precio_sin_igv_p[]" value="${element.precio_sin_igv}" readonly >
               </td>
-                <td class="hidden"><input class="w-px-135 input-no-border precio_igv_p_${cont_p}" type="number"  name="precio_igv_p[]" id="precio_igv_p[]" value="${element.igv}" readonly >
+                <td class="hidden"><input class="w-135px input-no-border precio_igv_p_${cont_p}" type="number"  name="precio_igv_p[]" id="precio_igv_p[]" value="${element.igv}" readonly >
               </td>
               <td >
-                <input type="number" class="w-px-135 precio_con_igv_p_${cont_p}" type="number"  name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales_p();" onchange="modificarSubtotales_p();">
+                <input type="number" class="w-135px precio_con_igv_p_${cont_p}" type="number"  name="precio_con_igv_p[]" id="precio_con_igv_p[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales_p();" onchange="modificarSubtotales_p();">
               </td>
               <td>
-                <input type="number" class="w-px-135 descuento_p_${cont_p}" name="descuento_p[]" value="${element.descuento}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
+                <input type="number" class="w-135px descuento_p_${cont_p}" name="descuento_p[]" value="${element.descuento}" onkeyup="modificarSubtotales_p()" onchange="modificarSubtotales_p()">
               </td>
               <td class="text-right">
                 <span class="text-right subtotal_producto_p_${cont_p}" name="subtotal_producto_p" id="subtotal_producto_p">0.00</span>

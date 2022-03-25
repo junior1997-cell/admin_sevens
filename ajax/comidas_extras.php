@@ -229,9 +229,9 @@ switch ($_GET["op"]){
 								<span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->numero_comprobante)?" - ":$reg->numero_comprobante).'</span>         
 							</div>',
 						"4"=> date("d/m/Y", strtotime($reg->fecha_comida)), 
-		 				"5"=>'S/. '.number_format($reg->subtotal, 2, '.', ','),
-		 				"6"=>'S/. '.number_format($reg->igv, 2, '.', ','),
-		 				"7"=>'S/. '.number_format($reg->costo_parcial, 2, '.', ','),
+		 				"5"=>'S/ '.number_format($reg->subtotal, 2, '.', ','),
+		 				"6"=>'S/ '.number_format($reg->igv, 2, '.', ','),
+		 				"7"=>'S/ '.number_format($reg->costo_parcial, 2, '.', ','),
 						"8"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
 		 				"9"=>$comprobante,
 		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:

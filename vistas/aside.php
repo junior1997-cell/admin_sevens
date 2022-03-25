@@ -147,7 +147,7 @@
         <?php if ($_SESSION['activo_fijo_general']==1) {  ?>
           <!-- ALL ACTIVOS FIJOS -->
           <li class="nav-item">
-            <a href="all_activos_fijos.php" class="nav-link pl-2" id="mAllactivos_fijos">
+            <a href="compra_activos_fijos.php" class="nav-link pl-2" id="mAllactivos_fijos">
               <i class="nav-icon fas fa-hand-holding-usd"></i>
               <p>Compras de activos fijos</p>
             </a>
@@ -243,7 +243,7 @@
             <?php if ($_SESSION['asistencia_trabajador']==1) {  ?>
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
-                <a href="registro_asistencia.php" class="nav-link pl-2" id="lAsistencia">
+                <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
                   <i class="fas fa-clipboard-list nav-icon"></i>
                   <p>
                     Asistencia del obrero

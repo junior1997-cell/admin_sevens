@@ -310,7 +310,7 @@ function listar_botoness( nube_idproyecto ) {
           } 
         
     } else {
-      $('#List_smnas_pen').html(`<div class="info-box shadow-lg w-px-600"> 
+      $('#List_smnas_pen').html(`<div class="info-box shadow-lg w-600px"> 
         <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
         <div class="info-box-content"> 
           <span class="info-box-text">Alerta</span> 
@@ -573,7 +573,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
             var weekday = extraer_dia_semana(fecha_asist); //console.log(weekday);
 
-              tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">${platos_x_dia}</span> <input type="number" value="${platos_x_dia}" class="hidden input-visible w-px-45 input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${fecha_asist}" onchange="calcular_platos(${value.idservicio_pension},'${fecha_asist}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${fecha_asist}',${data.length})"> </td>`);
+              tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">${platos_x_dia}</span> <input type="number" value="${platos_x_dia}" class="hidden input-visible w-45px input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${fecha_asist}" onchange="calcular_platos(${value.idservicio_pension},'${fecha_asist}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${fecha_asist}',${data.length})"> </td>`);
               
               array_class.push( { 
                 'idservicio_pension':value.idservicio_pension, 
@@ -586,7 +586,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
             var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
 
-            tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45 input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${format_a_m_d(fecha)}" onchange="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})"> </td>`);
+            tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-45px input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${format_a_m_d(fecha)}" onchange="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})"> </td>`);
 
               array_class.push( { 
                 'idservicio_pension':value.idservicio_pension, 
@@ -622,7 +622,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
           var weekday = extraer_dia_semana(format_a_m_d(fecha));
 
-          tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-px-45 input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${format_a_m_d(fecha)}" onchange="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})"> </td>`);
+          tabla_bloc_dia_3 = tabla_bloc_dia_3.concat(`<td> <span class="text-center span-visible">-</span> <input type="number" value="" class="hidden input-visible w-45px input_dia_${value.idservicio_pension}_${i} input_dia_${value.idservicio_pension}_${format_a_m_d(fecha)}" onchange="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})" onkeyup="calcular_platos(${value.idservicio_pension},'${format_a_m_d(fecha)}',${data.length})"> </td>`);
            
             array_class.push( { 
               'idservicio_pension':value.idservicio_pension, 
@@ -662,13 +662,13 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
       
       var tabla_bloc_descrip_comida_1 =`<td><b>${value.nombre_servicio}</b></td>`;
-      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(definir_precio_actual).toFixed(2)}</b></span> <input type="number" value="${parseFloat(definir_precio_actual).toFixed(2)}" onchange="calcular_precios(${value.idservicio_pension},${data.length})" onkeyup="calcular_precios(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_precio_${value.idservicio_pension}"></td>`;
+      var tabla_bloc_precio_2 =`<td><span class="text-center span-visible" >s/ <b>${ parseFloat(definir_precio_actual).toFixed(2)}</b></span> <input type="number" value="${parseFloat(definir_precio_actual).toFixed(2)}" onchange="calcular_precios(${value.idservicio_pension},${data.length})" onkeyup="calcular_precios(${value.idservicio_pension},${data.length})" class="hidden input-visible w-70px input_precio_${value.idservicio_pension}"></td>`;
 
      // var tabla_bloc_dia_3 =`<td> <span class="text-center span-visible">6</span> <input type="number" class="hidden input-visible w-px-30" > </td>`;
       var tabla_bloc_cantidad_4 =`<td class="text-center"> <span class="span_cantidad_${value.idservicio_pension}">${value.cantidad_total_platos}</span> </td>`;
-      var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(adicional_descuento).toFixed(2)}" onchange="calcular_adicional(${value.idservicio_pension},${data.length})" onkeyup="calcular_adicional(${value.idservicio_pension},${data.length})" class="hidden input-visible w-px-70 input_adicional_${value.idservicio_pension}"> </td>`;
+      var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(adicional_descuento).toFixed(2)}" onchange="calcular_adicional(${value.idservicio_pension},${data.length})" onkeyup="calcular_adicional(${value.idservicio_pension},${data.length})" class="hidden input-visible w-70px input_adicional_${value.idservicio_pension}"> </td>`;
       var tabla_bloc_parcial_6 =`<td> <span class="span_parcial_${value.idservicio_pension} calcular_total_parcial_${index+1}">${formato_miles(parseFloat(total).toFixed(2))}</span></td>`;
-      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center textarea-visible textarea_descrip_${value.idservicio_pension}" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
+      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center textarea-visible textarea_descrip_${value.idservicio_pension} h-auto" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
 
       var tabla_bloc_HN_1 = `<tr>
               ${tabla_bloc_descrip_comida_1} 
@@ -1507,7 +1507,7 @@ function total_monto(idpension) {
         num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
         total_mont_f= (((sign) ? '' : '-') + num + '.' + cents);
 
-    $("#monto_total_f").html('S/. '+total_mont_f);
+    $("#monto_total_f").html('S/ '+total_mont_f);
 
   });
 }

@@ -465,7 +465,7 @@ function total() {
 
     data = JSON.parse(data);  console.log(data);  
 
-    $("#total_monto").html('S/. '+ formato_miles(data.precio_parcial));
+    $("#total_monto").html('S/ '+ formato_miles(data.precio_parcial));
    // $("#cargando").hide();
   });
 }

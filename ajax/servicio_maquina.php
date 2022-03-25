@@ -264,7 +264,7 @@ switch ($_GET["op"]) {
             "3" => $reg->razon_social,
             "4" => $reg->unidad_medida,
             "5" => $reg->cantidad_veces,
-            "6" =>'S/. '. number_format($reg->costo_parcial, 2, '.', ','),
+            "6" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
             "7" =>
               '<div class="text-center text-nowrap"> <button class="btn btn-' .
               $c .
@@ -377,10 +377,10 @@ switch ($_GET["op"]) {
             "3" => empty($reg->horometro_inicial) || $reg->horometro_inicial == '0.00' ? '-' : $reg->horometro_inicial,
             "4" => empty($reg->horometro_final) || $reg->horometro_final == '0.00' ? '-' : $reg->horometro_final,
             "5" => empty($reg->horas) || $reg->horas == '0.00' ? '-' : $reg->horas,
-            "6" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ?  'S/. 0.00 ' :'S/. '. number_format($reg->costo_unitario, 2, '.', ','),
+            "6" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ?  'S/ 0.00 ' :'S/ '. number_format($reg->costo_unitario, 2, '.', ','),
             "7" => empty($reg->unidad_medida) ? '-' : $reg->unidad_medida,
             "8" => empty($reg->cantidad) ? '-' : $reg->cantidad,
-            "9" => empty($reg->costo_parcial) ? 'S/. 0.00' : 'S/. '. number_format($reg->costo_parcial, 2, '.', ','),
+            "9" => empty($reg->costo_parcial) ? 'S/ 0.00' : 'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
             "10" => empty($reg->descripcion) ? '-' : '<textarea cols="30" rows="1" class="textarea_datatable" readonly >' . $reg->descripcion . '</textarea>',
             "11" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
@@ -602,7 +602,7 @@ switch ($_GET["op"]) {
             "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
             "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
             "6" => $reg->numero_operacion,
-            "7" =>'S/. '. number_format($reg->monto, 2, '.', ','),
+            "7" =>'S/ '. number_format($reg->monto, 2, '.', ','),
             "8" => $imagen,
             "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
@@ -683,7 +683,7 @@ switch ($_GET["op"]) {
             "4" => date("d/m/Y", strtotime($reg->fecha_pago)),
             "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
             "6" => $reg->numero_operacion,
-            "7" =>'S/. '. number_format($reg->monto, 2, '.', ','),
+            "7" =>'S/ '. number_format($reg->monto, 2, '.', ','),
             "8" => $imagen,
             "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
           ];
@@ -859,9 +859,9 @@ switch ($_GET["op"]) {
             "2" => $reg->codigo,
             "3" => date("d/m/Y", strtotime($reg->fecha_emision)),            
             "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->nota) ? '- - -' : $reg->nota ).'</textarea>',
-            "5" => 'S/. '.number_format($reg->subtotal, 2, '.', ','),
-            "6" => 'S/. '.number_format($reg->igv, 2, '.', ','),
-            "7" => 'S/. '.number_format($reg->monto, 2, '.', ','),
+            "5" => 'S/ '.number_format($reg->subtotal, 2, '.', ','),
+            "6" => 'S/ '.number_format($reg->igv, 2, '.', ','),
+            "7" => 'S/ '.number_format($reg->monto, 2, '.', ','),
             "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
             "9" => $imagen,
             "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,

@@ -119,11 +119,11 @@
                                   <th class="text-center text-gray">Hoy</th>
                                   <th class="text-center text-gray">Fecha <br> culminacion</th>
                                   <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                  <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                  <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                  <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
+                                  <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
+                                  <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
+                                  <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
                                   <th class="text-center text-gray">Último <br> pago</th>
                                   <th class="text-center text-gray">Siguiente <br> pago</th>
                                 </tr>
@@ -155,11 +155,11 @@
                                     <td>12-01-2022</td>
                                     <td>31-01-2022</td>
                                     <td>19</td>
-                                    <td> S/. 4400.00</td>
-                                    <td> S/. 2696.77</td>
+                                    <td> S/ 4400.00</td>
+                                    <td> S/ 2696.77</td>
                                     <td>
                                       <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_mes(1);"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                                      <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 900.00</button></div>
+                                      <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/ 900.00</button></div>
                                     </td>
                                   </tr>                        
                                 </tbody>
@@ -170,10 +170,10 @@
                                     <th colspan="2" class="stile-celda" ></th>
                                     <th class="stile-celda dias_x_mes_total">0</th>
                                     <th class="stile-celda "> </th>
-                                    <th class="stile-celda monto_x_mes_total">S/. 0.00</th> 
-                                    <th class="stile-celda monto_x_mes_pagado_total">S/. 0.00</th>
-                                    <th class="stile-celda saldo_total">S/. 0.00</th> 
-                                    <th class="stile-celda rh_total">S/. 0.00</th>                          
+                                    <th class="stile-celda monto_x_mes_total">S/ 0.00</th> 
+                                    <th class="stile-celda monto_x_mes_pagado_total">S/ 0.00</th>
+                                    <th class="stile-celda saldo_total">S/ 0.00</th> 
+                                    <th class="stile-celda rh_total">S/ 0.00</th>                          
                                   </tr>
                                 </tfoot>
                               </table>
@@ -294,7 +294,7 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="nombre_mes" class="text-gray">Mes </label>
-                                  <span class="nombre_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                  <span class="nombre_mes_modal text-gray form-control"> <sup>S/</sup> 0.00</span>
                                 </div>
                               </div>
 
@@ -302,7 +302,7 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="nombre_mes" class="text-gray">Faltante </label>
-                                  <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                  <span class="faltante_mes_modal text-gray form-control"> <sup>S/</sup> 0.00</span>
                                 </div>
                               </div>
                               

@@ -303,7 +303,7 @@
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-check"></i></button>',           
               "2"=>$reg->cuenta_deposito	,
               "3"=>$reg->forma_de_pago	,
-              "4"=>'S/. '. number_format($reg->monto, 2, ".", ","),
+              "4"=>'S/ '. number_format($reg->monto, 2, ".", ","),
               "5"=>$baucher_deposito,
               "6"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
               "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'

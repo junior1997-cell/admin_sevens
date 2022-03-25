@@ -35,6 +35,9 @@
         <!-- style nuevo -->
         <link rel="stylesheet" href="../dist/css/style_new.css" />
 
+        <!-- style go-to -->
+        <link rel="stylesheet" href="../dist/css/go-to.css">
+
         <!-- style switch_domingo -->
         <link rel="stylesheet" href="../dist/css/switch_domingo.css">
 
@@ -294,10 +297,16 @@
         <!-- AdminLTE for demo purposes -->
         <script src="../dist/js/demo.js"></script>  
 
+        <!-- hora sesion-->
+        <script src="../dist/js/sesion.js"></script> 
+
         <script type="text/javascript" src="scripts/calendario.js"></script>
-        <script>
-          $(function () {  $('[data-toggle="tooltip"]').tooltip();  });
-        </script>
+
+        <?php require 'go_to.php'; ?>
+
+        <?php require 'contacto_desarrollador.php'; ?>
+
+        <script> $(function () {  $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?> 
         

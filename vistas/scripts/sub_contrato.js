@@ -630,7 +630,7 @@ function total() {
 
     data = JSON.parse(data);  console.log(data);  
 
-    $(".total_monto").html('S/. '+ formato_miles(data.precio_parcial));
+    $(".total_monto").html('S/ '+ formato_miles(data.precio_parcial));
   });
 }
 
@@ -734,7 +734,7 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
 
   totattotal=total_pago; monto_total_dep=total_deposito;
 
-  $('#total_apagar').html('S/. '+formato_miles(total_pago));
+  $('#total_apagar').html('S/ '+formato_miles(total_pago));
 
   tabla_pagos_proveedor=$('#tabla-pagos-proveedor').dataTable({
    "responsive": true,
@@ -1043,17 +1043,17 @@ function total_pagos_proveedor(id_subcontrato) {
     
     if (data.monto_parcial_deposito==null || data.monto_parcial_deposito=="" || data.monto_parcial_deposito==0 ) {
 
-      $(".monto_total_deposito_prov").html('S/. 0.00');
+      $(".monto_total_deposito_prov").html('S/ 0.00');
 
       $(".porcnt_deposito_prov").html("0 %");
       
-      $("#saldo_prov").html('S/. '+formato_miles(monto_pagar_prov.toFixed(2)));
+      $("#saldo_prov").html('S/ '+formato_miles(monto_pagar_prov.toFixed(2)));
 
       $("#porcnt_sald_prov").html('100 %');
       
     } else {
       
-    $(".monto_total_deposito_prov").html('S/. '+ formato_miles(data.monto_parcial_deposito));
+    $(".monto_total_deposito_prov").html('S/ '+ formato_miles(data.monto_parcial_deposito));
 
     $(".porcnt_deposito_prov").html(((data.monto_parcial_deposito * 100) / monto_pagar_prov).toFixed(2) + " %");
 
@@ -1063,7 +1063,7 @@ function total_pagos_proveedor(id_subcontrato) {
 
     porcentaj_saldo=((total_saldo*porcentaj_deposito_a_la_fecha)/data.monto_parcial_deposito);
 
-    $("#saldo_prov").html('S/. '+total_saldo.toFixed(2));
+    $("#saldo_prov").html('S/ '+total_saldo.toFixed(2));
 
     $("#porcnt_sald_prov").html(porcentaj_saldo.toFixed(2)+' %');
       
@@ -1100,17 +1100,17 @@ function total_pagos_detraccion(id_subcontrato) {
     
     if (data.monto_parcial_deposito==null || data.monto_parcial_deposito==""  || data.monto_parcial_deposito==0) {
 
-      $(".monto_total_deposito_detracc").html('S/. 0.00');
+      $(".monto_total_deposito_detracc").html('S/ 0.00');
 
       $(".porcent_detracc").html("0 %");
       
-      $("#saldo_detracc").html('S/. '+formato_miles(monto_pagar_detracc.toFixed(2)));
+      $("#saldo_detracc").html('S/ '+formato_miles(monto_pagar_detracc.toFixed(2)));
 
       $("#porcnt_saldo_detracc").html('100 %');
       
     } else {
       
-    $(".monto_total_deposito_detracc").html('S/. '+ formato_miles(data.monto_parcial_deposito));
+    $(".monto_total_deposito_detracc").html('S/ '+ formato_miles(data.monto_parcial_deposito));
 
     $(".porcent_detracc").html(((data.monto_parcial_deposito * 100) / monto_pagar_detracc).toFixed(2) + " %");
 
@@ -1120,7 +1120,7 @@ function total_pagos_detraccion(id_subcontrato) {
 
     porcentaj_saldo=((total_saldo*porcentaj_deposito_a_la_fecha)/data.monto_parcial_deposito);
 
-    $("#saldo_detracc").html('S/. '+total_saldo.toFixed(2));
+    $("#saldo_detracc").html('S/ '+total_saldo.toFixed(2));
 
     $("#porcnt_saldo_detracc").html(porcentaj_saldo.toFixed(2)+' %');
       

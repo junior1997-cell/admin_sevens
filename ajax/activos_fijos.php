@@ -169,10 +169,10 @@
                 <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>
               </div>',
               "3" => $reg->categoria, 
-              "4" =>'S/. '. number_format($reg->precio_unitario, 2, '.', ','),
-              "5" =>'S/. '. number_format($reg->precio_sin_igv, 2, '.', ','),
-              "6" =>'S/. '. number_format($igv, 2, '.', ','),
-              "7" =>'S/. '. number_format($reg->precio_total, 2, '.', ','),
+              "4" =>'S/ '. number_format($reg->precio_unitario, 2, '.', ','),
+              "5" =>'S/ '. number_format($reg->precio_sin_igv, 2, '.', ','),
+              "6" =>'S/ '. number_format($igv, 2, '.', ','),
+              "7" =>'S/ '. number_format($reg->precio_total, 2, '.', ','),
               "8" => $ficha_tecnica,
               "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
             ];

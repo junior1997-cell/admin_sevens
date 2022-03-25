@@ -12,12 +12,12 @@
     
     if ($_SESSION['activo_fijo_general'] == 1) {
 
-      require_once "../modelos/All_activos_fijos.php";
+      require_once "../modelos/Compra_activos_fijos.php";
       require_once "../modelos/AllProveedor.php";
       require_once "../modelos/Activos_fijos.php";   
       require_once "../modelos/Compra.php";
       
-      $all_activos_fijos = new All_activos_fijos();
+      $compra_activos_fijos = new Compra_activos_fijos();
       $proveedor = new Proveedor();
       $activos_fijos = new Activos_fijos();
       $compra = new Compra();
@@ -97,7 +97,7 @@
       
           if (empty($idcompra_af_general)) {
       
-            $rspta = $all_activos_fijos->insertar( $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, $descripcion, 
+            $rspta = $compra_activos_fijos->insertar( $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, $descripcion, 
             $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
             $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
             $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -106,7 +106,7 @@
       
           } else {
       
-            $rspta = $all_activos_fijos->editar( $idcompra_af_general, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, 
+            $rspta = $compra_activos_fijos->editar( $idcompra_af_general, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, 
             $val_igv, $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
             $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
             $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -143,7 +143,7 @@
           //Borramos el comprobante
           if ($flat_comprob == true) {
 
-            $datos_f1 = $all_activos_fijos->obtener_comprobante_af_g($idcompra_af_g_o_p);
+            $datos_f1 = $compra_activos_fijos->obtener_comprobante_af_g($idcompra_af_g_o_p);
   
             $doc1_ant = $datos_f1['comprobante'];
   
@@ -151,7 +151,7 @@
           }
   
           // editamos un documento existente
-          $rspta = $all_activos_fijos->editar_comprobante_af_g($idcompra_af_g_o_p, $doc1);
+          $rspta = $compra_activos_fijos->editar_comprobante_af_g($idcompra_af_g_o_p, $doc1);
   
           echo $rspta ? "ok" : "Documento no se pudo actualizar";
 
@@ -159,7 +159,7 @@
       
         case 'anular':
 
-          $rspta = $all_activos_fijos->desactivar($idcompra_af_general);
+          $rspta = $compra_activos_fijos->desactivar($idcompra_af_general);
       
           echo $rspta ? "ok" : "Compra no se puede Anular";
 
@@ -167,7 +167,7 @@
       
         case 'des_anular':
 
-          $rspta = $all_activos_fijos->activar($idcompra_af_general);
+          $rspta = $compra_activos_fijos->activar($idcompra_af_general);
       
           echo $rspta ? "ok" : "Compra no se puede recuperar";
 
@@ -175,7 +175,7 @@
       
         case 'eliminar_compra':
 
-          $rspta = $all_activos_fijos->eliminar_compra($idcompra_af_general);
+          $rspta = $compra_activos_fijos->eliminar_compra($idcompra_af_general);
       
           echo $rspta ? "ok" : "Compra no se puede Eliminar";
 
@@ -183,7 +183,7 @@
       
         //listar facturas_compra activos
         case 'listar_compra_activos':
-          $rspta = $all_activos_fijos->listar_compra_activo_f_g();
+          $rspta = $compra_activos_fijos->listar_compra_activo_f_g();
           //Vamos a declarar un array
           $data = [];
   
@@ -276,7 +276,7 @@
       
         //tbl listar compras por proveedor
         case 'listar_compraxporvee_af_g':
-          $rspta = $all_activos_fijos->listar_compraxporvee_af_g();
+          $rspta = $compra_activos_fijos->listar_compraxporvee_af_g();
           //Vamos a declarar un array
           $data = [];
           $c = "info";
@@ -310,7 +310,7 @@
       
         case 'listar_detalle_compraxporvee':
 
-          $rspta = $all_activos_fijos->listar_detalle_comprax_provee($_GET["idproveedor"]);
+          $rspta = $compra_activos_fijos->listar_detalle_comprax_provee($_GET["idproveedor"]);
           //Vamos a declarar un array
           $data = [];
           
@@ -348,8 +348,8 @@
           //Recibimos el idingreso
           $idcompra_af_general = $_GET['idcompra_af_general'];
 
-          $rspta = $all_activos_fijos->ver_compra_general($idcompra_af_general);
-          $rspta2 = $all_activos_fijos->ver_detalle_compra_general($idcompra_af_general);         
+          $rspta = $compra_activos_fijos->ver_compra_general($idcompra_af_general);
+          $rspta2 = $compra_activos_fijos->ver_detalle_compra_general($idcompra_af_general);         
 
           $subtotal = 0;  $ficha = '';
 
@@ -450,9 +450,9 @@
                   <h5 class="font-weight-bold">TOTAL</h5>
                 </th>
                 <th class="text-right">
-                  <h6 class="font-weight-bold">S/. ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                  <h6 class="font-weight-bold">S/. ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                  <h5 class="font-weight-bold">S/. ' . number_format($rspta['total'], 2, '.',',') . '</h5>
+                  <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
+                  <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
+                  <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
                 </th>
               </tfoot>
             </table>
@@ -462,7 +462,7 @@
       
         case 'ver_compra_editar':
           
-          $rspta = $all_activos_fijos->mostrar_compra_para_editar($idcompra_af_general);
+          $rspta = $compra_activos_fijos->mostrar_compra_para_editar($idcompra_af_general);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
       
@@ -559,7 +559,7 @@
 
         case 'listarActivoscompra':
           
-          $rspta = $all_activos_fijos->lista_activos_para_compras();
+          $rspta = $compra_activos_fijos->lista_activos_para_compras();
           //Vamos a declarar un array
           $datas = [];
           // echo json_encode($rspta);
@@ -585,7 +585,7 @@
   
             $datas[] = [
               "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->igv . '\', \'' . $reg->precio_con_igv . '\', \'' .  $img_parametro . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
-              "1" => '<div class="user-block w-px-200">'.
+              "1" => '<div class="user-block w-250px">'.
                 '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
                 '<span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                 <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>'.
@@ -611,7 +611,7 @@
       
         case 'most_datos_prov_pago':
 
-          $rspta = $all_activos_fijos->most_datos_prov_pago($_POST["idcompra_af_general"]);
+          $rspta = $compra_activos_fijos->most_datos_prov_pago($_POST["idcompra_af_general"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -632,20 +632,20 @@
           }
   
           if (empty($idpago_af_general)) {
-            $rspta = $all_activos_fijos->insertar_pago( $idcompra_af_general_p, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago,
+            $rspta = $compra_activos_fijos->insertar_pago( $idcompra_af_general_p, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago,
             $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos de servicio";
           } else {
             // validamos si existe LA IMG para eliminarlo
             if ($flat_img1 == true) {
-              $datos_f1 = $all_activos_fijos->obtenerImg($idpago_af_general);
+              $datos_f1 = $compra_activos_fijos->obtenerImg($idpago_af_general);
   
               $img1_ant = $datos_f1->fetch_object()->imagen;
   
               if ($img1_ant != "") { unlink("../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" . $img1_ant); }
             }
   
-            $rspta = $all_activos_fijos->editar_pago( $idpago_af_general, $idcompra_af_general_p, $beneficiario_pago, $forma_pago, $tipo_pago,
+            $rspta = $compra_activos_fijos->editar_pago( $idpago_af_general, $idcompra_af_general_p, $beneficiario_pago, $forma_pago, $tipo_pago,
             $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
   
             echo $rspta ? "ok" : "Servicio no se pudo actualizar";
@@ -654,7 +654,7 @@
       
         case 'desactivar_pagos':
 
-          $rspta = $all_activos_fijos->desactivar_pagos($idpago_af_general);
+          $rspta = $compra_activos_fijos->desactivar_pagos($idpago_af_general);
 
           echo $rspta ? "Pago Anulado" : "Pago no se puede Anular";
 
@@ -662,7 +662,7 @@
       
         case 'activar_pagos':
 
-          $rspta = $all_activos_fijos->activar_pagos($idpago_af_general);
+          $rspta = $compra_activos_fijos->activar_pagos($idpago_af_general);
 
           echo $rspta ? "Pago Restablecido" : "Pago no se pudo Restablecido";
 
@@ -670,14 +670,14 @@
       
         case 'eliminar_pagos':
 
-          $rspta = $all_activos_fijos->eliminar_pagos($idpago_af_general);
+          $rspta = $compra_activos_fijos->eliminar_pagos($idpago_af_general);
 
           echo $rspta ? "Pago Anulado" : "Pago no se puede Anular";
 
         break;
       
         case 'listar_pagos_proveedor':
-          $rspta = $all_activos_fijos->listar_pagos_af_g($_GET["idcompra_af_general"]);
+          $rspta = $compra_activos_fijos->listar_pagos_af_g($_GET["idcompra_af_general"]);
           //Vamos a declarar un array
           $data = [];
           $cont = 1;
@@ -714,7 +714,7 @@
               '</div>',
               "5" => date("d/m/Y", strtotime($reg->fecha_pago)),
               "6" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
-              "7" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+              "7" => 'S/ ' . number_format($reg->monto, 2, '.', ','),
               "8" => $imagen,
               "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
             ];
@@ -736,7 +736,7 @@
 
           $idcompra_af_general = $_POST["idcompra_af_general"];
 
-          $rspta = $all_activos_fijos->suma_total_pagos($idcompra_af_general);
+          $rspta = $compra_activos_fijos->suma_total_pagos($idcompra_af_general);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -744,7 +744,7 @@
       
         case 'mostrar_pagos':
 
-          $rspta = $all_activos_fijos->mostrar_pagos($idpago_af_general);
+          $rspta = $compra_activos_fijos->mostrar_pagos($idpago_af_general);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
 
@@ -856,9 +856,9 @@
                   <h5 class="font-weight-bold">TOTAL</h5>
                 </th>
                 <th class="text-right">
-                  <h6 class="font-weight-bold">S/. ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                  <h6 class="font-weight-bold">S/. ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                  <h5 class="font-weight-bold">S/. ' . number_format($rspta['total'], 2, '.',',') . '</h5>
+                  <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
+                  <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
+                  <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
                 </th>
               </tfoot>
             </table>
@@ -870,7 +870,7 @@
     
         case 'select2Proveedor': 
       
-          $rspta=$all_activos_fijos->select2_proveedor();
+          $rspta=$compra_activos_fijos->select2_proveedor();
       
           while ($reg = $rspta->fetch_object())	{
       
@@ -882,7 +882,7 @@
       
         case 'select2Banco': 
       
-          $rspta = $all_activos_fijos->select2_banco();
+          $rspta = $compra_activos_fijos->select2_banco();
       
           while ($reg = $rspta->fetch_object())  {
       
@@ -893,7 +893,7 @@
       
         case 'select2Color': 
       
-          $rspta = $all_activos_fijos->select2_color();
+          $rspta = $compra_activos_fijos->select2_color();
       
           while ($reg = $rspta->fetch_object())  {
       
@@ -904,7 +904,7 @@
       
         case 'select2UnidaMedida': 
       
-          $rspta = $all_activos_fijos->select2_unidad_medida();
+          $rspta = $compra_activos_fijos->select2_unidad_medida();
       
           while ($reg = $rspta->fetch_object())  {
       
@@ -915,7 +915,7 @@
       
         case 'select2Categoria': 
       
-          $rspta = $all_activos_fijos->select2_categoria();
+          $rspta = $compra_activos_fijos->select2_categoria();
       
           while ($reg = $rspta->fetch_object())  {
       

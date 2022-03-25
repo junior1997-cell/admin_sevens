@@ -200,9 +200,9 @@
                 </div>',
               "4"=> date("d/m/Y", strtotime($reg['fecha_subcontrato'])), 
               "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',
-              "6"=>'S/. '.number_format($reg['subtotal'], 2, '.', ','),
-              "7"=>'S/. '.number_format($reg['igv'], 2, '.', ','),
-              "8"=>'S/. '.number_format($reg['costo_parcial'], 2, '.', ','),
+              "6"=>'S/ '.number_format($reg['subtotal'], 2, '.', ','),
+              "7"=>'S/ '.number_format($reg['igv'], 2, '.', ','),
+              "8"=>'S/ '.number_format($reg['costo_parcial'], 2, '.', ','),
               "9"=>'<div class="text-center text-nowrap"> 
                   <button class="btn btn-' . $c . ' btn-xs" onclick="listar_pagos(' .$reg['idsubcontrato']. ' , '.$reg['costo_parcial'].' , '.$reg['total_deposito'].')"><i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button> ' .
                   ' <button style="font-size: 14px;" class="btn btn-' . $c . ' btn-xs">' . number_format($reg['total_deposito'], 2, '.', ',') . '</button> 

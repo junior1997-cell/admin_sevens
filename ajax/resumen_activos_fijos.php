@@ -95,9 +95,9 @@ if (!isset($_SESSION["nombre"])) {
             "5" => $reg->nombre_medida,
             "6" => $reg->cantidad_total,
             "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button>',
-            "8" => 'S/. ' . number_format($reg->promedio_precio, 2, ".", ","),
-            "9" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
-            "10" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+            "8" => 'S/ ' . number_format($reg->promedio_precio, 2, ".", ","),
+            "9" => 'S/ ' . number_format($reg->precio_actual, 2, ".", ","),
+            "10" => 'S/ ' . number_format($reg->precio_total, 2, ".", ","),             
           ];
         }
 
@@ -144,9 +144,9 @@ if (!isset($_SESSION["nombre"])) {
             "5" => $reg->nombre_medida,
             "6" => $reg->cantidad_total,
             "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button>',
-            "8" => 'S/. ' . number_format($reg->promedio_precio, 2, ".", ","),
-            "9" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
-            "10" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+            "8" => 'S/ ' . number_format($reg->promedio_precio, 2, ".", ","),
+            "9" => 'S/ ' . number_format($reg->precio_actual, 2, ".", ","),
+            "10" => 'S/ ' . number_format($reg->precio_total, 2, ".", ","),             
           ];
         }
 
@@ -193,9 +193,9 @@ if (!isset($_SESSION["nombre"])) {
             "5" => $reg->nombre_medida,
             "6" => $reg->cantidad_total,
             "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button>',
-            "8" => 'S/. ' . number_format($reg->promedio_precio, 2, ".", ","),
-            "9" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
-            "10" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+            "8" => 'S/ ' . number_format($reg->promedio_precio, 2, ".", ","),
+            "9" => 'S/ ' . number_format($reg->precio_actual, 2, ".", ","),
+            "10" => 'S/ ' . number_format($reg->precio_total, 2, ".", ","),             
           ];
         }
 
@@ -242,9 +242,9 @@ if (!isset($_SESSION["nombre"])) {
             "5" => $reg->nombre_medida,
             "6" => $reg->cantidad_total,
             "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')"><i class="far fa-eye"></i></button>',
-            "8" => 'S/. ' . number_format($reg->promedio_precio, 2, ".", ","),
-            "9" => 'S/. ' . number_format($reg->precio_actual, 2, ".", ","),
-            "10" => 'S/. ' . number_format($reg->precio_total, 2, ".", ","),             
+            "8" => 'S/ ' . number_format($reg->promedio_precio, 2, ".", ","),
+            "9" => 'S/ ' . number_format($reg->precio_actual, 2, ".", ","),
+            "10" => 'S/ ' . number_format($reg->precio_total, 2, ".", ","),             
           ];
         }
 
@@ -384,7 +384,7 @@ if (!isset($_SESSION["nombre"])) {
             "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' . htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->precio_igv . '\', \'' . $reg->precio_total . '\', \'' . $reg->imagen . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Producto">
               <span class="fa fa-plus"></span>
             </button>',
-            "1" => '<div class="user-block w-px-200"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
+            "1" => '<div class="user-block w-250px"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
               <span class="username"><p style="margin-bottom: 0px !important;">' .   $reg->nombre . '</p></span> 
               <span class="description"><b>Color: </b>' .$reg->nombre_color . '</span>
               <span class="description"><b>Marca: </b>' .$reg->marca . '</span>
@@ -457,8 +457,8 @@ if (!isset($_SESSION["nombre"])) {
             "3" => date("d/m/Y", strtotime($reg->fecha_compra)),
             "4" => $reg->cantidad,
             "5" => '<b>' . number_format($reg->precio_con_igv, 2, ".", ",") . '</b>',
-            "6" => 'S/. ' . number_format($reg->descuento, 2, ".", ","),
-            "7" => 'S/. ' . number_format($reg->subtotal, 2, ".", ","),
+            "6" => 'S/ ' . number_format($reg->descuento, 2, ".", ","),
+            "7" => 'S/ ' . number_format($reg->subtotal, 2, ".", ","),
             // "7" => $ficha_tecnica,
           ];
         }
@@ -584,9 +584,9 @@ if (!isset($_SESSION["nombre"])) {
                 <h5 class="font-weight-bold">TOTAL</h5>
               </th>
               <th class="text-right">
-                <h6 class="font-weight-bold">S/. ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                <h6 class="font-weight-bold">S/. ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                <h5 class="font-weight-bold">S/. ' . number_format($rspta['total'], 2, '.',',') . '</h5>
+                <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
+                <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
+                <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
               </th>
             </tfoot>
           </table>

@@ -295,11 +295,11 @@ function listar_tbla_principal(nube_idproyecto) {
 
   $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
     data = JSON.parse(data);  console.log(data); 
-    $('.sueldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
-    $('.pago_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
-    $('.pago_hoy_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
-    $('.deposito_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);  
-    $('.saldo_total_tbla_principal').html(`<sup>S/.</sup> <b>${formato_miles(saldo_total)}</b>`);   
+    $('.sueldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
+    $('.pago_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
+    $('.pago_hoy_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
+    $('.deposito_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);  
+    $('.saldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(saldo_total)}</b>`);   
   }); 
 
   
@@ -398,13 +398,13 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
             <td>${element.fecha_i}</td>
             <td class="${bg_siguiente_pago}" >${element.fecha_f}</td>
             <td>${element.dias_regular}/${element.dias_mes}</td>
-            <td> S/. ${formato_miles(sueldo_mensual)}</td>
-            <td> S/. ${formato_miles(monto_x_mes)}</td>
+            <td> S/ ${formato_miles(sueldo_mensual)}</td>
+            <td> S/ ${formato_miles(monto_x_mes)}</td>
             <td class="justify-content-between">
               <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}','${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-              <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 0.00</button></div>
+              <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/ 0.00</button></div>
             </td>
-            <td> S/. ${formato_miles(monto_x_mes)}</td>
+            <td> S/ ${formato_miles(monto_x_mes)}</td>
             <td> 
               <button class="btn btn-outline-info btn-sm" ${btn_disabled} onclick="modal_recibos_x_honorarios('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '', '${nombre_trabajador}', '${cuenta_bancaria}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
@@ -495,15 +495,15 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
               <td>${format_d_m_a(fecha_inicial_e)}</td>
               <td class="${bg_siguiente_pago}" >${format_d_m_a(fecha_final_e)}</td>
               <td>${cant_dias_laborables_e}/${cant_dias_mes_e}</td>
-              <td> S/. ${formato_miles(sueldo_mensual_e)}</td>
-              <td> S/. ${formato_miles(monto_x_mes_e)}</td>
+              <td> S/ ${formato_miles(sueldo_mensual_e)}</td>
+              <td> S/ ${formato_miles(monto_x_mes_e)}</td>
               <td >
                 <div class="justify-content-between">
                   <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('${idfechas_mes_pagos_administrador_e}', '${idtrabajador_por_proyecto_e}', '${format_d_m_a(fecha_inicial_e)}', '${format_d_m_a(fecha_final_e)}', '${nombre_mes_e}', '${cant_dias_mes_e}', '${cant_dias_laborables_e}', '${sueldo_mensual_e}', '${monto_x_mes_e}', '${nombre_trabajador}', '${cuenta_bancaria}', '${saldo_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                  <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">S/. ${formato_miles(suma_monto_depositado_e)}</button>
+                  <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">S/ ${formato_miles(suma_monto_depositado_e)}</button>
                 </div>
               </td>
-              <td class="${bg_saldo}"> S/. ${formato_miles(saldo_x_mes)}</td>
+              <td class="${bg_saldo}"> S/ ${formato_miles(saldo_x_mes)}</td>
               <td> 
                 <button class="btn ${btn_tipo} btn-sm" ${btn_disabled} onclick="modal_recibos_x_honorarios('${idfechas_mes_pagos_administrador_e}', '${idtrabajador_por_proyecto_e}', '${format_d_m_a(fecha_inicial_e)}', '${format_d_m_a(fecha_final_e)}', '${nombre_mes_e}', '${cant_dias_mes_e}', '${cant_dias_laborables_e}', '${sueldo_mensual_e}', '${monto_x_mes_e}', '${recibos_x_honorarios_e}', '${nombre_trabajador}', '${cuenta_bancaria}');">
                   <i class="fas fa-file-invoice fa-lg"></i>
@@ -534,15 +534,15 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
               <td>${element.fecha_i}</td>
               <td class="${bg_siguiente_pago}" >${element.fecha_f}</td>
               <td>${element.dias_regular}/${element.dias_mes}</td>
-              <td> S/. ${formato_miles(sueldo_mensual)}</td>
-              <td> S/. ${formato_miles(monto_x_mes)}</td>
+              <td> S/ ${formato_miles(sueldo_mensual)}</td>
+              <td> S/ ${formato_miles(monto_x_mes)}</td>
               <td >
                 <div class="justify-content-between">
                   <button class="btn btn-info btn-sm" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}', '${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                  <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/. 0.00</button>
+                  <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/ 0.00</button>
                 </div>
               </td>
-              <td> S/. ${formato_miles(monto_x_mes)}</td>
+              <td> S/ ${formato_miles(monto_x_mes)}</td>
               <td> 
                 <button class="btn btn-outline-info btn-sm" ${btn_disabled} onclick="modal_recibos_x_honorarios('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '', '${nombre_trabajador}', '${cuenta_bancaria}');">
                   <i class="fas fa-file-invoice fa-lg"></i>
@@ -563,11 +563,11 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
         $('.dias_x_mes_total').html(`${dias_regular_total} día`);
       }      
 
-      $('.monto_x_mes_total').html(`S/. ${formato_miles(monto_total)}`);
+      $('.monto_x_mes_total').html(`S/ ${formato_miles(monto_total)}`);
 
-      $('.monto_x_mes_pagado_total').html(`S/. ${formato_miles(deposito_total)}`);
+      $('.monto_x_mes_pagado_total').html(`S/ ${formato_miles(deposito_total)}`);
 
-      $('.saldo_total').html(`S/. ${formato_miles(saldo_total)}`); 
+      $('.saldo_total').html(`S/ ${formato_miles(saldo_total)}`); 
 
       $('.rh_total').html(`${rh_total} <small class="text-gray">(docs.)</small>`);
     });    
@@ -579,9 +579,9 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
 
   table_show_hide(3);
 
-  $('#btn-nombre-mes').html(`&nbsp; &nbsp; <b>${mes_nombre}</b> - <sup>S/.</sup><b>${formato_miles(monto_x_mes)}</b>`);
+  $('#btn-nombre-mes').html(`&nbsp; &nbsp; <b>${mes_nombre}</b> - <sup>S/</sup><b>${formato_miles(monto_x_mes)}</b>`);
 
-  $('.faltante_mes_modal').html(`<sup>S/.</sup><b>${formato_miles(saldo_x_mes)}</b>`);
+  $('.faltante_mes_modal').html(`<sup>S/</sup><b>${formato_miles(saldo_x_mes)}</b>`);
 
   $('.nombre_de_trabajador_modal').html(`${nombre_trabajador}` );
 

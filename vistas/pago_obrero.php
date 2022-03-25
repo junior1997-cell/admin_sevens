@@ -116,12 +116,12 @@
                                   <th class="text-center text-gray">#</th>                                 
                                   <th class="text-gray">Trabajdor</th>                                 
                                   <th class="text-center text-gray">Horas Nrm/Extr</th>
-                                  <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
+                                  <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                               
                                   <th class="text-center text-gray">Sueldo Mensual</th>                                
-                                  <th class="text-right"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right"><h5 class="deposito_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right"><h5 class="saldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right"><h5 class="cant_s_q_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right"><h5 class="pago_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right"><h5 class="deposito_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right"><h5 class="saldo_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right"><h5 class="cant_s_q_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
                                   <th class="text-center text-gray">Fecha inicio</th>
                                   <th class="text-center text-gray">Hoy</th>
                                   <th class="text-center text-gray">Fecha fin</th>                       
@@ -163,10 +163,10 @@
                                     <th class="stile-celda total_hn_he"></th>
                                     <th class="stile-celda total_sabatical"></th>
                                     <th class="stile-celda total_monto_hn_he"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda-right total_descuento">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                    <th class="stile-celda-right total_quincena">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda-right total_deposito">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
-                                    <th class="stile-celda-right total_saldo">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                    <th class="stile-celda-right total_descuento">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="stile-celda-right total_quincena">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                    <th class="stile-celda-right total_deposito">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
+                                    <th class="stile-celda-right total_saldo">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
                                     <th class="stile-celda rh_total"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   </tr>
                                 </tfoot>
@@ -272,7 +272,7 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="nombre_mes" class="text-gray nombre_q_s">-- </label>
-                                  <span class="numero_q_s text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                  <span class="numero_q_s text-gray form-control"> <sup>S/</sup> 0.00</span>
                                 </div>
                               </div>
 
@@ -280,7 +280,7 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="nombre_mes" class="text-gray">Faltante </label>
-                                  <span class="faltante_mes_modal form-control"> <sup>S/.</sup> 0.00</span>
+                                  <span class="faltante_mes_modal form-control"> <sup>S/</sup> 0.00</span>
                                 </div>
                               </div>
                               

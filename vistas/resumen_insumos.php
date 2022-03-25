@@ -112,7 +112,7 @@
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
-                                  <th class="text-nowrap text-right suma_total_de_compras h5">S/. <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
+                                  <th class="text-nowrap text-right suma_total_de_compras h5">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
                                 </tr>
                               </tfoot>
                             </table>
@@ -299,14 +299,14 @@
                                           <h5 class="font-weight-bold">TOTAL</h5>
                                         </th>
                                         <th class="text-right"> 
-                                          <h6 class="font-weight-bold subtotal_compra">S/. 0.00</h6>
+                                          <h6 class="font-weight-bold subtotal_compra">S/ 0.00</h6>
                                           <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
                                           <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                                          <h6 class="font-weight-bold igv_compra">S/. 0.00</h6>
+                                          <h6 class="font-weight-bold igv_compra">S/ 0.00</h6>
                                           <input type="hidden" name="igv_compra" id="igv_compra" />
                                           
-                                          <h5 class="font-weight-bold total_venta">S/. 0.00</h5>
+                                          <h5 class="font-weight-bold total_venta">S/ 0.00</h5>
                                           <input type="hidden" name="total_venta" id="total_venta" />
                                           
                                         </th>

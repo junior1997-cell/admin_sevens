@@ -123,9 +123,9 @@
                               <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;">
                                 <thead style="background-color: #408c98; color: white;">
                                   <tr>
-                                    <th class="text-center w-px-300">Día</th>
-                                    <th class="text-center w-px-135">Cantidad</th>
-                                    <th class="text-center w-px-135">Parcial</th>
+                                    <th class="text-center w-300px">Día</th>
+                                    <th class="text-center w-135px">Cantidad</th>
+                                    <th class="text-center w-135px">Parcial</th>
                                     <th class="text-center">Descripción</th>
                                   </tr>
                                 </thead>
