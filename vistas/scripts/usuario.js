@@ -11,7 +11,7 @@ function init() {
   //Mostramos los trabajadores
   $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
-  $("#bloc_Accesos").addClass("menu-open");
+  $("#bloc_Accesos").addClass("menu-open bg-color-191f24");
 
   $("#mAccesos").addClass("active");
 

@@ -13,7 +13,7 @@ function init(){
 
   $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
-  $("#bloc_Compras").addClass("menu-open");
+  $("#bloc_Compras").addClass("menu-open bg-color-191f24");
 
   $("#mLogisticaAdquisiciones").addClass("active");
 

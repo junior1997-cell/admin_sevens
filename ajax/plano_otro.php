@@ -187,7 +187,7 @@
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
                 <span class="description"><b>Creado el:</b> '. date("d/m/Y g:i a", strtotime($reg->created_at)) .' </span>
               </div>',
-              "3"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+              "3"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
               "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
             );
           }
@@ -270,7 +270,7 @@
                 ' <button class="btn btn-primary  btn-sm" onclick="activar_plano('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
                 ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
               "2"=>$reg->nombre,
-              "3"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',   
+              "3"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',   
               "4" => '<div ">
                 <center>
                   <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >

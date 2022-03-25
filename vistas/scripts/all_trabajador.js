@@ -14,11 +14,12 @@ function init() {
   //Mostramos los ocupación
   $.post("../ajax/ocupacion.php?op=selectocupacion", function (r) { $("#ocupacion").html(r); });
 
-  $("#bloc_Recurso").addClass("menu-open");
+  $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
 
   $("#mRecurso").addClass("active");
 
   $("#lAllTrabajador").addClass("active");
+
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
 

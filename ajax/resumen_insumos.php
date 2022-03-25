@@ -234,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>',
             "2" => $reg->categoria,
             "3" => number_format($reg->precio_unitario, 2, '.', ','),
-            "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+            "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
             "5" => $ficha_tecnica . $toltip,
           ];
         }

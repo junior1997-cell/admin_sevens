@@ -13,10 +13,9 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Proveedor</title>
-        <?php
-        require 'head.php';
-        ?>
+        <title>Admin Sevens | Otros</title>
+
+        <?php $title = "Otros"; require 'head.php'; ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -28,6 +27,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['recurso']==1){
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -851,29 +851,7 @@
 
         <?php  require 'script.php'; ?>
         
-        <style>
-          .class-style label {
-            font-size: 14px;
-          }
-          .class-style small {
-            background-color: #f4f7ee;
-            border: solid 1px #ce542a21;
-            margin-left: 3px;
-            padding: 5px;
-            border-radius: 6px;
-          }             
-        </style>
-        <!-- Bootstrap 4 -->
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- jquery-validation -->
-        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- InputMask -->
-        <script src="../plugins/moment/moment.min.js"></script>
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
-        <!-- sweetalert2 -->
-        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
-
+        <script type="text/javascript" src="scripts/otros.js"></script>
         <script type="text/javascript" src="scripts/bancos.js"></script>
         <script type="text/javascript" src="scripts/color.js"></script>
         <script type="text/javascript" src="scripts/unidades_m.js"></script>

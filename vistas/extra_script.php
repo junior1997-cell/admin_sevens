@@ -1,3 +1,4 @@
+<!-- nombre de proyeto -->
 <script>
   if (localStorage.getItem("nube_idproyecto")) {
 
@@ -7,13 +8,69 @@
 
     $(".ver-otros-modulos-1").show();
 
-    $(tabla).ready(function () {
-      $('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
-    });   
+    //$('#icon_folder_'+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder-open"></i>');
 
   } else {
     $("#ver-proyecto").html('<i class="fas fa-tools"></i> Selecciona un proyecto');
 
     $(".ver-otros-modulos-1").hide();
   }
+</script>
+
+<script>
+
+  $("#bloc_Accesos").on("click", function (e) {
+    $("#bloc_Accesos").removeClass('bg-color-191f24').addClass('bg-color-191f24');
+    $("#bloc_Recurso").removeClass('bg-color-191f24');
+    $("#bloc_Compras").removeClass('bg-color-191f24');
+    $("#bloc_Viaticos").removeClass('bg-color-191f24');
+    $("#sub_bloc_comidas").removeClass('bg-color-191f24');    
+    $("#bloc_PagosTrabajador").removeClass('bg-color-191f24');
+  });
+
+  $("#bloc_Recurso").on("click", function (e) {
+    $("#bloc_Accesos").removeClass('bg-color-191f24');
+    $("#bloc_Recurso").removeClass('bg-color-191f24').addClass('bg-color-191f24');
+    $("#bloc_Compras").removeClass('bg-color-191f24');
+    $("#bloc_Viaticos").removeClass('bg-color-191f24');
+    $("#sub_bloc_comidas").removeClass('bg-color-191f24');    
+    $("#bloc_PagosTrabajador").removeClass('bg-color-191f24');
+  });  
+
+  $("#bloc_Compras").on("click", function (e) {    
+    $("#bloc_Accesos").removeClass('bg-color-191f24');
+    $("#bloc_Recurso").removeClass('bg-color-191f24');
+    $("#bloc_Compras").removeClass('bg-color-191f24').addClass('bg-color-191f24');
+    $("#bloc_Viaticos").removeClass('bg-color-191f24');
+    $("#sub_bloc_comidas").removeClass('bg-color-191f24');    
+    $("#bloc_PagosTrabajador").removeClass('bg-color-191f24');
+  });
+
+  $("#bloc_Viaticos").on("click", function (e) {
+    $("#bloc_Accesos").removeClass('bg-color-191f24');
+    $("#bloc_Recurso").removeClass('bg-color-191f24');
+    $("#bloc_Compras").removeClass('bg-color-191f24');
+    $("#bloc_Viaticos").removeClass('bg-color-191f24').addClass('bg-color-191f24');
+    $("#sub_bloc_comidas").removeClass('bg-color-191f24');    
+    $("#bloc_PagosTrabajador").removeClass('bg-color-191f24');
+  });  
+
+  $("#sub_bloc_comidas").on("click", function (e) {
+    $("#bloc_Accesos").removeClass('bg-color-191f24');
+    $("#bloc_Recurso").removeClass('bg-color-191f24');
+    $("#bloc_Compras").removeClass('bg-color-191f24');
+    $("#bloc_Viaticos").removeClass('bg-color-191f24');
+    $("#sub_bloc_comidas").removeClass('bg-color-191f24').addClass('bg-color-191f24');    
+    $("#bloc_PagosTrabajador").removeClass('bg-color-191f24');
+  });  
+
+  $("#bloc_PagosTrabajador").on("click", function (e) {
+    $("#bloc_Accesos").removeClass('bg-color-191f24');
+    $("#bloc_Recurso").removeClass('bg-color-191f24');
+    $("#bloc_Compras").removeClass('bg-color-191f24');
+    $("#bloc_Viaticos").removeClass('bg-color-191f24');
+    $("#sub_bloc_comidas").removeClass('bg-color-191f24');    
+    $("#bloc_PagosTrabajador").removeClass('bg-color-191f24').addClass('bg-color-191f24');
+  });
+
 </script>

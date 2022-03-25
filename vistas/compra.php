@@ -16,13 +16,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Admin Sevens | Compras</title>
 
-        <?php require 'head.php'; ?>
+        <?php $title = "Compras"; require 'head.php'; ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
-        <!-- Theme style -->
-        <!-- <link rel="stylesheet" href="../dist/css/adminlte.min.css"> -->
+        
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
         <div class="wrapper">
@@ -35,6 +34,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['compra']==1){
+            //require 'enmantenimiento.php';
             ?>
             <!--Contenido-->
             <div class="content-wrapper">
@@ -1302,19 +1302,7 @@
         
         <?php require 'script.php'; ?>
         
-        <script type="text/javascript" src="scripts/compra.js"></script>
-
-        <style>
-          .text_area_clss {
-            width: 100%;
-            background: rgb(215 224 225 / 22%);
-            border-block-color: inherit;
-            border-bottom: aliceblue;
-            border-left: aliceblue;
-            border-right: aliceblue;
-            border-top: hidden;
-          }
-        </style>
+        <script type="text/javascript" src="scripts/compra.js"></script>         
 
         <script>
           $(function () {

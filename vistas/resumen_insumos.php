@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Admin Sevens | Resumen Insumos</title>       
 
-        <?php  require 'head.php';  ?>
+        <?php $title = "Resumen Insumos"; require 'head.php';  ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -27,6 +27,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['compra']==1){
+            //require 'enmantenimiento.php';
             ?>   
           
             <!-- Content Wrapper. Contains page content -->
@@ -788,30 +789,7 @@
 
         <?php require 'script.php';  ?>
 
-        <!-- Bootstrap 4 -->
-        <!-- <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-        <!-- jquery-validation -->
-        <!-- <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script> -->
-        <!-- InputMask -->
-        <!-- <script src="../plugins/moment/moment.min.js"></script>
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>     -->
-        <!-- sweetalert2 -->
-        <!-- <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script> -->
-
         <script type="text/javascript" src="scripts/resumen_insumos.js"></script>
-
-        <style>
-          .text_area_clss {
-            width: 100%;
-            background: rgb(215 224 225 / 22%);
-            border-block-color: inherit;
-            border-bottom: aliceblue;
-            border-left: aliceblue;
-            border-right: aliceblue;
-            border-top: hidden;
-          }
-        </style>
 
         <script>
           $(function () {

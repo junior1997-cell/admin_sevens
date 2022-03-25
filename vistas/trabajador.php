@@ -12,8 +12,10 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | trabajadores</title>
-        <?php require 'head.php'; ?>
+        <title>Admin Sevens | Trabajadores</title>
+
+        <?php $title = "Trabajadores"; require 'head.php'; ?>
+
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -22,6 +24,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['trabajador']==1){
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -277,10 +280,8 @@
           ?>
         </div>
         <!-- /.content-wrapper -->
-        <?php
-        
-        require 'script.php';
-        ?>
+
+        <?php require 'script.php'; ?>
         
         <!-- moment LOCALE -->
         <script src="../plugins/moment/locales.js"></script>

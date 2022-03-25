@@ -83,9 +83,14 @@
 
 .bg-color-252e38{ background-color: #252e38; }
 
-.bg-color-127ab6ba{ background-color: #127ab6ba;}
+.bg-color-127ab6ba{ background-color: #127ab6ba; }
 
-.bg-color-ff6c046b{ background-color: #ff6c046b;}
+.bg-color-ff6c046b{ background-color: #ff6c046b; }
+
+.bg-color-262e36{ background-color: #262e36 !important; }
+
+.bg-color-191f24{ background-color: #191f24 !important; }
+
 
 /*  ══════════════════════════════════════════ - E S T Y L O   P A R A   T A B L A - ══════════════════════════════════════════ */
 
@@ -317,8 +322,15 @@ table th {
 
 
 /*  ══════════════════════════════════════════ - W I D T H   S I Z E - ══════════════════════════════════════════ */
+.w-5px{ width: 5px !important; }
 
-.w-px-30{ width: 30px !important; }
+.w-10px{ width: 10px !important; }
+
+.w-15px{ width: 15px !important; }
+
+.w-20px{ width: 20px !important; }
+
+.w-25px{ width: 25px !important; }
 
 .w-px-35{ width: 35px !important; }
 
@@ -446,7 +458,7 @@ table th {
 
 .font-size-20px{ font-size: 20px; }
 
-/*  ══════════════════════════════════════════ - F O N T   S I Z E - ══════════════════════════════════════════ */
+/*  ══════════════════════════════════════════ - B O R D E R   R A D I U S - ══════════════════════════════════════════ */
 .b-radio-0px{ border-radius: 0px; }
 .b-radio-1px{ border-radius: 1px; }
 .b-radio-2px{ border-radius: 2px; }

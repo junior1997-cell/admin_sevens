@@ -12,9 +12,9 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Resumen Insumos</title>
+        <title>Admin Sevens | Resumen de Activos Fijos General</title>
 
-        <?php require 'head.php';  ?>
+        <?php $title = "Resumen de Activos Fijos General"; require 'head.php';  ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -26,6 +26,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['resumen_activo_fijo_general']==1){
+            //require 'enmantenimiento.php';
             ?>
         
             <!-- Content Wrapper. Contains page content -->
@@ -963,6 +964,7 @@
           ?>
         </div>
         <!-- /.content-wrapper --> 
+
         <?php require 'script.php'; ?>
 
         <script type="text/javascript" src="scripts/resumen_activos_fijos_general.js"></script>      

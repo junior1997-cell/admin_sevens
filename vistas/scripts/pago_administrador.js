@@ -7,7 +7,7 @@ function init() {
 
   $("#bloc_ContableFinanciero").addClass("menu-open");
 
-  $("#bloc_PagosTrabajador").addClass("menu-open");
+  $("#bloc_PagosTrabajador").addClass("menu-open bg-color-191f24");
 
   $("#mContableFinanciero").addClass("active");
 

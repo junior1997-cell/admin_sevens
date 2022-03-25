@@ -6,7 +6,7 @@ function init() {
   //Activamos el "aside"
   $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
-  $("#bloc_Viaticos").addClass("menu-open");
+  $("#bloc_Viaticos").addClass("menu-open bg-color-191f24");
 
   $("#mLogisticaAdquisiciones").addClass("active");
 

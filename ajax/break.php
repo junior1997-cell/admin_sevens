@@ -237,7 +237,7 @@
                   "5"=>'S/. '.number_format($subtotal, 2, '.', ','), 
                   "6"=>'S/. '.number_format($igv, 2, '.', ','),
                   "7"=>'S/. '.number_format($monto, 2, '.', ','),
-                  "8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+                  "8"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
                   "9"=>$comprobante,
                   "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
                   '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip

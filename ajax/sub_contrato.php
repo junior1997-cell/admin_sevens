@@ -199,7 +199,7 @@
                   <span class="description" style="margin-left: 0px !important;">N° '.(empty($reg['numero_comprobante'])?" - ":$reg['numero_comprobante']).'</span>         
                 </div>',
               "4"=> date("d/m/Y", strtotime($reg['fecha_subcontrato'])), 
-              "5"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg['descripcion'].'</textarea>',
+              "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',
               "6"=>'S/. '.number_format($reg['subtotal'], 2, '.', ','),
               "7"=>'S/. '.number_format($reg['igv'], 2, '.', ','),
               "8"=>'S/. '.number_format($reg['costo_parcial'], 2, '.', ','),

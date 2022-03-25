@@ -6,19 +6,16 @@ function init() {
   listar();
   listar2();
 
-    //Mostramos los proveedores
-    $.post("../ajax/all_maquinaria.php?op=select2_proveedor", function (r) { $("#proveedor").html(r); });
+  //Mostramos los proveedores
+  $.post("../ajax/all_maquinaria.php?op=select2_proveedor", function (r) { $("#proveedor").html(r); });
 
-  $("#bloc_Recurso").addClass("menu-open");
+  $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
 
   $("#mRecurso").addClass("active");
 
-   $("#lAllMaquinas").addClass("active");
+  $("#lAllMaquinas").addClass("active");
 
-  $("#guardar_registro").on("click", function (e) {
-
-    $("#submit-form-maquinaria").submit();
-  });
+  $("#guardar_registro").on("click", function (e) { $("#submit-form-maquinaria").submit(); });
 
   // Formato para telefono
   $("[data-mask]").inputmask();

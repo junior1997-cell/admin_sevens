@@ -211,7 +211,7 @@
                   "5"=>'S/. '.number_format($subtotal, 2, '.', ','), 
                   "6"=>'S/. '.number_format($igv, 2, '.', ','),
                   "7"=>'S/. '.number_format($monto, 2, '.', ','),
-                  "8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+                  "8"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
                   "9"=>$comprobante,
                   "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
                   '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
@@ -417,7 +417,7 @@
                 <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Pensión. '.$reg->razon_social.'</p></span>
                 <span style="font-weight: bold; font-size: 15px;">'.$reg->direccion.' </span>
                 </div>',
-              "3"=>'<textarea cols="30" rows="2" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+              "3"=>'<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
               "4"=>'<b>'.number_format($total, 2, '.', ',').'</b>', 
               "5"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
               "6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-sm m-t-2px" onclick="listar_comprobantes('.$reg->idpension.')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 

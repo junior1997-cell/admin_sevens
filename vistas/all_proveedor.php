@@ -2,20 +2,20 @@
   //Activamos el almacenamiento en el buffer
   ob_start();
 
-    session_start();
-    if (!isset($_SESSION["nombre"])){
-      header("Location: index.php");
-    }else{
-      ?>
+  session_start();
+  if (!isset($_SESSION["nombre"])){
+    header("Location: index.php");
+  }else{
+    ?>
     <!DOCTYPE html>
     <html lang="es">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Admin Sevens | Proveedor</title>
-        <?php
-        require 'head.php';
-        ?>
+
+        <?php $title = "Proveedor"; require 'head.php'; ?>
+
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -24,6 +24,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['recurso']==1){
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -262,30 +263,8 @@
           ?>
         </div>
         <!-- /.content-wrapper -->
-        <?php require 'script.php';  ?>
-
-        <style>
-          .class-style label{
-            font-size: 14px;
-          }
-          .class-style small {
-            background-color: #f4f7ee;
-            border: solid 1px #ce542a21;
-            margin-left: 3px;
-            padding: 5px;
-            border-radius: 6px;
-          }
-        </style>
-        <!-- Bootstrap 4 -->
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- jquery-validation -->
-        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- InputMask -->
-        <script src="../plugins/moment/moment.min.js"></script>
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
-        <!-- sweetalert2 -->
-        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+        
+        <?php require 'script.php';  ?>        
 
         <script type="text/javascript" src="scripts/all_proveedor.js"></script>
 
@@ -301,7 +280,7 @@
     </html>
 
     <?php  
-    }
+  }
   ob_end_flush();
 
 ?>

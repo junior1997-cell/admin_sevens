@@ -1604,7 +1604,7 @@ function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final)
 
   
   // mostramos el nombre en el NAV
-  $("#ver-proyecto").html('<i class="fas fa-tools"></i> Proyecto: ' +  nombre_proyecto);
+  $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p>  ${nombre_proyecto}`);
   $("#ver-proyecto").show();
   $("#ver-otros-modulos").show();
 
@@ -1625,7 +1625,7 @@ function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final)
   },500);
 
   Swal.fire("Abierto!", "Proyecto abierto corrrectamente", "success");
-  // tabla.ajax.reload();
+
   $(".tooltip").removeClass('show');
 }
 

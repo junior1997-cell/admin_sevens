@@ -13,8 +13,11 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | asistencia</title>
-        <?php require 'head.php'; ?>
+
+        <title>Admin Sevens | Asistencia Obrero</title>
+
+        <?php $title = "Asistencia Obrero"; require 'head.php'; ?>
+
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -23,8 +26,8 @@
           require 'nav.php'; 
           require 'aside.php'; 
 
-          //if (false){
           if ($_SESSION['asistencia_trabajador']==1){  
+            //require 'enmantenimiento.php';
             ?>
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
@@ -729,7 +732,6 @@
             <?php  
           }else{ 
             require 'noacceso.php';
-            //require 'enmantenimiento.php'; 
           } 
           require 'footer.php'; 
           ?>

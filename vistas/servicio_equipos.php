@@ -12,11 +12,10 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Servicios</title>
-        <?php
-        require 'head.php';
-        
-        ?>
+        <title>Admin Sevens | Servicio - Equipo</title>
+
+        <?php $title = "Servicio - Equipo"; require 'head.php'; ?>
+
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
@@ -26,6 +25,7 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['servicio_equipo']==1){
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -832,46 +832,28 @@
           ?>
         </div>
         <!-- /.content-wrapper -->
+
         <?php require 'script.php'; ?>
 
         <style>
-            .class-style label{
-                font-size: 14px;
-            }
-            .class-style small {
-                background-color: #f4f7ee;
-                border: solid 1px #ce542a21;
-                margin-left: 3px;
-                padding: 5px;
-                border-radius: 6px;
-            }
-            .clase_nomb_maq_benef{
-              display: block;
-              width: 100%;
-              height:100%;
-              padding: 0.375rem 0.75rem;
-              font-size: 1rem;
-              font-weight: 400;
-              line-height: 1.5;
-              color: #495057;
-              background-color: #fff;
-              background-clip: padding-box;
-              border: 1px solid #ced4da;
-              border-radius: 0.25rem;
-              box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
-              transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-            }
+          .clase_nomb_maq_benef{
+            display: block;
+            width: 100%;
+            height:100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+          }
         </style>
-        <!-- Bootstrap 4 -->
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- jquery-validation -->
-        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- InputMask -->
-        <script src="../plugins/moment/moment.min.js"></script>
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
-        <!-- sweetalert2 -->
-        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
         <script type="text/javascript" src="scripts/servicio_equipos.js"></script>
 
         <script>

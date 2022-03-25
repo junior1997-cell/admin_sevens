@@ -22,7 +22,7 @@ function init() {
 
   $("#mViatico").addClass("active bg-primary");
 
-  $("#sub_bloc_comidas").addClass("menu-open");
+  $("#sub_bloc_comidas").addClass("menu-open bg-color-191f24");
 
   $("#sub_mComidas").addClass("active bg-primary");
 

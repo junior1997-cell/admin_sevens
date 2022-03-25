@@ -258,7 +258,7 @@ switch ($_GET["op"]){
 						"5"=>'S/. '.number_format($reg->subtotal, 2, '.', ','),
 						"6"=>'S/. '.number_format($reg->igv, 2, '.', ','),
 						"7"=>'S/. '.number_format($reg->precio_parcial, 2, '.', ','),
-						"8"=>'<textarea cols="30" rows="1" class="text_area_clss" readonly="">'.$reg->descripcion.'</textarea>',
+						"8"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
 						"9"=>$comprobante,
 		 				"10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
 						 '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
