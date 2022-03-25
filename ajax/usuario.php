@@ -244,7 +244,7 @@ switch ($_GET["op"]) {
       in_array(5, $valores) ? ($_SESSION['trabajador'] = 1) : ($_SESSION['trabajador'] = 0);
       in_array(6, $valores) ? ($_SESSION['asistencia_obrero'] = 1) : ($_SESSION['asistencia_obrero'] = 0);
       in_array(7, $valores) ? ($_SESSION['pago_trabajador'] = 1) : ($_SESSION['pago_trabajador'] = 0);
-      in_array(8, $valores) ? ($_SESSION['compra'] = 1) : ($_SESSION['compra'] = 0);
+      in_array(8, $valores) ? ($_SESSION['compra_insumos'] = 1) : ($_SESSION['compra_insumos'] = 0);
       in_array(9, $valores) ? ($_SESSION['servicio_maquina'] = 1) : ($_SESSION['servicio_maquina'] = 0);
       in_array(10, $valores) ? ($_SESSION['servicio_equipo'] = 1) : ($_SESSION['servicio_equipo'] = 0);
       in_array(11, $valores) ? ($_SESSION['calendario'] = 1) : ($_SESSION['calendario'] = 0);
@@ -259,7 +259,7 @@ switch ($_GET["op"]) {
       in_array(20, $valores) ? ($_SESSION['resumen_factura'] = 1) : ($_SESSION['resumen_factura'] = 0);
       in_array(21, $valores) ? ($_SESSION['papelera'] = 1) : ($_SESSION['papelera'] = 0);
       in_array(22, $valores) ? ($_SESSION['subcontrato'] = 1) : ($_SESSION['subcontrato'] = 0);
-      in_array(23, $valores) ? ($_SESSION['Resumen_recibo_por_honorario'] = 1) : ($_SESSION['Resumen_recibo_por_honorario'] = 0);
+      in_array(23, $valores) ? ($_SESSION['resumen_recibo_por_honorario'] = 1) : ($_SESSION['resumen_recibo_por_honorario'] = 0);
     }
     echo json_encode($fetch);
   break;

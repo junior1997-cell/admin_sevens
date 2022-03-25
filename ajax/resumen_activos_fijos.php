@@ -12,12 +12,12 @@ if (!isset($_SESSION["nombre"])) {
   if ($_SESSION['compra'] == 1) {
 
     require_once "../modelos/Resumen_activos_fijos.php";
-    require_once "../modelos/Compra.php";
+    require_once "../modelos/Compra_insumos.php";
     require_once "../modelos/AllProveedor.php";
     require_once "../modelos/Activos_fijos.php";
     
     $resumen_activo_fijo = new ResumenActivoFijo();
-    $compra = new Compra();
+    $compra = new Compra_insumos();
     $proveedor = new Proveedor();
     $activos_fijos = new Activos_fijos();
 

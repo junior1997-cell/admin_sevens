@@ -33,7 +33,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['compra']==1){
+          if ($_SESSION['compra_insumos']==1){
             //require 'enmantenimiento.php';
             ?>
             <!--Contenido-->
@@ -48,7 +48,7 @@
                     <!-- /.col -->
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="compra.php">Home</a></li>
+                        <li class="breadcrumb-item"><a href="compra_insumos.php">Home</a></li>
                         <li class="breadcrumb-item active">Compras</li>
                       </ol>
                     </div>
@@ -1302,7 +1302,7 @@
         
         <?php require 'script.php'; ?>
         
-        <script type="text/javascript" src="scripts/compra.js"></script>         
+        <script type="text/javascript" src="scripts/compra_insumos.js"></script>         
 
         <script>
           $(function () {

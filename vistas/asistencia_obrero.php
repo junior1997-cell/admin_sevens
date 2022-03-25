@@ -26,7 +26,7 @@
           require 'nav.php'; 
           require 'aside.php'; 
 
-          if ($_SESSION['asistencia_trabajador']==1){  
+          if ($_SESSION['asistencia_obrero']==1){  
             //require 'enmantenimiento.php';
             ?>
             <!-- Content Wrapper. Contains page content -->

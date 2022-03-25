@@ -144,7 +144,7 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['activo_fijo_general']==1) {  ?>
+        <?php if ($_SESSION['compra_activo_fijo']==1) {  ?>
           <!-- ALL ACTIVOS FIJOS -->
           <li class="nav-item">
             <a href="compra_activos_fijos.php" class="nav-link pl-2" id="mAllactivos_fijos">
@@ -186,7 +186,7 @@
           </li>
         <?php  }  ?>
 
-        <?php if ($_SESSION['Resumen_recibo_por_honorario']==1) {  ?>
+        <?php if ($_SESSION['resumen_recibo_por_honorario']==1) {  ?>
           <li class="nav-item ver-otros-modulos-1">
             <a href="resumen_rh.php" class="nav-link pl-2" id="lResumenRH">            
               <i class="nav-icon fas fa-poll"></i>
@@ -240,7 +240,7 @@
               </li>
             <?php  }  ?>
 
-            <?php if ($_SESSION['asistencia_trabajador']==1) {  ?>
+            <?php if ($_SESSION['asistencia_obrero']==1) {  ?>
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
@@ -301,7 +301,7 @@
               </li>
             <?php  }  ?>
 
-            <?php if ($_SESSION['compra']==1) {  ?>   
+            <?php if ($_SESSION['compra_insumos']==1) {  ?>   
               <!-- COMPRAS -->      
               <li class="nav-item ver-otros-modulos-1  b-radio-3px" id="bloc_Compras">
                 <a href="#" class="nav-link pl-2" id="mCompra">
@@ -315,7 +315,7 @@
                 <ul class="nav nav-treeview">
                   <!-- Compras del proyecto -->
                   <li class="nav-item ">
-                    <a href="compra.php" class="nav-link" id="lCompras">
+                    <a href="compra_insumos.php" class="nav-link" id="lCompras">
                       <i class="nav-icon fas fa-cart-plus"></i>
                       <p>Compras</p>
                     </a>

@@ -363,7 +363,7 @@ function limpiar_form_compra() {
   $(".tooltip").removeClass('show');
 
   //Mostramos los select2Proveedor
-  //$.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
+  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
 
   $("#idcompra_proyecto").val();
   $("#idproyecto").val();
@@ -1437,7 +1437,7 @@ function guardar_proveedor(e) {
         $("#modal-agregar-proveedor").modal("hide");
 
         //Cargamos los items al select cliente
-        $.post("../ajax/compra.php?op=selectProveedor", function (r) {  $("#idproveedor").html(r); });
+        $.post("../ajax/compra_insumos.php?op=selectProveedor", function (r) {  $("#idproveedor").html(r); });
 
       } else {
         // toastr.error(datos);

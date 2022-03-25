@@ -10,17 +10,17 @@
 
   } else {
     
-    if ($_SESSION['activo_fijo_general'] == 1) {
+    if ($_SESSION['compra_activo_fijo'] == 1) {
 
       require_once "../modelos/Compra_activos_fijos.php";
       require_once "../modelos/AllProveedor.php";
       require_once "../modelos/Activos_fijos.php";   
-      require_once "../modelos/Compra.php";
+      require_once "../modelos/Compra_insumos.php";
       
       $compra_activos_fijos = new Compra_activos_fijos();
       $proveedor = new Proveedor();
       $activos_fijos = new Activos_fijos();
-      $compra = new Compra();
+      $compra = new Compra_insumos();
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  C O M P R A   A C T I V O S ::::::::::::::::::::::::::::::::::::::
 

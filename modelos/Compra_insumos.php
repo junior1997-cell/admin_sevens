@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-class Compra
+class Compra_insumos
 {
   //Implementamos nuestro constructor
   public function __construct()

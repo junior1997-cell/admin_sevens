@@ -16,13 +16,13 @@ if (!isset($_SESSION["nombre"])) {
     require_once "../modelos/Activos_fijos.php";
     require_once "../modelos/Compra_activos_fijos.php";
     require_once "../modelos/AllProveedor.php";
-    require_once "../modelos/Compra.php";
+    require_once "../modelos/Compra_insumos.php";
 
     $resumen_af_g = new Resumen_activos_fijos_general();
     $compra_activos_fijos = new Compra_activos_fijos();
     $activos_fijos = new Activos_fijos();
     $proveedor = new Proveedor();   
-    $compra = new Compra();
+    $compra = new Compra_insumos();
     
 
     $op_general = "general";

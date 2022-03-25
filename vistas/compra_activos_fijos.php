@@ -30,7 +30,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['activo_fijo_general']==1){
+          if ($_SESSION['compra_activo_fijo']==1){
             //require 'enmantenimiento.php';
             ?>
             <!--Contenido-->

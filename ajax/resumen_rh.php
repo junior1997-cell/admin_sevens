@@ -10,7 +10,7 @@
     
   } else {
 
-    if ($_SESSION['Resumen_recibo_por_honorario'] == 1) {
+    if ($_SESSION['resumen_recibo_por_honorario'] == 1) {
 
       require_once "../modelos/Resumen_rh.php";
 

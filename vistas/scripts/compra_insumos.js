@@ -33,15 +33,15 @@ function init() {
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  $.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
   
-  $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); $("#banco_prov").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); $("#banco_prov").html(r); });
   
-  $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color_p").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
-  $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
-  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });  
+  $.post("../ajax/compra_insumos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });  
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
@@ -158,7 +158,7 @@ function limpiar_form_compra() {
   $(".tooltip").removeClass('show');
 
   //Mostramos los select2Proveedor
-  //$.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
+  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
 
   $("#idcompra_proyecto").val("");
   $("#idproveedor").val("null").trigger("change");
@@ -248,7 +248,7 @@ function tbla_principal(nube_idproyecto) {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,8,9], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,8,9,11], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6,8,9,11], } }, {extend: "colvis"} ,        
     ],
     ajax: {
-      url: "../ajax/compra.php?op=listar_compra&nube_idproyecto=" + nube_idproyecto,
+      url: "../ajax/compra_insumos.php?op=listar_compra&nube_idproyecto=" + nube_idproyecto,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -312,7 +312,7 @@ function tbla_principal(nube_idproyecto) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/compra.php?op=listar_compraxporvee&nube_idproyecto=" + nube_idproyecto,
+      url: "../ajax/compra_insumos.php?op=listar_compraxporvee&nube_idproyecto=" + nube_idproyecto,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -358,7 +358,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/compra.php?op=listar_detalle_compraxporvee&idproyecto=" + idproyecto + "&idproveedor=" + idproveedor,
+      url: "../ajax/compra_insumos.php?op=listar_detalle_compraxporvee&idproyecto=" + idproyecto + "&idproveedor=" + idproveedor,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -411,7 +411,7 @@ function guardar_y_editar_compras(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/compra.php?op=guardaryeditarcompra",
+        url: "../ajax/compra_insumos.php?op=guardaryeditarcompra",
         type: "POST",
         data: formData,
         contentType: false,
@@ -482,7 +482,7 @@ function anular(idcompra_proyecto) {
     confirmButtonText: "Si, Anular!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu Compra sido enviado a la PAPELERA.", "success");
 
@@ -506,7 +506,7 @@ function des_anular(idcompra_proyecto) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=des_anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=des_anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
         tabla_compra.ajax.reload();
       });
@@ -531,7 +531,7 @@ function eliminar_compra(idcompra_proyecto) {
 
     if (result.isConfirmed) {
 
-      $.post("../ajax/compra.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         if (e == "ok") {
           Swal.fire("Papelera!", "Tu Compra sido enviado a la <b>PAPELERA</b>.", "success");
 
@@ -543,7 +543,7 @@ function eliminar_compra(idcompra_proyecto) {
       
     }else if (result.isDenied) {
 
-      $.post("../ajax/compra.php?op=eliminar_compra", { idcompra_proyecto: idcompra_proyecto }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=eliminar_compra", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         if (e == "ok") {
           Swal.fire("ELIMINADO!", "Tu compra a sido <b>ELIMINADO</b> permanentemente.", "success");
 
@@ -1011,7 +1011,7 @@ function guardaryeditar_comprobante(e) {
   var formData = new FormData($("#form-comprobante")[0]);
 
   $.ajax({
-    url: "../ajax/compra.php?op=guardaryeditar_comprobante",
+    url: "../ajax/compra_insumos.php?op=guardaryeditar_comprobante",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1080,7 +1080,7 @@ function mostrar_compra(idcompra_proyecto) {
   detalles = 0;
   ver_form_add();
 
-  $.post("../ajax/compra.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
     
     data = JSON.parse(data); // console.log(data);
 
@@ -1194,7 +1194,7 @@ function ver_detalle_compras(idcompra_proyecto) {
 
   $("#modal-ver-compras").modal("show");
 
-  $.post("../ajax/compra.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
+  $.post("../ajax/compra_insumos.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
     $(".detalle_de_compra").html(r); 
     $("#cargando-5-fomulario").show();
     $("#cargando-6-fomulario").hide();
@@ -1249,7 +1249,7 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/compra.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/compra_insumos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
       
       data = JSON.parse(data);  // console.log(data);
 
@@ -1297,7 +1297,7 @@ function guardar_proveedor(e) {
   var formData = new FormData($("#form-proveedor")[0]);
 
   $.ajax({
-    url: "../ajax/compra.php?op=guardar_proveedor",
+    url: "../ajax/compra_insumos.php?op=guardar_proveedor",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1313,7 +1313,7 @@ function guardar_proveedor(e) {
         $("#modal-agregar-proveedor").modal("hide");
 
         //Cargamos los items al select cliente
-        $.post("../ajax/compra.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
+        $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
 
       } else {
         // toastr.error(datos);
@@ -1357,7 +1357,7 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/compra.php?op=listar_pagos_proveedor&idcompra_proyecto=" + idcompra_proyecto,
+      url: "../ajax/compra_insumos.php?op=listar_pagos_proveedor&idcompra_proyecto=" + idcompra_proyecto,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -1432,7 +1432,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/compra.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_proyecto=" + idcompra_proyecto,
+      url: "../ajax/compra_insumos.php?op=listar_pagos_compra_prov_con_dtracc&idcompra_proyecto=" + idcompra_proyecto,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -1462,7 +1462,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/compra.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_proyecto=" + idcompra_proyecto,
+      url: "../ajax/compra_insumos.php?op=listar_pgs_detrac_detracc_cmprs&idcompra_proyecto=" + idcompra_proyecto,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -1513,7 +1513,7 @@ function most_datos_prov_pago(idcompra_proyecto) {
 
   $("#banco_pago").val("").trigger("change");
 
-  $.post("../ajax/compra.php?op=most_datos_prov_pago", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=most_datos_prov_pago", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
 
     data = JSON.parse(data);   //console.log(data);
 
@@ -1557,7 +1557,7 @@ function guardaryeditar_pago(e) {
   var formData = new FormData($("#form-pago-compra")[0]);
 
   $.ajax({
-    url: "../ajax/compra.php?op=guardaryeditar_pago",
+    url: "../ajax/compra_insumos.php?op=guardaryeditar_pago",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1598,7 +1598,7 @@ function total_pagos(idcompra_proyecto) {
 
   $("#monto_total").html("");
 
-  $.post("../ajax/compra.php?op=suma_total_pagos", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {    
+  $.post("../ajax/compra_insumos.php?op=suma_total_pagos", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {    
 
     data = JSON.parse(data);  //console.log(data);
 
@@ -1612,7 +1612,7 @@ function total_pagos_detracc(idcompra_proyecto) {
   $("#monto_total_prov").html("");
 
   //tabla 2 proveedor
-  $.post("../ajax/compra.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {   
+  $.post("../ajax/compra_insumos.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {   
 
     data = JSON.parse(data); //console.log(data);
 
@@ -1641,7 +1641,7 @@ function total_pagos_detracc(idcompra_proyecto) {
   });
 
   //tabla 2 detracion
-  $.post("../ajax/compra.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
     $("#monto_total_detracc").html("");
     var valor_tt_detrcc = 0;
     var x_detrcc = 0;
@@ -1682,7 +1682,7 @@ function mostrar_pagos(idpago_compras) {
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
-  $.post("../ajax/compra.php?op=mostrar_pagos", { idpago_compras: idpago_compras }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=mostrar_pagos", { idpago_compras: idpago_compras }, function (data, status) {
     
     data = JSON.parse(data);  console.log(data);
 
@@ -1752,7 +1752,7 @@ function desactivar_pagos(idpago_compras) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {        
+      $.post("../ajax/compra_insumos.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {        
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
@@ -1786,7 +1786,7 @@ function activar_pagos(idpago_compras) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=activar_pagos", { idpago_compras: idpago_compras }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=activar_pagos", { idpago_compras: idpago_compras }, function (e) {
         Swal.fire("Activado!", "Pago ha sido activado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1818,7 +1818,7 @@ function eliminar_pago_compra(idpago_compras) {
     denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/compra.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {
         if (e == "ok") {
           Swal.fire("Papelera!", "Tu Pago sido enviado a la <b>PAPELERA</b>.", "success");
           total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1835,7 +1835,7 @@ function eliminar_pago_compra(idpago_compras) {
         }
       });
     }else if (result.isDenied) {
-      $.post("../ajax/compra.php?op=eliminar_pago_compra", { idpago_compras: idpago_compras }, function (e) {
+      $.post("../ajax/compra_insumos.php?op=eliminar_pago_compra", { idpago_compras: idpago_compras }, function (e) {
         if (e == "ok") {
           Swal.fire("ELIMINADO!", "Tu Pago a sido <b>ELIMINADO</b> permanentemente.", "success");
           total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1935,7 +1935,7 @@ function listarmateriales() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/compra.php?op=listarMaterialescompra",
+      url: "../ajax/compra_insumos.php?op=listarMaterialescompra",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -1963,7 +1963,7 @@ function mostrar_material(idproducto, cont) {
 
   $("#modal-agregar-material-activos-fijos").modal("show");
 
-  $.post("../ajax/compra.php?op=mostrar_materiales", { 'idproducto_p': idproducto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=mostrar_materiales", { 'idproducto_p': idproducto }, function (data, status) {
     
     data = JSON.parse(data); //console.log(data);    
 
@@ -2081,7 +2081,7 @@ function guardar_y_editar_materiales(e) {
   var formData = new FormData($("#form-materiales")[0]);
 
   $.ajax({
-    url: "../ajax/compra.php?op=guardar_y_editar_materiales",
+    url: "../ajax/compra_insumos.php?op=guardar_y_editar_materiales",
     type: "POST",
     data: formData,
     contentType: false,

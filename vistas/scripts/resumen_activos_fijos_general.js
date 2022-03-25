@@ -26,15 +26,15 @@ function init(){
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
 
-  $.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  $("#idproveedor_proy").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  $("#idproveedor_proy").html(r); });
 
-  $.post("../ajax/compra.php?op=select2Banco", function (r) {  $("#banco_prov").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Banco", function (r) {  $("#banco_prov").html(r); });
 
-  $.post("../ajax/compra.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
 
-  $.post("../ajax/compra.php?op=select2Color", function (r) { $("#color_p").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
-  $.post("../ajax/compra.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
+  $.post("../ajax/compra_insumos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
@@ -569,7 +569,7 @@ function guardar_proveedor(e) {
         $("#modal-agregar-proveedor").modal("hide");
 
         //Cargamos los items al select cliente
-        $.post("../ajax/compra.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
+        $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
 
       } else {
         // toastr.error(datos);
@@ -1064,7 +1064,7 @@ function limpiar_form_compra() {
   $(".tooltip").removeClass('show');
 
   //Mostramos los select2Proveedor
-  //$.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
+  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
 
   $("#idcompra_proyecto").val();
   $("#idproyecto").val();

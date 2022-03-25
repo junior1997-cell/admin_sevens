@@ -11,7 +11,7 @@ ob_start();
 
   } else {
     //Validamos el acceso solo al usuario logueado y autorizado.
-    if ($_SESSION['asistencia_trabajador'] == 1) {
+    if ($_SESSION['asistencia_obrero'] == 1) {
 
       require_once "../modelos/Asistencia_obrero.php";
 

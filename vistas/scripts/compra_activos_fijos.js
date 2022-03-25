@@ -20,15 +20,15 @@ function init() {
   tbla_principal();  
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
-  $.post("../ajax/Compra_activos_fijos.php?op=select2Proveedor", function (r) {$("#idproveedor").html(r);  });
+  $.post("../ajax/compra_activos_fijos.php?op=select2Proveedor", function (r) {$("#idproveedor").html(r);  });
 
-  $.post("../ajax/Compra_activos_fijos.php?op=select2Color", function (r) { $("#color_p").html(r); });
+  $.post("../ajax/compra_activos_fijos.php?op=select2Color", function (r) { $("#color_p").html(r); });
 
-  $.post("../ajax/Compra_activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
+  $.post("../ajax/compra_activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
 
-  $.post("../ajax/Compra_activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
+  $.post("../ajax/compra_activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
 
-  $.post("../ajax/Compra_activos_fijos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); $("#banco_prov").html(r); });
+  $.post("../ajax/compra_activos_fijos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); $("#banco_prov").html(r); });
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════ 
   $("#guardar_registro_compras").on("click", function (e) { $("#submit-form-compra-activos-f").submit(); });
@@ -367,7 +367,7 @@ function limpiar_form_compra() {
   $(".tooltip").removeClass('show');
 
   //Mostramos los select2Proveedor
-  //$.post("../ajax/compra.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
+  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
   $("#idcompra_af_general").val("");
   $("#idcompra_proyecto").val("");
   $("#idproyecto").val("");
@@ -480,7 +480,7 @@ function tbla_principal() {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, {extend: "colvis"} ,      
     ],
     ajax: {
-      url: "../ajax/Compra_activos_fijos.php?op=listar_compra_activos",
+      url: "../ajax/compra_activos_fijos.php?op=listar_compra_activos",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -546,7 +546,7 @@ function tbla_principal() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/Compra_activos_fijos.php?op=listar_compraxporvee_af_g",
+      url: "../ajax/compra_activos_fijos.php?op=listar_compraxporvee_af_g",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -594,7 +594,7 @@ function listar_facuras_proveedor_af_g(idproveedor) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
     ajax: {
-      url: "../ajax/Compra_activos_fijos.php?op=listar_detalle_compraxporvee&idproveedor=" + idproveedor,
+      url: "../ajax/compra_activos_fijos.php?op=listar_detalle_compraxporvee&idproveedor=" + idproveedor,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -637,7 +637,7 @@ function guardaryeditar_compras(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/Compra_activos_fijos.php?op=guardaryeditarcompraactivo",
+        url: "../ajax/compra_activos_fijos.php?op=guardaryeditarcompraactivo",
         type: "POST",
         data: formData,
         contentType: false,
@@ -675,7 +675,7 @@ function anular(idcompra_af_general) {
     confirmButtonText: "Si, Anular!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
@@ -700,7 +700,7 @@ function des_anular(idcompra_af_general) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Compra_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
         tabla.ajax.reload();
         tabla_comp_prov.ajax.reload();
@@ -728,7 +728,7 @@ function eliminar_compra(idcompra_af_general) {
 
     if (result.isConfirmed) {
      //op=desactivar
-      $.post("../ajax/Compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
@@ -741,7 +741,7 @@ function eliminar_compra(idcompra_af_general) {
 
     }else if (result.isDenied) {
      //op=eliminar
-      $.post("../ajax/Compra_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
         if (e == "ok") {
           Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");
 
@@ -1137,7 +1137,7 @@ function mostrar_compra_general(idcompra_af_general) {
   detalles = 0;
   ver_form_add();
 
-  $.post("../ajax/Compra_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/compra_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     
     data = JSON.parse(data); console.log(data);
     
@@ -1250,7 +1250,7 @@ function ver_detalle_compras_general(idcompra_af_general) {
 
   $("#modal-ver-compras-general").modal("show");
 
-  $.post("../ajax/Compra_activos_fijos.php?op=ver_detalle_compras_general&idcompra_af_general=" + idcompra_af_general, function (r) {
+  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_general&idcompra_af_general=" + idcompra_af_general, function (r) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
@@ -1266,7 +1266,7 @@ function ver_detalle_compras_proyecto(id_compra) {
 
   $("#modal-ver-compras-general").modal("show");
   
-  $.post("../ajax/Compra_activos_fijos.php?op=ver_detalle_compras_proyecto&id_compra=" + id_compra, function (r) {
+  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_proyecto&id_compra=" + id_compra, function (r) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
@@ -1497,7 +1497,7 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/Compra_activos_fijos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/compra_activos_fijos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
       
       data = JSON.parse(data);  // console.log(data);
 
@@ -1545,7 +1545,7 @@ function guardar_proveedor(e) {
   var formData = new FormData($("#form-proveedor")[0]);
 
   $.ajax({
-    url: "../ajax/Compra_activos_fijos.php?op=guardar_proveedor",
+    url: "../ajax/compra_activos_fijos.php?op=guardar_proveedor",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1561,7 +1561,7 @@ function guardar_proveedor(e) {
         $("#modal-agregar-proveedor").modal("hide");
 
         //Cargamos los items al select cliente
-        $.post("../ajax/compra.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
+        $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
 
       } else {
         // toastr.error(datos);
@@ -1606,7 +1606,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
       ajax: {
-        url: "../ajax/Compra_activos_fijos.php?op=listar_pagos_proveedor&idcompra_af_general=" + idcompra_af_general,
+        url: "../ajax/compra_activos_fijos.php?op=listar_pagos_proveedor&idcompra_af_general=" + idcompra_af_general,
         type: "get",
         dataType: "json",
         error: function (e) {
@@ -1668,7 +1668,7 @@ function most_datos_prov_pago(idcompra_af_general) {
   $("#h4_mostrar_beneficiario").html("");
 
   $("#banco_pago").val("").trigger("change");
-  $.post("../ajax/Compra_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/compra_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     data = JSON.parse(data); //console.log(data);
 
     $("#idcompra_af_general_p").val(data.idcompra_af_general);
@@ -1710,7 +1710,7 @@ function guardaryeditar_pago(e) {
   var formData = new FormData($("#form-servicios-pago")[0]);
 
   $.ajax({
-    url: "../ajax/Compra_activos_fijos.php?op=guardaryeditar_pago",
+    url: "../ajax/compra_activos_fijos.php?op=guardaryeditar_pago",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1740,7 +1740,7 @@ function guardaryeditar_pago(e) {
 function total_pagos(idcompra_af_general) {
   $(".tfoot_pago_general").show();
   $(".tfoot_pago_proy").hide();
-  $.post("../ajax/Compra_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/compra_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     $("#monto_total_general").html("");
     $("#monto_total_proy").html("");
 
@@ -1761,7 +1761,7 @@ function mostrar_pagos(idpago_af_general) {
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
-  $.post("../ajax/Compra_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
+  $.post("../ajax/compra_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
     data = JSON.parse(data);
     console.log(data);
 
@@ -1800,7 +1800,7 @@ function desactivar_pagos(idpago_af_general) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Compra_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1823,7 +1823,7 @@ function activar_pagos(idpago_af_general) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Compra_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Activado!", "Pago ha sido activado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1847,7 +1847,7 @@ function eliminar_pagos(idpago_af_general) {
     confirmButtonText: "Si, Eliminar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Compra_activos_fijos.php?op=eliminar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
+      $.post("../ajax/compra_activos_fijos.php?op=eliminar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
         Swal.fire("Eliminado!", "El pago ha sido Eliminado.", "success");
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1875,7 +1875,7 @@ function guardaryeditar_comprobante(e) {
   var formData = new FormData($("#form-comprobante")[0]);
 
   $.ajax({
-    url: "../ajax/Compra_activos_fijos.php?op=guardaryeditar_comprobante",
+    url: "../ajax/compra_activos_fijos.php?op=guardaryeditar_comprobante",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1961,7 +1961,7 @@ function guardar_y_editar_materiales(e) {
   var formData = new FormData($("#form-materiales")[0]);
 
   $.ajax({
-    url: "../ajax/Compra_activos_fijos.php?op=guardar_y_editar_materiales",
+    url: "../ajax/compra_activos_fijos.php?op=guardar_y_editar_materiales",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1996,7 +1996,7 @@ function listaractivos() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/Compra_activos_fijos.php?op=listarActivoscompra",
+      url: "../ajax/compra_activos_fijos.php?op=listarActivoscompra",
       type: "get",
       dataType: "json",
       error: function (e) {

@@ -16,10 +16,10 @@ if (!isset($_SESSION["nombre"])) {
 
     require_once "../modelos/Resumen_general.php";
     require_once "../modelos/Fechas.php";
-    require_once "../modelos/Compra.php";
+    require_once "../modelos/Compra_insumos.php";
 
     $resumen_general = new Resumen_general();
-    $compra = new Compra();
+    $compra = new Compra_insumos();
 
     switch ($_GET["op"]) {
 
