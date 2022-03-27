@@ -368,7 +368,7 @@ $(function () {
 
     highlight: function (element, errorClass, validClass) {
 
-      $(element).addClass("is-invalid"); //console.log(estado_usuario_requerido);
+      $(element).addClass("is-invalid").removeClass("is-valid"); //console.log(estado_usuario_requerido);
     },
 
     unhighlight: function (element, errorClass, validClass) {

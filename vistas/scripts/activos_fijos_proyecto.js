@@ -1942,7 +1942,7 @@ $(function () {
     },
 
     highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
+      $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
@@ -1990,7 +1990,7 @@ $(function () {
     },
 
     highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
+      $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
@@ -2047,7 +2047,7 @@ $(function () {
     },
 
     highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
+      $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
@@ -2088,7 +2088,7 @@ $(function () {
     },
 
     highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid");
+      $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
