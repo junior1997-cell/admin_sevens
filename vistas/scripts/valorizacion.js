@@ -314,6 +314,11 @@ function limpiar() {
   $("#doc7_nombre").html('');
   $("#doc_old_7").val(""); 
   $("#doc7").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función para guardar o editar

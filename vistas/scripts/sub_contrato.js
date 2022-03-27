@@ -168,6 +168,10 @@ function limpiar() {
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_de_pago").val("null").trigger("change");
 
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 function comprob_factura() {
@@ -910,8 +914,9 @@ function limpiar_pagos() {
   $('#doc2_nombre').html("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Guardar y editar

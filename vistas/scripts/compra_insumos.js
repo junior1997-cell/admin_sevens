@@ -189,8 +189,9 @@ function limpiar_form_compra() {
   cont = 0;
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 function ver_form_add() {
@@ -1228,8 +1229,9 @@ function limpiar_form_proveedor() {
   $("#titular_cuenta_prov").val("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 
   $(".tooltip").removeClass('show');
 }
@@ -1501,8 +1503,10 @@ function limpiar_form_pago_compra() {
   $('#doc3_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc3_nombre').html("");
 
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //mostrar datos proveedor pago
@@ -2071,8 +2075,10 @@ function limpiar_materiales() {
   $("#my-switch_igv").prop("checked", true);
   $("#estado_igv_p").val("1");
 
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función para guardar o editar

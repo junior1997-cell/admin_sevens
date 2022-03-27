@@ -182,7 +182,7 @@ function tbla_principal(nube_idproyecto) {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], }  } , {extend: "colvis"} ,
     ],
     "ajax":{
-      url: '../ajax/Asistencia_obrero.php?op=tbla_principal&nube_idproyecto='+nube_idproyecto,
+      url: '../ajax/asistencia_obrero.php?op=tbla_principal&nube_idproyecto='+nube_idproyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -232,7 +232,7 @@ function tbla_principal(nube_idproyecto) {
   }).DataTable();
 
   //Suma ACUMULADO
-  $.post("../ajax/Asistencia_obrero.php?op=suma_total_acumulado", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=suma_total_acumulado", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
 
@@ -251,7 +251,7 @@ function listar_botones_q_s(nube_idproyecto) {
   $('#lista_quincenas').html('<div class="my-3" ><i class="fas fa-spinner fa-pulse fa-2x"></i>&nbsp;&nbsp;&nbsp;Cargando...</div>');
 
   //Listar quincenas(botones)
-  $.post("../ajax/Asistencia_obrero.php?op=listarquincenas_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=listarquincenas_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
 
@@ -439,7 +439,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
   // $('.data-numero-semana').html(table_numero_semana);
   
-  $.post("../ajax/Asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (data, status) {
         
     data =JSON.parse(data); console.log(data);   
 
@@ -541,25 +541,25 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
               if (estado_hallando_sabado) { 
                 if (value.sabatical_manual_1 == "0") {
 
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
+                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
                   
                   count_dias_asistidos -= 1;
                 } else {
                   if (value.sabatical_manual_1 == "1") {
 
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
+                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
                       
                     sabatical = 1; count_sabatical_1_total++;
                   } else {
   
                     if (hora_n == 8 ) {
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
                                               
                       sabatical = 1; count_sabatical_1_total++;
                     } else {
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox"  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox"  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
                       
                       count_dias_asistidos -= 1; //horas_nomr_total -= 8;          
                     }
@@ -580,12 +580,12 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
               } else {
                 if (value.sabatical_manual_2 == "0") {
 
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
+                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);
                   
                 } else {
                   if (value.sabatical_manual_2 == "1") {
 
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
+                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
                     
                     // count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;                    
   
@@ -594,13 +594,13 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
   
                     if (hora_n == 8) {                      
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center  center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center  center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="8" > </td>`);
                                                 
                       sabatical += 1; count_sabatical_2_total++;
                       
                     } else { 
                       
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical  sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}', 'span_HE_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', 'input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);                    
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical  sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${format_d_m_a(fecha_asist)}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${format_d_m_a(fecha_asist)}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}')}, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${format_d_m_a(fecha_asist)}" type="text" value="0" > </td>`);                    
                       
                       count_dias_asistidos -= 1; //horas_nomr_total -= 8;
                     }                  
@@ -673,12 +673,12 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
               if (estado_hallando_sabado) { 
                 if (value.sabatical_manual_1 == "0") {
   
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="0" > </td>`);
+                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="0" > </td>`);
                                    
                 } else {
                   if (value.sabatical_manual_1 == "1") {
   
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                     
                     count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
     
@@ -687,14 +687,14 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
                     // El sistema calcula el "sabatical" conforme a las horas del trabajador
                     if (horas_nomr_total >= 44 ) {
     
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                       
                       count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
     
                       sabatical = 1;
                     } else {
     
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                      
                     }
                   }
@@ -715,12 +715,12 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
               } else {
                 if (value.sabatical_manual_2 == "0") {
   
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="0" > </td>`);
+                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="0" > </td>`);
                   
                 } else {
                   if (value.sabatical_manual_2 == "1") {
   
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                     
                     count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
     
@@ -731,28 +731,28 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
                       // El sistema calcula el "sabatical" conforme a las horas del trabajador
                       if ((horas_nomr_total - 52) >= 44 ) {
     
-                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                         
                         count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
     
                         sabatical = sabatical + 1;
                       } else {
     
-                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                                                
                       }
                     } else {
     
                       if ((horas_nomr_total - 44) >= 44 ) {
     
-                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
     
                         count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
     
                         sabatical = sabatical + 1;
                       } else {
     
-                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                        tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                                                
                       }
                     }                  
@@ -847,12 +847,12 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
             if (estado_hallando_sabado) { 
               if (value.sabatical_manual_1 == "0") {
 
-                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="0" > </td>`);
+                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="0" > </td>`);
                                  
               } else {
                 if (value.sabatical_manual_1 == "1") {
 
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                   
                   count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
   
@@ -861,14 +861,14 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
                   // El sistema calcula el "sabatical" conforme a las horas del trabajador
                   if (horas_nomr_total >= 44 ) {
   
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                     
                     count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
   
                     sabatical = 1;
                   } else {
   
-                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                    tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_1" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 1); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                    
                   }
                 }
@@ -889,12 +889,12 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
             } else {
               if (value.sabatical_manual_2 == "0") {
 
-                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                 
               } else {
                 if (value.sabatical_manual_2 == "1") {
 
-                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                  tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-eb0202 center-vertical"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                   
                   count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
   
@@ -905,28 +905,28 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
                     // El sistema calcula el "sabatical" conforme a las horas del trabajador
                     if ((horas_nomr_total - 52) >= 44 ) {
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
                       
                       count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
   
                       sabatical = sabatical + 1;
                     } else {
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                                              
                     }
                   } else {
   
                     if ((horas_nomr_total - 44) >= 44 ) {
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center center-vertical bg-color-28a745 sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" checked  id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="8" > </td>`);
   
                       count_dias_asistidos = count_dias_asistidos + 1; horas_nomr_total = horas_nomr_total + 8;
   
                       sabatical = sabatical + 1;
                     } else {
   
-                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}', 'span_HE_${value.idtrabajador_por_proyecto}_${fecha}', 'input_HN_${value.idtrabajador_por_proyecto}_${fecha}', '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
+                      tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical sabatical_auto_${value.idtrabajador_por_proyecto}_${count_bloque_q_s}"> <input class="w-xy-20px" type="checkbox" id="checkbox_sabatical_${value.idtrabajador_por_proyecto}_2" onclick="calcular_sabatical('${fecha}', '${value.sueldo_hora}', '${value.idtrabajador_por_proyecto}', '${value.nombres}', '${value.idresumen_q_s_asistencia}', 2); delay(function(){ calcular_he('${fecha}',   '${value.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${value.sueldo_hora}', '${data.length}', '${value.sabatical_manual_1}', '${value.sabatical_manual_2}') }, 300 );"> <input class="input_HN_${value.idtrabajador_por_proyecto}_${i} input_HN_${value.idtrabajador_por_proyecto}_${fecha} desglose_q_s_${value.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${value.idtrabajador_por_proyecto}_${fecha}" type="text" value="" > </td>`);
                                              
                     }
                   }                  
@@ -1389,7 +1389,7 @@ function guardar_fechas_asistencia() {
     $("#modal-cargando").modal("show");
 
     $.ajax({
-      url: "../ajax/Asistencia_obrero.php?op=guardaryeditar",
+      url: "../ajax/asistencia_obrero.php?op=guardaryeditar",
       type: "POST",
       data:  {
         'asistencia': JSON.stringify(array_datos_asistencia), 
@@ -1472,7 +1472,7 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
       }).then((result) => {
         if (result.isConfirmed) {
 
-          $.post("../ajax/Asistencia_obrero.php?op=agregar_quitar_pago_al_contador", { 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"1"  }, function (e) {
+          $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_pago_al_contador", { 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"1"  }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
               Swal.fire("Enviado!", `El pago de: ${nombre_trabajador} a sido enviado con éxito.`, "success");
@@ -1501,7 +1501,7 @@ function asignar_pago_al_contador(fecha_q_s_inicio, id_trabajador_x_proyecto, no
       }).then((result) => {
         if (result.isConfirmed) {
 
-          $.post("../ajax/Asistencia_obrero.php?op=agregar_quitar_pago_al_contador", { 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"0" }, function (e) {
+          $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_pago_al_contador", { 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'estado_envio_contador':"0" }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
               Swal.fire("Quitado!", `El pago de: ${nombre_trabajador} a sido ANULADO con éxito.`, "success");
@@ -1557,7 +1557,7 @@ function asignar_todos_pago_al_contador() {
         if (result.isConfirmed) {
           
           $.ajax({
-            url: "../ajax/Asistencia_obrero.php?op=agregar_quitar_pago_al_contador_todos",
+            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_pago_al_contador_todos",
             type: "POST",
             data:  {
               'array_pago_contador': JSON.stringify(array_pago_contador),
@@ -1619,7 +1619,7 @@ function asignar_todos_pago_al_contador() {
         if (result.isConfirmed) {
           
           $.ajax({
-            url: "../ajax/Asistencia_obrero.php?op=agregar_quitar_pago_al_contador_todos",
+            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_pago_al_contador_todos",
             type: "POST",
             data:  {
               'array_pago_contador': JSON.stringify(array_pago_contador),
@@ -1681,7 +1681,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
 
       // $(`#input_HN_${id_trabajador_x_proyecto}_${fecha}`).val('8'); console.log("tienen 8");
 
-      // $.post("../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
+      // $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
         
       //   if (e == 'ok') {
       //     tabla_principal.ajax.reload();
@@ -1696,7 +1696,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
 
     } else { // Asignamos un val:0 al sabatical
       // $(`#input_HN_${id_trabajador_x_proyecto}_${fecha}`).val('0'); console.log("tienen 0");
-      // $.post("../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia,  'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
+      // $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia,  'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
         
       //   if (e == 'ok') { 
       //     tabla_principal.ajax.reload();
@@ -1732,7 +1732,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
         confirmButtonText: "Si, asignar!",
       }).then((result) => {
         if (result.isConfirmed) {
-          $.post("../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
+          $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
               tbla_principal(localStorage.getItem('nube_idproyecto'));
@@ -1759,7 +1759,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
         confirmButtonText: "Si, anular!",
       }).then((result) => {
         if (result.isConfirmed) {
-          $.post("../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
+          $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
             if (e == 'ok') {
               datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
               tbla_principal(localStorage.getItem('nube_idproyecto'));
@@ -1812,7 +1812,7 @@ function calcular_todos_sabatical_1() {
         if (result.isConfirmed) {
 
           $.ajax({
-            url: "../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
+            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
             type: "POST",
             data:  {
               'sabatical_trabajador': JSON.stringify(array_sabatical_1), 
@@ -1874,7 +1874,7 @@ function calcular_todos_sabatical_1() {
         if (result.isConfirmed) {
            
           $.ajax({
-            url: "../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
+            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
             type: "POST",
             data:  {
               'sabatical_trabajador': JSON.stringify(array_sabatical_1), 
@@ -1957,7 +1957,7 @@ function calcular_todos_sabatical_2() {
         if (result.isConfirmed) {
 
           $.ajax({
-            url: "../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
+            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
             type: "POST",
             data:  {
               'sabatical_trabajador': JSON.stringify(array_sabatical_2), 
@@ -2019,7 +2019,7 @@ function calcular_todos_sabatical_2() {
         if (result.isConfirmed) {
            
           $.ajax({
-            url: "../ajax/Asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
+            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
             type: "POST",
             data:  {
               'sabatical_trabajador': JSON.stringify(array_sabatical_2), 
@@ -2156,7 +2156,7 @@ function guardaryeditar_adicional_descuento(e) {
   var formData = new FormData($("#form-adicional-descuento")[0]);
 
   $.ajax({
-    url: "../ajax/Asistencia_obrero.php?op=guardaryeditar_adicional_descuento",
+    url: "../ajax/asistencia_obrero.php?op=guardaryeditar_adicional_descuento",
     type: "POST",
     data: formData,
     contentType: false,
@@ -2191,7 +2191,7 @@ function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
 
   $("#modal-adicional-descuento").modal("show");
 
-  $.post("../ajax/Asistencia_obrero.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(data){
+  $.post("../ajax/asistencia_obrero.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(data){
     data = JSON.parse(data);  console.log(data);  
 
     if (data != null) {
@@ -2224,7 +2224,7 @@ function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proy
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-      url: '../ajax/Asistencia_obrero.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      url: '../ajax/asistencia_obrero.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -2305,7 +2305,7 @@ function justificar(idasistencia,horas, estado) {
 
       $("#modal-justificar-asistencia").modal("show");
 
-      $.post("../ajax/Asistencia_obrero.php?op=mostrar_justificacion", { 'idasistencia_trabajador': idasistencia }, function (data, status) {
+      $.post("../ajax/asistencia_obrero.php?op=mostrar_justificacion", { 'idasistencia_trabajador': idasistencia }, function (data, status) {
         
         data = JSON.parse(data);  console.log(data);
 
@@ -2361,7 +2361,7 @@ function guardar_y_editar_justificar(e) {
   var formData = new FormData($("#form-justificar-asistencia")[0]);
 
   $.ajax({
-    url: "../ajax/Asistencia_obrero.php?op=guardar_y_editar_justificacion",
+    url: "../ajax/asistencia_obrero.php?op=guardar_y_editar_justificacion",
     type: "POST",
     data: formData,
     contentType: false,
@@ -2398,7 +2398,7 @@ function desactivar_dia_asistencia(idasistencia_trabajador) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Asistencia_obrero.php?op=desactivar_dia", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+      $.post("../ajax/asistencia_obrero.php?op=desactivar_dia", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
 
         Swal.fire("Desactivado!", "La asistencia ha sido desactivado.", "success");
     
@@ -2421,7 +2421,7 @@ function activar_dia_asistencia(idasistencia_trabajador) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Asistencia_obrero.php?op=activar_dia", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
+      $.post("../ajax/asistencia_obrero.php?op=activar_dia", { idasistencia_trabajador: idasistencia_trabajador }, function (e) {
 
         Swal.fire("Activado!", "La asistencia ha sido activado.", "success");
 
@@ -2450,7 +2450,7 @@ function tabla_qs_individual(idtrabajador_por_proyecto) {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [10,11,12,1,2,3,4,5,6,7], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [10,11,12,1,2,3,4,5,6,7], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [10,11,12,1,2,3,4,5,6,7], } }, {extend: "colvis"} ,
     ],
     "ajax":{
-      url: '../ajax/Asistencia_obrero.php?op=tabla_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
+      url: '../ajax/asistencia_obrero.php?op=tabla_qs_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -2486,7 +2486,7 @@ function tabla_qs_individual(idtrabajador_por_proyecto) {
   }).DataTable();
 
   //Suma ACUMULADO
-  $.post("../ajax/Asistencia_obrero.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (data, status) {
 
     data =JSON.parse(data); //console.log(data);
 
@@ -2521,7 +2521,7 @@ function desactivar_qs(id, tipo_pago) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Asistencia_obrero.php?op=desactivar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
+      $.post("../ajax/asistencia_obrero.php?op=desactivar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
         
         if (e == 'ok') {
           Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
@@ -2549,7 +2549,7 @@ function activar_qs(id, tipo_pago) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/Asistencia_obrero.php?op=activar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
+      $.post("../ajax/asistencia_obrero.php?op=activar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
 
         if (e == 'ok') {
           Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
@@ -2576,7 +2576,7 @@ function limpiar_form_fechas_actividades(params) {
   $('#fecha_fin_actividad').val("");
   $('#plazo_actividad').val("");
 
-  $.post("../ajax/Asistencia_obrero.php?op=fechas_actividad", { 'id_proyecto': localStorage.getItem('nube_idproyecto') }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=fechas_actividad", { 'id_proyecto': localStorage.getItem('nube_idproyecto') }, function (data, status) {
     
     data = JSON.parse(data);  console.log(data);
 
@@ -2612,7 +2612,7 @@ function guardar_y_editar_fechas_actividades(e) {
   var formData = new FormData($("#form-fechas-actividades")[0]);
 
   $.ajax({
-    url: "../ajax/Asistencia_obrero.php?op=guardar_y_editar_fechas_actividad",
+    url: "../ajax/asistencia_obrero.php?op=guardar_y_editar_fechas_actividad",
     type: "POST",
     data: formData,
     contentType: false,
@@ -3223,7 +3223,7 @@ function mostrar(idasistencia_trabajador) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
-  $.post("../ajax/Asistencia_obrero.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=mostrar_editar", { idasistencia_trabajador: idasistencia_trabajador }, function (data, status) {
 
     data = JSON.parse(data);  console.log(data);
     
@@ -3274,7 +3274,7 @@ function lista_trabajadores(nube_idproyecto) {
     '</div>'
   );
 
-  $.post("../ajax/Asistencia_obrero.php?op=lista_trabajador", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=lista_trabajador", { nube_idproyecto: nube_idproyecto }, function (data, status) {
 
     data = JSON.parse(data);  //console.log(data); 
 

@@ -32,6 +32,11 @@ function limpiar()
 	$("#imagenactual").val("");
 	$("#print").hide();
 	$("#idarticulo").val("");
+	
+	// Limpiamos las validaciones
+	$(".form-control").removeClass('is-valid');
+	$(".form-control").removeClass('is-invalid');
+	$(".error.invalid-feedback").remove();
 }
 
 //Función mostrar formulario

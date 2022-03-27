@@ -484,8 +484,9 @@ function limpiar_form_proveedor() {
   $("#titular_cuenta_prov").val("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 
   $(".tooltip").removeClass('show');
 }

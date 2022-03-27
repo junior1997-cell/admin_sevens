@@ -10,15 +10,15 @@ if (!isset($_SESSION["nombre"])) {
 
 } else {
 
-  if ($_SESSION['compra'] == 1) {
+  if ($_SESSION['compra_insumos'] == 1) {
     
     require_once "../modelos/Compra_insumos.php";
     require_once "../modelos/AllProveedor.php";
     require_once "../modelos/Activos_fijos.php";
 
-    $activos_fijos = new Activos_fijos();
     $compra = new Compra_insumos();
     $proveedor = new Proveedor();
+    $activos_fijos = new Activos_fijos();        
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";

@@ -832,9 +832,10 @@ function limpiar_pension() {
   $("#proveedor").val("null").trigger("change"); 
   $("#servicio_p").val("null").trigger("change");
 
+  // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
-  $("#servicio_p-error").remove();
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 
 }
 

@@ -9,7 +9,7 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
   //Validamos el acceso solo al usuario logueado y autorizado.
-  if ($_SESSION['compra'] == 1) {
+  if ($_SESSION['compra_insumos'] == 1) {
 
     require_once "../modelos/Resumen_activos_fijos.php";
     require_once "../modelos/Compra_insumos.php";

@@ -332,8 +332,9 @@ function limpiar() {
   $("#cantidad").val("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función limpiar
@@ -353,8 +354,9 @@ function limpiar_c_pagos() {
   $('#doc1_nombre').html("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //regresar_principal
@@ -1346,6 +1348,11 @@ function limpiar_factura() {
   $("#doc2").val("");  
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //mostrar

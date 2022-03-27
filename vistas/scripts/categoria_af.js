@@ -18,8 +18,10 @@ function limpiar_c_af() {
   $("#idcategoria_insumos_af").val("");
   $("#nombre_categoria_af").val(""); 
 
+  // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función listar_c_insumos_af 

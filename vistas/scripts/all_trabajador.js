@@ -501,8 +501,10 @@ function limpiar() {
   $("#doc5").val("");
   $("#doc_old_5").val("");
   
+  // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función Listar

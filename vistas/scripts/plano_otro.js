@@ -203,7 +203,11 @@ function limpiar() {
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
   $("#doc1_nombre").html("");
   $("#doc_old_1").val("");
-}
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();}
 
 //Función Listar
 function listar_carpeta(nube_idproyecto) {

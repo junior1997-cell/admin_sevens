@@ -150,11 +150,10 @@ function limpiar() {
   $("#doc6_nombre").html('');
   $("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
+  // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
-
-  // form_validate_proyecto.resetForm();
-
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función Listar en curso o no empezados

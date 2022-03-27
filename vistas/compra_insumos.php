@@ -14,9 +14,9 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Compras</title>
+        <title>Admin Sevens | Compras de Insumos</title>
 
-        <?php $title = "Compras"; require 'head.php'; ?>
+        <?php $title = "Compras  de Insumos"; require 'head.php'; ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -43,13 +43,13 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1 class="m-0">Compras</h1>
+                      <h1 class="m-0">Compras de Insumos</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="compra_insumos.php">Home</a></li>
-                        <li class="breadcrumb-item active">Compras</li>
+                        <li class="breadcrumb-item active">Compras  de Insumos</li>
                       </ol>
                     </div>
                     <!-- /.col -->

@@ -33,8 +33,10 @@ function limpiar_cargo() {
   $("#nombre_cargo").val(""); 
   $("#idtipo_trabjador_c").val("null").trigger("change");
 
+  // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función listar_cargo

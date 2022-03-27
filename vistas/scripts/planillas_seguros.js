@@ -74,6 +74,10 @@ function limpiar() {
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //segun tipo de comprobante

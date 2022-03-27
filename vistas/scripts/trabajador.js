@@ -213,9 +213,11 @@ function limpiar() {
   $("#fecha_inicio").val(fecha_incial_proyecto);  $("#fecha_fin").val(fecha_final_proyecto); $('#cantidad_dias').val('')
   $('#cantidad_dias').removeClass('input-no-valido input-valido');
 
-  // limpiamos las validaciones del FORM
+  // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+  
   calcular_dias_trabajo();
 }
 

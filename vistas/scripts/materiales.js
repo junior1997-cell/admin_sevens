@@ -100,8 +100,10 @@ function limpiar() {
   $("#my-switch_igv").prop("checked", true);
   $("#estado_igv").val("1");
 
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función Listar

@@ -150,7 +150,7 @@ switch ($_GET["op"]) {
                 '<button class="btn btn-warning  btn-sm" onclick="mostrar(' . $reg->idusuario . ')"><i class="fas fa-pencil-alt"></i></button>' . 
                 ' <button class="btn btn-primary  btn-sm" onclick="activar(' . $reg->idusuario . ')"><i class="fa fa-check"></i></button>',
             "2" => '<div class="user-block"> 
-                      <img class="img-circle" src="../dist/img/usuarios/' . $reg->imagen_perfil . '" alt="User Image" onerror="' . $imagen_error . '">
+                      <img class="img-circle" src="../dist/docs/all_trabajador/perfil/' . $reg->imagen_perfil . '" alt="User Image" onerror="' . $imagen_error . '">
                       <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' . $reg->nombres . '</p></span> 
                       <span class="description">' . $reg->tipo_documento .  ': ' . $reg->numero_documento . ' </span>
                     </div>',

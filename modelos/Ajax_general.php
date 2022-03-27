@@ -58,7 +58,8 @@
 
     }
 
-    //Seleccionar Trabajador Select2
+    /* ══════════════════════════════════════ T R A B A J A D O R ══════════════════════════════════════ */
+
     public function select2_trabajador(){
       $sql = "SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento 
       FROM trabajador WHERE estado = '1' AND estado_delete = '1' ORDER BY nombres ASC;";
@@ -70,11 +71,48 @@
       return ejecutarConsulta($sql);		
     }
 
-    //Seleccionar Trabajador Select2
     public function select2_cargo_trabajador_id($id_tipo) {
-
       $sql = "SELECT * FROM cargo_trabajador WHERE idtipo_trabjador='$id_tipo' AND estado='1' AND estado_delete = '1' ORDER BY nombre ASC";
+      return ejecutarConsulta($sql);
+    }
 
+    /* ══════════════════════════════════════ P R O V E E D O R  ══════════════════════════════════════ */
+
+    public function select2_proveedor() {
+      $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado='1' AND estado_delete = '1' ORDER BY razon_social ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    /* ══════════════════════════════════════ B A N C O ══════════════════════════════════════ */
+
+    public function select2_banco() {
+      $sql = "SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND estado_delete = '1' ORDER BY nombre ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    public function formato_banco($idbanco){
+      $sql="SELECT nombre, formato_cta, formato_cci, formato_detracciones FROM bancos WHERE estado='1' AND idbancos = '$idbanco';";
+      return ejecutarConsultaSimpleFila($sql);		
+    }
+
+    /* ══════════════════════════════════════ C O L O R ══════════════════════════════════════ */
+
+    public function select2_color() {
+      $sql = "SELECT idcolor AS id, nombre_color AS nombre FROM color WHERE estado='1' AND estado_delete = '1' ORDER BY nombre_color ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    /* ══════════════════════════════════════ U N I D A D   D E   M E D I D A ══════════════════════════════════════ */
+
+    public function select2_unidad_medida() {
+      $sql = "SELECT idunidad_medida AS id, nombre_medida AS nombre, abreviacion FROM unidad_medida WHERE estado='1' AND estado_delete = '1' ORDER BY nombre_medida ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    /* ══════════════════════════════════════ C A T E G O R I A ══════════════════════════════════════ */
+
+    public function select2_categoria() {
+      $sql = "SELECT idcategoria_insumos_af as id, nombre FROM categoria_insumos_af WHERE estado='1' AND estado_delete = '1' ORDER BY nombre ASC;";
       return ejecutarConsulta($sql);
     }
   }

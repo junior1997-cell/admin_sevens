@@ -399,8 +399,9 @@ function limpiar_form_compra() {
   cont = 0;
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función limpiar
@@ -419,8 +420,10 @@ function limpiardatosproveedor() {
   $("#banco option[value='BCP']").attr("selected", true);
   $("#titular_cuenta").val("");
 
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 function ver_form_add() {
@@ -1476,8 +1479,9 @@ function limpiar_form_proveedor() {
   $("#titular_cuenta_prov").val("");
 
   // Limpiamos las validaciones
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 
   $(".tooltip").removeClass('show');
 }
@@ -1660,6 +1664,11 @@ function limpiar_c_pagos() {
   $("#foto1").val("");
   $("#foto1_actual").val("");
   $("#foto1_nombre").html("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //mostrar datos proveedor pago
@@ -1951,8 +1960,10 @@ function limpiar_materiales() {
   $("#my-switch_igv").prop("checked", true);
   $("#estado_igv_p").val("1");
 
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función para guardar o editar
@@ -2249,6 +2260,7 @@ $(function () {
   });
 
   $("#form-proveedor").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       tipo_documento_prov: { required: true },
       num_documento_prov: { required: true, minlength: 6, maxlength: 20 },
@@ -2307,6 +2319,7 @@ $(function () {
   });
 
   $("#form-servicios-pago").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       forma_pago: { required: true },
       tipo_pago: { required: true },
@@ -2357,6 +2370,7 @@ $(function () {
   });
 
   $("#form-comprobante").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       nombre: { required: true },
     },
@@ -2390,6 +2404,7 @@ $(function () {
   });
 
   $("#form-materiales").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       nombre_p: { required: true, minlength:3, maxlength:200},
       categoria_insumos_af_p: { required: true },

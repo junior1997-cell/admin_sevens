@@ -553,8 +553,10 @@ function limpiar() {
   $("#total").html("");
   $("#total_compra_af_p").val("");
 
-  $(".form-control").removeClass("is-valid");
-  $(".is-invalid").removeClass("error is-invalid");
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función limpiar

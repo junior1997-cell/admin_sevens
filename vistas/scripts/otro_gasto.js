@@ -81,7 +81,8 @@ function limpiar() {
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //segun tipo de comprobante
@@ -294,7 +295,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   
   return precio_sin_igv; 
 }
-
 
 //Función Listar
 function listar() {

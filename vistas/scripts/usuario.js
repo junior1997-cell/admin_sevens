@@ -73,6 +73,11 @@ function limpiar() {
 
   //Mostramos los permisos
   $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función Listar

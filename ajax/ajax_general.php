@@ -40,7 +40,8 @@
         echo json_encode($rspta);
 
       break;
-
+      
+      /* ══════════════════════════════════════ T R A B A J A D O R  ══════════════════════════════════════ */
       case 'select2Trabajador': 
 
         $rspta = $ajax_general->select2_trabajador();
@@ -62,8 +63,7 @@
         }
       break;
 
-      case 'select2CargoTrabajdorId':
-         
+      case 'select2CargoTrabajdorId':         
          
         $rspta=$ajax_general->select2_cargo_trabajador_id( $_POST["idtipo"] );
 
@@ -72,6 +72,77 @@
           echo '<option  value=' . $reg->idcargo_trabajador  . '>' . $reg->nombre .'</option>';
         }
 
+      break;
+      
+      /* ══════════════════════════════════════ P R O V E E D O R  ══════════════════════════════════════ */
+      case 'select2Proveedor': 
+    
+        $rspta=$ajax_general->select2_proveedor();
+
+        $cont = 1;
+    
+        while ($reg = $rspta->fetch_object())	{
+    
+          echo '<option value=' . $reg->idproveedor . '>' .$cont++.'. '. $reg->razon_social .' - '. $reg->ruc . '</option>';
+    
+        }
+    
+      break;
+      
+      /* ══════════════════════════════════════ B A N C O  ══════════════════════════════════════ */
+      case 'select2Banco': 
+    
+        $rspta = $ajax_general->select2_banco();
+    
+        while ($reg = $rspta->fetch_object())  {
+    
+          echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
+        }
+    
+      break;
+
+      case 'formato_banco':
+               
+        $rspta=$proveedor->formato_banco($_POST["idbanco"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta);
+         
+      break;
+      
+      /* ══════════════════════════════════════ C O L O R ══════════════════════════════════════ */
+      case 'select2Color': 
+    
+        $rspta = $ajax_general->select2_color();
+    
+        while ($reg = $rspta->fetch_object())  {
+    
+          echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+        }
+    
+      break;
+      
+      /* ══════════════════════════════════════ U N I D A D   D E   M E D I D A  ══════════════════════════════════════ */
+      case 'select2UnidaMedida': 
+    
+        $rspta = $ajax_general->select2_unidad_medida();
+    
+        while ($reg = $rspta->fetch_object())  {
+    
+          echo '<option value=' . $reg->id . '>' . $reg->nombre . ' - ' . $reg->abreviacion .'</option>';
+        }
+    
+      break;
+      
+      /* ══════════════════════════════════════ C A T E G O R I A ══════════════════════════════════════ */
+      case 'select2Categoria': 
+    
+        $rspta = $ajax_general->select2_categoria();
+    
+        while ($reg = $rspta->fetch_object())  {
+    
+          echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+        }
+    
       break;
     }
       

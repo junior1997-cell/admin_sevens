@@ -57,6 +57,10 @@ function limpiar() {
   $("#proveedor").val("null").trigger("change"); 
   $("#proveedor_old").val(""); 
   
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función Listar

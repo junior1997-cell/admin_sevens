@@ -317,7 +317,7 @@
                   <li class="nav-item ">
                     <a href="compra_insumos.php" class="nav-link" id="lCompras">
                       <i class="nav-icon fas fa-cart-plus"></i>
-                      <p>Compras</p>
+                      <p>Compras de insumos</p>
                     </a>
                   </li>
                   <!-- Resumend de Insumos -->

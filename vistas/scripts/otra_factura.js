@@ -73,7 +73,7 @@ function limpiar() {
   $("#igv").val("");
   $("#precio_parcial").val("");
   $("#descripcion").val("");
-   $("#tipo_gravada").val("");
+  $("#tipo_gravada").val("");
 
   $("#doc_old_1").val("");
   $("#doc1").val("");  
@@ -87,7 +87,8 @@ function limpiar() {
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
-  $(".is-invalid").removeClass("error is-invalid");
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //segun tipo de comprobante

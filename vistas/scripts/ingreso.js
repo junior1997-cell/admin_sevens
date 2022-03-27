@@ -39,6 +39,11 @@ function limpiar() {
   //Marcamos el primer tipo_documento
   $("#tipo_comprobante").val("Boleta");
   $("#tipo_comprobante").selectpicker("refresh");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función mostrar formulario
