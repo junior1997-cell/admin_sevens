@@ -412,7 +412,7 @@ function listar_tbla_principal(nube_idproyecto) {
            
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {

@@ -10,20 +10,20 @@ class Otro_ingreso
   }
   //$idotro_ingreso,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproyecto, $idproveedor, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
+  public function insertar($idproyecto, $idproveedor, $fecha_i, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
   {
-    $sql = "INSERT INTO otro_ingreso (idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_g, costo_parcial,subtotal,igv,val_igv,tipo_gravada,descripcion, comprobante,ruc,razon_social,direccion,glosa) 
-		VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_g', '$precio_parcial', '$subtotal', '$igv', '$val_igv', '$tipo_gravada', '$descripcion', '$comprobante', '$ruc', '$razon_social', '$direccion', '$glosa')";
+    $sql = "INSERT INTO otro_ingreso (idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_i, costo_parcial,subtotal,igv,val_igv,tipo_gravada,descripcion, comprobante,ruc,razon_social,direccion,glosa) 
+		VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_i', '$precio_parcial', '$subtotal', '$igv', '$val_igv', '$tipo_gravada', '$descripcion', '$comprobante', '$ruc', '$razon_social', '$direccion', '$glosa')";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para editar registros
-  public function editar($idotro_ingreso, $idproyecto, $idproveedor, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
+  public function editar($idotro_ingreso, $idproyecto, $idproveedor, $fecha_i, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
   {
     $sql = "UPDATE otro_ingreso SET 
 		idproyecto='$idproyecto',
     idproveedor='$idproveedor',
-		fecha_g='$fecha_g',
+		fecha_i='$fecha_i',
 		costo_parcial='$precio_parcial',
 		subtotal='$subtotal',
 		igv='$igv',

@@ -280,7 +280,7 @@ function listar_tbla_principal(nube_idproyecto) {
       
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -624,7 +624,7 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
         }
       },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -960,7 +960,7 @@ function reload_table_pagos_x_mes(id) {
         }
       },
       "language": {
-        "lengthMenu": "Mostrar : _MENU_ registros",
+        "lengthMenu": "Mostrar: _MENU_ registros",
         "buttons": {
           "copyTitle": "Tabla Copiada",
           "copySuccess": {
@@ -1083,7 +1083,7 @@ function formato_miles(num) {
 }
 
 // extrae los nombres de dias de semana "Completo"
-function extraer_dia_semana_complet(fecha) {
+function extraer_dia_semana_completo(fecha) {
   const fechaComoCadena = fecha; // día fecha
   const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']; //
   const numeroDia = new Date(fechaComoCadena).getDay();

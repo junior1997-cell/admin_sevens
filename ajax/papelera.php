@@ -46,10 +46,10 @@
               ' <button class="btn btn-danger btn-sm" onclick="eliminar_permanente('.$info.')"><i class="far fa-trash-alt"></i></button>',
               "2"=>'<span class="text-bold">'. $value['nombre_proyecto'] .'</span>',  
               "3"=>'<span class="text-bold">'. $value['modulo'] .'</span>',  
-              "4"=>'<span class="text-primary text-bold">'. $value['nombre_archivo'] .'</span>',  
-              "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$value['descripcion'].'</textarea>',         
-              "6"=> nombre_dia_semana( date("Y-m-d", strtotime($value['created_at'])) ) .', '. date("d/m/Y", strtotime($value['created_at'])) .' - '. date("g:i a", strtotime($value['created_at'])) ,
-              "7"=> nombre_dia_semana( date("Y-m-d", strtotime($value['updated_at'])) ) .', '. date("d/m/Y", strtotime($value['updated_at'])) .' - '. date("g:i a", strtotime($value['updated_at']))
+              "4"=>'<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $value['nombre_archivo'] .'</div>',  
+              "5"=>'<textarea class="textarea_datatable" readonly="" style="height: 45px;">'.$value['descripcion'].'</textarea>',         
+              "6"=> nombre_dia_semana( date("Y-m-d", strtotime($value['created_at'])) ) .', <br>'. date("d/m/Y", strtotime($value['created_at'])) .' - '. date("g:i a", strtotime($value['created_at'])) ,
+              "7"=> nombre_dia_semana( date("Y-m-d", strtotime($value['updated_at'])) ) .', <br>'. date("d/m/Y", strtotime($value['updated_at'])) .' - '. date("g:i a", strtotime($value['updated_at']))
             );
           }
           $results = array(

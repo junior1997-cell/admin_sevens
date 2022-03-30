@@ -16,12 +16,12 @@
       require_once "../modelos/AllProveedor.php";
 
       $otro_ingreso = new Otro_ingreso();
-      $proveedor = new Proveedor();
+      $proveedor = new AllProveedor();
 
-      $idotro_gasto     = isset($_POST["idotro_gasto"]) ? limpiarCadena($_POST["idotro_gasto"]) : ""; 
+      $idotro_ingreso     = isset($_POST["idotro_ingreso"]) ? limpiarCadena($_POST["idotro_ingreso"]) : ""; 
       $idproyecto       = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";      
       $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";     
-      $fecha_g          = isset($_POST["fecha_g"]) ? limpiarCadena($_POST["fecha_g"]) : "";
+      $fecha_i          = isset($_POST["fecha_i"]) ? limpiarCadena($_POST["fecha_i"]) : "";
       $forma_pago       = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
       $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
       $nro_comprobante  = isset($_POST["nro_comprobante"]) ? limpiarCadena($_POST["nro_comprobante"]) : "";
@@ -54,7 +54,8 @@
       $titular_cuenta_prov= isset($_POST["titular_cuenta_prov"])? limpiarCadena($_POST["titular_cuenta_prov"]):"";
       
       switch ($_GET["op"]) {
-        case 'guardaryeditar':
+
+        case 'guardar_y_editar_otros_ingresos':
           // Comprobante
           if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
       
@@ -73,9 +74,9 @@
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/otro_ingreso/comprobante/" . $comprobante);
           }
       
-          if (empty($idotro_gasto)) {
+          if (empty($idotro_ingreso)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otro_ingreso->insertar($idproyecto, $idproveedor , $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
+            $rspta = $otro_ingreso->insertar($idproyecto, $idproveedor , $fecha_i, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
       
@@ -83,7 +84,7 @@
             //validamos si existe comprobante para eliminarlo
             if ($flat_ficha1 == true) {
       
-              $datos_ficha1 = $otro_ingreso->ficha_tec($idotro_gasto);
+              $datos_ficha1 = $otro_ingreso->ficha_tec($idotro_ingreso);
       
               $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
       
@@ -93,15 +94,15 @@
               }
             }
       
-            $rspta = $otro_ingreso->editar($idotro_gasto, $idproyecto, $idproveedor , $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
-            //var_dump($idotro_gasto,$idproveedor);
+            $rspta = $otro_ingreso->editar($idotro_ingreso, $idproyecto, $idproveedor , $fecha_i, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
+            //var_dump($idotro_ingreso,$idproveedor);
             echo $rspta ? "ok" : "No se pudo actualizar";
           }
         break;
       
         case 'desactivar':
       
-          $rspta = $otro_ingreso->desactivar($idotro_gasto);
+          $rspta = $otro_ingreso->desactivar($idotro_ingreso);
       
           echo $rspta ? " Desactivado" : "No se puede desactivar";
       
@@ -109,7 +110,7 @@
       
         case 'activar':
       
-          $rspta = $otro_ingreso->activar($idotro_gasto);
+          $rspta = $otro_ingreso->activar($idotro_ingreso);
       
           echo $rspta ? "Activado" : "No se puede activar";
       
@@ -117,7 +118,7 @@
 
         case 'eliminar':
       
-          $rspta = $otro_ingreso->eliminar($idotro_gasto);
+          $rspta = $otro_ingreso->eliminar($idotro_ingreso);
       
           echo $rspta ? "Elinado" : "No se puede Eliminar";
       
@@ -125,7 +126,7 @@
       
         case 'mostrar':
       
-          $rspta = $otro_ingreso->mostrar($idotro_gasto);
+          $rspta = $otro_ingreso->mostrar($idotro_ingreso);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
       
@@ -133,7 +134,7 @@
       
         case 'verdatos':
       
-          $rspta = $otro_ingreso->mostrar($idotro_gasto);
+          $rspta = $otro_ingreso->mostrar($idotro_ingreso);
           //Codificar el resultado utilizando json
           echo json_encode($rspta);
       
@@ -149,28 +150,21 @@
             
             empty($reg->comprobante)
               ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-              : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+              : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(\'' . $reg->comprobante .'\', \''. $reg->fecha_i .'\', \''. $reg->tipo_comprobante .'\', \''. $reg->numero_comprobante .'\', \''. 'dist/docs/otro_ingreso/comprobante/'  . '\')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
             
-              
-
-            $tool = '"tooltip"';
-            $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+            $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
             $data[] = [
               "0" => $cont++,
-              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ')"><i class="fas fa-skull-crossbones"></i> </button>':
-                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_gasto . ')"><i class="fa fa-check"></i></button>',
+              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_ingreso . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_ingreso . ')"><i class="fas fa-skull-crossbones"></i> </button>':
+                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_ingreso . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_ingreso . ')"><i class="fa fa-check"></i></button>',
               "2" => $reg->forma_de_pago,
               "3" =>'<div class="user-block">
-                  <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
-                $reg->tipo_comprobante .
-                '</p> </span>
-                  <span class="description" style="margin-left: 0px !important;">N° ' .
-                (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .
-                '</span>         
+                  <span class="username ml-0" > <p class="text-primary m-b-02rem">' . $reg->tipo_comprobante . '</p> </span>
+                  <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                 </div>',
-              "4" => date("d/m/Y", strtotime($reg->fecha_g)),
+              "4" => date("d/m/Y", strtotime($reg->fecha_i)),
               "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
               "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
               "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
@@ -201,10 +195,10 @@
       
           if (empty($idproveedor_prov)){
       
-            $rspta=$proveedor->insertar_id($nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
+            $rspta=$proveedor->insertar($nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
             $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
             
-            echo $rspta;
+            echo json_encode($rspta, true);
           }
       
         break;

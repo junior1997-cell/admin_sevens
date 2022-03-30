@@ -71,7 +71,7 @@ function listar_cargo() {
         }
       },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {

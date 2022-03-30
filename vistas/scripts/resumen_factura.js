@@ -72,7 +72,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       }      
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -167,7 +167,7 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
     </div>
   </div>`);
 
-  // $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 }
 
 function filtros() {  

@@ -68,29 +68,18 @@
 /*  ══════════════════════════════════════════ - B A C K G R O U N D   P E R S O N A L I Z A D O - ══════════════════════════════════════════ */
 
 .bg-color-acc3c7{ background-color: #acc3c7; }
-
 .bg-color-b4bdbe47{ background-color: #71919547; }
-
 .bg-color-eb0202{ background-color: #eb0202; }
-
 .bg-color-408c98{ background-color: #408c98; }
-
 .bg-color-28a745{ background-color: #28a745; }
-
 .bg-color-2c2c2c{ background-color: #2c2c2c !important; }
-
 .bg-color-acc3c775{ background-color: #acc3c775; }
-
 .bg-color-252e38{ background-color: #252e38; }
-
 .bg-color-127ab6ba{ background-color: #127ab6ba; }
-
 .bg-color-ff6c046b{ background-color: #ff6c046b; }
-
 .bg-color-262e36{ background-color: #262e36 !important; }
-
 .bg-color-191f24{ background-color: #191f24 !important; }
-
+.bg-color-242244245{background-color: rgb(242 244 245);}
 
 /*  ══════════════════════════════════════════ - E S T Y L O   P A R A   T A B L A - ══════════════════════════════════════════ */
 
@@ -237,8 +226,6 @@ table th {
 .p-18px{ padding: 18px !important; }
 .p-19px{ padding: 19px !important; }
 
-
-
 .p-x-1px{ padding: 0px 1px 0px 1px !important; }
 .p-x-5px{ padding: 0px 5px 0px 5px !important; }
 .p-x-10px{ padding: 0px 10px 0px 10px !important; }
@@ -254,11 +241,11 @@ table th {
 .p-x-20px{ padding: 0px 20px 0px 20px !important; }
 
 .p-r-0px{ padding-right: 0px !important; }
-
+.p-r-1px{ padding-right: 1px !important; }
 .p-r-10px{ padding-right: 10px !important; }
 
 .p-l-0px{ padding-left: 0px !important; }
-
+.p-l-1px{ padding-left: 1px !important; }
 .p-l-10px{ padding-left: 10px !important; }
 
 /* ══════════════════════════════════════════ - M A R G I N G   S I Z E - ══════════════════════════════════════════ */
@@ -280,6 +267,37 @@ table th {
 .m-14px{ margin: 14px !important; }
 .m-15px{ margin: 15px !important; }
 
+.m-b-0px{ margin-bottom: 0px !important; }
+.m-b-1px{ margin-bottom: 1px !important; }
+.m-b-2px{ margin-bottom: 2px !important; }
+.m-b-3px{ margin-bottom: 3px !important; }
+.m-b-4px{ margin-bottom: 4px !important; }
+.m-b-5px{ margin-bottom: 5px !important; }
+.m-b-6px{ margin-bottom: 6px !important; }
+.m-b-7px{ margin-bottom: 7px !important; }
+.m-b-8px{ margin-bottom: 8px !important; }
+.m-b-9px{ margin-bottom: 9px !important; }
+.m-b-10px{ margin-bottom: 10px !important; }
+
+.m-t-0px{ margin-top: 0px !important; }
+.m-t-1px{ margin-top: 1px !important; }
+.m-t-2px{ margin-top: 2px !important; }
+.m-t-3px{ margin-top: 3px !important; }
+.m-t-4px{ margin-top: 4px !important; }
+.m-t-5px{ margin-top: 5px !important; }
+.m-t-6px{ margin-top: 6px !important; }
+.m-t-7px{ margin-top: 7px !important; }
+.m-t-8px{ margin-top: 8px !important; }
+.m-t-8px{ margin-top: 8px !important; }
+.m-t-9px{ margin-top: 9px !important; }
+.m-t-10px{ margin-top: 10px !important; }
+
+.m-r-1px{ margin-right: 1px !important; }
+.m-r-2px{ margin-right: 2px !important; }
+.m-r-5px{ margin-right: 5px !important; }
+.m-r-10px{ margin-right: 10px !important; }
+.m-r-15px{ margin-right: 15px !important; }
+
 .m-0rem{ margin: 0rem !important; }
 .m-01rem{ margin: 0.1rem !important; }
 .m-02rem{ margin: 0.2rem !important; }
@@ -287,103 +305,51 @@ table th {
 .m-04rem{ margin: 0.4rem !important; }
 .m-05rem{ margin: 0.5rem !important; }
 
-.m-b-1px{ margin-bottom: 1px !important; }
-
-.m-b-5px{ margin-bottom: 5px !important; }
-
-.m-t-1px{ margin-top: 1px !important; }
-
-.m-t-2px{ margin-top: 2px !important; }
-
-.m-t-5px{ margin-top: 5px !important; }
-
-.m-r-1px{ margin-right: 1px !important; }
-
-.m-r-2px{ margin-right: 2px !important; }
-
-.m-r-5px{ margin-right: 5px !important; }
-
-.m-r-10px{ margin-right: 10px !important; }
-
-.m-r-15px{ margin-right: 15px !important; }
-
 .m-b-0rem{ margin-bottom: 0rem !important; }
 .m-b-01rem{ margin-bottom: 0.1rem !important; }
 .m-b-02rem{ margin-bottom: 0.2rem !important; }
 .m-b-03rem{ margin-bottom: 0.3rem !important; }
 .m-b-04rem{ margin-bottom: 0.4rem !important; }
 .m-b-05rem{ margin-bottom: 0.5rem !important; }
-
 .m-b-5rem{ margin-bottom: 5rem !important; }
 
 .m-t-1rem{ margin-top: 1rem !important; }
-
 .m-t-2rem{ margin-top: 2rem !important; }
-
 .m-t-5rem{ margin-top: 5rem !important; }
 
 .m-r-1rem{ margin-right: 1rem !important; }
-
 .m-r-2rem{ margin-right: 2rem !important; }
-
 .m-r-5rem{ margin-right: 5rem !important; }
-
 .m-r-10rem{ margin-right: 10rem !important; }
-
 .m-r-15rem{ margin-right: 15rem !important; }
 
 
 /*  ══════════════════════════════════════════ - W I D T H   S I Z E - ══════════════════════════════════════════ */
 .w-5px{ width: 5px !important; }
-
 .w-10px{ width: 10px !important; }
-
 .w-15px{ width: 15px !important; }
-
 .w-20px{ width: 20px !important; }
-
 .w-25px{ width: 25px !important; }
-
 .w-30px{ width: 30px !important; }
-
 .w-35px{ width: 35px !important; }
-
 .w-40px{ width: 40px !important; }
-
 .w-45px{ width: 45px !important; }
-
 .w-60px{ width: 60px !important; }
-
 .w-65px{ width: 65px !important; }
-
 .w-70px{ width: 70px !important; }
-
 .w-75px{ width: 75px !important; }
-
 .w-80px{ width: 80px !important; }
-
 .w-85px{ width: 85px !important; }
-
 .w-90px{ width: 90px !important; }
-
 .w-95px{ width: 95px !important; }
-
 .w-100px{ width: 100px !important; }
-
-.w-px-110{ width: 110px !important; }
-
+.w-110px{ width: 110px !important; }
 .w-120px{ width: 120px !important; }
-
 .w-135px{ width: 135px !important; }
-
 .w-200px{ width: 200px !important; }
-
 .w-250px{ width: 250px !important; }
-
 .w-300px{ width: 300px !important; }
-
 .w-350px{ width: 350px !important; }
-
 .w-600px{ width: 600px !important; }
 
 .w-xy-20px{  width: 20px !important;  height: 20px !important; }
@@ -391,85 +357,48 @@ table th {
 /*  ══════════════════════════════════════════ - H E I G H T   S I Z E - ══════════════════════════════════════════ */
 
 .h-10px{ height: 10px !important; }
-
 .h-15px{ height: 15px !important; }
-
 .h-20px{ height: 20px !important; }
-
 .h-30px{ height: 30px !important; }
-
 .h-40px{ height: 40px !important; }
-
+.h-45px{ height: 45px !important; }
 .h-50px{ height: 50px !important; }
-
 .h-60px{ height: 60px !important; }
-
 .h-70px{ height: 70px !important; }
-
 .h-80px{ height: 80px !important; }
-
 .h-90px{ height: 90px !important; }
-
 .h-100px{ height: 100px !important; }
-
 .h-150px{ height: 150px !important; }
-
 .h-200px{ height: 200px !important; }
-
 .h-250px{ height: 250px !important; }
-
 .h-300px{ height: 300px !important; }
-
 .h-350px{ height: 350px !important; }
-
 .h-400px{ height: 400px !important; }
-
 .h-500px{ height: 500px !important; }
-
 .h-600px{ height: 600px !important; }
-
 .h-700px{ height: 700px !important; }
 
 /*  ══════════════════════════════════════════ - F O N T   S I Z E - ══════════════════════════════════════════ */
 
 .font-size-1px{ font-size: 1px; }
-
 .font-size-2px{ font-size: 2px; }
-
 .font-size-3px{ font-size: 3px; }
-
 .font-size-4px{ font-size: 4px; }
-
 .font-size-5px{ font-size: 5px; }
-
 .font-size-6px{ font-size: 6px; }
-
 .font-size-7px{ font-size: 7px; }
-
 .font-size-8px{ font-size: 8px; }
-
 .font-size-9px{ font-size: 9px; }
-
 .font-size-10px{ font-size: 10px; }
-
 .font-size-11px{ font-size: 11px; }
-
 .font-size-12px{ font-size: 12px; }
-
 .font-size-13px{ font-size: 13px; }
-
 .font-size-14px{ font-size: 14px; }
-
 .font-size-15px{ font-size: 15px; }
-
 .font-size-16px{ font-size: 16px; }
-
 .font-size-17px{ font-size: 17px; }
-
 .font-size-18px{ font-size: 18px; }
-
 .font-size-19px{ font-size: 19px; }
-
 .font-size-20px{ font-size: 20px; }
 
 /*  ══════════════════════════════════════════ - B O R D E R   R A D I U S - ══════════════════════════════════════════ */
@@ -539,8 +468,8 @@ table th {
 }
 
 /* input-group-append con SELECT2 */
-.input-group > .select2-container--bootstrap {
-  width: auto;
+/* .input-group > .select2-container--bootstrap .elect2-container--below {
+  width: 90% !important;
   flex: 1 1 auto;
 }
 
@@ -548,48 +477,31 @@ table th {
   height: 100%;
   line-height: inherit;
   padding: 0.5rem 1rem;
-}
+  width: 90% !important;
+} */
 
 /*  ══════════════════════════════════════════ - @ M E D I A  - M I N - ══════════════════════════════════════════ */
 /* min-width = como minimo ─|──────── */
 @media (min-width: 576px) {
-  .w-sm-100{
-    width: 100% !important;
-  }
 
-  .w-sm-25{
-    width: 25% !important;
-  }
+  .show-min-width-576px{ display: inline-block !important; }
+
+  .hide-min-width-576px{ display: none !important;  }
+
 }
 
 /* min-width = como minimo ─|──────── */
 @media (min-width: 768px) {
-  .w-md-100{
-    width: 100% !important;
-  }
 
-  .w-md-25{
-    width: 25% !important;
-  }
+  
 }
 
 /* min-width = como minimo ─|──────── */
 @media (min-width: 992px) {
 
-  .w-lg-100{
-    width: 100% !important;
-  }
+  .borde-arriba-naranja{ border-top: 3px solid #fd4604; }
 
-  .w-lg-25{
-    width: 25% !important;
-  }
-
-  .borde-arriba-naranja{
-    border-top: 3px solid #fd4604;
-  }
-  .borde-arriba-negro{
-    border-top: 3px solid #1a221c;
-  }
+  .borde-arriba-negro{ border-top: 3px solid #1a221c; }
 }
 
 /* min-width = como minimo ─|──────── */
@@ -599,41 +511,22 @@ table th {
 
 /* min-width = como minimo ─|──────── */
 @media (min-width: 1200px) {
-  .w-xl-100{
-    width: 100% !important;
-  }
 
-  .w-xl-25{
-    width: 25% !important;
-  }
-
-  .show-min-width-1200px{
-    display: inline-block !important;
-  }
+  .show-min-width-1200px{ display: inline-block !important; }
 }
 
-/*  ══════════════════════════════════════════ - @ M E D I A  - M I N - ══════════════════════════════════════════ */
+/*  ══════════════════════════════════════════ - @ M E D I A  - M A X - ══════════════════════════════════════════ */
 
 /* max-width = como maximo ────────|─ */
 @media (max-width: 575.98px) {
-  .w-sm-100{
-    width: 100% !important;
-  }
 
-  .w-sm-25{
-    width: 25% !important;
-  }
+  
 }
 
 /* max-width = como maximo  ────────| */
 @media (max-width: 576px) {
-  .w-sm-100{
-    width: 100% !important;
-  }
-
-  .w-sm-25{
-    width: 25% !important;
-  }
+ 
+  .show-max-width-576px{ display: inline-block !important; }
 }
 /* max-width = como maximo  ────────| */
 @media (max-width: 767.98px) {
@@ -642,18 +535,13 @@ table th {
 
 /* max-width = como maximo ────────| */
 @media (max-width: 991.98px) {
-  .borde-arriba-verde{
-    border-top: 3px solid #109e38;
-  }
-
+  .borde-arriba-verde{ border-top: 3px solid #109e38; }
   
 }
 
 /* max-width = como maximo ────────| */
 @media (max-width: 1080px) {
-  .hide-max-width-1080px{
-    display: none !important;
-  }
+  .hide-max-width-1080px{ display: none !important; }
 }
 
 /* max-width = como maximo  ────────| */

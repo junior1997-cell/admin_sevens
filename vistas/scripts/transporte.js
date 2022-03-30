@@ -324,7 +324,7 @@ function listar() {
         }
       },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -368,7 +368,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
 
   
- // $(".tooltip").hide();
+ // $(".tooltip").removeClass('show');
 }
 //Función para guardar o editar
 

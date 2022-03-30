@@ -46,7 +46,7 @@ function listar() {
 
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -122,7 +122,7 @@ function modal_comprobante(comprobante,ruta, proveedor) {
     </div>
   </div>`);
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 
 function desccargar_zip_recibos_honorarios() {   

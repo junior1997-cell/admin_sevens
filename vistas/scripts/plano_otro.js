@@ -234,7 +234,7 @@ function listar_carpeta(nube_idproyecto) {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -286,7 +286,7 @@ function listar_plano(nombre, id_carpeta) {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -895,7 +895,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
     // $('#verdoc1').html('<embed src="../dist/pdf/'+doc+'" type="application/pdf" width="100%" height="200px" />');
   }
 
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 }
 
 init();

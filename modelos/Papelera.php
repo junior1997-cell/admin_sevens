@@ -14,7 +14,7 @@ class Papelera
   {
     $data = Array();   
 
-    $sql_1 = "SELECT idbancos,  nombre, alias, created_at, updated_at, estado FROM bancos WHERE estado = '0' AND estado_delete= '1';";
+    $sql_1 = "SELECT idbancos,  nombre, formato_cta, formato_cci, formato_detracciones, alias, created_at, updated_at, estado FROM bancos WHERE estado = '0' AND estado_delete= '1';";
     $banco = ejecutarConsultaArray($sql_1);
 
     if (!empty($banco)) {
@@ -24,7 +24,11 @@ class Papelera
           'nombre_id_tabla' => 'idbancos',
           'id_tabla'        => $value1['idbancos'],
           'modulo'          => 'Bancos',
-          'nombre_archivo'  => $value1['nombre'] .' - ' . $value1['alias'],
+          'nombre_archivo'  => '<b>Banco: </b>'.$value1['nombre'].'<br>'. 
+          '<b>Alias: </b>'.$value1['alias'].'<br>'.
+          '<b>Formato Cta: </b>'.$value1['formato_cta'].'<br>'. 
+          '<b>Formato Cci: </b>'.$value1['formato_cci'].'<br>'. 
+          '<b>Formato Dtrac: </b>'.$value1['formato_detracciones'].'<br>' ,
           'descripcion'     => '- - -',
           'nombre_proyecto'  => 'General',
           'created_at'      => $value1['created_at'],
@@ -111,7 +115,8 @@ class Papelera
       }
     }
 
-    $sql_6 = "SELECT cx.idcomida_extra, cx.tipo_comprobante, cx.numero_comprobante, cx.descripcion, cx.estado, cx.created_at, cx.updated_at, p.nombre_codigo
+    $sql_6 = "SELECT cx.idcomida_extra, cx.tipo_comprobante, cx.razon_social, cx.costo_parcial, cx.numero_comprobante, cx.descripcion, cx.estado, 
+    cx.created_at, cx.updated_at, p.nombre_codigo
     FROM comida_extra as cx, proyecto as p
     WHERE cx.estado = '0' AND cx.estado_delete = '1' AND cx.idproyecto ='$nube_idproyecto' AND  cx.idproyecto=p.idproyecto;";
     $comida_extra = ejecutarConsultaArray($sql_6);
@@ -123,7 +128,9 @@ class Papelera
           'nombre_id_tabla' => 'idcomida_extra',
           'id_tabla'        => $value6['idcomida_extra'],
           'modulo'          => 'Comida Extras',
-          'nombre_archivo'  => $value6['tipo_comprobante'] . ': ' . $value6['numero_comprobante'],
+          'nombre_archivo'  => '<b>'.$value6['tipo_comprobante'].': </b>'.$value6['numero_comprobante'].'<br>'.
+          '<b>Monto: </b>'.number_format($value6['costo_parcial'], 2, '.', ',').'<br>' .
+          '<b>Proveedor: </b>'.$value6['razon_social'].'<br>',
           'descripcion'     => $value6['descripcion'],
           'nombre_proyecto'  => $value6['nombre_codigo'],
           'created_at'      => $value6['created_at'],
@@ -152,9 +159,11 @@ class Papelera
       }
     }
 
-    $sql_8 = "SELECT cpp.idcompra_proyecto, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.descripcion,  cpp.estado, cpp.created_at, cpp.updated_at,p.nombre_codigo
-    FROM compra_por_proyecto as cpp, proyecto as p
-    WHERE cpp.estado = '0' AND cpp.estado_delete = '1' AND cpp.idproyecto = '$nube_idproyecto' AND  cpp.idproyecto=p.idproyecto";
+    $sql_8 = "SELECT cpp.idcompra_proyecto, cpp.total, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.descripcion, cpp.estado, cpp.created_at, 
+    cpp.updated_at, p.nombre_codigo, prov.razon_social
+    FROM compra_por_proyecto as cpp, proyecto as p, proveedor AS prov
+    WHERE cpp.idproyecto=p.idproyecto AND cpp.idproveedor = prov.idproveedor  AND cpp.estado = '0' AND cpp.estado_delete = '1' 
+    AND cpp.idproyecto = '$nube_idproyecto';";
     $compra_por_proyecto = ejecutarConsultaArray($sql_8);
 
     if (!empty($compra_por_proyecto)) {
@@ -164,7 +173,9 @@ class Papelera
           'nombre_id_tabla' => 'idcompra_proyecto',
           'modulo'          => 'Compras',
           'id_tabla'        => $value8['idcompra_proyecto'],
-          'nombre_archivo'  => $value8['tipo_comprobante'] . ': ' . $value8['serie_comprobante'],
+          'nombre_archivo'  => '<b>'.$value8['tipo_comprobante'].': </b>'.$value8['serie_comprobante'].'<br>'.
+          '<b>Monto: </b>'.number_format($value8['total'], 2, '.', ',').'<br>'.
+          '<b>Proveedor: </b>'.$value8['razon_social'].'<br>' ,
           'descripcion'     => $value8['descripcion'],
           'nombre_proyecto'  => $value8['nombre_codigo'],
           'created_at'      => $value8['created_at'],
@@ -173,10 +184,11 @@ class Papelera
       }
     }
 
-    $sql_9 = "SELECT f.idfactura, f.codigo, f.descripcion, f.estado, f.created_at, f.updated_at,p.nombre_codigo
+    $sql_9 = "SELECT f.idfactura, m.nombre AS maquina, f.codigo, f.tipo_comprobante, f.codigo, f.monto, f.descripcion, f.estado, 
+    f.created_at, f.updated_at, p.nombre_codigo
     FROM factura AS f, maquinaria AS m, proyecto AS p
-    WHERE f.idmaquinaria = m.idmaquinaria AND m.tipo = '1' AND f.estado = '0' AND f.estado_delete = '1' AND 
-    f.idproyecto = '$nube_idproyecto' AND  f.idproyecto=p.idproyecto;";
+    WHERE f.idmaquinaria = m.idmaquinaria AND f.idproyecto=p.idproyecto AND m.tipo = '1' AND f.estado = '0' AND f.estado_delete = '1'
+    AND f.idproyecto = '$nube_idproyecto';";
     $factura_m = ejecutarConsultaArray($sql_9);
 
     if (!empty($factura_m)) {
@@ -186,7 +198,9 @@ class Papelera
           'nombre_id_tabla' => 'idfactura',
           'modulo'          => 'Factura Servicio Maquina',
           'id_tabla'        => $value9['idfactura'],
-          'nombre_archivo'  => 'Factura: ' . $value9['codigo'],
+          'nombre_archivo'  => '<b>'.$value9['tipo_comprobante'].': </b>'.$value9['codigo'].'<br>'.
+          '<b>Monto: </b>'.number_format($value9['monto'], 2, '.', ',').'<br>'.
+          '<b>Máquina: </b>'.$value9['maquina'].'<br>' ,
           'descripcion'     => $value9['descripcion'],
           'nombre_proyecto'  => $value9['nombre_codigo'],
           'created_at'      => $value9['created_at'],
@@ -195,7 +209,8 @@ class Papelera
       }
     }
 
-    $sql_10 = "SELECT f.idfactura, f.codigo, f.descripcion, f.estado, f.created_at, f.updated_at,p.nombre_codigo
+    $sql_10 = "SELECT f.idfactura, m.nombre AS maquina, f.codigo, f.tipo_comprobante, f.codigo, f.monto, f.descripcion, f.estado, 
+    f.created_at, f.updated_at, p.nombre_codigo
     FROM factura AS f, maquinaria AS m, proyecto AS p
     WHERE f.idmaquinaria = m.idmaquinaria AND m.tipo = '2' AND f.estado = '0' AND f.estado_delete = '1' AND 
     f.idproyecto = '$nube_idproyecto' AND  f.idproyecto=p.idproyecto;";
@@ -209,7 +224,9 @@ class Papelera
           'nombre_id_tabla' => 'idfactura',
           'modulo'          => 'Factura Servicio Equipo',
           'id_tabla'        => $value10['idfactura'],
-          'nombre_archivo'  => 'Factura: ' . $value10['codigo'],
+          'nombre_archivo'  => '<b>'.$value10['tipo_comprobante'].': </b>'.$value10['codigo'].'<br>'.
+          '<b>Monto: </b>'.number_format($value10['monto'], 2, '.', ',').'<br>'.
+          '<b>Máquina: </b>'.$value10['maquina'].'<br>' ,
           'descripcion'     => $value10['descripcion'],
           'nombre_proyecto'  => $value10['nombre_codigo'],
           'created_at'      => $value10['created_at'],
@@ -218,7 +235,8 @@ class Papelera
       }
     }
 
-    $sql_11 = "SELECT fb.idfactura_break, fb.tipo_comprobante, fb.nro_comprobante, fb.descripcion, fb.estado, fb.created_at, fb.updated_at,p.nombre_codigo
+    $sql_11 = "SELECT fb.idfactura_break, fb.tipo_comprobante, fb.nro_comprobante, fb.descripcion, fb.estado, fb.created_at, 
+    fb.updated_at, p.nombre_codigo, fb.monto, sb.numero_semana, sb.fecha_inicial, sb.fecha_final
     FROM factura_break AS fb, semana_break AS sb, proyecto AS p
     WHERE fb.idsemana_break = sb.idsemana_break AND fb.estado = '0' AND fb.estado_delete = '1' AND sb.idproyecto = '$nube_idproyecto'  AND sb.idproyecto = p.idproyecto";
     $factura_break = ejecutarConsultaArray($sql_11);
@@ -230,7 +248,10 @@ class Papelera
           'nombre_id_tabla' => 'idfactura_break',
           'modulo'          => 'Breack',
           'id_tabla'        => $value11['idfactura_break'],
-          'nombre_archivo'  => $value11['tipo_comprobante'] .': ' . $value11['nro_comprobante'],
+          'nombre_archivo'  => '<b>'.$value11['tipo_comprobante'].': </b>'.$value11['nro_comprobante'].'<br>'.
+          '<b>Monto: </b>'.number_format($value11['monto'], 2, '.', ',').'<br>'.
+          '<b>Semana: </b>'. $value11['fecha_inicial'].' - '.$value11['fecha_final'].'<br>'.  
+          '<b>Num: </b>'.$value11['numero_semana'].'<br>',
           'descripcion'     => $value11['descripcion'],
           'nombre_proyecto'  => $value11['nombre_codigo'],
           'created_at'      => $value11['created_at'],
@@ -239,9 +260,10 @@ class Papelera
       }
     }
 
-    $sql_12 = "SELECT fp.idfactura_pension, fp.tipo_comprobante, fp.nro_comprobante, fp.descripcion, fp.estado,  fp.created_at, fp.updated_at, proy.nombre_codigo
-    FROM factura_pension AS fp, pension AS p, proyecto AS proy
-    WHERE fp.idpension = p.idpension AND fp.estado = '0' AND fp.estado_delete = '1' AND p.idproyecto = '$nube_idproyecto' AND p.idproyecto = proy.idproyecto;";
+    $sql_12 = "SELECT fp.idfactura_pension, fp.tipo_comprobante, fp.nro_comprobante, fp.descripcion, fp.estado,  fp.created_at, 
+    fp.updated_at, proy.nombre_codigo, prov.razon_social, fp.monto
+    FROM factura_pension AS fp, pension AS p, proyecto AS proy, proveedor AS prov
+    WHERE fp.idpension = p.idpension  AND p.idproyecto = proy.idproyecto AND p.idproveedor = prov.idproveedor AND fp.estado = '0' AND fp.estado_delete = '1' AND p.idproyecto = '$nube_idproyecto'  ;";
     $factura_pension = ejecutarConsultaArray($sql_12);
 
     if (!empty($factura_pension)) {
@@ -251,7 +273,9 @@ class Papelera
           'nombre_id_tabla' => 'idfactura_pension',
           'modulo'          => 'Pensión',
           'id_tabla'        => $value12['idfactura_pension'],
-          'nombre_archivo'  => $value12['tipo_comprobante'] .': ' . $value12['nro_comprobante'],
+          'nombre_archivo'  => '<b>'.$value12['tipo_comprobante'].': </b>'.$value12['nro_comprobante'].'<br>'.
+          '<b>Monto: </b>'.number_format($value12['monto'], 2, '.', ',').'<br>' .
+          '<b>Proveedor: </b>'. $value12['razon_social']. '<br>' ,
           'descripcion'     => $value12['descripcion'],
           'nombre_proyecto'  => $value12['nombre_codigo'],
           'created_at'      => $value12['created_at'],
@@ -260,9 +284,10 @@ class Papelera
       }
     }
 
-    $sql_13 = "SELECT h.idhospedaje, h.tipo_comprobante, h.numero_comprobante, h.descripcion, h.estado, h.estado_delete, h.created_at, h.updated_at, p.nombre_codigo
-    FROM hospedaje as h, proyecto AS p 
-    WHERE h.estado = '0' AND h.estado_delete = '1' AND h.idproyecto = '$nube_idproyecto' AND h.idproyecto = p.idproyecto;";
+    $sql_13 = "SELECT h.idhospedaje, h.tipo_comprobante, h.numero_comprobante, h.razon_social, h.precio_parcial, h.descripcion, h.estado, 
+    h.estado_delete, h.created_at, h.updated_at, p.nombre_codigo
+    FROM hospedaje as h, proyecto AS p
+    WHERE  h.idproyecto = p.idproyecto AND h.estado = '0' AND h.estado_delete = '1' AND h.idproyecto = '$nube_idproyecto' ;";
     $hospedaje = ejecutarConsultaArray($sql_13);
 
     if (!empty($hospedaje)) {
@@ -272,7 +297,9 @@ class Papelera
           'nombre_id_tabla' => 'idhospedaje',
           'modulo'          => 'Hospedaje',
           'id_tabla'        => $value13['idhospedaje'],
-          'nombre_archivo'  => $value13['tipo_comprobante'] .': ' . $value13['numero_comprobante'],
+          'nombre_archivo'  => '<b>'.$value13['tipo_comprobante'].': </b>'.$value13['numero_comprobante'].'<br>'.
+          '<b>Monto: </b>'.number_format($value13['precio_parcial'], 2, '.', ',').'<br>'. 
+          '<b>Proveedor: </b>'. $value13['razon_social']. '<br>' ,
           'descripcion'     => $value13['descripcion'],
           'nombre_proyecto'  => $value13['nombre_codigo'],
           'created_at'      => $value13['created_at'],
@@ -281,7 +308,7 @@ class Papelera
       }
     }
 
-    $sql_14 = "SELECT m.idmaquinaria,  m.nombre, p.razon_social AS proveedor, m.tipo, m.estado, m.created_at, m.updated_at
+    $sql_14 = "SELECT m.idmaquinaria,  m.nombre, p.razon_social AS proveedor, m.codigo_maquina, m.tipo, m.estado, m.created_at, m.updated_at
     FROM maquinaria AS m, proveedor AS p
     WHERE m.idproveedor = p.idproveedor AND m.estado = '0' AND m.estado_delete = '1';";
     $maquinaria = ejecutarConsultaArray($sql_14);
@@ -293,9 +320,11 @@ class Papelera
           'nombre_id_tabla' => 'idmaquinaria',
           'modulo'          => 'Maquinaria y Equipos',
           'id_tabla'        => $value14['idmaquinaria'],
-          'nombre_archivo'  => $value14['nombre'] . ' ─ ' .  ($value14['tipo'] == '1' ? 'Maquina' : 'Equipo' ),
-          'descripcion'     => $value14['proveedor'],
-          'nombre_proyecto'  => 'General',
+          'nombre_archivo'  => '<b>'.($value14['tipo'] == '1' ? 'Maquina' : 'Equipo' ) .': </b>'. $value14['nombre']. '<br>'.
+          '<b>Modelo: </b>'.$value14['codigo_maquina'].'<br>'.
+          '<b>Proveedor: </b>'.$value14['proveedor'].'<br>' ,
+          'descripcion'     =>'- - -',
+          'nombre_proyecto' => 'General',
           'created_at'      => $value14['created_at'],
           'updated_at'      => $value14['updated_at'],
         );
@@ -331,7 +360,7 @@ class Papelera
         $data[] = array(
           'nombre_tabla'    => 'otro_servicio',
           'nombre_id_tabla' => 'idotro_servicio',
-          'modulo'          => 'Otros Gastos',
+          'modulo'          => 'Otros Servicio',
           'id_tabla'        => $value16['idotro_servicio'],
           'nombre_archivo'  => $value16['tipo_comprobante'] . ': ' . $value16['numero_comprobante'] ,
           'descripcion'     => $value16['descripcion'],
@@ -342,7 +371,8 @@ class Papelera
       }
     }
 
-    $sql_17 = "SELECT pqso.idpagos_q_s_obrero, pqso.monto_deposito, t.nombres AS trabajador, pqso.descripcion, pqso.estado,  pqso.created_at, pqso.updated_at, p.nombre_codigo 
+    $sql_17 = "SELECT pqso.idpagos_q_s_obrero, pqso.monto_deposito, t.nombres AS trabajador, pqso.descripcion, pqso.estado,  pqso.created_at, 
+    pqso.updated_at, p.nombre_codigo , p.fecha_pago_obrero, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin
     FROM pagos_q_s_obrero AS pqso, resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador AS t, proyecto AS p 
     WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador AND
     tpp.idproyecto = '$nube_idproyecto' AND pqso.estado = '0' AND pqso.estado_delete = '1' AND tpp.idproyecto = p.idproyecto; ";
@@ -355,7 +385,10 @@ class Papelera
           'nombre_id_tabla' => 'idpagos_q_s_obrero',
           'modulo'          => 'Pago Obrero',
           'id_tabla'        => $value17['idpagos_q_s_obrero'],
-          'nombre_archivo'  => $value17['trabajador'] . ' ─ S/.' . number_format($value17['monto_deposito'], 2, '.', ','),
+          'nombre_archivo'  => '<b>Trabajador: </b>'. $value17['trabajador']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value17['monto_deposito'], 2, '.', ',').'<br>'.
+          '<b>'.$value17['fecha_pago_obrero'].': </b>'.$value17['fecha_q_s_inicio'] . ' - ' . $value17['fecha_q_s_fin'] . '<br>'.
+          '<b>Num: </b>'.$value17['numero_q_s']. '<br>',
           'descripcion'     => $value17['descripcion'],
           'nombre_proyecto'  => $value17['nombre_codigo'],
           'created_at'      => $value17['created_at'],
@@ -364,7 +397,8 @@ class Papelera
       }
     }
 
-    $sql_18 = "SELECT pxma.idpagos_x_mes_administrador, t.nombres AS trabajador, pxma.monto, pxma.descripcion, pxma.estado, pxma.created_at, pxma.updated_at, p.nombre_codigo 
+    $sql_18 = "SELECT pxma.idpagos_x_mes_administrador, t.nombres AS trabajador, pxma.monto, pxma.descripcion, pxma.estado, pxma.created_at, 
+    pxma.updated_at, p.nombre_codigo, fmpa.fecha_inicial, fmpa.fecha_final, fmpa.nombre_mes 
     FROM pagos_x_mes_administrador AS pxma, fechas_mes_pagos_administrador AS fmpa, trabajador_por_proyecto AS tpp, trabajador AS t, proyecto AS p 
     WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 
     AND tpp.idtrabajador = t.idtrabajador AND pxma.estado = '0' AND pxma.estado_delete = '1' AND tpp.idproyecto = '$nube_idproyecto' AND tpp.idproyecto = p.idproyecto;";
@@ -377,16 +411,19 @@ class Papelera
           'nombre_id_tabla' => 'idpagos_x_mes_administrador',
           'modulo'          => 'Pago Administrador',
           'id_tabla'        => $value18['idpagos_x_mes_administrador'],
-          'nombre_archivo'  => $value18['trabajador'] . ' ─ S/.' .  number_format($value18['monto'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Trabajador: </b>'. $value18['trabajador']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value18['monto'], 2, '.', ',').'<br>'.
+          '<b>Fechas: </b>'.$value18['fecha_inicial'] . ' - ' . $value18['fecha_final'] . '<br>'.
+          '<b>Mes: </b>'.$value18['nombre_mes']. '<br>',
           'descripcion'     => $value18['descripcion'],
-          'nombre_proyecto'  => $value18['nombre_codigo'],
+          'nombre_proyecto' => $value18['nombre_codigo'],
           'created_at'      => $value18['created_at'],
           'updated_at'      => $value18['updated_at'],
         );
       }
     }
 
-    $sql_19 = "SELECT idpago_af_general,beneficiario,monto,descripcion,created_at,updated_at
+    $sql_19 = "SELECT idpago_af_general, beneficiario, monto, descripcion, fecha_pago, created_at, updated_at
     FROM pago_af_general WHERE  estado='0' AND estado_delete='1'";
     $pago_af_general = ejecutarConsultaArray($sql_19);
 
@@ -397,7 +434,10 @@ class Papelera
           'nombre_id_tabla' => 'idpago_af_general',
           'modulo'          => 'Pago activo general',
           'id_tabla'        => $value19['idpago_af_general'],
-          'nombre_archivo'  => $value19['beneficiario'] . ' ─ S/.' . number_format($value19['monto'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Beneficiario: </b>'. $value19['beneficiario']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value19['monto'], 2, '.', ',').'<br>'.
+          '<b>Fecha: </b>'.$value19['fecha_pago'] . '<br>'.
+          '<b>'.$value19['tipo_pago']. ': </b>'.$value19['numero_operacion']. '<br>',
           'descripcion'     => $value19['descripcion'],
           'nombre_proyecto'  => 'General',
           'created_at'      => $value19['created_at'],
@@ -406,7 +446,8 @@ class Papelera
       }
     }
 
-    $sql_20 = "SELECT pc.idpago_compras, pc.beneficiario, pc.descripcion, pc.monto, pc.created_at, pc.updated_at, p.nombre_codigo
+    $sql_20 = "SELECT pc.idpago_compras, pc.beneficiario, pc.descripcion, pc.monto, pc.created_at, pc.updated_at, p.nombre_codigo, pc.fecha_pago,
+    pc.tipo_pago, pc.numero_operacion
     FROM pago_compras as pc, compra_por_proyecto as cpp, proyecto as p
     WHERE pc.estado='0' AND pc.estado_delete='1' AND cpp.idproyecto='$nube_idproyecto' AND pc.idcompra_proyecto=cpp.idcompra_proyecto AND cpp.idproyecto=p.idproyecto";
 
@@ -419,7 +460,10 @@ class Papelera
           'nombre_id_tabla' => 'idpago_compras',
           'modulo'          => 'Pago compras',
           'id_tabla'        => $value20['idpago_compras'],
-          'nombre_archivo'  => $value20['beneficiario'] . ' ─ S/.' . number_format($value20['monto'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Beneficiario: </b>'. $value20['beneficiario']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value20['monto'], 2, '.', ',').'<br>'.
+          '<b>Fecha: </b>'.$value20['fecha_pago'] . '<br>'.
+          '<b>'.$value20['tipo_pago']. ': </b>'.$value20['numero_operacion']. '<br>',
           'descripcion'     => $value20['descripcion'],
           'nombre_proyecto'  => $value20['nombre_codigo'],
           'created_at'      => $value20['created_at'],
@@ -428,7 +472,8 @@ class Papelera
       }
     }
     
-    $sql21 = "SELECT ps.idpago_servicio, ps.beneficiario, ps.descripcion, ps.monto, ps.created_at, ps.updated_at, p.nombre_codigo
+    $sql21 = "SELECT ps.idpago_servicio, ps.beneficiario, ps.descripcion, ps.monto, ps.fecha_pago, ps.tipo_pago, ps.numero_operacion, 
+    ps.created_at, ps.updated_at, p.nombre_codigo
     FROM pago_servicio AS ps, maquinaria AS m, proyecto AS p 
     WHERE ps.estado='0' AND ps.estado_delete=1 AND  m.idmaquinaria=ps.id_maquinaria  AND m.tipo=1 AND ps.idproyecto=p.idproyecto AND ps.idproyecto='$nube_idproyecto'";
 
@@ -441,7 +486,10 @@ class Papelera
           'nombre_id_tabla' => 'idpago_servicio',
           'modulo'          => 'Pago Servicio Maquinaria',
           'id_tabla'        => $value21['idpago_servicio'],
-          'nombre_archivo'  => $value21['beneficiario'] . ' ─ S/.' . number_format($value21['monto'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Beneficiario: </b>'. $value21['beneficiario']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value21['monto'], 2, '.', ',').'<br>'.
+          '<b>Fecha: </b>'.$value21['fecha_pago'] . '<br>'.
+          '<b>'.$value21['tipo_pago']. ': </b>'.$value21['numero_operacion']. '<br>',
           'descripcion'     => $value21['descripcion'],
           'nombre_proyecto'  => $value21['nombre_codigo'],
           'created_at'      => $value21['created_at'],
@@ -450,7 +498,8 @@ class Papelera
       }
     }
 
-    $sql22 = "SELECT ps.idpago_servicio, ps.beneficiario, ps.descripcion, ps.monto, ps.created_at, ps.updated_at, p.nombre_codigo
+    $sql22 = "SELECT ps.idpago_servicio, ps.beneficiario, ps.descripcion, ps.monto, ps.fecha_pago, ps.tipo_pago, ps.numero_operacion, 
+     ps.created_at,  ps.updated_at, p.nombre_codigo
     FROM pago_servicio AS ps, maquinaria AS m, proyecto AS p 
     WHERE ps.estado='0' AND ps.estado_delete=1 AND  m.idmaquinaria=ps.id_maquinaria  AND m.tipo=2 AND ps.idproyecto=p.idproyecto AND ps.idproyecto='$nube_idproyecto'";
 
@@ -463,7 +512,10 @@ class Papelera
           'nombre_id_tabla' => 'idpago_servicio',
           'modulo'          => 'Pago Servicio Equipo',
           'id_tabla'        => $value22['idpago_servicio'],
-          'nombre_archivo'  => $value22['beneficiario'] . ' ─ S/.' . number_format($value22['monto'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Beneficiario: </b>'. $value22['beneficiario']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value22['monto'], 2, '.', ',').'<br>'.
+          '<b>Fecha: </b>'.$value22['fecha_pago'] . '<br>'.
+          '<b>'.$value22['tipo_pago']. ': </b>'.$value22['numero_operacion']. '<br>',
           'descripcion'     => $value22['descripcion'],
           'nombre_proyecto'  => $value22['nombre_codigo'],
           'created_at'      => $value22['created_at'],
@@ -472,7 +524,8 @@ class Papelera
       }
     }
 
-    $sql23 = "SELECT ps.idpago_subcontrato, ps.beneficiario, ps.monto, ps.descripcion, ps.created_at, ps.updated_at, p.nombre_codigo
+    $sql23 = "SELECT ps.idpago_subcontrato, ps.beneficiario, ps.monto, ps.descripcion,  ps.fecha_pago,  ps.tipo_pago,  ps.numero_operacion,
+     ps.created_at, ps.updated_at, p.nombre_codigo
     FROM pago_subcontrato AS ps, subcontrato as s, proyecto as p
     WHERE ps.estado='0' AND ps.estado_delete='1' AND ps.idsubcontrato=s.idsubcontrato AND s.idproyecto=p.idproyecto AND s.idproyecto='$nube_idproyecto'";
 
@@ -485,7 +538,10 @@ class Papelera
           'nombre_id_tabla' => 'idpago_subcontrato',
           'modulo'          => 'Pago sub contrato',
           'id_tabla'        => $value23['idpago_subcontrato'],
-          'nombre_archivo'  => $value23['beneficiario'] . ' ─ S/.' . number_format($value23['monto'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Beneficiario: </b>'. $value23['beneficiario']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value23['monto'], 2, '.', ',').'<br>'.
+          '<b>Fecha: </b>'.$value23['fecha_pago'] . '<br>'.
+          '<b>'.$value23['tipo_pago']. ': </b>'.$value23['numero_operacion']. '<br>',
           'descripcion'     => $value23['descripcion'],
           'nombre_proyecto'  => $value23['nombre_codigo'],
           'created_at'      => $value23['created_at'],
@@ -494,7 +550,8 @@ class Papelera
       }
     }
     
-    $sql24 = "SELECT ps.idplanilla_seguro, ps.tipo_comprobante, ps.numero_comprobante, ps.costo_parcial, ps.created_at, ps.updated_at, p.nombre_codigo
+    $sql24 = "SELECT ps.idplanilla_seguro, ps.tipo_comprobante, ps.numero_comprobante, ps.costo_parcial, ps.fecha_p_s,
+    ps.created_at, ps.updated_at, p.nombre_codigo
     FROM planilla_seguro as ps, proyecto as p
     WHERE ps.idproyecto=p.idproyecto AND ps.estado='0' AND ps.estado_delete='1' AND ps.idproyecto='$nube_idproyecto'";
 
@@ -507,7 +564,9 @@ class Papelera
           'nombre_id_tabla' => 'idplanilla_seguro',
           'modulo'          => 'Planillas y seguros',
           'id_tabla'        => $value24['idplanilla_seguro'],
-          'nombre_archivo'  => $value24['tipo_comprobante'] .' : ' . $value24['numero_comprobante'] .' ─ S/. ' .number_format($value24['costo_parcial'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>'.$value24['tipo_comprobante']. ': </b>'.$value24['numero_comprobante']. '<br>'.
+          '<b>Monto pago: </b>'.number_format($value24['costo_parcial'], 2, '.', ',').'<br>'.
+          '<b>Fecha: </b>'.$value24['fecha_p_s'] . '<br>',
           'descripcion'     => '- - -',
           'nombre_proyecto'  => $value24['nombre_codigo'],
           'created_at'      => $value24['created_at'],
@@ -529,7 +588,8 @@ class Papelera
           'nombre_id_tabla' => 'idplano_otro',
           'modulo'          => 'Planos y otros',
           'id_tabla'        => $value25['idplano_otro'],
-          'nombre_archivo'  => $value25['nombre'] .'  -- carpera ' . $value25['nombre_capeta'],
+          'nombre_archivo'  =>   '<b>Archivo: </b>'.$value25['nombre']. '<br>'.
+          '<b>Carpeta: </b>'.$value25['nombre_capeta'].'<br>',
           'descripcion'     => $value25['descripcion'],
           'nombre_proyecto'  => $value25['nombre_codigo'],
           'created_at'      => $value25['created_at'],
@@ -538,8 +598,9 @@ class Papelera
       }
     }
 
-    $sql26 = "SELECT p.idproducto,p.nombre,p.descripcion,p.precio_total,p.created_at,p.updated_at
-    FROM producto as p WHERE p.estado='0' AND p.estado_delete='1' AND p.idcategoria_insumos_af=1";
+    $sql26 = "SELECT p.idproducto, p.nombre, p.descripcion, p.precio_total, p.created_at, p.updated_at, c.nombre_color
+    FROM producto as p, color AS c 
+    WHERE p.idcolor = c.idcolor AND p.estado='0' AND p.estado_delete='1' AND p.idcategoria_insumos_af = '1'";
 
     $producto_insumo = ejecutarConsultaArray($sql26);
 
@@ -550,7 +611,9 @@ class Papelera
           'nombre_id_tabla' => 'idproducto',
           'modulo'          => 'Insumos',
           'id_tabla'        => $value26['idproducto'],
-          'nombre_archivo'  => $value26['nombre'].' ─ S/. ' .number_format($value26['precio_total'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Insumo: </b>'.$value26['nombre']. '<br>'.
+          '<b>Precio: </b>'.number_format($value26['precio_total'], 2, '.', ',').'<br>'.
+          '<b>Color: </b>'.$value26['nombre_color']. '<br>',
           'descripcion'     => $value26['descripcion'],
           'nombre_proyecto'  => 'General',
           'created_at'      => $value26['created_at'],
@@ -559,8 +622,9 @@ class Papelera
       }
     }
 
-    $sql27 = "SELECT p.idproducto,p.nombre,p.descripcion,p.precio_total,p.created_at,p.updated_at
-    FROM producto as p WHERE p.estado='0' AND p.estado_delete='1' AND p.idcategoria_insumos_af!=1";
+    $sql27 = "SELECT p.idproducto, p.nombre, p.descripcion, p.precio_total, p.created_at, p.updated_at, c.nombre_color
+    FROM producto as p, color AS c  
+    WHERE p.idcolor = c.idcolor AND p.estado='0' AND p.estado_delete='1' AND p.idcategoria_insumos_af!=1";
 
     $producto_insumo = ejecutarConsultaArray($sql27);
 
@@ -571,7 +635,9 @@ class Papelera
           'nombre_id_tabla' => 'idproducto',
           'modulo'          => 'Activos fijos',
           'id_tabla'        => $value27['idproducto'],
-          'nombre_archivo'  => $value27['nombre'].' ─ S/. ' .number_format($value27['precio_total'], 2, '.', ',') ,
+          'nombre_archivo'  => '<b>Insumo: </b>'.$value26['nombre']. '<br>'.
+          '<b>Precio: </b>'.number_format($value26['precio_total'], 2, '.', ',').'<br>'.
+          '<b>Color: </b>'.$value26['nombre_color']. '<br>',
           'descripcion'     => $value27['descripcion'],
           'nombre_proyecto'  => 'General',
           'created_at'      => $value27['created_at'],
@@ -940,6 +1006,32 @@ class Papelera
           'nombre_proyecto'  => $value44['nombre_codigo'],
           'created_at'      => $value44['created_at'],
           'updated_at'      => $value44['updated_at'],
+        );
+      }
+    }
+
+    $sql45 = "SELECT prov.razon_social AS proveedor, oi.idotro_ingreso, oi.idproyecto, oi.idproveedor, oi.ruc, oi.razon_social, oi.direccion, oi.tipo_comprobante, 
+    oi.numero_comprobante, oi.forma_de_pago, oi.fecha_i, oi.subtotal, oi.igv, oi.costo_parcial, oi.descripcion, oi.glosa, oi.comprobante, 
+    oi.val_igv, oi.tipo_gravada, oi.estado, oi.estado_delete, oi.created_at, oi.updated_at, p.nombre_codigo
+    FROM otro_ingreso AS oi, proveedor AS prov, proyecto AS p
+    WHERE oi.idproveedor = prov.idproveedor AND oi.idproyecto = p.idproyecto AND oi.estado='0' AND oi.estado_delete ='1' AND oi.idproyecto='$nube_idproyecto'";
+
+    $fechas_mes_pagos_administrador = ejecutarConsultaArray($sql45);
+
+    if (!empty($fechas_mes_pagos_administrador)) {
+      foreach ($fechas_mes_pagos_administrador as $key => $value45) {
+        $data[] = array(
+          'nombre_tabla'    => 'otro_ingreso',
+          'nombre_id_tabla' => 'idotro_ingreso',
+          'modulo'          => 'Otro Ingreso',
+          'id_tabla'        => $value45['idotro_ingreso'],
+          'nombre_archivo'  => '<b>Proveedor: </b>'.$value45['proveedor'].'<br>'. 
+          '<b>'.$value45['tipo_comprobante'].': </b>'.$value45['numero_comprobante'].'<br>'.
+          '<b>Monto: </b>'.$value45['costo_parcial'].'<br>' ,
+          'descripcion'     => '- - - ',
+          'nombre_proyecto'  => $value45['nombre_codigo'],
+          'created_at'      => $value45['created_at'],
+          'updated_at'      => $value45['updated_at'],
         );
       }
     }

@@ -139,7 +139,7 @@ function listar(nube_idproyecto) {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -271,7 +271,7 @@ function listar_botoness(nube_idproyecto) {
           buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
           data: datos,
           "language": {
-            "lengthMenu": "Mostrar : _MENU_ registros",
+            "lengthMenu": "Mostrar: _MENU_ registros",
             "buttons": {
               "copyTitle": "Tabla Copiada",
               "copySuccess": {
@@ -789,7 +789,7 @@ function listar_comprobantes(idsemana_break) {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -1115,7 +1115,7 @@ function ver_modal_comprobante(comprobante) {
     $("#ver_fact_pdf").html('<iframe src="../dist/docs/break/comprobante/' + comprobante + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
     $("#iddescargar").attr("href", "../dist/docs/break/comprobante/" + comprobante);
   }
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 
 //-total Pagos

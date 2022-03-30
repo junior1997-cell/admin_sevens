@@ -30,7 +30,7 @@ function init() {
   $("#banco_prov").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - OTRO INGRESO  ══════════════════════════════════════
-  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true,   });
 
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });
 
@@ -44,7 +44,7 @@ function init() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addDocsImgApplication(e,$("#doc1").attr("id")) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -59,7 +59,7 @@ function doc1_eliminar() {
 //Función limpiar
 function limpiar_form() {
   $("#idotro_ingreso").val("");
-  $("#fecha_g").val("");  
+  $("#fecha_i").val("");  
   $("#nro_comprobante").val("");
   $("#ruc").val("");
   $("#razon_social").val("");
@@ -111,7 +111,7 @@ function tbla_principal() {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    buttons: ["copyHtml5", "excelHtml5", "pdf", "colvis"],
     ajax: {
       url: "../ajax/otro_ingreso.php?op=tbla_principal&idproyecto=" + idproyecto,
       type: "get",
@@ -143,7 +143,7 @@ function tbla_principal() {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -383,86 +383,64 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 }
 
 //ver ficha tecnica
-function modal_comprobante(comprobante) {
+function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comprobante, ruta) {
 
-  var comprobante = comprobante;
-   
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
+  var data_comprobante = ""; var url = ""; var nombre_download = "Comprobante"; 
+  
   $("#modal-ver-comprobante").modal("show");
 
   if (comprobante == '' || comprobante == null) {
-    $(".ver-comprobante").html(`<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
-      <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
-      No hay un documento para mostrar
-    </div>`);
+
+    data_comprobante = `<div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="Alerta" aria-hidden="true">&times;</button><h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>No hay un documento para ver. Edite este registro en su modulo correspondiente.</div>`;
+
   }else{
 
     if ( extrae_extencion(comprobante) == "jpeg" || extrae_extencion(comprobante) == "jpg" || extrae_extencion(comprobante) == "jpe" ||
       extrae_extencion(comprobante) == "jfif" || extrae_extencion(comprobante) == "gif" || extrae_extencion(comprobante) == "png" ||
       extrae_extencion(comprobante) == "tiff" || extrae_extencion(comprobante) == "tif" || extrae_extencion(comprobante) == "webp" ||
       extrae_extencion(comprobante) == "bmp" || extrae_extencion(comprobante) == "svg" ) {
+      
+      url = `../${ruta}${comprobante}`;
 
-      $(".ver-comprobante").html(`<div class="row text-center">                          
-        <!-- Dowload -->
-        <div class="col-md-6 text-center descargar" >
-          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_ingreso/comprobante/${comprobante}" download="Comprobante"> <i class="fas fa-download"></i> Descargar. </a>
-        </div>
-        <!-- Ver grande -->
-        <div class="col-md-6 text-center ver_completo" >
-          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_ingreso/comprobante/${comprobante}" > <i class="fas fa-expand"></i> Ver completo. </a>
-        </div>
-      </div>
+      nombre_download = `${extraer_dia_semana_completo(fecha)}, ${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
 
-      <div class="text-center mt-4">
-        <img src="../dist/docs/otro_ingreso/comprobante/${comprobante}" alt="" width="100%" >
-      </div>
-      <div class="text-center">Comprobante.${extrae_extencion(comprobante)}</div>`);
+      data_comprobante = `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"><img src="${url}" alt="img" class="img-thumbnail" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" ></div>`;         
       
     } else { 
 
       if (extrae_extencion(comprobante) == "pdf") {
 
-        $(".ver-comprobante").html(`<div class="row text-center">                          
-        <!-- Dowload -->
-        <div class="col-md-6 text-center descargar" >
-          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_ingreso/comprobante/${comprobante}" download="Comprobante"> <i class="fas fa-download"></i> Descargar. </a>
-        </div>
-        <!-- Ver grande -->
-        <div class="col-md-6 text-center ver_completo" >
-          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_ingreso/comprobante/${comprobante}" > <i class="fas fa-expand"></i> Ver completo. </a>
-        </div>
-      </div>
+        url = `../${ruta}${comprobante}`;
 
-      <div class="text-center mt-4">
-        <iframe src="../dist/docs/otro_ingreso/comprobante/${comprobante}" frameborder="0" scrolling="no" width="100%" height="510"></iframe>        
-      </div>
-      <div class="text-center">Comprobante.${extrae_extencion(comprobante)}</div>`);
+        nombre_download = `${extraer_dia_semana_completo(fecha)}, ${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
+
+        data_comprobante = `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"><iframe src="${url}" frameborder="0" scrolling="no" width="100%" height="410"> </iframe></div>`;      
 
       } else {
-        $(".ver-comprobante").html(`<div class="row text-center">                          
-          <!-- Dowload -->
-          <div class="col-md-6 text-center descargar">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_ingreso/comprobante/${comprobante}" download="Comprobante"> <i class="fas fa-download"></i> Descargar. </a>
-          </div>
-          <!-- Ver grande -->
-          <div class="col-md-6 text-center ver_completo">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_ingreso/comprobante/${comprobante}" > <i class="fas fa-expand"></i> Ver completo. </a>
-          </div>
-        </div>
+        
+        url = `${ruta}${comprobante}`;
 
-        <div class="text-center mt-4">
-          <iframe src="../dist/svg/doc_si_extencion.svg" frameborder="0" scrolling="no" width="100%" height="510"></iframe>        
-        </div>
-        <div class="text-center">Comprobante.${extrae_extencion(comprobante)}</div>`);
+        nombre_download = `${extraer_dia_semana_completo(fecha)}, ${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
+
+        data_comprobante = `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"><img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" ></div>`;
+        
       }      
     }
   } 
+  
+  $(".ver-comprobante").html(`<div class="row" >
+    <div class="col-md-6 text-center">
+      <a type="button" class="btn btn-warning btn-block btn-xs" href="${url}" download="${nombre_download}"> <i class="fas fa-download"></i> Descargar. </a>
+    </div>
+    <div class="col-md-6 text-center">
+      <a type="button" class="btn btn-info btn-block btn-xs" href="${url}" target="_blank" <i class="fas fa-expand"></i> Ver completo. </a>
+    </div>
+    <div class="col-md-12 mt-3">     
+      ${data_comprobante}
+    </div>
+  </div>`);
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 
 //Función para guardar o editar
@@ -479,11 +457,12 @@ function guardar_y_editar_otros_ingresos(e) {
     success: function (datos) {
       if (datos == "ok") {
 
-        Swal.fire("Desactivado!", "El registro se guardo correctamente.", "success");
+        Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
         tabla.ajax.reload(); total();
 
         limpiar_form();    
+        show_hide_form(1);
 
       } else {
         toastr.error(datos);
@@ -494,7 +473,7 @@ function guardar_y_editar_otros_ingresos(e) {
 
 function mostrar(idotro_ingreso) {
 
-  limpiar_form();
+  limpiar_form(); show_hide_form(2);
   
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
@@ -505,11 +484,12 @@ function mostrar(idotro_ingreso) {
     
     data = JSON.parse(data); console.log(data);    
 
+    $("#idproveedor").val(data.idproveedor).trigger("change");
     $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
     $("#forma_pago").val(data.forma_de_pago).trigger("change");
     $("#glosa").val(data.glosa).trigger("change");
     $("#idotro_ingreso").val(data.idotro_ingreso);
-    $("#fecha_g").val(data.fecha_g);
+    $("#fecha_i").val(data.fecha_i);
     $("#nro_comprobante").val(data.numero_comprobante);  
     $("#ruc").val(data.ruc);
     $("#razon_social").val(data.razon_social);
@@ -592,7 +572,7 @@ function ver_datos(idotro_ingreso) {
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Fecha</th>
-                <td>${data.fecha_g}</td>
+                <td>${data.fecha_i}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo pago </th>
@@ -699,7 +679,7 @@ function eliminar(idotro_ingreso) {
 
       //Desactivar
       $.post("../ajax/otro_ingreso.php?op=desactivar", { idotro_ingreso: idotro_ingreso }, function (e) {
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
+        Swal.fire("♻️ Papelera! ♻️", "Tu registro ha sido reciclado.", "success");
 
         tabla.ajax.reload();
         total();
@@ -806,31 +786,48 @@ function guardar_proveedor(e) {
   var formData = new FormData($("#form-proveedor")[0]);
 
   $.ajax({
-    url: "../ajax/ajax_general.php?op=guardar_proveedor",
+    url: "../ajax/otro_ingreso.php?op=guardar_proveedor",
     type: "POST",
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-      console.log(datos);
-      if (datos ) {
+    success: function (e) {
+      console.log(e);
+      // if(typeof e === 'object'){
 
-        $("#idproveedor").val("null").trigger("change");
+        var d = JSON.parse(e); console.log(d);
 
-        // toastr.success("proveedor registrado correctamente");
-        Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
-         
-        limpiar_form_proveedor();
+        if ( d.message == 'noexiste' ) {
 
-        $("#modal-agregar-proveedor").modal("hide");
-
-        //Cargamos los items al select cliente
-        $.post("../ajax/ajax_general.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
-
-      } else {
-        // toastr.error(datos);
-        Swal.fire("Error!", datos, "error");
-      }
+          //Cargamos los items al select cliente
+          $.post("../ajax/ajax_general.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); $("#idproveedor").val(d.id_tabla).trigger("change");});
+  
+          // toastr.success("proveedor registrado correctamente");
+          Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");        
+  
+          limpiar_form_proveedor();
+  
+          $("#modal-agregar-proveedor").modal("hide");
+  
+        } else if (d.message == 'existe') {   
+          var trabajdor = "";
+  
+          d.data.forEach(key => {
+            trabajdor = trabajdor.concat(`<li class="text-left font-size-13px">
+              <b>Razón Social: </b>${key.razon_social} <br>
+              <b>${key.tipo_documento}: </b>${key.ruc} <br>
+              <b>Papelera: </b>${( key.estado==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO')} <br>
+              <b>Eliminado: </b>${( key.estado_delete==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO')} <br>
+              <hr class="m-t-2px m-b-2px">
+            </li>`);
+          });
+  
+          trabajdor = `<ul>${trabajdor}</ul>`;     
+          Swal.fire("El Proveedor Existe!", trabajdor, "info");
+        }
+      // } else {
+      //   Swal.fire("Error!", `<div class="text-left">${e}</div>`, "error");
+      // }
     },
   });
 }
@@ -851,7 +848,7 @@ $(function () {
       idproveedor:{ required: true },
       forma_pago: { required: true },
       tipo_comprobante: { required: true },
-      fecha_g: { required: true },
+      fecha_i: { required: true },
       precio_parcial: { required: true },
       descripcion: { required: true },
       val_igv: { required: true, number: true, min:0, max:1 },
@@ -861,7 +858,7 @@ $(function () {
       idproveedor:{ required: "Campo requerido", },
       forma_pago: { required: "Campo requerido", },
       tipo_comprobante: { required: "Campo requerido", },
-      fecha_g: { required: "Campo requerido", },
+      fecha_i: { required: "Campo requerido", },
       precio_parcial: { required: "Campo requerido",},
       descripcion: { required: "Es necesario rellenar el campo descripción", },
       val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
@@ -956,6 +953,6 @@ var yyyy = today.getFullYear();
 if (dd < 10) { dd = "0" + dd; }
 if (mm < 10) { mm = "0" + mm; }
 today = yyyy + "-" + mm + "-" + dd;
-document.getElementById("fecha_g").setAttribute("max", today);
+document.getElementById("fecha_i").setAttribute("max", today);
 
 init();

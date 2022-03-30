@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-class Proveedor
+class AllProveedor
 {
   //Implementamos nuestro constructor
   public function __construct()
@@ -11,34 +11,19 @@ class Proveedor
 
   //Implementamos un método para insertar registros
   public function insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $cci, $c_detracciones, $banco, $titular_cuenta) {
-    
-    if (!empty($num_documento)) {
+    $sw = Array();
+    $sql_0 = "SELECT * FROM proveedor WHERE ruc = '$num_documento' AND razon_social = '$nombre'";
+    $existe = ejecutarConsultaArray($sql_0);
 
-      $sql_0 = "SELECT razon_social, tipo_documento, ruc, direccion, telefono, estado, estado_delete, created_at, updated_at 
-      FROM proveedor WHERE ruc = '$num_documento'";
-      
-    } else {
+    if (empty($existe)) {
+      $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
+      VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
+      $sw = array( 'status' => true, 'message' => 'noexiste', 'data' => $existe, 'id_tabla' => ejecutarConsulta_retornarID($sql));      
+    } else{
+      $sw = array( 'status' => true, 'message' => 'existe', 'data' => $existe, 'id_tabla' => '' );
+    }
 
-      if (!empty($nombre)) {
-
-        $sql_0 = "SELECT razon_social, tipo_documento, ruc, direccion, telefono, estado, estado_delete, created_at, updated_at 
-        FROM proveedor WHERE razon_social = '$nombre'";
-        
-      } else {
-        $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
-        VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
-
-        return ejecutarConsulta($sql);
-      }
-    }    
-  }
-
-  public function insertar_id($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $cci, $c_detracciones, $banco, $titular_cuenta)
-  {
-    $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
-		VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
-
-    return ejecutarConsulta_retornarID($sql);
+    return $sw;
   }
 
   //Implementamos un método para editar registros

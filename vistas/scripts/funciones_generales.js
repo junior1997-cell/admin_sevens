@@ -1,10 +1,59 @@
 
+// Función que suma o resta días a la fecha indicada
+sumaFecha = function(d, fecha){
+  var Fecha = new Date();
+  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
+  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
+  var aFecha = sFecha.split(sep);
+  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
+  fecha= new Date(fecha);
+  fecha.setDate(fecha.getDate()+parseInt(d));
+  var anno=fecha.getFullYear();
+  var mes= fecha.getMonth()+1;
+  var dia= fecha.getDate();
+  mes = (mes < 10) ? ("0" + mes) : mes;
+  dia = (dia < 10) ? ("0" + dia) : dia;
+  var fechaFinal = dia+sep+mes+sep+anno;
+  return (fechaFinal);
+}
+
+// extrae los nombres de dias de semana "Completo"
+function extraer_dia_semana_completo(fecha) {
+
+  var nombreDia = "";
+
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') { nombreDia = "-"; } else {
+    const fechaComoCadena = fecha; // día fecha
+    const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']; //
+    const numeroDia = new Date(fechaComoCadena).getDay();
+    nombreDia = dias[numeroDia];
+  }
+  return nombreDia;
+}
+
+function extraer_nombre_mes(fecha) {
+
+  var nombre_completo = "";
+
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') { nombre_completo = "-"; } else {
+    const array_mes = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    
+    let date = new Date(fecha.replace(/-+/g, '/'));
+      
+    var mes_indice = date.getMonth();
+
+    nombre_completo = array_mes[mes_indice];
+  }
+
+  return nombre_completo;
+}
+
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
 function format_d_m_a(fecha) {
   var format = "";
   if (fecha == '' || fecha == null || fecha == '0000-00-00') { format = "-"; } else {
     let splits = fecha.split("-"); //console.log(splits);
-    format = `${splits[2]} - ${splits[1]} - ${splits[0]}`;
+    format = `${splits[2]}-${splits[1]}-${splits[0]}`;
   } 
   return format;
 }
@@ -14,7 +63,7 @@ function format_a_m_d(fecha) {
   var format = "";
   if (fecha == '' || fecha == null || fecha == '00-00-0000') { format = "-"; } else {
     let splits = fecha.split("-"); //console.log(splits);
-    format = `${splits[2]} - ${splits[1]} - ${splits[0]}`;
+    format = `${splits[2]}-${splits[1]}-${splits[0]}`;
   } 
   return format;
 }
@@ -66,14 +115,14 @@ function encodeHtml(str) {
       '"': '&quot;',
       "'": '&#039;'
     };
-    encode = str.replace(/[&<>"']/g, function(m) {return map[m];});
+    encode = str.replace(/[&<>"']/g, function(m) {return map[m];}); //console.log(encode);
   }
   return encode;
 }
 
 // Decodificamos los caracteres: &amp; &lt; &gt; &quot; &#039;
 function decodeHtml(str) {
-  var encode = "";
+  var decode = "";
   if (str == "" || str == null || str === undefined) { } else {
     var map = {
       '&amp;': '&',
@@ -82,9 +131,9 @@ function decodeHtml(str) {
       '&quot;': '"',
       '&#039;': "'"
     };
-    encode = str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];})
+    decode = str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];}); //console.log(decode);
   }
-  return encode;
+  return decode;
 }
 
 /* PREVISUALIZAR LOS DOCUMENTOS: img, pdf, doc, excel,  */

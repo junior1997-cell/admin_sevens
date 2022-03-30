@@ -17,7 +17,7 @@ if (!isset($_SESSION["nombre"])) {
     require_once "../modelos/Activos_fijos.php";
 
     $compra = new Compra_insumos();
-    $proveedor = new Proveedor();
+    $proveedor = new AllProveedor();
     $activos_fijos = new Activos_fijos();        
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
@@ -194,7 +194,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>',
             "2" => $reg->categoria,
             "3" => number_format($reg->precio_unitario, 2, '.', ','),
-            "4" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+            "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
             "5" => $ficha_tecnica . $toltip,
           ];
         }
@@ -419,7 +419,7 @@ if (!isset($_SESSION["nombre"])) {
             "8" => number_format($rspta2['total_pago_compras'], 2, '.', ','),
             "9" => number_format($saldo, 2, '.', ','),
             "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-            "11" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+            "11" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
             "12" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
           ];
         }
@@ -481,7 +481,7 @@ if (!isset($_SESSION["nombre"])) {
             "3" => $reg->tipo_comprobante,
             "4" => $reg->serie_comprobante,
             "5" => number_format($reg->total, 2, '.', ','),
-            "6" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$reg->descripcion.'</textarea>',
+            "6" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
             "7" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
           ];
         }

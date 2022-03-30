@@ -338,7 +338,7 @@ function listar() {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -435,7 +435,7 @@ function modal_comprobante(comprobante) {
     }
   } 
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 
 //Función para guardar o editar
@@ -453,7 +453,7 @@ function guardaryeditar(e) {
     success: function (datos) {
       if (datos == "ok") {
 
-        Swal.fire("Desactivado!", "El registro se guardo correctamente.", "success");
+        Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
         tabla.ajax.reload();
 

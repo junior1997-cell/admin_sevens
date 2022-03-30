@@ -121,7 +121,7 @@ function editar_detalle_compras_af_p(idcompra_af_proyecto) {
           $("#content-t-comprob-p").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
           $("#content-descrp-p").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
           $("#content-comprob-p").show();
-        } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+        } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
           $("#igv_proy").val("");
           $("#content-comprob-p").show();
           $("#content-igv-p").hide();

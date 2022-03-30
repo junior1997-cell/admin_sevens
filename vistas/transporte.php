@@ -155,7 +155,7 @@
                                       <option value="Ninguno">Ninguno</option>
                                       <option value="Boleta">Boleta</option>
                                       <option value="Factura">Factura</option>
-                                      <option value="Nota_de_venta">Nota de venta</option>
+                                      <option value="Nota de venta">Nota de venta</option>
                                     </select>
                                   </div>
                                 </div>

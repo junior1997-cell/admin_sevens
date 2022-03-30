@@ -18,7 +18,7 @@
       require_once "../modelos/Compra_insumos.php";
       
       $compra_activos_fijos = new Compra_activos_fijos();
-      $proveedor = new Proveedor();
+      $proveedor = new AllProveedor();
       $activos_fijos = new Activos_fijos();
       $compra = new Compra_insumos();
 
@@ -327,7 +327,7 @@
                 '<span class="description ml-0"><b>' . $value['serie_comprobante'] . '</b></span>                                  
               </div>',
               "4" => number_format($value['total'], 2, '.', ','),
-              "5" => '<textarea cols="30" rows="1" class="text_area_clss" readonly >'.$value['descripcion'].'</textarea>',
+              "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
               "6" => $value['estado'] == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
             ];
           }

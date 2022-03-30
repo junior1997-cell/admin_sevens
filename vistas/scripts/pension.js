@@ -935,7 +935,7 @@ function listar(nube_idproyecto) {
         totalsaldo += parseFloat(saldo);
       },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -986,7 +986,7 @@ function ver_detalle_x_servicio(idpension) {
 
       },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -1182,7 +1182,7 @@ function listar_comprobantes(idpension) {
 
       },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {

@@ -158,7 +158,7 @@ function listar() {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -199,7 +199,7 @@ function modal_ficha_tec(ficha_tecnica) {
     $("#iddescargar").attr("href", "../dist/ficha_tecnica_materiales/" + ficha_tec);
   }
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 //Función para guardar o editar
 

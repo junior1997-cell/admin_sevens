@@ -36,7 +36,7 @@ function listar() {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -76,7 +76,7 @@ function mostrar_usuarios(id) {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación

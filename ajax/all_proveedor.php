@@ -5,7 +5,7 @@ if (strlen(session_id()) < 1){
 }
 require_once "../modelos/AllProveedor.php";
 
-$proveedor=new Proveedor();
+$proveedor=new AllProveedor();
 
 //$idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta	
 $idproyecto			= isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";

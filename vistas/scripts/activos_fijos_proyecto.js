@@ -522,7 +522,7 @@ function fecha_actual() {
 
 //Función limpiar
 function limpiar() {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 
   //Mostramos los selectProveedor
   $.post("../ajax/activos_fijos_proyecto.php?op=selectProveedor", function (r) {
@@ -561,7 +561,7 @@ function limpiar() {
 
 //Función limpiar
 function limpiardatosproveedor() {
-  $(".tooltip").hide();
+  $(".tooltip").removeClass('show');
 
   $("#idproveedor").val("");
   $("#tipo_documento option[value='RUC']").attr("selected", true);
@@ -659,7 +659,7 @@ function listar(nube_idproyecto) {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -699,7 +699,7 @@ function listar(nube_idproyecto) {
         },
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -740,7 +740,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
         },
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -1014,7 +1014,7 @@ function listar_pagos(idcompra_af_proyecto, idproyecto, monto_total, total_depos
         },
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -1231,7 +1231,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
   $("#descargar").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
 
-  // $(".tooltip").hide();
+  // $(".tooltip").removeClass('show');
 }
 //-----------agregar activos----------------------------
 //Función limpiar
@@ -1660,7 +1660,7 @@ function editar_detalle_compras(idcompra_af_proyecto) {
         $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-comprob").show();
-      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
         $(".igv").val("");
         $(".content-comprob").show();
         $(".content-igv").hide();
@@ -1762,7 +1762,7 @@ function ver_detalle_compras(idcompra_af_proyecto) {
       $(".content-t-comprob").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
       $(".content-descrp").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
       $(".content-comprob").show();
-    } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+    } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
       $(".igv").val("");
       $(".content-comprob").show();
       $(".content-igv").hide();

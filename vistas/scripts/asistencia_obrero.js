@@ -212,7 +212,7 @@ function tbla_principal(nube_idproyecto) {
       if (data[10] != '') { $("td", row).eq(10).addClass('text-nowrap text-right'); }      
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -1347,7 +1347,7 @@ function guardar_fechas_asistencia() {
       array_datos_asistencia.push({ 
         'id_trabajador':key.id_trabajador,        
         'fecha_asistida':format_a_m_d(key.fecha_asistida),
-        'nombre_dia':extraer_dia_semana_complet(format_a_m_d(key.fecha_asistida)),
+        'nombre_dia':extraer_dia_semana_completo(format_a_m_d(key.fecha_asistida)),
         'horas_normal_dia':$(`.input_HN_${key.id_trabajador}_${key.fecha_asistida}`).val(),
         'pago_normal_dia':(parseFloat($(`.input_HN_${key.id_trabajador}_${key.fecha_asistida}`).val()) * key.sueldo_hora).toFixed(2) ,
         'horas_extras_dia':horas_extras_dia,
@@ -1538,7 +1538,7 @@ function asignar_todos_pago_al_contador() {
     var trabajdor = "";
 
     array_pago_contador.forEach(element => {
-      trabajdor = trabajdor.concat(`<li class="text-left font-size-13px">${element.nombres} ─ <b>${formato_miles(element.pago_quincenal)}</b></li>`);
+      trabajdor = trabajdor.concat(`<li class="text-left font-size-13px">${element.razon_social} ─ <b>${formato_miles(element.pago_quincenal)}</b></li>`);
     });
 
     trabajdor = `<ul>${trabajdor}</ul>`;
@@ -2264,7 +2264,7 @@ function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proy
       }
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -2466,7 +2466,7 @@ function tabla_qs_individual(idtrabajador_por_proyecto) {
        
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -2872,7 +2872,7 @@ function extraer_dia_semana(fecha) {
 }
 
 // extrae los nombres de dias de semana "Completo"
-function extraer_dia_semana_complet(fecha) {
+function extraer_dia_semana_completo(fecha) {
   const fechaComoCadena = fecha; // día fecha
   const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']; //
   const numeroDia = new Date(fechaComoCadena).getDay();

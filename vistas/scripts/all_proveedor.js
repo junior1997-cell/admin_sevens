@@ -86,7 +86,7 @@ function listar() {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {
@@ -113,8 +113,8 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (datos) {
+      e = JSON.parse(e); console.log(e);
       if (datos == "ok") {
         toastr.success("proveedor registrado correctamente");
 

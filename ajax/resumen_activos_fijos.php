@@ -18,7 +18,7 @@ if (!isset($_SESSION["nombre"])) {
     
     $resumen_activo_fijo = new ResumenActivoFijo();
     $compra = new Compra_insumos();
-    $proveedor = new Proveedor();
+    $proveedor = new AllProveedor();
     $activos_fijos = new Activos_fijos();
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::

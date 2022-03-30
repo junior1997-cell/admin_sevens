@@ -519,7 +519,7 @@ function tbla_principal() {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -565,7 +565,7 @@ function tbla_principal() {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -605,7 +605,7 @@ function listar_facuras_proveedor_af_g(idproveedor) {
       },
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -1155,7 +1155,7 @@ function mostrar_compra_general(idcompra_af_general) {
         $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descripcion").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-serie-comprobante").show();
-      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
         $(".content-serie-comprobante").show();
         $(".content-igv").hide();
         $(".content-tipo-comprobante").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
@@ -1631,7 +1631,7 @@ function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
         }
       },
       language: {
-        lengthMenu: "Mostrar : _MENU_ registros",
+        lengthMenu: "Mostrar: _MENU_ registros",
         buttons: {
           copyTitle: "Tabla Copiada",
           copySuccess: {

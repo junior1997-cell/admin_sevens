@@ -245,7 +245,7 @@ function listar_tbla_principal(id_proyecto) {
       
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {
@@ -457,7 +457,7 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
       }
     },
     "language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": {

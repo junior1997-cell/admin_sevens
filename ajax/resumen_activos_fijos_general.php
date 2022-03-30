@@ -21,7 +21,7 @@ if (!isset($_SESSION["nombre"])) {
     $resumen_af_g = new Resumen_activos_fijos_general();
     $compra_activos_fijos = new Compra_activos_fijos();
     $activos_fijos = new Activos_fijos();
-    $proveedor = new Proveedor();   
+    $proveedor = new AllProveedor();   
     $compra = new Compra_insumos();
     
 

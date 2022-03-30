@@ -221,7 +221,7 @@ function tbla_principal(id_proyecto) {
       }
     },
 		"language": {
-      "lengthMenu": "Mostrar : _MENU_ registros",
+      "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
         "copyTitle": "Tabla Copiada",
         "copySuccess": { _: '%d líneas copiadas',  1: '1 línea copiada' }
@@ -313,7 +313,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
         $("td", row).eq(7).addClass("text-right");         
       }
     },
-		"language": {"lengthMenu": "Mostrar : _MENU_ registros", },
+		"language": {"lengthMenu": "Mostrar: _MENU_ registros", },
 		"bDestroy": true,
 		"iDisplayLength": 10,//Paginación
 		"order": [[ 0, "asc" ]]//Ordenar (columna,orden)
@@ -428,7 +428,7 @@ function editar_detalle_compras(id) {
         $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descripcion").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-serie-comprobante").show();
-      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
         $(".content-serie-comprobante").show();
         $(".content-igv").hide();
         $(".content-tipo-comprobante").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
@@ -1221,7 +1221,7 @@ function mostrar_detalle_material(idproducto) {
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Descripción</th>
-                <td><textarea cols="30" rows="1" class="text_area_clss" readonly >${data.descripcion}</textarea></td>
+                <td><textarea cols="30" rows="1" class="textarea_datatable" readonly >${data.descripcion}</textarea></td>
               </tr>              
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Ficha tecnica</th>

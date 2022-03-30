@@ -19,7 +19,7 @@ if (!isset($_SESSION["nombre"])) {
     $activos_fijos = new Activos_fijos();
     $resumen_insumos = new ResumenInsumos();
     $compra = new Compra_insumos();
-    $proveedor = new Proveedor();
+    $proveedor = new AllProveedor();
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";

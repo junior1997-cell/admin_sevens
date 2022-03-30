@@ -286,7 +286,7 @@ function tbla_principal(nube_idproyecto) {
       
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -327,7 +327,7 @@ function tbla_principal(nube_idproyecto) {
       }
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -367,7 +367,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
       },
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -1092,7 +1092,7 @@ function mostrar_compra(idcompra_proyecto) {
         $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descripcion").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-serie-comprobante").show();
-      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota_de_venta") {
+      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
         $(".content-serie-comprobante").show();
         $(".content-igv").hide();
         $(".content-tipo-comprobante").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
@@ -1377,7 +1377,7 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
       }  
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -1442,7 +1442,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
       },
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -1472,7 +1472,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
       },
     },
     language: {
-      lengthMenu: "Mostrar : _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ registros",
       buttons: {
         copyTitle: "Tabla Copiada",
         copySuccess: {
@@ -1951,6 +1951,16 @@ function listarmateriales() {
       if (data[3] != '') {
         $("td", row).eq(3).addClass('text-right');
       }  
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
+        },
+      },
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
