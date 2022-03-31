@@ -2,7 +2,7 @@ var errores_list = [];
 
 /*  ══════════════════════════════════════════ - C R U D - ══════════════════════════════════════════ */
 
-function crud_listar(url, nombre_modulo) {
+function crud_listar_tabla(url, nombre_modulo) {
   tabla = $("#tabla_" + nombre_modulo).DataTable({
     responsive: true,
     aProcessing: true, //Activamos el procesamiento del datatables
@@ -31,54 +31,32 @@ function crud_listar(url, nombre_modulo) {
   return tabla;
 }
 
-function lista_select2(url, nombre_modulo, id) {
-  $.get(url, function (data, status) {
-    data = JSON.parse(data);
+function lista_select2(url, nombre_input, id_tabla) {
 
-    $("#select_modal_" + nombre_modulo).html("");
+  $.get(url, function (e, status) {
 
-    $.each(data, function (i, item) {
-      // console.log(item);
-      var option = '<option  value="' + item.id + '">' + item.nombre + "</option>";
-      $("#select_modal_" + nombre_modulo).append(option);
-    });
+    e = JSON.parse(e);   //console.log(e);
 
-    if (id) {
-      $("#select_modal_" + nombre_modulo)
-        .val(id)
-        .trigger("change");
+    $(nombre_input).html(e.data); 
+
+    if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
+
+      $(nombre_input).val(null).trigger("change");
+
     } else {
-      $("#select_modal_" + nombre_modulo)
-        .val(null)
-        .trigger("change");
+
+      $(nombre_input).val(id_tabla).trigger("change");  
+
     }
-  });
+
+  }).fail( function(e) { console.log(e);  ver_errores(e); } );
 }
 
-function crud_listar_select(url, select, select2 = false) {
-  $.get(url, function (data, status) {
-    data = JSON.parse(data);
 
-    $("#" + select).html("");
-
-    $.each(data, function (key, value) {
-      $("#" + select).append('<option value="' + value.id + '">' + value.nombre + "</option>");
-    });
-
-    if (select2) {
-      $("#" + select)
-        .val(null)
-        .trigger("change");
-    }
-  });
-}
-
-function crud_guardar_editar(event, url, nombre_modulo, callback_limpiar, callback_true, callback_false) {
+function crud_guardar_editar_card_xhr(event, url, formData,  callback_limpiar, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
   event.preventDefault();
 
   $("#div_barra_progress_" + nombre_modulo).show();
-
-  var formData = new FormData($("#formulario_" + nombre_modulo)[0]);
 
   $.ajax({
     url: url,
@@ -87,72 +65,60 @@ function crud_guardar_editar(event, url, nombre_modulo, callback_limpiar, callba
     contentType: false,
     processData: false,
     success: function (datos) {
-      datos = JSON.parse(datos);
 
-      if (datos.status) {
-        sw_success(datos.message);
-        limpiar_form(nombre_modulo, callback_limpiar);
-        if (callback_true) {
-          callback_true();
-        }
+      datos = JSON.parse(datos); console.log(datos);
+
+      if (datos.status) { 
+
+        if (callback_limpiar) { callback_true();  }
+        if (callback_true)    { callback_true();  }
+
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+
       } else {
-        sw_error(datos.message);
-        if (callback_false) {
-          callback_false();
-        }
+        ver_errores(e); 
       }
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
 
-      xhr.upload.addEventListener(
-        "progress",
-        function (evt) {
-          if (evt.lengthComputable) {
-            var prct = (evt.loaded / evt.total) * 100;
-            prct = Math.round(prct);
+      xhr.upload.addEventListener( "progress", function (evt) {
 
-            $("#barra_progress_" + nombre_modulo).css({
-              width: prct + "%",
-            });
+        if (evt.lengthComputable) {
+          var prct = (evt.loaded / evt.total) * 100;
+          prct = Math.round(prct);
 
-            $("#barra_progress_" + nombre_modulo).text(prct + "%");
+          $("#barra_progress_" + nombre_modulo).css({ width: prct + "%", });
 
-            // if (prct === 100) {
-            //     setTimeout(function(){ reniciar_barra(nombre_modulo) }, 600);
-            // }
-          }
-        },
-        false
-      );
+          $("#barra_progress_" + nombre_modulo).text(prct + "%");
+
+        }
+      }, false );
+
       return xhr;
     },
     beforeSend: function () {
       $("#div_barra_progress_" + nombre_modulo).show();
-      $("#barra_progress_" + nombre_modulo).css({
-        width: "0%",
-      });
+      $("#barra_progress_" + nombre_modulo).css({ width: "0%",  });
       $("#barra_progress_" + nombre_modulo).text("0%");
     },
     complete: function () {
       $("#div_barra_progress_" + nombre_modulo).hide();
-      $("#barra_progress_" + nombre_modulo).css({
-        width: "0%",
-      });
+      $("#barra_progress_" + nombre_modulo).css({ width: "0%", });
       $("#barra_progress_" + nombre_modulo).text("0%");
     },
     error: function (jqXhr) {
-      comprobar_errores(jqXhr, nombre_modulo);
+      ver_errores(jqXhr);
     },
   });
 }
 
-function crud_guardar_editar_sm(event, url, nombre_modulo, callback_limpiar, callback_true, callback_false) {
+function crud_guardar_editar_modal_xhr(event, url, formData, nombre_modal, callback_limpiar, callback_true, select2_reload, name_progress, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
   event.preventDefault();
-
-  $("#div_barra_progress_" + nombre_modulo).show();
-
-  var formData = new FormData($("#formulario_" + nombre_modulo)[0]);
 
   $.ajax({
     url: url,
@@ -161,72 +127,65 @@ function crud_guardar_editar_sm(event, url, nombre_modulo, callback_limpiar, cal
     contentType: false,
     processData: false,
     success: function (datos) {
-      datos = JSON.parse(datos);
 
-      if (datos.status) {
-        sw_success(datos.message);
-        limpiar_form_sm(nombre_modulo, callback_limpiar);
-        if (callback_true) {
-          callback_true();
-        }
+      datos = JSON.parse(datos); // console.log(datos.inputt);
+
+      if (datos.status) { 
+              
+        if (callback_limpiar) { callback_true();  }
+        if (callback_true)    { callback_true();  }
+        if (select2_reload)   { select2_reload(); }        
+
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+
+        $(nombre_modal).modal('hide');
+
       } else {
-        sw_error(datos.message);
-        if (callback_false) {
-          callback_false();
-        }
+        ver_errores(e);
       }
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
 
-      xhr.upload.addEventListener(
-        "progress",
-        function (evt) {
-          if (evt.lengthComputable) {
-            var prct = (evt.loaded / evt.total) * 100;
-            prct = Math.round(prct);
+      xhr.upload.addEventListener( "progress", function (evt) {
 
-            $("#barra_progress_" + nombre_modulo).css({
-              width: prct + "%",
-            });
+        if (evt.lengthComputable) {
+          var prct = (evt.loaded / evt.total) * 100;
+          prct = Math.round(prct);
 
-            $("#barra_progress_" + nombre_modulo).text(prct + "%");
+          $(`"#barra_progress_${name_progress}`).css({ width: prct + "%", });
 
-            // if (prct === 100) {
-            //     setTimeout(function(){ reniciar_barra(nombre_modulo) }, 600);
-            // }
-          }
-        },
-        false
-      );
+          $(`"#barra_progress_${name_progress}`).text(prct + "%");
+
+        }
+      }, false );
+
       return xhr;
     },
     beforeSend: function () {
-      $("#div_barra_progress_" + nombre_modulo).show();
-      $("#barra_progress_" + nombre_modulo).css({
-        width: "0%",
-      });
-      $("#barra_progress_" + nombre_modulo).text("0%");
+      $(`"#div_barra_progress_${name_progress}`).show();
+      $(`"#barra_progress_${name_progress}`).css({ width: "0%", });
+      $(`"#barra_progress_${name_progress}`).text("0%");
     },
     complete: function () {
-      $("#div_barra_progress_" + nombre_modulo).hide();
-      $("#barra_progress_" + nombre_modulo).css({
-        width: "0%",
-      });
-      $("#barra_progress_" + nombre_modulo).text("0%");
+      $(`"#div_barra_progress_${name_progress}`).hide();
+      $(`"#barra_progress_${name_progress}`).css({ width: "0%", });
+      $(`"#barra_progress_${name_progress}`).text("0%");
     },
     error: function (jqXhr) {
-      comprobar_errores(jqXhr, nombre_modulo);
+      comprobar_errores(jqXhr);
     },
   });
 }
 
-function crud_guardar_modal(event, url, nombre_modulo, callback_limpiar, callback_true, callback_false) {
+function crud_guardar_editar_card(event, url, formData, callback_limpiar, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
   event.preventDefault();
 
   $("#div_barra_progress_" + nombre_modulo).show();
-
-  var formData = new FormData($("#formulario_" + nombre_modulo)[0]);
 
   $.ajax({
     url: url,
@@ -235,168 +194,111 @@ function crud_guardar_modal(event, url, nombre_modulo, callback_limpiar, callbac
     contentType: false,
     processData: false,
     success: function (datos) {
+
       datos = JSON.parse(datos);
-      // console.log(datos.inputt);
-      if (datos.status) {
-        sw_success(datos.message);
 
-        limpiar_form(nombre_modulo, callback_limpiar);
+      if (datos.status) { 
+              
+        if (callback_limpiar) { callback_true();  }
+        if (callback_true)    { callback_true();  }
 
-        console.log("IDDDDDDDD" + datos.id);
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
 
-        lista_select2("/admin/" + nombre_modulo + "/listar/select", nombre_modulo, datos.id);
+      } else {         
+        ver_errores(e);
+      }
+    },    
+    error: function (jqXhr) {
+      ver_errores(jqXhr);
+    },
+  });
+}
 
-        if (callback_true) {
-          callback_true();
+function crud_guardar_editar_modal(event, url, formData, nombre_modal, callback_limpiar, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
+  event.preventDefault();
 
-          // cerramos el modal agregar rubro
-          $("#modal_agregar_rubro").modal("hide");
-          // cerramos el modal agregar preguntas
-          $("#modal_agregar_preguntas").modal("hide");
-          // cerramos el modal agregar talla
-          $("#modal_agregar_talla").modal("hide");
-          // cerramos el modal agregar talla
-          $("#modal_agregar_color").modal("hide");
-        }
+  $("#div_barra_progress_" + nombre_modulo).show();
+
+  $.ajax({
+    url: url,
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (datos) {
+
+      datos = JSON.parse(datos);
+
+      if (datos.status) { 
+              
+        if (callback_limpiar) { callback_true();  }
+        if (callback_true)    { callback_true();  }
+        if (select2_reload)   { select2_reload(); }
+
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+
+        $(nombre_modal).modal('hide');
       } else {
-        sw_error(datos.message);
-
-        if (callback_false) {
-          callback_false();
-        }
+        ver_errores(e);
       }
     },
-    xhr: function () {
-      var xhr = new window.XMLHttpRequest();
-
-      xhr.upload.addEventListener(
-        "progress",
-        function (evt) {
-          if (evt.lengthComputable) {
-            var prct = (evt.loaded / evt.total) * 100;
-            prct = Math.round(prct);
-
-            $("#barra_progress_" + nombre_modulo).css({
-              width: prct + "%",
-            });
-
-            $("#barra_progress_" + nombre_modulo).text(prct + "%");
-
-            // if (prct === 100) {
-            //     setTimeout(function(){ reniciar_barra(nombre_modulo) }, 600);
-            // }
-          }
-        },
-        false
-      );
-
-      return xhr;
-    },
-
-    beforeSend: function () {
-      $("#div_barra_progress_" + nombre_modulo).show();
-      $("#barra_progress_" + nombre_modulo).css({
-        width: "0%",
-      });
-      $("#barra_progress_" + nombre_modulo).text("0%");
-    },
-    complete: function () {
-      $("#div_barra_progress_" + nombre_modulo).hide();
-      $("#barra_progress_" + nombre_modulo).css({
-        width: "0%",
-      });
-      $("#barra_progress_" + nombre_modulo).text("0%");
-    },
     error: function (jqXhr) {
-      comprobar_errores(jqXhr, nombre_modulo);
+      comprobar_errores(jqXhr);
     },
   });
 }
 
 
-function crud_desactivar(url, id_tabla, title, mensaje, callback_true, callback_false) {
-  Swal.fire({
-    title: "¿Deseas desactivar este registro?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#f34770",
-    confirmButtonText: "Si, desactivar",
-    cancelButtonText: "No, cancelar",
-    closeOnConfirm: false,
-    closeOnCancel: false,
-  }).then((result) => {
-    if (result.value) {
-      $.get(url, function (data, status) {
-        data = JSON.parse(data);
-        if (data.status) {
-          sw_success("Se desactivó");
-          if (callback_true) {
-            callback_true();
-            // REMOVEMOS EL TOOTIP.......................................................
-            $(".tooltip").removeClass("show").addClass("hidde");
-          }
-        } else {
-          sw_error("Error en desactivar");
-          if (callback_false) {
-            callback_false();
-            // REMOVEMOS EL TOOTIP.......................................................
-            $(".tooltip").removeClass("show").addClass("hidde");
-          }
-        }
-      });
-    } else if (result.dismiss) {
-      sw_cancelar();
-      // REMOVEMOS EL TOOTIP.......................................................
-      $(".tooltip").removeClass("show").addClass("hidde");
-    }
-    // REMOVEMOS EL TOOTIP.......................................................
-    $(".tooltip").removeClass("show").addClass("hidde");
-  });
-}
-
-function crud_activar(url, id_tabla, title, mensaje, callback_true, callback_false) {
-  Swal.fire({
-    title: "¿Deseas activar este registro?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#42d697",
-    // cancelButtonColor: "#f34770",
-    confirmButtonText: "Si, activar",
-    cancelButtonText: "No, cancelar",
-    closeOnConfirm: false,
-    closeOnCancel: false,
-  }).then((result) => {
-    if (result.value) {
-      $.get(url, function (data, status) {
-        data = JSON.parse(data);
-        if (data.status) {
-          sw_success("Se desactivó");
-          if (callback_true) {
-            callback_true();
-            // REMOVEMOS EL TOOTIP.......................................................
-            $(".tooltip").removeClass("show").addClass("hidde");
-          }
-        } else {
-          sw_error("Error en desactivar");
-          if (callback_false) {
-            callback_false();
-            // REMOVEMOS EL TOOTIP.......................................................
-            $(".tooltip").removeClass("show").addClass("hidde");
-          }
-        }
-      });
-    } else if (result.dismiss) {
-      sw_cancelar();
-      // REMOVEMOS EL TOOTIP.......................................................
-      $(".tooltip").removeClass("show").addClass("hidde");
-    }
-    // REMOVEMOS EL TOOTIP.......................................................
-    $(".tooltip").removeClass("show").addClass("hidde");
-  });
+function crud_desactivar(url, id_tabla, title, mensaje, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4, table_reload_5) {
 
   Swal.fire({
     title: title,
-    text: mensaje,
+    html: mensaje,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      $.post( url, { 'id_tabla': id_tabla }, function (e) {
+
+        if (e.status) {
+
+          if (callback_true) { callback_true(); } 
+          
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
+
+          $(".tooltip").removeClass("show").addClass("hidde");
+          
+        }else{
+  
+          ver_errores(e);
+        }
+      }).fail( function(e) { console.log(e); ver_errores(e); } );      
+    }
+  });
+}
+
+function crud_activar(url, id_tabla, title, mensaje, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
+
+  Swal.fire({
+    title: title,
+    html: mensaje,
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
@@ -408,14 +310,15 @@ function crud_activar(url, id_tabla, title, mensaje, callback_true, callback_fal
 
       $.post( url, { 'id_tabla': id_tabla }, function (e) {
 
-        if (data.status) {
+        if (e.status) {
 
-          if (callback_true) {
-            callback_true();
-          }
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
-  
-          tabla.ajax.reload();
+          if (callback_true) { callback_true(); } 
+          
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
 
           $(".tooltip").removeClass("show").addClass("hidde");
           
@@ -430,63 +333,104 @@ function crud_activar(url, id_tabla, title, mensaje, callback_true, callback_fal
 
 function crud_eliminar(url, callback_true, callback_false) {
   Swal.fire({
-    title: "¿Deseas eliminar permanetemente este registro?",
-    text: "¡No se podra recuperar!",
+    title: title,
+    text: mensaje,
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#f34770",
-    confirmButtonText: "Si, eliminar",
-    cancelButtonText: "No, cancelar",
-    closeOnConfirm: false,
-    closeOnCancel: false,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
   }).then((result) => {
-    if (result.value) {
-      $.get(url, function (data, status) {
-        data = JSON.parse(data);
-        if (data.status) {
-          sw_success("Se eliminó");
-          if (callback_true) {
-            callback_true();
-          }
-        } else {
-          sw_error(data.message);
-          if (callback_false) {
-            callback_false();
-          }
+
+    if (result.isConfirmed) {
+
+      $.post( url, { 'id_tabla': id_tabla }, function (e) {
+
+        if (e.status) {
+
+          if (callback_true) { callback_true(); } 
+          
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
+
+          $(".tooltip").removeClass("show").addClass("hidde");
+          
+        }else{
+  
+          ver_errores(e);
         }
-      });
-    } else if (result.dismiss) {
-      sw_cancelar();
+      }).fail( function(e) { console.log(e); ver_errores(e); } );      
     }
   });
+
+  
 }
 
-function crud_eliminar_papelera(url, id) {
+function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, mensaje, callback_true_papelera, callback_true_eliminar, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
+
   Swal.fire({
-    title: "¿Deseas eliminar permanetemente este registro?",
-    text: "¡No se podra recuperar!",
+    title: title,
+    html: mensaje,
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#f34770",
-    confirmButtonText: "Si, eliminar",
-    cancelButtonText: "No, cancelar",
-    closeOnConfirm: false,
-    closeOnCancel: false,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
   }).then((result) => {
-    if (result.value) {
-      $.get(url, function (data, status) {
-        data = JSON.parse(data);
-        if (data.status) {
-          $("#tr_" + id).remove();
-          sw_success("Se eliminó");
-        } else {
-          sw_error("Error en eliminar");
+
+    if (result.isConfirmed) {
+
+      $.post(url_papelera, { 'id_tabla': id_tabla }, function (e) {
+
+        e = JSON.parse(e);
+
+        if (e.status) {
+          
+          if (callback_true_papelera) { callback_true_papelera(); }
+
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
+
+        }else{
+
+          ver_errores(e);
         }
-      });
-    } else if (result.dismiss) {
-      sw_cancelar();
+        
+      }).fail( function(e) { console.log(e); ver_errores(e); } );
+
+    }else if (result.isDenied) {
+
+      $.post(url_eliminar, { 'id_tabla': id_tabla }, function (e) {
+
+        e = JSON.parse(e);
+
+        if (e.status) {
+
+          if (callback_true_eliminar) { callback_true_eliminar(); } 
+
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); } 
+
+        }else{
+
+          ver_errores(e);
+        }     
+
+      }).fail( function(e) { console.log(e); ver_errores(e); } );
     }
-  });
+  });  
 }
 
 /*  ══════════════════════════════════════════ - A L E R T A S - ══════════════════════════════════════════ */
@@ -509,10 +453,10 @@ function sw_error(txt = "Error", timer = 3000) {
   });
 }
 
-function sw_success(txt = "Exito", timer = 1000) {
+function sw_success(title='Exito', txt = "Acción ejecutada con éxito", timer = 3000) {
   Swal.fire({
-    title: "Exito",
-    text: txt,
+    title: title,
+    html: txt,
     timer: timer,
     icon: "success",
   });
@@ -542,7 +486,7 @@ function confirmar_formulario(flat, callback) {
 
 function ver_errores(e) {
 
-  if (e.status == 400) {
+  if (e.status == 404) {
 
     Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
     
@@ -550,13 +494,12 @@ function ver_errores(e) {
 
     Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
 
-    if (e.status == false) {
+  }else if (e.status == false) {
 
-      Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-       
-    } else {
-      Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-    }
+    Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+     
+  } else { console.log('grave');
+    Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
   }
 }
 

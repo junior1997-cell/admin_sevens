@@ -41,11 +41,11 @@
           if (empty($idusuario)) {
             $rspta = $usuario->insertar($trabajador, $cargo, $login, $clavehash, $permiso);
 
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+            echo json_encode($rspta, true);
           } else {
             $rspta = $usuario->editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clavehash, $permiso);
 
-            echo $rspta ? "ok" : "Usuario no se pudo actualizar";
+            echo json_encode($rspta, true);
           }
           //Fin de las validaciones de acceso
         } else {
@@ -60,9 +60,9 @@
       } else {
         //Validamos el acceso solo al usuario logueado y autorizado.
         if ($_SESSION['acceso'] == 1) {
-          $rspta = $usuario->desactivar($idusuario);
+          $rspta = $usuario->desactivar($_POST["id_tabla"]);
 
-          echo $rspta ? "ok" : "Usuario no se puede desactivar";
+          echo json_encode($rspta, true);
           //Fin de las validaciones de acceso
         } else {
           require 'noacceso.php';
@@ -76,8 +76,8 @@
       } else {
         //Validamos el acceso solo al usuario logueado y autorizado.
         if ($_SESSION['acceso'] == 1) {
-          $rspta = $usuario->activar($idusuario);
-          echo $rspta ? "ok" : "Usuario no se puede activar";
+          $rspta = $usuario->activar($_POST["id_tabla"]);
+          echo json_encode($rspta, true);
           //Fin de las validaciones de acceso
         } else {
           require 'noacceso.php';
@@ -91,8 +91,8 @@
       } else {
         //Validamos el acceso solo al usuario logueado y autorizado.
         if ($_SESSION['acceso'] == 1) {
-          $rspta = $usuario->eliminar($idusuario);
-          echo $rspta ? "ok" : "Usuario no se puede eliminar";
+          $rspta = $usuario->eliminar($_POST["id_tabla"]);
+          echo json_encode($rspta, true);
           //Fin de las validaciones de acceso
         } else {
           require 'noacceso.php';

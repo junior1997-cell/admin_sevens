@@ -55,7 +55,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title " >
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-usuario" onclick="limpiar();">
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-usuario" onclick="limpiar_form_usuario();">
                               <i class="fas fa-user-plus"></i> Agregar
                             </button>
                             Usuarios que administran el sistema                        
@@ -162,6 +162,15 @@
                                 <div class="form-group mb-0">
                                   <label class="ml-1" for="permisos">Permisos</label>                               
                                   <ul style="list-style: none; padding-left: 10px !important;" id="permisos"><i class="fas fa-spinner fa-pulse fa-2x"></i></ul>
+                                </div>
+                              </div>
+
+                              <!-- Progress -->
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <div class="progress" id="div_barra_progress_usuario">
+                                    <div id="barra_progress_usuario" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                  </div>
                                 </div>
                               </div>
                               
