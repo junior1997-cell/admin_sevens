@@ -66,6 +66,11 @@
 <!-- hora sesion-->
 <script src="../dist/js/sesion.js"></script> 
 
+<!-- Funciones Crud -->
+<script type="text/javascript" src="../dist/js/funcion_crud.js"></script>
+<!-- Funciones Generales -->
+<script type="text/javascript" src="../dist/js/funcion_general.js"></script>
+
 <?php require 'contacto_desarrollador.php'; ?>
 
 <?php require 'go_to.php'; ?>

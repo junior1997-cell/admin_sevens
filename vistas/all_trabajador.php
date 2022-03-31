@@ -243,7 +243,7 @@
                               </div>
                               <!-- CCI -->
                               <div class="col-lg-4">
-                                <div class="form-group">
+                                <div class="form-group"> 
                                   <label for="c_bancaria" class="chargue-format-2">CCI</label>
                                   <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
                                 </div>
@@ -422,8 +422,9 @@
         </div>
         <!-- /.content-wrapper -->
         
-        <?php require 'script.php'; ?>        
-
+        <?php require 'script.php'; ?>       
+        
+        <!-- Funciones del modulo -->
         <script type="text/javascript" src="scripts/all_trabajador.js"></script>
 
         <script>

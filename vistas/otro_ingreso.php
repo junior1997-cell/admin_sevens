@@ -93,7 +93,7 @@
                                   <th>Fecha</th>
                                   <th>Subtotal</th>
                                   <th>IGV</th>
-                                  <th class="text-nowrap" id="total_monto"><i class="fas fa-spinner fa-pulse"></i></th>
+                                  <th class="text-nowrap text-right" id="total_monto"><i class="fas fa-spinner fa-pulse"></i></th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                   <th>Estado</th>
@@ -513,9 +513,6 @@
         <!-- /.content-wrapper -->
 
         <?php require 'script.php'; ?>
-
-        <!-- Funciones Generales -->
-        <script type="text/javascript" src="scripts/funciones_generales.js"></script>
         
         <!-- Funciones del modulo -->
         <script type="text/javascript" src="scripts/otro_ingreso.js"></script>

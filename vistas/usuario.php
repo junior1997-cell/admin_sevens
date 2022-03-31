@@ -124,11 +124,8 @@
                               <div class="col-lg-8">
                                 <div class="form-group">
                                   <label for="trabajador" id="trabajador_c">Trabajador</label>                               
-                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="seleccion();" >
-                                    
-                                  </select>
-                                  <input type="hidden" name="trabajador_old" id="trabajador_old" />
-                                  <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>  
+                                  <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" > </select>
+                                  <input type="hidden" name="trabajador_old" id="trabajador_old" /> 
                                 </div>                                                        
                               </div>
 
@@ -164,7 +161,7 @@
                               <div class="col-lg-4">
                                 <div class="form-group mb-0">
                                   <label class="ml-1" for="permisos">Permisos</label>                               
-                                  <ul style="list-style: none; padding-left: 10px !important;" id="permisos"></ul>
+                                  <ul style="list-style: none; padding-left: 10px !important;" id="permisos"><i class="fas fa-spinner fa-pulse fa-2x"></i></ul>
                                 </div>
                               </div>
                               

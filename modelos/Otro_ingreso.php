@@ -76,7 +76,7 @@ class Otro_ingreso
 
   //total
   public function total($idproyecto) {
-    $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_ingreso WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete='1'";
+    $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_ingreso WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1'";
     return ejecutarConsultaSimpleFila($sql);
   }
 

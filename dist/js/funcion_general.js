@@ -1,3 +1,4 @@
+/*  ══════════════════════════════════════════ - F E C H A S - ══════════════════════════════════════════ */
 
 // Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
@@ -68,6 +69,8 @@ function format_a_m_d(fecha) {
   return format;
 }
 
+/*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
+
 // Formato de miles
 function formato_miles(num) {
   if (!num || num == "NaN") return "-";
@@ -83,7 +86,7 @@ function formato_miles(num) {
   return (sign ? "" : "-") + num + "." + cents;
 }
 
-//  Quirae formato de miles
+// Quitar formato de miles
 function quitar_formato_miles(num) {
   let inVal = 0;
   if (!num || num == "NaN" || num == "" || num == null || num == "Infinity" || num === undefined) { } else {
@@ -92,7 +95,7 @@ function quitar_formato_miles(num) {
   return inVal;
 }
 
-/**Redondear */
+// Redondear a un exponente
 function redondearExp(numero, digitos) {
   function toExp(numero, digitos) {
     let arr = numero.toString().split("e");
@@ -103,6 +106,18 @@ function redondearExp(numero, digitos) {
   let entero = Math.round(toExp(Math.abs(numero), digitos));
   return Math.sign(numero) * toExp(entero, -digitos);
 }
+
+//Redondear 2 decimales (1.56 = 1.60, 1.52 = 1.50)
+function roundTwo(num) {
+  return Number(+(Math.round(num + "e+1") + "e-1")).toFixed(2);
+}
+
+// Unico ID
+function unique_id() {
+  return parseInt(Math.round(new Date().getTime() + Math.random() * 100));
+}
+
+/*  ══════════════════════════════════════════ - E N C O D E   D E C O D E   S T R I N G - ══════════════════════════════════════════ */
 
 // Codificamos los caracteres: &, <, >, ", '
 function encodeHtml(str) {
@@ -135,6 +150,8 @@ function decodeHtml(str) {
   }
   return decode;
 }
+
+/*  ══════════════════════════════════════════ - S U B I R   D O C S  - ══════════════════════════════════════════ */
 
 /* PREVISUALIZAR LOS DOCUMENTOS: img, pdf, doc, excel,  */
 function addDocsImgApplication(e,id) {
@@ -397,8 +414,18 @@ function re_visualizacion(id, carpeta, sub_carpeta) {
   }
 }
 
+function extrae_extencion(filename) { 
+  var exten = "";
+  if (filename == "" || filename == null || filename === undefined) {  }else{
+    exten = filename.split(".").pop();
+  }
+  return exten; 
+}
+
+/*  ══════════════════════════════════════════ - A P I S - ══════════════════════════════════════════ */
 // Buscar Reniec SUNAT
-function buscar_sunat_reniec(input) {
+function buscar_sunat_reniec(input='') {
+  console.log(input);
 
   $(`#search${input}`).hide(); $(`#charge${input}`).show();
 
@@ -446,6 +473,8 @@ function buscar_sunat_reniec(input) {
         
       });
     } else {
+
+      $(`#num_documento${input}`).addClass("is-invalid");
 
       $(`#search${input}`).show();
 
@@ -521,6 +550,8 @@ function buscar_sunat_reniec(input) {
           }          
         });
       } else {
+        $(`#num_documento${input}`).addClass("is-invalid");
+
         $(`#search${input}`).show();
 
         $(`#charge${input}`).hide();
@@ -538,7 +569,7 @@ function buscar_sunat_reniec(input) {
 
       } else {
 
-        $("#tipo_doc").addClass("is-invalid");
+        $(`#tipo_documento${input}`).addClass("is-invalid");
 
         $(`#search${input}`).show();
 
@@ -550,14 +581,7 @@ function buscar_sunat_reniec(input) {
   }
 }
 
-function extrae_extencion(filename) { 
-  var exten = "";
-  if (filename == "" || filename == null || filename === undefined) {  }else{
-    exten = filename.split(".").pop();
-  }
-  return exten; 
-}
-
+/*  ══════════════════════════════════════════ - M E N S A J E S - ══════════════════════════════════════════ */
 function ok_dowload_doc() { toastr.success("El documento se descargara en breve!!"); }
 
 function error_dowload_doc() { toastr.success("Hubo un ERROR en la descarga, reintente nuevamente!!"); }

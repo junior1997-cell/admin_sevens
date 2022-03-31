@@ -1,14 +1,16 @@
 
 
-$("#frmAcceso").on('submit',function(e)
-{
+$("#frmAcceso").on('submit',function(e) {
+
 	e.preventDefault();
     logina=$("#logina").val();
     clavea=$("#clavea").val();
 
     $.post("../ajax/usuario.php?op=verificar",{"logina":logina,"clavea":clavea}, function(data){
-        console.log(data);
-        if (data!="null"){
+         
+        data = JSON.parse(data); console.log(data);
+
+        if (data.status){
             $(document).Toasts('create', {
                 class: 'bg-success',
                 title: 'Bienvenido al sistema "Admin Sevens"',

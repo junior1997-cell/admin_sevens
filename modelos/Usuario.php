@@ -144,7 +144,7 @@ Class Usuario
     	$sql="SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento
 		FROM usuario as u, trabajador as t
 		WHERE u.login='$login' AND u.password='$clave' AND t.estado=1 and u.estado=1 and u.estado_delete=1 and u.idtrabajador = t.idtrabajador;"; 
-    	return ejecutarConsulta($sql);  
+    	return ejecutarConsultaSimpleFila($sql);  
     }
 
 	//Seleccionar Trabajador Select2

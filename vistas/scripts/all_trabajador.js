@@ -1125,9 +1125,7 @@ function eliminar(idtrabajador) {
       icon: "warning",
       title: 'Antes de expulsar ingrese una descripción',
       input: 'text',
-      inputAttributes: {
-        autocapitalize: 'off'
-      },
+      inputAttributes: { autocapitalize: 'off' },
       showCancelButton: true,
       cancelButtonColor: "#d33",
       confirmButtonText: 'Si, expulsar!',

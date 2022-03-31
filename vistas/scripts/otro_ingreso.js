@@ -459,7 +459,7 @@ function guardar_y_editar_otros_ingresos(e) {
 
         Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
-        tabla.ajax.reload(); total();
+        tabla.ajax.reload(); total(localStorage.getItem("nube_idproyecto"));
 
         limpiar_form();    
         show_hide_form(1);
@@ -629,7 +629,7 @@ function desactivar(idotro_ingreso) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
         tabla.ajax.reload();
-        total();
+        total(localStorage.getItem("nube_idproyecto"));
       });
     }
   });
@@ -651,7 +651,7 @@ function activar(idotro_ingreso) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
         tabla.ajax.reload();
-        total();
+        total(localStorage.getItem("nube_idproyecto"));
       });
     }
   });
@@ -682,7 +682,7 @@ function eliminar(idotro_ingreso) {
         Swal.fire("♻️ Papelera! ♻️", "Tu registro ha sido reciclado.", "success");
 
         tabla.ajax.reload();
-        total();
+        total(localStorage.getItem("nube_idproyecto"));
       });
 
     }else if (result.isDenied) {
@@ -692,7 +692,7 @@ function eliminar(idotro_ingreso) {
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
         tabla.ajax.reload();
-        total();
+        total( localStorage.getItem("nube_idproyecto"));
       });
 
     }
@@ -889,28 +889,28 @@ $(function () {
   $("#form-proveedor").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      tipo_documento_prov: { required: true },
-      num_documento_prov: { required: true, minlength: 6, maxlength: 20 },
-      nombre_prov: { required: true, minlength: 6, maxlength: 100 },
-      direccion_prov: { minlength: 5, maxlength: 150 },
-      telefono_prov: { minlength: 8 },
-      c_bancaria_prov: { minlength: 6,  },
-      cci_prov: { minlength: 6,  },
-      c_detracciones_prov: { minlength: 6,  },      
-      banco_prov: { required: true },
-      titular_cuenta_prov: { minlength: 4 },
+      tipo_documento_prov:  { required: true },
+      num_documento_prov:   { required: true, minlength: 6, maxlength: 20 },
+      nombre_prov:          { required: true, minlength: 6, maxlength: 100 },
+      direccion_prov:       { minlength: 5, maxlength: 150 },
+      telefono_prov:        { minlength: 8 },
+      c_bancaria_prov:      { minlength: 6,  },
+      cci_prov:             { minlength: 6,  },
+      c_detracciones_prov:  { minlength: 6,  },      
+      banco_prov:           { required: true },
+      titular_cuenta_prov:  { minlength: 4 },
     },
     messages: {
-      tipo_documento_prov: { required: "Por favor selecione un tipo de documento", },
+      tipo_documento_prov:{ required: "Por favor selecione un tipo de documento", },
       num_documento_prov: { required: "Campo requerido", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
-      nombre_prov: { required: "Campo requerido", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
-      direccion_prov: { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 150 caracteres.", },
-      telefono_prov: { minlength: "MÍNIMO 9 caracteres.", },
-      c_bancaria_prov: { minlength: "MÍNIMO 6 caracteres.", },
-      cci_prov: { minlength: "MÍNIMO 6 caracteres.",  },
-      c_detracciones_prov: { minlength: "MÍNIMO 6 caracteres.", },      
-      banco_prov: { required: "Campo requerido",  },
-      titular_cuenta_prov: { minlength: 'MÍNIMO 4 caracteres.' },
+      nombre_prov:        { required: "Campo requerido", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
+      direccion_prov:     { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 150 caracteres.", },
+      telefono_prov:      { minlength: "MÍNIMO 9 caracteres.", },
+      c_bancaria_prov:    { minlength: "MÍNIMO 6 caracteres.", },
+      cci_prov:           { minlength: "MÍNIMO 6 caracteres.",  },
+      c_detracciones_prov:{ minlength: "MÍNIMO 6 caracteres.", },      
+      banco_prov:         { required: "Campo requerido",  },
+      titular_cuenta_prov:{ minlength: 'MÍNIMO 4 caracteres.' },
     },
 
     errorElement: "span",

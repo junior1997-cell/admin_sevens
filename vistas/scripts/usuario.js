@@ -2,14 +2,6 @@ var tabla; var estado_usuario_requerido = true;
 
 //Función que se ejecuta al inicio
 function init() {
-  
-  listar();
-
-  //Mostramos los permisos
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) {  $("#permisos").html(r); });
-
-  //Mostramos los trabajadores
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
 
   $("#bloc_Accesos").addClass("menu-open bg-color-191f24");
 
@@ -17,48 +9,48 @@ function init() {
 
   $("#lUsuario").addClass("active");
 
+  tbla_principal();
+
+  //Mostramos los permisos
+  $.post("../ajax/uusuario.php?op=permisos&id=", function (r) { 
+    r = JSON.parse(r); $("#permisos").html(r.data); 
+  }).fail(
+    function(e) { 
+      console.log(e);
+      if (e.status == 404) {
+        Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+      } else if(e.status == 500) {
+        Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+      }       
+    }
+  );
+
+  //Mostramos los trabajadores
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { r = JSON.parse(r); $("#trabajador").html(r.data); });
+
   $("#guardar_registro").on("click", function (e) { $("#submit-form-usuario").submit(); });
 
   //Initialize Select2 Elements
-  $("#trabajador").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione trabajador",
-    allowClear: true,
-  });
-  
+  $("#trabajador").select2({ theme: "bootstrap4",  placeholder: "Selecione trabajador", allowClear: true, });  
 
   //Initialize Select2 Elements
-  $("#cargo").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione cargo",
-    allowClear: true,
-  });
+  $("#cargo").select2({ theme: "bootstrap4",  placeholder: "Selecione cargo", allowClear: true, });
   
-  // $("#trabajador").val("").trigger("change");
-  // $("#cargo").val("").trigger("change");
-
   // Formato para telefono
   $("[data-mask]").inputmask();   
 }
  
 
-function seleccion() {
-
-  if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == null) {
-
-    $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-  } else {
-
-    $("#trabajador_validar").hide();
-  }
-}
-
 //Función limpiar
 function limpiar() {
+
+  // Agregamos la validacion
+  $("#trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+
+  $("#permisos").html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
   estado_usuario_requerido = true;
 
-  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); $("#trabajador").val("").trigger("change"); });
+  $.post("../ajax/usuario.php?op=select2Trabajador&id=", function (r) { r = JSON.parse(r); $("#trabajador").html(r.data); $("#trabajador").val("").trigger("change"); });
 
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");
@@ -72,7 +64,7 @@ function limpiar() {
   $(".modal-title").html("Agregar usuario");  
 
   //Mostramos los permisos
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
+  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { r = JSON.parse(r); $("#permisos").html(r.data); });
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -81,36 +73,36 @@ function limpiar() {
 }
 
 //Función Listar
-function listar() {
+function tbla_principal() {
 
-  tabla=$('#tabla-usuarios').dataTable({
+  tabla = $('#tabla-usuarios').dataTable({
     "responsive": true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
     "ajax":{
-        url: '../ajax/usuario.php?op=listar',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: 0
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-        // columna: 1
-        if (data[1] != '') {
-          $("td", row).eq(1).addClass("text-center");   
-            
-        }
-      },
+      url: '../ajax/uusuario.php?op=tbla_principal',
+      type : "get",
+      dataType : "json",						
+      error: function(e){        
+        console.log(e.responseText); ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {    
+
+      // columna: 0
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass("text-center");   
+          
+      }
+      // columna: 1
+      if (data[1] != '') {
+        $("td", row).eq(1).addClass("text-center");   
+          
+      }
+    },
     "language": {
       "lengthMenu": "Mostrar: _MENU_ registros",
       "buttons": {
@@ -128,12 +120,12 @@ function listar() {
 }
 
 //Función para guardar o editar
-function guardaryeditar(e) {
+function guardar_y_editar_usuario(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-usuario")[0]);
 
   $.ajax({
-    url: "../ajax/usuario.php?op=guardaryeditar",
+    url: "../ajax/usuario.php?op=guardar_y_editar_usuario",
     type: "POST",
     data: formData,
     contentType: false,
@@ -160,37 +152,41 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
-  limpiar();
-  estado_usuario_requerido = false;
+
+  limpiar();  
+
   $(".modal-title").html("Editar usuario");
   $("#trabajador").val("").trigger("change"); 
   $("#trabajador_c").html(`Trabajador <b class="text-danger">(Selecione nuevo) </b>`);
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-usuario").modal("show")
+  // Removemos la validacion
+  $("#trabajador").rules('remove', 'required');
+
+  $("#modal-agregar-usuario").modal("show");  
 
   $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data); 
+    data = JSON.parse(data);  console.log(data); 
 
-    $(".modal-title").html(`Editar usuario: <b> ${data.nombres} </b> `);
+    $(".modal-title").html(`Editar usuario: <i class="fas fa-users-cog text-primary"></i> <b>${data.data.nombres}</b> `);    
+    
+    $("#trabajador_old").val(data.data.idtrabajador); 
+    $("#cargo").val(data.data.cargo).trigger("change"); 
+    $("#login").val(data.data.login);
+    $("#password-old").val(data.data.password);
+    $("#idusuario").val(data.data.idusuario);
 
     $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-    
-    $("#trabajador_old").val(data.idtrabajador); 
-    $("#cargo").val(data.cargo).trigger("change"); 
-    $("#login").val(data.login);
-    $("#password-old").val(data.password);
-    $("#idusuario").val(data.idusuario);
-    
-  });
+    $("#cargando-2-fomulario").hide();    
+
+  }).fail( function(e) { console.log(e); ver_errores(e); } );
 
   $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-
-    $("#permisos").html(r);
-  });
+    r = JSON.parse(r);
+    $("#permisos").html(r.data);
+  }).fail( function(e) { console.log(e); ver_errores(e); } );
 }
 
 //Función para desactivar registros
@@ -216,145 +212,89 @@ function desactivar(idusuario) {
   
           Swal.fire("Error!", e, "error");
         }
-      });      
+      }).fail( function(e) { console.log(e); ver_errores(e); } );      
     }
   });   
 }
 
 //Función para activar registros ::: sin usar::::
-function activar(idusuario) {
-
-  Swal.fire({
-
-    title: "¿Está Seguro de  Activar  el Usuario?",
-    text: "Este usuario tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      $.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
-
-        if (e == 'ok') {
-
-          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
-  
-          tabla.ajax.reload();
-          
-        }else{
-  
-          Swal.fire("Error!", e, "error");
-        }
-      });      
-    }
-  });      
-}
+crud_activar(
+  "../ajax/usuario.php?op=activar", 
+  idusuario, 
+  "¿Está Seguro de  Activar  el Usuario?", 
+  "Este usuario tendra acceso al sistema", 
+  callback_true, 
+  callback_false
+)
 
 //Función para desactivar registros
 function eliminar(idusuario) {
-   //----------------------------
- Swal.fire({
 
-  title: "!Elija una opción¡",
-  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-  icon: "warning",
-  showCancelButton: true,
-  showDenyButton: true,
-  confirmButtonColor: "#17a2b8",
-  denyButtonColor: "#d33",
-  cancelButtonColor: "#6c757d",    
-  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+  Swal.fire({
+    title: "!Elija una opción¡",
+    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+    icon: "warning",
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+  }).then((result) => {
 
-}).then((result) => {
+    if (result.isConfirmed) {
+      //op=desactivar
+      $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
+        if (e == 'ok') {
 
-  if (result.isConfirmed) {
-    //op=desactivar
-    $.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
-      if (e == 'ok') {
+          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
 
-        Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");		 
+          tabla.ajax.reload();
+          
+        }else{
 
-        tabla.ajax.reload();
+          Swal.fire("Error!", e, "error");
+        }
+      }).fail( function(e) { console.log(e); ver_errores(e); } );
+
+    }else if (result.isDenied) {
+      //op=eliminar
+      $.post("../ajax/usuario.php?op=eliminar", { idusuario: idusuario }, function (e) {
+        if (e == 'ok') {
+
+          Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");		 
+
+          tabla.ajax.reload();
+          
+        }else{
+
+          Swal.fire("Error!", e, "error");
+        }
         
-      }else{
-
-        Swal.fire("Error!", e, "error");
-      }
-    });
-
-  }else if (result.isDenied) {
-   //op=eliminar
-   $.post("../ajax/usuario.php?op=eliminar", { idusuario: idusuario }, function (e) {
-    if (e == 'ok') {
-
-      Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");		 
-
-      tabla.ajax.reload();
-      
-    }else{
-
-      Swal.fire("Error!", e, "error");
+      }).fail( function(e) { console.log(e); ver_errores(e); } );
     }
-    
-  }); 
-
-
-  }
-
-});  
+  });  
 }
 
 init();
 
 $(function () {
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-        
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-
-        guardaryeditar(e);
-      }
-    },
-  });
+  $("#cargo").on('change', function() { $(this).trigger('blur'); });
+  $("#trabajador").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-usuario").validate({
+    ignore: '.select2-input, .select2-focusser',
     rules: {
       login: { required: true, minlength: 3, maxlength: 20 },
       password: { minlength: 4, maxlength: 20 },
-      // estado_usuario_requerido? trabajador: { required: estado_usuario_requerido},:
       cargo: { required: true }
-      // terms: { required: true },
     },
     messages: {
-      login: {
-        required: "Este campo es requerido.",
-        minlength: "El login debe tener MÍNIMO 4 caracteres.",
-        maxlength: "El login debe tener como MÁXIMO 20 caracteres.",
-      },
-      password: {
-        minlength: "La contraseña debe tener MÍNIMO 4 caracteres.",
-        maxlength: "La contraseña debe tener como MÁXIMO 20 caracteres.",
-      },
-      trabajador: {
-        required: "Este campo es requerido."
-      },
-      cargo: {
-        required: "Este campo es requerido."
-      },
+      login: { required: "Este campo es requerido.", minlength: "MÍNIMO 4 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
+      password: { minlength: "MÍNIMO 4 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
+      cargo: { required: "Campo requerido." },
     },
     
     errorElement: "span",
@@ -374,17 +314,16 @@ $(function () {
     unhighlight: function (element, errorClass, validClass) {
 
       $(element).removeClass("is-invalid").addClass("is-valid");
+              
+    },
 
-      if ($("#trabajador").select2("val") == null && $("#trabajador_old").val() == "") {
-         
-        $("#trabajador_validar").show(); //console.log($("#trabajador").select2("val") + ", "+ $("#trabajador_old").val());
-
-      } else {
-
-        $("#trabajador_validar").hide();
-      }       
+    submitHandler: function (e) {
+      guardar_y_editar_usuario(e);
     },
   });
+
+  $("#cargo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 function marcar_todos_permiso() {

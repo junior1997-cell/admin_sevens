@@ -1,5 +1,7 @@
 var errores_list = [];
 
+/*  ══════════════════════════════════════════ - C R U D - ══════════════════════════════════════════ */
+
 function crud_listar(url, nombre_modulo) {
   tabla = $("#tabla_" + nombre_modulo).DataTable({
     responsive: true,
@@ -47,6 +49,24 @@ function lista_select2(url, nombre_modulo, id) {
         .trigger("change");
     } else {
       $("#select_modal_" + nombre_modulo)
+        .val(null)
+        .trigger("change");
+    }
+  });
+}
+
+function crud_listar_select(url, select, select2 = false) {
+  $.get(url, function (data, status) {
+    data = JSON.parse(data);
+
+    $("#" + select).html("");
+
+    $.each(data, function (key, value) {
+      $("#" + select).append('<option value="' + value.id + '">' + value.nombre + "</option>");
+    });
+
+    if (select2) {
+      $("#" + select)
         .val(null)
         .trigger("change");
     }
@@ -293,68 +313,8 @@ function crud_guardar_modal(event, url, nombre_modulo, callback_limpiar, callbac
   });
 }
 
-function crud_eliminar(url, callback_true, callback_false) {
-  Swal.fire({
-    title: "¿Deseas eliminar permanetemente este registro?",
-    text: "¡No se podra recuperar!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#f34770",
-    confirmButtonText: "Si, eliminar",
-    cancelButtonText: "No, cancelar",
-    closeOnConfirm: false,
-    closeOnCancel: false,
-  }).then((result) => {
-    if (result.value) {
-      $.get(url, function (data, status) {
-        data = JSON.parse(data);
-        if (data.status) {
-          sw_success("Se eliminó");
-          if (callback_true) {
-            callback_true();
-          }
-        } else {
-          sw_error(data.message);
-          if (callback_false) {
-            callback_false();
-          }
-        }
-      });
-    } else if (result.dismiss) {
-      sw_cancelar();
-    }
-  });
-}
 
-function crud_eliminar_detalle(url, id) {
-  Swal.fire({
-    title: "¿Deseas eliminar permanetemente este registro?",
-    text: "¡No se podra recuperar!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#f34770",
-    confirmButtonText: "Si, eliminar",
-    cancelButtonText: "No, cancelar",
-    closeOnConfirm: false,
-    closeOnCancel: false,
-  }).then((result) => {
-    if (result.value) {
-      $.get(url, function (data, status) {
-        data = JSON.parse(data);
-        if (data.status) {
-          $("#tr_" + id).remove();
-          sw_success("Se eliminó");
-        } else {
-          sw_error("Error en eliminar");
-        }
-      });
-    } else if (result.dismiss) {
-      sw_cancelar();
-    }
-  });
-}
-
-function crud_desactivar(url, callback_true, callback_false) {
+function crud_desactivar(url, id_tabla, title, mensaje, callback_true, callback_false) {
   Swal.fire({
     title: "¿Deseas desactivar este registro?",
     icon: "warning",
@@ -394,7 +354,7 @@ function crud_desactivar(url, callback_true, callback_false) {
   });
 }
 
-function crud_activar(url, callback_true, callback_false) {
+function crud_activar(url, id_tabla, title, mensaje, callback_true, callback_false) {
   Swal.fire({
     title: "¿Deseas activar este registro?",
     icon: "warning",
@@ -433,27 +393,103 @@ function crud_activar(url, callback_true, callback_false) {
     // REMOVEMOS EL TOOTIP.......................................................
     $(".tooltip").removeClass("show").addClass("hidde");
   });
-}
 
-function crud_listar_select(url, select, select2 = false) {
-  $.get(url, function (data, status) {
-    data = JSON.parse(data);
+  Swal.fire({
+    title: title,
+    text: mensaje,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, activar!",
+  }).then((result) => {
 
-    $("#" + select).html("");
+    if (result.isConfirmed) {
 
-    $.each(data, function (key, value) {
-      $("#" + select).append('<option value="' + value.id + '">' + value.nombre + "</option>");
-    });
+      $.post( url, { 'id_tabla': id_tabla }, function (e) {
 
-    if (select2) {
-      $("#" + select)
-        .val(null)
-        .trigger("change");
+        if (data.status) {
+
+          if (callback_true) {
+            callback_true();
+          }
+          Swal.fire("Activado!", "Tu usuario ha sido activado.", "success");		 
+  
+          tabla.ajax.reload();
+
+          $(".tooltip").removeClass("show").addClass("hidde");
+          
+        }else{
+  
+          ver_errores(e);
+        }
+      }).fail( function(e) { console.log(e); ver_errores(e); } );      
     }
   });
 }
 
-/******************* ALERTAS *******************/
+function crud_eliminar(url, callback_true, callback_false) {
+  Swal.fire({
+    title: "¿Deseas eliminar permanetemente este registro?",
+    text: "¡No se podra recuperar!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#f34770",
+    confirmButtonText: "Si, eliminar",
+    cancelButtonText: "No, cancelar",
+    closeOnConfirm: false,
+    closeOnCancel: false,
+  }).then((result) => {
+    if (result.value) {
+      $.get(url, function (data, status) {
+        data = JSON.parse(data);
+        if (data.status) {
+          sw_success("Se eliminó");
+          if (callback_true) {
+            callback_true();
+          }
+        } else {
+          sw_error(data.message);
+          if (callback_false) {
+            callback_false();
+          }
+        }
+      });
+    } else if (result.dismiss) {
+      sw_cancelar();
+    }
+  });
+}
+
+function crud_eliminar_papelera(url, id) {
+  Swal.fire({
+    title: "¿Deseas eliminar permanetemente este registro?",
+    text: "¡No se podra recuperar!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#f34770",
+    confirmButtonText: "Si, eliminar",
+    cancelButtonText: "No, cancelar",
+    closeOnConfirm: false,
+    closeOnCancel: false,
+  }).then((result) => {
+    if (result.value) {
+      $.get(url, function (data, status) {
+        data = JSON.parse(data);
+        if (data.status) {
+          $("#tr_" + id).remove();
+          sw_success("Se eliminó");
+        } else {
+          sw_error("Error en eliminar");
+        }
+      });
+    } else if (result.dismiss) {
+      sw_cancelar();
+    }
+  });
+}
+
+/*  ══════════════════════════════════════════ - A L E R T A S - ══════════════════════════════════════════ */
 
 function sw_cancelar(txt = "Se canceló", timer = 3000) {
   Swal.fire({
@@ -502,52 +538,29 @@ function confirmar_formulario(flat, callback) {
   }
 }
 
-/*********************************************/
+/*  ══════════════════════════════════════════ - E R R O R E S - ══════════════════════════════════════════ */
 
-function comprobar_errores(jqXhr, nombre_modulo) {
-  if (jqXhr.status === 422) {
-    var errors = jqXhr.responseJSON;
-    ver_errores(errors, nombre_modulo);
-  } else {
-    Swal.fire({
-      title: "Error " + jqXhr.status,
-      text: "Contactase con el area de desarrollo de software!",
-      timer: 2000,
-      icon: "error",
-    });
+function ver_errores(e) {
+
+  if (e.status == 400) {
+
+    Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+    
+  } else if(e.status == 500) {
+
+    Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+
+    if (e.status == false) {
+
+      Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+       
+    } else {
+      Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+    }
   }
 }
 
-function ver_errores(errors, nombre_modulo) {
-  /* Limpiamos posibles errores pasados*/
-  limpiar_errores(nombre_modulo);
-
-  var errors_html = "";
-
-  $.each(errors.errors, function (key, value) {
-    $('input[name="' + key + '"]').addClass("is-invalid");
-    $('select[name="' + key + '"]').addClass("is-invalid");
-    $('textarea[name="' + key + '"]').addClass("is-invalid");
-    errors_html += "<li>" + value[0] + "</li>";
-  });
-
-  $("#contenedor_de_errores_" + nombre_modulo).html(div_alert_danger(errors_html));
-  /* Guardamos los errorres pasados*/
-  errores_list = errors;
-}
-
-function limpiar_errores(nombre_modulo) {
-  $("#contenedor_de_errores_" + nombre_modulo).html("");
-
-  $.each(errores_list.errors, function (key, value) {
-    console.log("borrrar is-invalid: " + key);
-    $('input[name="' + key + '"]').removeClass("is-invalid");
-    $('select[name="' + key + '"]').removeClass("is-invalid");
-    $('textarea[name="' + key + '"]').removeClass("is-invalid");
-  });
-}
-
-function div_alert_danger(html) {
+function alert_danger(html) {
   return (
     '<div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert_error_cliente">' +
     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
@@ -574,17 +587,6 @@ function limpiar_form(nombre_modulo, callback) {
   limpiar_errores(nombre_modulo);
 }
 
-function limpiar_form_sm(nombre_modulo, callback) {
-  if (callback) {
-    callback();
-  }
-
-  /* Reiniciamos la barra */
-  // reniciar_barra(nombre_modulo);
-  /* Limpiamos posibles errores*/
-  limpiar_errores(nombre_modulo);
-}
-
 function reniciar_barra(nombre_modulo) {
   $("#div_barra_progress_" + nombre_modulo).hide();
   $("#barra_progress_" + nombre_modulo).css({
@@ -593,27 +595,3 @@ function reniciar_barra(nombre_modulo) {
   $("#barra_progress_" + nombre_modulo).text("0%");
 }
 
-/****************************************************** */
-/****************************************************** */
-/****************************************************** */
-
-// Funciones
-
-function formatText(icon) {
-  return $('<span><i class="' + icon.text + '"></i> ' + icon.text + "</span>");
-}
-
-function formatLabel(icon) {
-  return $('<span class="label ' + icon.text + '"> ' + icon.text + " </span>");
-}
-
-//Redondear 2 decimales (1.56 = 1.60, 1.52 = 1.50)
-function roundTwo(num) {
-  return Number(+(Math.round(num + "e+1") + "e-1")).toFixed(2);
-}
-
-function unique_id() {
-  return parseInt(Math.round(new Date().getTime() + Math.random() * 100));
-}
-// REMOVEMOS EL TOOTIP.......................................................
-$(".tooltip").removeClass("show").addClass("hidde");
