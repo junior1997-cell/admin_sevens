@@ -43,23 +43,11 @@ function init() {
   $("#doc5").change(function(e) {  addDocs(e,$("#doc5").attr("id")) });
 
   //Initialize Select2 Elements
-  $("#banco").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione banco",
-    allowClear: true,
-  });
+  $("#banco").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
   //Initialize Select2 Elements
-  $("#tipo").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione tipo",
-    allowClear: true,
-  });
+  $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   //Initialize Select2 Elements
-  $("#ocupacion").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione Ocupación",
-    allowClear: true,
-  });
+  $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 }
 
 /* PREVISUALIZAR LAS IMAGENES */
@@ -463,7 +451,7 @@ function sueld_mensual(){
 }
 
 //Función limpiar
-function limpiar() {
+function limpiar_form_trabajador() {
   $("#idtrabajador").val("");
   $("#tipo_documento option[value='DNI']").attr("selected", true);
   $("#nombre").val(""); 
@@ -590,9 +578,9 @@ function listar() {
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
-//Función para guardar o editar
 
-function guardaryeditar(e) {
+//Función para guardar o editar
+function guardar_y_editar_trabajador(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-trabajador")[0]);
 
@@ -611,7 +599,7 @@ function guardaryeditar(e) {
 
 	      tabla.ajax.reload();
          
-				limpiar();
+				limpiar_form_trabajador();
 
         $("#modal-agregar-trabajador").modal("hide");
 
@@ -835,7 +823,7 @@ function verdatos(idtrabajador){
 // mostramos los datos para editar
 function mostrar(idtrabajador) {
 
-  limpiar();  
+  limpiar_form_trabajador();  
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
@@ -1189,7 +1177,7 @@ $(function () {
 
     submitHandler: function (e) {
 
-      guardaryeditar(e);
+      guardar_y_editar_trabajador(e);
 
     },
   });
@@ -1197,98 +1185,54 @@ $(function () {
   $("#form-trabajador").validate({
     rules: {
       tipo_documento: { required: true },
-      num_documento: { required: true, minlength: 6, maxlength: 20 },
-      nombre: { required: true, minlength: 6, maxlength: 100 },
-      email: { email: true, minlength: 10, maxlength: 50 },
-      direccion: { minlength: 5, maxlength: 70 },
-      telefono: { minlength: 8 },
-      tipo_trabajador: { required: true},
-      cargo: { required: true},
-      c_bancaria: { minlength: 10,},
-      banco: { required: true},
-      tipo: { required: true},
-      ocupacion: { required: true},
-      ruc: { minlength: 11, maxlength: 11},
-      // terms: { required: true },
+      num_documento:  { required: true, minlength: 6, maxlength: 20 },
+      nombre:         { required: true, minlength: 6, maxlength: 100 },
+      email:          { email: true, minlength: 10, maxlength: 50 },
+      direccion:      { minlength: 5, maxlength: 70 },
+      telefono:       { minlength: 8 },
+      tipo_trabajador:{ required: true},
+      cargo:          { required: true},
+      c_bancaria:     { minlength: 10,},
+      banco:          { required: true},
+      tipo:           { required: true},
+      ocupacion:      { required: true},
+      ruc:            { minlength: 11, maxlength: 11},
     },
     messages: {
-      tipo_documento: {
-        required: "Por favor selecione un tipo de documento", 
-      },
-      num_documento: {
-        required: "Ingrese un número de documento",
-        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El número documento debe tener como MÁXIMO 20 caracteres.",
-      },
-      nombre: {
-        required: "Por favor ingrese los nombres y apellidos",
-        minlength: "El número documento debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El número documento debe tener como MÁXIMO 100 caracteres.",
-      },
-      email: {
-        required: "Por favor ingrese un correo electronico.",
-        email: "Por favor ingrese un coreo electronico válido.",
-        minlength: "El correo electronico debe tener MÍNIMO 10 caracteres.",
-        maxlength: "El correo electronico debe tener como MÁXIMO 50 caracteres.",
-      },
-      direccion: {
-        minlength: "La dirección debe tener MÍNIMO 5 caracteres.",
-        maxlength: "La dirección debe tener como MÁXIMO 70 caracteres.",
-      },
-      telefono: {
-        minlength: "El teléfono debe tener MÍNIMO 8 caracteres.",
-      },
-      tipo_trabajador: {
-        required: "Por favor  seleccione un tipo trabajador.",
-      },
-      cargo: {
-        required: "Por favor  un cargo.",
-      },
-      c_bancaria: {
-        minlength: "El número documento debe tener 10 caracteres."
-      },
-      tipo: {
-        required: "Este campo es requerido",
-      },
-      ocupacion: {
-        required: "Este campo es requerido",
-      },
-      banco: {
-        required: "Este campo es requerido",
-      },
-      ruc: {
-        minlength: "El número documento debe tener 11 caracteres.",
-        maxlength: "El número documento debe tener maximo 11 caracteres.",
-      },
+      tipo_documento: { required: "Campo requerido.", },
+      num_documento:  { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
+      nombre:         { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
+      email:          { required: "Campo requerido.", email: "Ingrese un coreo electronico válido.", minlength: "MÍNIMO 10 caracteres.", maxlength: "MÁXIMO 50 caracteres.", },
+      direccion:      { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 70 caracteres.", },
+      telefono:       { minlength: "MÍNIMO 8 caracteres.", },
+      tipo_trabajador:{ required: "Campo requerido.", },
+      cargo:          { required: "Campo requerido.", },
+      c_bancaria:     { minlength: "MÍNIMO 10 caracteres.", },
+      tipo:           { required: "Campo requerido.", },
+      ocupacion:      { required: "Campo requerido.", },
+      banco:          { required: "Campo requerido.", },
+      ruc:            { minlength: "MÍNIMO 11 caracteres.", maxlength: "MÁXIMO 11 caracteres.", },
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
-   unhighlight: function (element, errorClass, validClass) {
-
+    unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
-
     },
-
-
-
   });
 });
 
 /*Validación Fecha de Nacimiento Mayoria de edad del usuario*/
-function edades() {
+function calcular_edad() {
 
   var fechaUsuario = $("#nacimiento").val();
 
@@ -1383,19 +1327,20 @@ function edades() {
 }
 
 // restringimos la fecha para no elegir mañana
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; //January is 0!
-var yyyy = today.getFullYear();
- if(dd<10){
-        dd='0'+dd
-    } 
-    if(mm<10){
-        mm='0'+mm
-    } 
+function no_select_tomorrow(nombre_input) {  
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  if(dd<10){ dd='0'+dd } 
+  if(mm<10){ mm='0'+mm } 
 
-today = yyyy+'-'+mm+'-'+dd;
-document.getElementById("nacimiento").setAttribute("max", today);
+  today = `${yyyy}-${mm}-${dd}`;
+  $(nombre_input).attr('max',today);
+  //document.getElementById("nacimiento").setAttribute("max", );
+}
+
+
 
 function validacion_form() {
   if ($('#nombre').val() == '' || $('#tipo_documento').val() == '' ) {

@@ -522,7 +522,7 @@ function fecha_actual() {
 
 //Función limpiar
 function limpiar() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   //Mostramos los selectProveedor
   $.post("../ajax/activos_fijos_proyecto.php?op=selectProveedor", function (r) {
@@ -561,7 +561,7 @@ function limpiar() {
 
 //Función limpiar
 function limpiardatosproveedor() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   $("#idproveedor").val("");
   $("#tipo_documento option[value='RUC']").attr("selected", true);
@@ -1231,7 +1231,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
   $("#descargar").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_pagos_activos_fijos_p/" + imagen);
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 //-----------agregar activos----------------------------
 //Función limpiar

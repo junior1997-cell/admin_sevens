@@ -55,7 +55,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-trabajador" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-trabajador" onclick="limpiar_form_trabajador();"><i class="fas fa-user-plus"></i> Agregar</button>
                             Admnistra de manera eficiente a los trabajdores
                           </h3>
                         </div>
@@ -150,12 +150,11 @@
                         <form id="form-trabajador" name="form-trabajador" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
-
                               <!-- id trabajador -->
-                              <input type="hidden" name="idtrabajador" id="idtrabajador" />                          
+                              <input type="hidden" name="idtrabajador" id="idtrabajador" />
 
                               <!-- Tipo de documento -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="tipo_documento">Tipo de documento</label>
                                   <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
@@ -166,8 +165,9 @@
                                   </select>
                                 </div>
                               </div>
+
                               <!-- N° de documento -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="num_documento">N° de documento</label>
                                   <div class="input-group">
@@ -181,51 +181,50 @@
                                   </div>
                                 </div>
                               </div>
+
                               <!-- Nombre -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                                 <div class="form-group">
                                   <label for="nombre">Nombre y Apellidos/Razon Social</label>
                                   <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombres y apellidos" />
                                 </div>
                               </div>
+
                               <!-- Correo electronico -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="email">Correo electrónico</label>
                                   <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico" onkeyup="convert_minuscula(this);" />
                                 </div>
                               </div>
-                              <!-- Direccion -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="direccion">Dirección</label>
-                                  <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
-                                </div>
-                              </div>
+                              
                               <!-- Telefono -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="telefono">Teléfono</label>
                                   <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
                                 </div>
                               </div>
+
                               <!-- fecha de nacimiento -->
-                              <div class="col-lg-3">
+                              <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="fecha_nacimiento">Fecha Nacimiento</label>
                                   <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="edades();" onchange="edades();" />
-                                  <input type="hidden" name="edad" id="edad">
+                                  <input type="hidden" name="edad" id="edad" />
                                 </div>
                               </div>
+
                               <!-- edad -->
-                              <div class="col-lg-1">
+                              <div class="col-12 col-sm-2 col-md-6 col-lg-1">
                                 <div class="form-group">
                                   <label for="edad">Edad</label>
                                   <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
                                 </div>
-                              </div> 
+                              </div>
+
                               <!-- banco -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="banco">Banco</label>
                                   <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
@@ -233,60 +232,70 @@
                                   </select>
                                   <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
                                 </div>
-                              </div>                         
+                              </div>
+
                               <!-- Cuenta bancaria -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="c_bancaria" class="chargue-format-1">Cuenta Bancaria</label>
                                   <input type="text" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
                                 </div>
                               </div>
+
                               <!-- CCI -->
-                              <div class="col-lg-4">
-                                <div class="form-group"> 
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
                                   <label for="c_bancaria" class="chargue-format-2">CCI</label>
                                   <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
                                 </div>
                               </div>
+
                               <!-- Titular de la cuenta -->
-                              <div class="col-lg-3">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="titular_cuenta">Titular de la cuenta</label>
                                   <input type="text" name="titular_cuenta" class="form-control" id="titular_cuenta" placeholder="Titular de la cuenta" />
                                 </div>
                               </div>
+
                               <!-- tipo -->
-                              <div class="col-lg-2">
-                                  <div class="form-group">
-                                      <label for="tipo">Tipo</label>
-                                      <select name="tipo" id="tipo" class="form-control select2" style="width: 100%;" >
-                                      </select>
-                                      <!--<input type="hidden" name="color_old" id="color_old" />-->
-                                  </div>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="tipo">Tipo</label>
+                                  <select name="tipo" id="tipo" class="form-control select2" style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
                               </div>
+
                               <!-- ocupacion -->
-                              <div class="col-lg-3">
-                                  <div class="form-group">
-                                      <label for="ocupacion">Ocupación</label>
-                                      <select name="ocupacion" id="ocupacion" class="form-control select2" style="width: 100%;" >
-                                      </select>
-                                      <!--<input type="hidden" name="color_old" id="color_old" />-->
-                                  </div>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="ocupacion">Ocupación</label>
+                                  <select name="ocupacion" id="ocupacion" class="form-control select2" style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
                               </div>
+
                               <!-- Ruc -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="ruc">Ruc</label>
                                   <input type="number" name="ruc" class="form-control" id="ruc" placeholder="Ingrese número de ruc" />
                                 </div>
                               </div>
-                              
-                              <div class="col-lg-8"></div>
+
+                              <!-- Direccion -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                                <div class="form-group">
+                                  <label for="direccion">Dirección</label>
+                                  <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
+                                </div>
+                              </div>
 
                               <!-- imagen perfil -->
-                              <div class="col-md-6 col-lg-4">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
-                                <label for="foto1">Foto de perfil</label> <br>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto1">Foto de perfil</label> <br />
                                 <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
                                 <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
                                 <input type="hidden" name="foto1_actual" id="foto1_actual" />
@@ -294,9 +303,9 @@
                               </div>
 
                               <!-- imagen dni anverso -->
-                              <div class="col-md-6 col-lg-4">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
-                                <label for="foto2">DNI anverso</label> <br>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto2">DNI anverso</label> <br />
                                 <img onerror="this.src='../dist/img/default/dni_anverso.webp';" src="../dist/img/default/dni_anverso.webp" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
                                 <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
                                 <input type="hidden" name="foto2_actual" id="foto2_actual" />
@@ -304,69 +313,60 @@
                               </div>
 
                               <!-- imagen dni reverso -->
-                              <div class="col-md-6 col-lg-4">
-                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div>
-                                <label for="foto3">DNI reverso</label> <br>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto3">DNI reverso</label> <br />
                                 <img onerror="this.src='../dist/img/default/dni_reverso.webp';" src="../dist/img/default/dni_reverso.webp" class="img-thumbnail" id="foto3_i" style="cursor: pointer !important;" width="auto" />
                                 <input style="display: none;" type="file" name="foto3" id="foto3" accept="image/*" />
                                 <input type="hidden" name="foto3_actual" id="foto3_actual" />
                                 <div class="text-center" id="foto3_nombre"><!-- aqui va el nombre de la FOTO --></div>
-                              </div>                           
+                              </div>
 
                               <!-- Pdf 4 -->
-                              <div class="col-md-6 col-lg-4  mt-2" >  
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mt-2">
                                 <!-- linea divisoria -->
-                                <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>                             
+                                <div class="col-lg-12 borde-arriba-naranja mt-2"></div>
                                 <div class="row">
                                   <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="Presupuesto" class="control-label" >CV Documentado</label>
+                                    <label for="Presupuesto" class="control-label">CV Documentado</label>
                                   </div>
                                   <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i">
-                                      <i class="fas fa-file-upload"></i> Subir.
-                                    </button>
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i"><i class="fas fa-file-upload"></i> Subir.</button>
                                     <input type="hidden" id="doc_old_4" name="doc_old_4" />
-                                    <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" /> 
+                                    <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" />
                                   </div>
                                   <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4,'cv_documentado');">
-                                      <i class="fa fa-eye"></i> PDF.
-                                    </button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4,'cv_documentado');"><i class="fa fa-eye"></i> PDF.</button>
                                   </div>
-                                </div>                              
+                                </div>
                                 <div id="doc4_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" />
                                 </div>
-                                <div class="text-center" id="doc4_nombre"><!-- aqui va el nombre del pdf --></div>                              
-                              </div>
-                                
-                              <!-- Pdf 5 -->
-                              <div class="col-md-6 col-lg-4  mt-2" > 
-                                <!-- linea divisoria -->
-                                <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>                              
-                                <div class="row">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="analisis-de-costos-unitarios" class="control-label" > CV No Documentado</label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i">
-                                      <i class="fas fa-file-upload"></i> Subir.
-                                    </button>
-                                    <input type="hidden" id="doc_old_5" name="doc_old_5" />
-                                    <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" /> 
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5,'cv_no_documentado');">
-                                      <i class="fa fa-eye"></i> PDF.
-                                    </button>
-                                  </div>
-                                </div>                              
-                                <div id="doc5_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
-                                </div>
-                                <div class="text-center" id="doc5_nombre"><!-- aqui va el nombre del pdf --></div>                            
+                                <div class="text-center" id="doc4_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
 
+                              <!-- Pdf 5 -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mt-2">
+                                <!-- linea divisoria -->
+                                <div class="col-lg-12 borde-arriba-naranja mt-2"></div>
+                                <div class="row">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="analisis-de-costos-unitarios" class="control-label"> CV No Documentado</label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                    <input type="hidden" id="doc_old_5" name="doc_old_5" />
+                                    <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" />
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5,'cv_no_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                  </div>
+                                </div>
+                                <div id="doc5_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" />
+                                </div>
+                                <div class="text-center" id="doc5_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -382,7 +382,7 @@
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" onclick="limpiar();" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="limpiar_form_trabajador();" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
                       </div>
                     </div>

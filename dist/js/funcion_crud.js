@@ -49,14 +49,13 @@ function lista_select2(url, nombre_input, id_tabla) {
 
     }
 
-  }).fail( function(e) { console.log(e);  ver_errores(e); } );
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 
-function crud_guardar_editar_card_xhr(event, url, formData,  callback_limpiar, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
-  event.preventDefault();
-
-  $("#div_barra_progress_" + nombre_modulo).show();
+function crud_guardar_editar_card_xhr( url, formData, callback_limpiar, callback_true, name_progress, table_reload_1, table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false, table_reload_9 = false) {
+  //event.preventDefault();
+  $("#div_barra_progress_" + name_progress).show();
 
   $.ajax({
     url: url,
@@ -78,9 +77,13 @@ function crud_guardar_editar_card_xhr(event, url, formData,  callback_limpiar, c
         if (table_reload_3) { table_reload_3(); }
         if (table_reload_4) { table_reload_4(); }
         if (table_reload_5) { table_reload_5(); }
+        if (table_reload_6) { table_reload_6(); }
+        if (table_reload_7) { table_reload_7(); }
+        if (table_reload_8) { table_reload_8(); }
+        if (table_reload_9) { table_reload_9(); }
 
       } else {
-        ver_errores(e); 
+        ver_errores(datos); 
       }
     },
     xhr: function () {
@@ -92,74 +95,9 @@ function crud_guardar_editar_card_xhr(event, url, formData,  callback_limpiar, c
           var prct = (evt.loaded / evt.total) * 100;
           prct = Math.round(prct);
 
-          $("#barra_progress_" + nombre_modulo).css({ width: prct + "%", });
+          $("#barra_progress_" + name_progress).css({ width: prct + "%", });
 
-          $("#barra_progress_" + nombre_modulo).text(prct + "%");
-
-        }
-      }, false );
-
-      return xhr;
-    },
-    beforeSend: function () {
-      $("#div_barra_progress_" + nombre_modulo).show();
-      $("#barra_progress_" + nombre_modulo).css({ width: "0%",  });
-      $("#barra_progress_" + nombre_modulo).text("0%");
-    },
-    complete: function () {
-      $("#div_barra_progress_" + nombre_modulo).hide();
-      $("#barra_progress_" + nombre_modulo).css({ width: "0%", });
-      $("#barra_progress_" + nombre_modulo).text("0%");
-    },
-    error: function (jqXhr) {
-      ver_errores(jqXhr);
-    },
-  });
-}
-
-function crud_guardar_editar_modal_xhr(event, url, formData, nombre_modal, callback_limpiar, callback_true, select2_reload, name_progress, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
-  event.preventDefault();
-
-  $.ajax({
-    url: url,
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (datos) {
-
-      datos = JSON.parse(datos); // console.log(datos.inputt);
-
-      if (datos.status) { 
-              
-        if (callback_limpiar) { callback_true();  }
-        if (callback_true)    { callback_true();  }
-        if (select2_reload)   { select2_reload(); }        
-
-        if (table_reload_1) { table_reload_1(); }
-        if (table_reload_2) { table_reload_2(); }
-        if (table_reload_3) { table_reload_3(); }
-        if (table_reload_4) { table_reload_4(); }
-        if (table_reload_5) { table_reload_5(); }
-
-        $(nombre_modal).modal('hide');
-
-      } else {
-        ver_errores(e);
-      }
-    },
-    xhr: function () {
-      var xhr = new window.XMLHttpRequest();
-
-      xhr.upload.addEventListener( "progress", function (evt) {
-
-        if (evt.lengthComputable) {
-          var prct = (evt.loaded / evt.total) * 100;
-          prct = Math.round(prct);
-
-          $(`"#barra_progress_${name_progress}`).css({ width: prct + "%", });
-
-          $(`"#barra_progress_${name_progress}`).text(prct + "%");
+          $("#barra_progress_" + name_progress).text(prct + "%");
 
         }
       }, false );
@@ -167,23 +105,21 @@ function crud_guardar_editar_modal_xhr(event, url, formData, nombre_modal, callb
       return xhr;
     },
     beforeSend: function () {
-      $(`"#div_barra_progress_${name_progress}`).show();
-      $(`"#barra_progress_${name_progress}`).css({ width: "0%", });
-      $(`"#barra_progress_${name_progress}`).text("0%");
+      $("#div_barra_progress_" + name_progress).show();
+      $("#barra_progress_" + name_progress).css({ width: "0%",  });
+      $("#barra_progress_" + name_progress).text("0%");
     },
     complete: function () {
-      $(`"#div_barra_progress_${name_progress}`).hide();
-      $(`"#barra_progress_${name_progress}`).css({ width: "0%", });
-      $(`"#barra_progress_${name_progress}`).text("0%");
+      $("#div_barra_progress_" + name_progress).hide();
+      $("#barra_progress_" + name_progress).css({ width: "0%", });
+      $("#barra_progress_" + name_progress).text("0%");
     },
-    error: function (jqXhr) {
-      comprobar_errores(jqXhr);
-    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
-function crud_guardar_editar_card(event, url, formData, callback_limpiar, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
-  event.preventDefault();
+function crud_guardar_editar_card( url, formData, callback_limpiar, callback_true, table_reload_1, table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false, table_reload_9 = false) {
+  //event.preventDefault();
 
   $("#div_barra_progress_" + nombre_modulo).show();
 
@@ -207,19 +143,87 @@ function crud_guardar_editar_card(event, url, formData, callback_limpiar, callba
         if (table_reload_3) { table_reload_3(); }
         if (table_reload_4) { table_reload_4(); }
         if (table_reload_5) { table_reload_5(); }
+        if (table_reload_6) { table_reload_6(); }
+        if (table_reload_7) { table_reload_7(); }
+        if (table_reload_8) { table_reload_8(); }
+        if (table_reload_9) { table_reload_9(); }
 
       } else {         
-        ver_errores(e);
+        ver_errores(datos);
       }
     },    
-    error: function (jqXhr) {
-      ver_errores(jqXhr);
-    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
-function crud_guardar_editar_modal(event, url, formData, nombre_modal, callback_limpiar, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
-  event.preventDefault();
+function crud_guardar_editar_modal_xhr( url, formData, nombre_modal, callback_limpiar, callback_true, name_progress, table_reload_1, table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false, table_reload_9 = false) {
+  //event.preventDefault();
+
+  $.ajax({
+    url: url,
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (datos) {
+
+      datos = JSON.parse(datos); // console.log(datos.inputt);
+
+      if (datos.status) { 
+              
+        if (callback_limpiar) { callback_true();  }
+        if (callback_true)    { callback_true();  }       
+
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+        if (table_reload_6) { table_reload_6(); }
+        if (table_reload_7) { table_reload_7(); }
+        if (table_reload_8) { table_reload_8(); }
+        if (table_reload_9) { table_reload_9(); }
+
+        $(nombre_modal).modal('hide');
+
+      } else {
+        ver_errores(datos);
+      }
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener( "progress", function (evt) {
+
+        if (evt.lengthComputable) {
+          var prct = (evt.loaded / evt.total) * 100;
+          prct = Math.round(prct);
+
+          $(`#barra_progress_${name_progress}`).css({ width: prct + "%", });
+
+          $(`#barra_progress_${name_progress}`).text(prct + "%");
+
+        }
+      }, false );
+
+      return xhr;
+    },
+    beforeSend: function () {
+      $(`#div_barra_progress_${name_progress}`).show();
+      $(`#barra_progress_${name_progress}`).css({ width: "0%", });
+      $(`#barra_progress_${name_progress}`).text("0%");
+    },
+    complete: function () {
+      $(`#div_barra_progress_${name_progress}`).hide();
+      $(`#barra_progress_${name_progress}`).css({ width: "0%", });
+      $(`#barra_progress_${name_progress}`).text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function crud_guardar_editar_modal( url, formData, nombre_modal, callback_limpiar, callback_true, table_reload_1, table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false, table_reload_9 = false) {
+  //event.preventDefault();
 
   $("#div_barra_progress_" + nombre_modulo).show();
 
@@ -244,15 +248,84 @@ function crud_guardar_editar_modal(event, url, formData, nombre_modal, callback_
         if (table_reload_3) { table_reload_3(); }
         if (table_reload_4) { table_reload_4(); }
         if (table_reload_5) { table_reload_5(); }
+        if (table_reload_6) { table_reload_6(); }
+        if (table_reload_7) { table_reload_7(); }
+        if (table_reload_8) { table_reload_8(); }
+        if (table_reload_9) { table_reload_9(); }
 
         $(nombre_modal).modal('hide');
       } else {
-        ver_errores(e);
+        ver_errores(datos);
       }
     },
-    error: function (jqXhr) {
-      comprobar_errores(jqXhr);
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function crud_guardar_editar_modal_select2_xhr( url, formData, nombre_modal, callback_limpiar, callback_true, name_progress, url_select2, input_select2, table_reload_1 = false, table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false, table_reload_9 = false) {
+  //event.preventDefault();
+
+  $.ajax({
+    url: url,
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (datos) {
+
+      datos = JSON.parse(datos); // console.log(datos.inputt);
+
+      if (datos.status) { 
+              
+        if (callback_limpiar) { callback_true();  }
+        if (callback_true)    { callback_true();  }   
+        if (url_select2 && input_select2) { lista_select2(url_select2, input_select2, datos.data); }    
+
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+        if (table_reload_6) { table_reload_6(); }
+        if (table_reload_7) { table_reload_7(); }
+        if (table_reload_8) { table_reload_8(); }
+        if (table_reload_9) { table_reload_9(); }
+
+        $(nombre_modal).modal('hide');
+
+      } else {
+        ver_errores(datos);
+      }
     },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener( "progress", function (evt) {
+
+        if (evt.lengthComputable) {
+          var prct = (evt.loaded / evt.total) * 100;
+          prct = Math.round(prct);
+
+          $(`#barra_progress_${name_progress}`).css({ width: prct + "%", });
+
+          $(`#barra_progress_${name_progress}`).text(prct + "%");
+
+        }
+      }, false );
+
+      return xhr;
+    },
+    beforeSend: function () {
+      $(`#div_barra_progress_${name_progress}`).show();
+      $(`#barra_progress_${name_progress}`).css({ width: "0%", });
+      $(`#barra_progress_${name_progress}`).text("0%");
+    },
+    complete: function () {
+      $(`#div_barra_progress_${name_progress}`).hide();
+      $(`#barra_progress_${name_progress}`).css({ width: "0%", });
+      $(`#barra_progress_${name_progress}`).text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -435,25 +508,25 @@ function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, men
 
 /*  ══════════════════════════════════════════ - A L E R T A S - ══════════════════════════════════════════ */
 
-function sw_cancelar(txt = "Se canceló", timer = 3000) {
+function sw_cancelar(title='Cancelado!', txt = "Acción cancelada.", timer = 3000) {
   Swal.fire({
-    title: txt,
-    // text: txt,
+    title: title,
+    html: txt,
     timer: timer,
     icon: "info",
   });
 }
 
-function sw_error(txt = "Error", timer = 3000) {
+function sw_error(title='Error!', txt = "Acción con error.", timer = 3000) {
   Swal.fire({
-    title: "Error",
-    text: txt,
+    title: title,
+    html: txt,
     timer: timer,
     icon: "error",
   });
 }
 
-function sw_success(title='Exito', txt = "Acción ejecutada con éxito", timer = 3000) {
+function sw_success(title='Exito!', txt = "Acción ejecutada con éxito", timer = 3000) {
   Swal.fire({
     title: title,
     html: txt,
@@ -485,20 +558,21 @@ function confirmar_formulario(flat, callback) {
 /*  ══════════════════════════════════════════ - E R R O R E S - ══════════════════════════════════════════ */
 
 function ver_errores(e) {
-
+  
   if (e.status == 404) {
-
+    console.group("Error"); console.warn('Error 404 -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
     
   } else if(e.status == 500) {
-
+    console.group("Error"); console.warn('Error 404 -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
 
   }else if (e.status == false) {
-
+    console.group("Error"); console.warn('Error BD -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
      
-  } else { console.log('grave');
+  } else {
+    console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
   }
 }

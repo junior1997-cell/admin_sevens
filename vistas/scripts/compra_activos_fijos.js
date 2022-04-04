@@ -364,7 +364,7 @@ function fecha_actual() {
 
 //Función limpiar
 function limpiar_form_compra() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   //Mostramos los select2Proveedor
   //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
@@ -406,7 +406,7 @@ function limpiar_form_compra() {
 
 //Función limpiar
 function limpiardatosproveedor() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   $("#idproveedor").val("");
   $("#tipo_documento option[value='RUC']").attr("selected", true);
@@ -1483,7 +1483,7 @@ function limpiar_form_proveedor() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // damos formato a: Cta, CCI
@@ -1874,7 +1874,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
   $("#descargar").attr("href", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // :::::::::::::::::::::::::: GUARDAMOS FACTURA :::::::::::::::::::::::::::::::::::::::::::::::::::: 

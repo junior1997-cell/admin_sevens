@@ -348,11 +348,25 @@ table th {
 .w-135px{ width: 135px !important; }
 .w-200px{ width: 200px !important; }
 .w-250px{ width: 250px !important; }
+.w-280px{ width: 280px !important; }
 .w-300px{ width: 300px !important; }
 .w-350px{ width: 350px !important; }
 .w-600px{ width: 600px !important; }
 
 .w-xy-20px{  width: 20px !important;  height: 20px !important; }
+
+.w-01rem{ width: 0.1rem !important; }
+.w-02rem{ width: 0.2rem !important; }
+.w-03rem{ width: 0.3rem !important; }
+.w-04rem{ width: 0.4rem !important; }
+.w-05rem{ width: 0.5rem !important; }
+.w-06rem{ width: 0.6rem !important; }
+.w-07rem{ width: 0.7rem !important; }
+.w-08rem{ width: 0.8rem !important; }
+.w-09rem{ width: 0.9rem !important; }
+.w-1rem{ width: 1rem !important; }
+.w-2rem{ width: 2rem !important; }
+.w-3rem{ width: 3rem !important; }
 
 /*  ══════════════════════════════════════════ - H E I G H T   S I Z E - ══════════════════════════════════════════ */
 
@@ -377,6 +391,19 @@ table th {
 .h-500px{ height: 500px !important; }
 .h-600px{ height: 600px !important; }
 .h-700px{ height: 700px !important; }
+
+.h-01rem{ height: 0.1rem !important; }
+.h-02rem{ height: 0.2rem !important; }
+.h-03rem{ height: 0.3rem !important; }
+.h-04rem{ height: 0.4rem !important; }
+.h-05rem{ height: 0.5rem !important; }
+.h-06rem{ height: 0.6rem !important; }
+.h-07rem{ height: 0.7rem !important; }
+.h-08rem{ height: 0.8rem !important; }
+.h-09rem{ height: 0.9rem !important; }
+.h-1rem{ height: 1rem !important; }
+.h-2rem{ height: 2rem !important; }
+.h-3rem{ height: 3rem !important; }
 
 /*  ══════════════════════════════════════════ - F O N T   S I Z E - ══════════════════════════════════════════ */
 
@@ -465,6 +492,12 @@ table th {
   border-left: aliceblue;
   border-right: aliceblue;
   border-top: hidden;
+}
+
+.recorte-text{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 /* input-group-append con SELECT2 */

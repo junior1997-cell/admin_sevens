@@ -2387,7 +2387,7 @@ function guardar_y_editar_justificar(e) {
 
 //Función para desactivar registros
 function desactivar_dia_asistencia(idasistencia_trabajador) {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
   Swal.fire({
     title: "¿Está Seguro de  Desactivar la Asistencia?",
     text: "Al desactivar, las horas de este registro no seran contado.",
@@ -2410,7 +2410,7 @@ function desactivar_dia_asistencia(idasistencia_trabajador) {
 
 //Función para activar registros
 function activar_dia_asistencia(idasistencia_trabajador) {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
   Swal.fire({
     title: "¿Está Seguro de  Activar  la Asistencia?",
     text: "Al activar, las horas de este registro seran contados",
@@ -2533,7 +2533,7 @@ function desactivar_qs(id, tipo_pago) {
       });      
     }
   });  
-  $(".tooltip").removeClass('show'); 
+  $(".tooltip").removeClass("show").addClass("hidde"); 
 }
 
 //Función para activar registros
@@ -2561,7 +2561,7 @@ function activar_qs(id, tipo_pago) {
       });      
     }
   });     
-  $(".tooltip").removeClass('show'); 
+  $(".tooltip").removeClass("show").addClass("hidde"); 
 }
 
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   F E C H A S   D E   A C T I V I D A D E S  :::::::::::::::::::::::::::::::::::::::..

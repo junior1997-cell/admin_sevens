@@ -44,7 +44,7 @@ function init() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addDocsImgApplication(e,$("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -440,7 +440,7 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
     </div>
   </div>`);
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 //Función para guardar o editar
@@ -720,7 +720,7 @@ function limpiar_form_proveedor() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // damos formato a: Cta, CCI

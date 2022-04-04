@@ -75,7 +75,7 @@
               <i class="fas fa-phone-alt"></i> Telefono: <?php echo $_SESSION['telefono']; ?>
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
+            <a href="#" class="dropdown-item w-280px recorte-text">
               <i class="fas fa-envelope"></i> Email: <?php echo $_SESSION['email']; ?>
             </a>
             <div class="dropdown-divider"></div>

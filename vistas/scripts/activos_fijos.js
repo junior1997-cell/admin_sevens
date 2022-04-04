@@ -204,7 +204,7 @@ function modal_ficha_tec(ficha_tecnica) {
     $("#iddescargar").attr("href", "../dist/docs/activos_fijos_general/ficha_tecnica_activos_fijos/" + ficha_tec);
   }
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 //Función para guardar o editar
 

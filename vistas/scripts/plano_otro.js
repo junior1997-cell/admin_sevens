@@ -895,7 +895,7 @@ function ver_modal_docs(nombre, descripcion, doc) {
     // $('#verdoc1').html('<embed src="../dist/pdf/'+doc+'" type="application/pdf" width="100%" height="200px" />');
   }
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 init();

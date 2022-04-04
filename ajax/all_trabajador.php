@@ -19,8 +19,7 @@
       require_once "../modelos/AllTrabajador.php";
 
       $trabajador = new AllTrabajador();
-
-      //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
+      
       $idtrabajador	  	= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
       $nombre 		      = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
       $tipo_documento 	= isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
@@ -28,15 +27,14 @@
       $direccion		    = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
       $telefono		      = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
       $nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
-      $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";
+      $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";      
+      $email			      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
+      $banco			      = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";      
       $c_bancaria		    = isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
       $c_bancaria_format= isset($_POST["c_bancaria"])? limpiarCadena($_POST["c_bancaria"]):"";
-      $email			      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
-      $banco			      = isset($_POST["banco"])? limpiarCadena($_POST["banco"]):"";
-      $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
-      
       $cci	          	= isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
       $cci_format      	= isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
+      $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
       $tipo	          	= isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
       $ocupacion	      = isset($_POST["ocupacion"])? limpiarCadena($_POST["ocupacion"]):"";
       $ruc	          	= isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
@@ -44,10 +42,9 @@
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
       $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
       $imagen3			    = isset($_POST["foto3"])? limpiarCadena($_POST["foto3"]):"";
-      //cvs
+
       $cv_documentado			    = isset($_POST["doc4"])? limpiarCadena($_POST["doc4"]):"";
       $cv_nodocumentado			  = isset($_POST["doc5"])? limpiarCadena($_POST["doc5"]):"";
-      //$cci,$tipo,$ocupacion,$ruc,$cv_documentado,$cv_nodocumentado
       switch ($_GET["op"]) {
 
         case 'guardaryeditar':
@@ -96,6 +93,7 @@
             move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/docs/all_trabajador/dni_reverso/" . $imagen3);
 						
 					}
+
           // cv documentado
           if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
 
@@ -110,6 +108,7 @@
             move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/all_trabajador/cv_documentado/" .  $cv_documentado);
             
           }
+
           // cv  no documentado
           if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
 
@@ -126,8 +125,8 @@
           }
 
           if (empty($idtrabajador)){
-
-            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, str_replace("-", "", $c_bancaria), $c_bancaria_format, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $cci_format, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
+            
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco, str_replace("-", "",$c_bancaria), $c_bancaria_format, str_replace("-", "",$cci), $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
   
@@ -171,6 +170,7 @@
                 unlink("../dist/docs/all_trabajador/dni_reverso/" . $img3_ant);
               }
             }
+
             //cvs
             if ($flat_cv1 == true) {
 
@@ -197,7 +197,7 @@
             }
 
             // editamos un trabajador existente
-            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, str_replace("-", "", $c_bancaria), $c_bancaria_format, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, str_replace("-", "", $cci), $cci_format, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $email, $banco, str_replace("-", "",$c_bancaria), $c_bancaria_format, str_replace("-", "",$cci), $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo $rspta ? "ok" : "Trabajador no se pudo actualizar";
           }            
@@ -361,8 +361,8 @@
 
   function quitar_guion($numero){ return str_replace("-", "", $numero); } 
 
-   // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
-   function format_a_m_d( $fecha ) {
+  // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
+  function format_a_m_d( $fecha ) {
 
     if (!empty($fecha)) {
 

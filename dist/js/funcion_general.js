@@ -108,16 +108,12 @@ function redondearExp(numero, digitos) {
 }
 
 //Redondear 2 decimales (1.56 = 1.60, 1.52 = 1.50)
-function roundTwo(num) {
-  return Number(+(Math.round(num + "e+1") + "e-1")).toFixed(2);
-}
+function roundTwo(num) { return Number(+(Math.round(num + "e+1") + "e-1")).toFixed(2); }
 
 // Unico ID
-function unique_id() {
-  return parseInt(Math.round(new Date().getTime() + Math.random() * 100));
-}
+function unique_id() { return parseInt(Math.round(new Date().getTime() + Math.random() * 100)); }
 
-/*  ══════════════════════════════════════════ - E N C O D E   D E C O D E   S T R I N G - ══════════════════════════════════════════ */
+/*  ══════════════════════════════════════════ - S T R I N G - ══════════════════════════════════════════ */
 
 // Codificamos los caracteres: &, <, >, ", '
 function encodeHtml(str) {
@@ -151,10 +147,95 @@ function decodeHtml(str) {
   return decode;
 }
 
+// to miniscula
+function convert_minuscula(e) { e.value = e.value.toLowerCase(); }
+
 /*  ══════════════════════════════════════════ - S U B I R   D O C S  - ══════════════════════════════════════════ */
 
-/* PREVISUALIZAR LOS DOCUMENTOS: img, pdf, doc, excel,  */
-function addDocsImgApplication(e,id) {
+/* PREVISUALIZAR: img */
+function addImage(e, id, img_default='') {
+  // colocamos cargando hasta que se vizualice
+  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+
+	console.log(id);
+
+	var file = e.target.files[0], imageType = /image.*/;
+	
+	if (e.target.files[0]) {
+
+		var sizeByte = file.size;
+
+		var sizekiloBytes = parseInt(sizeByte / 1024);
+
+		var sizemegaBytes = (sizeByte / 1000000);
+		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
+
+		if (!file.type.match(imageType)){
+			// return;
+			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>');
+
+			if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
+        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+      } else {
+        $("#"+id+"_i").attr("src", img_default);
+      }      
+
+		}else{
+
+			if (sizekiloBytes <= 10240) {
+
+				var reader = new FileReader();
+
+				reader.onload = fileOnload;
+
+				function fileOnload(e) {
+
+					var result = e.target.result;
+
+					$("#"+id+"_i").attr("src", result);
+
+					$("#"+id+"_nombre").html(''+
+						'<div class="row">'+
+              '<div class="col-md-12">'+
+              file.name +
+              '</div>'+
+              '<div class="col-md-12">'+
+              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
+              '</div>'+
+            '</div>'+
+					'');
+
+					toastr.success('Imagen aceptada.')
+				}
+
+				reader.readAsDataURL(file);
+
+			} else {
+
+				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
+
+				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+
+				$("#"+id).val("");
+			}
+		}
+
+	}else{
+
+		toastr.error('Seleccione una Imagen');
+
+    if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
+      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+    } else {
+      $("#"+id+"_i").attr("src", img_default);
+    }  
+
+		$("#"+id+"_nombre").html("");
+	}
+}
+
+/* PREVISUALIZA: img, pdf, doc, excel,  */
+function addImageApplication(e, id, img_default='') {
 
   $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
 
@@ -179,7 +260,12 @@ function addDocsImgApplication(e,id) {
         timer: 1500
       });
 
-      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+      if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
+        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+      } else {
+        $("#"+id+"_ver").html(`<img src="${img_default}" alt="" width="50%" >`); 
+      }
+      
 
 		}else{
 
@@ -196,44 +282,30 @@ function addDocsImgApplication(e,id) {
           // cargamos la imagen adecuada par el archivo
 				  if ( extrae_extencion(file.name) == "doc") {
             $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "docx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "pdf" ) {
-                $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-              }else{
-                if ( extrae_extencion(file.name) == "csv" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(file.name) == "xls" ) {
-                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                  } else {
-                    if ( extrae_extencion(file.name) == "xlsx" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "xlsm" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                      } else {
-                        if (
-                          extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
-                          extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
-                          extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
-                          extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
+          } else if ( extrae_extencion(file.name) == "docx" ) {             
+            $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+          }else if ( extrae_extencion(file.name) == "pdf" ) {              
+            $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+          }else if ( extrae_extencion(file.name) == "csv" ) {              
+            $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+          } else if ( extrae_extencion(file.name) == "xls" ) {             
+            $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+          } else if ( extrae_extencion(file.name) == "xlsx" ) {             
+            $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+          } else if ( extrae_extencion(file.name) == "xlsm" ) {             
+            $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+          } else if (
+            extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
+            extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
+            extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
+            extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
 
-                          $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-                          
-                        } else {
-                          $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                        }
-                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } 
+            $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+              
+          } else {
+            $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+          }
+           
 					$("#"+id+"_nombre").html(`<div class="row">
             <div class="col-md-12">
               <i> ${file.name} </i>
@@ -263,7 +335,12 @@ function addDocsImgApplication(e,id) {
           timer: 1500
         })
 
-        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+        if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
+          $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+        } else {
+          $("#"+id+"_ver").html(`<img src="${img_default}" alt="" width="50%" >`); 
+        }
+        
         $("#"+id+"_nombre").html("");
 				$("#"+id).val("");
 			}
@@ -275,9 +352,14 @@ function addDocsImgApplication(e,id) {
       title: 'Seleccione un documento',
       showConfirmButton: false,
       timer: 1500
-    })
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+    });
+
+    if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
+      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+    } else {
+      $("#"+id+"_ver").html(`<img src="${img_default}" alt="" width="50%" >`); 
+    }		 
+    
 		$("#"+id+"_nombre").html("");
     $("#"+id).val("");
 	}	
@@ -582,6 +664,136 @@ function buscar_sunat_reniec(input='') {
 }
 
 /*  ══════════════════════════════════════════ - M E N S A J E S - ══════════════════════════════════════════ */
+
 function ok_dowload_doc() { toastr.success("El documento se descargara en breve!!"); }
 
 function error_dowload_doc() { toastr.success("Hubo un ERROR en la descarga, reintente nuevamente!!"); }
+
+function no_doc() { toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!") }
+
+/*  ══════════════════════════════════════════ - O T R O S - ══════════════════════════════════════════ */
+
+function decifrar_format_banco(format) {
+
+  var array_format =  format.split("-"); var format_final = "";
+  
+  array_format.forEach((item, index)=>{
+
+    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
+
+    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
+  });
+
+  var ultima_letra = format_final.slice(-1);
+   
+  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
+
+  return format_final;
+}
+
+/*Validación Fecha de Nacimiento Mayoria de edad del usuario*/
+function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad) {
+
+  var fechaUsuario = $(input_fecha_nacimiento).val();
+
+  if (fechaUsuario) {         
+  
+    //El siguiente fragmento de codigo lo uso para igualar la fecha de nacimiento con la fecha de hoy del usuario
+    let d = new Date(),    month = '' + (d.getMonth() + 1),    day = '' + d.getDate(),   year = d.getFullYear();
+    
+    if (month.length < 2) 
+      month = '0' + month;
+    if (day.length < 2) 
+      day = '0' + day;
+    d=[year, month, day].join('-')
+
+    /*------------*/
+    var hoy = new Date(d);//fecha del sistema con el mismo formato que "fechaUsuario"
+
+    var cumpleanos = new Date(fechaUsuario);
+    
+    //Calculamos años
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+
+      edad--;
+    }
+
+    // calculamos los meses
+    var meses=0;
+
+    if(hoy.getMonth()>cumpleanos.getMonth()){
+
+      meses=hoy.getMonth()-cumpleanos.getMonth();
+
+    }else if(hoy.getMonth()<cumpleanos.getMonth()){
+
+      meses=12-(cumpleanos.getMonth()-hoy.getMonth());
+
+    }else if(hoy.getMonth()==cumpleanos.getMonth() && hoy.getDate()>cumpleanos.getDate() ){
+
+      if(hoy.getMonth()-cumpleanos.getMonth()==0){
+
+        meses=0;
+      }else{
+
+        meses=11;
+      }            
+    }
+
+    // Obtener días: día actual - día de cumpleaños
+    let dias  = hoy.getDate() - cumpleanos.getDate();
+
+    if(dias < 0) {
+      // Si días es negativo, día actual es mayor al de cumpleaños,
+      // hay que restar 1 mes, si resulta menor que cero, poner en 11
+      meses = (meses - 1 < 0) ? 11 : meses - 1;
+      // Y obtener días faltantes
+      dias = 30 + dias;
+    }
+
+    // console.log(`Tu edad es de ${edad} años, ${meses} meses, ${dias} días`);
+    $(input_edad).val(edad);
+
+    $(span_edad).html(`${edad} años`);
+    // calcular mayor de 18 años
+    if(edad>=18){
+
+      console.log("Eres un adulto");
+
+    }else{
+      // Calcular faltante con base en edad actual
+      // 18 menos años actuales
+      let edadF = 18 - edad;
+      // El mes solo puede ser 0 a 11, se debe restar (mes actual + 1)
+      let mesesF = 12 - (meses + 1);
+      // Si el mes es mayor que cero, se debe restar 1 año
+      if(mesesF > 0) { edadF --;  }
+      let diasF = 30 - dias;
+      // console.log(`Te faltan ${edadF} años, ${mesesF} meses, ${diasF} días para ser adulto`);
+    }
+
+  } else {
+
+    $(input_edad).val("");
+
+    $(span_edad).html(`0 años`); 
+  }
+}
+
+// restringimos la fecha para no elegir mañana
+function no_select_tomorrow(nombre_input) {  
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  if(dd<10){ dd='0'+dd } 
+  if(mm<10){ mm='0'+mm } 
+
+  today = `${yyyy}-${mm}-${dd}`;
+  
+  $(nombre_input).attr('max',today);
+}

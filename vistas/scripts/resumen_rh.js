@@ -122,7 +122,7 @@ function modal_comprobante(comprobante,ruta, proveedor) {
     </div>
   </div>`);
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 function desccargar_zip_recibos_honorarios() {   

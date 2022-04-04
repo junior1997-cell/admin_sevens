@@ -199,7 +199,7 @@ function modal_ficha_tec(ficha_tecnica) {
     $("#iddescargar").attr("href", "../dist/ficha_tecnica_materiales/" + ficha_tec);
   }
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 //Función para guardar o editar
 

@@ -167,7 +167,7 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
     </div>
   </div>`);
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 function filtros() {  

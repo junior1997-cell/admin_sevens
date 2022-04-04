@@ -116,7 +116,7 @@
                                   <!--Proveedor-->
                                    
 
-                                  <div class="col-xs-12 col-md-9 col-lg-5 col-xl-5">
+                                  <div class="col-sm-12 col-md-9 col-lg-5 col-xl-5">
                                     <div class="form-group">
                                       <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
                                       <!-- <div class="input-group"> -->
@@ -131,7 +131,7 @@
                                   </div>  
 
                                   <!-- adduser -->
-                                  <div class="col-xs-12 col-md-3 col-lg-1 col-xl-1">
+                                  <div class="col-sm-12 col-md-3 col-lg-1 col-xl-1">
                                     <div class="form-group">
                                       <label class="text-white d-none show-min-width-576px">.</label> 
                                       <label class="d-none show-max-width-576px" >Nuevo proveedor</label>
@@ -144,7 +144,7 @@
                                   </div>                                 
 
                                   <!--forma pago-->
-                                  <div class="col-xs-12 col-md-6 col-lg-3 col-xl-3">
+                                  <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                     <div class="form-group">
                                       <label for="forma_pago">Forma Pago</label>
                                       <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
@@ -156,7 +156,7 @@
                                   </div>
 
                                   <!-- Tipo de comprobante -->
-                                  <div class="col-xs-12 col-md-6 col-lg-3 col-xl-3" id="content-t-comprob">
+                                  <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3" id="content-t-comprob">
                                     <div class="form-group">
                                       <label for="tipo_comprobante">Tipo Comprobante</label>
                                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" onkeyup="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
@@ -194,7 +194,7 @@
                                   </div> -->
 
                                   <!-- Glosa-->
-                                  <div class="col-xs-12 col-md-6 col-lg-4 col-xl-4" id="content-t-comprob">
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4" id="content-t-comprob">
                                     <div class="form-group">
                                       <label for="glosa">Selecc. Glosa</label>
                                       <select name="glosa" id="glosa" class="form-control select2" placeholder="Seleccinar">
@@ -219,7 +219,7 @@
                                   </div>
 
                                   <!-- Código-->
-                                  <div class="col-xs-12 col-md-6 col-lg-4 col-xl-4">
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                       <label class="nro_comprobante" for="nro_comprobante">Núm. comprobante </label>
                                       <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
@@ -227,7 +227,7 @@
                                   </div>
 
                                   <!-- Fecha 1  -->
-                                  <div class="col-xs-12 col-md-6 col-lg-4 col-xl-4">
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                       <label for="fecha_i">Fecha Emisión</label>
                                       <input type="date" name="fecha_i" class="form-control" id="fecha_i" />
@@ -235,7 +235,7 @@
                                   </div>
 
                                   <!-- Sub total -->
-                                  <div class="col-xs-12 col-md-6 col-lg-4 col-xl-4">
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                       <label for="subtotal">Sub total</label>
                                       <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                                   
@@ -243,7 +243,7 @@
                                   </div>
 
                                   <!-- IGV -->
-                                  <div class="col-xs-12 col-md-6 col-lg-2 col-xl-2">
+                                  <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
                                     <div class="form-group">
                                       <label for="igv">IGV</label>
                                       <input class="form-control igv" type="number" id="igv" name="igv" placeholder="IGV" readonly />
@@ -251,7 +251,7 @@
                                   </div>
 
                                   <!-- valor IGV -->
-                                  <div class="col-xs-12 col-md-6 col-lg-2 col-xl-2">
+                                  <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
                                     <div class="form-group">
                                         <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
                                         <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();"> 
@@ -260,7 +260,7 @@
                                   </div>
                                   
                                   <!--Precio Parcial-->
-                                  <div class="col-xs-12 col-md-6 col-lg-4 col-xl-4">
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                       <label for="marca">Monto total </label>
                                       <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />                                  
@@ -268,18 +268,18 @@
                                   </div>
 
                                   <!--Descripcion-->
-                                  <div class="col-xs-12 col-md-12 col-lg-12 col-xl-12">
+                                  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="form-group ">
                                       <label for="descripcion_pago">Descripción</label> <br />
                                       <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                     </div>
                                   </div>
-                                  <!-- <div class="col-xs-12 col-md-12 col-lg-12 col-xl-12">
+                                  <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                   <div style="overflow: auto; resize: vertical;"><b>gola:</b> como estas gomero <br> <b>casa: </b> cerca del gim</div>
                                   </div> -->
 
                                   <!-- Factura -->
-                                  <div class="col-xs-12 col-md-6 col-lg-4 col-xl-4" >   
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4" >   
                                     <!-- linea divisoria -->
                                     <div class="borde-arriba-naranja mt-4"> </div>                            
                                     <div class="row text-center">

@@ -611,7 +611,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 
 // LIMPIAR FORM
 function limpiar_form_compra() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   //Mostramos los select2Proveedor
   //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
@@ -1614,7 +1614,7 @@ function limpiar_form_proveedor() {
   $(".form-control").removeClass("is-valid");
   $(".is-invalid").removeClass("error is-invalid");
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // damos formato a: Cta, CCI

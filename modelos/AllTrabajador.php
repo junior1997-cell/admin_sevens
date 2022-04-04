@@ -10,7 +10,7 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $c_bancaria_format, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $cci_format, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado)
+    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco, $c_bancaria, $c_bancaria_format, $cci, $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado)
     {
       //var_dump($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
       $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, cuenta_bancaria_format, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, cci, cci_format, idtipo_trabajador , idocupacion, ruc, cv_documentado, cv_no_documentado)
@@ -21,7 +21,7 @@
     }
 
       //Implementamos un método para editar registros $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado
-    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $c_bancaria_format, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $cci_format, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado)
+    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco, $c_bancaria, $c_bancaria_format, $cci, $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado)
     {
       $sql="UPDATE trabajador SET idbancos='$banco', nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', 
       fecha_nacimiento='$nacimiento', edad='$edad', cuenta_bancaria='$c_bancaria', cuenta_bancaria_format='$c_bancaria_format', titular_cuenta='$titular_cuenta',direccion='$direccion', 

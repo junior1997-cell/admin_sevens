@@ -488,7 +488,7 @@ function limpiar_form_proveedor() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // damos formato a: Cta, CCI
@@ -1062,7 +1062,7 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
 
 // LIMPIAR FORM
 function limpiar_form_compra() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   //Mostramos los select2Proveedor
   //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });

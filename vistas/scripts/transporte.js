@@ -368,7 +368,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
 
   
- // $(".tooltip").removeClass('show');
+ $(".tooltip").removeClass("show").addClass("hidde");
 }
 //Función para guardar o editar
 

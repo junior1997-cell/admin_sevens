@@ -1154,7 +1154,7 @@ function ver_modal_vaucher(imagen) {
   $("#img-vaucher").attr("src", "../dist/docs/servicio_maquina/comprobante_pago/" + imagen);
   $("#descargar").attr("href", "../dist/docs/servicio_maquina/comprobante_pago/" + imagen);
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 function validar_forma_de_pago() {
@@ -1496,7 +1496,7 @@ function ver_modal_factura(imagen) {
     $("#iddescargar").attr("href", "../dist/docs/servicio_maquina/comprobante_servicio/" + img);
   }
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 //-total Pagos

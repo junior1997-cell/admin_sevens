@@ -435,7 +435,7 @@ function modal_comprobante(comprobante) {
     }
   } 
 
-  // $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 //Función para guardar o editar

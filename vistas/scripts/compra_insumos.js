@@ -155,7 +155,7 @@ function fecha_actual() {
 
 //Función limpiar
 function limpiar_form_compra() {
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   //Mostramos los select2Proveedor
   //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
@@ -1233,7 +1233,7 @@ function limpiar_form_proveedor() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // damos formato a: Cta, CCI
@@ -1906,7 +1906,7 @@ function ver_modal_vaucher(imagen, fecha_pago) {
     </div>
   </div>`);
 
-  $(".tooltip").removeClass('show');
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 function validar_forma_de_pago() {

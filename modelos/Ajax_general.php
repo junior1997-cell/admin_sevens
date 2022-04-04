@@ -76,6 +76,12 @@
       return ejecutarConsulta($sql);
     }
 
+    public function select2_ocupacion_trabajador()  {
+      $sql="SELECT idocupacion AS id, nombre_ocupacion AS nombre FROM ocupacion where estado = '1' AND estado_delete = '1' ORDER BY nombre_ocupacion ASC;";
+		return ejecutarConsulta($sql);
+    }
+    
+
     /* ══════════════════════════════════════ P R O V E E D O R  ══════════════════════════════════════ */
 
     public function select2_proveedor() {

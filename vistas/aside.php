@@ -403,9 +403,8 @@
             <?php if ($_SESSION['resumen_general']==1) {  ?>
               <!-- OTROS SERVICIOS -->       
               <li class="nav-item ver-otros-modulos-1">
-                <a href="resumen_general.php" class="nav-link pl-2" id="lresumen_general">
-                  
-                <i class="nav-icon fas fa-list-ul"></i>
+                <a href="resumen_general.php" class="nav-link pl-2" id="lresumen_general">                  
+                  <i class="nav-icon fas fa-list-ul"></i>
                   <p>
                   Resumen general               
                   </p>
@@ -532,14 +531,16 @@
               </a>
             </li>
 
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="otro_ingreso.php" class="nav-link pl-2" id="lOtroIngreso">             
-                <i class="nav-icon fas fa-hand-holding-usd"></i>
-                <p>
-                  Otro ingreso             
-                </p>
-              </a>
-            </li>
+            <?php if ($_SESSION['otro_ingreso']==1) {  ?>
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="otro_ingreso.php" class="nav-link pl-2" id="lOtroIngreso">             
+                  <i class="nav-icon fas fa-hand-holding-usd"></i>
+                  <p>
+                    Otro ingreso             
+                  </p>
+                </a>
+              </li>
+            <?php  }  ?>
 
             <li class="nav-item ver-otros-modulos-1">
               <a href="pago_valorizacion.php" class="nav-link pl-2" id="lPagoValorizacion">             
