@@ -74,6 +74,14 @@
                                 <th>Fecha Nac. / Edad</th>
                                 <th>Cuenta bancaria</th>
                                 <th>Estado</th>
+                                <th>Nombres</th>
+                                <th>Tipo</th>
+                                <th>Num Doc.</th>
+                                <th>Nacimiento</th>
+                                <th>Edad</th>
+                                <th>Banco</th>
+                                <th>Cta. Cte.</th>
+                                <th>CCI</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -88,6 +96,14 @@
                                 <th>Fecha Nac. / Edad</th>
                                 <th>Cuenta bancaria</th>
                                 <th>Estado</th>
+                                <th>Nombres</th>
+                                <th>Tipo</th>
+                                <th>Num Doc.</th>
+                                <th>Nacimiento</th>
+                                <th>Edad</th>
+                                <th>Banco</th>
+                                <th>Cta. Cte.</th>
+                                <th>CCI</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -105,6 +121,14 @@
                                     <th>Telefono</th> 
                                     <th>Descripción</th>
                                     <th>Estado</th>
+                                    <th>Nombres</th>
+                                    <th>Tipo</th>
+                                    <th>Num Doc.</th>
+                                    <th>Nacimiento</th>
+                                    <th>Edad</th>
+                                    <th>Banco</th>
+                                    <th>Cta. Cte.</th>
+                                    <th>CCI</th>
                                   </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -118,6 +142,14 @@
                                     <th>Telefono</th>
                                     <th>Descripción</th>
                                     <th>Estado</th>
+                                    <th>Nombres</th>
+                                    <th>Tipo</th>
+                                    <th>Num Doc.</th>
+                                    <th>Nacimiento</th>
+                                    <th>Edad</th>
+                                    <th>Banco</th>
+                                    <th>Cta. Cte.</th>
+                                    <th>CCI</th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -210,7 +242,7 @@
                               <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="fecha_nacimiento">Fecha Nacimiento</label>
-                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="edades();" onchange="edades();" />
+                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#p_edad','#edad');" onchange="calcular_edad('#nacimiento','#p_edad','#edad');" />
                                   <input type="hidden" name="edad" id="edad" />
                                 </div>
                               </div>
@@ -327,16 +359,16 @@
                                 <!-- linea divisoria -->
                                 <div class="col-lg-12 borde-arriba-naranja mt-2"></div>
                                 <div class="row">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <div class="col-md-12 p-t-15px p-b-5px" >
                                     <label for="Presupuesto" class="control-label">CV Documentado</label>
                                   </div>
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i"><i class="fas fa-file-upload"></i> Subir.</button>
                                     <input type="hidden" id="doc_old_4" name="doc_old_4" />
                                     <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" />
                                   </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4,'cv_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4, 'all_trabajador', 'cv_documentado');"><i class="fa fa-eye"></i> PDF.</button>
                                   </div>
                                 </div>
                                 <div id="doc4_ver" class="text-center mt-4">
@@ -348,18 +380,18 @@
                               <!-- Pdf 5 -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mt-2">
                                 <!-- linea divisoria -->
-                                <div class="col-lg-12 borde-arriba-naranja mt-2"></div>
+                                <div class="col-lg-12 borde-arriba-naranja mt-2"></div> 
                                 <div class="row">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <div class="col-md-12 p-t-15px p-b-5px">
                                     <label for="analisis-de-costos-unitarios" class="control-label"> CV No Documentado</label>
                                   </div>
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i"><i class="fas fa-file-upload"></i> Subir.</button>
                                     <input type="hidden" id="doc_old_5" name="doc_old_5" />
                                     <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" />
                                   </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5,'cv_no_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5, 'all_trabajador', 'cv_no_documentado');"><i class="fa fa-eye"></i> PDF.</button>
                                   </div>
                                 </div>
                                 <div id="doc5_ver" class="text-center mt-4">
@@ -367,6 +399,16 @@
                                 </div>
                                 <div class="text-center" id="doc5_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div> 
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">

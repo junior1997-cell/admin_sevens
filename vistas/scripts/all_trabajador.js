@@ -3,380 +3,46 @@ var tabla; var tabla2;
 //Función que se ejecuta al inicio
 function init() {
 
-  listar( );
-
-  //Mostramos los BANCOS
-  $.post("../ajax/all_trabajador.php?op=select2Banco", function (r) { $("#banco").html(r); });
-
-  //Mostramos los tipo
-  $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#tipo").html(r); });
-
-  //Mostramos los ocupación
-  $.post("../ajax/ocupacion.php?op=selectocupacion", function (r) { $("#ocupacion").html(r); });
-
   $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
 
   $("#mRecurso").addClass("active");
 
   $("#lAllTrabajador").addClass("active");
 
+  tbla_principal();
 
-  $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco', null);
+  lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#tipo', null);
+  lista_select2("../ajax/ajax_general.php?op=select2OcupacionTrabajador", '#ocupacion', null);  
+
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
+  $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });  
+
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  $("#banco").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
+  $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
+  $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-
-  // abrimos el navegador de archivos
-  $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
-  $("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
-
-  $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
-  $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
-
-  $("#foto3_i").click(function() { $('#foto3').trigger('click'); });
-  $("#foto3").change(function(e) { addImage(e,$("#foto3").attr("id")) });
-
-  $("#doc4_i").click(function() {  $('#doc4').trigger('click'); });
-  $("#doc4").change(function(e) {  addDocs(e,$("#doc4").attr("id")) });
-
-  $("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
-  $("#doc5").change(function(e) {  addDocs(e,$("#doc5").attr("id")) });
-
-  //Initialize Select2 Elements
-  $("#banco").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
-  //Initialize Select2 Elements
-  $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
-  //Initialize Select2 Elements
-  $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 }
 
-/* PREVISUALIZAR LAS IMAGENES */
-function addImage(e,id) {
-  // colocamos cargando hasta que se vizualice
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
+// abrimos el navegador de archivos
+$("#foto1_i").click(function() { $('#foto1').trigger('click'); });
+$("#foto1").change(function(e) { addImage(e,$("#foto1").attr("id")) });
 
-	console.log(id);
+$("#foto2_i").click(function() { $('#foto2').trigger('click'); });
+$("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
 
-	var file = e.target.files[0], imageType = /image.*/;
-	
-	if (e.target.files[0]) {
+$("#foto3_i").click(function() { $('#foto3').trigger('click'); });
+$("#foto3").change(function(e) { addImage(e,$("#foto3").attr("id")) });
 
-		var sizeByte = file.size;
+$("#doc4_i").click(function() {  $('#doc4').trigger('click'); });
+$("#doc4").change(function(e) {  addImageApplication(e,$("#doc4").attr("id")) });
 
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(imageType)){
-			// return;
-			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>');
-
-			if (id == 'foto1' ) {
-        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-      } else {
-        if (id == 'foto2' ) {
-          $("#"+id+"_i").attr("src", "../dist/img/default/dni_anverso.webp");
-        } else {
-          $("#"+id+"_i").attr("src", "../dist/img/default/dni_reverso.webp");
-        } 
-      }
-
-		}else{
-
-			if (sizekiloBytes <= 10240) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-
-					$("#"+id+"_i").attr("src", result);
-
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
-              file.name +
-              '</div>'+
-              '<div class="col-md-12">'+
-              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-
-					toastr.success('Imagen aceptada.')
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-
-				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-		}
-
-	}else{
-
-		toastr.error('Seleccione una Imagen');
-
-    if (id == 'foto1' ) {
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-    } else {
-      if (id == 'foto2' ) {
-        $("#"+id+"_i").attr("src", "../dist/img/default/dni_anverso.webp");
-      } else {
-        $("#"+id+"_i").attr("src", "../dist/img/default/dni_reverso.webp");
-      } 
-    }
-
-		$("#"+id+"_nombre").html("");
-	}
-}
-
-/* PREVISUALIZAR LOS DOCUMENTOS */
-function addDocs(e,id) {
-
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
-
-	var file = e.target.files[0], imageType = /application.*/;
-	
-	if (e.target.files[0]) {
-    
-		var sizeByte = file.size; console.log(file.type);
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(imageType)){
-			// return;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.pdf',
-        showConfirmButton: false,
-        timer: 1500
-      });			 
-      $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		}else{
-
-			if (sizekiloBytes <= 40960) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-				 
-          // $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-
-          // cargamos la imagen adecuada par el archivo
-				  if ( extrae_extencion(file.name) == "doc") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "docx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "pdf" ) {
-                $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-              }else{
-                if ( extrae_extencion(file.name) == "csv" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(file.name) == "xls" ) {
-                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                  } else {
-                    if ( extrae_extencion(file.name) == "xlsx" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "xlsm" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                      } else {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } 
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
-                '<i>' + file.name + '</i>' +
-              '</div>'+
-              '<div class="col-md-12">'+
-                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'El documento: '+file.name.toUpperCase()+' es aceptado.',
-            showConfirmButton: false,
-            timer: 1500
-          });
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado.',
-          showConfirmButton: false,
-          timer: 1500
-        })
-
-        $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-		}
-	}else{
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    })
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-		$("#"+id+"_nombre").html("");
-	}	
-}
-
-// recargar un doc para ver
-function re_visualizacion(id,carpeta) {
-
-  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
-
-  pdffile     = document.getElementById("doc"+id+"").files[0];
-
-  var antiguopdf  = $("#doc_old_"+id+"").val();
-
-  if(pdffile === undefined){
-
-    if (antiguopdf == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-		  $("#doc"+id+"_nombre").html("");
-
-    } else {
-      if ( extrae_extencion(antiguopdf) == "doc") {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      } else {
-        if ( extrae_extencion(antiguopdf) == "docx" ) {
-          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-        } else {
-          if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/all_trabajador/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="210"></iframe>`);
-            toastr.success('Documento vizualizado correctamente!!!')
-          } else {
-            if ( extrae_extencion(antiguopdf) == "csv" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(antiguopdf) == "xls" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  } else {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  }
-                }
-              }
-            }
-          }
-        }
-      }      
-    }
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "doc") {
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else {
-      if ( extrae_extencion(pdffile.name) == "docx" ) {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      }else{
-        if ( extrae_extencion(pdffile.name) == "pdf" ) {
-          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-          toastr.success('Documento vizualizado correctamente!!!')
-        }else{
-          if ( extrae_extencion(pdffile.name) == "csv" ) {
-            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-          } else {
-            if ( extrae_extencion(pdffile.name) == "xls" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                }
-              }
-            }
-          }
-        }
-      }
-    }  
-    	
-    console.log(pdffile);
-
-  }
-}
+$("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
+$("#doc5").change(function(e) {  addImageApplication(e,$("#doc5").attr("id")) });
 
 function foto1_eliminar() {
 
@@ -425,31 +91,6 @@ function doc5_eliminar() {
 	$("#doc5_nombre").html("");
 }
 
-function no_pdf() {
-  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
-}
-
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!")
-}
-
-function extrae_extencion(filename) {
-  return filename.split('.').pop();
-}
-
-function sueld_mensual(){
-
-  var sueldo_mensual = $('#sueldo_mensual').val()
-
-  var sueldo_diario=(sueldo_mensual/30).toFixed(1);
-
-  var sueldo_horas=(sueldo_diario/8).toFixed(1);
-
-  $("#sueldo_diario").val(sueldo_diario);
-
-  $("#sueldo_hora").val(sueldo_horas);
-}
-
 //Función limpiar
 function limpiar_form_trabajador() {
   $("#idtrabajador").val("");
@@ -485,9 +126,13 @@ function limpiar_form_trabajador() {
 
   $("#doc4").val("");
   $("#doc_old_4").val("");
+  $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+  $("#doc4_nombre").html('');
   
   $("#doc5").val("");
   $("#doc_old_5").val("");
+  $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+  $("#doc5_nombre").html('');
   
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -496,7 +141,7 @@ function limpiar_form_trabajador() {
 }
 
 //Función Listar
-function listar() {
+function tbla_principal() {
 
   tabla=$('#tabla-trabajador').dataTable({
     "responsive": true,
@@ -504,9 +149,11 @@ function listar() {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [9,10,11,3,4,12,13,14,15,16,5,], } }, {extend: "colvis"} ,
+    ],
     "ajax":{
-      url: '../ajax/all_trabajador.php?op=listar',
+      url: '../ajax/all_trabajador.php?op=tbla_principal',
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -537,7 +184,17 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs": [
+      { targets: [9], visible: false, searchable: false, },
+      { targets: [10], visible: false, searchable: false, },
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },
+      { targets: [14], visible: false, searchable: false, },
+      { targets: [15], visible: false, searchable: false, },   
+      { targets: [16], visible: false, searchable: false, },      
+    ],
   }).DataTable();
 
   // listamos al trabajadores expulsados
@@ -547,7 +204,9 @@ function listar() {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [8,9,10,11,3,4,12,13,14,15,5,6], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [8,9,10,11,3,4,12,13,14,15,5,6], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [8,9,10,11,3,4,12,13,14,15,5,6], } }, {extend: "colvis"} ,
+    ],
     "ajax":{
         url: '../ajax/all_trabajador.php?op=listar_expulsado',
         type : "get",
@@ -575,7 +234,17 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    "columnDefs": [
+      { targets: [8], visible: false, searchable: false, },
+      { targets: [9], visible: false, searchable: false, },
+      { targets: [10], visible: false, searchable: false, },
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },
+      { targets: [14], visible: false, searchable: false, },
+      { targets: [15], visible: false, searchable: false, },   
+    ],
   }).DataTable();
 }
 
@@ -590,10 +259,9 @@ function guardar_y_editar_trabajador(e) {
     data: formData,
     contentType: false,
     processData: false,
-
-    success: function (datos) {
-             
-      if (datos == 'ok') {	
+    success: function (e) {
+      e = JSON.parse(e);  //console.log(e); 
+      if (e.status) {	
 
         Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
 
@@ -604,16 +272,43 @@ function guardar_y_editar_trabajador(e) {
         $("#modal-agregar-trabajador").modal("hide");
 
 			}else{
-
-        Swal.fire("Error!", datos, "error");
-
+        ver_errores(e);
 			}
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress").css({ width: "0%",  });
+      $("#barra_progress").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress").css({ width: "0%", });
+      $("#barra_progress").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
 // ver detallles del registro
 function verdatos(idtrabajador){
+
+  $(".tooltip").removeClass("show").addClass("hidde");
 
   $('#datostrabajador').html(''+
   '<div class="row" >'+
@@ -636,193 +331,200 @@ function verdatos(idtrabajador){
 
   $("#modal-ver-trabajador").modal("show")
 
-  $.post("../ajax/all_trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (data, status) {
+  $.post("../ajax/all_trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (e, status) {
 
-    data = JSON.parse(data);  //console.log(data); 
-   
-    if (data.imagen_perfil != '') {
-
-      imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${data.imagen_perfil}" alt="" class="img-thumbnail">`
-      
-      btn_imagen_perfil=`
-      <div class="row">
-        <div class="col-6"">
-           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/perfil/${data.imagen_perfil}"> <i class="fas fa-expand"></i></a>
-        </div>
-        <div class="col-6"">
-           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/perfil/${data.imagen_perfil}" download="PERFIL ${data.nombres}"> <i class="fas fa-download"></i></a>
-        </div>
-      </div>`;
+    e = JSON.parse(e);  //console.log(e); 
     
-    } else {
-
-      imagen_perfil='No hay imagen';
-      btn_imagen_perfil='';
-
-    }
-
-    if (data.imagen_dni_anverso != '') {
-
-      imagen_dni_anverso=`<img src="../dist/docs/all_trabajador/dni_anverso/${data.imagen_dni_anverso}" alt="" class="img-thumbnail">`
+    if (e.status) {
       
-      btn_imagen_dni_anverso=`
-      <div class="row">
-        <div class="col-6"">
-           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_anverso/${data.imagen_dni_anverso}"> <i class="fas fa-expand"></i></a>
-        </div>
-        <div class="col-6"">
-           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_anverso/${data.imagen_dni_anverso}" download="DNI ${data.nombres}"> <i class="fas fa-download"></i></a>
-        </div>
-      </div>`;
     
-    } else {
+      if (e.data.imagen_perfil != '') {
 
-      imagen_dni_anverso='No hay imagen';
-      btn_imagen_dni_anverso='';
-
-    }
-
-    if (data.imagen_dni_reverso != '') {
-
-      imagen_dni_reverso=`<img src="../dist/docs/all_trabajador/dni_reverso/${data.imagen_dni_reverso}" alt="" class="img-thumbnail">`
+        imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${e.data.imagen_perfil}" alt="" class="img-thumbnail">`
+        
+        btn_imagen_perfil=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/perfil/${e.data.imagen_perfil}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/perfil/${e.data.imagen_perfil}" download="PERFIL ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
       
-      btn_imagen_dni_reverso=`
-      <div class="row">
-        <div class="col-6"">
-           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_reverso/${data.imagen_dni_reverso}"> <i class="fas fa-expand"></i></a>
-        </div>
-        <div class="col-6"">
-           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${data.imagen_dni_reverso}" download="DNI ${data.nombres}"> <i class="fas fa-download"></i></a>
-        </div>
-      </div>`;
-    
-    } else {
+      } else {
 
-      imagen_dni_reverso='No hay imagen';
-      btn_imagen_dni_reverso='';
+        imagen_perfil='No hay imagen';
+        btn_imagen_perfil='';
 
-    }
+      }
 
-    if (data.cv_documentado != '') {
+      if (e.data.imagen_dni_anverso != '') {
 
-      cv_documentado=`<iframe src="../dist/docs/all_trabajador/cv_documentado/${data.cv_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        imagen_dni_anverso=`<img src="../dist/docs/all_trabajador/dni_anverso/${e.data.imagen_dni_anverso}" alt="" class="img-thumbnail">`
+        
+        btn_imagen_dni_anverso=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_anverso/${e.data.imagen_dni_anverso}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_anverso/${e.data.imagen_dni_anverso}" download="DNI ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
       
-      btn_cv_documentado=`
-      <div class="row">
-        <div class="col-6"">
-           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_documentado/${data.cv_documentado}"> <i class="fas fa-expand"></i></a>
-        </div>
-        <div class="col-6"">
-           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${data.cv_documentado}" download="CV DOCUMENTADO ${data.nombres}"> <i class="fas fa-download"></i></a>
-        </div>
-      </div>`;
-    
-    } else {
+      } else {
 
-      cv_documentado='Sin CV documentado';
-      btn_cv_documentado='';
+        imagen_dni_anverso='No hay imagen';
+        btn_imagen_dni_anverso='';
 
-    }
+      }
 
-    if (data.cv_no_documentado != '') {
+      if (e.data.imagen_dni_reverso != '') {
 
-      cv_no_documentado=`<iframe src="../dist/docs/all_trabajador/cv_no_documentado/${data.cv_no_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        imagen_dni_reverso=`<img src="../dist/docs/all_trabajador/dni_reverso/${e.data.imagen_dni_reverso}" alt="" class="img-thumbnail">`
+        
+        btn_imagen_dni_reverso=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_reverso/${e.data.imagen_dni_reverso}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${e.data.imagen_dni_reverso}" download="DNI ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
       
-      btn_cv_no_documentado=`
-      <div class="row">
-        <div class="col-6"">
-           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_no_documentado/${data.cv_no_documentado}"> <i class="fas fa-expand"></i> </a>
-        </div>
-        <div class="col-6"">
-           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${data.cv_no_documentado}" download="CV NO DOCUMENTADO ${data.nombres}"> <i class="fas fa-download"></i></a>
-        </div>
-      </div>`;
-    
-    } else {
+      } else {
 
-      cv_no_documentado='Sin CV no documentado';
-      btn_cv_no_documentado='';
+        imagen_dni_reverso='No hay imagen';
+        btn_imagen_dni_reverso='';
 
-    }
+      }
 
-    verdatos=`                                                                            
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <table class="table table-hover table-bordered">        
-            <tbody>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}
+      if (e.data.cv_documentado != '') {
+
+        cv_documentado=`<iframe src="../dist/docs/all_trabajador/cv_documentado/${e.data.cv_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        
+        btn_cv_documentado=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_documentado/${e.data.cv_documentado}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${e.data.cv_documentado}" download="CV DOCUMENTADO ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      
+      } else {
+
+        cv_documentado='Sin CV documentado';
+        btn_cv_documentado='';
+
+      }
+
+      if (e.data.cv_no_documentado != '') {
+
+        cv_no_documentado=`<iframe src="../dist/docs/all_trabajador/cv_no_documentado/${e.data.cv_no_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        
+        btn_cv_no_documentado=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.cv_no_documentado}"> <i class="fas fa-expand"></i> </a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.cv_no_documentado}" download="CV NO DOCUMENTADO ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      
+      } else {
+
+        cv_no_documentado='Sin CV no documentado';
+        btn_cv_no_documentado='';
+
+      }
+
+      verdatos=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}
+                  
+                  </th>
+                  <td> <b>Nombre: </b> ${e.data.nombres}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <td> <b>DNI: </b>  ${e.data.numero_documento}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Dirección</th>
+                  <td>${e.data.direccion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Correo</th>
+                  <td>${e.data.email}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Teléfono</th>
+                  <td>${e.data.telefono}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha nacimiento</th>
+                    <td>${e.data.fecha_nacimiento}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Cuenta bancaria</th>
+                  <td>${e.data.cuenta_bancaria_format}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>CCI </th>
+                  <td>${e.data.cci_format}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Banco</th>
+                  <td>${e.data.banco}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Titular cuenta </th>
+                  <td>${e.data.titular_cuenta}</td>
+                </tr>
                 
-                </th>
-                <td> <b>Nombre: </b> ${data.nombres}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <td> <b>DNI: </b>  ${data.numero_documento}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Dirección</th>
-                <td>${data.direccion}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Correo</th>
-                <td>${data.email}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Teléfono</th>
-                <td>${data.telefono}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Fecha nacimiento</th>
-                  <td>${data.fecha_nacimiento}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Cuenta bancaria</th>
-                <td>${data.cuenta_bancaria_format}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>CCI </th>
-                <td>${data.cci_format}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Banco</th>
-                <td>${data.banco}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Titular cuenta </th>
-                <td>${data.titular_cuenta}</td>
-              </tr>
-              
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>DNI anverso</th>
-                <td> ${imagen_dni_anverso} <br>${btn_imagen_dni_anverso}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>DNI reverso</th>
-                <td> ${imagen_dni_reverso}<br>${btn_imagen_dni_reverso}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>CV documentado</th>
-                <td> ${cv_documentado} <br>${btn_cv_documentado}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>CV no documentado</th>
-                <td> ${cv_no_documentado} <br>${btn_cv_no_documentado}</td>
-              </tr>
-            </tbody>
-          </table>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>DNI anverso</th>
+                  <td> ${imagen_dni_anverso} <br>${btn_imagen_dni_anverso}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>DNI reverso</th>
+                  <td> ${imagen_dni_reverso}<br>${btn_imagen_dni_reverso}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>CV documentado</th>
+                  <td> ${cv_documentado} <br>${btn_cv_documentado}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>CV no documentado</th>
+                  <td> ${cv_no_documentado} <br>${btn_cv_no_documentado}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>`;
-  
-    $("#datostrabajador").html(verdatos);
+      </div>`;
+    
+      $("#datostrabajador").html(verdatos);
 
-  });
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 // mostramos los datos para editar
 function mostrar(idtrabajador) {
-
+  $(".tooltip").removeClass("show").addClass("hidde");
   limpiar_form_trabajador();  
 
   $("#cargando-1-fomulario").hide();
@@ -830,175 +532,97 @@ function mostrar(idtrabajador) {
 
   $("#modal-agregar-trabajador").modal("show")
 
-  $.post("../ajax/all_trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
+  $.post("../ajax/all_trabajador.php?op=mostrar", { idtrabajador: idtrabajador }, function (e, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
+    e = JSON.parse(e);  console.log(e);   
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-
-    $("#tipo_documento option[value='"+data.tipo_documento+"']").attr("selected", true);
-    $("#nombre").val(data.nombres);
-    $("#num_documento").val(data.numero_documento);
-    $("#direccion").val(data.direccion);
-    $("#telefono").val(data.telefono);
-    $("#email").val(data.email);
-    $("#nacimiento").val(data.fecha_nacimiento);
-    $("#c_bancaria").val(data.cuenta_bancaria);
-    $("#cci").val(data.cci);
-    $("#banco").val(data.idbancos).trigger("change");
-    $("#tipo").val(data.idtipo_trabajador).trigger("change");
-    $("#ocupacion").val(data.idocupacion).trigger("change");
-    $("#titular_cuenta").val(data.titular_cuenta);
-    $("#idtrabajador").val(data.idtrabajador);
-    $("#ruc").val(data.ruc);
-    //cci, idtipo, idocupacion, ruc, cv_documentado, cv_no_documentado
-    if (data.imagen_perfil!="") {
-
-			$("#foto1_i").attr("src", "../dist/docs/all_trabajador/perfil/" + data.imagen_perfil);
-
-			$("#foto1_actual").val(data.imagen_perfil);
-		}
-
-    if (data.imagen_dni_anverso != "") {
-
-			$("#foto2_i").attr("src", "../dist/docs/all_trabajador/dni_anverso/" + data.imagen_dni_anverso);
-
-			$("#foto2_actual").val(data.imagen_dni_anverso);
-		}
-
-    if (data.imagen_dni_reverso != "") {
-
-			$("#foto3_i").attr("src", "../dist/docs/all_trabajador/dni_reverso/" + data.imagen_dni_reverso);
-
-			$("#foto3_actual").val(data.imagen_dni_reverso);
-		}
-    //cvs
-    //validamoos DOC-4
-    if (data.cv_documentado != "" ) {
-
-      $("#doc_old_4").val(data.cv_documentado);
-
-      $("#doc4_nombre").html('CV.' + extrae_extencion(data.cv_documentado));
+    if (e.status) {
+      $("#tipo_documento option[value='"+e.data.tipo_documento+"']").attr("selected", true);
+      $("#nombre").val(e.data.nombres);
+      $("#num_documento").val(e.data.numero_documento);
+      $("#direccion").val(e.data.direccion);
+      $("#telefono").val(e.data.telefono);
+      $("#email").val(e.data.email);
+      $("#nacimiento").val(e.data.fecha_nacimiento);
+      $("#c_bancaria").val(e.data.cuenta_bancaria);
+      $("#cci").val(e.data.cci);
+      $("#banco").val(e.data.idbancos).trigger("change");
+      $("#tipo").val(e.data.idtipo_trabajador).trigger("change");
+      $("#ocupacion").val(e.data.idocupacion).trigger("change");
+      $("#titular_cuenta").val(e.data.titular_cuenta);
+      $("#idtrabajador").val(e.data.idtrabajador);
+      $("#ruc").val(e.data.ruc);
       
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.cv_documentado) == "xls") {
+      if (e.data.imagen_perfil!="") {
 
-        $("#doc4_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+        $("#foto1_i").attr("src", "../dist/docs/all_trabajador/perfil/" + e.data.imagen_perfil);
 
+        $("#foto1_actual").val(e.data.imagen_perfil);
+      }
+
+      if (e.data.imagen_dni_anverso != "") {
+
+        $("#foto2_i").attr("src", "../dist/docs/all_trabajador/dni_anverso/" + e.data.imagen_dni_anverso);
+
+        $("#foto2_actual").val(e.data.imagen_dni_anverso);
+      }
+
+      if (e.data.imagen_dni_reverso != "") {
+
+        $("#foto3_i").attr("src", "../dist/docs/all_trabajador/dni_reverso/" + e.data.imagen_dni_reverso);
+
+        $("#foto3_actual").val(e.data.imagen_dni_reverso);
+      }
+
+      //validamoos DOC-4
+      if (e.data.cv_documentado != "" ) {
+
+        $("#doc_old_4").val(e.data.cv_documentado);
+
+        $("#doc4_nombre").html('CV documentado.' + extrae_extencion(e.data.cv_documentado));
+
+        var doc_html = doc_view_extencion(e.data.cv_documentado, 'all_trabajador', 'cv_documentado', '100%', '210' );
+
+        $("#doc4_ver").html(doc_html);        
+         
       } else {
 
-        if ( extrae_extencion(data.cv_documentado) == "xlsx" ) {
+        $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
 
-          $("#doc4_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+        $("#doc4_nombre").html('');
 
-        }else{
-
-          if ( extrae_extencion(data.cv_documentado) == "csv" ) {
-
-            $("#doc4_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          }else{
-
-            if ( extrae_extencion(data.cv_documentado) == "xlsm" ) {
-
-              $("#doc4_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            }else{
-
-              if ( extrae_extencion(data.cv_documentado) == "doc" || extrae_extencion(data.cv_documentado) == "docx" ) {
-
-                $("#doc4_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-  
-              }else{
-
-                if ( extrae_extencion(data.cv_documentado) == "pdf" ) {
-
-                  $("#doc4_ver").html('<iframe src="../dist/docs/all_trabajador/cv_documentado/'+data.cv_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-                }else{
-
-                  $("#doc4_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                }
-              }
-            }
-          }
-        }
+        $("#doc_old_4").val("");
       }
-    } else {
 
-      $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
+      //validamoos DOC-5
+      if (e.data.cv_no_documentado != "" ) {
 
-      $("#doc4_nombre").html('');
+        $("#doc_old_5").val(e.data.cv_no_documentado);
 
-      $("#doc_old_4").val("");
-    }
+        $("#doc5_nombre").html('CV no documentado.' + extrae_extencion(e.data.cv_no_documentado));
 
-    //validamoos DOC-5
-    if (data.cv_no_documentado != "" ) {
+        var doc_html = doc_view_extencion(e.data.cv_no_documentado, 'all_trabajador', 'cv_no_documentado', '100%', '210' );
 
-      $("#doc_old_5").val(data.cv_no_documentado);
-
-      $("#doc5_nombre").html('Analisis de costos unitarios.' + extrae_extencion(data.cv_no_documentado));
-
-      // $("#doc5_ver").html('<iframe src="../dist/pdf/'+data.cv_no_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-      
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.cv_no_documentado) == "xls") {
-
-        $("#doc5_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
+        $("#doc5_ver").html(doc_html);
+        
       } else {
 
-        if ( extrae_extencion(data.cv_no_documentado) == "xlsx" ) {
+        $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
 
-          $("#doc5_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+        $("#doc5_nombre").html('');
 
-        }else{
-
-          if ( extrae_extencion(data.cv_no_documentado) == "csv" ) {
-
-            $("#doc5_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          }else{
-
-            if ( extrae_extencion(data.cv_no_documentado) == "xlsm" ) {
-
-              $("#doc5_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            }else{
-
-              if ( extrae_extencion(data.cv_no_documentado) == "doc" || extrae_extencion(data.cv_no_documentado) == "docx" ) {
-
-                $("#doc5_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-  
-              }else{
-
-                if ( extrae_extencion(data.cv_no_documentado) == "pdf" ) {
-
-                  $("#doc5_ver").html('<iframe src="../dist/docs/all_trabajador/cv_no_documentado/'+data.cv_no_documentado+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-                }else{
-
-                  $("#doc5_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                }
-              }
-            }
-          }
-        }
+        $("#doc_old_5").val("");
       }
+
+      calcular_edad('#nacimiento','#p_edad','#edad');
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
     } else {
-
-      $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-
-      $("#doc5_nombre").html('');
-
-      $("#doc_old_5").val("");
-    }
-
-    edades();
-  });
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para desactivar registros
@@ -1066,121 +690,111 @@ function desactivar(idtrabajador) {
 }
 
 //Función para activar registros
-function activar(idtrabajador) {
+function activar(idtrabajador, nombre) {
+  $(".tooltip").removeClass("show").addClass("hidde");
   Swal.fire({
     title: "¿Está Seguro de  Activar  el trabajador?",
-    text: "Este trabajador tendra acceso al sistema",
+    html: `<b class="text-success">${nombre}</b> <br> Este trabajador tendra acceso al sistema`,
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, activar!",
+    showLoaderOnConfirm: true,
+    preConfirm: (input) => {       
+      return fetch(`../ajax/all_trabajador.php?op=activar&idtrabajador=${idtrabajador}`).then(response => {
+        console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/all_trabajador.php?op=activar", { idtrabajador: idtrabajador }, function (e) {
-
+      if (result.value.status) {
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
-
         tabla.ajax.reload(); tabla2.ajax.reload();
-      });
-      
-    }
+      }else{
+        ver_errores(result.value);
+      }     
+    }    
   });      
 }
 
-
 //Función para desactivar registros
-function eliminar(idtrabajador) {
-   //----------------------------
- Swal.fire({
-
-  title: "!Elija una opción¡",
-  html: "Al <b>Expulsar</b> Padrá encontrar el registro en la tabla inferior! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-  icon: "warning",
-  showCancelButton: true,
-  showDenyButton: true,
-  confirmButtonColor: "#17a2b8",
-  denyButtonColor: "#d33",
-  cancelButtonColor: "#6c757d",    
-  confirmButtonText: `<i class="fas fa-times"></i> Expulsar`,
-  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-}).then((result) => {
-
-  if (result.isConfirmed) {
-  
-    Swal.fire({
-      icon: "warning",
-      title: 'Antes de expulsar ingrese una descripción',
-      input: 'text',
-      inputAttributes: { autocapitalize: 'off' },
-      showCancelButton: true,
-      cancelButtonColor: "#d33",
-      confirmButtonText: 'Si, expulsar!',
-      confirmButtonColor: "#28a745",
-      showLoaderOnConfirm: true,
-      preConfirm: (login) => {
-        // console.log(login);
-        return fetch(`../ajax/all_trabajador.php?op=desactivar&idtrabajador=${idtrabajador}&descripcion=${login}`)
-          .then(response => {
+function eliminar(idtrabajador, nombre) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  Swal.fire({
+    title: "!Elija una opción¡",
+    html: `<b class="text-danger"><del>${nombre}</del></b> <br> Al <b>Expulsar</b> Padrá encontrar el registro en la tabla inferior! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
+    icon: "warning",
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Expulsar`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,    
+    showLoaderOnDeny: true,
+    preDeny: (input) => {       
+      return fetch(`../ajax/all_trabajador.php?op=eliminar&idtrabajador=${idtrabajador}`).then(response => {
+        console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    console.log(result );
+    if (result.isConfirmed) {    
+      Swal.fire({
+        icon: "warning",
+        title: 'Antes de expulsar ingrese una descripción',
+        input: 'text',
+        inputAttributes: { autocapitalize: 'off' },
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+        confirmButtonText: 'Si, expulsar!',
+        confirmButtonColor: "#28a745",
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          // console.log(login);
+          return fetch(`../ajax/all_trabajador.php?op=desactivar&idtrabajador=${idtrabajador}&descripcion=${login}`).then(response => {
             console.log(response);
-            if (!response.ok) {
-              throw new Error(response.statusText)
-            }
-            return response.json()
-          })
-          .catch(error => {
-            Swal.showValidationMessage(
-              `Request failed: ${error}`
-            )
-          })
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      console.log(result );
-      if (result.isConfirmed) {
-        if (result.value.ok) {
-          Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
-          tabla.ajax.reload(); tabla2.ajax.reload();
-        }else{
-          Swal.fire("Error!", "No se pudo realizar la petición.", "error");
-        }     
-      }
-    })
+            if (!response.ok) { throw new Error(response.statusText); }
+            return response.json();
+          }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        console.log(result );
+        if (result.isConfirmed) {
+          if (result.value.status) {
+            Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
+            tabla.ajax.reload(); tabla2.ajax.reload();
+          }else{
+            ver_errores(result.value);
+          }     
+        }
+      });
 
-  }else if (result.isDenied) {
-   //op=eliminar
-    $.post("../ajax/all_trabajador.php?op=eliminar", { idtrabajador: idtrabajador }, function (e) {
-      if (e == 'ok') {
-
-        Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");		 
-
+    }else if (result.isDenied) {
+      //op=eliminar
+      if (result.value.status) {
+        Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");
         tabla.ajax.reload(); tabla2.ajax.reload();
-        
       }else{
-
-        Swal.fire("Error!", e, "error");
-      }
-    }); 
-
-  }
-
-});
+        ver_errores(result.value);
+      }      
+    }
+  });
 }
-
 
 init();
 
-$(function () {
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-      guardar_y_editar_trabajador(e);
-
-    },
-  });
+$(function () {   
 
   $("#form-trabajador").validate({
     rules: {
@@ -1220,16 +834,21 @@ $(function () {
       error.addClass("invalid-feedback");
       element.closest(".form-group").append(error);
     },
-
     highlight: function (element, errorClass, validClass) {
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
-
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_trabajador(e);
+
+    },
   });
 });
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 /*Validación Fecha de Nacimiento Mayoria de edad del usuario*/
 function calcular_edad() {
@@ -1326,191 +945,10 @@ function calcular_edad() {
   }
 }
 
-// restringimos la fecha para no elegir mañana
-function no_select_tomorrow(nombre_input) {  
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
-  var yyyy = today.getFullYear();
-  if(dd<10){ dd='0'+dd } 
-  if(mm<10){ mm='0'+mm } 
-
-  today = `${yyyy}-${mm}-${dd}`;
-  $(nombre_input).attr('max',today);
-  //document.getElementById("nacimiento").setAttribute("max", );
-}
-
-
-
-function validacion_form() {
-  if ($('#nombre').val() == '' || $('#tipo_documento').val() == '' ) {
-    $('.validar_nombre').addClass('has-error');
-    console.log("vacio");
-    return false;
-  }else{
-    $('.validar_nombre').removeClass('has-error');
-    console.log("no vacio");
-    return true;
-  }
-
-}
-
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#num_documento").val(); 
-   
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/ajax_general.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);  console.log(data);
-
-        if (data == null) {
-
-          $("#search").show();
-  
-          $("#charge").hide();
-  
-          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-          
-        } else {
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
-          } else {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-            $("#titular_cuenta").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-            toastr.success("Persona encontrada!!!!");
-          }
-        }
-        
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/ajax_general.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);    console.log(data);
-
-          if (data == null) {
-            $("#search").show();
-    
-            $("#charge").hide();
-    
-            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-            
-          } else {
-
-            if (data.success == false) {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              toastr.error("Datos no encontrados en la SUNAT!!!");
-              
-            } else {
-
-              if (data.estado == "ACTIVO") {
-
-                $("#search").show();
-
-                $("#charge").hide();
-
-                data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#titular_cuenta").val(data.nombreComercial) : $("#titular_cuenta").val(data.razonSocial);
-
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);                
-
-                data.direccion == null ? $("#direccion").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion").val(data.direccion);
-
-                toastr.success("Persona encontrada!!");
-
-              } else {
-
-                toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-                $("#search").show();
-
-                $("#charge").hide();
-
-                $("#nombre").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#titular_cuenta").val(data.nombreComercial) : $("#titular_cuenta").val(data.razonSocial);
-                
-                data.direccion == null ? $("#direccion").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion").val(data.direccion);
-
-              }
-            }
-          }          
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
-}
-
 // damos formato a: Cta, CCI
 function formato_banco() {
 
-  if ($("#banco").select2("val") == null || $("#banco").select2("val") == "") {
+  if ($("#banco").select2("val") == null || $("#banco").select2("val") == "" || $("#banco").select2("val") == '1') {
 
     $("#c_bancaria").prop("readonly",true);   $("#cci").prop("readonly",true);
   } else {
@@ -1525,7 +963,7 @@ function formato_banco() {
 
       $(".chargue-format-1").html('Cuenta Bancaria'); $(".chargue-format-2").html('CCI');
 
-      var format_cta = decifrar_format_banco(data.formato_cta); var format_cci = decifrar_format_banco(data.formato_cci);
+      var format_cta = decifrar_format_banco(data.data.formato_cta); var format_cci = decifrar_format_banco(data.data.formato_cci);
 
       $("#c_bancaria").inputmask(`${format_cta}`);
 
@@ -1534,24 +972,23 @@ function formato_banco() {
   }  
 }
 
-function decifrar_format_banco(format) {
+function sueld_mensual(){
 
-  var array_format =  format.split("-"); var format_final = "";
+  var sueldo_mensual = $('#sueldo_mensual').val()
 
-  array_format.forEach((item, index)=>{
+  var sueldo_diario=(sueldo_mensual/30).toFixed(1);
 
-    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
+  var sueldo_horas=(sueldo_diario/8).toFixed(1);
 
-    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
-  });
+  $("#sueldo_diario").val(sueldo_diario);
 
-  var ultima_letra = format_final.slice(-1);
-   
-  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
-
-  return format_final;
+  $("#sueldo_hora").val(sueldo_horas);
 }
 
-function convert_minuscula(e) {
-  e.value = e.value.toLowerCase();
+function no_pdf() {
+  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
+}
+
+function dowload_pdf() {
+  toastr.success("El documento se descargara en breve!!")
 }

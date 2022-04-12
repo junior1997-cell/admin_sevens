@@ -175,7 +175,7 @@
                               <!-- fecha seleccionada  -->
                               <div class="col-lg-12 text-center mb-3">
                                 <div class="external-event bg-warning">
-                                  <h4 id="fecha_select" style="margin-bottom: 0 !important;">2021/10/23</h4>
+                                  <h4 id="fecha_select" class="mb-0" ><i class="fas fa-spinner fa-pulse fa-2x"></i></h4>
                                 </div>                            
                               </div>
 
@@ -191,7 +191,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="background_color">Tipo feriado</label>                                   
-                                  <select name="background_color" id="background_color" class="form-control select2" style="width: 100%;" onchange="contraste();" >
+                                  <select name="background_color" id="background_color" class="form-control select2" style="width: 100%;" onchange="contraste(); color_muestra();" >
                                     <option value="#FF0000">Feriado Nacional</option>
                                     <option value="#FFF700">Dia no Laborable</option>
                                     <option value="#28A745">Feriado local</option>
@@ -272,6 +272,11 @@
                
         <!-- hora sesion-->
         <script src="../dist/js/sesion.js"></script> 
+
+        <!-- Funciones Crud -->
+        <script type="text/javascript" src="../dist/js/funcion_crud.js"></script>
+        <!-- Funciones Generales -->
+        <script type="text/javascript" src="../dist/js/funcion_general.js"></script>
 
         <script type="text/javascript" src="scripts/all_calendario.js"></script>
         

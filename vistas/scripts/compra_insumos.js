@@ -2151,7 +2151,7 @@ function precio_con_igv() {
     $("#precio_sin_igv_p").val( parseFloat(precio_total).toFixed(2));
     $("#precio_total_p").val(precio_base.toFixed(2));
 
-    $("#estado_igv_p").val("0");
+    $("#estado_igv_p").val("0"); 
   }
 }
 

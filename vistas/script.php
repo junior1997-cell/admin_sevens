@@ -13,15 +13,17 @@
 <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
 
-<!-- InputMask -->
+<!-- Moment -->
 <script src="../plugins/moment/moment.min.js"></script>
+
+<!-- InputMask -->
 <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
 
 <!-- date-range-picker -->
 <script src="../plugins/daterangepicker/daterangepicker.js"></script>
 
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js"></script>
 
 <!-- DataTables  & Plugins -->
 <script src="../plugins/datatables2/jquery.dataTables.min.js"></script>    

@@ -69,6 +69,30 @@ function format_a_m_d(fecha) {
   return format;
 }
 
+// convierte de una fecha(mm-dd-aa): 23-12-2021 a una fecha(mm-dd-aa): 12-23-2021
+function format_m_d_a(fecha) {
+  var format = "";
+  if (fecha == '' || fecha == null || fecha == '00-00-0000') { format = "-"; } else {
+    let splits = fecha.split("-"); //console.log(splits);
+    format = `${splits[1]}-${splits[0]}-${splits[2]}`;
+  } 
+  return format;
+}
+
+// restringimos la fecha para no elegir mañana
+function no_select_tomorrow(nombre_input) {  
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  if(dd<10){ dd='0'+dd } 
+  if(mm<10){ mm='0'+mm } 
+
+  today = `${yyyy}-${mm}-${dd}`;
+  
+  $(nombre_input).attr('max',today);
+}
+
 /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
 
 // Formato de miles
@@ -237,7 +261,7 @@ function addImage(e, id, img_default='') {
 /* PREVISUALIZA: img, pdf, doc, excel,  */
 function addImageApplication(e, id, img_default='') {
 
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
+  $(`#${id}_ver`).html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
 
 	var file = e.target.files[0], archivoType = /image.*|application.*/;
 	
@@ -261,9 +285,9 @@ function addImageApplication(e, id, img_default='') {
       });
 
       if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+        $(`#${id}_ver`).html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
       } else {
-        $("#"+id+"_ver").html(`<img src="${img_default}" alt="" width="50%" >`); 
+        $(`#${id}_ver`).html(`<img src="${img_default}" alt="" width="50%" >`); 
       }
       
 
@@ -281,29 +305,29 @@ function addImageApplication(e, id, img_default='') {
 
           // cargamos la imagen adecuada par el archivo
 				  if ( extrae_extencion(file.name) == "doc") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
           } else if ( extrae_extencion(file.name) == "docx" ) {             
-            $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
           }else if ( extrae_extencion(file.name) == "pdf" ) {              
-            $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
+            $(`#${id}_ver`).html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
           }else if ( extrae_extencion(file.name) == "csv" ) {              
-            $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
           } else if ( extrae_extencion(file.name) == "xls" ) {             
-            $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
           } else if ( extrae_extencion(file.name) == "xlsx" ) {             
-            $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
           } else if ( extrae_extencion(file.name) == "xlsm" ) {             
-            $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
           } else if (
             extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
             extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
             extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
             extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
 
-            $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+            $(`#${id}_ver`).html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
               
           } else {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+            $(`#${id}_ver`).html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
           }
            
 					$("#"+id+"_nombre").html(`<div class="row">
@@ -336,9 +360,9 @@ function addImageApplication(e, id, img_default='') {
         })
 
         if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-          $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+          $(`#${id}_ver`).html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
         } else {
-          $("#"+id+"_ver").html(`<img src="${img_default}" alt="" width="50%" >`); 
+          $(`#${id}_ver`).html(`<img src="${img_default}" alt="" width="50%" >`); 
         }
         
         $("#"+id+"_nombre").html("");
@@ -355,9 +379,9 @@ function addImageApplication(e, id, img_default='') {
     });
 
     if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+      $(`#${id}_ver`).html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
     } else {
-      $("#"+id+"_ver").html(`<img src="${img_default}" alt="" width="50%" >`); 
+      $(`#${id}_ver`).html(`<img src="${img_default}" alt="" width="50%" >`); 
     }		 
     
 		$("#"+id+"_nombre").html("");
@@ -496,12 +520,139 @@ function re_visualizacion(id, carpeta, sub_carpeta) {
   }
 }
 
+function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', height='auto') {
+
+  var html = ''; var ruta = sub_carpeta==''?  `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+  var extencion = '';
+
+  // cargamos la imagen adecuada par el archivo
+  if ( extrae_extencion(filename) == "xls") {
+
+    html = `<img src="../dist/svg/xls.svg" alt="" width="${width}" height="${height}" >`;
+    extencion = extrae_extencion(filename);
+
+  } else if ( extrae_extencion(filename) == "xlsx" ) {    
+
+    html = `<img src="../dist/svg/xlsx.svg" alt="" width="${width}" height="${height}" >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "csv" ) {
+
+    html = `<img src="../dist/svg/csv.svg" alt="" width="${width}" height="${height}" >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "xlsm" ) {
+
+    html = `<img src="../dist/svg/xlsm.svg" alt="" width="${width}" height="${height}" >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "docx" ) {
+
+    html = `<img src="../dist/svg/docx.svg" alt="" width="${width}" height="${height}" >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "doc") {
+
+    html = `<img src="../dist/svg/doc.svg" alt="" width="${width}" height="${height}" >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "pdf" ) {
+    //recomendado - height="210" 
+    html = `<iframe src="${ruta}" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`;
+    extencion = extrae_extencion(filename);
+  
+  } else if (
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
+    extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
+    extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
+
+    html = `<img src="${ruta}" alt="" width="${width}" height="${height}" onerror="this.src='../dist/svg/error-404-x.svg';" >`;
+    extencion = extrae_extencion(filename);
+    
+  }else{
+    //height="${height}"
+    html = `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="${width}" >`;
+    extencion = extrae_extencion(filename);
+    
+  }
+
+  return html;
+}
+
+function doc_view_icon(filename, color_class='', font_size_class='' ) {
+
+  // cargamos la imagen adecuada par el archivo
+  if ( extrae_extencion(filename) == "xls") {
+
+    html = `<i class="far fa-file-excel ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
+
+  } else if ( extrae_extencion(filename) == "xlsx" ) {    
+
+    html = `<i class="far fa-file-excel ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
+
+  }else if ( extrae_extencion(filename) == "csv" ) {
+
+    html = `<i class="fas fa-file-csv ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
+
+  }else if ( extrae_extencion(filename) == "xlsm" ) {
+
+    html = `<i class="far fa-file-excel ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
+
+  }else if ( extrae_extencion(filename) == "docx" ) {
+
+    html = `<i class="fas fa-file-word ${(color_class==''? 'text-primary': color_class)} ${font_size_class}"></i>`;
+
+  }else if ( extrae_extencion(filename) == "doc") {
+
+    html = `<i class="fas fa-file-word ${(color_class==''? 'text-primary': color_class)} ${font_size_class}"></i>`;
+
+
+  }else if ( extrae_extencion(filename) == "pdf" ) {
+    
+    html = `<i class="far fa-file-pdf ${(color_class==''? 'text-danger': color_class)} ${font_size_class}"></i>`;
+  
+  } else if (
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
+    extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
+    extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
+
+    html = `<i class="fas fa-file-image ${(color_class==''? 'text-primary': color_class)} ${font_size_class}"></i>`;
+    
+  }else{
+
+    html = `<i class="fas fa-file-alt ${color_class} ${font_size_class}"></i>`;
+    
+  }
+
+  return html;
+}
+
 function extrae_extencion(filename) { 
   var exten = "";
   if (filename == "" || filename == null || filename === undefined) {  }else{
     exten = filename.split(".").pop();
   }
   return exten; 
+}
+
+function pdf_o_img(filename) {
+  data = false;
+  if ( extrae_extencion(filename) == "pdf" ) {
+    //recomendado - height="210" 
+    data = true;
+
+  } else if (
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
+    extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
+    extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
+
+    data = true;
+    
+  }
+  return data;
 }
 
 /*  ══════════════════════════════════════════ - A P I S - ══════════════════════════════════════════ */
@@ -598,6 +749,7 @@ function buscar_sunat_reniec(input='') {
                 $(`#charge${input}`).hide();
 
                 data.razonSocial == null ? $(`#nombre${input}`).val(data.nombreComercial) : $(`#nombre${input}`).val(data.razonSocial);
+                data.razonSocial == null ? $(`#empresa${input}`).val(data.empresaComercial) : $(`#empresa${input}`).val(data.razonSocial);
 
                 data.razonSocial == null ? $(`#titular_cuenta${input}`).val(data.nombreComercial) : $(`#titular_cuenta${input}`).val(data.razonSocial);
 
@@ -606,6 +758,7 @@ function buscar_sunat_reniec(input='') {
                 var distrito = (data.distrito == null ? "" : data.distrito);                
 
                 data.direccion == null ? $(`#direccion${input}`).val(`${departamento} - ${provincia} - ${distrito}`) : $(`#direccion${input}`).val(data.direccion);
+                data.direccion == null ? $(`#ubicacion${input}`).val(`${departamento} - ${provincia} - ${distrito}`) : $(`#ubicacion${input}`).val(data.direccion);
 
                 toastr.success("Datos encontrados!!");
 
@@ -618,6 +771,7 @@ function buscar_sunat_reniec(input='') {
                 $(`#charge${input}`).hide();
 
                 data.razonSocial == null ? $(`#nombre${input}`).val(data.nombreComercial) : $(`#nombre${input}`).val(data.razonSocial);
+                data.razonSocial == null ? $(`#empresa${input}`).val(data.empresaComercial) : $(`#empresa${input}`).val(data.razonSocial);
 
                 data.razonSocial == null ? $(`#titular_cuenta${input}`).val(data.nombreComercial) : $(`#titular_cuenta${input}`).val(data.razonSocial);
                 
@@ -626,6 +780,7 @@ function buscar_sunat_reniec(input='') {
                 var distrito = (data.distrito == null ? "" : data.distrito);
 
                 data.direccion == null ? $(`#direccion${input}`).val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $(`#direccion${input}`).val(data.direccion);
+                data.direccion == null ? $(`#ubicacion${input}`).val(`${departamento} - ${provincia} - ${distrito}`) : $(`#ubicacion${input}`).val(data.direccion);
 
               }
             }
@@ -692,7 +847,7 @@ function decifrar_format_banco(format) {
 }
 
 /*Validación Fecha de Nacimiento Mayoria de edad del usuario*/
-function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad) {
+function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad='') {
 
   var fechaUsuario = $(input_fecha_nacimiento).val();
 
@@ -784,16 +939,3 @@ function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad) {
   }
 }
 
-// restringimos la fecha para no elegir mañana
-function no_select_tomorrow(nombre_input) {  
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
-  var yyyy = today.getFullYear();
-  if(dd<10){ dd='0'+dd } 
-  if(mm<10){ mm='0'+mm } 
-
-  today = `${yyyy}-${mm}-${dd}`;
-  
-  $(nombre_input).attr('max',today);
-}

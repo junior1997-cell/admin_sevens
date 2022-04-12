@@ -26,7 +26,7 @@ function listar() {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {
@@ -66,7 +66,7 @@ function mostrar_usuarios(id) {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {

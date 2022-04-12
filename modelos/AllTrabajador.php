@@ -12,12 +12,30 @@
     //Implementamos un método para insertar registros
     public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco, $c_bancaria, $c_bancaria_format, $cci, $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado)
     {
-      //var_dump($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $c_bancaria, $email, $banco, $titular_cuenta, $imagen1, $imagen2, $imagen3, $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado);
-      $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, cuenta_bancaria_format, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, cci, cci_format, idtipo_trabajador , idocupacion, ruc, cv_documentado, cv_no_documentado)
-      VALUES ( '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$c_bancaria', '$c_bancaria_format', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$cci', '$cci_format', '$tipo', '$ocupacion', '$ruc', '$cv_documentado', '$cv_nodocumentado')";
+      $sw = Array();
+      $sql_0 = "SELECT * FROM trabajador WHERE numero_documento = '$num_documento' AND nombres = '$nombre'";
+      $existe = ejecutarConsultaArray($sql_0);
+
+      if ($existe['status']) {
+        if ( empty($existe['data']) ) {
+          $sql="INSERT INTO trabajador ( idbancos, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, cuenta_bancaria, cuenta_bancaria_format, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, cci, cci_format, idtipo_trabajador , idocupacion, ruc, cv_documentado, cv_no_documentado)
+          VALUES ( '$banco', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$c_bancaria', '$c_bancaria_format', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$cci', '$cci_format', '$tipo', '$ocupacion', '$ruc', '$cv_documentado', '$cv_nodocumentado')";
+          $new_trabajador = ejecutarConsulta_retornarID($sql);
+
+          if ($new_trabajador['status']) {
+            $sw = array( 'status' => true, 'message' => 'noduplicado', 'data' => $new_trabajador['data'], 'id_tabla' =>$new_trabajador['id_tabla'] );
+          } else {
+            $sw = $new_trabajador;
+          }          
+          
+        } else {
+          $sw = array( 'status' => true, 'message' => 'duplicado', 'data' => $existe['data'], 'id_tabla' => '' );
+        }
+      } else {
+        $sw = $existe;
+      }
       
-      return ejecutarConsulta($sql);
-        
+      return $sw;        
     }
 
       //Implementamos un método para editar registros $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado
@@ -87,14 +105,14 @@
     }
 
     //Implementar un método para listar los registros
-    public function listar()
+    public function tbla_principal()
     {
       $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.cuenta_bancaria_format, 
       t.cci_format, t.telefono, t.imagen_perfil,  t.estado, b.nombre AS banco, tt.nombre AS nombre_tipo, o.nombre_ocupacion AS nombre_ocupacion 
       FROM trabajador AS t, bancos AS b,  tipo_trabajador as tt, ocupacion as o
       WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = 1 AND t.estado_delete = 1 ORDER BY  t.nombres ASC ;";
 
-      return ejecutarConsulta($sql);		
+      return ejecutarConsultaArray($sql);		
     }
 
     //Implementar un método para listar los registros
@@ -105,7 +123,7 @@
       FROM trabajador AS t, bancos AS b,  tipo_trabajador as tt, ocupacion as o
       WHERE t.idbancos = b.idbancos AND  t.idocupacion =o.idocupacion  AND tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = 0;";
 
-      return ejecutarConsulta($sql);		
+      return ejecutarConsultaArray($sql);		
     }
 
     // obtebnemos los DOCS para eliminar
@@ -113,14 +131,14 @@
 
       $sql = "SELECT imagen_perfil, imagen_dni_anverso, imagen_dni_reverso FROM trabajador WHERE idtrabajador='$idtrabajador'";
 
-      return ejecutarConsulta($sql);
+      return ejecutarConsultaSimpleFila($sql);
     }
     // obtebnemos los DOCS para eliminar
     public function obtenercv($idtrabajador) {
 
       $sql = "SELECT cv_documentado, cv_no_documentado FROM trabajador WHERE idtrabajador='$idtrabajador'";
 
-      return ejecutarConsulta($sql);
+      return ejecutarConsultaSimpleFila($sql);
     }
 
     public function select2_banco() {

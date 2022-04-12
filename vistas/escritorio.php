@@ -81,7 +81,7 @@
                         <div class="small-box bg-success">
                           <div class="inner">
                             <h3 id="cantidad_proveedores"> <i class="fas fa-spinner fa-pulse "></i> </h3>
-                            <p>Total de Proveedores activos</p>
+                            <p>Total de Proveedores</p>
                           </div>
                           <div class="icon">
                             <i class="fas fa-truck"></i>
@@ -96,7 +96,7 @@
                           <div class="inner">
                             <h3 id="cantidad_trabajadores"> <i class="fas fa-spinner fa-pulse "></i> </h3>
 
-                            <p>Total de Trabajadores activos</p>
+                            <p>Total de Trabajadores</p>
                           </div>
                           <div class="icon">
                             <i class="fas fa-users"></i>
@@ -109,14 +109,14 @@
                       <div class="col-lg-3 col-6">
                         <div class="small-box bg-danger">
                           <div class="inner">
-                            <h3 id="cantidad_servicios"> <i class="fas fa-spinner fa-pulse "></i> </h3>
+                            <h3 id="cantidad_compra"> <i class="fas fa-spinner fa-pulse "></i> </h3>
 
-                            <p>Total de Servicio</p>
+                            <p>Total de Compras de insumos</p>
                           </div>
                           <div class="icon">
-                            <i class="fas fa-tractor"></i>
+                            <i class="fas fa-shopping-cart"></i>
                           </div>
-                          <a href="#" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                          <a href="compra_insumos.php" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                       </div>
 
@@ -277,7 +277,7 @@
                                 <input type="hidden" name="idproyecto" id="idproyecto" />
 
                                 <!-- Tipo de documento -->
-                                <div class="col-lg-3">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                                   <div class="form-group">
                                     <label for="tipo_documento">Tipo de documento <sup class="text-danger">*</sup> </label>
                                     <select name="tipo_documento" id="tipo_documento" class="form-control"  placeholder="Tipo de documento">
@@ -290,11 +290,11 @@
                                 </div>
 
                                 <!-- N° de documento -->
-                                <div class="col-lg-3">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                                   <div class="form-group">
-                                    <label for="numero_documento">N° de documento <sup class="text-danger">*</sup></label>
+                                    <label for="num_documento">N° de documento <sup class="text-danger">*</sup></label>
                                     <div class="input-group">
-                                      <input type="number" name="numero_documento" id="numero_documento" class="form-control" placeholder="N° de documento" />
+                                      <input type="number" name="num_documento" id="num_documento" class="form-control" placeholder="N° de documento" />
                                       <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
                                         <span class="input-group-text" style="cursor: pointer;">
                                           <i class="fas fa-search text-primary" id="search"></i>
@@ -306,7 +306,7 @@
                                 </div>
 
                                 <!-- Empresa -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                   <div class="form-group">
                                     <label for="empresa">Empresa <sup class="text-danger">*</sup> <small class="text-orange">(para quien va la obra)</small> </label>                               
                                     <input type="text" name="empresa" id="empresa" class="form-control"  placeholder="Empresa">  
@@ -314,7 +314,7 @@
                                 </div>
 
                                 <!-- Nombre del proyecto -->
-                                <div class="col-lg-8">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                                   <div class="form-group">
                                     <label for="nombre_proyecto">Nombre del proyecto <sup class="text-danger">*</sup></label>
                                     <textarea name="nombre_proyecto" id="nombre_proyecto" class="form-control" rows="3" placeholder="Ingresa nombre">
@@ -323,7 +323,7 @@
                                 </div>
 
                                 <!-- Ubicación (de la obra) -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="ubicacion">Ubicación <small class="text-orange"> (de la obra) </small> </label>                               
                                     <!-- <input type="text" name="ubicacion" id="ubicacion" class="form-control"  placeholder="Ubicación">  -->
@@ -333,7 +333,7 @@
                                 </div>
 
                                 <!-- Codigo del proyecto -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="nombre_codigo">Código del proyecto</label>
                                     <input type="text" name="nombre_codigo" id="nombre_codigo" class="form-control"  placeholder="Codigo proyecto">
@@ -341,7 +341,7 @@
                                 </div>                           
 
                                 <!-- Actividad del trabajo -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="actividad_trabajo">Actividad del trabajo </label>
                                     <input type="text" name="actividad_trabajo" id="actividad_trabajo" class="form-control" placeholder="Actividad del trabajo">
@@ -387,7 +387,7 @@
                                 <!-- <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"> </div> -->
                                 
                                 <!-- FECHA INICIO -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label>Fecha Inicio: <sup class="text-danger">*</sup></label>
                                     <div class="input-group date"  data-target-input="nearest">
@@ -400,7 +400,7 @@
                                 </div>
 
                                 <!-- Dias habiles -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="dias_habiles">Plazo <sup class="text-danger">*</sup> <small class="text-orange">(días hábiles)</small> </label>
                                     <input type="number" name="dias_habiles" id="dias_habiles" class="form-control" min="0"  placeholder="Días habiles" onchange="calcular_plazo_fechafin()" onkeyup="calcular_plazo_fechafin()" >
@@ -408,7 +408,7 @@
                                 </div>
 
                                 <!-- Plazo -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="plazo">Plazo <sup class="text-danger">*</sup> <small class="text-orange">(días calendario)</small></label>
                                     <input type="number" name="plazo" id="plazo" class="form-control" placeholder="Días calendario" readonly >
@@ -416,7 +416,7 @@
                                 </div>
                                 
                                 <!-- FECHA FIN -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label>Fecha fin: <sup class="text-danger">*</sup></label>
                                     <div class="input-group date"  data-target-input="nearest">
@@ -429,7 +429,7 @@
                                 </div>
 
                                 <!-- Costo total del proyecto -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="costo">Costo <small class="text-orange">("costo total del proyecto")</small></label>
                                     <div class="input-group mb-3">
@@ -442,15 +442,19 @@
                                 </div> 
                                 
                                 <!-- Empresa a cargo -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="empresa_acargo">Empresa a cargo <small class="text-orange">("Seven's Ingenieros")</small></label>
-                                    <input type="text" name="empresa_acargo" id="empresa_acargo" class="form-control"  placeholder="Empresa a cargo" value="Seven's Ingenieros SAC">
+                                    <select class="form-control select2 select2-purple" name="empresa_acargo" id="empresa_acargo" data-dropdown-css-class="select2-purple" style="width: 100%;">
+                                      <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option>
+                                      <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option>
+                                      <option value="Ninguno" title="emogi-carita-feliz.svg">Ninguno</option>
+                                    </select>                                     
                                   </div>
                                 </div>
 
                                 <!-- fechas de valorizacion -->
-                                <div class="col-lg-4">                               
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">                               
                                   <div class="form-group">
                                     <label for="fecha_valorizacion">Valorizacion <sup class="text-danger">*</sup></label>
                                     <select class="form-control select2" name="fecha_valorizacion" id="fecha_valorizacion" style="width: 100%;">
@@ -462,7 +466,7 @@
                                 </div>
 
                                 <!-- fechas de pago de obreros -->
-                                <div class="col-lg-4">                               
+                                <div class="col-8 col-sm-7 col-md-6 col-lg-4">                               
                                   <div class="form-group show_hide_select_1">
                                     <label for="fecha_pago_obrero">Pago de obreros <sup class="text-danger">*</sup></label>
                                     <select class="form-control select2" name="fecha_pago_obrero" id="fecha_pago_obrero" style="width: 100%;" onchange="validar_permanent();">
@@ -475,32 +479,34 @@
                                   </div>
                                 </div>
 
-                                <div class="col-lg-4">
-                                  <label for="fecha_pago_obrero">Definir permanente <small class="text-danger">(pago de obreros)</small> </label>
+                                <!-- Swichs permanente -->
+                                <div class="col-4 col-sm-5 col-md-6 col-lg-4">
+                                  <label for="fecha_pago_obrero" class="d-none show-min-width-576px">Definir permanente <small class="text-danger">(pago de obreros)</small> </label>
+                                  <label for="fecha_pago_obrero" class="d-none show-max-width-576px"><small class="text-danger">(Permanente)</small> </label>
                                   <div class="switch-toggle show_hide_switch_1">
                                     <input type="checkbox" id="definiendo" >
                                     <label for="definiendo" onclick="permanente_pago_obrero()"></label>
                                   </div>
                                   <div class="show_hide_switch_2" style="display: none;">
-                                    Esta no se configuracion NO se puede cambiar
+                                    Esta no se configuracion <b class="text-danger">NO se puede cambiar</b>
                                   </div>
                                   <input type="hidden" name="permanente_pago_obrero" id="permanente_pago_obrero"  >
                                 </div>
 
                                 <!-- Pdf 1 -->
-                                <div class="col-md-6 col-lg-4" >                               
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="cip" class="control-label" > Acta de contrato de obra </label>
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
                                         <i class="fas fa-file-upload"></i> Subir.
                                       </button>
                                       <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                       <input style="display: none;" id="doc1" type="file" name="doc1" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1);">
                                         <i class="fa fa-eye"></i> PDF.
                                       </button>
@@ -516,19 +522,19 @@
                                 </div> 
 
                                 <!-- Pdf 2 -->
-                                <div class="col-md-6 col-lg-4" >                               
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="cip" class="control-label" > Acta de entrega de terreno</label>
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                         <i class="fas fa-file-upload"></i> Subir.
                                       </button>
                                       <input type="hidden" id="doc_old_2" name="doc_old_2" />
                                       <input style="display: none;" id="doc2" type="file" name="doc2" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2);">
                                         <i class="fa fa-eye"></i> PDF.
                                       </button>
@@ -544,19 +550,19 @@
                                 </div>
                                 
                                 <!-- Pdf 3 -->
-                                <div class="col-md-6 col-lg-4" >                               
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="cip" class="control-label" > Acta de inicio de obra</label>
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc3_i">
                                         <i class="fas fa-file-upload"></i> Subir.
                                       </button>
                                       <input type="hidden" id="doc_old_3" name="doc_old_3" />
                                       <input style="display: none;" id="doc3" type="file" name="doc3" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(3);">
                                         <i class="fa fa-eye"></i> PDF.
                                       </button>
@@ -572,19 +578,19 @@
                                 </div>                            
 
                                 <!-- Pdf 4 -->
-                                <div class="col-md-6 col-lg-4" >                               
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="Presupuesto" class="control-label" >Presupuesto</label>
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i">
                                         <i class="fas fa-file-upload"></i> Subir.
                                       </button>
                                       <input type="hidden" id="doc_old_4" name="doc_old_4" />
                                       <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4);">
                                         <i class="fa fa-eye"></i> PDF.
                                       </button>
@@ -600,19 +606,19 @@
                                 </div>
                                 
                                 <!-- Pdf 5 -->
-                                <div class="col-md-6 col-lg-4" >                               
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="analisis-de-costos-unitarios" class="control-label" > Analisis de costos unitarios</label>
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i">
                                         <i class="fas fa-file-upload"></i> Subir.
                                       </button>
                                       <input type="hidden" id="doc_old_5" name="doc_old_5" />
                                       <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5);">
                                         <i class="fa fa-eye"></i> PDF.
                                       </button>
@@ -628,19 +634,19 @@
                                 </div>
 
                                 <!-- Pdf 6 -->
-                                <div class="col-md-6 col-lg-4" >                               
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="inicio-de-obra" class="control-label" > Insumos</label>
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc6_i">
                                         <i class="fas fa-file-upload"></i> Subir.
                                       </button>
                                       <input type="hidden" id="doc_old_6" name="doc_old_6" />
                                       <input style="display: none;" id="doc6" type="file" name="doc6" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(6);">
                                         <i class="fa fa-eye"></i> PDF.
                                       </button>
@@ -806,96 +812,104 @@
                         </div>
                         
                         <div class="modal-body">
-                          <div class="row" id="cargando-detalle-proyecto">
+                          
+                          
+
+                          <div id="cargando-3-fomulario">
+
+                            <div class="row" id="cargando-detalle-proyecto"> </div>
+                            
+                            <div class="mailbox-attachments  clearfix text-center row">
+                              <div class="col-lg-4" >     
+                                <li >                    
+                                  <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_1" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+  
+                              <div class="col-lg-4" >  
+                                <li>                       
+                                  <span class="mailbox-attachment-icon name_icon_2"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_2"><i class="fas fa-paperclip"></i> Acta-de-entrega-de-terreno</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_2" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_2" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_2" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+  
+                              <div class="col-lg-4" >  
+                                <li>                       
+                                  <span class="mailbox-attachment-icon name_icon_3"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_3"><i class="fas fa-paperclip"></i> Acta-de-inicio-de-obra</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_3" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_3" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_3" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+  
+                              <div class="col-lg-4" >     
+                                <li>                    
+                                  <span class="mailbox-attachment-icon name_icon_4"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_4"><i class="fas fa-paperclip"></i> Presupuesto</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_4" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_4" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_4" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+  
+                              <div class="col-lg-4" >  
+                                <li>                       
+                                  <span class="mailbox-attachment-icon name_icon_5"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_5"><i class="fas fa-paperclip"></i> Analisis-de-costos-unitarios</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_5" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_5" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_5" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+  
+                              <div class="col-lg-4" >  
+                                <li>                       
+                                  <span class="mailbox-attachment-icon name_icon_6"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_6"><i class="fas fa-paperclip"></i> Insumos</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_6" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_6" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_6" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="cargando-4-fomulario">
                             <div class="col-lg-12 text-center">
                               <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
                               <h4>Cargando...</h4>
-                            </div>
-                          </div>
-                          
-                          <div class="mailbox-attachments  clearfix text-center row">
-                            <div class="col-lg-4" >     
-                              <li>                    
-                                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                                <div class="mailbox-attachment-info">
-                                  <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra.pdf</a>
-                                    <span class="mailbox-attachment-size clearfix mt-1">
-                                      <a href="#" class="btn btn-default btn-sm" data-toggle="tooltip" data-original-title="Descargar doc."><i class="fas fa-cloud-download-alt"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm" data-toggle="tooltip" data-original-title="Ver doc."><i class="far fa-eye"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm" data-toggle="tooltip" data-original-title="Imprimir doc." onclick="printJS({printable:'admin_sevens/dist/pdf/13163632640334.pdf', type:'pdf', showModal:true})"><i class="fas fa-print"></i></a>
-                                    </span>
-                                </div>
-                              </li>
-                            </div>
-
-                            <div class="col-lg-4" >  
-                              <li>                       
-                                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                                <div class="mailbox-attachment-info">
-                                  <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-entrega-de-terreno.pdf</a>
-                                    <span class="mailbox-attachment-size clearfix mt-1">
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
-                                    </span>
-                                </div>
-                              </li>
-                            </div>
-
-                            <div class="col-lg-4" >  
-                              <li>                       
-                                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                                <div class="mailbox-attachment-info">
-                                  <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Acta-de-inicio-de-obra.pdf</a>
-                                    <span class="mailbox-attachment-size clearfix mt-1">
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
-                                    </span>
-                                </div>
-                              </li>
-                            </div>
-
-                            <div class="col-lg-4" >     
-                              <li>                    
-                                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                                <div class="mailbox-attachment-info">
-                                  <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Presupuesto.pdf</a>
-                                    <span class="mailbox-attachment-size clearfix mt-1">
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
-                                    </span>
-                                </div>
-                              </li>
-                            </div>
-
-                            <div class="col-lg-4" >  
-                              <li>                       
-                                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                                <div class="mailbox-attachment-info">
-                                  <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Analisis-de-costos-unitarios.pdf</a>
-                                    <span class="mailbox-attachment-size clearfix mt-1">
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
-                                    </span>
-                                </div>
-                              </li>
-                            </div>
-
-                            <div class="col-lg-4" >  
-                              <li>                       
-                                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                                <div class="mailbox-attachment-info">
-                                  <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Insumos.pdf</a>
-                                    <span class="mailbox-attachment-size clearfix mt-1">
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-cloud-download-alt"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="far fa-eye"></i></a>
-                                      <a href="#" class="btn btn-default btn-sm "><i class="fas fa-print"></i></a>
-                                    </span>
-                                </div>
-                              </li>
                             </div>
                           </div>
 

@@ -183,7 +183,7 @@
     
         case 'desactivar':
 
-          $rspta = $usuario->desactivar($_POST["id_tabla"]);
+          $rspta = $usuario->desactivar($_GET["id_tabla"]);
     
           echo json_encode($rspta, true);
 
@@ -191,7 +191,7 @@
     
         case 'activar':
 
-          $rspta = $usuario->activar($_POST["id_tabla"]);
+          $rspta = $usuario->activar($_GET["id_tabla"]);
 
           echo json_encode($rspta, true);
 
@@ -199,7 +199,7 @@
     
         case 'eliminar':
 
-          $rspta = $usuario->eliminar($_POST["id_tabla"]);
+          $rspta = $usuario->eliminar($_GET["id_tabla"]);
 
           echo json_encode($rspta, true);
 
@@ -218,24 +218,27 @@
           $rspta = $usuario->listar();
               
           //Vamos a declarar un array
-          $data = [];  $imagen_error = "this.src='../dist/svg/user_default.svg'"; $cont=1;
+          $data = [];  
+          $imagen_error = "this.src='../dist/svg/user_default.svg'"; $cont=1;
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
           if ($rspta['status']) {
             foreach ($rspta['data'] as $key => $value) {
               $data[] = [
                 "0"=>$cont++,
-                "1" => $value['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idusuario'] . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $value['idusuario'] . ')"><i class="fas fa-skull-crossbones"></i> </button>':
-                    '<button class="btn btn-warning  btn-sm" onclick="mostrar(' . $value['idusuario'] . ')"><i class="fas fa-pencil-alt"></i></button>' . 
-                    ' <button class="btn btn-primary  btn-sm" onclick="activar(' . $value['idusuario'] . ')"><i class="fa fa-check"></i></button>',
+                "1" => $value['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idusuario'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $value['idusuario'] .', \''.encodeCadenaHtml($value['nombres']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>':
+                    '<button class="btn btn-warning  btn-sm" onclick="mostrar(' . $value['idusuario'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' . 
+                    ' <button class="btn btn-primary  btn-sm" onclick="activar(' . $value['idusuario'] . ')" data-toggle="tooltip" data-original-title="Recuperar"><i class="fa fa-check"></i></button>',
                 "2" => '<div class="user-block">'. 
                   '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/' . $value['imagen_perfil'] . '" alt="User Image" onerror="' . $imagen_error . '">'.
                   '<span class="username"><p class="text-primary m-b-02rem" >' . $value['nombres'] . '</p></span>'. 
-                  '<span class="description">' . $value['tipo_documento'] .  ': ' . $value['numero_documento'] . ' </span>'.
+                  '<span class="description"> - ' . $value['tipo_documento'] .  ': ' . $value['numero_documento'] . ' </span>'.
                 '</div>',
                 "3" => $value['telefono'],
                 "4" => $value['login'],
                 "5" => $value['cargo'],
-                "6" => $value['estado'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+                "6" => ($value['estado'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
               ];
             }
             $results = [
@@ -297,8 +300,12 @@
                 $sw = in_array($value['idpermiso'], $valores) ? 'checked' : '';
     
                 $data .= $div_open.'<li>'. 
-                  '<input id="permiso_'.$key.'" class="permiso h-1rem w-1rem" type="checkbox" ' . $sw . ' name="permiso[]" value="' . $value['idpermiso'] . '"> '.
-                  '<label for="permiso_'.$key.'" class="font-weight-normal" >' .$value['icono'] .' '. $value['nombre'].'</label>' . 
+                  '<div class="form-group mb-0">'.
+                    '<div class="custom-control custom-checkbox">'.
+                      '<input id="permiso_'.$value['idpermiso'].'" class="custom-control-input permiso h-1rem w-1rem" type="checkbox" ' . $sw . ' name="permiso[]" value="' . $value['idpermiso'] . '"> '.
+                      '<label for="permiso_'.$value['idpermiso'].'" class="custom-control-label font-weight-normal" >' .$value['icono'] .' '. $value['nombre'].'</label>' . 
+                    '</div>'.
+                  '</div>'.
                 '</li>'. $div_close;
               }
     
@@ -327,7 +334,7 @@
           if ($rspta['status']) {
     
             foreach ($rspta['data'] as $key => $value) {
-              $data  .= '<option value=' . $value['id'] . '>' . $value['nombre'] . ' - ' . $value['numero_documento'] . '</option>';
+              $data  .= '<option value=' . $value['id'] . ' title="'.$value['imagen_perfil'].'">' . $value['nombre'] . ' - ' . $value['numero_documento'] . '</option>';
             }
         
             $retorno = array(
@@ -422,13 +429,13 @@
 
           if (empty($idtrabajador)){
 
-            $rspta=$alltrabajador->insertar($nombre_trab, $tipo_documento_trab, $num_documento_trab, $direccion_trab, $telefono_trab, $nacimiento_trab, $edad_trab,  $email_trab, $banco_trab, str_replace("-", "",$c_bancaria_trab), $c_bancaria_format, str_replace("-", "",$cci_trab), $cci_format, $titular_cuenta_trab, $tipo, $ocupacion_trab, $ruc_trab, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $rspta=$alltrabajador->insertar($nombre_trab, $tipo_documento_trab, $num_documento_trab, $direccion_trab, $telefono_trab, $nacimiento_trab, $edad_trab, $email_trab, $banco_trab, str_replace("-", "",$c_bancaria_trab), $c_bancaria_format, str_replace("-", "",$cci_trab), $cci_format, $titular_cuenta_trab, $tipo_trab, $ocupacion_trab, $ruc_trab, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
+            echo json_encode($rspta, true);
   
           }else {            
-                        
-            echo $rspta= array( 'status' => false, 'message' => 'No hay editar usuario en este modulo', );
+            $rspta = array( 'status' => false, 'message' => 'No hay editar usuario en este modulo', );      
+            echo json_encode($rspta, true);
           }            
 
         break;

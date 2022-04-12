@@ -37,17 +37,23 @@ function lista_select2(url, nombre_input, id_tabla) {
 
     e = JSON.parse(e);   //console.log(e);
 
-    $(nombre_input).html(e.data); 
+    if (e.status) {
 
-    if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
+      $(nombre_input).html(e.data); 
 
-      $(nombre_input).val(null).trigger("change");
+      if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
+
+        $(nombre_input).val(null).trigger("change");
+
+      } else {
+
+        $(nombre_input).val(id_tabla).trigger("change");  
+
+      }
 
     } else {
-
-      $(nombre_input).val(id_tabla).trigger("change");  
-
-    }
+      ver_errores(e);
+    }   
 
   }).fail( function(e) { ver_errores(e); } );
 }
@@ -442,8 +448,8 @@ function crud_eliminar(url, callback_true, callback_false) {
   
 }
 
-function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, mensaje, callback_true_papelera, callback_true_eliminar, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
-
+function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, mensaje, callback_true_papelera, callback_true_eliminar, table_reload_1=false, table_reload_2=false, table_reload_3=false, table_reload_4=false,table_reload_5=false) {
+  
   Swal.fire({
     title: title,
     html: mensaje,
@@ -455,53 +461,49 @@ function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, men
     cancelButtonColor: "#6c757d",    
     confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
     denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+    showLoaderOnConfirm: true,
+    preConfirm: (input) => {       
+      return fetch(`${url_papelera}&id_tabla=${id_tabla}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    showLoaderOnDeny: true,
+    preDeny: (input) => {       
+      return fetch(`${url_eliminar}&id_tabla=${id_tabla}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
-
+    console.log(result);
     if (result.isConfirmed) {
-
-      $.post(url_papelera, { 'id_tabla': id_tabla }, function (e) {
-
-        e = JSON.parse(e);
-
-        if (e.status) {
-          
-          if (callback_true_papelera) { callback_true_papelera(); }
-
-          if (table_reload_1) { table_reload_1(); }
-          if (table_reload_2) { table_reload_2(); }
-          if (table_reload_3) { table_reload_3(); }
-          if (table_reload_4) { table_reload_4(); }
-          if (table_reload_5) { table_reload_5(); }
-
-        }else{
-
-          ver_errores(e);
-        }
-        
-      }).fail( function(e) { console.log(e); ver_errores(e); } );
-
+      if (result.value.status) {
+        if (callback_true_papelera) { callback_true_papelera(); }
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+        $(".tooltip").removeClass("show").addClass("hidde");
+      }else{
+        ver_errores(result.value);
+      }
     }else if (result.isDenied) {
-
-      $.post(url_eliminar, { 'id_tabla': id_tabla }, function (e) {
-
-        e = JSON.parse(e);
-
-        if (e.status) {
-
-          if (callback_true_eliminar) { callback_true_eliminar(); } 
-
-          if (table_reload_1) { table_reload_1(); }
-          if (table_reload_2) { table_reload_2(); }
-          if (table_reload_3) { table_reload_3(); }
-          if (table_reload_4) { table_reload_4(); }
-          if (table_reload_5) { table_reload_5(); } 
-
-        }else{
-
-          ver_errores(e);
-        }     
-
-      }).fail( function(e) { console.log(e); ver_errores(e); } );
+      if (result.value.status) {
+        if (callback_true_eliminar) { callback_true_eliminar(); }
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+        $(".tooltip").removeClass("show").addClass("hidde");
+      }else{
+        ver_errores(result.value);
+      }
     }
   });  
 }
@@ -570,7 +572,11 @@ function ver_errores(e) {
   }else if (e.status == false) {
     console.group("Error"); console.warn('Error BD -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-     
+  
+  }else if (e.status == 'duplicado') {
+    console.group("Error"); console.warn('Duplicado Error BD -------------'); console.log(e); console.groupEnd();
+    Swal.fire(`Estos datos ya existen 😅!`, e.data, "error");   
+  
   } else {
     console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");

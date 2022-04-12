@@ -10,28 +10,38 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar( $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color)
-    {
+    public function insertar( $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color) {
         
       $sql="INSERT INTO calendario ( titulo, descripcion, fecha_feriado, fecha_invertida, background_color, text_color)
       VALUES ( '$titulo', '$descripcion', '$fecha_feriado', '$fecha_invertida', '$background_color', '$text_color')";
       $all_calendario = ejecutarConsulta($sql);
-      
-      $sql2 = "SELECT idproyecto FROM calendario_por_proyecto GROUP BY idproyecto;";
-      $proyecto = ejecutarConsultaArray($sql2);
-      
-      foreach ($proyecto as $indice => $key) {
-        $idproyecto = $key['idproyecto'];
-        $sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
-        VALUES ('$idproyecto', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
-        ejecutarConsulta($sql3);
-      }
 
-      return $all_calendario;
+      if ($all_calendario['status']) {
+        $sql2 = "SELECT idproyecto FROM calendario_por_proyecto GROUP BY idproyecto;";
+        $proyecto = ejecutarConsultaArray($sql2);
         
+        if ($proyecto['status']) {
+          $sw = "";
+          foreach ($proyecto['data'] as $indice => $key) {
+            $idproyecto = $key['idproyecto'];
+            $sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
+            VALUES ('$idproyecto', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
+            $sw = ejecutarConsulta($sql3);
+
+            if ($sw['status'] == false) { return $sw; }            
+          }
+
+          return $sw;
+        } else {
+          return $proyecto;
+        }
+
+      } else {
+        return $all_calendario;
+      }  
     }
 
-      //Implementamos un método para editar registros
+    //Implementamos un método para editar registros
     public function editar($idcalendario, $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color)
     {
       $sql="UPDATE calendario SET titulo = '$titulo', descripcion = '$descripcion', fecha_feriado = '$fecha_feriado', 
@@ -73,13 +83,15 @@
 
       $fechas = ejecutarConsultaArray($sql);	
 
-      $count_n = ejecutarConsultaSimpleFila($sql2); $count_la = ejecutarConsultaSimpleFila($sql3); $count_lo = ejecutarConsultaSimpleFila($sql4);
+      $count_n = ejecutarConsultaSimpleFila($sql2); 
+      $count_la = ejecutarConsultaSimpleFila($sql3); 
+      $count_lo = ejecutarConsultaSimpleFila($sql4);
       	
       $results = array(
-        "fechas" =>$fechas,
-        "count_n" =>$count_n['count_n'],
-        "count_la" =>$count_la['count_la'],
-        "count_lo" =>$count_lo['count_lo'],
+        "fechas" =>$fechas['data'],
+        "count_n" =>$count_n['data']['count_n'],
+        "count_la" =>$count_la['data']['count_la'],
+        "count_lo" =>$count_lo['data']['count_lo'],
       );
       return $results;
     }    

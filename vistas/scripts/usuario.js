@@ -25,8 +25,9 @@ function init() {
   $("#guardar_registro_trabajador").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#trabajador").select2({ theme: "bootstrap4",  placeholder: "Selecione trabajador", allowClear: true, });  
+  $("#trabajador").select2({ templateResult: formatState, theme: "bootstrap4",  placeholder: "Selecione trabajador", allowClear: true, });  
 
+  $("#cargo").select2({ theme: "bootstrap4", placeholder: "Selecione cargo", allowClear: true, });
   $("#banco_trab").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
   $("#tipo_trab").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion_trab").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
@@ -37,6 +38,15 @@ function init() {
   // Formato para telefono
   $("[data-mask]").inputmask();   
 }
+
+function formatState (state) {
+  console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/all_trabajador/perfil/${state.title}`: '../dist/svg/user_default.svg'; 
+  var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 // abrimos el navegador de archivos
 $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
@@ -109,6 +119,7 @@ function limpiar_form_usuario() {
     r = JSON.parse(r); //console.log(r);
 
     if (r.status) { $("#permisos").html(r.data); } else { ver_errores(e); }
+    //$("#permiso_4").rules('add', { required: true, messages: {  required: "Campo requerido" } });
     
   }).fail( function(e) { console.log(e); ver_errores(e); } );
 
@@ -151,7 +162,9 @@ function tbla_principal() {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [2,3,4,5], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [2,3,4,5], } }, { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [2,3,4,5], } }, {extend: "colvis"} ,
+    ],
     "ajax":{
       url: '../ajax/usuario.php?op=tbla_principal',
       type : "get",
@@ -210,7 +223,8 @@ function guardar_y_editar_usuario(e) {
 }
 
 function mostrar(idusuario) {
-
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".trabajador-name").html(`<i class="fas fa-spinner fa-pulse fa-2x"></i>`);
   limpiar_form_usuario();  
 
   $(".modal-title").html("Editar usuario");
@@ -229,7 +243,7 @@ function mostrar(idusuario) {
 
     data = JSON.parse(data);  //console.log(data); 
 
-    $(".modal-title").html(`Editar usuario: <i class="fas fa-users-cog text-primary"></i> <b class="texto-parpadeante">${data.data.nombres}</b> `);    
+    $(".trabajador-name").html(` <i class="fas fa-users-cog text-primary"></i> <b class="texto-parpadeante font-size-20px">${data.data.nombres}</b> `);    
     
     $("#trabajador_old").val(data.data.idtrabajador); 
     $("#cargo").val(data.data.cargo).trigger("change"); 
@@ -248,18 +262,20 @@ function mostrar(idusuario) {
     r = JSON.parse(r); console.log(r);
 
     if (r.status) { $("#permisos").html(r.data); } else { ver_errores(e); }
+    //$("#permiso_4").rules('add', { required: true, messages: {  required: "Campo requerido" } });
     
   }).fail( function(e) { console.log(e); ver_errores(e); } );
 }
 
 //Función para desactivar registros
-function eliminar(idusuario) {
+function eliminar(idusuario, nombre) {
+  
   crud_eliminar_papelera(
     "../ajax/usuario.php?op=desactivar",
     "../ajax/usuario.php?op=eliminar", 
     idusuario, 
     "!Elija una opción¡", 
-    "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
     function(){ tabla.ajax.reload() },
@@ -307,9 +323,13 @@ function limpiar_form_trabajador() {
 
   $("#doc4").val("");
   $("#doc_old_4").val("");
+  $('#doc4_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc4_nombre').html("");
   
   $("#doc5").val("");
   $("#doc_old_5").val("");
+  $('#doc5_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc5_nombre').html("");
   
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -320,29 +340,91 @@ function limpiar_form_trabajador() {
 //Función para guardar o editar
 function guardar_y_editar_trabajador(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
+  console.log('llegue aqui 1');
   var formData = new FormData($("#form-trabajador")[0]);
+  $("#div_barra_progress_trabajador").show();
+  console.log('llegue aqui 2');
 
-  /*url, formData, nombre_modal, callback_limpiar, callback_true, name_progress, url_select2, input_select2, table_reload_1 = false, 
-  table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, 
-  table_reload_7 = false, table_reload_8 = false, table_reload_9 = false */
+  $.ajax({
+    url: "../ajax/usuario.php?op=guardar_y_editar_trabajador",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) { 
 
-  crud_guardar_editar_modal_xhr( 
-    "../ajax/usuario.php?op=guardar_y_editar_trabajador", 
-    formData, 
-    "#modal-agregar-trabajador", 
-    function(){ limpiar_form_trabajador(); },
-    function(){ sw_success('Correcto!', "Usuario guardado correctamente." ); },
-    "trabajador", 
-    "../ajax/usuario.php?op=select2Trabajador",
-    '#trabajador',     
-  )
+      var d = JSON.parse(e); console.log(d);
+
+      if (d.status) {
+
+        if ( d.message == 'noduplicado' ) {
+
+          lista_select2("../ajax/usuario.php?op=select2Trabajador", '#trabajador', d.id_tabla);
+          
+          sw_success('Correcto!', "Trabajador guardado correctamente." );      
+  
+          limpiar_form_trabajador();
+  
+          $("#modal-agregar-trabajador").modal("hide");
+  
+        } else if (d.message == 'duplicado') {  
+
+          var trabajador = "";
+  
+          d.data.forEach(key => {
+            trabajador = trabajador.concat(`<li class="text-left font-size-13px">
+              <b>Razón Social: </b>${key.nombres} <br>
+              <b>${key.tipo_documento}: </b>${key.numero_documento} <br>
+              <b>Papelera: </b>${( key.estado==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO')} <br>
+              <b>Eliminado: </b>${( key.estado_delete==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO')} <br>
+              <hr class="m-t-2px m-b-2px">
+            </li>`);
+          });
+  
+          trabajador = `<ul>${trabajador}</ul>`;     
+          Swal.fire("El Trabajador Existe!", trabajador, "info");
+        }
+      } else {
+        ver_errores(d);
+      }      
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener( "progress", function (evt) {
+
+        if (evt.lengthComputable) {
+          var prct = (evt.loaded / evt.total) * 100;
+          prct = Math.round(prct);
+
+          $("#barra_progress_trabajador").css({ width: prct + "%", });
+
+          $("#barra_progress_trabajador").text(prct + "%");
+
+        }
+      }, false );
+
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#div_barra_progress_trabajador").show();
+      $("#barra_progress_trabajador").css({ width: "0%",  });
+      $("#barra_progress_trabajador").text("0%");
+    },
+    complete: function () {
+      $("#div_barra_progress_trabajador").hide();
+      $("#barra_progress_trabajador").css({ width: "0%", });
+      $("#barra_progress_trabajador").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
 
 }
 
 // damos formato a: Cta, CCI
 function formato_banco() {
 
-  if ($("#banco_trab").select2("val") == null || $("#banco_trab").select2("val") == "") {
+  if ($("#banco_trab").select2("val") == null || $("#banco_trab").select2("val") == "" || $("#banco_trab").select2("val") == '1') {
 
     $("#c_bancaria_trab").prop("readonly",true);   $("#cci_trab").prop("readonly",true);
   } else {
@@ -380,12 +462,16 @@ $(function () {
   $("#cargo").on('change', function() { $(this).trigger('blur'); });
   $("#trabajador").on('change', function() { $(this).trigger('blur'); });
 
+  $("#banco_trab").on('change', function() { $(this).trigger('blur'); });
+  $("#tipo_trab").on('change', function() { $(this).trigger('blur'); });
+  $("#ocupacion_trab").on('change', function() { $(this).trigger('blur'); });
+
   $("#form-usuario").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
       login:    { required: true, minlength: 3, maxlength: 20 },
       password: { required: true, minlength: 4, maxlength: 20 },
-      cargo:    { required: true }
+      cargo:    { required: true },
     },
     messages: {
       login:    { required: "Este campo es requerido.", minlength: "MÍNIMO 4 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
@@ -414,6 +500,7 @@ $(function () {
   });
 
   $("#form-trabajador").validate({
+    //ignore: '.select2-input, .select2-focusser',
     rules: {
       tipo_documento_trab: { required: true },
       num_documento_trab:  { required: true, minlength: 6, maxlength: 20 },
@@ -427,7 +514,7 @@ $(function () {
       banco_trab:          { required: true},
       tipo_trab:           { required: true},
       ocupacion_trab:      { required: true},
-      ruc_trab:            { minlength: 11, maxlength: 11},
+      ruc_trab:            { minlength: 11, maxlength: 11},      
     },
     messages: {
       tipo_documento_trab: { required: "Campo requerido.", },
@@ -467,6 +554,9 @@ $(function () {
 
   $("#cargo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#banco_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#tipo_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#ocupacion_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   
 });
 

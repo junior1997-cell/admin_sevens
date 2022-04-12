@@ -16,11 +16,8 @@ function init() {
   $("#eliminar_registro").on("click", function (e) { desactivar()  });
 
   //Initialize Select2 Elements
-  $("#background_color").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione tipo",
-    allowClear: true,
-  });
+  $("#background_color").select2({ theme: "bootstrap4",  placeholder: "Selecione tipo", allowClear: true,});
+
   $("#background_color").val("#FF0000").trigger("change");
 }
 
@@ -31,6 +28,20 @@ function contraste() {
   let color_contrst = invertColor(color, true)
 
   $('#text_color').val(color_contrst);
+}
+
+function color_muestra() {
+
+  let color = $('#background_color').select2('val');
+
+  if ( color == '#FF0000' ) {
+    $('.external-event').removeClass('bg-danger bg-warning bg-success').addClass('bg-danger');
+  } else if ( color == '#FFF700' ) {
+    $('.external-event').removeClass('bg-danger bg-warning bg-success').addClass('bg-warning');
+  } else if ( color == '#28A745' ) {
+    $('.external-event').removeClass('bg-danger bg-warning bg-success').addClass('bg-success');
+  }
+  
 }
 
 //Función limpiar
@@ -59,7 +70,7 @@ function listar() {
 
   $.post("../ajax/all_calendario.php?op=listar-calendario",  function (data, status) {
 
-    data = JSON.parse(data);   //console.log(data); 
+    data = JSON.parse(data);   console.log(data); 
 
     $("#external-events").html('');
 
@@ -67,7 +78,7 @@ function listar() {
 
       $.each(data.fechas, function (index, value) {
              
-        $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+' - '+ value.start +' </div>');
+        $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+' - '+ format_d_m_a(value.start) +' </div>');
       });     
 
     } else {       
@@ -145,7 +156,7 @@ function listar() {
         $("#fecha_invertida").val(fecha_invertida(info.dateStr));
         $('#text_color').val('#ffffff');
 
-        $('#fecha_select').html(info.dateStr);
+        $('#fecha_select').html(`${extraer_dia_semana_completo(info.dateStr)}, ${format_d_m_a(info.dateStr)}`);
 
         localStorage.setItem('dateStr', info.dateStr); console.log(info.dateStr); 
 
@@ -177,7 +188,10 @@ function listar() {
 
         $('#text_color').val(info.event.textColor);
 
-        $('#fecha_select').html(year+'-' + month + '-'+dt);
+        //$('#fecha_select').html(`${year}-${month}-${dt}`);
+        var fecha_dia = `${year}-${month}-${dt}`
+         
+        $('#fecha_select').html(`${extraer_dia_semana_completo(fecha_dia)}, ${dt}-${month}-${year}`);
 
         localStorage.setItem('dateStr', year+'-' + month + '-'+dt); console.log(year+'-' + month + '-'+dt);
 
@@ -237,50 +251,57 @@ function listar() {
     localStorage.setItem('dateStr', y + '-' + m + '-' + d);
 
     calendar.render(); 
-  });
+  }).fail( function(e) { ver_errores(e); } ); 
 
   // fechas eliminadas
   $("#external-events-eliminados").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
 
   $.post("../ajax/all_calendario.php?op=listar-calendario-e",  function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data); 
+    data = JSON.parse(data);  console.log(data); 
 
-    $("#external-events-eliminados").html('');
+    if (data.status) {
 
-    if (data.length != 0) {
+      $("#external-events-eliminados").html('');
 
-      $("#f_delete").html(data.length);
+      if (data.data.length != 0) {
 
-      $.each(data, function (index, value) {              
-        $("#external-events-eliminados").append(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
-          '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number" > ' + value.title + '</span>'+
-          '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
-            '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+
-          '</span>'+
-        '</div>'
+        $("#f_delete").html(data.data.length);
+
+        $.each(data.data, function (index, value) {              
+          $("#external-events-eliminados").append(
+          '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
+            '<div class="info-box-content">  '   +                                    
+              '<span class="info-box-number" > ' + value.title + '</span>'+
+            '</div>'+
+            '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
+              '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+
+            '</span>'+
+          '</div>'
+          );
+        });
+        
+      } else {
+
+        $("#f_delete").html('0');
+
+        $("#external-events-eliminados").html(
+          '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
+            '<div class="info-box-content">  '   +                                    
+              '<span class="info-box-number">No hay fechas eliminadas </span>'+
+            '</div>'+
+            '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
+              '<i class="far fa-grin-alt"></i>'+
+            '</span>'+
+          '</div>'
         );
-      });
-      
+      }
     } else {
-
-      $("#f_delete").html('0');
-
-      $("#external-events-eliminados").html(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
-          '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number">No hay fechas eliminadas </span>'+
-          '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
-            '<i class="far fa-grin-alt"></i>'+
-          '</span>'+
-        '</div>'
-      );
+      ver_errores(e);
     }
-  });
+
+    
+  }).fail( function(e) { ver_errores(e); } ); 
 }
 
 //Función para guardar o editar
@@ -294,10 +315,9 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (datos) {
-             
-      if (datos == 'ok') {	
+      datos = JSON.parse(datos);
+      if (datos.status) {	
 
         Swal.fire("Correcto!", "Fecha guardada correctamente", "success");			 
 
@@ -305,11 +325,11 @@ function guardaryeditar(e) {
 
 			}else{
 
-        Swal.fire("Error!", datos, "error");
+        ver_errores(e);
 
 			}
     },
-  });
+  }).fail( function(e) { ver_errores(e); } ); 
 }
 
 //Función para desactivar registros
@@ -364,65 +384,40 @@ function activar(idcalendario) {
 
 
 // Validacion FORM
-$(function () {
-
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-      guardaryeditar(e);
-
-    },
-  });
+$(function () {  
 
   $("#form-calendario").validate({
     rules: {
-      titulo: { required: true, minlength: 3, maxlength: 30 },
-      color: { required: true,  },
-      descripcion: { minlength: 6 },
+      titulo:           { required: true, minlength: 3, maxlength: 30 },
+      color:            { required: true,  },
+      descripcion:      { minlength: 6 },
       background_color: { required: true,  },
     },
     messages: {
-
-      background_color: {
-        required: "Este campo es requerido",        
-      },
-
-      titulo: {
-        required: "Este campo es requerido",
-        minlength: "El color debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El color debe tener como MÁXIMO 30 caracteres.", 
-      },
-
-      color: {
-        required: "Ingrese un color de texto",        
-      },
-
-      descripcion: {
-        minlength: "La descripcion debe tener MÍNIMO 4 caracteres.",
-      },
-
+      background_color: { required: "Este campo es requerido", },
+      titulo:           { required: "Este campo es requerido", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 30 caracteres.", },
+      color:            { required: "Ingrese un color de texto", },
+      descripcion:      { minlength: "MÍNIMO 4 caracteres.",  },
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
-      element.closest(".form-group").append(error);
+      element.closest(".form-group").append(error);    
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
       $(element).removeClass("is-invalid").addClass("is-valid");
-
     },
+    submitHandler: function (e) {
+      guardaryeditar(e);
+    },
+
   });
 });
 
@@ -463,7 +458,8 @@ init();
 
 function fecha_invertida(fecha) {
   
-  var fecha_feriado = fecha.split("-");  var fecha_invertida = fecha_feriado[1] + "-" + fecha_feriado[2] + "-" + fecha_feriado[0]; //console.log(fecha_feriado);
+  var fecha_feriado = fecha.split("-");  
+  var fecha_invertida = `${fecha_feriado[1]}-${fecha_feriado[2]}-${fecha_feriado[0]}`; //console.log(fecha_feriado);
   
   return fecha_invertida;
 }

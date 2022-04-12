@@ -38,14 +38,14 @@
 
             $rspta=$calendario->insertar($titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+            echo json_encode($rspta, true);	
   
           }else {
 
             // editamos un trabajador existente
             $rspta=$calendario->editar($idcalendario, $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color);
             
-            echo $rspta ? "ok" : "Fecha no se pudo actualizar";
+            echo json_encode($rspta, true);	
           }            
 
         break;
@@ -54,7 +54,7 @@
 
           $rspta=$calendario->desactivar($idcalendario);
 
- 				  echo $rspta ? "Usuario Desactivado" : "calendario no se puede desactivar";
+ 				  echo json_encode($rspta, true);	
 
         break;
 
@@ -62,7 +62,7 @@
 
           $rspta=$calendario->activar($idcalendario);
 
- 				  echo $rspta ? "Usuario activado" : "calendario no se puede activar";
+ 				  echo json_encode($rspta, true);	
 
         break;        
 
@@ -70,14 +70,14 @@
 
           $rspta=$calendario->listar();
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);         
+          echo json_encode($rspta, true);	      
 
         break;
         case 'listar-calendario-e':          
 
           $rspta=$calendario->listar_e();
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);         
+          echo json_encode($rspta, true);	
 
         break;
       }

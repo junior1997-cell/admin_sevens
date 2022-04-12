@@ -207,9 +207,10 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
   width: 145px;
 }
 .bootstrap-datetimepicker-widget table th.disabled, .bootstrap-datetimepicker-widget table th.disabled:hover {
-  background: none;
+  /* background: none; */
   color: #6c757d;
   cursor: not-allowed;
+  background-color: #b3b9be34;
 }
 .bootstrap-datetimepicker-widget table th.prev::after {
   content: "Previous Month";
@@ -270,9 +271,10 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
   border-bottom-color: #fff;
 }
 .bootstrap-datetimepicker-widget table td.disabled, .bootstrap-datetimepicker-widget table td.disabled:hover {
-  background: none;
+  /* background: none; */
   color: #6c757d;
   cursor: not-allowed;
+  background-color: #b3b9be34;
 }
 .bootstrap-datetimepicker-widget table td span {
   display: inline-block;
@@ -296,9 +298,10 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
   color: #6c757d;
 }
 .bootstrap-datetimepicker-widget table td span.disabled, .bootstrap-datetimepicker-widget table td span.disabled:hover {
-  background: none;
+  /* background: none; */
   color: #6c757d;
   cursor: not-allowed;
+  background-color: #b3b9be34;
 }
 .bootstrap-datetimepicker-widget.usetwentyfour td.hour {
   height: 27px;

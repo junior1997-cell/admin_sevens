@@ -146,7 +146,7 @@ class Usuario
 
   //Seleccionar Trabajador Select2
   public function select2_trabajador() {
-    $sql = "SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento 
+    $sql = "SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento, imagen_perfil
 		FROM trabajador WHERE estado='1' AND estado_delete='1' AND estado_usuario = '0' ORDER BY nombres ASC;";
     return ejecutarConsulta($sql);
   }

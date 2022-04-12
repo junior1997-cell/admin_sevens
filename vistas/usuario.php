@@ -56,6 +56,7 @@
                         <div class="card-header">                               
                           <h3 class="card-title btn-regresar" style="display: none;">
                             <button type="button" class="btn bg-gradient-warning" onclick="limpiar_form_usuario(); show_hide_form(1);"><i class="fas fa-arrow-left"></i> Regresar</button>                            
+                            <b class="trabajador-name"></b>
                           </h3>
                           <h3 class="card-title btn-agregar">
                             <button type="button" class="btn bg-gradient-success" onclick="limpiar_form_usuario(); show_hide_form(2);"><i class="fas fa-user-plus"></i> Agregar</button>
@@ -112,7 +113,7 @@
                                     </div>                                                        
                                   </div>
 
-                                  <!-- adduser -->
+                                  <!-- adduser --> 
                                   <div class="col-12 col-sm-3 col-md-3 col-lg-1 col-xl-1">
                                     <div class="form-group">
                                       <label class="text-white d-none show-min-width-576px">.</label> 
@@ -130,7 +131,7 @@
                                     <div class="form-group">
                                       <label for="cargo">Cargo</label>                               
                                       <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  >
-                                        <option value="Administrador">Administrador</option>
+                                        <option data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle mr-2" src="assets/vendor/flag-icon-css/flags/1x1/io.svg" alt="British Indian Ocean Territory Flag" /><span class="text-truncate">British Indian Ocean Territory</span></span>' value="Administrador">Administrador</option>
                                         <option value="Recursos Humanos">Recursos Humanos</option>
                                         <option value="Contador">Contador</option>
                                         <option value="SSOMA">SSOMA</option>
@@ -157,7 +158,7 @@
 
                                   <!-- permisos -->
                                   <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="form-group mb-0">
+                                    <div class="mb-0">
                                       <label class="ml-1" for="permisos">Permisos</label>                               
                                       <div   id="permisos">
                                         <i class="fas fa-spinner fa-pulse fa-2x"></i>
@@ -403,7 +404,7 @@
                                     <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" />
                                   </div>
                                   <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4,'cv_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4, 'all_trabajador', 'cv_documentado');"><i class="fa fa-eye"></i> PDF.</button>
                                   </div>
                                 </div>
                                 <div id="doc4_ver" class="text-center mt-4">
@@ -426,7 +427,7 @@
                                     <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" />
                                   </div>
                                   <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5,'cv_no_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5, 'all_trabajador', 'cv_no_documentado');"><i class="fa fa-eye"></i> PDF.</button>
                                   </div>
                                 </div>
                                 <div id="doc5_ver" class="text-center mt-4">

@@ -25,22 +25,26 @@
 					//Vamos a declarar un array
 					$cont=1;
 					$data= Array();
+					if ($rspta['status']) {
+						foreach ($rspta['data'] as $key => $value) {
 
-					while ($reg=$rspta->fetch_object()){
-
-						$data[]=array(
-							"0"=>$cont++,
-							"1"=>'<button class="btn btn-info btn-sm" onclick="mostrar_usuarios('.$reg->idpermiso.')"><i class="fas fa-eye"></i></button>',
-							"2"=>$reg->nombre
+							$data[]=array(
+								"0"=>$cont++,
+								"1"=>'<button class="btn btn-info btn-sm" onclick="mostrar_usuarios('.$value['idpermiso'].')"><i class="fas fa-eye"></i></button>',
+								"2"=>$value['nombre']
+							);
+						}
+	
+						$results = array(
+							"sEcho"=>1, //Información para el datatables
+							"iTotalRecords"=>count($data), //enviamos el total registros al datatable
+							"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+							"aaData"=>$data
 						);
-					}
-
-					$results = array(
-						"sEcho"=>1, //Información para el datatables
-						"iTotalRecords"=>count($data), //enviamos el total registros al datatable
-						"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
-						"aaData"=>$data);
-					echo json_encode($results);
+						echo json_encode($results);
+					} else {
+						echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+					}					
 
 				break;
 
@@ -53,26 +57,33 @@
 					//Vamos a declarar un array
 					$data= Array();
 					$imagen_error = "this.src='../dist/svg/user_default.svg'";
-					while ($reg=$rspta->fetch_object()){
+					if ($rspta['status']) {
+						foreach ($rspta['data'] as $key => $value) {
 
-						$data[]=array(
-							"0"=>$cont++,
-							"1"=>'<div class="user-block">
-								<img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-								<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-								<span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-							</div>',
-							"2"=>$reg->cargo, 
-							"3"=>substr ( $reg->created_at , 0, ((strlen($reg->created_at))-3) )
+							$data[]=array(
+								"0"=>$cont++,
+								"1"=>'<div class="user-block">
+									<img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+									<span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
+									<span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+								</div>',
+								"2"=>$value['cargo'], 
+								"3"=>substr ( $value['created_at'] , 0, ((strlen($value['created_at']))-3) )
+							);
+						}
+	
+						$results = array(
+							"sEcho"=>1, //Información para el datatables
+							"iTotalRecords"=>count($data), //enviamos el total registros al datatable
+							"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+							"aaData"=>$data
 						);
+						echo json_encode($results);
+					} else {
+						echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
 					}
-
-					$results = array(
-						"sEcho"=>1, //Información para el datatables
-						"iTotalRecords"=>count($data), //enviamos el total registros al datatable
-						"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
-						"aaData"=>$data);
-					echo json_encode($results);
+					
+					
 
 				break;
 			}

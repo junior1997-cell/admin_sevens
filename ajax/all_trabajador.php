@@ -128,7 +128,7 @@
             
             $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco, str_replace("-", "",$c_bancaria), $c_bancaria_format, str_replace("-", "",$cci), $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Trabajador";
+            echo json_encode($rspta, true);
   
           }else {
 
@@ -137,7 +137,7 @@
 
               $datos_f1 = $trabajador->obtenerImg($idtrabajador);
 
-              $img1_ant = $datos_f1->fetch_object()->imagen_perfil;
+              $img1_ant = $datos_f1['data']['imagen_perfil'];
 
               if ($img1_ant != "") {
 
@@ -150,7 +150,7 @@
 
               $datos_f2 = $trabajador->obtenerImg($idtrabajador);
 
-              $img2_ant = $datos_f2->fetch_object()->imagen_dni_anverso;
+              $img2_ant = $datos_f2['data']['imagen_dni_anverso'];
 
               if ($img2_ant != "") {
 
@@ -163,7 +163,7 @@
 
               $datos_f3 = $trabajador->obtenerImg($idtrabajador);
 
-              $img3_ant = $datos_f3->fetch_object()->imagen_dni_reverso;
+              $img3_ant = $datos_f3['data']['imagen_dni_reverso'];
 
               if ($img3_ant != "") {
 
@@ -176,7 +176,7 @@
 
               $datos_cv1 = $trabajador->obtenercv($idtrabajador);
 
-              $cv1_ant = $datos_cv1->fetch_object()->cv_documentado;
+              $cv1_ant = $datos_cv1['data']['cv_documentado'];
 
               if ($cv1_ant != "") {
 
@@ -188,7 +188,7 @@
 
               $datos_cv2 = $trabajador->obtenercv($idtrabajador);
 
-              $cv2_ant = $datos_cv2->fetch_object()->cv_no_documentado;
+              $cv2_ant = $datos_cv2['data']['cv_no_documentado'];
 
               if ($cv2_ant != "") {
 
@@ -199,46 +199,32 @@
             // editamos un trabajador existente
             $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $email, $banco, str_replace("-", "",$c_bancaria), $c_bancaria_format, str_replace("-", "",$cci), $cci_format, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
-            echo $rspta ? "ok" : "Trabajador no se pudo actualizar";
+            echo json_encode($rspta, true);
           }            
 
         break;
 
         case 'desactivar':
 
-          $ok = ['ok'=> true, 'redirected'=> true, 'status'=> 200];
+          $rspta=$trabajador->desactivar($_GET["idtrabajador"], $_GET["descripcion"]);
 
-          $error = ['ok'=> false, 'redirected'=> true, 'status'=> 404];
-
-          $idtrabajador = $_GET["idtrabajador"];  $descripcion = $_GET["descripcion"];
-
-          $rspta=$trabajador->desactivar($idtrabajador, $descripcion);
-
- 				  echo $rspta ? json_encode($ok) : json_encode($error);
+          echo json_encode($rspta, true);
 
         break;
 
         case 'activar':
 
-          $rspta=$trabajador->activar($idtrabajador);
+          $rspta=$trabajador->activar($_GET["idtrabajador"]);
 
- 				  echo $rspta ? "Trabajador activado" : "Trabajador no se puede activar";
-
-        break;
-        
-        case 'desactivar_1':
-
-          $rspta=$trabajador->desactivar_1($idtrabajador);
-
- 				  echo $rspta ? "Trabajador Descativado" : "Trabajador no se puede Descativar";
+          echo json_encode($rspta, true);
 
         break;
 
         case 'eliminar':
 
-          $rspta=$trabajador->eliminar($idtrabajador);
+          $rspta=$trabajador->eliminar($_GET["idtrabajador"]);
 
- 				  echo $rspta ? "ok" : "Trabajador no se puede eliminado";
+          echo json_encode($rspta, true);
 
         break;
 
@@ -246,108 +232,127 @@
 
           $rspta=$trabajador->mostrar($idtrabajador);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
 
         break;
 
-        case 'listar':          
+        case 'tbla_principal':          
 
-          $rspta=$trabajador->listar();
+          $rspta=$trabajador->tbla_principal();
           //Vamos a declarar un array
-          $data= Array();
-          $cont=1;
+          $data= Array(); $cont=1;
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+          if ($rspta['status']) {
+
+            foreach ($rspta['data'] as $key => $value) {             
           
-          while ($reg=$rspta->fetch_object()){
-            $data[]=array(
-              "0"=>$cont++,
-              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$reg->idtrabajador.')"><i class="fas fa-skull-crossbones"></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
-              "2"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                </div>',
-              "3"=> $reg->nombre_tipo,
-              "4"=> $reg->nombre_ocupacion,
-              "5"=>'<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
-              "6"=>format_d_m_a($reg->fecha_nacimiento).'<b>: </b>'.$reg->edad,
-              "7"=> '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria_format .' <br> <b>CCI: </b>'.$reg->cci_format,
-              "8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
+              $data[]=array(
+                "0"=>$cont++,
+                "1"=>($value['estado'])?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$value['idtrabajador'].', \''.encodeCadenaHtml($value['nombres']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'.
+                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')"data-toggle="tooltip" data-original-title="ver datos"><i class="far fa-eye"></i></button>':
+                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>',
+                "2"=>'<div class="user-block">
+                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                  <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
+                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                  </div>',
+                "3"=> $value['nombre_tipo'],
+                "4"=> $value['nombre_ocupacion'],
+                "5"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
+                "6"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'.calculaedad($value['fecha_nacimiento']),
+                "7"=> '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria_format'] .' <br> <b>CCI: </b>'.$value['cci_format'],
+                "8"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>':
+                '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "9"=> $value['nombres'],
+                "10"=> $value['tipo_documento'],
+                "11"=> $value['numero_documento'],
+                "12"=> format_d_m_a($value['fecha_nacimiento']),
+                "13"=>calculaedad($value['fecha_nacimiento']),
+                "14"=> $value['banco'],
+                "15"=> $value['cuenta_bancaria_format'],
+                "16"=> $value['cci_format'],
               );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data);
+            echo json_encode($results);
+
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
-          echo json_encode($results);
 
         break;  
 
         case 'listar_expulsado':
           $rspta=$trabajador->listar_expulsado();
           //Vamos a declarar un array
-          $data= Array();
-          $cont=1;
+          $data= Array(); $cont=1;
+
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
-          while ($reg=$rspta->fetch_object()){
-            $data[]=array(
-              "0"=>$cont++,
-              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$reg->idtrabajador.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idtrabajador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idtrabajador.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idtrabajador.')"><i class="far fa-eye"></i></button>',
-              "2"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .'<br>'.format_d_m_a($reg->fecha_nacimiento).' : '.$reg->edad.' años</span>
-                </div>',
-              "3"=> '<div class="center-vertical">'. $reg->nombre_tipo .'</div>',
-              "4"=> $reg->nombre_ocupacion,
-              "5"=> '<a href="tel:+51'.quitar_guion($reg->telefono).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $reg->telefono . '</a>',
-              "6"=> $reg->descripcion_expulsion ,
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+          if ($rspta['status']) {
+
+            foreach ($rspta['data'] as $key => $value) { 
+              $data[]=array(
+                "0"=>$cont++,
+                "1"=>($value['estado'])?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger btn-sm" onclick="desactivar('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="far fa-trash-alt  "></i></button>'.
+                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
+                  '<button class="btn btn-warning btn-sm" onclick="mostrar('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-primary btn-sm" onclick="activar('.$value['idtrabajador'].', \''.encodeCadenaHtml($value['nombres']).'\')" data-toggle="tooltip" data-original-title="Recuperar"><i class="fa fa-check"></i></button>'.
+                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Mostrar"><i class="far fa-eye"></i></button>',
+                "2"=>'<div class="user-block">
+                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                  <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
+                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.format_d_m_a($value['fecha_nacimiento']).' : '.$value['edad'].' años</span>
+                  </div>',
+                "3"=> '<div class="center-vertical">'. $value['nombre_tipo'] .'</div>',
+                "4"=> $value['nombre_ocupacion'],
+                "5"=> '<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
+                "6"=> $value['descripcion_expulsion'] ,
+                "7"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>':
+                '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "8"=> $value['nombres'],
+                "9"=> $value['tipo_documento'],
+                "10"=> $value['numero_documento'],
+                "11"=> format_d_m_a($value['fecha_nacimiento']),
+                "12"=>calculaedad($value['fecha_nacimiento']),
+                "13"=> $value['banco'],
+                "14"=> $value['cuenta_bancaria_format'],
+                "15"=> $value['cci_format'],
               );
+            }
+
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data);
+            echo json_encode($results);
+
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
-          echo json_encode($results);
+          
         break;
         
         case 'verdatos':
           $rspta=$trabajador->verdatos($idtrabajador);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
-        break;
-
-        case 'select2Banco': 
-
-          $rspta = $trabajador->select2_banco();
-      
-          while ($reg = $rspta->fetch_object())  {
-
-            echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
-          }
-
-        break;
+          echo json_encode($rspta, true);
+        break;        
 
         case 'formato_banco':
            
           $rspta=$trabajador->formato_banco($_POST["idbanco"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
            
         break;
       }
@@ -381,18 +386,30 @@
   // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
   function format_d_m_a( $fecha ) {
 
-    if (!empty($fecha)) {
+    $fecha_convert = "-";
 
+    if (empty($fecha) || $fecha == '0000-00-00') { }else{
+      
       $fecha_expl = explode("-", $fecha);
-
       $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
-
-    }else{
-
-      $fecha_convert = "";
+      
     }   
 
     return $fecha_convert;
+  }
+
+  function calculaedad($fechanacimiento){
+    $ano_diferencia = '-';
+    if (empty($fechanacimiento) || $fechanacimiento=='0000-00-00') { } else{
+      list($ano,$mes,$dia) = explode("-",$fechanacimiento);
+      $ano_diferencia  = date("Y") - $ano;
+      $mes_diferencia = date("m") - $mes;
+      $dia_diferencia   = date("d") - $dia;
+      if ($dia_diferencia < 0 || $mes_diferencia < 0)
+        $ano_diferencia--;
+    } 
+    
+    return $ano_diferencia;
   }
 
   ob_end_flush();

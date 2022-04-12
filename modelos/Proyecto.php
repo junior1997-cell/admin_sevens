@@ -27,29 +27,38 @@ Class Proyecto
 		// VALUES ('$id_proyect','Desayuno','0'), ('$id_proyect','Almuerzo','0'), ('$id_proyect','Cena','0')";
 		// ejecutarConsulta($sql_pension);
 
-		// extraemos todas fechas
-		$sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
-		$proyecto =  ejecutarConsultaArray($sql2) ;
+		if ($id_proyect['status']) {
+			// extraemos todas fechas
+			$sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
+			$proyecto =  ejecutarConsultaArray($sql2) ;
 
-		if (!empty($proyecto) ) {			
+			if ($proyecto['status']) {
+				if (!empty($proyecto['id_tabla']) ) {	
 
-			// insertamos las fechas al nuevo proyecto
-			foreach ($proyecto as $indice => $key) {
+					$id_proyect = 	$id_proyect['id_tabla'];
+	
+					// insertamos las fechas al nuevo proyecto
+					foreach ($proyecto['data'] as $indice => $key) {
+	
+						$titulo = $key['titulo']; $descripcion = $key['descripcion']; $fecha_feriado = $key['fecha_feriado']; $background_color = $key['background_color']; $text_color = $key['text_color'];
+						
+						$sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
+						VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
+						$calendario_proyect = ejecutarConsulta($sql3);
 
-				$titulo = $key['titulo']; $descripcion = $key['descripcion']; $fecha_feriado = $key['fecha_feriado']; $background_color = $key['background_color']; $text_color = $key['text_color'];
-				
-				$sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
-				VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
-
-				$calendario_proyect = ejecutarConsulta($sql3);
-			}
+						if ($calendario_proyect['status'] == false) { return $calendario_proyect; } 						
+					}
+					return $calendario_proyect;
+				} else {
+					return $proyecto;		 
+				}
+			} else {
+				return $proyecto;	
+			}			
 		} else {
-			$calendario_proyect = $id_proyect > 0 ? true : false ;			 
-		}
-		
+			return $id_proyect;	
+		}		
 		// $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
-		 
-		return $calendario_proyect;	 	
 	}
 
 	//Implementamos un método para editar registros
@@ -111,7 +120,7 @@ Class Proyecto
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function tbla_principal()
 	{
 		$sql="SELECT * FROM proyecto as p WHERE p.estado = 1 OR p.estado = 2;";
 		return ejecutarConsulta($sql);		
@@ -128,27 +137,30 @@ Class Proyecto
 
         $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos FROM proyecto WHERE idproyecto='$idproyecto'";
 
-        return ejecutarConsulta($sql);
+        return ejecutarConsultaSimpleFila($sql);
     }
 
 	// optenemos el total de PROYECTOS, PROVEEDORES, TRABAJADORES, SERVICIO
 	public function tablero() {
 
         $sql = "SELECT COUNT(p.empresa) AS cantidad_proyectos FROM proyecto AS p;";
-		$sql2 = "SELECT COUNT(p.idproveedor) AS cantidad_proveedores FROM proveedor AS p WHERE p.estado = 1;";
-		$sql3 = "SELECT COUNT(t.nombres) AS cantidad_trabajadores FROM trabajador AS t WHERE t.estado = 1;";
-		$sql4 = "SELECT COUNT(s.idservicio) AS cantidad_servicios FROM servicio AS s;";
+		$sql2 = "SELECT COUNT(p.idproveedor) AS cantidad_proveedores FROM proveedor AS p WHERE estado_delete='1' AND p.estado = 1;";
+		$sql3 = "SELECT COUNT(t.nombres) AS cantidad_trabajadores FROM trabajador AS t WHERE estado_delete='1' AND t.estado = 1;";
+		$sql4 = "SELECT COUNT(idcompra_proyecto) AS cantidad_compra_insumos FROM compra_por_proyecto WHERE estado_delete='1' AND estado='1';";
 
 		$proyecto = ejecutarConsultaSimpleFila($sql);
 		$proveedor = ejecutarConsultaSimpleFila($sql2);
 		$trabajador = ejecutarConsultaSimpleFila($sql3);
 		$servicio = ejecutarConsultaSimpleFila($sql4);
 
-		$results = array(
-			"proyecto" =>$proyecto,
-			"proveedor" =>$proveedor,
-			"trabajador" =>$trabajador,
-			"servicio" =>$servicio,
+		$results = array(			
+			"status" =>true,
+			"data" =>array(
+				"proyecto" =>$proyecto['data'],
+				"proveedor" =>$proveedor['data'],
+				"trabajador" =>$trabajador['data'],
+				"servicio" =>$servicio['data'],
+			),
 		);
         return $results;
     }	 
