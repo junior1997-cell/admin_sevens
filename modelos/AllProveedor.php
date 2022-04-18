@@ -15,12 +15,24 @@ class AllProveedor
     $sql_0 = "SELECT * FROM proveedor WHERE ruc = '$num_documento' AND razon_social = '$nombre'";
     $existe = ejecutarConsultaArray($sql_0);
 
-    if (empty($existe)) {
+    if (empty($existe['data'])) {
       $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
       VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
       $sw = array( 'status' => true, 'message' => 'noduplicado', 'data' => $existe, 'id_tabla' => ejecutarConsulta_retornarID($sql));      
     } else{
-      $sw = array( 'status' => true, 'message' => 'duplicado', 'data' => $existe, 'id_tabla' => '' );
+
+      $info_repetida = ''; 
+
+      foreach ($existe['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+          <b>Razón Social: </b>'.$value['razon_social'].'<br>
+          <b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>
+          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
+          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+          <hr class="m-t-2px m-b-2px">
+        </li>'; 
+      }
+      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
     }
 
     return $sw;
@@ -69,22 +81,28 @@ class AllProveedor
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idproveedor)
   {
-    $sql = "SELECT * FROM proveedor WHERE idproveedor='$idproveedor'";
+    $sql = "SELECT p.idproveedor, p.idbancos, p.razon_social, p.tipo_documento, p.ruc, p.direccion, p.telefono, p.cuenta_bancaria, 
+    p.cci, p.cuenta_detracciones, p.titular_cuenta, p.updated_at, b.nombre AS nombre_banco, b.icono AS icono_banco
+    FROM proveedor as p, bancos AS b
+    WHERE p.idbancos = b.idbancos AND idproveedor = '$idproveedor'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
   //Implementar un método para listar los registros
-  public function listar()
+  public function tbla_principal()
   {
-    $sql = "SELECT * FROM proveedor WHERE idproveedor>1 AND estado=1 AND estado_delete=1 ORDER BY  razon_social ASC";
-    return ejecutarConsulta($sql);
-  }
-
+    $sql = "SELECT p.idproveedor, p.idbancos, p.razon_social, p.tipo_documento, p.ruc, p.direccion, p.telefono, p.cuenta_bancaria, 
+    p.cci, p.cuenta_detracciones, p.titular_cuenta, p.estado, p.estado_delete, p.created_at, p.updated_at, b.nombre AS nombre_banco
+    FROM proveedor AS p, bancos AS b
+    WHERE p.idbancos = b.idbancos AND p.idproveedor>1 AND p.estado=1 AND p.estado_delete=1 
+    ORDER BY  p.razon_social ASC";
+    return ejecutarConsultaArray($sql);
+  }  
 
   public function select2_banco()
   {
-    $sql = "SELECT idbarncos as id, nombre, alias FROM bancos WHERE estado='1' AND estado_delete=1  ORDER BY idbancos ASC;";
-    return ejecutarConsulta($sql);
+    $sql = "SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND estado_delete=1  ORDER BY idbancos ASC;";
+    return ejecutarConsultaArray($sql);
   }
 
   // optenesmo el formato para los bancos

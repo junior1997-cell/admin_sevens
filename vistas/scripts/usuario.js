@@ -104,24 +104,12 @@ function doc5_eliminar() {
 //Función limpiar
 function limpiar_form_usuario() {
 
-  $("#permisos").html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
-
   // Agregamos la validacion
   $("#trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });  
   $("#password").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
   //Select2 trabajador
   lista_select2("../ajax/usuario.php?op=select2Trabajador", '#trabajador', null);
-
-  //Permiso
-  $.post(`../ajax/usuario.php?op=permisos&id=`, function (r) {
-
-    r = JSON.parse(r); //console.log(r);
-
-    if (r.status) { $("#permisos").html(r.data); } else { ver_errores(e); }
-    //$("#permiso_4").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-    
-  }).fail( function(e) { console.log(e); ver_errores(e); } );
 
   $("#idusuario").val("");
   $("#trabajador_c").html("Trabajador");   
@@ -137,6 +125,19 @@ function limpiar_form_usuario() {
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
+}
+
+function permisos() {
+  $("#permisos").html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
+  //Permiso
+  $.post(`../ajax/usuario.php?op=permisos&id=`, function (r) {
+
+    r = JSON.parse(r); //console.log(r);
+
+    if (r.status) { $("#permisos").html(r.data); } else { ver_errores(e); }
+    //$("#permiso_4").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+    
+  }).fail( function(e) { console.log(e); ver_errores(e); } );
 }
 
 function show_hide_form(flag) {
@@ -163,7 +164,7 @@ function tbla_principal() {
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [2,3,4,5], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [2,3,4,5], } }, { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [2,3,4,5], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5], } }, { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4,5], } }, {extend: "colvis"} ,
     ],
     "ajax":{
       url: '../ajax/usuario.php?op=tbla_principal',
@@ -176,15 +177,9 @@ function tbla_principal() {
     createdRow: function (row, data, ixdex) {    
 
       // columna: 0
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass("text-center");   
-          
-      }
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass("text-center");   
-          
-      }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }
     },
     "language": {
       "lengthMenu": "Mostrar: _MENU_ registros",
@@ -225,6 +220,8 @@ function guardar_y_editar_usuario(e) {
 function mostrar(idusuario) {
   $(".tooltip").removeClass("show").addClass("hidde");
   $(".trabajador-name").html(`<i class="fas fa-spinner fa-pulse fa-2x"></i>`);
+  
+
   limpiar_form_usuario();  
 
   $(".modal-title").html("Editar usuario");
@@ -238,6 +235,8 @@ function mostrar(idusuario) {
   $("#password").rules('remove', 'required');
 
   show_hide_form(2);
+
+  $("#permisos").html('<i class="fas fa-spinner fa-pulse fa-2x"></i>');
 
   $.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
 

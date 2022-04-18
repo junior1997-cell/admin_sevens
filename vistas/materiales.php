@@ -57,7 +57,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-material" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-material" onclick="limpiar_form_material();"><i class="fas fa-plus-circle"></i> Agregar</button>
                             Admnistra de manera eficiente de tus Insumos.
                           </h3>
                         </div>
@@ -107,7 +107,7 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar proveedores -->
+                <!-- MODAL - AGREGAR MATERIAL -->
                 <div class="modal fade" id="modal-agregar-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -131,7 +131,7 @@
                               <input type="hidden" name="idcategoria_insumos_af" id="idcategoria_insumos_af" value="1"/>
 
                               <!-- Nombre -->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                                 <div class="form-group">
                                   <label for="nombre_material">Nombre</label>
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
@@ -139,7 +139,7 @@
                               </div>
 
                               <!-- Modelo -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="modelo">Modelo <sup class="text-danger">*</sup> </label>
                                   <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
@@ -147,7 +147,7 @@
                               </div>
 
                               <!-- Serie -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="serie">Serie </label>
                                   <input class="form-control" type="text" id="serie" name="serie" placeholder="Serie." />
@@ -155,7 +155,7 @@
                               </div>
 
                               <!--Marca-->
-                              <div class="col-lg-6 class_pading">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="marca">Marca</label>
                                   <input type="text" name="marca" class="form-control" id="marca" placeholder="Marca" />
@@ -163,7 +163,7 @@
                               </div>
 
                               <!-- Color -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="color">Color</label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
@@ -171,29 +171,28 @@
                                 </div>
                               </div>
 
-                              <!-- Unnidad  onchange="mostrar_igv(); ocultar_comprob();"-->
-                              <div class="col-lg-6" id="content-t-unidad">
+                              <!-- Unnidad de medida  -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="Unidad-medida">Unidad-medida</label>
                                   <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
-                                  <!--<input type="hidden" name="unid_medida_old" id="unid_medida_old" />-->
                                 </div>
                               </div>
 
                               <!--Precio U-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-7 col-sm-7 col-md-8 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_unitario">Precio</label>
-                                  <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                  <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                 </div>
                               </div>
 
                               <!-- Rounded switch -->
-                              <div class="col-lg-2 class_pading">
+                              <div class="col-5 col-sm-5 col-md-4 col-lg-2">
                                 <div class="form-group">
                                   <label for="" class="labelswitch">Sin o Con (Igv)</label>
                                   <div id="switch_igv">
-                                    <div class="switch-holder myestilo-switch">
+                                    <div class="myestilo-switch">
                                       <div class="switch-toggle">
                                         <input type="checkbox" id="my-switch_igv" checked />
                                         <label for="my-switch_igv"></label>
@@ -204,8 +203,8 @@
                                 </div>
                               </div>
 
-                              <!--Sub Total precio_real monto_igv total-->
-                              <div class="col-lg-4 class_pading">
+                              <!--Sub Total-->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_real">Sub Total</label>
                                   <input type="number" class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
@@ -214,7 +213,7 @@
                               </div>
 
                               <!--IGV-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="monto_igv">IGV</label>
                                   <input type="number" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
@@ -223,7 +222,7 @@
                               </div>
 
                               <!--Total-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="total_precio">Total</label>
                                   <input type="number" class="form-control total_precio" placeholder="Precio real." readonly />
@@ -232,15 +231,15 @@
                               </div>
 
                               <!--descripcion_material-->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="descripcion_material">Descripción </label> <br />
                                   <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               
-                              <!--iamgen-material-->
-                              <div class="col-md-6 col-lg-6">
+                              <!--img-material-->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                 <label for="imagen1">Imagen</label>
                                 <div style="text-align: center;">
                                   <img
@@ -258,11 +257,11 @@
                               </div>
 
                               <!-- Ficha tecnica -->
-                              <div class="col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                 <label for="doc2_i" >Ficha técnica <b class="text-danger">(Imagen o PDF)</b> </label>  
                                 <div class="row text-center">                               
                                   <!-- Subir documento -->
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                       <i class="fas fa-upload"></i> Subir.
                                     </button>
@@ -270,8 +269,8 @@
                                     <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <!-- Recargar -->
-                                  <div class="col-md-6 text-center comprobante">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'ficha_tecnica');">
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center comprobante">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'material', 'ficha_tecnica');">
                                     <i class="fas fa-redo"></i> Recargar.
                                   </button>
                                   </div>                                  
@@ -282,6 +281,16 @@
                                 </div>
                                 <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -297,14 +306,14 @@
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_material();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!--Modal ver proveedores-->
+                <!-- MODAL - VER MATERIAL-->
                 <div class="modal fade" id="modal-ver-proveedores">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
@@ -322,7 +331,7 @@
                   </div>
                 </div>
 
-                <!--===============Modal-ver-ficha-tècnica =========-->
+                <!-- MODAL - FICHA TECNICA-->
                 <div class="modal fade" id="modal-ver-ficha_tec">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -343,6 +352,27 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- MODAL - VER DETALLE INSUMO-->
+                <div class="modal fade" id="modal-ver-insumo">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Datos del Insumo</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div id="datosinsumo" class="class-style">
+                          <!-- vemos los datos del trabajador -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>

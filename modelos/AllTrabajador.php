@@ -29,7 +29,18 @@
           }          
           
         } else {
-          $sw = array( 'status' => true, 'message' => 'duplicado', 'data' => $existe['data'], 'id_tabla' => '' );
+          $info_repetida = ''; 
+
+          foreach ($existe['data'] as $key => $value) {
+            $info_repetida .= '<li class="text-left font-size-13px">
+              <bNombre: </b>'.$value['nombres'].'<br>
+              <b>'.$value['tipo_documento'].': </b>'.$value['numero_documento'].'<br>
+              <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
+              <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+              <hr class="m-t-2px m-b-2px">
+            </li>'; 
+          }
+          $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
         }
       } else {
         $sw = $existe;

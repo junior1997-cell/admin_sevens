@@ -939,3 +939,11 @@ function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad='') {
   }
 }
 
+function quitar_guion(str) {
+
+  if (str == '' || str == null ) {
+    return "-";
+  } else {
+    return str.replace("-", "");
+  }  
+}

@@ -31,59 +31,76 @@
 
           if (empty($idproveedor)) {
             $rspta = $proveedor->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $cci, $c_detracciones, $banco, $titular_cuenta);
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
+            echo json_encode($rspta, true);
           } else {
             $rspta = $proveedor->editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $cci, $c_detracciones, $banco, $titular_cuenta);
-            echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+            echo json_encode($rspta, true);
           }
         break;
 
         case 'desactivar':
-          $rspta = $proveedor->desactivar($idproveedor);
-          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
-        break;
-
-        case 'activar':
-          $rspta = $proveedor->activar($idproveedor);
-          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+          $rspta = $proveedor->desactivar($_GET["id_tabla"]);
+          echo json_encode($rspta, true);
         break;
 
         case 'eliminar':
-          $rspta = $proveedor->eliminar($idproveedor);
-          echo $rspta ? "ok" : "Proveedor no se puede Elimniar";
+          $rspta = $proveedor->eliminar($_GET["id_tabla"]);
+          echo json_encode($rspta, true);
         break;
 
         case 'mostrar':
           $rspta = $proveedor->mostrar($idproveedor);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
         break;
 
-        case 'listar':
-          $rspta = $proveedor->listar();
+        case 'mostrar_mas_detalle':
+          $rspta = $proveedor->mostrar($idproveedor);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;
+
+        case 'tbla_principal':
+          $rspta = $proveedor->tbla_principal();
           //Vamos a declarar un array
           $data = [];  $cont = 1; 
 
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
           if ($rspta['status']) {   
           
-            foreach ($rspta['data'] as $key => $value) {           
-            
+            foreach ($rspta['data'] as $key => $value) {   
+
+              $razon_social = '';  $direccion = ''; $titular_cuenta = '';
+
+              if (strlen($value['razon_social']) >= 25 ) { $razon_social = substr($value['razon_social'], 0, 25).'...';  } else { $razon_social = $value['razon_social']; }
+              if (strlen($value['direccion']) >= 25 ) { $direccion = substr($value['direccion'], 0, 25).'...';  } else { $direccion = $value['direccion']; }
+              if (strlen($value['titular_cuenta']) >= 25 ) { $titular_cuenta = substr($value['titular_cuenta'], 0, 25).'...';  } else { $titular_cuenta = $value['titular_cuenta']; }
+              
               $data[] = [
                 "0" => $cont++,
-                "1" => $value['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idproveedor'] . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $value['idproveedor'] . ')"><i class="fas fa-skull-crossbones"></i></button>'
-                  : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idproveedor'] . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                "1" => $value['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idproveedor'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $value['idproveedor'] .', \''.encodeCadenaHtml($value['razon_social']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'.
+                    ' <button class="btn btn-info btn-sm" onclick="ver_mas_detalles('.$value['idproveedor'].')" data-toggle="tooltip" data-original-title="Ver mas datalles."><i class="far fa-eye"></i></button>'
+                    : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idproveedor'] . ')"><i class="fa fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-primary btn-sm" onclick="activar(' . $value['idproveedor'] . ')"><i class="fa fa-check"></i></button>',
                 "2" => '<div class="user-block">
-                  <span class="username ml-0" ><p class="text-primary m-b-02rem">' . $value['razon_social'] .'</p></span> 
-                  <span class="description ml-0"><b>' . $value['tipo_documento'] . '</b>: ' . $value['ruc'] . ' </span>
-                  <span class="description ml-0"><b>Cel.:</b>' . '<a href="tel:+51' . quitar_guion($value['telefono']) . '" data-toggle="tooltip" data-original-title="Llamar al PROVEEDOR.">' .
-                  $value['telefono'] . '</a>' . ' </span>
-                </div>',
-                "3" => $value['direccion'],
-                "4" => '<div class="w-250px"><b>Cta. Banc.:</b>' . $value['cuenta_bancaria'] . '<br> <b>CCI:</b> ' . $value['cci'] . ' <br> <b>Cta. Dtrac.:</b> ' . $value['cuenta_detracciones'] . '</div>',
-                "5" => $value['titular_cuenta'],
-                "6" => $value['estado'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+                  <span class="username ml-0" ><p class="text-primary m-b-02rem">' . $razon_social .'</p></span> 
+                  <span class="description ml-0"><b>' . $value['tipo_documento'] . '</b>: ' . $value['ruc'] . ' </span>'.
+                '</div>',
+                "3" => $direccion . (empty($value['telefono'])? '' : '<br>' . '<span class="text-gray font-size-13px"><b>Cel:</b> <a href="tel:+51' . quitar_guion($value['telefono']) . '" data-toggle="tooltip" data-original-title="Llamar al PROVEEDOR.">' . $value['telefono'] . '</a></span>' ) ,
+                "4" => ($value['nombre_banco'] == 'SIN BANCO' ? 'SIN BANCO' : '<div class="w-250px"><b>'.$value['nombre_banco'].':</b>' . $value['cuenta_bancaria'] . '<br> <b>CCI:</b> ' . $value['cci'] . '</div>' ).$toltip ,
+                "5" => $titular_cuenta,                
+                "6" => $value['razon_social'],
+                "7" => $value['tipo_documento'],
+                "8" => $value['ruc'],
+                "9" => $value['nombre_banco'],
+                "10" => $value['cuenta_bancaria'],
+                "11" => $value['cci'],
+                "12" => $value['cuenta_detracciones'],
+                "13" => $value['titular_cuenta'],
+                "14" => $value['direccion'],
+                "15" => $value['telefono'],
               ];
             }
             $results = [
@@ -98,24 +115,6 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
           
-        break;
-
-        case 'select2Banco':
-          $rspta = $proveedor->select2_banco();
-
-          if ($rspta['status']) {
-            foreach ($rspta['data'] as $key => $value) {
-              echo '<option value=' . $value['id'] . '>' . $value['nombre'] . (empty($value['alias']) ? "" : ' - ' . $value['alias'] ) . '</option>';
-            }
-          } else {
-            echo json_encode($rspta, true); 
-          }
-        break;
-
-        case 'formato_banco':
-          $rspta = $proveedor->formato_banco($_POST["idbanco"]);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta);
         break;
 
         case 'salir':

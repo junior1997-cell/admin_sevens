@@ -87,7 +87,7 @@
 
               $datos_f1 = $activos_fijos->obtenerImg($idproducto);
 
-              $img1_ant = $datos_f1->fetch_object()->imagen;
+              $img1_ant = $datos_f1['data']->fetch_object()->imagen;
 
               if ($img1_ant != "") {
 
@@ -143,7 +143,7 @@
 
           $imagen_error = "this.src='../dist/svg/default_producto.svg'";
           $cont=1;
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
 
             if (empty($reg->imagen)) {
               $imagen = 'src="../dist/svg/default_producto.svg"';

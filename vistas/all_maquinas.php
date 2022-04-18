@@ -55,7 +55,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-maquinaria" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-maquinaria" onclick="limpiar_form_maquinaria();"><i class="fas fa-user-plus"></i> Agregar</button>
                             Admnistra tus máquinarias y/o equipos.
                           </h3>
                         </div>
@@ -71,6 +71,7 @@
                                 <th>Modelo</th>
                                 <th>Proveedor</th>
                                 <th>Estado</th>
+                                <th>Tipo</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -82,6 +83,7 @@
                                 <th>Modelo</th>
                                 <th>Proveedor</th>
                                 <th>Estado</th>
+                                <th>Tipo</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -99,6 +101,7 @@
                                 <th>Modelo</th>
                                 <th>Proveedor</th>
                                 <th>Estado</th>
+                                <th>Tipo</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -110,6 +113,7 @@
                                 <th>Modelo</th>
                                 <th>Proveedor</th>
                                 <th>Estado</th>
+                                <th>Tipo</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -143,8 +147,16 @@
                               <!-- id proveedores -->
                               <input type="hidden" name="idmaquinaria" id="idmaquinaria" />
 
+                              <!-- Nombre Máquina -->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                  <label for="nombre_maquina">Nombre Máquina / Equipo</label>
+                                  <input type="text" name="nombre_maquina" class="form-control" id="nombre_maquina" placeholder="Ingrese nombre de una máquina" />
+                                </div>
+                              </div>
+
                               <!-- cargo -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="tipo">Tipo</label>
                                   <select name="tipo" id="tipo" class="form-control select2" style="width: 100%;">
@@ -154,22 +166,17 @@
                                   <!-- <small id="cargo_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small> -->
                                 </div>
                               </div>
-                              <!-- Nombre Máquina -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_maquina">Nombre Máquina / Equipo</label>
-                                  <input type="text" name="nombre_maquina" class="form-control" id="nombre_maquina" placeholder="Ingrese nombre de una máquina" />
-                                </div>
-                              </div>
+                              
                               <!-- Codigo de la máquina -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="codigo_m">Modelo</label>
                                   <input type="text" name="codigo_m" class="form-control" id="codigo_m" placeholder="Dirección" />
                                 </div>
                               </div>
+
                               <!-- Codigo de la máquina -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="proveedor">Seleccionar Proveedor</label>
                                   <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;"> </select>

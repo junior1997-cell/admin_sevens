@@ -255,7 +255,7 @@
       
         case 'empezar_proyecto':
 
-          $rspta=$proyecto->empezar_proyecto($idproyecto);
+          $rspta=$proyecto->empezar_proyecto($_GET["id_tabla"]);
 
           echo json_encode($rspta, true);	
 
@@ -263,7 +263,7 @@
 
         case 'terminar_proyecto':
 
-          $rspta=$proyecto->terminar_proyecto($idproyecto);
+          $rspta=$proyecto->terminar_proyecto($_GET["id_tabla"]);
 
           echo json_encode($rspta, true);	
 
@@ -271,7 +271,7 @@
 
         case 'reiniciar_proyecto':
 
-          $rspta=$proyecto->reiniciar_proyecto($idproyecto);
+          $rspta=$proyecto->reiniciar_proyecto($_GET["id_tabla"]);
 
           echo json_encode($rspta, true);	
 

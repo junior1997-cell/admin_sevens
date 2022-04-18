@@ -335,45 +335,8 @@ function crud_guardar_editar_modal_select2_xhr( url, formData, nombre_modal, cal
   });
 }
 
-
-function crud_desactivar(url, id_tabla, title, mensaje, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4, table_reload_5) {
-
-  Swal.fire({
-    title: title,
-    html: mensaje,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      $.post( url, { 'id_tabla': id_tabla }, function (e) {
-
-        if (e.status) {
-
-          if (callback_true) { callback_true(); } 
-          
-          if (table_reload_1) { table_reload_1(); }
-          if (table_reload_2) { table_reload_2(); }
-          if (table_reload_3) { table_reload_3(); }
-          if (table_reload_4) { table_reload_4(); }
-          if (table_reload_5) { table_reload_5(); }
-
-          $(".tooltip").removeClass("show").addClass("hidde");
-          
-        }else{
-  
-          ver_errores(e);
-        }
-      }).fail( function(e) { console.log(e); ver_errores(e); } );      
-    }
-  });
-}
-
-function crud_activar(url, id_tabla, title, mensaje, callback_true, table_reload_1, table_reload_2, table_reload_3, table_reload_4,table_reload_5) {
+// Desactivar, activar, eliminar, etc...
+function crud_simple_alerta(url, id_tabla, title, mensaje, text_button, callback_true, table_reload_1=false, table_reload_2=false, table_reload_3=false, table_reload_4=false,table_reload_5=false) {
 
   Swal.fire({
     title: title,
@@ -382,70 +345,31 @@ function crud_activar(url, id_tabla, title, mensaje, callback_true, table_reload
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
+    confirmButtonText: text_button,    
+    preConfirm: (input) => {       
+      return fetch(`${url}&id_tabla=${id_tabla}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    showLoaderOnConfirm: true,
   }).then((result) => {
-
+    console.log(result);
     if (result.isConfirmed) {
-
-      $.post( url, { 'id_tabla': id_tabla }, function (e) {
-
-        if (e.status) {
-
-          if (callback_true) { callback_true(); } 
-          
-          if (table_reload_1) { table_reload_1(); }
-          if (table_reload_2) { table_reload_2(); }
-          if (table_reload_3) { table_reload_3(); }
-          if (table_reload_4) { table_reload_4(); }
-          if (table_reload_5) { table_reload_5(); }
-
-          $(".tooltip").removeClass("show").addClass("hidde");
-          
-        }else{
-  
-          ver_errores(e);
-        }
-      }).fail( function(e) { console.log(e); ver_errores(e); } );      
+      if (result.value.status) {
+        if (callback_true) { callback_true(); }
+        if (table_reload_1) { table_reload_1(); }
+        if (table_reload_2) { table_reload_2(); }
+        if (table_reload_3) { table_reload_3(); }
+        if (table_reload_4) { table_reload_4(); }
+        if (table_reload_5) { table_reload_5(); }
+        $(".tooltip").removeClass("show").addClass("hidde");
+      }else{
+        ver_errores(result.value);
+      }
     }
   });
-}
-
-function crud_eliminar(url, callback_true, callback_false) {
-  Swal.fire({
-    title: title,
-    text: mensaje,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      $.post( url, { 'id_tabla': id_tabla }, function (e) {
-
-        if (e.status) {
-
-          if (callback_true) { callback_true(); } 
-          
-          if (table_reload_1) { table_reload_1(); }
-          if (table_reload_2) { table_reload_2(); }
-          if (table_reload_3) { table_reload_3(); }
-          if (table_reload_4) { table_reload_4(); }
-          if (table_reload_5) { table_reload_5(); }
-
-          $(".tooltip").removeClass("show").addClass("hidde");
-          
-        }else{
-  
-          ver_errores(e);
-        }
-      }).fail( function(e) { console.log(e); ver_errores(e); } );      
-    }
-  });
-
-  
 }
 
 function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, mensaje, callback_true_papelera, callback_true_eliminar, table_reload_1=false, table_reload_2=false, table_reload_3=false, table_reload_4=false,table_reload_5=false) {
@@ -563,15 +487,15 @@ function ver_errores(e) {
   
   if (e.status == 404) {
     console.group("Error"); console.warn('Error 404 -------------'); console.log(e); console.groupEnd();
-    Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+    Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i>`, "error");
     
   } else if(e.status == 500) {
     console.group("Error"); console.warn('Error 404 -------------'); console.log(e); console.groupEnd();
-    Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+    Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i>`, "error");
 
   }else if (e.status == false) {
     console.group("Error"); console.warn('Error BD -------------'); console.log(e); console.groupEnd();
-    Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+    Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i>`, "error");
   
   }else if (e.status == 'duplicado') {
     console.group("Error"); console.warn('Duplicado Error BD -------------'); console.log(e); console.groupEnd();
@@ -579,7 +503,7 @@ function ver_errores(e) {
   
   } else {
     console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
-    Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+    Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i>`, "error");
   }
 }
 

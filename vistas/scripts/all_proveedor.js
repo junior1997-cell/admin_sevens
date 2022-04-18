@@ -1,8 +1,7 @@
 var tabla;
 
 //Función que se ejecuta al inicio
-function init() {
-  tbla_principal();
+function init() {  
 
   $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
 
@@ -10,19 +9,29 @@ function init() {
 
   $("#lAllProveedor").addClass("active");
 
-  //Mostramos los BANCOS
-  $.post("../ajax/all_proveedor.php?op=select2Banco", function (r) { if (r.status) { $("#banco").html(r); } else { console.log(r.responseJSON);}  });
+  tbla_principal();
 
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco', null);
+
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
-  //Initialize Select2 Elements
-  $("#banco").select2({  theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
-
-  $("#banco").val("null").trigger("change");
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  $("#banco").select2({ templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+function formatState (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/banco/logo/${state.title}`: '../dist/docs/banco/logo/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 //Función limpiar
 function limpiar() {
@@ -52,29 +61,24 @@ function tbla_principal() {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "pdf", "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,6,7,8,9,10,11,12,13,14,15], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,6,7,8,9,10,11,12,13,14,15], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,6,7,8,9,10,11,12,13,14,15], } }, {extend: "colvis"} ,
+    ],
     ajax: {
       url: "../ajax/all_proveedor.php?op=tbla_principal",
       type: "get",
       dataType: "json",
       error: function (e) {
         console.log(e.responseText);
-        // Swal.fire(`Error!`, `<div class="text-left">${e.responseText}</div>`, "error");
-        Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
+        ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {    
 
       // columna: #0
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass("text-center");   
-          
-      }
+      if (data[0] != '') {  $("td", row).eq(0).addClass("text-center"); }
       // columna: #0
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass("text-nowrap");   
-          
-      }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -89,6 +93,18 @@ function tbla_principal() {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [6], visible: false, searchable: false, },  
+      { targets: [7], visible: false, searchable: false, },   
+      { targets: [8], visible: false, searchable: false, },
+      { targets: [9], visible: false, searchable: false, },
+      { targets: [10], visible: false, searchable: false, },
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },     
+      { targets: [14], visible: false, searchable: false, },
+      { targets: [15], visible: false, searchable: false, },       
+    ],
   }).DataTable();
 }
 //Función para guardar o editar
@@ -98,15 +114,15 @@ function guardaryeditar(e) {
   var formData = new FormData($("#form-proveedor")[0]);
 
   $.ajax({
-    url: "../ajax/all_proveeedor.php?op=guardaryeditar",
+    url: "../ajax/all_proveedor.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
+    success: function (e) {
       e = JSON.parse(e); console.log(e);
-      if (datos == "ok") {
-        toastr.success("proveedor registrado correctamente");
+      if (e.status == true) {
+        Swal.fire("Correcto!", "Proveedor guardado correctamente", "success");
 
         tabla.ajax.reload();
 
@@ -114,17 +130,10 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-proveedor").modal("hide");
       } else {
-        toastr.error(datos);
+        ver_errores(e);
       }
     },
-    error: function (jqXhr) {
-      console.log(jqXhr);
-      if (jqXhr.status == 404) {
-        Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-      } else if(jqXhr.status == 500) {
-        Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-      }  
-    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -136,151 +145,132 @@ function mostrar(idproveedor) {
 
   $("#modal-agregar-proveedor").modal("show");
 
-  $.post("../ajax/all_proveedor.php?op=mostrar", { idproveedor: idproveedor }, function (data, status) {
-    data = JSON.parse(data);  console.log(data);
+  $.post("../ajax/all_proveedor.php?op=mostrar", { idproveedor: idproveedor }, function (e, status) {
 
-    if (data.status) {
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status) {     
+
+      $("#tipo_documento option[value='" + e.data.tipo_documento + "']").attr("selected", true);
+      $("#nombre").val(e.data.razon_social);
+      $("#num_documento").val(e.data.ruc);
+      $("#direccion").val(e.data.direccion);
+      $("#telefono").val(e.data.telefono);
+      $("#banco").val(e.data.idbancos).trigger("change");
+      $("#c_bancaria").val(e.data.cuenta_bancaria);
+      $("#cci").val(e.data.cci);
+      $("#c_detracciones").val(e.data.cuenta_detracciones);
+      $("#titular_cuenta").val(e.data.titular_cuenta);
+      $("#idproveedor").val(e.data.idproveedor);
+
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
-
-      $("#tipo_documento option[value='" + data.data.tipo_documento + "']").attr("selected", true);
-      $("#nombre").val(data.data.razon_social);
-      $("#num_documento").val(data.data.ruc);
-      $("#direccion").val(data.data.direccion);
-      $("#telefono").val(data.data.telefono);
-      $("#banco").val(data.data.idbancos).trigger("change");
-      $("#c_bancaria").val(data.data.cuenta_bancaria);
-      $("#cci").val(data.data.cci);
-      $("#c_detracciones").val(data.data.cuenta_detracciones);
-      $("#titular_cuenta").val(data.data.titular_cuenta);
-      $("#idproveedor").val(data.data.idproveedor);
     } else {
-      //Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-      Swal.fire(`Error ${data.code_error}!`, `<div class="text-left">${data.message}  ${data.data} </div>`, "error");
-      console.log('Error brutal: 👇');console.log(data);
+      ver_errores(e);
     }    
-  }).fail(
-    function(e) { 
-      console.log(e);
-      if (e.status == 404) {
-        Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-      } else if(e.status == 500) {
-        Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-      }       
-    }
-  );
+  }).fail( function(e) { ver_errores(e); });
+}
+
+function ver_mas_detalles(idproveedor) {
+
+  $("#ver_mas_detalles_trabajador").html(`<div class="row">
+    <div class="col-lg-12 text-center">
+      <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+      <br />
+      <h4>Cargando...</h4>
+    </div>
+  </div>`);
+
+  $("#modal-ver-mas-detalles-trabajador").modal("show");
+
+  $.post("../ajax/all_proveedor.php?op=mostrar_mas_detalle", { idproveedor: idproveedor }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status) {    
+
+      $("#ver_mas_detalles_trabajador").html(`
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-hover table-bordered">         
+                <tbody>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Nombre</th>
+                    <td>${e.data.razon_social}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>${e.data.tipo_documento}</th>
+                    <td>${e.data.ruc}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Banco</th>
+                    <td>
+                      <div class="user-block float-none">
+                        <img class="img-circle float-left w-25px h-auto mr-1" src="../dist/docs/banco/logo/${e.data.icono_banco}" alt="Banco" onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';">
+                        <span class="username ml-2" ><p class="text-primary m-b-02rem">${e.data.nombre_banco}</p></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Cta. Cte.</th>
+                    <td>${e.data.cuenta_bancaria}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>CCI</th>
+                    <td>${e.data.cci}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Cta. Detraccion</th>
+                    <td>${e.data.cuenta_detracciones}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Direccion</th>
+                    <td>${e.data.direccion}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Titular</th>                            
+                    <td>${e.data.titular_cuenta}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Celular</th>
+                    <td>${e.data.telefono}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Actualizacion</th>
+                    <td>${extraer_dia_semana_completo(e.data.updated_at)}, ${moment(e.data.updated_at).format('DD-MM-YYYY hh:mm a')}</td>
+                  </tr>
+                </tbody>
+              </table>       
+            </div>
+          </div>
+      </div>`);
+
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); });
 }
 
 //Función para desactivar registros
-function desactivar(idproveedor) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el proveedor?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_proveedor.php?op=desactivar", { idproveedor: idproveedor }, function (e) {
-        Swal.fire("Desactivado!", "Tu proveedor ha sido desactivado.", "success");
-
-        tabla.ajax.reload();
-      }).fail(
-        function(e) { 
-          console.log(e);    
-          if (e.status == 404) {
-            Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          } else if(e.status == 500) {
-            Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          }         
-        }
-      );
-    }
-  });
-}
-
-//Función para activar registros
-function activar(idproveedor) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  el proveedor?",
-    text: "Este proveedor tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_proveedor.php?op=activar", { idproveedor: idproveedor }, function (e) {
-        Swal.fire("Activado!", "Tu proveedor ha sido activado.", "success");
-
-        tabla.ajax.reload();
-      }).fail(
-        function(e) { 
-          console.log(e);    
-          if (e.status == 404) {
-            Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          } else if(e.status == 500) {
-            Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          }
-        }
-      );
-    }
-  });
-}
-
-//Función para elimar registros
-function eliminar(idproveedor) {
+function eliminar(idproveedor, nombre) {
   
-  Swal.fire({
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-      //op=desactivar
-      $.post("../ajax/all_proveedor.php?op=desactivar", { idproveedor: idproveedor }, function (e) {
-        Swal.fire("Desactivado!", "Tu proveedor ha sido desactivado.", "success");
-        tabla.ajax.reload();
-      }).fail(
-        function(e) { 
-          console.log(e);    
-          if (e.status == 404) {
-            Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          } else if(e.status == 500) {
-            Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          }         
-        }
-      );   
-
-    }else if (result.isDenied) {
-      //op=eliminar
-      $.post("../ajax/all_proveedor.php?op=eliminar", { idproveedor: idproveedor }, function (e) {
-        Swal.fire("Eliminado!", "Tu proveedor ha sido eliminado.", "success");
-        tabla.ajax.reload();
-      }).fail(
-        function(e) { 
-          console.log(e);    
-          if (e.status == 404) {
-            Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          } else if(e.status == 500) {
-            Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-          }         
-        }
-      );
-    }
-  });
+  crud_eliminar_papelera(
+    "../ajax/all_proveedor.php?op=desactivar",
+    "../ajax/all_proveedor.php?op=eliminar", 
+    idproveedor, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload() },
+    false, 
+    false, 
+    false,
+    false
+  );
 }
+
 // damos formato a: Cta, CCI
 function formato_banco() {
 
@@ -293,10 +283,10 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');   
 
-    $.post("../ajax/all_proveedor.php?op=formato_banco", { 'idbanco': $("#banco").select2("val") }, function (data, status) {
-      data = JSON.parse(data); // console.log(data);
+    $.post("../ajax/ajax_general.php?op=formato_banco", { 'idbanco': $("#banco").select2("val") }, function (e, status) {
+      e = JSON.parse(e); // console.log(e);
 
-      if (data.status) {
+      if (e.status) {
         $(".chargue-format-1").html("Cuenta Bancaria");
         $(".chargue-format-2").html("CCI");
         $(".chargue-format-3").html("Cuenta Detracciones");
@@ -305,28 +295,17 @@ function formato_banco() {
         $("#cci").prop("readonly", false);
         $("#c_detracciones").prop("readonly", false);
 
-        var format_cta = decifrar_format_banco(data.data.formato_cta);
-        var format_cci = decifrar_format_banco(data.data.formato_cci);
-        var formato_detracciones = decifrar_format_banco(data.data.formato_detracciones);
+        var format_cta = decifrar_format_banco(e.data.formato_cta);
+        var format_cci = decifrar_format_banco(e.data.formato_cci);
+        var formato_detracciones = decifrar_format_banco(e.data.formato_detracciones);
 
         $("#c_bancaria").inputmask(`${format_cta}`);
         $("#cci").inputmask(`${format_cci}`);
         $("#c_detracciones").inputmask(`${formato_detracciones}`);
       } else {
-        Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-        //Swal.fire(`Error ${data.code_error}!`, `<div class="text-left">${data.message}  ${data.data} </div>`, "error");
-        console.log('Error brutal: 👇');console.log(data);
+        ver_errores(e);
       }      
-    }).fail(
-      function(e) { 
-        console.log(e);    
-        if (e.status == 404) {
-          Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-        } else if(e.status == 500) {
-          Swal.fire(`Error 500 😅!`, `<h5>Error Interno del Servidor</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i>921-305-769</i> ─ <i>921-487-276</i>`, "error");
-        }         
-      }
-    );
+    }).fail( function(e) { ver_errores(e); });
   }
 }
 
@@ -335,12 +314,8 @@ init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M S  :::::::::::::::::::::::::::::::::::::::..
 
-$(function () {
-  $.validator.setDefaults({
-    submitHandler: function (e) {
-      guardaryeditar(e);
-    },
-  });
+$(function () {  
+  $("#banco").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-proveedor").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -382,26 +357,13 @@ $(function () {
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
+    submitHandler: function (e) {
+      guardaryeditar(e);
+    },
   });
+
+  $("#banco").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
- 
-function decifrar_format_banco(format) {
-
-  var array_format =  format.split("-"); var format_final = "";
-
-  array_format.forEach((item, index)=>{
-
-    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
-
-    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
-  });
-
-  var ultima_letra = format_final.slice(-1);
-   
-  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
-
-  return format_final;
-}

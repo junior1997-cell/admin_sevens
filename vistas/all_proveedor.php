@@ -68,9 +68,18 @@
                                 <th class="">Aciones</th>
                                 <th>Proveedor</th>
                                 <th>Dirección</th>
-                                <th>Cta. bancaria / CCI / Cta. detracciones</th>
+                                <th>Cta. bancaria / CCI </th>
                                 <th>Titular cuenta</th>
-                                <th>Estado</th>
+                                <th>Proveedor</th>
+                                <th>Doc.</th>
+                                <th>Num. Documento</th>
+                                <th>Banco</th>
+                                <th>Cta. Cte.</th>
+                                <th>CCI</th>
+                                <th>Cta. Detracciones</th>
+                                <th>Titular Cta.</th>
+                                <th>Direccion</th>
+                                <th>Teléfono</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -80,9 +89,18 @@
                                 <th>Aciones</th>
                                 <th>Proveedor</th>
                                 <th>Dirección</th>
-                                <th>C. bancaria / CCI / C. detracciones</th>
+                                <th>C. bancaria / CCI</th>
                                 <th>Titular cuenta</th>
-                                <th>Estado</th>
+                                <th>Proveedor</th>
+                                <th>Doc.</th>
+                                <th>Num. Documento</th>
+                                <th>Banco</th>
+                                <th>Cta. Cte.</th>
+                                <th>CCI</th>
+                                <th>Cta. Detracciones</th>
+                                <th>Titular Cta.</th>
+                                <th>Direccion</th>    
+                                <th>Teléfono</th>                            
                               </tr>
                             </tfoot>
                           </table>
@@ -250,7 +268,26 @@
                       </div>
                     </div>
                   </div>
+                </div> 
+
+                <!--Modal ver mas detales del trabajador-->
+                <div class="modal fade" id="modal-ver-mas-detalles-trabajador">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Datos Trabajador</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div id="ver_mas_detalles_trabajador"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
               </section>
               <!-- /.content -->
             </div>

@@ -812,15 +812,13 @@
                         </div>
                         
                         <div class="modal-body">
-                          
-                          
 
                           <div id="cargando-3-fomulario">
 
                             <div class="row" id="cargando-detalle-proyecto"> </div>
                             
                             <div class="mailbox-attachments  clearfix text-center row">
-                              <div class="col-lg-4" >     
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >     
                                 <li >                    
                                   <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
                                   <div class="mailbox-attachment-info">
@@ -834,7 +832,7 @@
                                 </li>
                               </div>
   
-                              <div class="col-lg-4" >  
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >  
                                 <li>                       
                                   <span class="mailbox-attachment-icon name_icon_2"><i class="far fa-file-pdf"></i></span>
                                   <div class="mailbox-attachment-info">
@@ -848,7 +846,7 @@
                                 </li>
                               </div>
   
-                              <div class="col-lg-4" >  
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >  
                                 <li>                       
                                   <span class="mailbox-attachment-icon name_icon_3"><i class="far fa-file-pdf"></i></span>
                                   <div class="mailbox-attachment-info">
@@ -862,7 +860,7 @@
                                 </li>
                               </div>
   
-                              <div class="col-lg-4" >     
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >     
                                 <li>                    
                                   <span class="mailbox-attachment-icon name_icon_4"><i class="far fa-file-pdf"></i></span>
                                   <div class="mailbox-attachment-info">
@@ -876,7 +874,7 @@
                                 </li>
                               </div>
   
-                              <div class="col-lg-4" >  
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >  
                                 <li>                       
                                   <span class="mailbox-attachment-icon name_icon_5"><i class="far fa-file-pdf"></i></span>
                                   <div class="mailbox-attachment-info">
@@ -890,7 +888,7 @@
                                 </li>
                               </div>
   
-                              <div class="col-lg-4" >  
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >  
                                 <li>                       
                                   <span class="mailbox-attachment-icon name_icon_6"><i class="far fa-file-pdf"></i></span>
                                   <div class="mailbox-attachment-info">

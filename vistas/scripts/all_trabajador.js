@@ -20,13 +20,22 @@ function init() {
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });  
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#banco").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
+  $("#banco").select2({templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
   $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+function formatState (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/banco/logo/${state.title}`: '../dist/docs/banco/logo/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 // abrimos el navegador de archivos
 $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
@@ -150,7 +159,7 @@ function tbla_principal() {
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [9,10,11,3,4,12,13,14,15,16,5,], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, {extend: "colvis"} ,
     ],
     "ajax":{
       url: '../ajax/all_trabajador.php?op=tbla_principal',
@@ -158,18 +167,15 @@ function tbla_principal() {
       dataType : "json",						
       error: function(e){
         console.log(e.responseText);	
+        ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {          
 
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-center');         
-      } 
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
       // columna: 1
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass('text-nowrap');         
-      }          
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }          
       
     },
     "language": {
@@ -261,7 +267,7 @@ function guardar_y_editar_trabajador(e) {
     processData: false,
     success: function (e) {
       e = JSON.parse(e);  //console.log(e); 
-      if (e.status) {	
+      if (e.status == true) {	
 
         Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
 
@@ -796,6 +802,10 @@ init();
 
 $(function () {   
 
+  $("#banco").on('change', function() { $(this).trigger('blur'); });
+  $("#tipo").on('change', function() { $(this).trigger('blur'); });
+  $("#ocupacion").on('change', function() { $(this).trigger('blur'); });
+
   $("#form-trabajador").validate({
     rules: {
       tipo_documento: { required: true },
@@ -846,6 +856,10 @@ $(function () {
 
     },
   });
+
+  $("#banco").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#tipo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#ocupacion").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

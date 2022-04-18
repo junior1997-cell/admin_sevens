@@ -59,7 +59,7 @@
                             <b class="trabajador-name"></b>
                           </h3>
                           <h3 class="card-title btn-agregar">
-                            <button type="button" class="btn bg-gradient-success" onclick="limpiar_form_usuario(); show_hide_form(2);"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" onclick="permisos(); limpiar_form_usuario(); show_hide_form(2);"><i class="fas fa-user-plus"></i> Agregar</button>
                             Usuarios que administran el sistema  
                           </h3>                
                         </div>
@@ -160,7 +160,7 @@
                                   <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="mb-0">
                                       <label class="ml-1" for="permisos">Permisos</label>                               
-                                      <div   id="permisos">
+                                      <div id="permisos">
                                         <i class="fas fa-spinner fa-pulse fa-2x"></i>
                                       </div>
                                     </div>

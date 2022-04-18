@@ -92,7 +92,7 @@
     /* ══════════════════════════════════════ B A N C O ══════════════════════════════════════ */
 
     public function select2_banco() {
-      $sql = "SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1' AND estado_delete = '1' ORDER BY nombre ASC;";
+      $sql = "SELECT idbancos as id, nombre, alias, icono FROM bancos WHERE estado='1' AND estado_delete = '1' AND idbancos > 1 ORDER BY nombre ASC;";
       return ejecutarConsulta($sql);
     }
 

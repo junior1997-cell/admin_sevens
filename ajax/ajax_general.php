@@ -177,13 +177,13 @@
 
           foreach ($rspta['data'] as $key => $value) {    
             
-            $data .= '<option value=' . $value['id'] . '>' . $value['nombre'] . (empty($value['alias']) ? "" : ' -'. $value['alias'] ) .'</option>';
+            $data .= '<option value=' . $value['id'] . ' title="'.$value['icono'].'">' . $value['nombre'] . (empty($value['alias']) ? "" : ' -'. $value['alias'] ) .'</option>';
           }
 
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => $data, 
+            'data' => '<option value="1">SIN BANCO</option>'.$data, 
           );
   
           echo json_encode($retorno, true);

@@ -409,95 +409,43 @@ function l_m(){
 
 //Función para desactivar registros
 function empezar_proyecto(idproyecto, nombre_proyecto ) {
-  $(".tooltip").removeClass("show").addClass("hidde");
-  Swal.fire({
-    title: "¿Está Seguro de  Empezar  el proyecto ?",
-    html: `<b class="text-success">${nombre_proyecto}</b> <br> Tendras acceso a agregar o editar: provedores, trabajadores!`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Empezar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/proyecto.php?op=empezar_proyecto", { idproyecto: idproyecto }, function (data) {
-        data = JSON.parse(data);  console.log(data);
-        if (data.status) {
-
-          Swal.fire("En curso!", "Tu proyecto esta en curso.", "success");		 
-  
-          tabla.ajax.reload();
-          tabla2.ajax.reload();
-          
-        }else{
-  
-          ver_errores(data);
-        }
-      }).fail( function(e) { ver_errores(e); } );
-    }
-  });   
+  crud_simple_alerta(
+    '../ajax/proyecto.php?op=empezar_proyecto', 
+    idproyecto, 
+    '¿Está Seguro de  Empezar  el proyecto ?', 
+    `<b class="text-success">${nombre_proyecto}</b> <br> Tendras acceso a agregar o editar: provedores, trabajadores!`, 
+    'Si, Empezar!',
+    function(){ Swal.fire("En curso!", "Tu proyecto esta en curso.", "success"); },
+    function(){ tabla.ajax.reload(); tabla2.ajax.reload();}
+  );  
 }
 
 //Función para activar registros
 function terminar_proyecto(idproyecto, nombre_proyecto) {
-  $(".tooltip").removeClass("show").addClass("hidde");
-  Swal.fire({
-    title: "¿Está Seguro de  Terminar  el Proyecto?",
-    html: `<b class="text-danger"><del>${nombre_proyecto}</del></b> <br> No tendras acceso a editar o agregar: proveedores o trabajadores!`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Terminar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/proyecto.php?op=terminar_proyecto", { idproyecto: idproyecto }, function (data) {
-        data = JSON.parse(data);  console.log(data);
-        if (data.status) {
 
-          Swal.fire("Terminado!", "Tu Proyecto ha sido terminado.", "success");		 
-  
-          tabla.ajax.reload();
-          tabla2.ajax.reload();
-          
-        }else{
-  
-          ver_errores(data);
-        }
-      }).fail( function(e) { ver_errores(e); } );      
-    }
-  });      
+  crud_simple_alerta(
+    '../ajax/proyecto.php?op=terminar_proyecto', 
+    idproyecto, 
+    '¿Está Seguro de  Terminar  el Proyecto?', 
+    `<b class="text-danger"><del>${nombre_proyecto}</del></b> <br> No tendras acceso a editar o agregar: proveedores o trabajadores!`, 
+    'Si, Terminar!',
+    function(){ Swal.fire("Terminado!", "Tu Proyecto ha sido terminado.", "success"); },
+    function(){ tabla.ajax.reload(); tabla2.ajax.reload();}
+  );        
 }
 
 //Función para activar registros
 function reiniciar_proyecto(idproyecto, nombre_proyecto) {
-  $(".tooltip").removeClass("show").addClass("hidde");
-  Swal.fire({
-    title: "¿Está Seguro de  Reactivar  el Proyecto?",
-    html: `<b class="text-success">${nombre_proyecto}</b> <br> Despues de esto tendrás que empezar el proyecto!`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Reactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/proyecto.php?op=reiniciar_proyecto", { idproyecto: idproyecto }, function (data) {
-        data = JSON.parse(data);  console.log(data);
-        if (data.status) {
 
-          Swal.fire("Reactivado!", "Tu Proyecto ha sido Reactivado.", "success");		 
-  
-          tabla.ajax.reload();
-          tabla2.ajax.reload();
-          
-        }else{
-  
-          ver_errores(data);
-        }
-      }).fail( function(e) { ver_errores(e); } );      
-    }
-  });      
+  crud_simple_alerta(
+    '../ajax/proyecto.php?op=reiniciar_proyecto', 
+    idproyecto, 
+    '¿Está Seguro de Reactivar el Proyecto?', 
+    `<b class="text-success">${nombre_proyecto}</b> <br> Despues de esto tendrás que empezar el proyecto!`, 
+    'Si, Reactivar!',
+    function(){ Swal.fire("Reactivado!", "Tu Proyecto ha sido Reactivado.", "success"); },
+    function(){ tabla.ajax.reload(); tabla2.ajax.reload();}
+  );       
 }
 
 // caculamos el plazo CON DATE RANGER
@@ -1068,12 +1016,15 @@ function mostrar_detalle(idproyecto) {
         $('.download_doc_1').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_1').removeClass('btn-outline-info').addClass('btn-default disabled');
         $('.imprimir_doc_1').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_1').attr('onclick', ``);
       } else {
         $('.name_doc_1').html(`<i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra.${extrae_extencion(data.data.doc1_contrato_obra)}`); 
         $('.name_icon_1').html( doc_view_icon(data.data.doc1_contrato_obra) );
         $('.download_doc_1').removeClass('btn-default disabled').addClass('btn-outline-success');
         $('.download_doc_1').attr('download', 'Contrato de obra');
         $('.download_doc_1').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc1_contrato_obra}`);
+        $('.download_doc_1').attr('onclick', `ok_dowload_doc();`);
 
         if ( pdf_o_img(data.data.doc1_contrato_obra) ) {
           $('.ver_doc_1').removeClass('btn-default disabled').addClass('btn-outline-info');
@@ -1093,12 +1044,15 @@ function mostrar_detalle(idproyecto) {
         $('.download_doc_2').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_2').removeClass('btn-outline-info').addClass('btn-default disabled');
         $('.imprimir_doc_2').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_2').attr('onclick', ``);
       } else {
         $('.name_doc_2').html(`<i class="fas fa-paperclip"></i> Acta-de-entrega-de-terreno.${extrae_extencion(data.data.doc2_entrega_terreno)}`);
         $('.name_icon_2').html( doc_view_icon(data.data.doc2_entrega_terreno) );
         $('.download_doc_2').removeClass('btn-default disabled').addClass('btn-outline-success');
         $('.download_doc_2').attr('download', 'Acta-de-entrega-de-terreno');
         $('.download_doc_2').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc2_entrega_terreno}`);
+        $('.download_doc_2').attr('onclick', `ok_dowload_doc();`);
 
         if ( pdf_o_img(data.data.doc2_entrega_terreno) ) {
           $('.ver_doc_2').removeClass('btn-default disabled').addClass('btn-outline-info');
@@ -1118,12 +1072,15 @@ function mostrar_detalle(idproyecto) {
         $('.download_doc_3').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_3').removeClass('btn-outline-info').addClass('btn-default disabled');
         $('.imprimir_doc_3').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_3').attr('onclick', ``);
       } else {
         $('.name_doc_3').html(`<i class="fas fa-paperclip"></i> Acta-de-inicio-de-obra.${extrae_extencion(data.data.doc3_inicio_obra)}`);
         $('.name_icon_3').html( doc_view_icon(data.data.doc3_inicio_obra) );
         $('.download_doc_3').removeClass('btn-default disabled').addClass('btn-outline-success');
         $('.download_doc_3').attr('download', 'Acta-de-inicio-de-obra');
         $('.download_doc_3').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc3_inicio_obra}`);
+        $('.download_doc_3').attr('onclick', `ok_dowload_doc();`);
 
         if ( pdf_o_img(data.data.doc3_inicio_obra) ) {
           $('.ver_doc_3').removeClass('btn-default disabled').addClass('btn-outline-info');
@@ -1143,12 +1100,15 @@ function mostrar_detalle(idproyecto) {
         $('.download_doc_4').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_4').removeClass('btn-outline-info').addClass('btn-default disabled');
         $('.imprimir_doc_4').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_4').attr('onclick', ``);
       } else {
         $('.name_doc_4').html(`<i class="fas fa-paperclip"></i> Presupuesto.${extrae_extencion(data.data.doc4_presupuesto)}`);
         $('.name_icon_4').html( doc_view_icon(data.data.doc4_presupuesto) );
         $('.download_doc_4').removeClass('btn-default disabled').addClass('btn-outline-success');
         $('.download_doc_4').attr('download', 'Presupuesto');
         $('.download_doc_4').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc4_presupuesto}`);
+        $('.download_doc_4').attr('onclick', `ok_dowload_doc();`);
 
         if ( pdf_o_img(data.data.doc4_presupuesto) ) {
           $('.ver_doc_4').removeClass('btn-default disabled').addClass('btn-outline-info');
@@ -1168,12 +1128,15 @@ function mostrar_detalle(idproyecto) {
         $('.download_doc_5').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_5').removeClass('btn-outline-info').addClass('btn-default disabled');
         $('.imprimir_doc_5').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_5').attr('onclick', ``);
       } else {
         $('.name_doc_5').html(`<i class="fas fa-paperclip"></i> Analisis-de-costos-unitarios.${extrae_extencion(data.data.doc5_analisis_costos_unitarios)}`);
         $('.name_icon_5').html( doc_view_icon(data.data.doc5_analisis_costos_unitarios) );
         $('.download_doc_5').removeClass('btn-default disabled').addClass('btn-outline-success');
         $('.download_doc_5').attr('download', 'Analisis-de-costos-unitarios');
         $('.download_doc_5').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc5_analisis_costos_unitarios}`);
+        $('.download_doc_5').attr('onclick', `ok_dowload_doc();`);
 
         if ( pdf_o_img(data.data.doc5_analisis_costos_unitarios) ) {
           $('.ver_doc_5').removeClass('btn-default disabled').addClass('btn-outline-info');
@@ -1193,12 +1156,16 @@ function mostrar_detalle(idproyecto) {
         $('.download_doc_6').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_6').removeClass('btn-outline-info').addClass('btn-default disabled');
         $('.imprimir_doc_6').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_6').attr('onclick', ``);
       } else {
         $('.name_doc_6').html(`<i class="fas fa-paperclip"></i> Insumos.${extrae_extencion(data.data.doc6_insumos)}`);
         $('.name_icon_6').html( doc_view_icon(data.data.doc6_insumos) );
         $('.download_doc_6').removeClass('btn-default disabled').addClass('btn-outline-success');
         $('.download_doc_6').attr('download', 'Insumos');
         $('.download_doc_6').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc6_insumos}`);
+
+        $('.download_doc_6').attr('onclick', `ok_dowload_doc();`);
 
         if ( pdf_o_img(data.data.doc6_insumos) ) {
           $('.ver_doc_6').removeClass('btn-default disabled').addClass('btn-outline-info');
