@@ -5,14 +5,12 @@ function init() {
   listar_c_insumos_af();
 
   //Guardar  
-  $("#guardar_registro_categoria_af").on("click", function (e) {
-    $("#submit-form-cateogrias-af").submit(); 
-    console.log('kkkkkkkkkkkkkkkkkkkk');
-  });
+  $("#guardar_registro_categoria_af").on("click", function (e) { $("#submit-form-cateogrias-af").submit(); });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
 //Función limpiar 
 function limpiar_c_af() {
   $("#idcategoria_insumos_af").val("");
@@ -28,46 +26,40 @@ function limpiar_c_af() {
 function listar_c_insumos_af () {
 
   tabla_categorias_af=$('#tabla-categorias-af').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5','pdf'],
-    "ajax":{
-        url: '../ajax/categoria_af.php?op=listar_c_insumos_af',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-        // columna: #
-        if (data[1] != '') {
-          $("td", row).eq(1).addClass("text-nowrap");   
-            
-        }
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    ajax:{
+      url: '../ajax/categoria_af.php?op=listar_c_insumos_af',
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 5,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -83,87 +75,95 @@ function guardaryeditar_c_insumos_af(e) {
     data: formData,
     contentType: false,
     processData: false,
+    success: function (e) {
+      e = JSON.parse(e);  console.log(e);
+      if ( e.status == true) {
 
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+				Swal.fire("Correcto!", "Clasificación registrado correctamente.", "success");	 	 
 
-				toastr.success('Registrado correctamente')				 
-
-	      tabla_categorias_af.ajax.reload();
+	      tabla_categorias_af.ajax.reload(null, false);
          
 				limpiar_c_af();
 
         $("#modal-agregar-categorias-af").modal("hide");
 
 			}else{
-
-				toastr.error(datos);
+				ver_errores(e);
 			}
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_categoria_af").css({"width": percentComplete+'%'});
+
+          $("#barra_progress_categoria_af").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_categoria_af").css({ width: "0%",  });
+      $("#barra_progress_categoria_af").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_categoria_af").css({ width: "0%", });
+      $("#barra_progress_categoria_af").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
 function mostrar_c_insumos_af (idcategoria_insumos_af ) {
+
+  $("#cargando-11-fomulario").hide();
+  $("#cargando-12-fomulario").show();
+
   limpiar_c_af();
-  console.log(idcategoria_insumos_af );
 
   $("#modal-agregar-categorias-af").modal("show")
 
-  $.post("../ajax/categoria_af.php?op=mostrar", {idcategoria_insumos_af : idcategoria_insumos_af }, function (data, status) {
+  $.post("../ajax/categoria_af.php?op=mostrar", {idcategoria_insumos_af : idcategoria_insumos_af }, function (e, status) {
 
-    data = JSON.parse(data);  console.log(data);  
+    e = JSON.parse(e);  console.log(e);
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+    if (e.status) {
+      $("#idcategoria_insumos_af").val(e.data.idcategoria_insumos_af );
+      $("#nombre_categoria_af").val(e.data.nombre); 
 
-    $("#idcategoria_insumos_af").val(data.idcategoria_insumos_af );
-    $("#nombre_categoria_af").val(data.nombre); 
-
-  });
+      $("#cargando-11-fomulario").show();
+      $("#cargando-12-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
 
 }
 
 
 //Función para desactivar y eliminar registros
-function eliminar_c_insumos_af(idcategoria_insumos_af ) {
-   //----------------------------
- Swal.fire({
+function eliminar_c_insumos_af(idcategoria_insumos_af, nombre ) {
+  crud_eliminar_papelera(
+    "../ajax/categoria_af.php?op=desactivar",
+    "../ajax/categoria_af.php?op=delete", 
+    idcategoria_insumos_af, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){  tabla_categorias_af.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
 
-  title: "!Elija una opción¡",
-  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-  icon: "warning",
-  showCancelButton: true,
-  showDenyButton: true,
-  confirmButtonColor: "#17a2b8",
-  denyButtonColor: "#d33",
-  cancelButtonColor: "#6c757d",    
-  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-}).then((result) => {
-
-  if (result.isConfirmed) {
-   //op=desactivar
-    $.post("../ajax/categoria_af.php?op=desactivar", { idcategoria_insumos_af : idcategoria_insumos_af  }, function (e) {
-
-      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-      tabla_categorias_af.ajax.reload();
-    });  
-
-  }else if (result.isDenied) {
-   //op=eliminar
-    $.post("../ajax/categoria_af.php?op=delete", { idcategoria_insumos_af : idcategoria_insumos_af  }, function (e) {
-
-      Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-
-      tabla_categorias_af.ajax.reload();
-    });  
-
-  }
-
-});
 }
 
 
@@ -171,49 +171,31 @@ init();
 
 $(function () {
 
-  
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-      console.log('iiiiiiiiiiiiiiiiiiiiiiiiiii');
-    guardaryeditar_c_insumos_af(e);
-      
-    },
-  });
-
   $("#form-categoria-af").validate({
-    rules: {    // terms: { required: true },
-      nombre_categoria_af: { required: true }
+    rules: { 
+      nombre_categoria_af: { required: true } 
     },
     messages: {
-
-      nombre_categoria_af: {
-        required: "Campo requerido", 
-      },
-
+      nombre_categoria_af: { required: "Campo requerido", },
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-   
+      $(element).removeClass("is-invalid").addClass("is-valid");   
     },
-
-
+    submitHandler: function (e) {
+      guardaryeditar_c_insumos_af(e);      
+    },
   });
 });
 

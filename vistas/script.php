@@ -22,6 +22,9 @@
 <!-- date-range-picker -->
 <script src="../plugins/daterangepicker/daterangepicker.js"></script>
 
+<!-- bootstrap color picker -->
+<script src="../plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js"></script>
 

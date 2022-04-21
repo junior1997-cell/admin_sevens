@@ -414,7 +414,7 @@ function guardaryeditar(e) {
 
 				toastr.success('Registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				limpiar();
 
@@ -669,7 +669,7 @@ function desactivar(idhospedaje) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });      
     }
@@ -692,7 +692,7 @@ function activar(idhospedaje) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
       
@@ -724,7 +724,7 @@ function eliminar(idhospedaje) {
 
       Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
   
-      tabla.ajax.reload();
+      tabla.ajax.reload(null, false);
       total();
     });
 
@@ -735,7 +735,7 @@ function eliminar(idhospedaje) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       }); 
 

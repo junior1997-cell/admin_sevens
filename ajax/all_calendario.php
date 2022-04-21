@@ -52,7 +52,7 @@
 
         case 'desactivar':
 
-          $rspta=$calendario->desactivar($idcalendario);
+          $rspta=$calendario->desactivar($_GET["id_tabla"]);
 
  				  echo json_encode($rspta, true);	
 
@@ -60,7 +60,7 @@
 
         case 'activar':
 
-          $rspta=$calendario->activar($idcalendario);
+          $rspta=$calendario->activar($_GET["id_tabla"]);
 
  				  echo json_encode($rspta, true);	
 

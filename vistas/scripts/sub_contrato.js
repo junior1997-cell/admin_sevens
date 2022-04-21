@@ -452,7 +452,7 @@ function guardaryeditar(e) {
 
 				toastr.success('Registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				limpiar();
 
@@ -653,7 +653,7 @@ function desactivar(idsubcontrato) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });      
     }
@@ -675,7 +675,7 @@ function activar(idsubcontrato) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
       
@@ -706,7 +706,7 @@ function eliminar(idsubcontrato) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       }); 
 
@@ -717,7 +717,7 @@ function eliminar(idsubcontrato) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 
@@ -937,9 +937,9 @@ function guardaryeditar_pago(e) {
 
         $("#modal-agregar-pago").modal("hide");
 
-        tabla.ajax.reload();
-        tabla_pagos_proveedor.ajax.reload();
-        tabla_pagos_detraccion.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla_pagos_proveedor.ajax.reload(null, false);
+        tabla_pagos_detraccion.ajax.reload(null, false);
         limpiar_pagos();
         total_pagos_proveedor(id_subcontrato);
         total_pagos_detraccion(id_subcontrato);
@@ -1150,9 +1150,9 @@ function desactivar_pagos(idpago_subcontrato) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();        
-        tabla_pagos_proveedor.ajax.reload();
-        tabla_pagos_detraccion.ajax.reload();
+        tabla.ajax.reload(null, false);        
+        tabla_pagos_proveedor.ajax.reload(null, false);
+        tabla_pagos_detraccion.ajax.reload(null, false);
         total_pagos_proveedor(id_subcontrato);
         total_pagos_detraccion(id_subcontrato);
       });      
@@ -1175,9 +1175,9 @@ function activar_pagos(idpago_subcontrato) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
-        tabla_pagos_proveedor.ajax.reload();
-        tabla_pagos_detraccion.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla_pagos_proveedor.ajax.reload(null, false);
+        tabla_pagos_detraccion.ajax.reload(null, false);
         total_pagos_proveedor(id_subcontrato);
         total_pagos_detraccion(id_subcontrato);
       });
@@ -1209,9 +1209,9 @@ function eliminar_pagos(idpago_subcontrato) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
-        tabla.ajax.reload();
-        tabla_pagos_proveedor.ajax.reload();
-        tabla_pagos_detraccion.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla_pagos_proveedor.ajax.reload(null, false);
+        tabla_pagos_detraccion.ajax.reload(null, false);
         total_pagos_proveedor(id_subcontrato);
         total_pagos_detraccion(id_subcontrato);
 
@@ -1223,9 +1223,9 @@ function eliminar_pagos(idpago_subcontrato) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
-        tabla.ajax.reload();
-        tabla_pagos_proveedor.ajax.reload();
-        tabla_pagos_detraccion.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla_pagos_proveedor.ajax.reload(null, false);
+        tabla_pagos_detraccion.ajax.reload(null, false);
         total_pagos_proveedor(id_subcontrato);
         total_pagos_detraccion(id_subcontrato);
 

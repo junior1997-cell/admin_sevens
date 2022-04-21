@@ -1,96 +1,85 @@
 <?php
 ob_start();
-if (strlen(session_id()) < 1){
-	session_start();//Validamos si existe o no la sesión
+if (strlen(session_id()) < 1) {
+  session_start(); //Validamos si existe o no la sesión
 }
 require_once "../modelos/Color.php";
 
-$color=new Color();
+$color = new Color();
 
-$idcolor=isset($_POST["idcolor"])? limpiarCadena($_POST["idcolor"]):"";
-$nombre=isset($_POST["nombre_color"])? limpiarCadena($_POST["nombre_color"]):"";
+$idcolor      = isset($_POST["idcolor"]) ? limpiarCadena($_POST["idcolor"]) : "";
+$nombre       = isset($_POST["nombre_color"]) ? limpiarCadena($_POST["nombre_color"]) : "";
+$hexadecimal  = isset($_POST["hexadecimal"]) ? limpiarCadena($_POST["hexadecimal"]) : "";
 
-switch ($_GET["op"]){
-	case 'guardaryeditar':
-		if (empty($idcolor)){
-			$rspta=$color->insertar($nombre);
-			echo $rspta ? "ok" : "color no se pudo registrar";
-		}
-		else {
-			$rspta=$color->editar($idcolor,$nombre);
-			echo $rspta ? "ok" : "color no se pudo actualizar";
-		}
-	break;
+switch ($_GET["op"]) {
+  case 'guardaryeditar':
+    if (empty($idcolor)) {
+      $rspta = $color->insertar($nombre, $hexadecimal);
+      echo json_encode( $rspta, true) ;
+    } else {
+      $rspta = $color->editar($idcolor, $nombre, $hexadecimal);
+      echo json_encode( $rspta, true) ;
+    }
+  break;
 
-	case 'desactivar':
-		$rspta=$color->desactivar($idcolor);
- 		echo $rspta ? "color Desactivada" : "color no se puede desactivar";
-	break;
+  case 'desactivar':
+    $rspta = $color->desactivar($_GET["id_tabla"]);
+    echo json_encode( $rspta, true) ;
+  break;
 
-	case 'activar':
-		$rspta=$color->activar($idcolor);
- 		echo $rspta ? "color activada" : "color no se puede activar";
-	break;
+  case 'eliminar':
+    $rspta = $color->eliminar($_GET["id_tabla"]);
+    echo json_encode( $rspta, true) ;
+  break;
 
-	case 'eliminar':
-		$rspta=$color->eliminar($idcolor);
- 		echo $rspta ? "color Eliminada" : "color no se puede Eliminar";
-	break;
+  case 'mostrar':
+    $rspta = $color->mostrar($idcolor);
+    //Codificar el resultado utilizando json
+    echo json_encode( $rspta, true) ;
+  break;
 
-	case 'mostrar':
-		$rspta=$color->mostrar($idcolor);
- 		//Codificar el resultado utilizando json
- 		echo json_encode($rspta);
-	break;
+  case 'listar':
+    $rspta = $color->listar();
+    //Vamos a declarar un array
+    $data = []; $cont = 1;
 
-	case 'listar':
-		$rspta=$color->listar();
- 		//Vamos a declarar un array
- 		$data= Array();
-		 $cont=1;
- 		while ($reg=$rspta->fetch_object()){
- 			$data[]=array(
-				"0"=>$cont++,
- 				"1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fas fa-pencil-alt"></i></button>'.
-					 ' <button class="btn btn-danger  btn-sm" onclick="eliminar_color(' . $reg->idcolor . ')"><i class="fas fa-skull-crossbones"></i> </button>':
- 					'<button class="btn btn-warning btn-sm" onclick="mostrar('.$reg->idcolor.')"><i class="fa fa-pencil-alt"></i></button>'.
- 					' <button class="btn btn-primary btn-sm" onclick="activar('.$reg->idcolor.')"><i class="fa fa-check"></i></button>',
- 				"2"=>$reg->nombre_color,
- 				"3"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
- 				'<span class="text-center badge badge-danger">Desactivado</span>'
- 				);
- 		}
- 		$results = array(
- 			"sEcho"=>1, //Información para el datatables
- 			"iTotalRecords"=>count($data), //enviamos el total registros al datatable
- 			"iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
- 			"aaData"=>$data);
- 		echo json_encode($results);
+    $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-	break;
-	case "selectcolor":
-        $rspta = $color->select();
+    if ($rspta['status']) {
+      while ($reg = $rspta['data']->fetch_object()) {
+        $data[] = [
+          "0" => $cont++,
+          "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idcolor . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+          ' <button class="btn btn-danger btn-sm" onclick="eliminar_color(' . $reg->idcolor .', \''.encodeCadenaHtml($reg->nombre_color).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'
+          : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idcolor . ')"><i class="fa fa-pencil-alt"></i></button>' .
+          ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idcolor . ')"><i class="fa fa-check"></i></button>',
+          "2" => $reg->nombre_color,
+          "3" => ( empty($reg->hexadecimal) ? '' :   '<i class="fas fa-square fa-lg" style="color: '.$reg->hexadecimal.' !important;"></i>'.' '.$reg->hexadecimal),
+          "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+        ];
+      }
+      $results = [
+        "sEcho" => 1, //Información para el datatables
+        "iTotalRecords" => count($data), //enviamos el total registros al datatable
+        "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+        "aaData" => $data,
+      ];
+      echo json_encode($results, true) ;
+    } else {
+      echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+    }
 
-        while ($reg = $rspta->fetch_object()) {
-          echo '<option  value=' . $reg->idcolor . '>' . $reg->nombre_color . '</option>';
-        }
-    break;
-	case "selectcolor_2":
-        $rspta = $color->select();
+  break;
 
-        while ($reg = $rspta->fetch_object()) {
-          echo '<option  value=' . $reg->nombre_color . '>' . $reg->nombre_color . '</option>';
-        }
-    break;
-	case 'salir':
-		//Limpiamos las variables de sesión   
-        session_unset();
-        //Destruìmos la sesión
-        session_destroy();
-        //Redireccionamos al login
-        header("Location: ../index.php");
+  case 'salir':
+    //Limpiamos las variables de sesión
+    session_unset();
+    //Destruìmos la sesión
+    session_destroy();
+    //Redireccionamos al login
+    header("Location: ../index.php");
 
-	break;
+  break;
 }
 ob_end_flush();
 ?>

@@ -158,15 +158,15 @@ function show_hide_form(flag) {
 function tbla_principal() {
 
   tabla = $('#tabla-usuarios').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5], } }, { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4,5], } }, {extend: "colvis"} ,
     ],
-    "ajax":{
+    ajax:{
       url: '../ajax/usuario.php?op=tbla_principal',
       type : "get",
       dataType : "json",						
@@ -174,26 +174,26 @@ function tbla_principal() {
         console.log(e.responseText); ver_errores(e);
       }
     },
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {
       // columna: 0
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -212,7 +212,7 @@ function guardar_y_editar_usuario(e) {
     function(){ limpiar_form_usuario(); },
     function(){ sw_success('Correcto!', "Usuario guardado correctamente." ) },  
     'usuario',
-    function(){ tabla.ajax.reload(); }, 
+    function(){ tabla.ajax.reload(null, false); }, 
     function(){ show_hide_form(1); },  
   );
 }
@@ -277,7 +277,7 @@ function eliminar(idusuario, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload() },
+    function(){ tabla.ajax.reload(null, false) },
     false, 
     false, 
     false,

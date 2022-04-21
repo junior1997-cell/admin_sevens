@@ -318,7 +318,7 @@ function guardaryeditar_carpeta(e) {
       if (datos == "ok") {
         Swal.fire("Correcto!", "Carpeta guardado correctamente", "success");
 
-        tabla_carpeta.ajax.reload();
+        tabla_carpeta.ajax.reload(null, false);
 
         limpiar();
 
@@ -367,7 +367,7 @@ function guardaryeditar_plano(e) {
       if (datos == "ok") {
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
-        tabla_plano.ajax.reload();
+        tabla_plano.ajax.reload(null, false);
 
         limpiar();
 
@@ -538,7 +538,7 @@ function desactivar_carpeta(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=desactivar_carpeta", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
 
-        tabla_carpeta.ajax.reload();
+        tabla_carpeta.ajax.reload(null, false);
       });
     }
   });
@@ -559,7 +559,7 @@ function activar_carpeta(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=activar_carpeta", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Activado!", "Tu Documento ha sido activado.", "success");
 
-        tabla_carpeta.ajax.reload();
+        tabla_carpeta.ajax.reload(null, false);
       });
     }
   });
@@ -588,7 +588,7 @@ function eliminar_carpeta(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=desactivar_carpeta", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
 
-        tabla_carpeta.ajax.reload();
+        tabla_carpeta.ajax.reload(null, false);
       });
 
     }else if (result.isDenied) {
@@ -596,7 +596,7 @@ function eliminar_carpeta(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=eliminar_carpeta", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Eliminado!", "Tu Documento ha sido Eliminado.", "success");
 
-        tabla_carpeta.ajax.reload();
+        tabla_carpeta.ajax.reload(null, false);
       });
 
     }
@@ -619,7 +619,7 @@ function desactivar_plano(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=desactivar", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
 
-        tabla_plano.ajax.reload();
+        tabla_plano.ajax.reload(null, false);
       });
     }
   });
@@ -640,7 +640,7 @@ function activar_plano(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=activar", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Activado!", "Tu Documento ha sido activado.", "success");
 
-        tabla_plano.ajax.reload();
+        tabla_plano.ajax.reload(null, false);
       });
     }
   });
@@ -669,7 +669,7 @@ function eliminar_plano(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=desactivar_plano", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
 
-        tabla_plano.ajax.reload();
+        tabla_plano.ajax.reload(null, false);
       });
 
     }else if (result.isDenied) {
@@ -677,7 +677,7 @@ function eliminar_plano(idplano_otro) {
       $.post("../ajax/plano_otro.php?op=eliminar_plano", { idplano_otro: idplano_otro }, function (e) {
         Swal.fire("Desactivado!", "Tu Documento ha sido desactivado.", "success");
 
-        tabla_plano.ajax.reload();
+        tabla_plano.ajax.reload(null, false);
       });
 
     }

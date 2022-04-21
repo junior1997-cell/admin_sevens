@@ -727,7 +727,7 @@ function guardaryeditar_factura(e) {
       if (datos == "ok") {
         toastr.success("servicio registrado correctamente");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         $("#modal-agregar-comprobante").modal("hide");
         listar_comprobantes(localStorage.getItem("idsemana_break_nube"));
@@ -1037,7 +1037,7 @@ function desactivar_comprobante(idfactura_break) {
       $.post("../ajax/break.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
         total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
     }
   });
@@ -1057,7 +1057,7 @@ function activar_comprobante(idfactura_break) {
       $.post("../ajax/break.php?op=activar_comprobante", { idfactura_break: idfactura_break }, function (e) {
         Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
         total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
     }
   });
@@ -1082,14 +1082,14 @@ function eliminar_comprobante(idfactura_break) {
       $.post("../ajax/break.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
         total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
     } else if (result.isDenied) {
       // Eliminar
       $.post("../ajax/break.php?op=eliminar_comprobante", { idfactura_break: idfactura_break }, function (e) {
         Swal.fire("Eliminado!", "Comprobante a ha sido Eliminado.", "success");
         total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
     }
   });

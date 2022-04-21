@@ -1,26 +1,26 @@
 $(document).ready(function () {
 
   var hora_inicial_sesion = "00:30:00";
-
+  var resta_hora = '';
   // se ejecuta cuando muvo lel maus
   $(document).mousemove(function (event) {  
 
-    if (hora_inicial_sesion == "00:00:00" ) { }else{ hora_inicial_sesion = "00:30:00"; } 
+    if (hora_inicial_sesion == "00:00:00" ) { location.reload(); }else{ hora_inicial_sesion = "00:30:00"; } 
       
   });
 
 
   // se ejecuta cada segundo
-  setInterval(function(){
-    var resta_hora = restar_hora(hora_inicial_sesion, "00:00:01");
-
+  setInterval(function(){    
+    
     if ( resta_hora == "00:00:00") {
-
+      hora_inicial_sesion = '00:00:00';
+      $('#ver-sesion').html('Sesion expirada');  //console.log(hora_inicial_sesion);
     }else{
+      resta_hora = restar_hora(hora_inicial_sesion, "00:00:01");
       hora_inicial_sesion = resta_hora;
-    } 
-
-    $('#ver-sesion').html(hora_inicial_sesion);  //console.log(hora_inicial_sesion);
+      $('#ver-sesion').html(hora_inicial_sesion);  //console.log(hora_inicial_sesion);
+    }    
 
   },1000); 
         

@@ -343,7 +343,7 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-valorizacion").modal("hide");
 
-        tabla_principal.ajax.reload();
+        tabla_principal.ajax.reload(null, false);
         mostrar_form_table(1);
        // fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'))
 
@@ -729,7 +729,7 @@ function eliminar(nombre_tabla,nombre_columna,idtabla) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla_principal.ajax.reload();
+        tabla_principal.ajax.reload(null, false);
 
       });   
 
@@ -740,7 +740,7 @@ function eliminar(nombre_tabla,nombre_columna,idtabla) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
     
-        tabla_principal.ajax.reload();
+        tabla_principal.ajax.reload(null, false);
         
       });
 

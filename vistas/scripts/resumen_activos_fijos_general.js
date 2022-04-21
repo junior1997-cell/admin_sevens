@@ -666,12 +666,12 @@ function guardar_y_editar_materiales(e) {
 
         Swal.fire("Correcto!", "Producto creado correctamente", "success");      
        
-        if (tabla_materiales) { tabla_materiales.ajax.reload(); }
+        if (tabla_materiales) { tabla_materiales.ajax.reload(null, false); }
 
-        if (tabla_principal_maquinaria) { tabla_principal_maquinaria.ajax.reload(); }
-        if (tabla_principal_equipo) { tabla_principal_equipo.ajax.reload(); } 
-        if (tabla_principal_herramienta) { tabla_principal_herramienta.ajax.reload(); }
-        if (tabla_principal_oficina) { tabla_principal_oficina.ajax.reload(); } 
+        if (tabla_principal_maquinaria) { tabla_principal_maquinaria.ajax.reload(null, false); }
+        if (tabla_principal_equipo) { tabla_principal_equipo.ajax.reload(null, false); } 
+        if (tabla_principal_herramienta) { tabla_principal_herramienta.ajax.reload(null, false); }
+        if (tabla_principal_oficina) { tabla_principal_oficina.ajax.reload(null, false); } 
 
         actualizar_producto();
         

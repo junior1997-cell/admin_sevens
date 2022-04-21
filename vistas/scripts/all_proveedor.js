@@ -69,12 +69,10 @@ function tbla_principal() {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
-        ver_errores(e);
+        console.log(e.responseText); ver_errores(e);
       },
     },
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {
       // columna: #0
       if (data[0] != '') {  $("td", row).eq(0).addClass("text-center"); }
       // columna: #0
@@ -89,6 +87,7 @@ function tbla_principal() {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -124,7 +123,7 @@ function guardaryeditar(e) {
       if (e.status == true) {
         Swal.fire("Correcto!", "Proveedor guardado correctamente", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar();
 
@@ -263,7 +262,7 @@ function eliminar(idproveedor, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload() },
+    function(){ tabla.ajax.reload(null, false) },
     false, 
     false, 
     false,

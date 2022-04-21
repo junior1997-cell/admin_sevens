@@ -617,7 +617,7 @@ function regresar() {
   $("#ttl_monto_pgs_detracc").html("");
   limpiar();
   limpiardatosproveedor();
-  tabla.ajax.reload();
+  tabla.ajax.reload(null, false);
 }
 
 //Función Listar
@@ -785,13 +785,13 @@ function guardaryeditar_compras(e) {
             // toastr.success("Usuario registrado correctamente");
             Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-            tabla.ajax.reload();
+            tabla.ajax.reload(null, false);
 
             limpiar();
             regresar();
             cont = 0;
             $("#modal-agregar-usuario").modal("hide");
-            tabla_comp_prov.ajax.reload();
+            tabla_comp_prov.ajax.reload(null, false);
           } else {
             // toastr.error(datos);
             Swal.fire("Error!", datos, "error");
@@ -818,7 +818,7 @@ function guardarproveedor(e) {
       if (datos == "ok") {
         // toastr.success("proveedor registrado correctamente");
         Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiardatosproveedor();
 
@@ -852,7 +852,7 @@ function anular(idcompra_af_proyecto) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
-          tabla.ajax.reload();
+          tabla.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -874,7 +874,7 @@ function des_anular(idcompra_af_proyecto) {
     if (result.isConfirmed) {
       $.post("../ajax/activos_fijos_proyecto.php?op=des_anular", { idcompra_af_proyecto: idcompra_af_proyecto }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
     }
   });
@@ -1110,10 +1110,10 @@ function guardaryeditar_pago(e) {
       if (datos == "ok") {
         toastr.success("servicio registrado correctamente");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         $("#modal-agregar-pago").modal("hide");
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         /**================================================== */
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
@@ -1193,7 +1193,7 @@ function desactivar_pagos(idpago_af_proyecto) {
 
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         
       });
     }
@@ -1219,7 +1219,7 @@ function activar_pagos(idpago_af_proyecto) {
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         });
     }
   });
@@ -1284,7 +1284,7 @@ function guardaryeditar_c_activos(e) {
       if (datos == "ok") {
         toastr.success("Registrado correctamente");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar();
 
@@ -1591,7 +1591,7 @@ function guardaryeditar_comprobante(e) {
       if (datos == "ok") {
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar();
 

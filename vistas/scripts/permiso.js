@@ -31,9 +31,7 @@ function listar() {
     },
     createdRow: function (row, data, ixdex) {
       // columna: #0
-      if (data[0] != "") {
-        $("td", row).eq(0).addClass("text-center");
-      }
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -44,6 +42,7 @@ function listar() {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación

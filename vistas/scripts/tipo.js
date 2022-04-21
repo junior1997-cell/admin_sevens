@@ -2,22 +2,21 @@ var tabla_tipo;
 
 //Función que se ejecuta al inicio
 function init() {
-  listar_tipo();
+  
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
 
   //$("#lAllMateriales").addClass("active");
 
-  $("#guardar_registro_tipo").on("click", function (e) {
-    
-    $("#submit-form-tipo").submit();
-  });
+  listar_tipo();
+
+  $("#guardar_registro_tipo").on("click", function (e) { $("#submit-form-tipo").submit(); });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-
 }
+
 //Función limpiar
 function limpiar_tipo() {
   //Mostramos los Materiales
@@ -34,46 +33,42 @@ function limpiar_tipo() {
 function listar_tipo() {
 
   tabla_tipo=$('#tabla-tipo').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'pdf'],
-    "ajax":{
-        url: '../ajax/tipo.php?op=listar_tipo',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-        // columna: #
-        if (data[1] != '') {
-          $("td", row).eq(1).addClass("text-nowrap");   
-            
-        }
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2], } }, { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2], } } ,
+    ],
+    ajax:{
+      url: '../ajax/tipo.php?op=listar_tipo',
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 5,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -89,185 +84,127 @@ function guardaryeditar_tipo(e) {
     data: formData,
     contentType: false,
     processData: false,
+    success: function (e) {
+      e = JSON.parse(e);  console.log(e);  
+      if (e.status == true) {
 
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+				Swal.fire("Correcto!", "Tipo trabajado registrado correctamente.", "success");
 
-				toastr.success('Registrado correctamente')				 
-
-	      tabla_tipo.ajax.reload();
+	      tabla_tipo.ajax.reload(null, false);
          
 				limpiar();
 
         $("#modal-agregar-tipo").modal("hide");
-        $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
+        
+        lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#idtipo_trabjador_c', null);
 
 			}else{
-
-				toastr.error(datos)
+				ver_errores(e);	
 			}
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_tipo").css({"width": percentComplete+'%'});
+
+          $("#barra_progress_tipo").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_tipo").css({ width: "0%",  });
+      $("#barra_progress_tipo").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_tipo").css({ width: "0%", });
+      $("#barra_progress_tipo").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
 function mostrar_tipo(idtipo_trabajador) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#cargando-7-fomulario").hide();
+  $("#cargando-8-fomulario").show();
+
   limpiar_tipo();
 
   $("#modal-agregar-tipo").modal("show")
 
-  $.post("../ajax/tipo.php?op=mostrar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (data, status) {
+  $.post("../ajax/tipo.php?op=mostrar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e, status) {
 
-    data = JSON.parse(data);  console.log(data);  
+    e = JSON.parse(e);  console.log(e);  
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+    if (e.status) {
+      $("#idtipo_trabajador").val(e.data.idtipo_trabajador);
+      $("#nombre_tipo").val(e.data.nombre);
 
-    $("#idtipo_trabajador").val(data.idtipo_trabajador);
-    $("#nombre_tipo").val(data.nombre);
-  });
-}
-
-//Función para desactivar registros
-function desactivar_tipo(idtipo_trabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el registro?",
-    text: "Tipo",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/tipo.php?op=desactivar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
-
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-    
-        tabla_tipo.ajax.reload();
-        
-        $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
-      });      
+      $("#cargando-7-fomulario").show();
+      $("#cargando-8-fomulario").hide();
+    } else {
+      ver_errores(e);
     }
-  });   
-}
-
-//Función para activar registros
-function activar_tipo(idtipo_trabajador) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar el registro?",
-    text: "Tipo",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/tipo.php?op=activar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
-
-        Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
-
-        tabla_tipo.ajax.reload();
-        
-        $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
-      });
-      
-    }
-  });      
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para eliminar registros
-function eliminar_tipo(idtipo_trabajador) {
-   //----------------------------
- Swal.fire({
+function eliminar_tipo(idtipo_trabajador, nombre) {  
+  
+  crud_eliminar_papelera(
+    "../ajax/tipo.php?op=desactivar_tipo",
+    "../ajax/tipo.php?op=eliminar_tipo", 
+    idtipo_trabajador, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){  tabla_tipo.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
 
-  title: "!Elija una opción¡",
-  html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-  icon: "warning",
-  showCancelButton: true,
-  showDenyButton: true,
-  confirmButtonColor: "#17a2b8",
-  denyButtonColor: "#d33",
-  cancelButtonColor: "#6c757d",    
-  confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-  denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-}).then((result) => {
-
-  if (result.isConfirmed) {
-   //op=desactivar
-    $.post("../ajax/tipo.php?op=desactivar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
-
-      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-      tabla_tipo.ajax.reload();
-      
-      $.post("../ajax/tipo.php?op=selecttipo_tipo", function (r) { $("#idtipo_trabjador_c").html(r); });
-    });  
-
-  }else if (result.isDenied) {
-   //op=eliminar
-
-   $.post("../ajax/tipo.php?op=eliminar_tipo", { idtipo_trabajador: idtipo_trabajador }, function (e) {
-
-    Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-
-    tabla_tipo.ajax.reload();
-
-  }); 
-
-  }
-
-});  
 }
-
 
 init();
 
 $(function () {
-
-  
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-        guardaryeditar_tipo(e);
-      
-    },
-  });
 
   $("#form-tipo").validate({
     rules: {
       nombre_tipo: { required: true }      // terms: { required: true },
     },
     messages: {
-      nombre_tipo: {
-        required: "Por favor ingrese nombre.", 
-      },
-
+      nombre_tipo: { required: "Por favor ingrese nombre.", },
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-   
+      $(element).removeClass("is-invalid").addClass("is-valid");   
     },
-
-
+    submitHandler: function (e) {
+      guardaryeditar_tipo(e);      
+    },
   });
 });
 

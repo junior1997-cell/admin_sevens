@@ -168,15 +168,15 @@ function limpiar() {
 function tbla_principal() {
 
   tabla=$('#tabla-proyectos').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, {extend: "colvis"} ,        
     ],
-    "ajax":{
+    ajax:{
       url: '../ajax/proyecto.php?op=tbla_principal',
       type : "get",
       dataType : "json",						
@@ -186,28 +186,25 @@ function tbla_principal() {
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass("text-center");
-      }
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: costo
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass("text-right");
-      }
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
-        }
-      }
+        },        
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
-    "columnDefs": [
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [6], visible: false, searchable: false, },
       { targets: [7], visible: false, searchable: false, },
       { targets: [8], visible: false, searchable: false, },
@@ -227,15 +224,15 @@ function tbla_principal() {
 function tbla_secundaria() {
 
   tabla2=$('#tabla-proyectos-terminados').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, {extend: "colvis"} ,        
     ],
-    "ajax":{
+    ajax:{
       url: '../ajax/proyecto.php?op=listar-proyectos-terminados',
       type : "get",
       dataType : "json",						
@@ -253,20 +250,21 @@ function tbla_secundaria() {
         $("td", row).eq(5).addClass("text-right");
       }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
-    "columnDefs": [
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [6], visible: false, searchable: false, },
       { targets: [7], visible: false, searchable: false, },
       { targets: [8], visible: false, searchable: false, },
@@ -279,8 +277,6 @@ function tbla_secundaria() {
       { targets: [15], visible: false, searchable: false, },      
     ],
   }).DataTable();
-
-   
   
 }
 
@@ -299,7 +295,7 @@ function guardaryeditar(e) {
       data = JSON.parse(data);  console.log(data);  
       if (data) {
 
-        tabla.ajax.reload();	
+        tabla.ajax.reload(null, false);	
 
         Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	      
          
@@ -357,7 +353,7 @@ function guardar_editar_valorizacion(e) {
              
       if (datos == 'ok') {
 
-        tabla.ajax.reload();	
+        tabla.ajax.reload(null, false);	
 
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");	      
          
@@ -416,7 +412,7 @@ function empezar_proyecto(idproyecto, nombre_proyecto ) {
     `<b class="text-success">${nombre_proyecto}</b> <br> Tendras acceso a agregar o editar: provedores, trabajadores!`, 
     'Si, Empezar!',
     function(){ Swal.fire("En curso!", "Tu proyecto esta en curso.", "success"); },
-    function(){ tabla.ajax.reload(); tabla2.ajax.reload();}
+    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);}
   );  
 }
 
@@ -430,7 +426,7 @@ function terminar_proyecto(idproyecto, nombre_proyecto) {
     `<b class="text-danger"><del>${nombre_proyecto}</del></b> <br> No tendras acceso a editar o agregar: proveedores o trabajadores!`, 
     'Si, Terminar!',
     function(){ Swal.fire("Terminado!", "Tu Proyecto ha sido terminado.", "success"); },
-    function(){ tabla.ajax.reload(); tabla2.ajax.reload();}
+    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);}
   );        
 }
 
@@ -444,7 +440,7 @@ function reiniciar_proyecto(idproyecto, nombre_proyecto) {
     `<b class="text-success">${nombre_proyecto}</b> <br> Despues de esto tendrás que empezar el proyecto!`, 
     'Si, Reactivar!',
     function(){ Swal.fire("Reactivado!", "Tu Proyecto ha sido Reactivado.", "success"); },
-    function(){ tabla.ajax.reload(); tabla2.ajax.reload();}
+    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);}
   );       
 }
 

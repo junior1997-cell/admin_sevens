@@ -88,10 +88,10 @@
                                       <li class="nav-item">
                                         <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Detalle</a>
                                       </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false"><i class="fas fa-calendar-week"></i></a>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="Lista de fechas" >
+                                        <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false" ><i class="fas fa-calendar-week"></i></a>
                                       </li>
-                                      <li class="nav-item">
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="Fechas eliminadas">
                                         <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false"><i class="fas fa-trash-alt"></i></a>
                                       </li> 
                                     </ul>
@@ -188,7 +188,7 @@
                               </div>                                                    
 
                               <!-- Background Color -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6" >
                                 <div class="form-group">
                                   <label for="background_color">Tipo feriado</label>                                   
                                   <select name="background_color" id="background_color" class="form-control select2" style="width: 100%;" onchange="contraste(); color_muestra();" >
@@ -204,6 +204,15 @@
                                 <div class="form-group">
                                   <label for="descripcion">Descripcion</label>
                                   <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Ingrese descripción"></textarea>
+                                </div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
                                 </div>
                               </div>
 

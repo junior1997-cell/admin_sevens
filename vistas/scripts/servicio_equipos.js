@@ -522,7 +522,7 @@ function suma_horas_costoparcial(idmaquinaria, idproyecto) {
     $("#costo-parcial").html("");
     data = JSON.parse(data);
     //console.log(data);
-    // tabla.ajax.reload();
+    // tabla.ajax.reload(null, false);
     // $("#horas-total").html(data.horas);
     num = data.costo_parcial;
     if (!num || num == "NaN") return "0.00";
@@ -556,11 +556,11 @@ function guardaryeditar(e) {
       if (datos == "ok") {
         toastr.success("servicio registrado correctamente");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         $("#modal-agregar-servicio").modal("hide");
         // console.log(tabla2);
-        tabla2.ajax.reload();
+        tabla2.ajax.reload(null, false);
         var idmaquinaria = $("#maquinaria").val();
         if (idmaquinaria != "") {
           suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
@@ -633,8 +633,8 @@ function eliminar(idservicio, idmaquinaria) {
       $.post("../ajax/servicio_equipos.php?op=desactivar", { idservicio: idservicio }, function (e) {
         Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla2.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla2.ajax.reload(null, false);
       });
 
     }else if (result.isDenied) {
@@ -643,8 +643,8 @@ function eliminar(idservicio, idmaquinaria) {
       $.post("../ajax/servicio_equipos.php?op=eliminar", { idservicio: idservicio }, function (e) {
         Swal.fire("Eliminado!", "Servicio ha sido Eliminado.", "success");
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla2.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla2.ajax.reload(null, false);
       });
 
 
@@ -669,8 +669,8 @@ function activar(idservicio, idmaquinaria) {
       $.post("../ajax/servicio_equipos.php?op=activar", { idservicio: idservicio }, function (e) {
         Swal.fire("Activado!", "Servicio ha sido activado.", "success");
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla2.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla2.ajax.reload(null, false);
       });
     }
   });
@@ -697,13 +697,13 @@ function guardaryeditar_pago(e) {
       if (datos == "ok") {
         toastr.success("servicio registrado correctamente");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         $("#modal-agregar-pago").modal("hide");
         // console.log(tabla2);
-        //tabla2.ajax.reload();
-        tabla3.ajax.reload();
-        tabladetrecc.ajax.reload();
+        //tabla2.ajax.reload(null, false);
+        tabla3.ajax.reload(null, false);
+        tabladetrecc.ajax.reload(null, false);
         /**================================================== */
         total_pagos(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"));
         total_costo_secc_pagoss(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"));
@@ -1065,9 +1065,9 @@ function desactivar_pagos(idpago_servicio, idmaquinaria) {
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         //Función para activar registros
         total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla3.ajax.reload();
-        tabladetrecc.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla3.ajax.reload(null, false);
+        tabladetrecc.ajax.reload(null, false);
       });
     }
   });
@@ -1089,9 +1089,9 @@ function activar_pagos(idpago_servicio, idmaquinaria) {
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         //Función para activar registros
         total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla3.ajax.reload();
-        tabladetrecc.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla3.ajax.reload(null, false);
+        tabladetrecc.ajax.reload(null, false);
       });
     }
   });
@@ -1124,9 +1124,9 @@ function eliminar_pagos(idpago_servicio, idmaquinaria) {
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         //Función para activar registros
         total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla3.ajax.reload();
-        tabladetrecc.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla3.ajax.reload(null, false);
+        tabladetrecc.ajax.reload(null, false);
       });
 
     }else if (result.isDenied) {
@@ -1137,9 +1137,9 @@ function eliminar_pagos(idpago_servicio, idmaquinaria) {
         suma_horas_costoparcial(idmaquinaria, localStorage.getItem("nube_idproyecto"));
         //Función para activar registros
         total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-        tabla.ajax.reload();
-        tabla3.ajax.reload();
-        tabladetrecc.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla3.ajax.reload(null, false);
+        tabladetrecc.ajax.reload(null, false);
       });
 
     }
@@ -1196,8 +1196,8 @@ function guardaryeditar_factura(e) {
       if (datos == "ok") {
         toastr.success("servicio registrado correctamente");
 
-        tabla4.ajax.reload();
-        tabla.ajax.reload();
+        tabla4.ajax.reload(null, false);
+        tabla.ajax.reload(null, false);
 
         $("#modal-agregar-factura").modal("hide");
         total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
@@ -1435,7 +1435,7 @@ function eliminar_factura(idfactura) {
         Swal.fire("Desactivado!", "Servicio ha sido desactivado.", "success");
         // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
         total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
-        tabla4.ajax.reload();
+        tabla4.ajax.reload(null, false);
       });
 
     }else if (result.isDenied) {
@@ -1444,7 +1444,7 @@ function eliminar_factura(idfactura) {
         Swal.fire("Eliminado!", "Servicio ha sido Eliminado.", "success");
         // total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
         total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
-        tabla4.ajax.reload();
+        tabla4.ajax.reload(null, false);
       });
 
     }
@@ -1469,7 +1469,7 @@ function activar_factura(idfactura) {
 
         //total_pagos(idmaquinaria,localStorage.getItem('nube_idproyecto'));
         total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
-        tabla4.ajax.reload();
+        tabla4.ajax.reload(null, false);
       });
     }
   });

@@ -46,44 +46,43 @@ function limpiar_form_maquinaria() {
 function listar() {
 
   tabla=$('#tabla-maquinas').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,6,4], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,6,4], } }, { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,2,3,6,4], } }, {extend: "colvis"} ,
     ],
-    "ajax":{
+    ajax:{
       url: '../ajax/all_maquinaria.php?op=listar_maquinas',
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
-        ver_errores(e);
+        console.log(e.responseText); ver_errores(e);
       }
     },      
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {   
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: #
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
-    "columnDefs": [
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [6], visible: false, searchable: false, },            
     ],
   }).DataTable();
@@ -93,15 +92,15 @@ function listar() {
 function listar2() {
 
   tabla2=$('#tabla-equipos').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,6,4], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,6,4], } }, { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,2,3,6,4], } }, {extend: "colvis"} ,
     ],
-    "ajax":{
+    ajax:{
       url: '../ajax/all_maquinaria.php?op=listar_equipos',
       type : "get",
       dataType : "json",						
@@ -109,27 +108,27 @@ function listar2() {
         console.log(e.responseText);	ver_errores(e);
       }
     },
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: #1
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
-    "columnDefs": [
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [6], visible: false, searchable: false, },            
     ],
   }).DataTable();
@@ -150,8 +149,8 @@ function guardaryeditar(e) {
       e = JSON.parse(e);  console.log(e);   
       if (e.status) {
 				
-	      tabla.ajax.reload();
-	      tabla2.ajax.reload();
+	      tabla.ajax.reload(null, false);
+	      tabla2.ajax.reload(null, false);
          
 				limpiar_form_maquinaria();
 
@@ -209,8 +208,8 @@ function desactivar(idmaquinaria) {
 
         Swal.fire("Desactivado!", "Tu máquinas o equipo ha sido desactivada.", "success");
     
-        tabla.ajax.reload();
-	      tabla2.ajax.reload();
+        tabla.ajax.reload(null, false);
+	      tabla2.ajax.reload(null, false);
       });      
     }
   });   
@@ -227,7 +226,7 @@ function eliminar(idmaquinaria, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(); tabla2.ajax.reload(); },
+    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false); },
     false, 
     false, 
     false,

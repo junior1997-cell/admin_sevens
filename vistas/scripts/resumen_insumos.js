@@ -1046,9 +1046,9 @@ function guardar_materiales(e) {
 
         Swal.fire("Correcto!", "Producto guardado correctamente", "success");        
          
-        tabla_principal.ajax.reload();
+        tabla_principal.ajax.reload(null, false);
 
-        if (tabla_materiales) { tabla_materiales.ajax.reload(); }
+        if (tabla_materiales) { tabla_materiales.ajax.reload(null, false); }
 
         actualizar_producto();
 

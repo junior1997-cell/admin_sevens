@@ -459,7 +459,7 @@ function guardar_y_editar_otros_ingresos(e) {
 
         Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
-        tabla.ajax.reload(); total(localStorage.getItem("nube_idproyecto"));
+        tabla.ajax.reload(null, false); total(localStorage.getItem("nube_idproyecto"));
 
         limpiar_form();    
         show_hide_form(1);
@@ -628,7 +628,7 @@ function desactivar(idotro_ingreso) {
       $.post("../ajax/otro_ingreso.php?op=desactivar", { idotro_ingreso: idotro_ingreso }, function (e) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total(localStorage.getItem("nube_idproyecto"));
       });
     }
@@ -650,7 +650,7 @@ function activar(idotro_ingreso) {
       $.post("../ajax/otro_ingreso.php?op=activar", { idotro_ingreso: idotro_ingreso }, function (e) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total(localStorage.getItem("nube_idproyecto"));
       });
     }
@@ -681,7 +681,7 @@ function eliminar(idotro_ingreso) {
       $.post("../ajax/otro_ingreso.php?op=desactivar", { idotro_ingreso: idotro_ingreso }, function (e) {
         Swal.fire("♻️ Papelera! ♻️", "Tu registro ha sido reciclado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total(localStorage.getItem("nube_idproyecto"));
       });
 
@@ -691,7 +691,7 @@ function eliminar(idotro_ingreso) {
       $.post("../ajax/otro_ingreso.php?op=eliminar", { idotro_ingreso: idotro_ingreso }, function (e) {
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total( localStorage.getItem("nube_idproyecto"));
       });
 

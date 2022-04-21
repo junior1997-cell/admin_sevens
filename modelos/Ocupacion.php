@@ -57,11 +57,6 @@ Class Ocupacion
 		$sql="SELECT * FROM ocupacion 	WHERE estado=1  AND estado_delete=1  ORDER BY nombre_ocupacion ASC";
 		return ejecutarConsulta($sql);		
 	}
-	//Implementar un método para listar los registros y mostrar en el select
-	public function select()
-	{
-		$sql="SELECT * FROM ocupacion where estado=1";
-		return ejecutarConsulta($sql);		
-	}
+
 }
 ?>

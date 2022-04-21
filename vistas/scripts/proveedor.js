@@ -115,7 +115,7 @@ function guardaryeditar(e) {
 
 				toastr.success('proveedor registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				limpiar();
 
@@ -169,7 +169,7 @@ function desactivar(idproveedor_proyecto) {
 
         Swal.fire("Desactivado!", "Tu proveedor ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });      
     }
   });   
@@ -191,7 +191,7 @@ function activar(idproveedor_proyecto) {
 
         Swal.fire("Activado!", "Tu proveedor ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
       
     }

@@ -285,7 +285,7 @@ function guardaryeditar(e) {
 
         Swal.fire("Correcto!", "Trabajador registrado correctamente", "success");
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				show_hide_form(false);
 
@@ -451,7 +451,7 @@ function desactivar(idtrabajador) {
 
         Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });      
     }
   });   
@@ -473,7 +473,7 @@ function activar(idtrabajador) {
 
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
       });
       
     }

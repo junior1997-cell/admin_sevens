@@ -80,7 +80,7 @@
             
             $rspta = $materiales->insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
             
-            echo json_encode( $rspta, true) ;
+            echo json_encode( $rspta, true);
 
           } else {
 
@@ -156,7 +156,7 @@
                 '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>',
                 "2" =>
                   '<div class="user-block">
-                    <img class="profile-user-img img-responsive img-circle" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'">
+                    <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg->nombre).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                     <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                     <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
                   </div>',
@@ -168,6 +168,9 @@
                 "8" =>'S/ '.number_format($reg->precio_total, 2, '.', ','),
                 "9" => $ficha_tecnica,
                 "10" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "11" => $reg->nombre,
+                "12" => $reg->nombre_color,
+                "13" => $reg->descripcion,
               ];
             }
   

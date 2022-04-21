@@ -72,11 +72,14 @@
                                 <th>Unidad</th>
                                 <th>Marca</th>
                                 <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
+                                <th data-toggle="tooltip" data-original-title="Sub total">Subtotal</th>
                                 <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
                                 <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                 <th>Ficha técnica</th>
                                 <th>Estado</th>
+                                <th>Nombre</th>
+                                <th>Color</th>
+                                <th>Descripción</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -93,6 +96,9 @@
                                 <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                 <th>Ficha técnica</th>
                                 <th>Estado</th>
+                                <th>Nombre</th>
+                                <th>Color</th>
+                                <th>Descripción</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -133,7 +139,7 @@
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                                 <div class="form-group">
-                                  <label for="nombre_material">Nombre</label>
+                                  <label for="nombre_material">Nombre <sup class="text-danger">*</sup></label>
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
                                 </div>
                               </div>
@@ -141,7 +147,7 @@
                               <!-- Modelo -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="modelo">Modelo <sup class="text-danger">*</sup> </label>
+                                  <label for="modelo">Modelo</label>
                                   <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
                                 </div>
                               </div>
@@ -165,7 +171,7 @@
                               <!-- Color -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="color">Color</label>
+                                  <label for="color">Color <sup class="text-danger">*</sup></label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
@@ -174,7 +180,7 @@
                               <!-- Unnidad de medida  -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="Unidad-medida">Unidad-medida</label>
+                                  <label for="Unidad-medida">Unidad-medida <sup class="text-danger">*</sup></label>
                                   <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
@@ -182,7 +188,7 @@
                               <!--Precio U-->
                               <div class="col-7 col-sm-7 col-md-8 col-lg-4">
                                 <div class="form-group">
-                                  <label for="precio_unitario">Precio</label>
+                                  <label for="precio_unitario">Precio <sup class="text-danger">*</sup></label>
                                   <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                 </div>
                               </div>
@@ -206,7 +212,7 @@
                               <!--Sub Total-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="precio_real">Sub Total</label>
+                                  <label for="precio_real">Sub Total <sup class="text-danger">*</sup></label>
                                   <input type="number" class="form-control precio_real" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                   <input type="hidden" name="precio_real" class="form-control" id="precio_real" placeholder="Precio real." />
                                 </div>
@@ -215,7 +221,7 @@
                               <!--IGV-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="monto_igv">IGV</label>
+                                  <label for="monto_igv">IGV <sup class="text-danger">*</sup></label>
                                   <input type="number" class="form-control monto_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                   <input type="hidden" name="monto_igv" class="form-control" id="monto_igv" />
                                 </div>
@@ -224,7 +230,7 @@
                               <!--Total-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="total_precio">Total</label>
+                                  <label for="total_precio">Total <sup class="text-danger">*</sup></label>
                                   <input type="number" class="form-control total_precio" placeholder="Precio real." readonly />
                                   <input type="hidden" name="total_precio" id="total_precio" class="form-control total" placeholder="Precio real." readonly />
                                 </div>
@@ -312,25 +318,7 @@
                     </div>
                   </div>
                 </div>
-
-                <!-- MODAL - VER MATERIAL-->
-                <div class="modal fade" id="modal-ver-proveedores">
-                  <div class="modal-dialog modal-dialog-scrollable modal-xm">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Datos proveedores</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <div id="datosproveedores" class="class-style"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+                
                 <!-- MODAL - FICHA TECNICA-->
                 <div class="modal fade" id="modal-ver-ficha_tec">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -355,7 +343,7 @@
 
                 <!-- MODAL - VER DETALLE INSUMO-->
                 <div class="modal fade" id="modal-ver-insumo">
-                  <div class="modal-dialog modal-dialog-scrollable modal-xm">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Datos del Insumo</h4>
@@ -366,6 +354,25 @@
 
                       <div class="modal-body">
                         <div id="datosinsumo" class="class-style">
+                          <!-- vemos los datos del trabajador -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER PERFIL INSUMO-->
+                <div class="modal fade" id="modal-ver-perfil-insumo">
+                  <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white foto-insumo">Foto Insumo</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body"> 
+                        <div id="perfil-insumo" class="class-style">
                           <!-- vemos los datos del trabajador -->
                         </div>
                       </div>

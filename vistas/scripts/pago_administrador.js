@@ -719,7 +719,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 
         detalle_fechas_mes_trabajador(id_tabajador_x_proyecto_r, nombre_trabajador_r, fecha_inicial_r, fecha_hoy_r, fecha_final_r, sueldo_mensual_r, cuenta_bancaria_r, cant_dias_trabajando_r);
 
-        tabla_principal.ajax.reload();
+        tabla_principal.ajax.reload(null, false);
 
         Swal.fire("Correcto!", "Recibo por honorario guardado correctamente", "success");	      
          
@@ -774,11 +774,11 @@ function guardar_y_editar_pagos_x_mes(e) {
 
       if (datos.estado) {
 
-        // tabla_ingreso_pagos.ajax.reload(); 
+        // tabla_ingreso_pagos.ajax.reload(null, false); 
         $('#idfechas_mes_pagos_administrador_pxm').val(datos.id_tabla);
         reload_table_pagos_x_mes(datos.id_tabla);        
 
-        // tabla_principal.ajax.reload();     
+        // tabla_principal.ajax.reload(null, false);     
         listar_tbla_principal(localStorage.getItem('nube_idproyecto'));    
 
         Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      

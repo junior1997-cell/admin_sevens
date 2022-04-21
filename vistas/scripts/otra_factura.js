@@ -428,7 +428,7 @@ function guardaryeditar(e) {
 
         Swal.fire("Éxito!", "El registro se guardo correctamente.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar();
 
@@ -549,7 +549,7 @@ function eliminar(idotra_factura) {
       $.post("../ajax/otra_factura.php?op=desactivar", { idotra_factura: idotra_factura }, function (e) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 
@@ -559,7 +559,7 @@ function eliminar(idotra_factura) {
       $.post("../ajax/otra_factura.php?op=eliminar", { idotra_factura: idotra_factura }, function (e) {
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 

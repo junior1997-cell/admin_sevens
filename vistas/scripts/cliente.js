@@ -113,7 +113,7 @@ function guardaryeditar(e)
 	    {                    
 	          bootbox.alert(datos);	          
 	          mostrarform(false);
-	          tabla.ajax.reload();
+	          tabla.ajax.reload(null, false);
 	    }
 
 	});
@@ -149,7 +149,7 @@ function eliminar(idpersona)
         {
         	$.post("../ajax/persona.php?op=eliminar", {idpersona : idpersona}, function(e){
         		bootbox.alert(e);
-	            tabla.ajax.reload();
+	            tabla.ajax.reload(null, false);
         	});	
         }
 	})

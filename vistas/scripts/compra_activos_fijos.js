@@ -466,7 +466,7 @@ function regresar() {
   $("#pagos_con_detraccion").hide();
   limpiar_form_compra();
   limpiardatosproveedor();
-  tabla.ajax.reload();
+  tabla.ajax.reload(null, false);
 }
 
 //::::::::::::::LISTAMOS LAS TABLAS PRINCIPALES:::::::::
@@ -651,12 +651,12 @@ function guardaryeditar_compras(e) {
             // toastr.success("Usuario registrado correctamente");
             Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-            tabla.ajax.reload();
+            tabla.ajax.reload(null, false);
 
             limpiar_form_compra();
             regresar();
             cont = 0;
-            tabla_comp_prov.ajax.reload();
+            tabla_comp_prov.ajax.reload(null, false);
           } else {
             // toastr.error(datos);
             Swal.fire("Error!", datos, "error");
@@ -682,8 +682,8 @@ function anular(idcompra_af_general) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
-          tabla.ajax.reload();
-          tabla_comp_prov.ajax.reload();
+          tabla.ajax.reload(null, false);
+          tabla_comp_prov.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -705,8 +705,8 @@ function des_anular(idcompra_af_general) {
     if (result.isConfirmed) {
       $.post("../ajax/compra_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
-        tabla.ajax.reload();
-        tabla_comp_prov.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tabla_comp_prov.ajax.reload(null, false);
       });
     }
   });
@@ -735,8 +735,8 @@ function eliminar_compra(idcompra_af_general) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
 
-          tabla.ajax.reload();
-          tabla_comp_prov.ajax.reload();
+          tabla.ajax.reload(null, false);
+          tabla_comp_prov.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -748,8 +748,8 @@ function eliminar_compra(idcompra_af_general) {
         if (e == "ok") {
           Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");
 
-          tabla.ajax.reload();
-          tabla_comp_prov.ajax.reload();
+          tabla.ajax.reload(null, false);
+          tabla_comp_prov.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -1729,10 +1729,10 @@ function guardaryeditar_pago(e) {
       if (datos == "ok") {
         toastr.success("servicio registrado correctamente");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         $("#modal-agregar-pago").modal("hide");
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         
         /**================================================== */
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
@@ -1814,7 +1814,7 @@ function desactivar_pagos(idpago_af_general) {
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         
       });
     }
@@ -1837,7 +1837,7 @@ function activar_pagos(idpago_af_general) {
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         
       });
     }
@@ -1861,7 +1861,7 @@ function eliminar_pagos(idpago_af_general) {
 
         total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
 
-          tabla_pagos1.ajax.reload();
+          tabla_pagos1.ajax.reload(null, false);
         
       });
     }
@@ -1894,7 +1894,7 @@ function guardaryeditar_comprobante(e) {
       if (datos == "ok") {
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar_form_compra();
 
@@ -1983,8 +1983,8 @@ function guardar_y_editar_materiales(e) {
 
         Swal.fire("Correcto!", "Producto creado correctamente", "success");
 
-        tabla.ajax.reload();
-        tablaactivos1.ajax.reload();
+        tabla.ajax.reload(null, false);
+        tablaactivos1.ajax.reload(null, false);
         //limpiar_materiales();
         
         actualizar_producto();

@@ -857,7 +857,7 @@ function guardaryeditar_pension(e) {
 
 				toastr.success('servicio registrado correctamente')				 
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         $("#modal-agregar-pension").modal("hide");
 
@@ -1126,7 +1126,7 @@ function guardaryeditar_factura(e) {
 
 				toastr.success('servicio registrado correctamente')				 
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         $("#modal-agregar-comprobante").modal("hide");
        listar_comprobantes(localStorage.getItem('idpension_f_nube'));
@@ -1416,7 +1416,7 @@ function eliminar_comprobante(idfactura_pension) {
 
         Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         listar( localStorage.getItem('nube_idproyecto'));
       });  
 
@@ -1428,7 +1428,7 @@ function eliminar_comprobante(idfactura_pension) {
 
         Swal.fire("Eliminado!", "Comprobante a ha sido Eliminado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         listar( localStorage.getItem('nube_idproyecto'));
       }); 
 
@@ -1453,7 +1453,7 @@ function activar_comprobante(idfactura_pension ) {
 
         Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         listar(localStorage.getItem('nube_idproyecto'));
       });
       

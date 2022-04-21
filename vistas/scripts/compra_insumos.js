@@ -233,7 +233,7 @@ function regresar() {
   $("#pagos_con_detraccion").hide();
   limpiar_form_compra();
   limpiar_form_proveedor();
-  tabla_compra.ajax.reload();
+  tabla_compra.ajax.reload(null, false);
 }
 
 //TABLA - COMPRAS
@@ -434,8 +434,8 @@ function guardar_y_editar_compras(e) {
             // toastr.success("Usuario registrado correctamente");
             Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-            tabla_compra.ajax.reload();
-            tabla_compra_x_proveedor.ajax.reload();
+            tabla_compra.ajax.reload(null, false);
+            tabla_compra_x_proveedor.ajax.reload(null, false);
 
             limpiar_form_compra(); regresar();
             
@@ -487,7 +487,7 @@ function anular(idcompra_proyecto) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "Tu Compra sido enviado a la PAPELERA.", "success");
 
-          tabla_compra.ajax.reload();
+          tabla_compra.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -509,7 +509,7 @@ function des_anular(idcompra_proyecto) {
     if (result.isConfirmed) {
       $.post("../ajax/compra_insumos.php?op=des_anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
         Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
-        tabla_compra.ajax.reload();
+        tabla_compra.ajax.reload(null, false);
       });
     }
   });
@@ -536,7 +536,7 @@ function eliminar_compra(idcompra_proyecto) {
         if (e == "ok") {
           Swal.fire("Papelera!", "Tu Compra sido enviado a la <b>PAPELERA</b>.", "success");
 
-          tabla_compra.ajax.reload(); tabla_compra_x_proveedor.ajax.reload();
+          tabla_compra.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -548,7 +548,7 @@ function eliminar_compra(idcompra_proyecto) {
         if (e == "ok") {
           Swal.fire("ELIMINADO!", "Tu compra a sido <b>ELIMINADO</b> permanentemente.", "success");
 
-          tabla_compra.ajax.reload(); tabla_compra_x_proveedor.ajax.reload();
+          tabla_compra.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false);
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -1023,7 +1023,7 @@ function guardaryeditar_comprobante(e) {
 
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
-        tabla_compra.ajax.reload();
+        tabla_compra.ajax.reload(null, false);
 
         limpiar_form_compra();
 
@@ -1572,15 +1572,15 @@ function guardaryeditar_pago(e) {
          
         Swal.fire("Correcto!", "Pago guardado correctamente", "success");	    
 
-        tabla_compra.ajax.reload();
+        tabla_compra.ajax.reload(null, false);
 
         $("#modal-agregar-pago").modal("hide");
 
         if (reload_detraccion == "si") {
-          if (tabla_pagos2) { tabla_pagos2.ajax.reload(); }
-          if (tabla_pagos3) { tabla_pagos3.ajax.reload(); }
+          if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+          if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
         } else {
-          if (tabla_pagos1) { tabla_pagos1.ajax.reload(); }
+          if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
         }
 
         /**================================================== */
@@ -1765,10 +1765,10 @@ function desactivar_pagos(idpago_compras) {
         if (e == "ok") {
           Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
           if (reload_detraccion == "si") {
-            if (tabla_pagos2) { tabla_pagos2.ajax.reload(); }
-            if (tabla_pagos3) { tabla_pagos3.ajax.reload(); }
+            if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+            if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
           } else {
-            if (tabla_pagos1) { tabla_pagos1.ajax.reload(); }
+            if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
           }
         } else {
           Swal.fire("Error!", e, "error");
@@ -1798,10 +1798,10 @@ function activar_pagos(idpago_compras) {
         total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
 
         if (reload_detraccion == "si") {
-          if (tabla_pagos2) { tabla_pagos2.ajax.reload(); }
-          if (tabla_pagos3) { tabla_pagos3.ajax.reload(); }
+          if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+          if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
         } else {
-          if (tabla_pagos1) { tabla_pagos1.ajax.reload(); }
+          if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
         }
       });
     }
@@ -1828,12 +1828,12 @@ function eliminar_pago_compra(idpago_compras) {
           total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
           total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
           if (reload_detraccion == "si") {
-            if (tabla_pagos2) { tabla_pagos2.ajax.reload(); }
-            if (tabla_pagos3) { tabla_pagos3.ajax.reload(); }
+            if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+            if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
           } else {
-            if (tabla_pagos1) { tabla_pagos1.ajax.reload(); }
+            if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
           }
-          if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(); }
+          if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); }
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -1845,12 +1845,12 @@ function eliminar_pago_compra(idpago_compras) {
           total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
           total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
           if (reload_detraccion == "si") {
-            if (tabla_pagos2) { tabla_pagos2.ajax.reload(); }
-            if (tabla_pagos3) { tabla_pagos3.ajax.reload(); }
+            if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+            if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
           } else {
-            if (tabla_pagos1) { tabla_pagos1.ajax.reload(); }
+            if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
           }
-          if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(); } 
+          if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); } 
         } else {
           Swal.fire("Error!", e, "error");
         }
@@ -2106,7 +2106,7 @@ function guardar_y_editar_materiales(e) {
       if (datos == "ok") {
 
         Swal.fire("Correcto!", "Producto creado correctamente", "success");
-        tablamateriales.ajax.reload();
+        tablamateriales.ajax.reload(null, false);
         actualizar_producto();
         $("#modal-agregar-material-activos-fijos").modal("hide");
 

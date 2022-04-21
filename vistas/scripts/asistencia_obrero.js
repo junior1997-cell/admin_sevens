@@ -1684,7 +1684,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
       // $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'1' }, function (e) {
         
       //   if (e == 'ok') {
-      //     tabla_principal.ajax.reload();
+      //     tabla_principal.ajax.reload(null, false);
       //     toastr.success(`<h5>Asignado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ASIGNADO con éxito.`);
       //   } else {
       //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', false);
@@ -1699,7 +1699,7 @@ function calcular_sabatical(fecha, sueldo_x_hora, id_trabajador_x_proyecto, nomb
       // $.post("../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual", {'idresumen_q_s_asistencia': idresumen_q_s_asistencia,  'fecha_asist': format_a_m_d(fecha), 'sueldo_x_hora':sueldo_x_hora, 'idresumen_q_s_asistencia': idresumen_q_s_asistencia, 'fecha_q_s_inicio': format_a_m_d(f1_r), 'fecha_q_s_fin': format_a_m_d(f2_r), 'numero_q_s':(parseInt(i_r) + 1), 'id_trabajador_x_proyecto': id_trabajador_x_proyecto, 'numero_sabado':numero_sabado, 'estado_sabatical_manual':'0' }, function (e) {
         
       //   if (e == 'ok') { 
-      //     tabla_principal.ajax.reload();
+      //     tabla_principal.ajax.reload(null, false);
       //     toastr.success(`<h5>Anulado</h5> El sabatical manual de: <b> ${nombre_trabajador} </b>  a sido ANULADO con éxito.`);
       //   } else {
       //     $(`#checkbox_sabatical_${id_trabajador_x_proyecto}_${numero_sabado}`).prop('checked', true);
@@ -2375,7 +2375,7 @@ function guardar_y_editar_justificar(e) {
 
         $("#modal-justificar-asistencia").modal("hide");
 
-        tabla_horas.ajax.reload();
+        tabla_horas.ajax.reload(null, false);
 
 			}else{
 

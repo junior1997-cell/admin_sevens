@@ -153,45 +153,43 @@ function limpiar_form_trabajador() {
 function tbla_principal() {
 
   tabla=$('#tabla-trabajador').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, {extend: "colvis"} ,
     ],
-    "ajax":{
+    ajax:{
       url: '../ajax/all_trabajador.php?op=tbla_principal',
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
-        ver_errores(e);
+        console.log(e.responseText);  ver_errores(e);
       }
     },
-    createdRow: function (row, data, ixdex) {          
-
+    createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
       // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }          
-      
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
-    "columnDefs": [
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [9], visible: false, searchable: false, },
       { targets: [10], visible: false, searchable: false, },
       { targets: [11], visible: false, searchable: false, },
@@ -205,43 +203,41 @@ function tbla_principal() {
 
   // listamos al trabajadores expulsados
   tabla2=$('#tabla-trabajador-expulsado').dataTable({
-    "responsive": true,
-    "lengthMenu": [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    responsive: true,
+    lengthMenu: [ 5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [8,9,10,11,3,4,12,13,14,15,5,6], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [8,9,10,11,3,4,12,13,14,15,5,6], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [8,9,10,11,3,4,12,13,14,15,5,6], } }, {extend: "colvis"} ,
     ],
-    "ajax":{
-        url: '../ajax/all_trabajador.php?op=listar_expulsado',
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {          
-
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass('text-center');         
-        }         
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
+    ajax:{
+      url: '../ajax/all_trabajador.php?op=listar_expulsado',
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
       }
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
-    "columnDefs": [
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }         
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: '%d líneas copiadas',
+          1: '1 línea copiada'
+        },        
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [8], visible: false, searchable: false, },
       { targets: [9], visible: false, searchable: false, },
       { targets: [10], visible: false, searchable: false, },
@@ -271,7 +267,7 @@ function guardar_y_editar_trabajador(e) {
 
         Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				limpiar_form_trabajador();
 
@@ -408,8 +404,8 @@ function verdatos(idtrabajador){
       }
 
       if (e.data.cv_documentado != '') {
-
-        cv_documentado=`<iframe src="../dist/docs/all_trabajador/cv_documentado/${e.data.cv_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        
+        cv_documentado=doc_view_extencion(e.data.cv_documentado, 'all_trabajador', 'cv_documentado', '100%');
         
         btn_cv_documentado=`
         <div class="row">
@@ -429,8 +425,8 @@ function verdatos(idtrabajador){
       }
 
       if (e.data.cv_no_documentado != '') {
-
-        cv_no_documentado=`<iframe src="../dist/docs/all_trabajador/cv_no_documentado/${e.data.cv_no_documentado}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        
+        cv_no_documentado=  doc_view_extencion(e.data.cv_no_documentado, 'all_trabajador', 'cv_no_documentado', '100%');
         
         btn_cv_no_documentado=`
         <div class="row">
@@ -668,7 +664,7 @@ function desactivar(idtrabajador) {
     if (result.isConfirmed) {
       if (result.value.ok) {
         Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
-        tabla.ajax.reload(); tabla2.ajax.reload();
+        tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);
       }else{
         Swal.fire("Error!", "No se pudo realizar la petición.", "error");
       }     
@@ -689,7 +685,7 @@ function desactivar(idtrabajador) {
 
   //       Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
     
-  //       tabla.ajax.reload(); tabla2.ajax.reload();
+  //       tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);
   //     });      
   //   }
   // });   
@@ -719,7 +715,7 @@ function activar(idtrabajador, nombre) {
     if (result.isConfirmed) {
       if (result.value.status) {
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
-        tabla.ajax.reload(); tabla2.ajax.reload();
+        tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);
       }else{
         ver_errores(result.value);
       }     
@@ -777,7 +773,7 @@ function eliminar(idtrabajador, nombre) {
         if (result.isConfirmed) {
           if (result.value.status) {
             Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
-            tabla.ajax.reload(); tabla2.ajax.reload();
+            tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);
           }else{
             ver_errores(result.value);
           }     
@@ -788,7 +784,7 @@ function eliminar(idtrabajador, nombre) {
       //op=eliminar
       if (result.value.status) {
         Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");
-        tabla.ajax.reload(); tabla2.ajax.reload();
+        tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);
       }else{
         ver_errores(result.value);
       }      

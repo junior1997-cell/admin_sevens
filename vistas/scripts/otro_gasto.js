@@ -455,7 +455,7 @@ function guardaryeditar(e) {
 
         Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar();
 
@@ -639,7 +639,7 @@ function desactivar(idotro_gasto) {
       $.post("../ajax/otro_gasto.php?op=desactivar", { idotro_gasto: idotro_gasto }, function (e) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
     }
@@ -661,7 +661,7 @@ function activar(idotro_gasto) {
       $.post("../ajax/otro_gasto.php?op=activar", { idotro_gasto: idotro_gasto }, function (e) {
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
     }
@@ -692,7 +692,7 @@ function eliminar(idotro_gasto) {
       $.post("../ajax/otro_gasto.php?op=desactivar", { idotro_gasto: idotro_gasto }, function (e) {
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 
@@ -702,7 +702,7 @@ function eliminar(idotro_gasto) {
       $.post("../ajax/otro_gasto.php?op=eliminar", { idotro_gasto: idotro_gasto }, function (e) {
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 

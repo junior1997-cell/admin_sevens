@@ -102,13 +102,15 @@ function tbla_principal() {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, {extend: "colvis"} ,
+    ],
     ajax: {
       url: "../ajax/materiales.php?op=tbla_principal",
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {    
@@ -135,10 +137,16 @@ function tbla_principal() {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
+    "columnDefs": [
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },      
+    ],
   }).DataTable();
 }
 
@@ -187,7 +195,7 @@ function guardaryeditar(e) {
       if (e.status == true) {
         Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
 
         limpiar_form_material();
 
@@ -299,14 +307,7 @@ function verdatos(idproducto){
 
   $(".tooltip").removeClass("show").addClass("hidde");
 
-  $('#datosinsumo').html(''+
-  '<div class="row" >'+
-    '<div class="col-lg-12 text-center">'+
-      '<i class="fas fa-spinner fa-pulse fa-6x"></i><br />'+
-      '<br />'+
-      '<h4>Cargando...</h4>'+
-    '</div>'+
-  '</div>');
+  $('#datosinsumo').html(`<div class="row"><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div></div>`);
 
   var verdatos=''; 
 
@@ -314,7 +315,7 @@ function verdatos(idproducto){
   
   var ficha_tecnica=''; var btn_ficha_tecnica = '';
 
-  $("#modal-ver-insumo").modal("show")
+  $("#modal-ver-insumo").modal("show");
 
   $.post("../ajax/materiales.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
 
@@ -332,7 +333,7 @@ function verdatos(idproducto){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/img_perfil/${e.data.imagen}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL - ${e.data.nombre}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -344,8 +345,8 @@ function verdatos(idproducto){
       }     
 
       if (e.data.ficha_tecnica != '') {
-
-        ficha_tecnica=`<iframe src="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`
+        
+        ficha_tecnica =  doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%');
         
         btn_ficha_tecnica=`
         <div class="row">
@@ -353,7 +354,7 @@ function verdatos(idproducto){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="CV DOCUMENTADO ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="Ficha Tecnica - ${e.data.nombre}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -380,22 +381,14 @@ function verdatos(idproducto){
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>U.M.</th>
                   <td>${e.data.nombre_medida}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Modelo</th>
-                  <td>${e.data.modelo}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Serie</th>
-                  <td>${e.data.serie}</td>
-                </tr>
+                </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Marca</th>
                     <td>${e.data.marca}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>IGV</th>
-                  <td>${e.data.estado_igv}</td>
+                  <th>Con IGV</th>
+                  <td>${(e.data.estado_igv==1? '<div class="myestilo-switch ml-2"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" checked disabled /><label for="my-switch-igv-2"></label></div></div>' : '<div class="myestilo-switch ml-3"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" disabled/><label for="my-switch-igv-2"></label></div></div>')}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Precio  </th>
@@ -412,7 +405,15 @@ function verdatos(idproducto){
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Total </th>
                   <td>${e.data.precio_total}</td>
-                </tr>                
+                </tr> 
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Modelo</th>
+                  <td>${e.data.modelo}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Serie</th>
+                  <td>${e.data.serie}</td>
+                </tr>               
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Descripción</th>
                   <td>${e.data.descripcion}</td>
@@ -436,6 +437,13 @@ function verdatos(idproducto){
   }).fail( function(e) { ver_errores(e); } );
 }
 
+function ver_perfil(file, nombre) {
+  $('.foto-insumo').html(nombre);
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#modal-ver-perfil-insumo").modal("show");
+  $('#perfil-insumo').html(`<center><img src="${file}" alt="Perfil" width="100%"></center>`);
+}
+
 //Función para desactivar registros
 function eliminar(idproducto, nombre) {
 
@@ -447,7 +455,7 @@ function eliminar(idproducto, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload() },
+    function(){ tabla.ajax.reload(null, false) },
     false, 
     false, 
     false,

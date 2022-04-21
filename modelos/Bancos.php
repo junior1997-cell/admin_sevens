@@ -10,16 +10,17 @@ Class Bancos
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre, $alias, $formato_cta, $formato_cci, $formato_detracciones)
+	public function insertar($nombre, $alias, $formato_cta, $formato_cci, $formato_detracciones, $imagen1)
 	{
-		$sql="INSERT INTO bancos (nombre, alias, formato_cta, formato_cci, formato_detracciones)VALUES ('$nombre', '$alias', '$formato_cta', '$formato_cci', '$formato_detracciones')";
+		$sql="INSERT INTO bancos (nombre, alias, formato_cta, formato_cci, formato_detracciones, icono)VALUES ('$nombre', '$alias', '$formato_cta', '$formato_cci', '$formato_detracciones', '$imagen1')";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idbancos, $nombre, $alias, $formato_cta, $formato_cci, $formato_detracciones)
+	public function editar($idbancos, $nombre, $alias, $formato_cta, $formato_cci, $formato_detracciones, $imagen1)
 	{
-		$sql="UPDATE bancos SET nombre='$nombre', alias ='$alias', formato_cta='$formato_cta', formato_cci='$formato_cci', formato_detracciones='$formato_detracciones'  
+		$sql="UPDATE bancos SET nombre='$nombre', alias ='$alias', formato_cta='$formato_cta', 
+		formato_cci='$formato_cci', formato_detracciones='$formato_detracciones', icono='$imagen1'  
 		WHERE idbancos='$idbancos'";
 		return ejecutarConsulta($sql);
 	}
@@ -59,10 +60,9 @@ Class Bancos
 	}
 	
 	//Implementar un método para listar los registros y mostrar en el select
-	public function select()
-	{
-		$sql="SELECT * FROM bancos where estado=1";
-		return ejecutarConsulta($sql);		
+	public function obtenerImg($id){
+		$sql="SELECT icono FROM bancos where idbancos = '$id' ";
+		return ejecutarConsultaSimpleFila($sql);		
 	}
 }
 ?>

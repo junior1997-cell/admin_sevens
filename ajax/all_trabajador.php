@@ -309,7 +309,7 @@
                   ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Mostrar"><i class="far fa-eye"></i></button>',
                 "2"=>'<div class="user-block">
                   <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
-                  <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
+                  <span class="username"><p class="text-primary m-b-02rem" >'. $value['nombres'] .'</p></span>
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.format_d_m_a($value['fecha_nacimiento']).' : '.$value['edad'].' años</span>
                   </div>',
                 "3"=> '<div class="center-vertical">'. $value['nombre_tipo'] .'</div>',

@@ -16,10 +16,18 @@ function init() {
   $("#eliminar_registro").on("click", function (e) { desactivar()  });
 
   //Initialize Select2 Elements
-  $("#background_color").select2({ theme: "bootstrap4",  placeholder: "Selecione tipo", allowClear: true,});
+  $("#background_color").select2({templateResult: formatState, theme: "bootstrap4",  placeholder: "Selecione tipo", allowClear: true,});
 
   $("#background_color").val("#FF0000").trigger("change");
 }
+
+function formatState (state) {
+  console.log(state);
+  if (!state.id) { return state.text; }
+  var color_bg = state.id != '' ? `${state.id}`: '';   
+  var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2">hol</b>${state.text}</span>`);
+  return $state;
+};
 
 function contraste() {
 
@@ -324,62 +332,67 @@ function guardaryeditar(e) {
 	      listar();  $("#modal-agregar-calendario").modal("hide"); limpiar();        
 
 			}else{
-
         ver_errores(e);
-
 			}
     },
-  }).fail( function(e) { ver_errores(e); } ); 
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress").css({ width: "0%",  });
+      $("#barra_progress").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress").css({ width: "0%", });
+      $("#barra_progress").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  }); 
 }
 
 //Función para desactivar registros
 function desactivar() {
 
   let idcalendario = $('#idcalendario').val();
+  let titulo = $('#titulo').val();
 
-  Swal.fire({
-    title: "¿Está Seguro de Eliminar esta fecha?",
-    text: "Al eliminar no podra recuperarlo",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      $.post("../ajax/all_calendario.php?op=desactivar", { idcalendario: idcalendario }, function (e) {
-
-        Swal.fire("Eliminado!", "Tu fecha a sido eliminado.", "success");
-    
-        listar(); $("#modal-agregar-calendario").modal("hide"); limpiar();    
-      });      
-    }
-  });   
+  crud_simple_alerta(
+    '../ajax/all_calendario.php?op=desactivar', 
+    idcalendario, 
+    '¿Está Seguro de Eliminar esta fecha?', 
+    `<b class="text-danger"><del>${titulo}</del></b> <br> Al eliminar, estara en la apartado de fechas eliminadas.!`, 
+    'Si, Empezar!',
+    function(){ Swal.fire("Eliminado!", "Tu fecha a sido eliminado.", "success"); },
+    function(){ listar(); $("#modal-agregar-calendario").modal("hide"); limpiar();}
+  );   
 }
 
 //Función para activar registros
 function activar(idcalendario) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar esta fecha?",
-    text: "Esta fecha se podra vizualizar.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/all_calendario.php?op=activar", { idcalendario: idcalendario }, function (e) {
 
-        Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
-
-        listar(); 
-      });
-      
-    }
-  });      
+  crud_simple_alerta(
+    '../ajax/all_calendario.php?op=activar', 
+    idcalendario, 
+    '¿Está Seguro de  Activar esta fecha?', 
+    `Esta fecha se podra vizualizar.`, 
+    'Si, Empezar!',
+    function(){ Swal.fire("Activado!", "Tu fecha a sido reactivada.", "success"); },
+    function(){ listar(); }
+  );     
 }
 
 

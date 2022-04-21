@@ -557,7 +557,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 
         detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
 
-        tabla_principal.ajax.reload();
+        tabla_principal.ajax.reload(null, false);
 
         Swal.fire("Correcto!", "Recibo por honorario guardado correctamente", "success");	      
          
@@ -611,7 +611,7 @@ function guardar_y_editar_pagos_x_q_s(e) {
 
       if (datos == 'ok') {
 
-        tabla_ingreso_pagos.ajax.reload(); 
+        tabla_ingreso_pagos.ajax.reload(null, false); 
           
         listar_tbla_principal(localStorage.getItem('nube_idproyecto'));    
 
@@ -736,7 +736,7 @@ function desactivar_pago_x_q_s(id) {
 
         if (e == "ok") {
 
-          tabla_ingreso_pagos.ajax.reload(); 
+          tabla_ingreso_pagos.ajax.reload(null, false); 
 
           listar_tbla_principal(localStorage.getItem('nube_idproyecto')); 
 
@@ -766,7 +766,7 @@ function activar_pago_x_q_s(id) {
 
         if (e == "ok") {
 
-          tabla_ingreso_pagos.ajax.reload(); 
+          tabla_ingreso_pagos.ajax.reload(null, false); 
 
           listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 

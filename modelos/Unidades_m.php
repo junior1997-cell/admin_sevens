@@ -52,16 +52,12 @@ Class Unidades_m
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function tbla_unidad_medida()
 	{
 		$sql="SELECT * FROM unidad_medida WHERE estado=1  AND estado_delete=1  ORDER BY nombre_medida ASC";
 		return ejecutarConsulta($sql);		
 	}
-	//Implementar un método para listar los registros y mostrar en el select
-	public function select()
-	{
-		$sql="SELECT * FROM unidad_medida where estado=1";
-		return ejecutarConsulta($sql);		
-	}
+
+	
 }
 ?>

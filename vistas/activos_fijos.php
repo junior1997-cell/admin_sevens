@@ -78,6 +78,10 @@
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                 <th class="text-center">Ficha técnica</th>
                                 <th class="text-center">Estado</th>
+                                <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Color</th>
+                                <th>Descripción</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -93,6 +97,10 @@
                                 <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
                                 <th class="text-center">Ficha técnica</th>
                                 <th class="text-center">Estado</th>
+                                <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Color</th>
+                                <th>Descripción</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -107,7 +115,7 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar Activos -->
+                <!-- MODAL - AGREGAR ACTIVOS FIJOS -->
                 <div class="modal fade" id="modal-agregar-activos-fijos">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -124,11 +132,10 @@
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!--  -->
-                              <input type="hidden" name="idproducto" id="idproducto" />
-                               
+                              <input type="hidden" name="idproducto" id="idproducto" />                              
 
                               <!-- Nombre -->
-                              <div class="col-lg-8 class_pading">
+                              <div class="col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre">Nombre <sup class="text-danger">*</sup></label>
                                   <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del activo." />
@@ -136,7 +143,7 @@
                               </div>
 
                               <!-- Categoria -->
-                              <div class="col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="categoria_insumos_af">Clasificación</label>
                                   <select name="categoria_insumos_af" id="categoria_insumos_af" class="form-control select2" style="width: 100%;"> 
@@ -145,44 +152,47 @@
                               </div>
 
                               <!-- Modelo -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="modelo">Modelo <sup class="text-danger">*</sup> </label>
                                   <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
                                 </div>
                               </div>
+
                               <!-- Serie -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="serie">Serie </label>
                                   <input class="form-control" type="text" id="serie" name="serie" placeholder="Serie." />
                                 </div>
                               </div>
+
                               <!-- Marca -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="marca">Marca </label>
                                   <input class="form-control" type="text" id="marca" name="marca" placeholder="Marca de activo." />
                                 </div>
                               </div>
+
                               <!-- Color -->
-                              <div class="col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="color">Color</label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
                               
-                              <!-- Unnidad-->
-                              <div class="col-lg-6" id="content-t-unidad">
+                              <!-- Unnidad de medida-->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                 <div class="form-group">
                                   <label for="Unidad-medida">Unidad-medida</label>
                                   <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
 
-                              <!--Precio U-->
-                              <div class="col-lg-4 class_pading">
+                              <!--Precio Unitario-->
+                              <div class="col-7 col-sm-7 col-md-8 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_unitario">Precio <sup class="text-danger">*</sup></label>
                                   <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
@@ -190,7 +200,7 @@
                               </div>
 
                               <!-- Rounded switch -->
-                              <div class="col-lg-2 class_pading">
+                              <div class="col-5 col-sm-5 col-md-4 col-lg-2">
                                 <div class="form-group">
                                   <label for="" class="labelswitch">Sin o Con (Igv)</label>
                                   <div id="switch_igv">
@@ -204,36 +214,41 @@
                                   <input type="hidden" name="estado_igv" id="estado_igv" />
                                 </div>
                               </div>
+
                               <!--Sub Total subtotal igv total-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_sin_igv">Sub Total</label>
                                   <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                 </div>
                               </div>
+
                               <!--IGV-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_igv">IGV</label>
                                   <input type="number" class="form-control" name="precio_igv" id="precio_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                 </div>
                               </div>
+
                               <!--Total-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_total">Total</label>
                                   <input type="number" class="form-control" name="precio_total" id="precio_total" placeholder="Precio real." readonly />
                                 </div>
                               </div>
+
                               <!--Descripcion-->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="descripcion_pago">Descripción </label> <br />
                                   <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
-                              <!--iamgen-material-->
-                              <div class="col-md-6 col-lg-6">
+
+                              <!--imagen-material-->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                 <label for="foto1">Imagen</label>
                                 <div style="text-align: center;">
                                   <img
@@ -251,11 +266,11 @@
                               </div>
 
                               <!-- Ficha tecnica -->
-                              <div class="col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                 <label for="doc2_i" >Ficha técnica <b class="text-danger">(Imagen o PDF)</b> </label>  
                                 <div class="row text-center">                               
                                   <!-- Subir documento -->
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                       <i class="fas fa-upload"></i> Subir.
                                     </button>
@@ -263,7 +278,7 @@
                                     <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <!-- Recargar -->
-                                  <div class="col-md-6 text-center comprobante">
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center comprobante">
                                     <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'ficha_tecnica');">
                                     <i class="fas fa-redo"></i> Recargar.
                                   </button>
@@ -275,6 +290,16 @@
                                 </div>
                                 <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -297,25 +322,25 @@
                   </div>
                 </div>
 
-                <!--Modal ver proveedores-->
-                <div class="modal fade" id="modal-ver-proveedores">
+                <!-- MODAL-->
+                <div class="modal fade" id="modal-ver-activos-fijos">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Datos proveedores</h4>
+                        <h4 class="modal-title">Datos Activos Fijos</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
 
                       <div class="modal-body">
-                        <div id="datosproveedores" class="class-style"></div>
+                        <div id="datos-activos-fjos" class=""></div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!--===============Modal-ver-ficha-tècnica =========-->
+                <!-- MODAL - FICHA TECNICA-->
                 <div class="modal fade" id="modal-ver-ficha_tec">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -331,6 +356,25 @@
                           <br />
                           <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
                           <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER PERFIL INSUMO-->
+                <div class="modal fade" id="modal-ver-perfil-activo-fijo">
+                  <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white foto-insumo">Foto Activo Fijo</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body"> 
+                        <div id="perfil-insumo" class="class-style">
+                          <!-- vemos los datos del trabajador -->
                         </div>
                       </div>
                     </div>

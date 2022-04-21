@@ -389,7 +389,7 @@ function guardaryeditar(e) {
 
 				toastr.success('Registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				limpiar();
 
@@ -648,7 +648,7 @@ function desactivar(idtransporte) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });      
     }
@@ -671,7 +671,7 @@ function activar(idtransporte) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
       
@@ -704,7 +704,7 @@ function eliminar(idtransporte) {
 
       Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
   
-      tabla.ajax.reload();
+      tabla.ajax.reload(null, false);
       total();
 
     });  
@@ -716,7 +716,7 @@ function eliminar(idtransporte) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 

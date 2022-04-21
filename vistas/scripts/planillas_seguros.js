@@ -302,7 +302,7 @@ function guardaryeditar(e) {
 
 				toastr.success('Registrado correctamente')				 
 
-	      tabla.ajax.reload();
+	      tabla.ajax.reload(null, false);
          
 				limpiar();
 
@@ -501,7 +501,7 @@ function eliminar(idplanilla_seguro) {
 
         Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 
@@ -512,7 +512,7 @@ function eliminar(idplanilla_seguro) {
 
         Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
     
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
 
@@ -537,7 +537,7 @@ function activar(idplanilla_seguro) {
 
         Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
 
-        tabla.ajax.reload();
+        tabla.ajax.reload(null, false);
         total();
       });
       

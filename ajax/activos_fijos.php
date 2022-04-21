@@ -78,7 +78,7 @@
             //var_dump($idproyecto,$idproveedor);
             $rspta = $activos_fijos->insertar( $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+            echo json_encode( $rspta, true);
 
           } else {
 
@@ -97,7 +97,7 @@
             
             $rspta = $activos_fijos->editar( $idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
             //var_dump($idactivos_fijos,$idproveedor);
-            echo $rspta ? "ok" : "No se pudo actualizar";
+            echo json_encode( $rspta, true);
           }
 
         break;
@@ -106,22 +106,15 @@
 
           $rspta = $activos_fijos->desactivar($idproducto);
 
-          echo $rspta ? "ok" : "Activo no se puede desactivar";
+          echo json_encode( $rspta, true);
 
         break;
 
-        case 'activar':
-
-          $rspta = $activos_fijos->activar($idproducto);
-
-          echo $rspta ? "ok" : "Activo no se puede activar";
-
-        break;
         case 'eliminar':
 
           $rspta = $activos_fijos->eliminar($idproducto);
 
-          echo $rspta ? "ok" : "Activo no se puede eliminar";
+          echo json_encode( $rspta, true);
 
         break;
 
@@ -129,7 +122,7 @@
 
           $rspta = $activos_fijos->mostrar($idproducto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode( $rspta, true);
 
         break;
 
@@ -139,85 +132,58 @@
           $data = [];
           $imagen = '';
           $ficha_tecnica = '';
-          $igv = '';
 
           $imagen_error = "this.src='../dist/svg/default_producto.svg'";
           $cont=1;
-          while ($reg = $rspta['data']->fetch_object()) {
 
-            if (empty($reg->imagen)) {
-              $imagen = 'src="../dist/svg/default_producto.svg"';
-            } else {
-              $imagen = 'src="../dist/docs/material/img_perfil/' . $reg->imagen . '"';
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
+          if ($rspta['status']) {
+            while ($reg = $rspta['data']->fetch_object()) {
+
+              if (empty($reg->imagen)) { $imagen = 'img_material_defect.jpg'; } else { $imagen =  $reg->imagen; }
+  
+              empty($reg->ficha_tecnica)
+                ? ($ficha_tecnica = '<div><center><a type="btn btn-danger" class=""><i class="far fa-file-pdf fa-2x text-gray-50"></i></a></center></div>')
+                : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>');
+
+              $data[] = [
+                "0"=>$cont++,
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idproducto . ')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
+                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idproducto.')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
+                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
+                "2" =>'<div class="user-block">'.
+                  '<img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg->nombre).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
+                  <span class="username"><p class="mb-0">' . $reg->nombre . '</p></span>
+                  <span class="description"><b>Marca: </b>' . $reg->marca . '</span>
+                  <span class="description"><b>UM: </b>' . $reg->nombre_medida . '</span>
+                </div>',
+                "3" => $reg->categoria, 
+                "4" =>'S/ '. number_format($reg->precio_unitario, 2, '.', ','),
+                "5" =>'S/ '. number_format($reg->precio_sin_igv, 2, '.', ','),
+                "6" =>'S/ '. (empty($reg->precio_igv) ? '-' : number_format($reg->precio_igv, 2, '.', ',')) ,
+                "7" =>'S/ '. number_format($reg->precio_total, 2, '.', ','),
+                "8" => $ficha_tecnica,
+                "9" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "10" => $reg->nombre,
+                "11" => $reg->marca,
+                "12" => $reg->nombre_color,
+                "13" => $reg->descripcion,
+              ];
             }
-
-            empty($reg->ficha_tecnica)
-              ? ($ficha_tecnica = '<div><center><a type="btn btn-danger" class=""><i class="far fa-file-pdf fa-2x text-gray-50"></i></a></center></div>')
-              : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>');
-            
-            empty($reg->precio_igv) ? ($igv = '-') : ($igv = $reg->precio_igv);
-
-            $data[] = [
-              "0"=>$cont++,
-              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idproducto . ')"><i class="fas fa-skull-crossbones"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idproducto . ')"><i class="fa fa-check"></i></button>',
-              "2" =>'<div class="user-block"> <img class="profile-user-img img-responsive img-circle" ' . $imagen . ' alt="user image" onerror="'.$imagen_error.'">
-                <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
-                <span class="description"><b>Marca: </b>' . $reg->marca . '</span>
-                <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>
-              </div>',
-              "3" => $reg->categoria, 
-              "4" =>'S/ '. number_format($reg->precio_unitario, 2, '.', ','),
-              "5" =>'S/ '. number_format($reg->precio_sin_igv, 2, '.', ','),
-              "6" =>'S/ '. number_format($igv, 2, '.', ','),
-              "7" =>'S/ '. number_format($reg->precio_total, 2, '.', ','),
-              "8" => $ficha_tecnica,
-              "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
+  
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
             ];
-          }
-
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-          ];
-
-          echo json_encode($results);
-
-        break;
-
-        case 'select2Color': 
-
-          $rspta = $activos_fijos->select2_color();
-      
-          while ($reg = $rspta->fetch_object())  {
-
-            echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
-          }
-
-        break;
-
-        case 'select2UnidaMedida': 
-
-          $rspta = $activos_fijos->select2_unidad_medida();
-      
-          while ($reg = $rspta->fetch_object())  {
-
-            echo '<option value=' . $reg->id . '>' . $reg->nombre . ' - ' . $reg->abreviacion .'</option>';
-          }
-
-        break;
-
-        case 'select2Categoria': 
-
-          $rspta = $activos_fijos->select2_categoria();
-      
-          while ($reg = $rspta->fetch_object())  {
-
-            echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
+  
+            echo json_encode($results);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
 
         break;
