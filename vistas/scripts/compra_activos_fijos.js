@@ -7,7 +7,6 @@ var tabla_pagos1;
 var array_class_trabajador = [];
 
 //Requejo99@
-//Función que se ejecuta al inicio
 function init() {
   
   $("#mAllactivos_fijos").addClass("active");
@@ -20,15 +19,12 @@ function init() {
   tbla_principal();  
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
-  $.post("../ajax/compra_activos_fijos.php?op=select2Proveedor", function (r) {$("#idproveedor").html(r);  });
-
-  $.post("../ajax/compra_activos_fijos.php?op=select2Color", function (r) { $("#color_p").html(r); });
-
-  $.post("../ajax/compra_activos_fijos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
-
-  $.post("../ajax/compra_activos_fijos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });
-
-  $.post("../ajax/compra_activos_fijos.php?op=select2Banco", function (r) { $("#banco_pago").html(r); $("#banco_prov").html(r); });
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════ 
   $("#guardar_registro_compras").on("click", function (e) { $("#submit-form-compra-activos-f").submit(); });
@@ -39,13 +35,13 @@ function init() {
 
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
   //subir factura modal
-  $("#guardar_registro_2").on("click", function (e) { $("#submit-form-planootro").submit(); });
+  $("#guardar_registro_comprobante").on("click", function (e) { $("#submit-form-comprobante").submit(); });
 
   // ══════════════════════════════════════ SELECT2 - COMPRAS ACTIVOS ══════════════════════════════════════
 
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione trabajador", allowClear: true, });
 
-  $("#glosa").select2({ theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
+  $("#glosa").select2({templateResult: templateGlosa, theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
 
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione Comprobante", allowClear: true, });
 
@@ -55,17 +51,17 @@ function init() {
 
   $("#tipo_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo de pago", allowClear: true, });
 
-  $("#banco_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
+  $("#banco_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
 
   // ══════════════════════════════════════ SELECT2 - PROVEEDOR ══════════════════════════════════════
 
-  $("#banco_prov").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
+  $("#banco_prov").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
 
   // ══════════════════════════════════════ SELECT2 - MATERIAL ══════════════════════════════════════
 
   $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });  
 
-  $("#color_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  $("#color_p").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
 
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
@@ -73,96 +69,43 @@ function init() {
   $("[data-mask]").inputmask();
 }
 
+function templateBanco (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/banco/logo/${state.title}`: '../dist/docs/banco/logo/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
+function templateColor (state) {
+  if (!state.id) { return state.text; }
+  var color_bg = state.title != '' ? `${state.title}`: '#ffffff00';   
+  var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2"><i class="fas fa-square"></i><i class="fas fa-square"></i></b>${state.text}</span>`);
+  return $state;
+}
 
-//::::::::::::::::V A U C H E R S  Y  F A C T U R A S::::::::::::
+function templateGlosa (state) {
+  if (!state.id) { return state.text; }  
+  var $state = $(`<span ><b class="mr-2"><i class="${state.title}"></i></b>${state.text}</span>`);
+  return $state;
+}
+
+//pago compra ativo fijo
 $("#foto1_i").click(function () {$("#foto1").trigger("click"); });
 $("#foto1").change(function (e) {addImage(e, $("#foto1").attr("id")); });
 
-//subir factura modal
+//subir factura compra ativo fijo
 $("#doc1_i").click(function () { $("#doc1").trigger("click");  });
-$("#doc1").change(function (e) { addDocs(e, $("#doc1").attr("id")); });
+$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id")); });
 
 // Perfil material
-$("#fotop2_i").click(function () {  $("#fotop2").trigger("click"); });
-$("#fotop2").change(function (e) { addImage(e, $("#fotop2").attr("id")); });
+$("#foto2_i").click(function () {  $("#foto2").trigger("click"); });
+$("#foto2").change(function (e) { addImage(e, $("#foto2").attr("id"), '../dist/img/default/img_defecto_activo_fijo.png'); });
 
 //ficha tecnica
-$("#doct2_i").click(function() {  $('#doct2').trigger('click'); });
-$("#doct2").change(function(e) {  addDocs(e,$("#doct2").attr("id")) }); 
-
-/* PREVISUALIZAR LAS IMAGENES */
-function addImage(e, id) {
-  // colocamos cargando hasta que se vizualice
-  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  console.log(id);
-
-  var file = e.target.files[0],
-    imageType = /application.*/;
-
-  if (e.target.files[0]) {
-    var sizeByte = file.size;
-
-    var sizekiloBytes = parseInt(sizeByte / 1024);
-
-    var sizemegaBytes = sizeByte / 1000000;
-    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-    if (extrae_extencion(file.name) == "pdf" || extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "png" || extrae_extencion(file.name) == "webp") {
-      if (sizekiloBytes <= 10240) {
-        var reader = new FileReader();
-
-        reader.onload = fileOnload;
-
-        function fileOnload(e) {
-          var result = e.target.result;
-          if (extrae_extencion(file.name) == "pdf") {
-            $("#ver_pdf").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          } else {
-            $("#" + id + "_i").attr("src", result);
-          }
-
-          $("#" + id + "_nombre").html(
-            "" +
-              '<div class="row">' +
-              '<div class="col-md-12">' +
-              file.name +
-              "</div>" +
-              '<div class="col-md-12">' +
-              '<button  class="btn btn-danger  btn-block" onclick="' +
-              id +
-              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-              "</div>" +
-              "</div>" +
-              ""
-          );
-
-          toastr.success("Imagen aceptada.");
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        toastr.warning("La imagen: " + file.name.toUpperCase() + " es muy pesada. Tamaño máximo 10mb");
-
-        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
-
-        $("#" + id).val("");
-      }
-    } else {
-      // return;
-      toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>");
-
-      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto.png");
-    }
-  } else {
-    toastr.error("Seleccione una Imagen");
-
-    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto2.png");
-
-    $("#" + id + "_nombre").html("");
-  }
-}
+$("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
+$("#doc2").change(function(e) {  addImageApplication(e,$("#doc2").attr("id")) }); 
 
 function foto1_eliminar() {
   $("#foto1").val("");
@@ -172,166 +115,12 @@ function foto1_eliminar() {
   $("#foto1_nombre").html("");
 }
 
-function foto11_eliminar() {
-  $("#foto11").val("");
+function foto2_eliminar() {
+  $("#foto2").val("");
 
-  $("#foto11_i").attr("src", "../dist/img/default/img_defecto.png");
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
 
-  $("#foto11_nombre").html("");
-}
-/* PREVISUALIZAR LAS DOCS */
-function addDocs(e, id) {
-  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-  // console.log(id);
-
-  var file = e.target.files[0],
-    imageType = false;
-
-  if (e.target.files[0]) {
-    // console.log(extrae_extencion(file.name));
-    var sizeByte = file.size;
-
-    var sizekiloBytes = parseInt(sizeByte / 1024);
-
-    var sizemegaBytes = sizeByte / 10000;
-    // alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-    if (imageType) {
-      // return;
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.xlsx",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      $("#" + id + "_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto.png");
-    } else {
-      if (sizekiloBytes <= 262144) {
-        var reader = new FileReader();
-
-        reader.onload = fileOnload;
-
-        function fileOnload(e) {
-          var result = e.target.result;
-
-          // cargamos la imagen adecuada par el archivo
-          if (extrae_extencion(file.name) == "xls") {
-            $("#" + id + "_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(file.name) == "xlsx") {
-              $("#" + id + "_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-            } else {
-              if (extrae_extencion(file.name) == "csv") {
-                $("#" + id + "_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(file.name) == "xlsm") {
-                  $("#" + id + "_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                } else {
-                  if (extrae_extencion(file.name) == "pdf") {
-                    // $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    $("#" + id + "_ver").html('<iframe src="' + result + '" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-                  } else {
-                    if (extrae_extencion(file.name) == "dwg") {
-                      $("#" + id + "_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-                    } else {
-                      if (extrae_extencion(file.name) == "zip" || extrae_extencion(file.name) == "rar" || extrae_extencion(file.name) == "iso") {
-                        $("#" + id + "_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                      } else {
-                        if (
-                          extrae_extencion(file.name) == "jpeg" ||
-                          extrae_extencion(file.name) == "jpg" ||
-                          extrae_extencion(file.name) == "jpe" ||
-                          extrae_extencion(file.name) == "jfif" ||
-                          extrae_extencion(file.name) == "gif" ||
-                          extrae_extencion(file.name) == "png" ||
-                          extrae_extencion(file.name) == "tiff" ||
-                          extrae_extencion(file.name) == "tif" ||
-                          extrae_extencion(file.name) == "webp" ||
-                          extrae_extencion(file.name) == "bmp"
-                        ) {
-                          $("#" + id + "_ver").html('<img src="' + result + '" alt="" width="50%" >');
-                        } else {
-                          if (
-                            extrae_extencion(file.name) == "docx" ||
-                            extrae_extencion(file.name) == "docm" ||
-                            extrae_extencion(file.name) == "dotx" ||
-                            extrae_extencion(file.name) == "dotm" ||
-                            extrae_extencion(file.name) == "doc" ||
-                            extrae_extencion(file.name) == "dot"
-                          ) {
-                            $("#" + id + "_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                          } else {
-                            $("#" + id + "_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          $("#" + id + "_nombre").html(
-            "" +
-              '<div class="row">' +
-              '<div class="col-md-12">' +
-              "<i>" +
-              file.name +
-              "</i>" +
-              "</div>" +
-              '<div class="col-md-12">' +
-              '<button  class="btn btn-danger  btn-block" onclick="' +
-              id +
-              '_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>' +
-              "</div>" +
-              "</div>" +
-              ""
-          );
-
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "El documento: " + file.name.toUpperCase() + " es aceptado.",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "warning",
-          title: "El documento: " + file.name.toUpperCase() + " es muy pesado. Tamaño máximo 150mb",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        $("#" + id + "_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
-
-        $("#" + id).val("");
-      }
-    }
-  } else {
-    Swal.fire({
-      position: "top-end",
-      icon: "error",
-      title: "Seleccione un documento",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-
-    $("#" + id + "_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    $("#" + id + "_nombre").html("");
-  }
+  $("#foto2_nombre").html("");
 }
 
 // Eliminamos el doc comprobante
@@ -352,22 +141,10 @@ function doc2_eliminar() {
   $("#doc2_nombre").html("");
 }
 
-function fecha_actual() {
-  //Obtenemos la fecha actual
-  var now = new Date();
-  var day = ("0" + now.getDate()).slice(-2);
-  var month = ("0" + (now.getMonth() + 1)).slice(-2);
-  var today = now.getFullYear() + "-" + month + "-" + day;
-  console.log(today);
-  $("#fecha_compra").val(today);
-}
-
 //Función limpiar
 function limpiar_form_compra() {
   $(".tooltip").removeClass("show").addClass("hidde");
 
-  //Mostramos los select2Proveedor
-  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
   $("#idcompra_af_general").val("");
   $("#idcompra_proyecto").val("");
   $("#idproyecto").val("");
@@ -404,73 +181,84 @@ function limpiar_form_compra() {
   $(".error.invalid-feedback").remove();
 }
 
-//Función limpiar
-function limpiardatosproveedor() {
-  $(".tooltip").removeClass("show").addClass("hidde");
+function limpiar_form_comprobante_compra() {
 
-  $("#idproveedor").val("");
-  $("#tipo_documento option[value='RUC']").attr("selected", true);
-  $("#nombre").val("");
-  $("#num_documento").val("");
-  $("#direccion").val("");
-  $("#telefono").val("");
-  $("#c_bancaria").val("");
-  $("#c_detracciones").val("");
-  //$("#banco").val("");
-  $("#banco option[value='BCP']").attr("selected", true);
-  $("#titular_cuenta").val("");
+  $("#idcompra").val("");
 
-  // Limpiamos las validaciones
-  $(".form-control").removeClass('is-valid');
-  $(".form-control").removeClass('is-invalid');
-  $(".error.invalid-feedback").remove();
+  $("#doc_old_2").val("");
+  $("#doc2").val("");  
+  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc2_nombre').html("");
 }
 
-function ver_form_add() {
-  array_class_trabajador = [];
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  $("#agregar_compras").show();
-  $("#agregar_compras_proyecto").hide();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-  $("#factura_compras").hide();
+// OCULTAR MOSTRAR - TABLAS
+function table_show_hide(flag) {
+  if (flag == 1) {
+         
+    $("#btn-regresar").hide(); 
+    $("#btn-agregar").show();
+    $("#btn-pagar").hide();
 
-  // $(".leyecnda_pagos").hide();
-  // $(".leyecnda_saldos").hide();
-  listaractivos();
-  //listaractivos_p();
+    $("#guardar_registro_compras").hide();
+
+    $("#div-tabla-principal").show();
+    $("#div-tabla-compra-por-proveedor").show();
+    $("#div-tabla-detalle-compra-proveedor").hide();
+    $("#div-pago-compras").hide();
+
+    $("#formulario-agregar-compra").hide();
+    $(".nombre-title-page").html(`<i class="fas fa-hand-holding-usd"></i> Compras de Activos Fijos`);
+
+  } else if (flag == 2) {    
+
+    array_class_trabajador = [];
+
+    $("#btn-regresar").show(); 
+    $("#btn-agregar").hide();
+    $("#btn-pagar").hide();
+
+    $("#guardar_registro_compras").hide();
+
+    $("#div-tabla-principal").hide();
+    $("#div-tabla-compra-por-proveedor").hide();
+    $("#div-tabla-detalle-compra-proveedor").hide();
+    $("#div-pago-compras").hide();
+
+    $("#formulario-agregar-compra").show();
+
+    tblaActivosFijos();
+
+  }else if (flag == 3) {
+      
+    $("#btn-regresar").show(); 
+    $("#btn-agregar").hide();
+    $("#btn-pagar").show();
+
+    $("#guardar_registro_compras").hide();
+
+    $("#div-tabla-principal").hide();
+    $("#div-tabla-compra-por-proveedor").hide();
+    $("#div-tabla-detalle-compra-proveedor").hide();
+    $("#div-pago-compras").show();
+
+    $("#formulario-agregar-compra").hide();
+  }else if (flag == 4) {
+    $("#btn-regresar").hide(); 
+    $("#btn-agregar").show();
+    $("#btn-pagar").hide();
+
+    $("#guardar_registro_compras").hide();
+
+    $("#div-tabla-principal").show();
+    $("#div-tabla-compra-por-proveedor").hide();
+    $("#div-tabla-detalle-compra-proveedor").show();
+    $("#div-pago-compras").hide();
+  }
 }
 
-function regresar() {
-  $("#regresar").hide();
-  $("#tabla-compra").show();
-  $("#tabla-compra-proveedor").show();
-  $("#agregar_compras").hide();
-  $("#agregar_compras_proyecto").hide();
-  $("#btn_agregar").show();
-  $("#div_tabla_compra").show();
-  $("#div_tabla_compra_proveedor").hide();
-  //----leyecnda_pagos,leyecnda_saldos
-  // $(".leyecnda_pagos").show();
-  // $(".leyecnda_saldos").show();
-  //-----
-  $("#pago_compras").hide();
-  $("#btn-pagar").hide();
-  $("#btn-pagar-af-p").hide();
-
-  $("#monto_total").html("");
-  $("#ttl_monto_pgs_detracc").html("");
-  $("#pagos_con_detraccion").hide();
-  limpiar_form_compra();
-  limpiardatosproveedor();
-  tabla.ajax.reload(null, false);
-}
 
 //::::::::::::::LISTAMOS LAS TABLAS PRINCIPALES:::::::::
-//Función Listar
+//tabla
 function tbla_principal() {
   //console.log(idproyecto);
   tabla = $("#tabla-compra").dataTable({
@@ -480,42 +268,35 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8], } }, {extend: "colvis"} ,      
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,10,11,12,13,14,15,6,14,15,16,17,18], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,10,11,12,13,14,15,6,14,15,16,17,18], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,10,11,12,13,14,15,6,14,15,16,17,18], } }, {extend: "colvis"} ,      
     ],
     ajax: {
-      url: "../ajax/compra_activos_fijos.php?op=listar_compra_activos",
+      url: "../ajax/compra_activos_fijos.php?op=tbla_compra_activos_fijos",
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass("text-center");   
-          
-      }
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: #
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass("text-nowrap");   
-          
-      }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: #
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass("text-nowrap");   
-          
-      }
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: #
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-nowrap text-right"); }
       //console.log(data);
       if (quitar_formato_miles(data[8]) > 0) {
-        $("td", row).eq(8).css({ "background-color": "#ffc107", color: "black", });
-        $("td", row).eq(8).addClass("text-nowrap");  
+        // $("td", row).eq(8).css({ "background-color": "#ffc107", color: "black", });
+        $("td", row).eq(8).addClass("text-nowrap bg-warning text-right");
       } else if (quitar_formato_miles(data[8]) == 0) {
-        $("td", row).eq(8).css({ "background-color": "#28a745", color: "white", });
-        $("td", row).eq(8).addClass("text-nowrap");  
+        //$("td", row).eq(8).css({ "background-color": "#28a745", color: "white", });
+        $("td", row).eq(8).addClass("text-nowrap bg-success text-right");
       } else {
-        $("td", row).eq(8).css({ "background-color": "#ff5252", color: "white", });
-        $("td", row).eq(8).addClass("text-nowrap");  
+        //$("td", row).eq(8).css({ "background-color": "#ff5252", color: "white", });
+        $("td", row).eq(8).addClass("text-nowrap bg-danger text-right");
       }
     },
     language: {
@@ -527,16 +308,23 @@ function tbla_principal() {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
-    columnDefs: [
-      {
-        // targets: [8],
-        // visible: true,
-        // searchable: true,
-      },
+    columnDefs: [      
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [10], visible: false, searchable: false, },
+      { targets: [11], visible: false, searchable: false, },
+      { targets: [12], visible: false, searchable: false, },
+      { targets: [13], visible: false, searchable: false, },
+      { targets: [14], visible: false, searchable: false, },
+      { targets: [15], visible: false, searchable: false, },
+      { targets: [16], visible: false, searchable: false, },
+      { targets: [17], visible: false, searchable: false, },
+      { targets: [18], visible: false, searchable: false, },
+
     ],
   }).DataTable();
 
@@ -547,22 +335,18 @@ function tbla_principal() {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4], } }, {extend: "colvis"} ,
+    ],
     ajax: {
-      url: "../ajax/compra_activos_fijos.php?op=listar_compraxporvee_af_g",
+      url: "../ajax/compra_activos_fijos.php?op=tbla_compra_x_porveedor",
       type: "get",
       dataType: "json",
-      error: function (e) {
-        console.log(e.responseText);
-      },
+      error: function (e) { console.log(e.responseText); ver_errores(e); },
     },
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass("text-center");   
-          
-      }
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -573,35 +357,35 @@ function tbla_principal() {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
   }).DataTable();
 }
-//facturas agrupadas por proveedor.
-function listar_facuras_proveedor_af_g(idproveedor) {
-  //console.log('idproyecto '+idproyecto, 'idproveedor '+idproveedor);
-  $("#div_tabla_compra").hide();
-  $("#agregar_compras").hide();
-  $("#agregar_compras_proyecto").hide();
-  $("#btn_agregar").hide();
-  $("#regresar").show();
-  $("#div_tabla_compra_proveedor").show();
 
-  tabla_list_comp_prov = $("#detalles-tabla-compra-prov").dataTable({
+//tabla
+function listar_facuras_x_proveedor(idproveedor, nombre_proveedor) {
+
+  table_show_hide(4); 
+  $(".proveedor-lista-facturas").html(nombre_proveedor);
+
+  tabla_list_comp_prov = $("#tabla-detalles-compra-proveedor").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, { extend: 'pdfHtml5', exportOptions: { columns: [0,2,3,4,5,6], } }, {extend: "colvis"} ,
+    ],
     ajax: {
-      url: "../ajax/compra_activos_fijos.php?op=listar_detalle_compraxporvee&idproveedor=" + idproveedor,
+      url: `../ajax/compra_activos_fijos.php?op=tbla_detalle_compra_x_porveedor&idproveedor=${idproveedor}`,
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     language: {
@@ -613,16 +397,17 @@ function listar_facuras_proveedor_af_g(idproveedor) {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[1, "desc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { /* targets: [8], visible: true, searchable: true,*/ },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), }
+    ],
   }).DataTable();
 }
-
-
-
-// .......:::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
 
 //Función para guardar o editar - COMPRAS
 function guardaryeditar_compras(e) {
@@ -637,128 +422,55 @@ function guardaryeditar_compras(e) {
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
+    preConfirm: (input) => {
+      return fetch("../ajax/compra_activos_fijos.php?op=guardaryeditarcompraactivo", {
+        method: 'POST', // or 'PUT'
+        body: formData, // data can be `string` or {object}!        
+      }).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+    },
+    showLoaderOnConfirm: true,
   }).then((result) => {
+    console.log(result);
     if (result.isConfirmed) {
-      $.ajax({
-        url: "../ajax/compra_activos_fijos.php?op=guardaryeditarcompraactivo",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-
-        success: function (datos) {
-          if (datos == "ok") {
-            // toastr.success("Usuario registrado correctamente");
-            Swal.fire("Correcto!", "Compra guardada correctamente", "success");
-
-            tabla.ajax.reload(null, false);
-
-            limpiar_form_compra();
-            regresar();
-            cont = 0;
-            tabla_comp_prov.ajax.reload(null, false);
-          } else {
-            // toastr.error(datos);
-            Swal.fire("Error!", datos, "error");
-          }
-        },
-      });
+      if (result.value.status){        
+        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+        if (tabla) { tabla.ajax.reload(null, false); } 
+        if (tabla_comp_prov) { tabla_comp_prov.ajax.reload(null, false); }
+        limpiar_form_compra(); table_show_hide(1);
+        cont = 0;        
+      } else {
+        ver_errores(result);
+      }      
     }
   });
 }
 
-function anular(idcompra_af_general) {
-  Swal.fire({
-    title: "¿Está Seguro de  Anular la compra?",
-    text: "Anulando  compra!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Anular!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
-        if (e == "ok") {
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
+function eliminar_compra(idcompra_af_general, nombre) {
 
-          tabla.ajax.reload(null, false);
-          tabla_comp_prov.ajax.reload(null, false);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-      });
-    }
-  });
+  $(".tooltip").removeClass("show").addClass("hidde");
+
+  crud_eliminar_papelera(
+    "../ajax/compra_activos_fijos.php?op=anular_compra",
+    "../ajax/compra_activos_fijos.php?op=eliminar_compra", 
+    idcompra_af_general, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload(null, false); tabla_comp_prov.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
+
 }
 
-function des_anular(idcompra_af_general) {
-  Swal.fire({
-    title: "¿Está Seguro de ReActivar esta Compra?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_activos_fijos.php?op=des_anular", { idcompra_af_general: idcompra_af_general }, function (e) {
-        Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
-        tabla.ajax.reload(null, false);
-        tabla_comp_prov.ajax.reload(null, false);
-      });
-    }
-  });
-}
-
-function eliminar_compra(idcompra_af_general) {
-  //----------------------------
-  Swal.fire({
-
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-     //op=desactivar
-      $.post("../ajax/compra_activos_fijos.php?op=anular", { idcompra_af_general: idcompra_af_general }, function (e) {
-        if (e == "ok") {
-          Swal.fire("Desactivado!", "Tu usuario ha sido Desactivado.", "success");
-
-          tabla.ajax.reload(null, false);
-          tabla_comp_prov.ajax.reload(null, false);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-      });
-
-    }else if (result.isDenied) {
-     //op=eliminar
-      $.post("../ajax/compra_activos_fijos.php?op=eliminar_compra", { idcompra_af_general: idcompra_af_general }, function (e) {
-        if (e == "ok") {
-          Swal.fire("Eliminado!", "Tu usuario ha sido Eliminado.", "success");
-
-          tabla.ajax.reload(null, false);
-          tabla_comp_prov.ajax.reload(null, false);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-      });
-
-    }
-
-  }); 
-}
+// .......:::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
 
 //Declaración de variables necesarias para trabajar con las compras y sus detalles
 var impuesto = 18;
@@ -795,7 +507,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
       var img_p = "";
 
       if (img == "" || img == null) {
-        img_p = "../dist/svg/default_producto.svg";
+        img_p = "../dist/docs/material/img_perfil/producto-sin-foto.svg";
       } else {
         img_p = `../dist/docs/material/img_perfil/${img}`;
       }
@@ -803,14 +515,14 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
       var fila = `
       <tr class="filas" id="fila${cont}">         
         <td class="">
-          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
-          <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
+          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})" data-toggle="tooltip" data-original-title="Eliminar"><i class="fas fa-times"></i></button>
         </td>
         <td class="">         
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${encodeHtml(nombre)}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}', ${cont} )" data-toggle="tooltip" data-original-title="Ver imagen">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -822,7 +534,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
         <td class=""><input class="w-135px precio_con_igv_${cont}" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
         <td class=""><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
         <td class=" text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
-        <td class=""><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+        <td class=""><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm" data-toggle="tooltip" data-original-title="Actualizar precios"><i class="fas fa-sync"></i></button></td>
       </tr>`;
 
       detalles = detalles + 1;
@@ -837,6 +549,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
 
       cont++;
       evaluar();
+      $('[data-toggle="tooltip"]').tooltip();
     }
   } else {
     // alert("Error al ingresar el detalle, revisar los datos del artículo");
@@ -1136,9 +849,9 @@ function mostrar_compra_general(idcompra_af_general) {
   limpiar_form_compra();
   array_class_trabajador = [];
 
-  cont = 0;
-  detalles = 0;
-  ver_form_add();
+  cont = 0; detalles = 0;
+
+  table_show_hide(2);
 
   $.post("../ajax/compra_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
     
@@ -1191,7 +904,7 @@ function mostrar_compra_general(idcompra_af_general) {
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
-            img = "../dist/svg/default_producto.svg";
+            img = "../dist/docs/material/img_perfil/producto-sin-foto.svg";
           } else {
             img = `../dist/docs/material/img_perfil/${element.imagen}`;
           }
@@ -1199,14 +912,14 @@ function mostrar_compra_general(idcompra_af_general) {
           var fila = `
           <tr class="filas" id="fila${cont}">
             <td>
-              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${element.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
-              <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button></td>
+              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${element.idproducto}, ${cont})" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})" data-toggle="tooltip" data-original-title="Eliminar"><i class="fas fa-times"></i></button></td>
             </td>
             <td>
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${encodeHtml(element.nombre_producto)}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}', ${cont})" data-toggle="tooltip" data-original-title="Ver imagen">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                 <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
@@ -1218,7 +931,7 @@ function mostrar_compra_general(idcompra_af_general) {
             <td ><input type="number" class="w-135px precio_con_igv_${cont}" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
-            <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+            <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm" data-toggle="tooltip" data-original-title="Actualizar precios"><i class="fas fa-sync"></i></button></td>
           </tr>`;
 
           detalles = detalles + 1;
@@ -1231,7 +944,8 @@ function mostrar_compra_general(idcompra_af_general) {
           evaluar();
         });
 
-        modificarSubtotales();              
+        modificarSubtotales();  
+        $('[data-toggle="tooltip"]').tooltip();            
       }      
     }
 
@@ -1247,7 +961,7 @@ function mostrar_compra_proyecto(params) {
 
 //DETALLE - COMRAS ACTIVOS FIJOS GENERAL
 function ver_detalle_compras_general(idcompra_af_general) {
-
+  $(".tooltip").removeClass("show").addClass("hidde");
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
@@ -1257,6 +971,7 @@ function ver_detalle_compras_general(idcompra_af_general) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
+    $('[data-toggle="tooltip"]').tooltip();
     $("#cargando-9-fomulario").show();
     $("#cargando-10-fomulario").hide();
   });
@@ -1264,6 +979,7 @@ function ver_detalle_compras_general(idcompra_af_general) {
 
 //DETALLE - COMRAS ACTIVOS FIJOS PROYECTO
 function ver_detalle_compras_proyecto(id_compra) {
+  $(".tooltip").removeClass("show").addClass("hidde");
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
@@ -1273,194 +989,435 @@ function ver_detalle_compras_proyecto(id_compra) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
+    $('[data-toggle="tooltip"]').tooltip();
     $("#cargando-9-fomulario").show();
     $("#cargando-10-fomulario").hide();
   });
 }
 
-// .......:::::::::::::::::: - FIN - AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
 
-// :::::::::::::::::::::::::::::::::::::::::::::::::::: VER FACTURAS Y COMPROBANTES ::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: V E R   F A C T U R A S   Y   C O M P R O B A N T E S ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //MOSTRAMOS LOS COMPROBANTES DE LA COMPRA GENERAL
-function comprobante_compra_af_g(idcompra_af_general, doc) {
-  //console.log(idcompra_af_general,doc);
-  $("#modal-comprobantes-af-g").modal("show");
-  $("#idcompra_af_g_o_p").val(idcompra_af_general);
+function comprobante_compra_activo_fijo(idcompra, doc) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#modal-comprobante-compra").modal("show");
+  $("#idcompra").val(idcompra);
+  $("#ruta_guardar").val('guardar_y_editar_comprobante_activo_fijo');
+  
   $("#doc1_nombre").html("");
-  $("#doc_old_1").val("");
+  $("#doc_old_1").val("");  
+
   if (doc != "") {
     $("#doc_old_1").val(doc);
-
     // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(doc) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-    } else {
-      if (extrae_extencion(doc) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-      } else {
-        if (extrae_extencion(doc) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-        } else {
-          if (extrae_extencion(doc) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(doc) == "pdf") {
-              $("#doc1_ver").html('<iframe src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-            } else {
-              if (extrae_extencion(doc) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                } else {
-                  if (
-                    extrae_extencion(doc) == "jpeg" ||
-                    extrae_extencion(doc) == "jpg" ||
-                    extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" ||
-                    extrae_extencion(doc) == "gif" ||
-                    extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" ||
-                    extrae_extencion(doc) == "tif" ||
-                    extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + doc + '" alt="" width="50%" >');
-                  } else {
-                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                    } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_activo_fijo', 'comprobante_compra','100%' ));
+    
     //ver_completo descargar comprobante subir
-
-    $(".ver_completo").val(doc);
-
-    //ver_completo descargar comprobante subir
-    // $(".subir").show();
     $(".subir").removeClass("col-md-6").addClass("col-md-4");
-    $(".comprobante").removeClass("col-md-6").addClass("col-md-4");
+    $(".recargar_activo_fijo").removeClass("col-md-6").addClass("col-md-4");
 
     $(".ver_completo").show();
     $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
+    $("#ver_completo").attr("href", "../dist/docs/compra_activo_fijo/comprobante_compra/" + doc);
 
     $(".descargar").show();
-    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
-
-    $("#ver_completo").attr("href", "../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/" + doc);
-    $("#descargar_comprob").attr("href", "../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/" + doc);
+    $(".descargar").removeClass("col-md-4").addClass("col-md-2");    
+    $("#descargar_comprob").attr("href", "../dist/docs/compra_activo_fijo/comprobante_compra/" + doc);
   } else {
     $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    // $("#doc1_nombre").html("");
-
     $("#doc_old_1").val("");
+
     $(".ver_completo").hide();
     $(".descargar").hide();
 
     $(".subir").removeClass("col-md-4").addClass("col-md-6");
-    $(".comprobante").removeClass("col-md-4").addClass("col-md-6");
+    $(".recargar_activo_fijo").removeClass("col-md-4").addClass("col-md-6");
   }
+  $(".recargar_activo_fijo").show();
+  $(".recargar_insumno").hide();
 }
 
 //MOSTRAMOS LOS COMPROBANTES DE LA COMPRA POR PROYECTO.
-function comprobante_compras(idcompra_af_proyecto, doc) {
-  //console.log(idcompra_af_proyecto,doc);
-  $("#modal-comprobantes-af-p").modal("show");
-  $("#comp_idcompra_af_proyecto").val(idcompra_af_proyecto);
-  $("#doc2_nombre").html("");
-  $("#doc_old_2").val("doc");
+function comprobante_compra_insumo(idcompra, doc) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#modal-comprobante-compra").modal("show");
+  $("#idcompra").val(idcompra);
+  $("#ruta_guardar").val('guardar_y_editar_comprobante_insumo');
+
+  $("#doc1_nombre").html("");
+  $("#doc_old_1").val("doc");
+  
   if (doc != "") {
-    $("#doc_old_2").val(doc);
+    $("#doc_old_1").val(doc);
+    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%' ));
 
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(doc) == "xls") {
-      $("#doc2_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-    } else {
-      if (extrae_extencion(doc) == "xlsx") {
-        $("#doc2_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-      } else {
-        if (extrae_extencion(doc) == "csv") {
-          $("#doc2_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-        } else {
-          if (extrae_extencion(doc) == "xlsm") {
-            $("#doc2_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(doc) == "pdf") {
-              $("#doc2_ver").html('<iframe src="../dist/docs/compra/comprobante_compra/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-            } else {
-              if (extrae_extencion(doc) == "dwg") {
-                $("#doc2_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
-                  $("#doc2_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                } else {
-                  if (
-                    extrae_extencion(doc) == "jpeg" ||
-                    extrae_extencion(doc) == "jpg" ||
-                    extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" ||
-                    extrae_extencion(doc) == "gif" ||
-                    extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" ||
-                    extrae_extencion(doc) == "tif" ||
-                    extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "bmp"
-                  ) {
-                    $("#doc2_ver").html('<img src="../dist/docs/compra/comprobante_compra/' + doc + '" alt="" width="50%" >');
-                  } else {
-                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
-                      $("#doc2_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                    } else {
-                      $("#doc2_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    //ver_completo descargar comprobante subir
+    $(".subir").removeClass("col-md-6").addClass("col-md-4");
+    $(".recargar_insumno").removeClass("col-md-6").addClass("col-md-4"); 
 
-    $(".ver_completo").val(doc);
+    $(".ver_completo").show();
+    $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
+    $("#ver_completo").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
 
-    //ver_completo descargar comprobante subir
-    // $(".subir").show();
-    $(".subir_c").removeClass("col-md-6").addClass("col-md-4");
-    $(".comprobante_c").removeClass("col-md-6").addClass("col-md-4");
-
-    $(".ver_c_completo").show();
-    $(".ver_c_completo").removeClass("col-md-4").addClass("col-md-2");
-
-    $(".descargar_c").show();
-    $(".descargar_c").removeClass("col-md-4").addClass("col-md-2");
-
-    $("#ver_c_completo").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" + doc);
-    $("#descargar_c_comprob").attr("href", "../dist/docs/activos_fijos_proyecto/comprobantes_activos_fijos_p/" + doc);
+    $(".descargar").show();
+    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
+    $("#descargar").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc); 
+    
   } else {
-    $("#doc2_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+    $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+    $("#doc_old_1").val("");
 
-    // $("#doc2_nombre").html("");
+    $(".ver_completo").hide();
+    $(".descargar").hide(); 
 
-    $("#doc_old_2").val("");
-
-    $(".ver_c_completo").hide();
-    $(".descargar_c").hide();
-
-    $(".subir_c").removeClass("col-md-4").addClass("col-md-6");
-    $(".comprobante_c").removeClass("col-md-4").addClass("col-md-6");
+    $(".subir").removeClass("col-md-4").addClass("col-md-6");
+    $(".recargar_insumno").removeClass("col-md-4").addClass("col-md-6");
   }
+  $(".recargar_activo_fijo").hide();
+  $(".recargar_insumno").show();
+}
+
+function guardar_y_editar_comprobante(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-comprobante")[0]);
+  var ruta_guardar = $("#ruta_guardar").val();
+
+  $.ajax({
+    url: `../ajax/compra_activos_fijos.php?op=${ruta_guardar}`,
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      e = JSON.parse(e); console.log(e);
+      if (e.status) {
+        Swal.fire("Correcto!", "Documento guardado correctamente", "success");
+        tabla.ajax.reload(null, false);
+        limpiar_form_compra();
+        $("#modal-comprobante-compra").modal("hide");
+      } else {
+        ver_errores(e);
+      }
+    },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_comprobante").css({"width": percentComplete+'%'});
+
+          $("#barra_progress_comprobante").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_comprobante").css({ width: "0%",  });
+      $("#barra_progress_comprobante").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_comprobante").css({ width: "0%", });
+      $("#barra_progress_comprobante").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: 💰  S E C C I O N   P A G O  💵   C O M P R A S   D E   A C T I V O S ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+function tbla_pagos_activo_fijo(idcompra_af_general, monto_total, total_deposito, nombre_proveedor) {
+
+  most_datos_prov_pago(idcompra_af_general);
+  localStorage.setItem("idcompra_pago_comp_nube", idcompra_af_general);
+
+  localStorage.setItem("monto_total_p", monto_total);
+  localStorage.setItem("monto_total_dep", total_deposito);
+
+  $("#monto_total_general").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>');
+  $("#total_compra").html(formato_miles(monto_total));
+  $(".nombre-title-page").html('<i class="nav-icon fas fa-truck"></i> ' + nombre_proveedor);  
+
+  table_show_hide(3)
+
+  tabla_pagos1 = $("#tabla-pagos-proveedor").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,5,7,9,10,11,12,13,6,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,5,7,9,10,11,12,13,6,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,5,7,9,10,11,12,13,6,], } }, {extend: "colvis"} ,
+    ],
+    ajax: {
+      url: `../ajax/compra_activos_fijos.php?op=tbla_pagos_activo_fijo&idcompra_af_general=${idcompra_af_general}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {  
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
+        },
+      },
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [9,10,11,12,13], visible: false, searchable: false, },
+    ],
+  }).DataTable();
+
+  total_pagos(idcompra_af_general);
+}
+
+//-total Pagos
+function total_pagos(idcompra_af_general) {
+
+  $.post("../ajax/compra_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (e, status) {
+
+    e = JSON.parse(e);  //console.log(data);
+    if (e.status) {
+      $("#monto_total_general").html('S/ '+formato_miles(e.data.total_monto));
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//Función limpiar
+function limpiar_form_pago_compra() {
+  $("#forma_pago").val("").trigger("change");
+  $("#tipo_pago").val("").trigger("change");
+  $("#monto_pago").val("");
+  $("#numero_op_pago").val("");
+  $("#idpago_af_general").val("");
+  $("#descripcion_pago").val("");
+  $("#idpago_compra").val("");
+
+  $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
+  $("#foto1").val("");
+  $("#foto1_actual").val("");
+  $("#foto1_nombre").html("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
+function show_hide_forma_pago() {
+
+  if ($('#forma_pago').select2('val') == 'Efectivo') {
+    $("#tipo_pago").val("Proveedor").trigger("change");
+    $("#banco_pago").val("1").trigger("change");
+    $('.show_hide_tipo_pago').hide();
+    $('.show_hide_cta_destino').hide();
+    $('.show_hide_banco').hide();
+    $('.show_hide_titular_cuenta').hide();
+  } else {
+    $('.show_hide_tipo_pago').show();
+    $('.show_hide_cta_destino').show();
+    $('.show_hide_banco').show();
+    $('.show_hide_titular_cuenta').show();
+  }
+}
+
+//mostrar datos proveedor pago
+function most_datos_prov_pago(idcompra_af_general) {
+
+  $("#h4_mostrar_beneficiario").html("");
+
+  $("#banco_pago").val("").trigger("change");
+  $.post("../ajax/compra_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (e, status) {
+    e = JSON.parse(e); //console.log(data);
+
+    if (e.status == true) {
+      $("#idcompra_af_general_p").val(e.data.idcompra_af_general);
+      $("#idproveedor_pago").val(e.data.idproveedor);
+      $("#beneficiario_pago").val(e.data.razon_social);
+      $("#h4_mostrar_beneficiario").html(e.data.razon_social);
+      $("#banco_pago").val(e.data.idbancos).trigger("change");
+      $("#tipo_pago").val('Proveedor').trigger("change");
+      $("#titular_cuenta_pago").val(e.data.titular_cuenta);
+      localStorage.setItem("nubecompra_c_b", e.data.cuenta_bancaria);
+      localStorage.setItem("nubecompra_c_d", e.data.cuenta_detracciones);
+      localStorage.setItem("nube_titular_cta", e.data.titular_cuenta);
+      localStorage.setItem("nube_banco_pago", e.data.idbancos);
+
+      if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(e.data.cuenta_bancaria);}
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+// datos_pago_proveedor
+function datos_pago_proveedor() {
+  var cuenta_bancaria = localStorage.getItem("nubecompra_c_b");
+  var cuenta_detracciones = localStorage.getItem("nubecompra_c_d");
+  var titular_cta = localStorage.getItem("nube_titular_cta");
+  var banco_pago = localStorage.getItem("nube_banco_pago");
+
+  $("#cuenta_destino_pago").val("");
+  $("#titular_cuenta_pago").val(titular_cta);
+  $("#banco_pago").val(banco_pago).trigger("change");
+
+  if ($("#tipo_pago").select2("val") == "Proveedor") {    
+    $("#cuenta_destino_pago").val(cuenta_bancaria);
+  }else if ($("#tipo_pago").select2("val") == "Detraccion") {    
+    $("#cuenta_destino_pago").val(cuenta_detracciones);
+  }
+}
+
+//Guardar y editar PAGOS
+function guardaryeditar_pago(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-servicios-pago")[0]);
+
+  $.ajax({
+    url: "../ajax/compra_activos_fijos.php?op=guardaryeditar_pago",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      e = JSON.parse(e);  console.log(e); 
+      if (e.status == true) {
+        toastr.success("servicio registrado correctamente");
+
+        tabla.ajax.reload(null, false);        
+
+        tabla_pagos1.ajax.reload(null, false);
+        
+        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+
+        limpiar_form_pago_compra();
+
+        $("#modal-agregar-pago").modal("hide");
+
+      } else {
+        ver_errores(e);
+      }
+    },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_pago_compra").css({"width": percentComplete+'%'});
+
+          $("#barra_progress_pago_compra").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_pago_compra").css({ width: "0%",  });
+      $("#barra_progress_pago_compra").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_pago_compra").css({ width: "0%", });
+      $("#barra_progress_pago_compra").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+//mostrar
+function mostrar_pagos(idpago_af_general) {
+  limpiar_form_pago_compra();
+  $("#h4_mostrar_beneficiario").html("");
+  $("#modal-agregar-pago").modal("show");
+  $("#banco_pago").val("").trigger("change");
+  $("#forma_pago").val("").trigger("change");
+  $("#tipo_pago").val("").trigger("change");
+
+  $.post("../ajax/compra_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (e, status) {
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status) {
+      $("#idcompra_af_general_p").val(e.data.idcompra_af_general);
+      $("#beneficiario_pago").val(e.data.beneficiario);
+      $("#h4_mostrar_beneficiario").html(e.data.beneficiario);
+      $("#cuenta_destino_pago").val(e.data.cuenta_destino);
+      $("#banco_pago").val(e.data.idbancos).trigger("change");
+      $("#titular_cuenta_pago").val(e.data.titular_cuenta);
+      $("#forma_pago").val(e.data.forma_pago).trigger("change");
+      $("#tipo_pago").val(e.data.tipo_pago).trigger("change");
+      $("#fecha_pago").val(e.data.fecha_pago);
+      $("#monto_pago").val(e.data.monto);
+      $("#numero_op_pago").val(e.data.numero_operacion);
+      $("#descripcion_pago").val(e.data.descripcion);
+      $("#idpago_af_general").val(e.data.idpago_af_general);
+
+      if (e.data.imagen != "") {
+        $("#foto1_i").attr("src", "../dist/docs/compra_activo_fijo/comprobante_pago/" + e.data.imagen);
+        $("#foto1_actual").val(e.data.imagen);
+      }
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//Función para eliminar registros
+function eliminar_pagos(idpago_af_general, nombre) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+
+  crud_eliminar_papelera(
+    "../ajax/compra_activos_fijos.php?op=desactivar_pagos",
+    "../ajax/compra_activos_fijos.php?op=eliminar_pagos", 
+    idpago_af_general, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function () { total_pagos(localStorage.getItem("idcompra_pago_comp_nube")); tabla_pagos1.ajax.reload(null, false); },
+    function () { tabla.ajax.reload(null, false); }, 
+    false, 
+    false,
+    false
+  );
+
+}
+
+function ver_modal_vaucher(imagen, proveedor) {
+  $("#img-vaucher").attr("src", "");
+  $("#modal-ver-vaucher").modal("show");
+  $("#img-vaucher").attr("src", "../dist/docs/compra_activo_fijo/comprobante_pago/" + imagen);
+  $("#descargar_voucher_pago").attr("href", "../dist/docs/compra_activo_fijo/comprobante_pago/" + imagen);
+  $("#descargar_voucher_pago").attr("download", `Voucher pago - ${quitar_punto(proveedor)}`);
+
+  $("#ver_completo_voucher_pago").attr("href", "../dist/docs/compra_activo_fijo/comprobante_pago/" + imagen);
+
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1501,46 +1458,31 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/compra_activos_fijos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/ajax_general.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (e, status) {
       
-      data = JSON.parse(data);  // console.log(data);
+      e = JSON.parse(e);  // console.log(e);
 
-      $(".chargue-format-1").html("Cuenta Bancaria");
-      $(".chargue-format-2").html("CCI");
-      $(".chargue-format-3").html("Cuenta Detracciones");
+      if (e.status) {
+        $("#c_bancaria_prov").prop("readonly", false);
+        $("#cci_prov").prop("readonly", false);
+        $("#c_detracciones_prov").prop("readonly", false);
 
-      $("#c_bancaria_prov").prop("readonly", false);
-      $("#cci_prov").prop("readonly", false);
-      $("#c_detracciones_prov").prop("readonly", false);
+        var format_cta = decifrar_format_banco(e.data.formato_cta);
+        var format_cci = decifrar_format_banco(e.data.formato_cci);
+        var formato_detracciones = decifrar_format_banco(e.data.formato_detracciones);
+        // console.log(format_cta, formato_detracciones);
 
-      var format_cta = decifrar_format_banco(data.formato_cta);
-      var format_cci = decifrar_format_banco(data.formato_cci);
-      var formato_detracciones = decifrar_format_banco(data.formato_detracciones);
-      // console.log(format_cta, formato_detracciones);
-
-      $("#c_bancaria_prov").inputmask(`${format_cta}`);
-      $("#cci_prov").inputmask(`${format_cci}`);
-      $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
-    });
+        $("#c_bancaria_prov").inputmask(`${format_cta}`);
+        $("#cci_prov").inputmask(`${format_cci}`);
+        $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
+        $(".chargue-format-1").html("Cuenta Bancaria");
+        $(".chargue-format-2").html("CCI");
+        $(".chargue-format-3").html("Cuenta Detracciones");
+      } else {
+        ver_errores(e);
+      }
+    }).fail( function(e) { ver_errores(e); } );
   }
-}
-
-function decifrar_format_banco(format) {
-
-  var array_format =  format.split("-"); var format_final = "";
-
-  array_format.forEach((item, index)=>{
-
-    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
-
-    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
-  });
-
-  var ultima_letra = format_final.slice(-1);
-   
-  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
-
-  return format_final;
 }
 
 //guardar proveedor
@@ -1548,384 +1490,16 @@ function guardar_proveedor(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-proveedor")[0]);
 
-  $.ajax({
-    url: "../ajax/compra_activos_fijos.php?op=guardar_proveedor",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        // toastr.success("proveedor registrado correctamente");
-        Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
-         
-        limpiar_form_proveedor();
-
-        $("#modal-agregar-proveedor").modal("hide");
-
-        //Cargamos los items al select cliente
-        $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
-
-      } else {
-        // toastr.error(datos);
-        Swal.fire("Error!", datos, "error");
-      }
-    },
-  });
-}
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O   C O M P R A S   D E   A C T I V O S ::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-function listar_pagos_af_g(idcompra_af_general, monto_total, total_deposito) {
-
-  most_datos_prov_pago(idcompra_af_general);
-  localStorage.setItem("idcompra_pago_comp_nube", idcompra_af_general);
-
-  localStorage.setItem("monto_total_p", monto_total);
-  localStorage.setItem("monto_total_dep", total_deposito);
-
-  $("#total_compra").html(formato_miles(monto_total));
-
-  $("#tabla-compra").hide();
-  $("#tabla-compra-proveedor").hide();
-  $("#regresar").show();
-  $("#btn_agregar").hide();
-  $("#guardar_registro_compras").hide();
-  $("#div_tabla_compra").hide();
-  // $(".leyecnda_pagos").hide();
-  // $(".leyecnda_saldos").hide();
-
-  $("#pago_compras").show();
-  $("#btn-pagar").show();
-  $("#btn-pagar-af-p").hide();
-  $("#pagos_con_detraccion").hide();
-
-  tabla_pagos1 = $("#tabla-pagos-proveedor")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
-      ajax: {
-        url: "../ajax/compra_activos_fijos.php?op=listar_pagos_proveedor&idcompra_af_general=" + idcompra_af_general,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
-      },
-      createdRow: function (row, data, ixdex) {    
+  crud_guardar_editar_modal_select2_xhr( 
+    "../ajax/compra_activos_fijos.php?op=guardar_proveedor", 
+    formData,
+    'proveeedor', 
+    "../ajax/ajax_general.php?op=select2Proveedor", 
+    '#idproveedor',
+    function(){ limpiar_form_proveedor(); $("#modal-agregar-proveedor").modal("hide"); }, 
+    function(){ sw_success('Correcto!', "Proveedor guardado correctamente." ); }, 
+  );
   
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-        // columna: #
-        if (data[1] != '') {
-          $("td", row).eq(1).addClass("text-nowrap");   
-            
-        }
-      },
-      language: {
-        lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "asc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
-
-  total_pagos(idcompra_af_general);
-}
-
-//Función limpiar
-function limpiar_c_pagos() {
-  //==========PAGO SERVICIOS=====
-  $("#forma_pago").val("");
-  $("#tipo_pago").val("");
-  $("#monto_pago").val("");
-  $("#numero_op_pago").val("");
-  $("#idpago_af_general").val("");
- // $("#cuenta_destino_pago").val("");
-  $("#descripcion_pago").val("");
-  $("#idpago_compra").val("");
-  $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
-  $("#foto1").val("");
-  $("#foto1_actual").val("");
-  $("#foto1_nombre").html("");
-
-  // Limpiamos las validaciones
-  $(".form-control").removeClass('is-valid');
-  $(".form-control").removeClass('is-invalid');
-  $(".error.invalid-feedback").remove();
-}
-
-//mostrar datos proveedor pago
-function most_datos_prov_pago(idcompra_af_general) {
-  // limpiar_c_pagos();
-  $("#h4_mostrar_beneficiario").html("");
-
-  $("#banco_pago").val("").trigger("change");
-  $.post("../ajax/compra_activos_fijos.php?op=most_datos_prov_pago", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
-
-    $("#idcompra_af_general_p").val(data.idcompra_af_general);
-    $("#idproveedor_pago").val(data.idproveedor);
-    $("#beneficiario_pago").val(data.razon_social);
-    $("#h4_mostrar_beneficiario").html(data.razon_social);
-    $("#banco_pago").val(data.idbancos).trigger("change");
-    $("#tipo_pago").val('Proveedor').trigger("change");
-    $("#titular_cuenta_pago").val(data.titular_cuenta);
-    localStorage.setItem("nubecompra_c_b", data.cuenta_bancaria);
-    localStorage.setItem("nubecompra_c_d", data.cuenta_detracciones);
-
-    if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(data.cuenta_bancaria);}
-  });
-}
-
-//captura_opicion tipopago
-function captura_op() {
-  cuenta_bancaria = localStorage.getItem("nubecompra_c_b");
-  cuenta_detracciones = localStorage.getItem("nubecompra_c_d");
-  //console.log(cuenta_bancaria,cuenta_detracciones);
-
-  $("#cuenta_destino_pago").val("");
-
-  if ($("#tipo_pago").select2("val") == "Proveedor") {
-    $("#cuenta_destino_pago").val("");
-    $("#cuenta_destino_pago").val(cuenta_bancaria);
-  }
-
-  if ($("#tipo_pago").select2("val") == "Detraccion") {
-    $("#cuenta_destino_pago").val("");
-    $("#cuenta_destino_pago").val(cuenta_detracciones);
-  }
-}
-
-//Guardar y editar PAGOS
-function guardaryeditar_pago(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-servicios-pago")[0]);
-
-  $.ajax({
-    url: "../ajax/compra_activos_fijos.php?op=guardaryeditar_pago",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        toastr.success("servicio registrado correctamente");
-
-        tabla.ajax.reload(null, false);
-        $("#modal-agregar-pago").modal("hide");
-
-          tabla_pagos1.ajax.reload(null, false);
-        
-        /**================================================== */
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-
-        limpiar_c_pagos();
-      } else {
-        toastr.error(datos);
-      }
-    },
-  });
-}
-
-//-total Pagos
-function total_pagos(idcompra_af_general) {
-  $(".tfoot_pago_general").show();
-  $(".tfoot_pago_proy").hide();
-  $.post("../ajax/compra_activos_fijos.php?op=suma_total_pagos", { idcompra_af_general: idcompra_af_general }, function (data, status) {
-    $("#monto_total_general").html("");
-    $("#monto_total_proy").html("");
-
-    data = JSON.parse(data);
-    //console.log(data);
-
-    $("#monto_total_general").html('S/ '+formato_miles(data.total_monto));
-  });
-}
-
-//mostrar
-function mostrar_pagos(idpago_af_general) {
-  limpiar_c_pagos();
-  // console.log("___________ " + idpago_af_general);
-  $("#h4_mostrar_beneficiario").html("");
-  $("#modal-agregar-pago").modal("show");
-  $("#banco_pago").val("").trigger("change");
-  $("#forma_pago").val("").trigger("change");
-  $("#tipo_pago").val("").trigger("change");
-
-  $.post("../ajax/compra_activos_fijos.php?op=mostrar_pagos", { idpago_af_general: idpago_af_general }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
-
-    $("#idcompra_af_general_p").val(data.idcompra_af_general);
-    // $("#maquinaria_pago").html(data.nombre_maquina);
-    $("#beneficiario_pago").val(data.beneficiario);
-    $("#h4_mostrar_beneficiario").html(data.beneficiario);
-    $("#cuenta_destino_pago").val(data.cuenta_destino);
-    $("#banco_pago").val(data.idbancos).trigger("change");
-    $("#titular_cuenta_pago").val(data.titular_cuenta);
-    $("#forma_pago").val(data.forma_pago).trigger("change");
-    $("#tipo_pago").val(data.tipo_pago).trigger("change");
-    $("#fecha_pago").val(data.fecha_pago);
-    $("#monto_pago").val(data.monto);
-    $("#numero_op_pago").val(data.numero_operacion);
-    $("#descripcion_pago").val(data.descripcion);
-    $("#idpago_af_general").val(data.idpago_af_general);
-
-    if (data.imagen != "") {
-      $("#foto1_i").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + data.imagen);
-
-      $("#foto1_actual").val(data.imagen);
-    }
-  });
-}
-
-//Función para desactivar registros
-function desactivar_pagos(idpago_af_general) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el pago?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_activos_fijos.php?op=desactivar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
-        Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
-
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-
-          tabla_pagos1.ajax.reload(null, false);
-        
-      });
-    }
-  });
-}
-
-function activar_pagos(idpago_af_general) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  Pago?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_activos_fijos.php?op=activar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
-        Swal.fire("Activado!", "Pago ha sido activado.", "success");
-
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-
-          tabla_pagos1.ajax.reload(null, false);
-        
-      });
-    }
-  });
-}
-
-//Función para eliminar registros
-function eliminar_pagos(idpago_af_general) {
-  Swal.fire({
-    title: "¿Está Seguro de  Eliminar el pago?",
-    text: "Registo no se podrá restablecer",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Eliminar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_activos_fijos.php?op=eliminar_pagos", { idpago_af_general: idpago_af_general }, function (e) {
-        Swal.fire("Eliminado!", "El pago ha sido Eliminado.", "success");
-
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-
-          tabla_pagos1.ajax.reload(null, false);
-        
-      });
-    }
-  });
-}
-
-function ver_modal_vaucher(imagen) {
-  $("#img-vaucher").attr("src", "");
-  $("#modal-ver-vaucher").modal("show");
-  $("#img-vaucher").attr("src", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
-  $("#descargar").attr("href", "../dist/docs/activos_fijos_general/comprobantes_pagos_activos_f/" + imagen);
-
-  $(".tooltip").removeClass("show").addClass("hidde");
-}
-
-// :::::::::::::::::::::::::: GUARDAMOS FACTURA :::::::::::::::::::::::::::::::::::::::::::::::::::: 
-
-function guardaryeditar_comprobante(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-comprobante")[0]);
-
-  $.ajax({
-    url: "../ajax/compra_activos_fijos.php?op=guardaryeditar_comprobante",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
-        Swal.fire("Correcto!", "Documento guardado correctamente", "success");
-
-        tabla.ajax.reload(null, false);
-
-        limpiar_form_compra();
-
-        $("#modal-comprobantes-af-g").modal("hide");
-      } else {
-        Swal.fire("Error!", datos, "error");
-      }
-    },
-    xhr: function () {
-      var xhr = new window.XMLHttpRequest();
-
-      xhr.upload.addEventListener(
-        "progress",
-        function (evt) {
-          if (evt.lengthComputable) {
-            var percentComplete = (evt.loaded / evt.total) * 100;
-            /*console.log(percentComplete + '%');*/
-            $("#barra_progress2").css({ width: percentComplete + "%" });
-
-            $("#barra_progress2").text(percentComplete.toFixed(2) + " %");
-
-            if (percentComplete === 100) {
-              l_m();
-            }
-          }
-        },
-        false
-      );
-      return xhr;
-    },
-  });
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N    I N S U M O S   Y   A C T I V O S :::::::::::::::::::::::::::::::::::::::::::::::::::: 
@@ -1943,15 +1517,15 @@ function limpiar_materiales() {
   $("#precio_igv_p").val("");
   $("#precio_total_p").val("");
 
-  $("#fotop2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
-  $("#fotop2").val("");
-  $("#fotop2_actual").val("");
-  $("#fotop2_nombre").html("");   
+  $("#foto2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
+  $("#foto2").val("");
+  $("#foto2_actual").val("");
+  $("#foto2_nombre").html("");   
 
-  $("#doc_oldt_2").val("");
-  $("#doct2").val("");  
-  $('#doct2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doct2_nombre').html("");
+  $("#doc_old_2").val("");
+  $("#doc2").val("");  
+  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc2_nombre').html("");
 
   $("#unid_medida_p").val(4).trigger("change");
   $("#color_p").val(1).trigger("change");
@@ -1977,28 +1551,56 @@ function guardar_y_editar_materiales(e) {
     data: formData,
     contentType: false,
     processData: false,
+    success: function (e) {
+      try {        
+        e = JSON.parse(e);  console.log(e);
+        if (e.status == true ) {
 
-    success: function (datos) {
-      if (datos == "ok") {
+          Swal.fire("Correcto!", "Producto creado correctamente", "success");
 
-        Swal.fire("Correcto!", "Producto creado correctamente", "success");
+          tabla.ajax.reload(null, false);
+          tablaactivos1.ajax.reload(null, false);
+          //limpiar_materiales();
+          
+          actualizar_producto();
 
-        tabla.ajax.reload(null, false);
-        tablaactivos1.ajax.reload(null, false);
-        //limpiar_materiales();
-        
-        actualizar_producto();
-
-        $("#modal-agregar-material-activos-fijos").modal("hide");
-      } else {
-        Swal.fire("Error!", datos, "error");
-      }
+          $("#modal-agregar-material-activos-fijos").modal("hide");
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_activo_fijo").css({"width": percentComplete+'%'});
+
+          $("#barra_progress_activo_fijo").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_activo_fijo").css({ width: "0%",  });
+      $("#barra_progress_activo_fijo").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_activo_fijo").css({ width: "0%", });
+      $("#barra_progress_activo_fijo").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
 //Función ListarArticulos
-function listaractivos() {
+function tblaActivosFijos() {
   tablaactivos1 = $("#tblaactivos").dataTable({
     //responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
@@ -2007,11 +1609,11 @@ function listaractivos() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/compra_activos_fijos.php?op=listarActivoscompra",
+      url: "../ajax/compra_activos_fijos.php?op=tblaActivosFijos",
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     bDestroy: true,
@@ -2029,104 +1631,85 @@ function mostrar_material(idproducto, cont) {
 
   $("#modal-agregar-material-activos-fijos").modal("show");
 
-  $.post("../ajax/activos_fijos.php?op=mostrar", { 'idproducto': idproducto }, function (data, status) {
+  $.post("../ajax/compra_activos_fijos.php?op=mostrar_activo_fijo", { 'idproducto': idproducto }, function (e, status) {
     
-    data = JSON.parse(data); console.log(data);
+    e = JSON.parse(e); console.log(e);
 
-    $("#cargando-9-fomulario").show();
-    $("#cargando-10-fomulario").hide();
+    if (e.status) {
+      $("#idproducto_p").val(e.data.idproducto);
+      $("#cont").val(cont);
 
-    $("#idproducto_p").val(data.idproducto);
-    $("#cont").val(cont);
+      $("#nombre_p").val(e.data.nombre);
+      $("#modelo_p").val(e.data.modelo);
+      $("#serie_p").val(e.data.serie);
+      $("#marca_p").val(e.data.marca);
+      $("#descripcion_p").val(e.data.descripcion);
 
-    $("#nombre_p").val(data.nombre);
-    $("#modelo_p").val(data.modelo);
-    $("#serie_p").val(data.serie);
-    $("#marca_p").val(data.marca);
-    $("#descripcion_p").val(data.descripcion);
-
-    $('#precio_unitario_p').val(parseFloat(data.precio_unitario).toFixed(2));
-    $("#estado_igv_p").val(parseFloat(data.estado_igv).toFixed(2));
-    $("#precio_sin_igv_p").val(parseFloat(data.precio_sin_igv).toFixed(2));
-    $("#precio_igv_p").val(parseFloat(data.precio_igv).toFixed(2));
-    $("#precio_total_p").val(parseFloat(data.precio_total).toFixed(2));
-     
-    $("#unid_medida_p").val(data.idunidad_medida).trigger("change");
-    $("#color_p").val(data.idcolor).trigger("change");  
-    $("#categoria_insumos_af_p").val(data.idcategoria_insumos_af).trigger("change");    
-
-    if (data.estado_igv == "1") {
-      $("#my-switch_igv").prop("checked", true);
-    } else {
-      $("#my-switch_igv").prop("checked", false);
-    }
-     
-    if (data.imagen != "") {
+      $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
+      $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
+      $("#precio_sin_igv_p").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
+      $("#precio_igv_p").val(parseFloat(e.data.precio_igv).toFixed(2));
+      $("#precio_total_p").val(parseFloat(e.data.precio_total).toFixed(2));
       
-      $("#fotop2_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
+      $("#unid_medida_p").val(e.data.idunidad_medida).trigger("change");
+      $("#color_p").val(e.data.idcolor).trigger("change");  
+      $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
 
-      $("#fotop2_actual").val(data.imagen);
-    }
-
-    // FICHA TECNICA
-    if (data.ficha_tecnica == "" || data.ficha_tecnica == null  ) {
-
-      $("#doct2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-      $("#doct2_nombre").html('');
-
-      $("#doc_oldt_2").val(""); $("#doct2").val("");
-
-    } else {
-
-      $("#doc_oldt_2").val(data.ficha_tecnica); 
-
-      $("#doct2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(data.ficha_tecnica)}</i></div></div>`);
+      if (e.data.estado_igv == "1") {
+        $("#my-switch_igv").prop("checked", true);
+      } else {
+        $("#my-switch_igv").prop("checked", false);
+      }
       
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.ficha_tecnica) == "pdf" ) {
+      if (e.data.imagen != "") {
+        
+        $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);
 
-        $("#doct2_ver").html('<iframe src="../dist/docs/material/ficha_tecnica/'+data.ficha_tecnica+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#foto2_actual").val(e.data.imagen);
+      }
 
-      }else{
-        if (
-          extrae_extencion(data.ficha_tecnica) == "jpeg" || extrae_extencion(data.ficha_tecnica) == "jpg" || extrae_extencion(data.ficha_tecnica) == "jpe" ||
-          extrae_extencion(data.ficha_tecnica) == "jfif" || extrae_extencion(data.ficha_tecnica) == "gif" || extrae_extencion(data.ficha_tecnica) == "png" ||
-          extrae_extencion(data.ficha_tecnica) == "tiff" || extrae_extencion(data.ficha_tecnica) == "tif" || extrae_extencion(data.ficha_tecnica) == "webp" ||
-          extrae_extencion(data.ficha_tecnica) == "bmp" || extrae_extencion(data.ficha_tecnica) == "svg" ) {
+      // FICHA TECNICA
+      if (e.data.ficha_tecnica == "" || e.data.ficha_tecnica == null  ) {
 
-          $("#doct2_ver").html(`<img src="../dist/docs/material/ficha_tecnica/${data.ficha_tecnica}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-          
-        } else {
-          $("#doct2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-        }        
-      }      
-    } 
-  });
+        $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+        $("#doc2_nombre").html('');
+
+        $("#doc_old_2").val(""); $("#doc2").val("");
+
+      } else {
+
+        $("#doc_old_2").val(e.data.ficha_tecnica); 
+
+        $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.ficha_tecnica)}</i></div></div>`);
+        
+        $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%'));
+              
+      }
+
+      $("#cargando-9-fomulario").show();
+      $("#cargando-10-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }     
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function precio_con_igv() {
-  var precio_total = 0;
-  var mont_igv = 0.0;
+  var precio_ingresado = $("#precio_unitario_p").val()=='' ? 0 : parseFloat($("#precio_unitario_p").val());
 
-  var precio_base = 0;
+  var input_precio_con_igv = 0;
   var igv = 0;
-  var precio_re = 0;
-
-  //var precio_r=0;
-  precio_ingresado = $("#precio_unitario_p").val();
-
-  $("#precio_igv_p").val(mont_igv.toFixed(2));
-  $("#precio_sin_igv_p").val(precio_ingresado);
+  var input_precio_sin_igv = 0;
 
   if ($("#my-switch_igv").is(":checked")) {
-    precio_base = precio_ingresado / 1.18;
-    igv = precio_ingresado - precio_base;
-    precio_re = parseFloat(precio_ingresado) - igv;
+    input_precio_sin_igv = precio_ingresado / 1.18;
+    igv = precio_ingresado - input_precio_sin_igv;
+    input_precio_con_igv = precio_ingresado;
     
-    $("#precio_igv_p").val(igv.toFixed(2));
-    $("#precio_sin_igv_p").val(precio_re.toFixed(2));
-    $("#precio_total_p").val((precio_re + igv).toFixed(2));
+    $("#precio_sin_igv_p").val(input_precio_sin_igv.toFixed(2));
+    $("#precio_igv_p").val(igv.toFixed(2));    
+    $("#precio_total_p").val(input_precio_con_igv.toFixed(2));
 
     $("#estado_igv_p").val("1");
   } else {
@@ -2144,31 +1727,26 @@ function precio_con_igv() {
 
 $("#my-switch_igv").on("click ", function (e) {
 
-  var precio_ingresado = 0;
-  var precio_sin_igv = 0;
-  var igv = 0;
-  var precio_total = 0;
+  var precio_ingresado = $("#precio_unitario_p").val()=='' ? 0 : parseFloat($("#precio_unitario_p").val());
 
-  precio_ingresado = $("#precio_unitario_p").val(); 
+  var input_precio_con_igv = 0;
+  var igv = 0;
+  var input_precio_sin_igv = 0;
 
   if ($("#my-switch_igv").is(":checked")) {
-    precio_sin_igv = precio_ingresado / 1.18;
-    igv = precio_ingresado - precio_sin_igv;
-    precio_total = parseFloat(precio_sin_igv) + igv;  
+    input_precio_sin_igv = precio_ingresado / 1.18;
+    igv = precio_ingresado - input_precio_sin_igv;
+    input_precio_con_igv = precio_ingresado;  
 
-    console.log(precio_sin_igv, igv, precio_total);
-
-    $("#precio_sin_igv_p").val(redondearExp(precio_sin_igv, 2));
+    $("#precio_sin_igv_p").val(redondearExp(input_precio_sin_igv, 2));
     $("#precio_igv_p").val(redondearExp(igv, 2));   
-    $("#precio_total_p").val(redondearExp(precio_total, 2)) ;
+    $("#precio_total_p").val(redondearExp(input_precio_con_igv, 2)) ;
 
     $("#estado_igv_p").val("1");
   } else {
     input_precio_con_igv = precio_ingresado * 1.18;     
     igv = input_precio_con_igv - precio_ingresado;
     input_precio_sin_igv = parseFloat(precio_ingresado);  
-
-    console.log(precio_sin_igv, igv, input_precio_con_igv);
 
     $("#precio_sin_igv_p").val(redondearExp(input_precio_sin_igv, 2));
     $("#precio_igv_p").val(redondearExp(igv, 2));
@@ -2188,8 +1766,7 @@ function actualizar_producto() {
   var unid_medida_p = $("#unidad_medida_p").find(':selected').text();
   var color_p = $("#color_p").find(':selected').text();  
 
-  if (idproducto == "" || idproducto == null) {
-     
+  if (idproducto == "" || idproducto == null) {   
   } else {
     $(`.nombre_producto_${cont}`).html(nombre_p); 
     $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
@@ -2197,6 +1774,11 @@ function actualizar_producto() {
     $(`.unidad_medida_${cont}`).html(unid_medida_p); 
     $(`.unidad_medida_${cont}`).val(unid_medida_p);
     $(`.precio_con_igv_${cont}`).val(precio_total_p);    
+     
+    if ($('#foto2').val()) {
+      var src_img = $(`#foto2_i`).attr("src");
+      $(`.img_perfil_${cont}`).attr("src", src_img);
+    }     
   } 
   
   modificarSubtotales();
@@ -2220,22 +1802,22 @@ $(function () {
   $("#form-compra-activos-f").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      idproveedor: { required: true },
+      idproveedor:      { required: true },
       tipo_comprobante: { required: true },
-      serie_comprobante: { minlength: 2 },
-      descripcion: { minlength: 4 },
-      fecha_compra: { required: true },
-      glosa: { required: true },
-      val_igv: { required: true, number: true, min:0, max:1 },
+      serie_comprobante:{ minlength: 2 },
+      descripcion:      { minlength: 4 },
+      fecha_compra:     { required: true },
+      glosa:            { required: true },
+      val_igv:          { required: true, number: true, min:0, max:1 },
     },
     messages: {
-      idproveedor: { required: "Campo requerido", },
+      idproveedor:      { required: "Campo requerido", },
       tipo_comprobante: { required: "Campo requerido", },
-      serie_comprobante: { minlength: "mayor a 2 caracteres", },
-      descripcion: { minlength: "mayor a 4 caracteres", },
-      fecha_compra: { required: "Campo requerido", },
-      glosa: { required: "Campo requerido", },
-      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
+      serie_comprobante:{ minlength: "mayor a 2 caracteres", },
+      descripcion:      { minlength: "mayor a 4 caracteres", },
+      fecha_compra:     { required: "Campo requerido", },
+      glosa:            { required: "Campo requerido", },
+      val_igv:          { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
     },
 
     errorElement: "span",
@@ -2254,6 +1836,7 @@ $(function () {
     },
 
     submitHandler: function (form) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardaryeditar_compras(form);
     },
   });
@@ -2261,39 +1844,28 @@ $(function () {
   $("#form-proveedor").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      tipo_documento_prov: { required: true },
+      tipo_documento_prov:{ required: true },
       num_documento_prov: { required: true, minlength: 6, maxlength: 20 },
-      nombre_prov: { required: true, minlength: 6, maxlength: 100 },
-      direccion_prov: { minlength: 5, maxlength: 150 },
-      telefono_prov: { minlength: 8 },
-      c_bancaria_prov: { minlength: 6,  },
-      cci_prov: { minlength: 6,  },
-      c_detracciones_prov: { minlength: 6,  },      
-      banco_prov: { required: true },
-      titular_cuenta_prov: { minlength: 4 },
+      nombre_prov:        { required: true, minlength: 6, maxlength: 100 },
+      direccion_prov:     { minlength: 5, maxlength: 150 },
+      telefono_prov:      { minlength: 8 },
+      c_bancaria_prov:    { minlength: 6, },
+      cci_prov:           { minlength: 6, },
+      c_detracciones_prov:{ minlength: 6, },      
+      banco_prov:         { required: true },
+      titular_cuenta_prov:{ minlength: 4 },
     },
     messages: {
-      tipo_documento_prov: { required: "Por favor selecione un tipo de documento", },
-      num_documento_prov: {
-        required: "Ingrese un número de documento",
-        minlength: "Ingrese como MÍNIMO 6 caracteres.",
-        maxlength: "Ingrese como MÁXIMO 20 caracteres.",
-      },
-      nombre_prov: {
-        required: "Por favor ingrese los nombres y apellidos",
-        minlength: "Ingrese como MÍNIMO 6 caracteres.",
-        maxlength: "Ingrese como MÁXIMO 100 caracteres.",
-      },
-      direccion_prov: {
-        minlength: "Ingrese como MÍNIMO 5 caracteres.",
-        maxlength: "Ingrese como MÁXIMO 150 caracteres.",
-      },
-      telefono_prov: { minlength: "Ingrese como MÍNIMO 9 caracteres.", },
-      c_bancaria_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.", },
-      cci_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.",  },
-      c_detracciones_prov: { minlength: "Ingrese como MÍNIMO 6 caracteres.", },      
-      banco_prov: { required: "Por favor  seleccione un banco",  },
-      titular_cuenta_prov: { minlength: 'Ingrese como MÍNIMO 4 caracteres.' },
+      tipo_documento_prov:{ required: "Campo requerido.", },
+      num_documento_prov: { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
+      nombre_prov:        { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
+      direccion_prov:     { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 150 caracteres.", },
+      telefono_prov:      { minlength: "MÍNIMO 9 caracteres.", },
+      c_bancaria_prov:    { minlength: "MÍNIMO 6 caracteres.", },
+      cci_prov:           { minlength: "MÍNIMO 6 caracteres.",  },
+      c_detracciones_prov:{ minlength: "MÍNIMO 6 caracteres.", },      
+      banco_prov:         { required: "Campo requerido.",  },
+      titular_cuenta_prov:{ minlength: 'MÍNIMO 4 caracteres.' },
     },
 
     errorElement: "span",
@@ -2313,6 +1885,7 @@ $(function () {
     },
 
     submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardar_proveedor(e);
     },
   });
@@ -2320,38 +1893,30 @@ $(function () {
   $("#form-servicios-pago").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      forma_pago: { required: true },
-      tipo_pago: { required: true },
-      banco_pago: { required: true },
-      fecha_pago: { required: true },
-      monto_pago: { required: true },
-      numero_op_pago: { minlength: 1 },
-      descripcion_pago: { minlength: 1 },
-      titular_cuenta_pago: { minlength: 1 },
+      forma_pago:       { required: true },
+      tipo_pago:        { required: true },
+      banco_pago:       { required: true },
+      fecha_pago:       { required: true },
+      monto_pago:       { required: true },
+      numero_op_pago:   { minlength: 3 },
+      descripcion_pago: { minlength: 3 },
+      titular_cuenta_pago: { minlength: 3 },
     },
     messages: {
-      forma_pago: {
-        required: "Por favor selecione una forma de pago",
-      },
-      tipo_pago: {
-        required: "Por favor selecione un tipo de pago",
-      },
-      banco_pago: {
-        required: "Por favor selecione un banco",
-      },
-      fecha_pago: {
-        required: "Por favor ingresar una fecha",
-      },
-      monto_pago: {
-        required: "Por favor ingresar el monto a pagar",
-      },
+      forma_pago:       { required: "Campo requerido.", },
+      tipo_pago:        {  required: "Campo requerido.", },
+      banco_pago:       { required: "Campo requerido.", },
+      fecha_pago:       { required: "Campo requerido.", },
+      monto_pago:       { required: "Campo requerido.", },
+      numero_op_pago:   { minlength: 'MÍNIMO 3 caracteres' },
+      descripcion_pago: { minlength: 'MÍNIMO 3 caracteres' },
+      titular_cuenta_pago: { minlength: 'MÍNIMO 3 caracteres' },
     },
 
     errorElement: "span",
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
@@ -2364,6 +1929,7 @@ $(function () {
     },
 
     submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardaryeditar_pago(e);
     },
   });
@@ -2375,9 +1941,7 @@ $(function () {
     },
 
     messages: {
-      nombre: {
-        required: "Este campo es requerido",
-      },
+      nombre: {   required: "Campo requerido", },
     },
 
     errorElement: "span",
@@ -2397,37 +1961,34 @@ $(function () {
     },
 
     submitHandler: function (e) {
-      guardaryeditar_comprobante(e);
-      guardaryeditar_comprobante_p(e);
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_comprobante(e);
     },
   });
 
   $("#form-materiales").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      nombre_p: { required: true, minlength:3, maxlength:200},
       categoria_insumos_af_p: { required: true },
-      color_p: { required: true },
-      unid_medida_p: { required: true },
-      modelo_p: { required: true },
-      precio_unitario_p: { required: true },
-      descripcion_p: { minlength: 3 },
+      nombre_p:         { required: true, minlength:3, maxlength:200},      
+      color_p:          { required: true },
+      unid_medida_p:    { required: true },
+      precio_unitario_p:{ required: true },
+      descripcion_p:    { minlength: 3 },
     },
     messages: {
-      nombre_p: { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
-      categoria_insumos_af_p: { required: "Campo requerido", },
-      color_p: { required: "Campo requerido" },
-      unid_medida_p: { required: "Campo requerido" },
-      modelo_p: { required: "Por favor ingrese modelo", },
-      precio_unitario_p: { required: "Ingresar precio compra", },      
-      descripcion_p: { minlength: "Minimo 3 caracteres" },
+      categoria_insumos_af_p: { required: "Campo requerido.", },
+      nombre_p:         { required: "Campo requerido.", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },      
+      color_p:          { required: "Campo requerido." },
+      unid_medida_p:    { required: "Campo requerido." },
+      precio_unitario_p:{ required: "Campo requerido.", },      
+      descripcion_p:    { minlength: "Minimo 3 caracteres" },
     },
 
     errorElement: "span",
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
@@ -2440,6 +2001,7 @@ $(function () {
     },
 
     submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardar_y_editar_materiales(e);
     },
   });
@@ -2458,494 +2020,6 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-function re_visualizacion() {
-  $("#doc1_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  pdffile = document.getElementById("doc1").files[0];
-
-  antiguopdf = $("#doc_old_1").val();
-
-  if (pdffile === undefined) {
-    var dr = antiguopdf;
-
-    if (dr == "") {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Seleccione un documento",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-      $("#doc1_nombre").html("");
-    } else {
-      // cargamos la imagen adecuada par el archivo
-      if (extrae_extencion(dr) == "xls") {
-        $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-      } else {
-        if (extrae_extencion(dr) == "xlsx") {
-          $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(dr) == "csv") {
-            $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-          } else {
-            if (extrae_extencion(dr) == "xlsm") {
-              $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-              toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-            } else {
-              if (extrae_extencion(dr) == "pdf") {
-                $("#doc1_ver").html('<iframe src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-                toastr.success("Documento vizualizado correctamente!!!");
-              } else {
-                if (extrae_extencion(dr) == "dwg") {
-                  $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                } else {
-                  if (extrae_extencion(dr) == "zip" || extrae_extencion(dr) == "rar" || extrae_extencion(dr) == "iso") {
-                    $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                    toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                  } else {
-                    if (
-                      extrae_extencion(dr) == "jpeg" ||
-                      extrae_extencion(dr) == "jpg" ||
-                      extrae_extencion(dr) == "jpe" ||
-                      extrae_extencion(dr) == "jfif" ||
-                      extrae_extencion(dr) == "gif" ||
-                      extrae_extencion(dr) == "png" ||
-                      extrae_extencion(dr) == "tiff" ||
-                      extrae_extencion(dr) == "tif" ||
-                      extrae_extencion(dr) == "webp" ||
-                      extrae_extencion(dr) == "bmp"
-                    ) {
-                      $("#doc1_ver").html('<img src="../dist/docs/activos_fijos_general/comprobantes_compra_activos_f/' + dr + '" alt="" width="50%" >');
-
-                      toastr.success("Documento vizualizado correctamente!!!");
-                    } else {
-                      if (extrae_extencion(dr) == "docx" || extrae_extencion(dr) == "docm" || extrae_extencion(dr) == "dotx" || extrae_extencion(dr) == "dotm" || extrae_extencion(dr) == "doc" || extrae_extencion(dr) == "dot") {
-                        $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                      } else {
-                        $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // console.log('hola'+dr);
-  } else {
-    pdffile_url = URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(pdffile.name) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-    } else {
-      if (extrae_extencion(pdffile.name) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-      } else {
-        if (extrae_extencion(pdffile.name) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(pdffile.name) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-          } else {
-            if (extrae_extencion(pdffile.name) == "pdf") {
-              $("#doc1_ver").html('<iframe src="' + pdffile_url + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-              toastr.success("Documento vizualizado correctamente!!!");
-            } else {
-              if (extrae_extencion(pdffile.name) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-              } else {
-                if (extrae_extencion(pdffile.name) == "zip" || extrae_extencion(pdffile.name) == "rar" || extrae_extencion(pdffile.name) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" ||
-                    extrae_extencion(pdffile.name) == "jpg" ||
-                    extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" ||
-                    extrae_extencion(pdffile.name) == "gif" ||
-                    extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" ||
-                    extrae_extencion(pdffile.name) == "tif" ||
-                    extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp"
-                  ) {
-                    $("#doc1_ver").html('<img src="' + pdffile_url + '" alt="" width="50%" >');
-
-                    toastr.success("Documento vizualizado correctamente!!!");
-                  } else {
-                    if (
-                      extrae_extencion(pdffile.name) == "docx" ||
-                      extrae_extencion(pdffile.name) == "docm" ||
-                      extrae_extencion(pdffile.name) == "dotx" ||
-                      extrae_extencion(pdffile.name) == "dotm" ||
-                      extrae_extencion(pdffile.name) == "doc" ||
-                      extrae_extencion(pdffile.name) == "dot"
-                    ) {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    console.log(pdffile);
-  }
-}
-// recargar un doc para ver comprobante proyecto
-function re_visualizacion2() {
-  $("#doc2_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  pdffile2 = document.getElementById("doc2").files[0];
-
-  antiguopdf = $("#doc_old_2").val();
-
-  if (pdffile2 === undefined) {
-    var dr = antiguopdf;
-
-    if (dr == "") {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Seleccione un documento",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      $("#doc2_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-      $("#doc2_nombre").html("");
-    } else {
-      // cargamos la imagen adecuada par el archivo
-      if (extrae_extencion(dr) == "xls") {
-        $("#doc2_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-      } else {
-        if (extrae_extencion(dr) == "xlsx") {
-          $("#doc2_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(dr) == "csv") {
-            $("#doc2_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-          } else {
-            if (extrae_extencion(dr) == "xlsm") {
-              $("#doc2_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-              toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-            } else {
-              if (extrae_extencion(dr) == "pdf") {
-                $("#doc2_ver").html('<iframe src="../dist/docs/compra/comprobante_compra/' + dr + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-                toastr.success("Documento vizualizado correctamente!!!");
-              } else {
-                if (extrae_extencion(dr) == "dwg") {
-                  $("#doc2_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                } else {
-                  if (extrae_extencion(dr) == "zip" || extrae_extencion(dr) == "rar" || extrae_extencion(dr) == "iso") {
-                    $("#doc2_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                    toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                  } else {
-                    if (
-                      extrae_extencion(dr) == "jpeg" ||
-                      extrae_extencion(dr) == "jpg" ||
-                      extrae_extencion(dr) == "jpe" ||
-                      extrae_extencion(dr) == "jfif" ||
-                      extrae_extencion(dr) == "gif" ||
-                      extrae_extencion(dr) == "png" ||
-                      extrae_extencion(dr) == "tiff" ||
-                      extrae_extencion(dr) == "tif" ||
-                      extrae_extencion(dr) == "webp" ||
-                      extrae_extencion(dr) == "bmp"
-                    ) {
-                      $("#doc2_ver").html('<img src="../dist/docs/compra/comprobante_compra/' + dr + '" alt="" width="50%" >');
-
-                      toastr.success("Documento vizualizado correctamente!!!");
-                    } else {
-                      if (extrae_extencion(dr) == "docx" || extrae_extencion(dr) == "docm" || extrae_extencion(dr) == "dotx" || extrae_extencion(dr) == "dotm" || extrae_extencion(dr) == "doc" || extrae_extencion(dr) == "dot") {
-                        $("#doc2_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                      } else {
-                        $("#doc2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-
-                        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // console.log('hola'+dr);
-  } else {
-    pdffile_url2 = URL.createObjectURL(pdffile2);
-
-    // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(pdffile2.name) == "xls") {
-      $("#doc2_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-    } else {
-      if (extrae_extencion(pdffile2.name) == "xlsx") {
-        $("#doc2_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-        toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-      } else {
-        if (extrae_extencion(pdffile2.name) == "csv") {
-          $("#doc2_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-        } else {
-          if (extrae_extencion(pdffile2.name) == "xlsm") {
-            $("#doc2_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-          } else {
-            if (extrae_extencion(pdffile2.name) == "pdf") {
-              $("#doc2_ver").html('<iframe src="' + pdffile_url2 + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-              toastr.success("Documento vizualizado correctamente!!!");
-            } else {
-              if (extrae_extencion(pdffile2.name) == "dwg") {
-                $("#doc2_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-
-                toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-              } else {
-                if (extrae_extencion(pdffile2.name) == "zip" || extrae_extencion(pdffile2.name) == "rar" || extrae_extencion(pdffile2.name) == "iso") {
-                  $("#doc2_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-
-                  toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                } else {
-                  if (
-                    extrae_extencion(pdffile2.name) == "jpeg" ||
-                    extrae_extencion(pdffile2.name) == "jpg" ||
-                    extrae_extencion(pdffile2.name) == "jpe" ||
-                    extrae_extencion(pdffile2.name) == "jfif" ||
-                    extrae_extencion(pdffile2.name) == "gif" ||
-                    extrae_extencion(pdffile2.name) == "png" ||
-                    extrae_extencion(pdffile2.name) == "tiff" ||
-                    extrae_extencion(pdffile2.name) == "tif" ||
-                    extrae_extencion(pdffile2.name) == "webp" ||
-                    extrae_extencion(pdffile2.name) == "bmp"
-                  ) {
-                    $("#doc2_ver").html('<img src="' + pdffile_url2 + '" alt="" width="50%" >');
-
-                    toastr.success("Documento vizualizado correctamente!!!");
-                  } else {
-                    if (
-                      extrae_extencion(pdffile2.name) == "docx" ||
-                      extrae_extencion(pdffile2.name) == "docm" ||
-                      extrae_extencion(pdffile2.name) == "dotx" ||
-                      extrae_extencion(pdffile2.name) == "dotm" ||
-                      extrae_extencion(pdffile2.name) == "doc" ||
-                      extrae_extencion(pdffile2.name) == "dot"
-                    ) {
-                      $("#doc2_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    } else {
-                      $("#doc2_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-
-                      toastr.error("Documento NO TIENE PREVIZUALIZACION!!!");
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-   // console.log(pdffile2);
-  }
-}
-// recargar un doc para ver ficha tecnica
-function re_visualizacion3(id, carpeta) {
-
-  $("#doct"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
-
-  pdffile     = document.getElementById("doct"+id+"").files[0];
-
-  var antiguopdf  = $("#doc_oldt_"+id+"").val();
-
-  if(pdffile === undefined){
-
-    if (antiguopdf == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doct"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-		  $("#doct"+id+"_nombre").html("");
-
-    } else {
-      if ( extrae_extencion(antiguopdf) == "doc") {
-        $("#doct"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      } else {
-        if ( extrae_extencion(antiguopdf) == "docx" ) {
-          $("#doct"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-        } else {
-          if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doct"+id+"_ver").html(`<iframe src="../dist/docs/compra/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-            toastr.success('Documento vizualizado correctamente!!!')
-          } else {
-            if ( extrae_extencion(antiguopdf) == "csv" ) {
-              $("#doct"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(antiguopdf) == "xls" ) {
-                $("#doct"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
-                  $("#doct"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
-                    $("#doct"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  } else {
-                    if (
-                      extrae_extencion(antiguopdf) == "jpeg" || extrae_extencion(antiguopdf) == "jpg" || extrae_extencion(antiguopdf) == "jpe" ||
-                      extrae_extencion(antiguopdf) == "jfif" || extrae_extencion(antiguopdf) == "gif" || extrae_extencion(antiguopdf) == "png" ||
-                      extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
-                      extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
-  
-                      $("#doct"+id+"_ver").html(`<img src="../dist/docs/compra/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="50%" >`);
-                      toastr.success('Documento vizualizado correctamente!!!');
-                    } else {
-                      $("#doct"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                    }                    
-                  }
-                }
-              }
-            }
-          }
-        }
-      }      
-    }
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "doc") {
-      $("#doct"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else {
-      if ( extrae_extencion(pdffile.name) == "docx" ) {
-        $("#doct"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      }else{
-        if ( extrae_extencion(pdffile.name) == "pdf" ) {
-          $("#doct"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="310"> </iframe>');
-          toastr.success('Documento vizualizado correctamente!!!');
-        }else{
-          if ( extrae_extencion(pdffile.name) == "csv" ) {
-            $("#doct"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-          } else {
-            if ( extrae_extencion(pdffile.name) == "xls" ) {
-              $("#doct"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-            } else {
-              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-                $("#doct"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-              } else {
-                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-                  $("#doct"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
-
-                    $("#doct"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="50%" >`);
-                    toastr.success('Documento vizualizado correctamente!!!');
-                  } else {
-                    $("#doct"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                  }                  
-                }
-              }
-            }
-          }
-        }
-      }
-    }     	
-    console.log(pdffile);
-  }
-}
-
-
 function l_m() {
   // limpiar_form_compra();
   $("#barra_progress").css({ width: "0%" });
@@ -2959,43 +2033,6 @@ function l_m() {
 
 function dowload_pdf() {
   toastr.success("El documento se descargara en breve!!");
-}
-
-function extrae_extencion(filename) {
-  return filename.split(".").pop();
-}
-
-/**formato_miles */
-function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
-
-function quitar_formato_miles(numero) {
-  let inVal = numero.replace(/,/g, "");
-  return inVal;
-}
-
-/**Redondear */
-function redondearExp(numero, digitos) {
-  function toExp(numero, digitos) {
-    let arr = numero.toString().split("e");
-    let mantisa = arr[0],
-      exponente = digitos;
-    if (arr[1]) exponente = Number(arr[1]) + digitos;
-    return Number(mantisa + "e" + exponente.toString());
-  }
-  let entero = Math.round(toExp(Math.abs(numero), digitos));
-  return Math.sign(numero) * toExp(entero, -digitos);
 }
 
 //validando excedentes
@@ -3037,197 +2074,27 @@ function validando_excedentes() {
 }
 
 // ver imagen grande del producto agregado a la compra
-function ver_img_activo(img, nombre) {
-  $("#ver_img_activo").attr("src", `../dist/docs/material/img_perfil/${img}`);
-  $(".nombre-img-activo").html(nombre);
-  $("#modal-ver-img-activo").modal("show");
-}
-
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento_prov").val();
-
-  let dni_ruc = $("#num_documento_prov").val(); 
-   
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/ajax_general.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);  console.log(data);
-
-        if (data == null) {
-
-          $("#search").show();
-  
-          $("#charge").hide();
-  
-          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-          
-        } else {
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
-          } else {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            $("#nombre_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-            $("#titular_cuenta_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-            toastr.success("Persona encontrada!!!!");
-          }
-        }
-        
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
+function ver_img_material(img_url, nombre, cont=null) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  if (cont == null || cont == "") {
+    $("#ver_img_material").attr("src", img_url);
+    $(".nombre-img-material").html(nombre);
+    $("#modal-ver-img-material").modal("show");    
   } else {
-    if (tipo_doc == "RUC") {
+    var img_peril = $(`.img_perfil_${cont}`).attr("src");
 
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/ajax_general.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);    console.log(data);
-
-          if (data == null) {
-            $("#search").show();
-    
-            $("#charge").hide();
-    
-            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-            
-          } else {
-
-            if (data.success == false) {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              toastr.error("Datos no encontrados en la SUNAT!!!");
-              
-            } else {
-
-              if (data.estado == "ACTIVO") {
-
-                $("#search").show();
-
-                $("#charge").hide();
-
-                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
-
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);                
-
-                data.direccion == null ? $("#direccion_prov").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion_prov").val(data.direccion);
-
-                toastr.success("Persona encontrada!!");
-
-              } else {
-
-                toastr.info("Se recomienda NO generar FACTURAS ó BOLETAS!!!");
-
-                $("#search").show();
-
-                $("#charge").hide();
-
-                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
-                
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);
-
-                data.direccion == null ? $("#direccion_prov").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion_prov").val(data.direccion);
-
-              }
-            }
-          }          
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
+    $("#ver_img_material").attr("src", `${img_peril}`);
+    $(".nombre-img-material").html(nombre);
+    $("#modal-ver-img-material").modal("show");
+  }  
 }
 
-// Codificamos los caracteres: &, <, >, ", '
-function encodeHtml(str) {
-
-  var map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-
-  return str.replace(/[&<>"']/g, function(m) {return map[m];});
-}
-
-// Decodificamos los caracteres: &amp; &lt; &gt; &quot; &#039;
-function decodeHtml(str) {
-
-  var map = {
-    '&amp;': '&',
-    '&lt;': '<',
-    '&gt;': '>',
-    '&quot;': '"',
-    '&#039;': "'"
-  };
-
-  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
-}
-
-// ver imagen grande del producto agregado a la compra
-function ver_img_material(img, nombre) {
-  $("#ver_img_material").attr("src", `../dist/docs/material/img_perfil/${img}`);
-  $(".nombre-img-material").html(nombre);
-  $("#modal-ver-img-material").modal("show");
+function fecha_actual() {
+  //Obtenemos la fecha actual
+  var now = new Date();
+  var day = ("0" + now.getDate()).slice(-2);
+  var month = ("0" + (now.getMonth() + 1)).slice(-2);
+  var today = now.getFullYear() + "-" + month + "-" + day;
+  console.log(today);
+  $("#fecha_compra").val(today);
 }

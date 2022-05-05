@@ -211,13 +211,13 @@
 
           foreach ($rspta['data'] as $key => $value) {    
 
-            $data .= '<option value=' . $value['id'] . '>' . $value['nombre'] .'</option>';
+            $data .= '<option value=' . $value['id'] . ' title="'.$value['hexadecimal'].'" >' . $value['nombre'] .'</option>';
           }
 
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => $data, 
+            'data' => '<option value="1" title="#ffffff00" >SIN COLOR</option>'.$data, 
           );
   
           echo json_encode($retorno, true);

@@ -13,9 +13,9 @@ class Activos_fijos
   public function insertar($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $imagen)
   {
     $sql = "SELECT p.nombre, p.modelo , p.serie, p.marca, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
-    um.nombre_medida, p.estado, p.estado_delete
-		FROM producto p, unidad_medida as um, color as c 
-    WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND idcategoria_insumos_af != '1' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unidad_medida';";
+    um.nombre_medida, p.estado, p.estado_delete, ciaf.nombre as nombre_categoria
+		FROM producto p, unidad_medida as um, color as c, categoria_insumos_af as ciaf 
+    WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af AND p.idcategoria_insumos_af = '$idcategoria' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unidad_medida';";
     $buscando = ejecutarConsultaArray($sql);
 
     if ($buscando['status']) {
@@ -29,6 +29,7 @@ class Activos_fijos
         foreach ($buscando['data'] as $key => $value) {
           $info_repetida .= '<li class="text-left font-size-13px">
             <b>Nombre: </b>'.$value['nombre'].'<br>
+            <b>Clasificación: </b>'.$value['nombre_categoria'].'<br>
             <b>Color: </b>'.$value['nombre_color'].'<br>
             <b>UM: </b>'.$value['nombre_medida'].'<br>
             <b>Precio con IGV: </b>'.number_format( $value['precio_total'], 2, '.', ',' ).'<br>

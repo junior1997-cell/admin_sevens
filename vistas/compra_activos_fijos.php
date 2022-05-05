@@ -40,7 +40,7 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1 class="m-0"> <i class="fas fa-hand-holding-usd"></i> Compras de Activos Fijos</h1>
+                      <h1 class="m-0 nombre-title-page"> <i class="fas fa-hand-holding-usd"></i> Compras de Activos Fijos</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
@@ -71,9 +71,9 @@
                                 <div class="card-header">
                                   <h3 class="card-title">
                                     <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
-                                    <button type="button" class="btn bg-gradient-success" id="btn_agregar" onclick="ver_form_add(); limpiar_form_compra();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                                    <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                                    <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
+                                    <button type="button" class="btn bg-gradient-success" id="btn-agregar" onclick="table_show_hide(2); limpiar_form_compra();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                                    <button type="button" class="btn bg-gradient-warning" id="btn-regresar" style="display: none;" onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
+                                    <button type="button" class="btn bg-gradient-success" id="btn-pagar" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_form_pago_compra();">
                                       <i class="fas fa-dollar-sign"></i> Agregar Pago
                                     </button>
                                   </h3>
@@ -126,7 +126,7 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                           <!-- TABLA - Lista de compras Por Facturas -->
-                          <div id="div_tabla_compra">
+                          <div id="div-tabla-principal">
                             <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
@@ -140,6 +140,15 @@
                                   <th>Añadir pago</th>
                                   <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
+                                  <th>Proyecto</th>
+                                  <th>Proveedor</th>
+                                  <th>Tipo comprobante</th>
+                                  <th>Serie comprobante</th>
+                                  <th>Subtotal</th>
+                                  <th>IGV</th>
+                                  <th>Depósito</th>
+                                  <th>Saldo</th>
+                                  <th>Glosa</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -155,10 +164,22 @@
                                   <th>Añadir pago</th>
                                   <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
+                                  <th>Proyecto</th>
+                                  <th>Proveedor</th>
+                                  <th>Tipo comprobante</th>
+                                  <th>Serie comprobante</th>
+                                  <th>Subtotal</th>
+                                  <th>IGV</th>
+                                  <th>Depósito</th>
+                                  <th>Saldo</th>
+                                  <th>Glosa</th>
                                 </tr>
                               </tfoot>
                             </table>
-                            <br />
+                          </div>
+
+                          <!-- TABLA - Lista de Compras Por Proveedor -->
+                          <div class="mt-4" id="div-tabla-compra-por-proveedor">
                             <h4><b>Lista de Compras Por Proveedor</b></h4>
                             <table id="tabla-compra-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
@@ -184,11 +205,12 @@
                           </div>
 
                           <!-- TABLA - Lista de Compras Por Proveedor -->
-                          <div id="div_tabla_compra_proveedor" style="display: none;">
-                            <h5><b>Lista de compras Por Facturas</b></h5>
-                            <table id="detalles-tabla-compra-prov" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <div class="mt-4" id="div-tabla-detalle-compra-proveedor" style="display: none;">
+                            <h5><button type="button" class="btn bg-gradient-warning texto-parpadeante"  onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i> Regresar</button> <b class="proveedor-lista-facturas">Lista de compras Por Facturas</b></h5>
+                            <table id="tabla-detalles-compra-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Fecha</th>
                                   <th  data-toggle="tooltip" data-original-title="Registrado en ..."> Registro</th>
@@ -201,6 +223,7 @@
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
+                                  <th class="">#</th>
                                   <th class="">Acciones</th>
                                   <th>Fecha</th>
                                   <th data-toggle="tooltip" data-original-title="Registrado en ...">Registro</th>
@@ -214,7 +237,7 @@
                           </div>
 
                           <!-- FORM COMPRAS -->
-                          <div id="agregar_compras" style="display: none;">
+                          <div id="formulario-agregar-compra" style="display: none;">
                             <div class="modal-body">
                               <!-- form start -->
                               <form id="form-compra-activos-f" name="form-compra-activos-f" method="POST">
@@ -257,8 +280,8 @@
                                     <div class="form-group">
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
-                                        <option value="MATERIAL">MATERIAL</option>
-                                        <option value="CONBUSTIBLE">CONBUSTIBLE</option>
+                                        <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
+                                        <option title="fas fa-gas-pump" value="CONBUSTIBLE">CONBUSTIBLE</option>
                                       </select>
                                     </div>
                                   </div>
@@ -394,8 +417,8 @@
                             </div>
                           </div>
 
-                          <!-- TABLA - PAGOS ALL ACTIVOS FIJOS-->
-                          <div id="pago_compras" style="display: none;">
+                          <!-- TABLA - PAGOS ACTIVOS FIJOS-->
+                          <div id="div-pago-compras" style="display: none;">
                             <div style="text-align: center;">
                               <div>
                                 <h4>Total a pagar: <b id="total_compra"></b></h4>
@@ -412,39 +435,34 @@
                                     <th>Descripción</th>
                                     <th>Monto</th>
                                     <th>Vaucher</th>
-                                    <th>Estado</th>
+                                    <th>Tipo pago</th>
+                                    <th>Beneficiario</th>
+                                    <th>Titular Cuenta</th>
+                                    <th>Banco</th>
+                                    <th>Cuenta Destino</th>
                                   </tr>
                                 </thead>
                                 <tbody></tbody>
                                 <tfoot>
-                                  <tr  class="tfoot_pago_general" >
-                                  <th class=" text-center">#</th>
-                                    <th>Aciones</th>
-                                    <th>Forma pago</th>
-                                    <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
-                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                    <th>Descripción</th>
-                                    <th style="color: #ff0000; background-color: #45c920;">
-                                      <b class="text-nowrap" id="monto_total_general"></b>
+                                  <tr >
+                                    <th class="text-gray text-center">#</th>
+                                    <th class="text-gray">Aciones</th>
+                                    <th class="text-gray">Forma pago</th>
+                                    <th class="text-gray">Beneficiario</th>
+                                    <th class="text-gray" data-toggle="tooltip" data-original-title="Cuenta Destino">C. Destino</th>
+                                    <th class="text-gray" data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                    <th class="text-gray">Descripción</th>
+                                    <th class="bg-gradient-success" >
+                                      <b class="text-nowrap h5 font-weight-bold" style="color: #ff0000;" id="monto_total_general"></b>
                                     </th>
-                                    <th>Vaucher</th>
-                                    <th>Estado</th>
-                                  </tr>
-                                  <tr style="display: none;" class="tfoot_pago_proy"  >
-                                    <th class=" text-center">#</th>
-                                    <th>Aciones</th>
-                                    <th>Forma pago</th>
+                                    <th class="text-gray" >Vaucher</th>
+                                    <th>Tipo pago</th>
                                     <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Titular Cuenta">Titular C.</th>
-                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                    <th>Descripción</th>
-                                    <th style="color: #ff0000; background-color: #45c920;">
-                                      <b id="monto_total_proy"></b>
-                                    </th>
-                                    <th>Vaucher</th>
-                                    <th>Estado</th>
+                                    <th>Titular Cuenta</th>
+                                    <th>Banco</th>
+                                    <th>Cuenta Destino</th>
                                   </tr>
+                                  
                                 </tfoot>
                               </table>
                             </div>
@@ -459,7 +477,40 @@
                   </div>
                   <!-- /.container-fluid -->
 
-                  <!--:::::::::AGREGAR PAGOS Y PROVEEDOR :::::::-->  
+                  <!-- ═════════════════════════  D E T A L L E   C O M P R A ═════════════════════════ -->  
+                  <!--Modal Ver compras-->
+                  <div class="modal fade" id="modal-ver-compras-general">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Detalle Compra</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div class="modal-body ">
+
+                          <div class="row detalle_de_compra_general" id="cargando-9-fomulario">
+                            <!--detalle de la compra-->
+                          </div>
+
+                          <div class="row" id="cargando-10-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ═════════════════════════  P R O V E E D O R ═════════════════════════ -->  
 
                   <!-- Modal agregar proveedores -->
                   <div class="modal fade" id="modal-agregar-proveedor">
@@ -497,10 +548,10 @@
                                   <label for="num_documento_prov">N° RUC / DNI</label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                       <span class="input-group-text" style="cursor: pointer;">
-                                        <i class="fas fa-search text-primary" id="search"></i>
-                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                        <i class="fas fa-search text-primary" id="search_prov"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge_prov" style="display: none;"></i>
                                       </span>
                                     </div>
                                   </div>
@@ -573,7 +624,14 @@
                                   <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
                                 </div>
                               </div>                  
-
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                <div class="progress" id="div_barra_progress_proveeedor">
+                                  <div id="barra_progress_proveeedor" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                             <!-- /.card-body -->
                             <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
@@ -587,6 +645,7 @@
                     </div>
                   </div>
 
+                  <!-- ═════════════════════════  P A G O   C O M P R A   A C T I V O   F I J O  ═════════════════════════ -->
                   <!--Modal agregar Pagos-->
                   <div class="modal fade" id="modal-agregar-pago">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -610,7 +669,7 @@
                                 <!-- id compras -->
                                 <input type="hidden" name="idpago_af_general" id="idpago_af_general" />
                                 <!-- Beneficiario -->
-                                <div class="col-lg-12">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                                   <div class="form-group">
                                     <label for="beneficiario_pago">Beneficiario</label>
                                     <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
@@ -619,10 +678,10 @@
                                   </div>
                                 </div>
                                 <!--Forma de pago -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="forma_pago">Forma Pago</label>
-                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="show_hide_forma_pago();">
                                       <option value="Transferencia">Transferencia</option>
                                       <option value="Efectivo">Efectivo</option>
                                       <option value="Crédito">Crédito</option>
@@ -630,24 +689,24 @@
                                   </div>
                                 </div>
                                 <!--tipo de pago -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 show_hide_tipo_pago">
                                   <div class="form-group">
                                     <label for="tipo_pago">Tipo Pago</label>
-                                    <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="captura_op();">
+                                    <select name="tipo_pago" id="tipo_pago" class="form-control select2" style="width: 100%;" onchange="datos_pago_proveedor();">
                                       <option value="Proveedor">Proveedor</option>
                                       <option value="Detraccion">Detracción</option>
                                     </select>
                                   </div>
                                 </div>
                                 <!-- Cuenta de destino-->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 show_hide_cta_destino">
                                   <div class="form-group">
                                     <label for="cuenta_destino_pago">Cuenta destino </label>
                                     <input type="text" name="cuenta_destino_pago" id="cuenta_destino_pago" class="form-control" placeholder="Cuenta destino" />
                                   </div>
                                 </div>
                                 <!-- banco -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 show_hide_banco">
                                   <div class="form-group">
                                     <label for="banco_pago">Banco</label>
                                     <select name="banco_pago" id="banco_pago" class="form-control select2" style="width: 100%;">
@@ -656,7 +715,7 @@
                                   </div>
                                 </div>
                                 <!-- Titular Cuenta-->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 show_hide_titular_cuenta">
                                   <div class="form-group">
                                     <label for="titular_cuenta_pago">Titular Cuenta </label>
                                     <input type="text" name="titular_cuenta_pago" id="titular_cuenta_pago" class="form-control" placeholder="Titular Cuenta" />
@@ -664,41 +723,49 @@
                                 </div>
 
                                 <!-- Fecha Inicio-->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="fecha_pago">Fecha Pago </label>
                                     <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" />
                                   </div>
                                 </div>
                                 <!-- Monto-->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="monto_pago">Monto </label>
                                     <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
                                   </div>
                                 </div>
                                 <!-- Número de Operación-->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="numero_op_pago">Número de operación </label>
                                     <input type="number" name="numero_op_pago" id="numero_op_pago" class="form-control" placeholder="Número de operación" />
                                   </div>
                                 </div>
                                 <!-- Descripcion-->
-                                <div class="col-lg-12">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                   <div class="form-group">
                                     <label for="descripcion_pago">Descripción </label> <br />
                                     <textarea name="descripcion_pago" id="descripcion_pago" class="form-control" rows="2"></textarea>
                                   </div>
                                 </div>
                                 <!--vaucher-->
-                                <div class="col-md-6 col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
                                   <label for="foto1">Voucher</label> <br />
                                   <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
                                   <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
                                   <input type="hidden" name="foto1_actual" id="foto1_actual" />
                                   <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                </div>
+                                <!-- barprogress -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                  <div class="progress" id="div_barra_progress_pago_compra">
+                                    <div id="barra_progress_pago_compra" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                      0%
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
 
@@ -715,17 +782,48 @@
                           </form>
                         </div>
                         <div class="modal-footer justify-content-between">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_c_pagos();">Close</button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_pago_compra();">Close</button>
                           <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <!--:::::::::AGREGAR FACTURAS Y COMPROBANTES :::::::-->  
+                  <!--Modal-ver-vaucher-pagos-->
+                  <div class="modal fade" id="modal-ver-vaucher">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xm">
+                      <div class="modal-content bg-color-0202022e shadow-none border-0">
+                        <div class="modal-header">
+                          <h4 class="modal-title text-white">Voucher pago</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-white" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row text-center" >
+
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                              <a class="btn btn-warning btn-block btn-xs" href="#" id="descargar_voucher_pago" download="Voucher" type="button" data-toggle="tooltip" data-original-title="Descargar Voucher"><i class="fas fa-download"></i></a>
+                            </div>
+
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                              <a class="btn btn-info btn-block btn-xs" target="_blank" href="#" id="ver_completo_voucher_pago" data-toggle="tooltip" data-original-title="Ver completo"><i class="fas fa-expand"></i></a>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-3">
+                              <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ═════════════════════════ C O M P R O B A N T E S   C O M R A ═════════════════════════ -->  
 
                   <!-- Modal agregar Comprobante-->
-                  <div class="modal fade" id="modal-comprobantes-af-g">
+                  <div class="modal fade" id="modal-comprobante-compra">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -741,7 +839,8 @@
                             
                             <div class="row" id="cargando-5-fomulario">
                               <!-- id Comprobante -->
-                              <input type="hidden" name="idcompra_af_g_o_p" id="idcompra_af_g_o_p" />
+                              <input type="hidden" name="idcompra" id="idcompra" />
+                              <input type="hidden" name="ruta_guardar" id="ruta_guardar" />
 
                               <!-- Doc  -->
                               <div class="col-md-12 col-lg-12">
@@ -754,14 +853,17 @@
                                     <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                     <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" />
                                   </div>
-                                  <div class="col-md-6 text-center comprobante">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion();"><i class="fa fa-eye"></i> Comprobante.</button>
+                                  <div class="col-md-6 text-center recargar_activo_fijo">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_activo_fijo', 'comprobante_compra');"><i class="fas fa-redo"></i> Recargar.</button>
+                                  </div>
+                                  <div class="col-md-6 text-center recargar_insumno">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra');"><i class="fas fa-redo"></i> Recargar.</button>
                                   </div>
                                   <div class="col-md-4 text-center descargar" style="display: none;">
-                                    <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob" style="padding: 0px 12px 0px 12px !important;" download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
+                                    <a type="button" class="btn-xs btn btn-warning btn-block btn-xs" id="descargar_comprob"  download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
                                   </div>
                                   <div class="col-md-4 text-center ver_completo" style="display: none;">
-                                    <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo" style="padding: 0px 12px 0px 12px !important;"> <i class="fas fa-expand"></i> Completo. </a>
+                                    <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo" > <i class="fas fa-expand"></i> Completo. </a>
                                   </div>
                                 </div>
                                 <div id="doc1_ver" class="text-center mt-4">
@@ -770,11 +872,10 @@
                                 <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
 
-                              <!-- ver_completo descargar comprobante subir -->
                               <!-- barprogress -->
                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
-                                <div class="progress" id="div_barra_progress2">
-                                  <div id="barra_progress2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                <div class="progress" id="div_barra_progress_comprobante">
+                                  <div id="barra_progress_comprobante" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                     0%
                                   </div>
                                 </div>
@@ -790,185 +891,18 @@
                             </div>
                             
                             <!-- /.card-body -->
-                            <button type="submit" style="display: none;" id="submit-form-planootro">Submit</button>
+                            <button type="submit" style="display: none;" id="submit-form-comprobante">Submit</button>
                           </form>
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
+                          <button type="submit" class="btn btn-success" id="guardar_registro_comprobante">Guardar Cambios</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <!--ver comprobantes proyecto-->
-                  <div class="modal fade" id="modal-comprobantes-af-p">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Actualizar Comprobante</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-
-                        <div class="modal-body">
-                          <!-- form start -->
-                          <form id="form-comprobante_p" name="form-comprobante_p" method="POST">
-                            <div class="card-body">
-                              <div class="row" id="cargando-7-fomulario">
-                                <!-- id Comprobante -->
-                                <input type="hidden" name="comp_idcompra_af_proyecto" id="comp_idcompra_af_proyecto" />
-
-                                <!-- Doc  -->
-                                <div class="col-md-12 col-lg-12">
-                                  <div class="row text-center">
-                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                      <label for="cip" class="control-label">Documento </label>
-                                    </div>
-                                    <div class="col-md-6 text-center subir_c">
-                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i" disabled ><i class="fas fa-file-upload"></i> Subir.</button>
-                                      <input type="hidden" id="doc_old_2" name="doc_old_2" />
-                                      <input style="display: none;" id="doc2" type="file" name="doc2" class="docpdf" />
-                                    </div>
-                                    <div class="col-md-6 text-center comprobante_c">
-                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion2();"><i class="fa fa-eye"></i> Comprobante.</button>
-                                    </div>
-                                    <div class="col-md-4 text-center descargar_c" style="display: none;">
-                                      <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_c_comprob" style="padding: 0px 12px 0px 12px !important;" download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
-                                    </div>
-                                    <div class="col-md-4 text-center ver_c_completo" style="display: none;">
-                                      <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_c_completo" style="padding: 0px 12px 0px 12px !important;"> <i class="fas fa-expand"></i> Completo. </a>
-                                    </div>
-                                  </div>
-                                  <div id="doc2_ver" class="text-center mt-4">
-                                    <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
-                                  </div>
-                                  <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
-                                </div>
-
-                                <!-- ver_completo descargar comprobante subir -->
-                                <!-- barprogress -->
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
-                                  <div class="progress" id="div_barra_progress2">
-                                    <div id="barra_progress2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                      0%
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="row" id="cargando-8-fomulario" style="display: none;">
-                                <div class="col-lg-12 text-center">
-                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                  <br />
-                                  <h4>Cargando...</h4>
-                                </div>
-                              </div>
-                            </div>
-                            <!-- /.card-body -->
-                            <button type="submit" style="display: none;" id="submit-form-comprobante-p">Submit</button>
-                          </form>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro_3" disabled>Guardar Cambios</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!--Modal Ver compras-->
-                  <div class="modal fade" id="modal-ver-compras-general">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Detalle Compra</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-
-                        <div class="modal-body ">
-
-                          <div class="row detalle_de_compra_general" id="cargando-9-fomulario">
-                            <!--detalle de la compra-->
-                          </div>
-
-                          <div class="row" id="cargando-10-fomulario" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                              <br />
-                              <h4>Cargando...</h4>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!--:::::::::::VER FACTURAS Y COMPROBANTES :::::::::::-->   
-
-                  <!-- Modal ver los documentos subidos -->
-                  <div class="modal fade" id="modal-ver-docs">
-                    <div class="modal-dialog modal-dialog-scrollable modal-md">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Documentos subidos</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-
-                        <div class="modal-body">
-                          <div class="row">
-                            <!-- Pdf 1 -->
-                            <div class="col-md-12 col-lg-12 mb-4">
-                              <div class="text-center mb-4" id="verdoc1_nombre">
-                                <!-- aqui va el nombre del pdf -->
-                              </div>
-
-                              <div id="verdoc1" class="text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="modal-footer justify-content-end">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!--Modal-ver-vaucher-pagos-->
-                  <div class="modal fade" id="modal-ver-vaucher">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xm">
-                      <div class="modal-content">
-                        <div class="modal-header" style="background-color: #ce834926;">
-                          <h4 class="modal-title">voucher</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div id="datosservicios" class="class-style" style="text-align: center;">
-                            <a class="btn btn-warning btn-block" href="#" id="descargar" download="Voucher" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                            <br />
-                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!--::::::::::: INSUMOS Y ACTIVOS FIJOS :::::::::::-->   
+                  <!-- ═════════════════════════ M A T E R I A L E S ═════════════════════════ -->   
 
                   <!-- Modal elegir Activo -->
                   <div class="modal fade" id="modal-elegir-activos">
@@ -979,7 +913,7 @@
                             <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
                               <button id="btnAgregarArt" type="button" class="btn btn-success btn-sm" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
                             </a>
-                            Seleccionar Activo 
+                            Seleccionar Activo Fijo
                           </h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
@@ -1029,7 +963,7 @@
                                 <input type="hidden" name="cont" id="cont" />      
                                 
                                 <!-- Nombre -->
-                                <div class="col-lg-8">
+                                <div class="col-12 col-sm-6 col-md-12 col-lg-8">
                                   <div class="form-group">
                                     <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
                                     <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
@@ -1037,24 +971,24 @@
                                 </div>
 
                                 <!-- Categoria -->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
-                                    <label for="categoria_insumos_af_p">Clasificación</label>
+                                    <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">*</sup></label>
                                     <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
                                     </select>
                                   </div>
                                 </div>
 
                                 <!-- Modelo -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                   <div class="form-group">
-                                    <label for="modelo_p">Modelo <sup class="text-danger">*</sup> </label>
+                                    <label for="modelo_p">Modelo </label>
                                     <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
                                   </div>
                                 </div>
 
                                 <!-- Serie -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="serie_p">Serie </label>
                                     <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
@@ -1062,7 +996,7 @@
                                 </div>
 
                                 <!-- Marca -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                   <div class="form-group">
                                     <label for="marca_p">Marca </label>
                                     <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." />
@@ -1070,23 +1004,23 @@
                                 </div>
 
                                 <!-- Color -->
-                                <div class="col-lg-6">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                   <div class="form-group">
-                                    <label for="color_p">Color</label>
+                                    <label for="color_p">Color <sup class="text-danger">*</sup></label>
                                     <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>
                                 
                                 <!-- Unnidad-->
-                                <div class="col-lg-6" id="content-t-unidad">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                   <div class="form-group">
-                                    <label for="unidad_medida_p">Unidad-medida</label>
+                                    <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">*</sup></label>
                                     <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>
 
                                 <!--Precio U-->
-                                <div class="col-lg-4">
+                                <div class="col-7 col-sm-7 col-md-8 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
                                     <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
@@ -1094,11 +1028,11 @@
                                 </div>
 
                                 <!-- Rounded switch -->
-                                <div class="col-lg-2">
+                                <div class="col-5 col-sm-5 col-md-4 col-lg-2">
                                   <div class="form-group">
                                     <label for="" class="labelswitch">Sin o Con (Igv)</label>
                                     <div id="switch_igv">
-                                      <div class="switch-holder myestilo-switch">
+                                      <div class="myestilo-switch">
                                         <div class="switch-toggle">
                                           <input type="checkbox" id="my-switch_igv" checked />
                                           <label for="my-switch_igv"></label>
@@ -1110,7 +1044,7 @@
                                 </div>
 
                                 <!--Sub Total subtotal igv total-->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_sin_igv_p">Sub Total</label>
                                     <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
@@ -1118,7 +1052,7 @@
                                 </div>
 
                                 <!--IGV-->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_igv_p">IGV</label>
                                     <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
@@ -1126,7 +1060,7 @@
                                 </div>
 
                                 <!--Total-->
-                                <div class="col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_total_p">Total</label>
                                     <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
@@ -1134,54 +1068,62 @@
                                 </div>
 
                                 <!--Descripcion-->
-                                <div class="col-lg-12">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                   <div class="form-group">
                                     <label for="descripcion_p">Descripción </label> <br />
                                     <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>
                                   </div>
                                 </div>
 
-                                <!--iamgen-material-->
-                                <div class="col-md-6 col-lg-6">
+                                <!--imgen-material-->
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                   <label for="foto2">Imagen</label>
                                   <div style="text-align: center;">
                                     <img
-                                      onerror="this.src='../dist/img/default/img_defecto_activo_fijo_material.png';"
-                                      src="../dist/img/default/img_defecto_activo_fijo_material.png"
-                                      class="img-thumbnail"
-                                      id="fotop2_i"
-                                      style="cursor: pointer !important; height: 100% !important;"
-                                      width="auto"
+                                      onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';"
+                                      src="../dist/img/default/img_defecto_activo_fijo.png"
+                                      class="img-thumbnail cursor-pointer"
+                                      id="foto2_i"
+                                      width="100%"
                                     />
-                                    <input style="display: none;" type="file" name="fotop2" id="fotop2" accept="image/*" />
-                                    <input type="hidden" name="fotop2_actual" id="fotop2_actual" />
-                                    <div class="text-center" id="fotop2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                                    <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
+                                    <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                    <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
                                   </div>
                                 </div>
 
                                 <!-- Ficha tecnica -->
-                                <div class="col-md-6 col-lg-6">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                   <label for="doc2_i" >Ficha técnica <b class="text-danger">(Imagen o PDF)</b> </label>  
                                   <div class="row text-center">                               
                                     <!-- Subir documento -->
-                                    <div class="col-md-6 text-center">
-                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doct2_i">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                         <i class="fas fa-upload"></i> Subir.
                                       </button>
-                                      <input type="hidden" id="doc_oldt_2" name="doc_oldt_2" />
-                                      <input style="display: none;" id="doct2" type="file" name="doct2" accept="application/pdf, image/*" class="docpdf" /> 
+                                      <input type="hidden" id="doc_old_2" name="doc_old_2" />
+                                      <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                     </div>
                                     <!-- Recargar -->
-                                    <div class="col-md-6 text-center comprobante">
-                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion3(2, 'ficha_tecnica');">
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center comprobante">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'compra', 'ficha_tecnica');">
                                       <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                     </div>                                  
                                   </div>
-                                  <div id="doct2_ver" class="text-center mt-4">
+                                  <div id="doc2_ver" class="text-center mt-4">
                                     <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
                                   </div>
-                                  <div class="text-center" id="doct2_nombre"><!-- aqui va el nombre del pdf --></div>
+                                  <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                                </div>
+
+                                <!-- barprogress -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                  <div class="progress" id="div_barra_progress_activo_fijo">
+                                    <div id="barra_progress_activo_fijo" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                      0%
+                                    </div>
+                                  </div>
                                 </div>
 
                               </div>
@@ -1208,19 +1150,17 @@
 
                   <!--Modal ver grande img producto -->
                   <div class="modal fade" id="modal-ver-img-material">
-                    <div class="modal-dialog modal-dialog-scrollable modal-md">
-                      <div class="modal-content">
-                        <div class="modal-header" style="background-color: #49a9ceb8;">
-                          <h4 class="modal-title nombre-img-material">Img producto</h4>
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+                      <div class="modal-content bg-color-0202022e shadow-none border-0">
+                        <div class="modal-header">
+                          <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
+                            <span class="text-white" aria-hidden="true">&times;</span>
                           </button>
                         </div>
                         <div class="modal-body">
-                          <div class="class-style" style="text-align: center;">
-                            
-                            <img onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
-                            
+                          <div class="text-center">                             
+                            <img src="" class="img-thumbnail" id="ver_img_material"  width="auto" onerror="this.src='../dist/svg/404-v2.svg';" />                            
                           </div>
                         </div>
                       </div>

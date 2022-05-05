@@ -7,6 +7,8 @@ require_once "../modelos/Bancos.php";
 
 $bancos = new Bancos();
 
+$date_now = date("d-m-Y g.i-a");
+
 $idbancos = isset($_POST["idbancos"]) ? limpiarCadena($_POST["idbancos"]) : "";
 $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
 $alias = isset($_POST["alias"]) ? limpiarCadena($_POST["alias"]) : "";
@@ -34,7 +36,7 @@ switch ($_GET["op"]) {
 
       $flat_img1 = true;
 
-      $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+      $imagen1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
       move_uploaded_file($_FILES["imagen1"]["tmp_name"], "../dist/docs/banco/logo/" . $imagen1);
     }

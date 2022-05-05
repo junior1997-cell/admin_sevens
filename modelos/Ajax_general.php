@@ -104,7 +104,7 @@
     /* ══════════════════════════════════════ C O L O R ══════════════════════════════════════ */
 
     public function select2_color() {
-      $sql = "SELECT idcolor AS id, nombre_color AS nombre FROM color WHERE estado='1' AND estado_delete = '1' ORDER BY nombre_color ASC;";
+      $sql = "SELECT idcolor AS id, nombre_color AS nombre, hexadecimal FROM color WHERE idcolor > 1 AND estado='1' AND estado_delete = '1' ORDER BY nombre_color ASC;";
       return ejecutarConsulta($sql);
     }
 

@@ -36,6 +36,7 @@
 <script src="../plugins/datatables2/jszip.min.js"></script>
 <script src="../plugins/datatables2/pdfmake.min.js"></script>
 <script src="../plugins/datatables2/vfs_fonts.js"></script>
+<script src="../plugins/datatables2/datetime.js"></script>
 <!-- Responsive datatable -->
 <script src="../plugins/datatables2/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="../plugins/datatables2/datatables-responsive/js/responsive.bootstrap4.min.js"></script>

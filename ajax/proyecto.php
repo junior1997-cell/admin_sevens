@@ -19,6 +19,8 @@
 
       $proyecto = new Proyecto();
 
+      $date_now = date("d-m-Y g.i-a");
+
       $idproyecto				    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):""; 
       $tipo_documento			  = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
       $numero_documento		  = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
@@ -64,7 +66,7 @@
 
             $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);            
               
-            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+            $doc1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc1);
             
@@ -83,7 +85,7 @@
 
             $ext_doc2     = explode(".", $_FILES["doc2"]["name"]);
               
-            $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
+            $doc2 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
 
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc2);
             
@@ -102,7 +104,7 @@
 
             $ext_doc3     = explode(".", $_FILES["doc3"]["name"]);
               
-            $doc3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
+            $doc3 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
 
             move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc3);
             
@@ -121,7 +123,7 @@
 
             $ext_doc4     = explode(".", $_FILES["doc4"]["name"]);
               
-            $doc4 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
+            $doc4 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
 
             move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc4);
             
@@ -140,7 +142,7 @@
 
             $ext_doc5     = explode(".", $_FILES["doc5"]["name"]);
               
-            $doc5 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
+            $doc5 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
 
             move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc5);
             
@@ -160,7 +162,7 @@
             $ext_doc6     = explode(".", $_FILES["doc6"]["name"]);
             
             // echo json_encode($_FILES['doc6']); 
-            $doc6 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
+            $doc6 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
 
             move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc6);
             

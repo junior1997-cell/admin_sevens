@@ -18,7 +18,7 @@ class AllProveedor
     if (empty($existe['data'])) {
       $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
       VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
-      $sw = array( 'status' => true, 'message' => 'noduplicado', 'data' => $existe, 'id_tabla' => ejecutarConsulta_retornarID($sql));      
+      $sw =  ejecutarConsulta_retornarID($sql);      
     } else{
 
       $info_repetida = ''; 
@@ -32,7 +32,7 @@ class AllProveedor
           <hr class="m-t-2px m-b-2px">
         </li>'; 
       }
-      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
     }
 
     return $sw;

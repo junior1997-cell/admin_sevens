@@ -223,7 +223,7 @@ class Compra_insumos
 
     $sql = "SELECT 
 		dp.idproducto as idproducto,
-		dp.ficha_tecnica_producto as ficha_tecnica,
+		dp.ficha_tecnica_producto  as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,
 		dp.cantidad ,
     dp.unidad_medida, dp.color,
 		dp.precio_sin_igv ,

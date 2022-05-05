@@ -174,6 +174,23 @@ function decodeHtml(str) {
 // to miniscula
 function convert_minuscula(e) { e.value = e.value.toLowerCase(); }
 
+function quitar_punto(string){ 
+  return string.replace(/\./g,'');
+}
+
+function replace_punto_a_guion(params) {
+  return string.replace(/\./g,'-');
+}
+
+function quitar_guion(str) {
+
+  if (str == '' || str == null ) {
+    return "-";
+  } else {
+    return str.replace("-", "");
+  }  
+}
+
 /*  ══════════════════════════════════════════ - S U B I R   D O C S  - ══════════════════════════════════════════ */
 
 /* PREVISUALIZAR: img */
@@ -939,11 +956,4 @@ function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad='') {
   }
 }
 
-function quitar_guion(str) {
 
-  if (str == '' || str == null ) {
-    return "-";
-  } else {
-    return str.replace("-", "");
-  }  
-}

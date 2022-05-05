@@ -16,6 +16,8 @@
 
       $materiales = new Materiales();
 
+      $date_now = date("d-m-Y g.i-a");
+
       $idproducto = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "";
       $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
 
@@ -53,7 +55,7 @@
 
             $flat_img1 = true;
 
-            $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $imagen1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["imagen1"]["tmp_name"], "../dist/docs/material/img_perfil/" . $imagen1);
           }
@@ -71,7 +73,7 @@
 
             $flat_ficha1 = true;
 
-            $ficha_tecnica = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $ficha_tecnica = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica);
           }
@@ -134,7 +136,7 @@
           $imagen = '';
           $ficha_tecnica = '';
           $monto_igv = '';
-          $imagen_error = "this.src='../dist/svg/default_producto.svg'";
+          $imagen_error = "this.src='../dist/svg/404-v2.svg'";
           $cont=1;
 
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -142,7 +144,7 @@
           if ($rspta['status']) {
             while ($reg = $rspta['data']->fetch_object()) {
 
-              if (empty($reg->imagen)) { $imagen = 'img_material_defect.jpg';  } else { $imagen = $reg->imagen;   }
+              if (empty($reg->imagen)) { $imagen = 'producto-sin-foto.svg';  } else { $imagen = $reg->imagen;   }
   
               empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
               

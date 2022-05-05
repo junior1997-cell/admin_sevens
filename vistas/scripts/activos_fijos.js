@@ -20,9 +20,16 @@ function init() {
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-activos-fijos").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#color").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unid_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
   $("#categoria_insumos_af").select2({ theme: "bootstrap4", placeholder: "Seleccinar una categoria", allowClear: true, });
+}
+
+function templateColor (state) {
+  if (!state.id) { return state.text; }
+  var color_bg = state.title != '' ? `${state.title}`: '#ffffff00';   
+  var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2"><i class="fas fa-square"></i><i class="fas fa-square"></i></b>${state.text}</span>`);
+  return $state;
 }
 
 // abrimos el navegador de archivos
@@ -334,7 +341,7 @@ function verdatos(idproducto){
     
       if (e.data.imagen != '') {
 
-        imagen_perfil=`<img src="../dist/docs/material/img_perfil/${e.data.imagen}" alt="" class="img-thumbnail w-150px">`
+        imagen_perfil=`<img src="../dist/docs/material/img_perfil/${e.data.imagen}" onerror="this.src='../dist/svg/404-v2.svg';" alt="" class="img-thumbnail w-150px">`
         
         btn_imagen_perfil=`
         <div class="row">
@@ -348,7 +355,7 @@ function verdatos(idproducto){
       
       } else {
 
-        imagen_perfil='No hay imagen';
+        imagen_perfil=`<img src="../dist/docs/material/img_perfil/producto-sin-foto.svg" onerror="this.src='../dist/svg/404-v2.svg';" alt="" class="img-thumbnail w-150px">`;
         btn_imagen_perfil='';
 
       }     
@@ -454,7 +461,7 @@ function ver_perfil(file, nombre) {
   $('.foto-insumo').html(nombre);
   $(".tooltip").removeClass("show").addClass("hidde");
   $("#modal-ver-perfil-activo-fijo").modal("show");
-  $('#perfil-insumo').html(`<center><img src="${file}" alt="Perfil" width="100%"></center>`);
+  $('#perfil-insumo').html(`<center><img src="${file}" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail" alt="Perfil" width="100%"></center>`);
 }
 
 //Función para desactivar registros

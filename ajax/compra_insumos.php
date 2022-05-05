@@ -18,7 +18,9 @@ if (!isset($_SESSION["nombre"])) {
 
     $compra = new Compra_insumos();
     $proveedor = new AllProveedor();
-    $activos_fijos = new Activos_fijos();        
+    $activos_fijos = new Activos_fijos();      
+    
+    $date_now = date("d-m-Y g.i-a");
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
@@ -269,7 +271,7 @@ if (!isset($_SESSION["nombre"])) {
     
           $doc_comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
     
-          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/compra/comprobante_compra/" . $doc_comprobante);
+          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/compra_insumo/comprobante_compra/" . $doc_comprobante);
         }
 
         //Borramos el comprobante
@@ -280,7 +282,7 @@ if (!isset($_SESSION["nombre"])) {
           $doc1_ant = $datos_f1->fetch_object()->comprobante;
     
           if ($doc1_ant != "") {
-            unlink("../dist/docs/compra/comprobante_compra/" . $doc1_ant);
+            unlink("../dist/docs/compra_insumo/comprobante_compra/" . $doc1_ant);
           }
         }
     
@@ -332,10 +334,10 @@ if (!isset($_SESSION["nombre"])) {
          
         $num_comprob = "";
     
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
           $rspta2 = $compra->pago_servicio($reg->idcompra_proyecto);
     
-          empty($rspta2) ? ($saldo = 0) : ($saldo = $reg->total - $rspta2['total_pago_compras']);       
+          empty($rspta2['data']) ? ($saldo = 0) : ($saldo = $reg->total - $rspta2['data']['total_pago_compras']);       
     
           if ($saldo == $reg->total) {
             $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
@@ -369,33 +371,33 @@ if (!isset($_SESSION["nombre"])) {
     
             $deposito_Actual = 0;
     
-            if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
+            if ($rspta2['data']['total_pago_compras'] == null || empty($rspta2['data']['total_pago_compras'])) {
               $deposito_Actual = 0;
             } else {
-              $deposito_Actual = $rspta2['total_pago_compras'];
+              $deposito_Actual = $rspta2['data']['total_pago_compras'];
             }
     
             $list_segun_estado_detracc = '<div class="text-center"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg->idcompra_proyecto . ',' . $reg->idproyecto . ',' . $reg->total . ',' . $deposito_Actual .')">'.
                 '<i class="fas fa-' . $icon .' nav-icon"></i> ' .$nombre .
               '</button>' .
-              ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($rspta2['total_pago_compras'], 2, '.', ',') . '</button>'.
+              ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($rspta2['data']['total_pago_compras'], 2, '.', ',') . '</button>'.
             '</div>';
     
           } else {
     
             $deposito_Actual = 0;
     
-            if ($rspta2['total_pago_compras'] == null || empty($rspta2['total_pago_compras'])) {
+            if ($rspta2['data']['total_pago_compras'] == null || empty($rspta2['data']['total_pago_compras'])) {
               $deposito_Actual = 0;
             } else {
-              $deposito_Actual = $rspta2['total_pago_compras'];
+              $deposito_Actual = $rspta2['data']['total_pago_compras'];
             }
     
             $list_segun_estado_detracc = '<div class="text-center text-nowrap">'. 
               '<button class="btn btn-' . $c . ' btn-xs m-t-2px" onclick="listar_pagos(' . $reg->idcompra_proyecto . ',' .  $reg->idproyecto .  ',' .    $reg->total . ', ' .  $deposito_Actual . ')">'.
                 '<i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . 
               '</button>' .
-              ' <button style="font-size: 14px;" class="btn btn-' .  $cc . ' btn-sm">' .  number_format($rspta2['total_pago_compras'], 2, '.', ',') . '</button>'.
+              ' <button style="font-size: 14px;" class="btn btn-' .  $cc . ' btn-sm">' .  number_format($rspta2['data']['total_pago_compras'], 2, '.', ',') . '</button>'.
             '</div>';
           }
     
@@ -416,7 +418,7 @@ if (!isset($_SESSION["nombre"])) {
             "5" => empty($reg->estado_detraccion) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
             "6" => number_format($reg->total, 2, '.', ','),
             "7" => $list_segun_estado_detracc,
-            "8" => number_format($rspta2['total_pago_compras'], 2, '.', ','),
+            "8" => number_format($rspta2['data']['total_pago_compras'], 2, '.', ','),
             "9" => number_format($saldo, 2, '.', ','),
             "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
             "11" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
@@ -443,7 +445,7 @@ if (!isset($_SESSION["nombre"])) {
         $info = "info";
         $icon = "eye";
     
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
           $data[] = [
             "0" => $cont++,
             "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
@@ -473,7 +475,7 @@ if (!isset($_SESSION["nombre"])) {
         //Vamos a declarar un array
         $data = []; $cont = 1;
     
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
           $data[] = [
             "0" => $cont++,
             "1" => '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
@@ -554,7 +556,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $tbody = "";
 
-        while ($reg = $rspta2->fetch_object()) {
+        while ($reg = $rspta2['data']->fetch_object()) {
 
           empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
           
@@ -636,7 +638,7 @@ if (!isset($_SESSION["nombre"])) {
     
           $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
     
-          move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/compra/comprobante_pago/" . $imagen1);
+          move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/compra_insumo/comprobante_pago/" . $imagen1);
         }
     
         if (empty($idpago_compras)) {
@@ -653,11 +655,11 @@ if (!isset($_SESSION["nombre"])) {
     
             $datos_f1 = $compra->obtenerComprobanteCompra($idpago_compras);
     
-            $img1_ant = $datos_f1->fetch_object()->imagen;
+            $img1_ant = $datos_f1['data']->fetch_object()->imagen;
     
             if ($img1_ant != "") {
     
-              unlink("../dist/docs/compra/comprobante_pago/" . $img1_ant);
+              unlink("../dist/docs/compra_insumo/comprobante_pago/" . $img1_ant);
             }
           }
     
@@ -713,7 +715,7 @@ if (!isset($_SESSION["nombre"])) {
         $suma = 0;
         $imagen = '';
     
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
     
           $suma = $suma + $reg->monto;                 
     
@@ -768,7 +770,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $imagen = '';
     
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
     
           empty($reg->imagen)
             ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
@@ -822,7 +824,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $imagen = '';
     
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
 
           empty($reg->imagen)
             ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')

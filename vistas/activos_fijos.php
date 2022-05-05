@@ -135,7 +135,7 @@
                               <input type="hidden" name="idproducto" id="idproducto" />                              
 
                               <!-- Nombre -->
-                              <div class="col-lg-8">
+                              <div class="col-12 col-sm-6 col-md-12 col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre">Nombre <sup class="text-danger">*</sup></label>
                                   <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del activo." />
@@ -168,7 +168,7 @@
                               </div>
 
                               <!-- Marca -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="marca">Marca </label>
                                   <input class="form-control" type="text" id="marca" name="marca" placeholder="Marca de activo." />
@@ -204,7 +204,7 @@
                                 <div class="form-group">
                                   <label for="" class="labelswitch">Sin o Con (Igv)</label>
                                   <div id="switch_igv">
-                                    <div class="switch-holder myestilo-switch">
+                                    <div class="myestilo-switch">
                                       <div class="switch-toggle">
                                         <input type="checkbox" id="my-switch_igv" checked />
                                         <label for="my-switch_igv"></label>

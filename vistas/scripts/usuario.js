@@ -209,18 +209,15 @@ function guardar_y_editar_usuario(e) {
   crud_guardar_editar_card_xhr(
     "../ajax/usuario.php?op=guardar_y_editar_usuario", 
     formData, 
-    function(){ limpiar_form_usuario(); },
-    function(){ sw_success('Correcto!', "Usuario guardado correctamente." ) },  
     'usuario',
     function(){ tabla.ajax.reload(null, false); }, 
-    function(){ show_hide_form(1); },  
+    function(){ show_hide_form(1); limpiar_form_usuario(); sw_success('Correcto!', "Usuario guardado correctamente." ); },  
   );
 }
 
 function mostrar(idusuario) {
   $(".tooltip").removeClass("show").addClass("hidde");
-  $(".trabajador-name").html(`<i class="fas fa-spinner fa-pulse fa-2x"></i>`);
-  
+  $(".trabajador-name").html(`<i class="fas fa-spinner fa-pulse fa-2x"></i>`);  
 
   limpiar_form_usuario();  
 

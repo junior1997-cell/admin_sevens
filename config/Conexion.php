@@ -1,6 +1,6 @@
 <?php
-//require_once "global_local.php";
-require_once "global.php";
+require_once "global_local.php";
+// require_once "global_nube.php";
 
 $conexion = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
@@ -160,4 +160,5 @@ if (!function_exists('ejecutarConsulta')) {
     return htmlspecialchars_decode($str, ENT_QUOTES);
   }
 }
+
 ?>
