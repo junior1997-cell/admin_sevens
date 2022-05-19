@@ -67,7 +67,7 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma Pago</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
                                 <th>Fecha</th>
                                 <th>Subtotal</th>
@@ -76,6 +76,8 @@
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                 <th>Estado</th>
+                                <th>Comprobante</th>
+                                <th>Numero</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -92,6 +94,8 @@
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                 <th>Estado</th>
+                                <th>Comprobante</th>
+                                <th>Numero</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -106,12 +110,12 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar otros gastos -->
+                <!-- MODAL - agregar otros gastos -->
                 <div class="modal fade" id="modal-agregar-otras_facturas">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title"><b>Agregar:</b> comprobante Otra factura</h4>
+                        <h4 class="modal-title"><b id="estado-edit-add-modal" >Agregar:</b> Comprobante Otra factura</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -278,7 +282,7 @@
                   </div>
                 </div>
 
-                <!--Modal-ver-comprobante-->
+                <!-- MODAL -ver-comprobante-->
                 <div class="modal fade" id="modal-ver-comprobante">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -290,6 +294,26 @@
                       </div>
                       <div class="modal-body ver-comprobante">              
                          
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER DETALLE INSUMO-->
+                <div class="modal fade" id="modal-ver-otra-factura">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Detalle</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div id="datos-otra-factura" class="class-style">
+                          <!-- vemos los datos del trabajador -->
+                        </div>
                       </div>
                     </div>
                   </div>

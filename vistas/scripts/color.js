@@ -25,6 +25,7 @@ function init() {
 
 //Función limpiar
 function limpiar() {
+  $("#guardar_registro_color").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
   $("#idcolor").val("");
   $("#nombre_color").val("");
@@ -98,7 +99,7 @@ function guardaryeditar_color(e) {
 				limpiar();
 
         $("#modal-agregar-color").modal("hide");
-
+        $("#guardar_registro_color").html('Guardar Cambios').removeClass('disabled');
 			}else{
 				ver_errores(e);
 			}
@@ -121,6 +122,7 @@ function guardaryeditar_color(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_color").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_color").css({ width: "0%",  });
       $("#barra_progress_color").text("0%");
     },

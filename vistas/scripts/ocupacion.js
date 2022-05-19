@@ -17,6 +17,7 @@ function init() {
 
 //Función limpiar
 function limpiar_ocupacion() {
+  $("#guardar_registro_ocupacion").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
   $("#idocupacion").val("");
   $("#nombre_ocupacion").val(""); 
@@ -93,6 +94,7 @@ function guardaryeditar_ocupacion(e) {
 				limpiar_ocupacion();
 
         $("#modal-agregar-ocupacion").modal("hide");
+        $("#guardar_registro_ocupacion").html('Guardar Cambios').removeClass('disabled');
 
 			}else{
 				ver_errores(e);	
@@ -116,6 +118,7 @@ function guardaryeditar_ocupacion(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_ocupacion").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_ocupacion").css({ width: "0%",  });
       $("#barra_progress_ocupacion").text("0%");
     },

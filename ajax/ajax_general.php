@@ -15,7 +15,10 @@
     require_once "../modelos/Ajax_general.php";
 
     $ajax_general = new Ajax_general();
-     
+    
+    $imagen_error = "this.src='../dist/svg/404-v2.svg'";
+
+    $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
     switch ($_GET["op"]) {       
 
@@ -278,6 +281,158 @@
 
           echo json_encode($rspta, true); 
         }
+      break;
+
+      /* ══════════════════════════════════════ P R O D U C T O ══════════════════════════════════════ */
+      case 'tblaActivosFijos':
+          
+        $rspta = $ajax_general->tblaActivosFijos();
+        //Vamos a declarar un array
+        $datas = []; 
+
+        if ($rspta['status'] == true) {
+          
+          while ($reg = $rspta['data']->fetch_object()) {
+
+            $img_parametro = ""; $img = "";  $ficha_tecnica = "";  $color_stock = "";
+  
+            if (empty($reg->imagen)) {
+              $img = 'src="../dist/docs/material/img_perfil/producto-sin-foto.svg"';
+            } else {
+              $img = 'src="../dist/docs/material/img_perfil/' . $reg->imagen . '"';
+              $img_parametro = $reg->imagen;
+            }
+  
+            !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              : ($ficha_tecnica = '<center><span class="text-center" data-toggle="tooltip" data-original-title="Vacío"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+  
+            $datas[] = [
+              "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->igv . '\', \'' . $reg->precio_con_igv . '\', \'' .  $img_parametro . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
+              "1" => '<div class="user-block w-250px">'.
+                '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
+                '<span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>'.
+              '</div>',
+              "2" => $reg->categoria,
+              "3" => number_format($reg->precio_con_igv, 2, '.', ','),
+              "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
+              "5" => $ficha_tecnica . $toltip,
+            ];
+          }
+  
+          $results = [
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($datas), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
+            "aaData" => $datas,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+        }
+    
+      break;
+
+      case 'tblaInsumos':
+          
+        $rspta = $ajax_general->tblaInsumos();
+        //Vamos a declarar un array
+        $datas = []; 
+
+        if ($rspta['status'] == true) {
+
+          while ($reg = $rspta['data']->fetch_object()) {
+
+            $img_parametro = ""; $img = "";  $ficha_tecnica = "";  $color_stock = "";
+  
+            if (empty($reg->imagen)) {
+              $img = 'src="../dist/docs/material/img_perfil/producto-sin-foto.svg"';
+            } else {
+              $img = 'src="../dist/docs/material/img_perfil/' . $reg->imagen . '"';
+              $img_parametro = $reg->imagen;
+            }
+  
+            !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              : ($ficha_tecnica = '<center><span class="text-center" data-toggle="tooltip" data-original-title="Vacío"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+  
+            $datas[] = [
+              "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->igv . '\', \'' . $reg->precio_con_igv . '\', \'' .  $img_parametro . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
+              "1" => '<div class="user-block w-250px">'.
+                '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
+                '<span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>'.
+              '</div>',
+              "2" => $reg->categoria,
+              "3" => number_format($reg->precio_con_igv, 2, '.', ','),
+              "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
+              "5" => $ficha_tecnica . $toltip,
+            ];
+          }
+  
+          $results = [
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($datas), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
+            "aaData" => $datas,
+          ];
+
+          echo json_encode($results, true);
+        } else {
+
+          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+        }
+    
+      break;
+
+      case 'tblaInsumosYActivosFijos':
+          
+        $rspta = $ajax_general->tblaInsumosYActivosFijos();
+        //Vamos a declarar un array
+        $datas = []; 
+
+        if ($rspta['status'] == true) {
+
+          while ($reg = $rspta['data']->fetch_object()) {
+
+            $img_parametro = ""; $img = "";  $ficha_tecnica = "";  $color_stock = "";
+  
+            if (empty($reg->imagen)) {
+              $img = 'src="../dist/docs/material/img_perfil/producto-sin-foto.svg"';
+            } else {
+              $img = 'src="../dist/docs/material/img_perfil/' . $reg->imagen . '"';
+              $img_parametro = $reg->imagen;
+            }
+  
+            !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              : ($ficha_tecnica = '<center><span class="text-center" data-toggle="tooltip" data-original-title="Vacío"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+  
+            $datas[] = [
+              "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->igv . '\', \'' . $reg->precio_con_igv . '\', \'' .  $img_parametro . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
+              "1" => '<div class="user-block w-250px">'.
+                '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
+                '<span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>'.
+              '</div>',
+              "2" => $reg->categoria,
+              "3" => number_format($reg->precio_con_igv, 2, '.', ','),
+              "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
+              "5" => $ficha_tecnica . $toltip,
+            ];
+          }
+  
+          $results = [
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($datas), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($datas), //enviamos el total registros a visualizar
+            "aaData" => $datas,
+          ];
+
+          echo json_encode($results, true);
+        } else {
+
+          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+        }
+    
       break;
     }
       

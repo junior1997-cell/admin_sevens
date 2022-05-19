@@ -60,6 +60,9 @@ function doc2_eliminar() {
 
 //Función limpiar
 function limpiar() {
+  
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
   //Mostramos los Materiales
   $("#idproducto").val("");  
   $("#nombre").val("");
@@ -207,6 +210,9 @@ function guardaryeditar(e) {
         limpiar();
 
         $("#modal-agregar-activos-fijos").modal("hide");
+
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
       } else {         
         ver_errores(e);
       }
@@ -229,6 +235,7 @@ function guardaryeditar(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
       $("#barra_progress").text("0%");
     },
@@ -349,7 +356,7 @@ function verdatos(idproducto){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/img_perfil/${e.data.imagen}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL - ${e.data.nombre}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -370,7 +377,7 @@ function verdatos(idproducto){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="Ficha Tecnica - ${e.data.nombre}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="Ficha Tecnica - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       

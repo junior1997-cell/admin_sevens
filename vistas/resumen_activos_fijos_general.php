@@ -83,6 +83,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
                                   <th>Suma Total</th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -104,6 +106,8 @@
                                   <th class="text-right">
                                     <h5 class="suma_total_de_maquinarias" style="font-weight: bold;">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
                                   </th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -137,6 +141,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
                                   <th>Suma Total</th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -158,6 +164,8 @@
                                   <th class="text-right">
                                     <h5 class="suma_total_de_equipos" style="font-weight: bold;">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
                                   </th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -191,6 +199,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
                                   <th>Suma Total</th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -212,6 +222,8 @@
                                   <th class="text-center">
                                     <h5 class="suma_total_de_herramientas">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
                                   </th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -245,6 +257,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
                                   <th>Suma Total</th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -266,6 +280,8 @@
                                   <th class="text-center">
                                     <h5 class="suma_total_de_oficina">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
                                   </th>
+                                  <th>Producto</th>
+                                  <th>Modelo</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -328,10 +344,10 @@
                                   <th>Módulo</th>
                                   <th>Proveedor</th>
                                   <th >Fecha compra</th>
-                                  <th class="cantidad_x_producto"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-right precio_promedio text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>  
-                                  <th class="text-right descuento_x_producto text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th class="text-right subtotal_x_producto text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="cantidad_x_producto" data-toggle="tooltip" data-original-title="Suma total de cantidad"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-right precio_promedio text-nowrap h5" data-toggle="tooltip" data-original-title="Precio promedio"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>  
+                                  <th class="text-right descuento_x_producto text-nowrap" data-toggle="tooltip" data-original-title="Suma total de descuento"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th class="text-right subtotal_x_producto text-nowrap h5" data-toggle="tooltip" data-original-title="Suma"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
                                 </tr>
                               </tfoot>
@@ -529,40 +545,11 @@
                   <!-- /.row -->
                 </div>
                 <!-- /.container-fluid -->
+                
 
-                <!-- MODAL - elegir material -->
-                <div class="modal fade" id="modal-elegir-material">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Seleccionar producto -</h4>
-                        <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
-                          <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
-                        </a>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body table-responsive">
-                        <table id="tblamateriales" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
-                          <thead>
-                            <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                            <th>Nombre Producto</th>
-                            <th>Clasificación</th>
-                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
-                            <th>Descripción</th>
-                            <th data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
-                          </thead>
-                          <tbody></tbody>
-                        </table>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
 
+                <!-- ══════════════════════════════════════ P R O V E E D O R ══════════════════════════════════════ -->
                 <!-- MODAL - agregar proveedores -->
                 <div class="modal fade" id="modal-agregar-proveedor">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -599,7 +586,7 @@
                                 <label for="num_documento_prov">N° RUC / DNI</label>
                                 <div class="input-group">
                                   <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                     <span class="input-group-text" style="cursor: pointer;">
                                       <i class="fas fa-search text-primary" id="search"></i>
                                       <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
@@ -688,6 +675,92 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- ══════════════════════════════════════ D E T A L L E   C O M P R A S ══════════════════════════════════════ -->
+                <!-- MODAL - DETALLE compras - charge -->
+                <div class="modal fade" id="modal-ver-compras">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Detalle Compra</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="row detalle_de_compra" id="cargando-5-fomulario">                            
+                          <!--detalle de la compra-->
+                        </div>
+
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ══════════════════════════════════════ P R O D U C T O ══════════════════════════════════════ -->
+                <!-- MODAL TABLA - elegir material -->
+                <div class="modal fade" id="modal-elegir-material">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Seleccionar producto -</h4>
+                        <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
+                          <button type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body table-responsive">
+                        <table id="tblamateriales" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
+                          <thead>
+                            <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                            <th>Nombre Producto</th>
+                            <th>Clasificación</th>
+                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
+                            <th>Descripción</th>
+                            <th data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
+                          </thead>
+                          <tbody></tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER PERFIL INSUMO-->
+                <div class="modal fade" id="modal-ver-perfil-insumo">
+                  <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white foto-insumo">Foto Insumo</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body"> 
+                        <div id="perfil-insumo" class="class-style">
+                          <!-- vemos los datos del trabajador -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>   
 
                 <!-- MODAL - agregar MATERIALES Y ACTIVOS FIJOS -->
                 <div class="modal fade" id="modal-agregar-material-activos-fijos">
@@ -828,10 +901,9 @@
                                   <img
                                     onerror="this.src='../dist/img/default/img_defecto_activo_fijo_material.png';"
                                     src="../dist/img/default/img_defecto_activo_fijo_material.png"
-                                    class="img-thumbnail"
+                                    class="img-thumbnail cursor-pointer"
                                     id="foto2_i"
-                                    style="cursor: pointer !important; height: 100% !important;"
-                                    width="auto"
+                                    width="100%"
                                   />
                                   <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
                                   <input type="hidden" name="foto2_actual" id="foto2_actual" />
@@ -858,6 +930,15 @@
                                   <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" />
                                 </div>
                                 <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                <div class="progress" id="div_barra_progress_activo_fijo">
+                                  <div id="barra_progress_activo_fijo" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div> 
+                                </div>
                               </div>
                             </div>
 
@@ -904,49 +985,17 @@
                 <!-- MODAL - ver grande img producto -->
                 <div class="modal fade" id="modal-ver-img-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
-                    <div class="modal-content">
-                      <div class="modal-header" style="background-color: #49a9ceb8;">
-                        <h4 class="modal-title nombre-img-material">Img producto</h4>
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header" >
+                        <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
+                          <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <img onerror="this.src='../dist/img/default/img_defecto_activo_fijo.png';" src="" class="img-thumbnail" id="ver_img_material" style="cursor: pointer !important;" width="auto" />
+                        <div class="class-style">
+                          <img onerror="this.src='../dist/svg/404-v2.svg';" src="" class="img-thumbnail" id="ver_img_material" width="auto" />
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- MODAL - DETALLE compras - charge -->
-                <div class="modal fade" id="modal-ver-compras">
-                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Detalle Compra</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <div class="row detalle_de_compra" id="cargando-5-fomulario">                            
-                          <!--detalle de la compra-->
-                        </div>
-
-                        <div class="row" id="cargando-6-fomulario" style="display: none;">
-                          <div class="col-lg-12 text-center">
-                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                            <br />
-                            <h4>Cargando...</h4>
-                          </div>
-                        </div>
-
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>

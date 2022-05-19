@@ -62,6 +62,9 @@ function doc2_eliminar() {
 
 //Función limpiar
 function limpiar_form_material() {
+
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
   //Mostramos los Materiales
   $("#idproducto").val("");
   $("#nombre_material").val("");
@@ -149,7 +152,7 @@ function tbla_principal() {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
-    "columnDefs": [
+    columnDefs: [
       { targets: [11], visible: false, searchable: false, },
       { targets: [12], visible: false, searchable: false, },
       { targets: [13], visible: false, searchable: false, },      
@@ -207,6 +210,8 @@ function guardaryeditar(e) {
         limpiar_form_material();
 
         $("#modal-agregar-material").modal("hide");
+
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
       } else {
         ver_errores(e);
       }
@@ -229,6 +234,7 @@ function guardaryeditar(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
       $("#barra_progress").text("0%");
     },
@@ -316,8 +322,6 @@ function verdatos(idproducto){
 
   $('#datosinsumo').html(`<div class="row"><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div></div>`);
 
-  var verdatos=''; 
-
   var imagen_perfil =''; var btn_imagen_perfil = '';
   
   var ficha_tecnica=''; var btn_ficha_tecnica = '';
@@ -340,7 +344,7 @@ function verdatos(idproducto){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/img_perfil/${e.data.imagen}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL - ${e.data.nombre}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -361,7 +365,7 @@ function verdatos(idproducto){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="Ficha Tecnica - ${e.data.nombre}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="Ficha Tecnica - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -372,7 +376,7 @@ function verdatos(idproducto){
 
       }     
 
-      verdatos=`                                                                            
+      var retorno_html=`                                                                            
       <div class="col-12">
         <div class="card">
           <div class="card-body">
@@ -435,7 +439,7 @@ function verdatos(idproducto){
         </div>
       </div>`;
     
-      $("#datosinsumo").html(verdatos);
+      $("#datosinsumo").html(retorno_html);
 
     } else {
       ver_errores(e);

@@ -35,25 +35,23 @@ function lista_select2(url, nombre_input, id_tabla) {
 
   $.get(url, function (e, status) {
 
-    e = JSON.parse(e);   //console.log(e);
+    try {
+      e = JSON.parse(e);   //console.log(e);
 
-    if (e.status) {
+      if (e.status) {
 
-      $(nombre_input).html(e.data); 
+        $(nombre_input).html(e.data); 
 
-      if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
-
-        $(nombre_input).val(null).trigger("change");
+        if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
+          $(nombre_input).val(null).trigger("change");
+        } else {
+          $(nombre_input).val(id_tabla).trigger("change");  
+        }
 
       } else {
-
-        $(nombre_input).val(id_tabla).trigger("change");  
-
+        ver_errores(e);
       }
-
-    } else {
-      ver_errores(e);
-    }   
+    } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
 
   }).fail( function(e) { ver_errores(e); } );
 }
@@ -71,19 +69,21 @@ function crud_guardar_editar_card_xhr( url, formData, name_progress, table_reloa
     processData: false,
     success: function (datos) {
 
-      datos = JSON.parse(datos); console.log(datos);
+      try {
+        datos = JSON.parse(datos); console.log(datos);
 
-      if (datos.status == true) { 
+        if (datos.status == true) { 
 
-        if (table_reload_1) { table_reload_1(); }
-        if (table_reload_2) { table_reload_2(); }
-        if (table_reload_3) { table_reload_3(); }
-        if (table_reload_4) { table_reload_4(); }
-        if (table_reload_5) { table_reload_5(); }
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
 
-      } else {
-        ver_errores(datos); 
-      }
+        } else {
+          ver_errores(datos); 
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -129,20 +129,21 @@ function crud_guardar_editar_card( url, formData, table_reload_1, table_reload_2
     contentType: false,
     processData: false,
     success: function (datos) {
+      try {
+        datos = JSON.parse(datos);
 
-      datos = JSON.parse(datos);
+        if (datos.status == true) { 
 
-      if (datos.status == true) { 
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
 
-        if (table_reload_1) { table_reload_1(); }
-        if (table_reload_2) { table_reload_2(); }
-        if (table_reload_3) { table_reload_3(); }
-        if (table_reload_4) { table_reload_4(); }
-        if (table_reload_5) { table_reload_5(); }
-
-      } else {         
-        ver_errores(datos);
-      }
+        } else {         
+          ver_errores(datos);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }
     },    
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
@@ -158,20 +159,21 @@ function crud_guardar_editar_modal_xhr( url, formData, name_progress, table_relo
     contentType: false,
     processData: false,
     success: function (datos) {
+      try {
+        datos = JSON.parse(datos); // console.log(datos.inputt);
 
-      datos = JSON.parse(datos); // console.log(datos.inputt);
+        if (datos.status == true) {      
 
-      if (datos.status == true) {      
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
 
-        if (table_reload_1) { table_reload_1(); }
-        if (table_reload_2) { table_reload_2(); }
-        if (table_reload_3) { table_reload_3(); }
-        if (table_reload_4) { table_reload_4(); }
-        if (table_reload_5) { table_reload_5(); }
-
-      } else {
-        ver_errores(datos);
-      }
+        } else {
+          ver_errores(datos);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }     
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -217,20 +219,21 @@ function crud_guardar_editar_modal( url, formData, table_reload_1, table_reload_
     contentType: false,
     processData: false,
     success: function (datos) {
+      try {
+        datos = JSON.parse(datos);
 
-      datos = JSON.parse(datos);
+        if (datos.status == true) { 
 
-      if (datos.status == true) { 
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
 
-        if (table_reload_1) { table_reload_1(); }
-        if (table_reload_2) { table_reload_2(); }
-        if (table_reload_3) { table_reload_3(); }
-        if (table_reload_4) { table_reload_4(); }
-        if (table_reload_5) { table_reload_5(); }
-
-      } else {
-        ver_errores(datos);
-      }
+        } else {
+          ver_errores(datos);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
@@ -246,22 +249,23 @@ function crud_guardar_editar_modal_select2_xhr( url, formData, name_progress, ur
     contentType: false,
     processData: false,
     success: function (e) {
+      try {
+        e = JSON.parse(e); // console.log(e.inputt);
 
-      e = JSON.parse(e); // console.log(e.inputt);
+        if (e.status == true) { 
 
-      if (e.status == true) { 
+          if (url_select2 && input_select2) { lista_select2(url_select2, input_select2, e.data); }    
 
-        if (url_select2 && input_select2) { lista_select2(url_select2, input_select2, e.data); }    
+          if (table_reload_1) { table_reload_1(); }
+          if (table_reload_2) { table_reload_2(); }
+          if (table_reload_3) { table_reload_3(); }
+          if (table_reload_4) { table_reload_4(); }
+          if (table_reload_5) { table_reload_5(); }
 
-        if (table_reload_1) { table_reload_1(); }
-        if (table_reload_2) { table_reload_2(); }
-        if (table_reload_3) { table_reload_3(); }
-        if (table_reload_4) { table_reload_4(); }
-        if (table_reload_5) { table_reload_5(); }
-
-      } else {
-        ver_errores(e);
-      }
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();

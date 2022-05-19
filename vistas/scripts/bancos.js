@@ -27,6 +27,7 @@ function imagen1_eliminar() {
 
 //Función limpiar
 function limpiar_banco() {
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
   $("#idbancos").val("");
   $("#nombre").val(""); 
@@ -118,6 +119,8 @@ function guardaryeditar_bancos(e) {
 
         $("#modal-agregar-bancos").modal("hide");
 
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
 			}else{
 
 				ver_errores(e);
@@ -141,6 +144,7 @@ function guardaryeditar_bancos(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_banco").css({ width: "0%",  });
       $("#barra_progress_banco").text("0%");
     },

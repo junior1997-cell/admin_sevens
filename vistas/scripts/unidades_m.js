@@ -17,6 +17,7 @@ function init() {
 
 //Función limpiar
 function limpiar_unidades_m() {
+  $("#guardar_registro_unidad_m").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
   $("#idunidad_medida").val("");
   $("#nombre_medida").val(""); 
@@ -94,6 +95,7 @@ function guardaryeditar_unidades_m(e) {
 				limpiar_unidades_m();
 
         $("#modal-agregar-unidad-m").modal("hide");
+        $("#guardar_registro_unidad_m").html('Guardar Cambios').removeClass('disabled');
 
 			}else{
         ver_errores(e);				 
@@ -117,6 +119,7 @@ function guardaryeditar_unidades_m(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_unidad_m").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_um").css({ width: "0%",  });
       $("#barra_progress_um").text("0%");
     },

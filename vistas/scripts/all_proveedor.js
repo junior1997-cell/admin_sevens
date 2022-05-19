@@ -35,6 +35,9 @@ function formatState (state) {
 
 //Función limpiar
 function limpiar() {
+  
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
   $("#idproveedor").val("");
   $("#tipo_documento option[value='RUC']").attr("selected", true);
   $("#nombre").val("");
@@ -128,9 +131,14 @@ function guardaryeditar(e) {
         limpiar();
 
         $("#modal-agregar-proveedor").modal("hide");
+
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
       } else {
         ver_errores(e);
       }
+    },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });

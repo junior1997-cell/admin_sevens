@@ -121,6 +121,40 @@
       $sql = "SELECT idcategoria_insumos_af as id, nombre FROM categoria_insumos_af WHERE estado='1' AND estado_delete = '1' AND idcategoria_insumos_af > 1 ORDER BY nombre ASC;";
       return ejecutarConsulta($sql);
     }
+
+    /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
+    public function tblaActivosFijos() {
+      $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
+      p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+      ciaf.nombre AS categoria
+      FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idcategoria_insumos_af!='1' AND 
+      p.estado='1' AND p.estado_delete='1'
+      ORDER BY p.nombre ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    public function tblaInsumos() {
+      $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
+      p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+      ciaf.nombre AS categoria
+      FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idcategoria_insumos_af='1' AND 
+      p.estado='1' AND p.estado_delete='1'
+      ORDER BY p.nombre ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    public function tblaInsumosYActivosFijos() {
+      $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
+      p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+      ciaf.nombre AS categoria
+      FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND 
+      p.estado='1' AND p.estado_delete='1'
+      ORDER BY p.nombre ASC;";
+      return ejecutarConsulta($sql);
+    }
   }
 
 ?>

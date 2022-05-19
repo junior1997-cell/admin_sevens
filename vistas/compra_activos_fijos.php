@@ -505,6 +505,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-success" onclick="$('.detalle_de_compra_general').print({addGlobalStyles : true,});"><i class="fas fa-print"></i> Imprimir</button>
                         </div>
                       </div>
                     </div>

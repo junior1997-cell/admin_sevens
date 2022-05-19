@@ -171,6 +171,31 @@ function decodeHtml(str) {
   return decode;
 }
 
+function removeHtml(str) {
+  if ((str===null) || (str==='')){
+    return '';
+  }else{
+    str = str.toString();
+    return str.replace( /(<([^>]+)>)/ig, '');
+  }
+}
+
+function removeCaracterEspecial(str) {
+  var string = "";
+  if (str == "" || str == null || str === undefined) { } else {     
+    string = str.replace(/[`~!@#$%^&*()_|+\-=?;:°'",.<>\{\}\[\]\\\/]/g, '');
+  }
+  return string;
+}
+
+function preservarNumeroLetra(str) {
+  var string = "";
+  if (str == "" || str == null || str === undefined) { } else {     
+   string = str.replace(/[^a-zA-Z 0-9.]/g, '');    
+  }
+  return string;
+}
+
 // to miniscula
 function convert_minuscula(e) { e.value = e.value.toLowerCase(); }
 
@@ -575,7 +600,7 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
 
   }else if ( extrae_extencion(filename) == "pdf" ) {
     //recomendado - height="210" 
-    html = `<iframe src="${ruta}" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`;
+    html = `<iframe src="${ruta}" onerror="this.src='../dist/svg/404-v2.svg';" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`;
     extencion = extrae_extencion(filename);
   
   } else if (
@@ -584,7 +609,7 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
 
-    html = `<img src="${ruta}" alt="" width="${width}" height="${height}" onerror="this.src='../dist/svg/error-404-x.svg';" >`;
+    html = `<img src="${ruta}" alt="" width="${width}" height="${height}" onerror="this.src='../dist/svg/404-v2.svg';" >`;
     extencion = extrae_extencion(filename);
     
   }else{
@@ -956,4 +981,11 @@ function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad='') {
   }
 }
 
+
+function UrlExists(url) {  
+  var http = new XMLHttpRequest();
+  http.open("HEAD", url, false);
+  http.send(); //console.log(http.status);
+  return http.status;
+}
 

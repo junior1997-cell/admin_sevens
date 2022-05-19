@@ -64,7 +64,11 @@
 <script src="../dist/js/demo.js"></script>
 
 <!-- Print PDF -->
-<script src="../plugins/Print.js-1.5.0/print.min.js"></script>
+<script src="../plugins/print-pdf-1.5.0/print.min.js"></script>
+
+<!-- Print DIV -->
+<script src="../plugins/print-jquery/jQuery.print.min.js"></script>
+
 
 <!-- Consola alerta -->
 <script src="../dist/js/consola_alerta.js"></script>

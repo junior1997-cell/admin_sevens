@@ -26,6 +26,7 @@ function init() {
 
 //Función limpiar
 function limpiar_cargo() {
+  $("#guardar_registro_cargo").html('Guardar Cambios').removeClass('disabled');
   $("#idcargo_trabajador").val("");
   $("#nombre_cargo").val(""); 
   $("#idtipo_trabjador_c").val("null").trigger("change");
@@ -101,7 +102,7 @@ function guardaryeditar_cargo(e) {
 				limpiar_cargo();
 
         $("#modal-agregar-cargo").modal("hide");
-
+        $("#guardar_registro_cargo").html('Guardar Cambios').removeClass('disabled');
 			}else{
 				ver_errores(e);
 			}
@@ -124,6 +125,7 @@ function guardaryeditar_cargo(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_cargo").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_cargo").css({ width: "0%",  });
       $("#barra_progress_cargo").text("0%");
     },

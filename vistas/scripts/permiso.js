@@ -76,6 +76,7 @@ function mostrar_usuarios(id) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación

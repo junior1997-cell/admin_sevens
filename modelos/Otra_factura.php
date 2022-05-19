@@ -62,7 +62,7 @@ class Otra_factura
   }
 
   //Implementar un método para listar los registros
-  public function listar()
+  public function tbla_principal()
   {
     $sql = "SELECT*FROM otra_factura WHERE  estado_delete='1' AND estado='1' ORDER BY idotra_factura DESC";
     return ejecutarConsulta($sql);

@@ -46,4 +46,4 @@
 <link rel="stylesheet" href="../dist/css/texto_parpadeante.css" />
 
 <!-- Print PDF -->
-<link rel="stylesheet" href="../plugins/Print.js-1.5.0/print.min.css">
+<link rel="stylesheet" href="../plugins/print-pdf-1.5.0/print.min.css">

@@ -9,11 +9,11 @@ class Resumenfacturas
   {
   }
 
-  public function facturas_compras($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante)
-  {
+  public function facturas_compras($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
     $data = Array(); $data_comprobante = Array(); $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
-    $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/';
+    $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+    $host       = $_SERVER['HTTP_HOST'];
 
     // FACTURAS - COMPRAS ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -40,12 +40,13 @@ class Resumenfacturas
     cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' 
-     $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
-
+    $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
     $compra = ejecutarConsultaArray($sql);
 
-    if (!empty($compra)) {
-      foreach ($compra as $key => $value) {
+    if ($compra['status'] == false) { return $compra; }
+
+    if (!empty($compra['data'])) {
+      foreach ($compra['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idcompra_proyecto'],
@@ -59,18 +60,20 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
-          "ruta"              => 'dist/docs/compra/comprobante_compra/',
-          "modulo"              => 'COMPRAS',
+          "carpeta"           => 'compra_insumo',
+          "subcarpeta"        => 'comprobante_compra',
+          "ruta"              => 'dist/docs/compra_insumo/comprobante_compra/',
+          "modulo"            => 'COMPRAS',
         );
 
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/compra/comprobante_compra/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/compra_insumo/comprobante_compra/', $value['comprobante']) ) {
             $data_comprobante[] = array(
-              "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/compra/comprobante_compra/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/compra/comprobante_compra/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/compra/comprobante_compra/'.$value['comprobante'],
+              "comprobante"    => $value['comprobante'],
+              "carpeta"        => 'compra_insumo',
+              "subcarpeta"     => 'comprobante_compra',
+              "host"           => $host,
+              "ruta_file"      => $scheme_host.'dist/docs/compra_insumo/comprobante_compra/'.$value['comprobante'],
             );
           }          
         }        
@@ -102,11 +105,12 @@ class Resumenfacturas
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY f.fecha_emision DESC;";
-
     $maquinaria_equipo =  ejecutarConsultaArray($sql2);
 
-    if (!empty($maquinaria_equipo)) {
-      foreach ($maquinaria_equipo as $key => $value) {
+    if ($maquinaria_equipo['status'] == false) { return $maquinaria_equipo; }
+
+    if (!empty($maquinaria_equipo['data'])) {
+      foreach ($maquinaria_equipo['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idfactura'],
@@ -120,17 +124,19 @@ class Resumenfacturas
           "glosa"             => 'MAQUINARIA',
           "tipo_gravada"      => 'GRAVADA',
           "comprobante"       => $value['imagen'],
+          "carpeta"           => 'servicio_maquina',
+          "subcarpeta"        => 'comprobante_servicio',
           "ruta"              => 'dist/docs/servicio_maquina/comprobante_servicio/',
           "modulo"              => 'MAQUINA Y/O EQUIPO',
         );
         if (!empty($value['imagen'])) {
-          if (validar_url( $link_host, 'dist/docs/servicio_maquina/comprobante_servicio/', $value['imagen'])) {
+          if (validar_url( $scheme_host, 'dist/docs/servicio_maquina/comprobante_servicio/', $value['imagen'])) {
             $data_comprobante[] = array(
               "comprobante"       => $value['imagen'],
-              "carpeta_file"      => 'dist/docs/servicio_maquina/comprobante_servicio/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/servicio_maquina/comprobante_servicio/'.$value['imagen'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/servicio_maquina/comprobante_servicio/'.$value['imagen'],
+              "carpeta"           => 'servicio_maquina',
+              "subcarpeta"        => 'comprobante_servicio',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/servicio_maquina/comprobante_servicio/'.$value['imagen'],
             );
           }
           
@@ -163,11 +169,12 @@ class Resumenfacturas
     costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
     FROM otro_gasto 
     WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
-
     $otro_gasto =  ejecutarConsultaArray($sql3);
 
-    if (!empty($otro_gasto)) {
-      foreach ($otro_gasto as $key => $value) {
+    if ($otro_gasto['status'] == false) { return $otro_gasto; }
+
+    if (!empty($otro_gasto['data'])) {
+      foreach ($otro_gasto['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idotro_gasto'],
@@ -181,17 +188,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'otro_gasto',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/otro_gasto/comprobante/',
           "modulo"              => 'OTRO GASTO',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/otro_gasto/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/otro_gasto/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/otro_gasto/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/otro_gasto/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/otro_gasto/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'otro_gasto',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/otro_gasto/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -224,11 +233,12 @@ class Resumenfacturas
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
-
     $transporte =  ejecutarConsultaArray($sql4);
 
-    if (!empty($transporte)) {
-      foreach ($transporte as $key => $value) {
+    if ($transporte['status'] == false) { return $transporte; }
+
+    if (!empty($transporte['data'])) {
+      foreach ($transporte['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idtransporte'],
@@ -242,17 +252,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'transporte',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/transporte/comprobante/',
           "modulo"              => 'TRANSPORTE',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/transporte/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/transporte/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/transporte/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/transporte/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/transporte/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'transporte',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/transporte/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -285,11 +297,12 @@ class Resumenfacturas
     FROM hospedaje 
     WHERE estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
-
     $hospedaje =  ejecutarConsultaArray($sql5);
 
-    if (!empty($hospedaje)) {
-      foreach ($hospedaje as $key => $value) {
+    if ($hospedaje['status'] == false) { return $hospedaje; }
+
+    if (!empty($hospedaje['data'])) {
+      foreach ($hospedaje['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idhospedaje'],
@@ -303,17 +316,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'hospedaje',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/hospedaje/comprobante/',
           "modulo"              => 'HOSPEDAJE',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/hospedaje/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/hospedaje/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/hospedaje/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/hospedaje/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/hospedaje/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'hospedaje',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/hospedaje/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -347,11 +362,12 @@ class Resumenfacturas
 		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.estado = '1' AND fp.estado_delete = '1'
      $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fp.fecha_emision DESC;";
-
     $factura_pension =  ejecutarConsultaArray($sql6);
 
-    if (!empty($factura_pension)) {
-      foreach ($factura_pension as $key => $value) {
+    if ($factura_pension['status'] == false) { return $factura_pension; }
+
+    if (!empty($factura_pension['data'])) {
+      foreach ($factura_pension['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idfactura_pension'],
@@ -365,17 +381,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'pension',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/pension/comprobante/',
           "modulo"              => 'PENSION',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/pension/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/pension/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/pension/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'pension',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/pension/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -409,11 +427,12 @@ class Resumenfacturas
 		WHERE  fb.idsemana_break = sb.idsemana_break  
     AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fb.fecha_emision DESC;";
-
     $factura_break =  ejecutarConsultaArray($sql7);
 
-    if (!empty($factura_break)) {
-      foreach ($factura_break as $key => $value) {
+    if ($factura_break['status'] == false) { return $factura_break; }
+
+    if (!empty($factura_break['data'])) {
+      foreach ($factura_break['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idfactura_break'],
@@ -427,17 +446,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'break',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/break/comprobante/',
           "modulo"              => 'BREAK',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/break/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/break/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/break/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/break/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/break/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'break',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/break/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -470,11 +491,12 @@ class Resumenfacturas
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
-
     $comida_extra =  ejecutarConsultaArray($sql8);
 
-    if (!empty($comida_extra)) {
-      foreach ($comida_extra as $key => $value) {
+    if ($comida_extra['status'] == false) { return $comida_extra; }
+
+    if (!empty($comida_extra['data'])) {
+      foreach ($comida_extra['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idcomida_extra'],
@@ -488,17 +510,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'comida_extra',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/comida_extra/comprobante/',
           "modulo"              => 'COMIDA EXTRA',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/comida_extra/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/comida_extra/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/comida_extra/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/comida_extra/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/comida_extra/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'comida_extra',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/comida_extra/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -531,11 +555,12 @@ class Resumenfacturas
     FROM otra_factura AS of, proveedor p
     WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY of.fecha_emision DESC;";
-
     $otra_factura =  ejecutarConsultaArray($sql9);
 
-    if (!empty($otra_factura)) {
-      foreach ($otra_factura as $key => $value) {
+    if ($otra_factura['status'] == false) { return $otra_factura; }
+
+    if (!empty($otra_factura['data'])) {
+      foreach ($otra_factura['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => '',
           "idtabla"           => $value['idotra_factura'],
@@ -549,17 +574,19 @@ class Resumenfacturas
           "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'otra_factura',
+          "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/otra_factura/comprobante/',
           "modulo"              => 'OTRA FACTURA',
         );
         if (!empty($value['comprobante'])) {
-          if ( validar_url( $link_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
+          if ( validar_url( $scheme_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
             $data_comprobante[] = array(
               "comprobante"       => $value['comprobante'],
-              "carpeta_file"      => 'dist/docs/otra_factura/comprobante/',
-              "host"              => $link_host,
-              "ruta_nube"         => $link_host.'dist/docs/otra_factura/comprobante/'.$value['comprobante'],
-              "ruta_local"        => 'http://localhost/admin_sevens/dist/docs/otra_factura/comprobante/'.$value['comprobante'],
+              "carpeta"           => 'otra_factura',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/otra_factura/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -567,8 +594,13 @@ class Resumenfacturas
     }
 
     $retorno = array(
-      "data"              => $data,
-      "data_comprobante"  => $data_comprobante,
+      "status"=> true,
+      "message"=> 'todo oka',
+      "data"=> [
+        "datos"              => $data,
+        "data_comprobante"  => $data_comprobante,
+      ]
+      
     );
 
     return $retorno;
@@ -604,9 +636,11 @@ class Resumenfacturas
     WHERE cpp.idproveedor = p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $compra = ejecutarConsultaSimpleFila($sql);
 
-    $total    += (empty($compra)) ? 0 : ( empty($compra['total']) ? 0 : floatval($compra['total']) );
-    $subtotal += (empty($compra)) ? 0 : ( empty($compra['subtotal']) ? 0 : floatval($compra['subtotal']) );
-    $igv      += (empty($compra)) ? 0 : ( empty($compra['igv']) ? 0 : floatval($compra['igv']) );
+    if ($compra['status'] == false) { return $compra; }
+
+    $total    += (empty($compra['data'])) ? 0 : ( empty($compra['data']['total']) ? 0 : floatval($compra['data']['total']) );
+    $subtotal += (empty($compra['data'])) ? 0 : ( empty($compra['data']['subtotal']) ? 0 : floatval($compra['data']['subtotal']) );
+    $igv      += (empty($compra['data'])) ? 0 : ( empty($compra['data']['igv']) ? 0 : floatval($compra['data']['igv']) );
      
     // SUMAS TOTALES - MAQUINARIA EQUIPO --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -635,9 +669,11 @@ class Resumenfacturas
     AND f.estado = '1' AND f.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $maquinaria = ejecutarConsultaSimpleFila($sql2);
 
-    $total    += (empty($maquinaria)) ? 0 : ( empty($maquinaria['total']) ? 0 : floatval($maquinaria['total']) );
-    $subtotal += (empty($maquinaria)) ? 0 : ( empty($maquinaria['subtotal']) ? 0 : floatval($maquinaria['subtotal']) );
-    $igv      += (empty($maquinaria)) ? 0 : ( empty($maquinaria['igv']) ? 0 : floatval($maquinaria['igv']) );
+    if ($maquinaria['status'] == false) { return $maquinaria; } 
+
+    $total    += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );
+    $subtotal += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['subtotal']) ? 0 : floatval($maquinaria['data']['subtotal']) );
+    $igv      += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['igv']) ? 0 : floatval($maquinaria['data']['igv']) );
 
     // SUMAS TOTALES - OTRO SERVICIO --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -664,10 +700,12 @@ class Resumenfacturas
     FROM otro_gasto  
     WHERE estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $otro_gasto = ejecutarConsultaSimpleFila($sql3);
+
+    if ($otro_gasto['status'] == false) { return $otro_gasto; } 
     
-    $total    += (empty($otro_gasto)) ? 0 : ( empty($otro_gasto['total']) ? 0 : floatval($otro_gasto['total']) );
-    $subtotal += (empty($otro_gasto)) ? 0 : ( empty($otro_gasto['subtotal']) ? 0 : floatval($otro_gasto['subtotal']) );
-    $igv      += (empty($otro_gasto)) ? 0 : ( empty($otro_gasto['igv']) ? 0 : floatval($otro_gasto['igv']) );
+    $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
+    $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
+    $igv      += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['igv']) ? 0 : floatval($otro_gasto['data']['igv']) );
 
     // SUMAS TOTALES - TRASNPORTE --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -694,10 +732,12 @@ class Resumenfacturas
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $transporte = ejecutarConsultaSimpleFila($sql4);
+
+    if ($transporte['status'] == false) { return $transporte; }
     
-    $total    += (empty($transporte)) ? 0 : ( empty($transporte['total']) ? 0 : floatval($transporte['total']) );
-    $subtotal += (empty($transporte)) ? 0 : ( empty($transporte['subtotal']) ? 0 : floatval($transporte['subtotal']) );
-    $igv      += (empty($transporte)) ? 0 : ( empty($transporte['igv']) ? 0 : floatval($transporte['igv']) );
+    $total    += (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['total']) ? 0 : floatval($transporte['data']['total']) );
+    $subtotal += (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['subtotal']) ? 0 : floatval($transporte['data']['subtotal']) );
+    $igv      += (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['igv']) ? 0 : floatval($transporte['data']['igv']) );
 
     // SUMAS TOTALES - HOSPEDAJE --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -723,10 +763,12 @@ class Resumenfacturas
     FROM hospedaje WHERE estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
     $hospedaje = ejecutarConsultaSimpleFila($sql5);
+
+    if ($hospedaje['status'] == false) { return $hospedaje; }
     
-    $total    += (empty($hospedaje)) ? 0 : ( empty($hospedaje['total']) ? 0 : floatval($hospedaje['total']) );
-    $subtotal += (empty($hospedaje)) ? 0 : ( empty($hospedaje['subtotal']) ? 0 : floatval($hospedaje['subtotal']) );
-    $igv      += (empty($hospedaje)) ? 0 : ( empty($hospedaje['igv']) ? 0 : floatval($hospedaje['igv']) );
+    $total    += (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['total']) ? 0 : floatval($hospedaje['data']['total']) );
+    $subtotal += (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['subtotal']) ? 0 : floatval($hospedaje['data']['subtotal']) );
+    $igv      += (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['igv']) ? 0 : floatval($hospedaje['data']['igv']) );
 
     // SUMAS TOTALES - FACTURA PENSION --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -753,10 +795,12 @@ class Resumenfacturas
 		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
     AND fp.estado = '1' AND fp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $factura_pension = ejecutarConsultaSimpleFila($sql6);
+
+    if ($factura_pension['status'] == false) { return $factura_pension; }
     
-    $total    += (empty($factura_pension)) ? 0 : ( empty($factura_pension['total']) ? 0 : floatval($factura_pension['total']) );
-    $subtotal += (empty($factura_pension)) ? 0 : ( empty($factura_pension['subtotal']) ? 0 : floatval($factura_pension['subtotal']) );
-    $igv      += (empty($factura_pension)) ? 0 : ( empty($factura_pension['igv']) ? 0 : floatval($factura_pension['igv']) );
+    $total    += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['total']) ? 0 : floatval($factura_pension['data']['total']) );
+    $subtotal += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['subtotal']) ? 0 : floatval($factura_pension['data']['subtotal']) );
+    $igv      += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['igv']) ? 0 : floatval($factura_pension['data']['igv']) );
 
     // SUMAS TOTALES - FACTURA BREACK --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -783,10 +827,12 @@ class Resumenfacturas
 		WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' 
     AND sb.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $factura_break = ejecutarConsultaSimpleFila($sql7);
+
+    if ($factura_break['status'] == false) { return $factura_break; }
     
-    $total    += (empty($factura_break)) ? 0 : ( empty($factura_break['total']) ? 0 : floatval($factura_break['total']) );
-    $subtotal += (empty($factura_break)) ? 0 : ( empty($factura_break['subtotal']) ? 0 : floatval($factura_break['subtotal']) );
-    $igv      += (empty($factura_break)) ? 0 : ( empty($factura_break['igv']) ? 0 : floatval($factura_break['igv']) );
+    $total    += (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['total']) ? 0 : floatval($factura_break['data']['total']) );
+    $subtotal += (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['subtotal']) ? 0 : floatval($factura_break['data']['subtotal']) );
+    $igv      += (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['igv']) ? 0 : floatval($factura_break['data']['igv']) );
 
     // SUMAS TOTALES - COMIDA EXTRA --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -812,10 +858,12 @@ class Resumenfacturas
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $comida_extra = ejecutarConsultaSimpleFila($sql8);
+
+    if ($comida_extra['status'] == false) { return $comida_extra; }
     
-    $total    += (empty($comida_extra)) ? 0 : ( empty($comida_extra['total']) ? 0 : floatval($comida_extra['total']) );
-    $subtotal += (empty($comida_extra)) ? 0 : ( empty($comida_extra['subtotal']) ? 0 : floatval($comida_extra['subtotal']) );
-    $igv      += (empty($comida_extra)) ? 0 : ( empty($comida_extra['igv']) ? 0 : floatval($comida_extra['igv']) );
+    $total    += (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['total']) ? 0 : floatval($comida_extra['data']['total']) );
+    $subtotal += (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['subtotal']) ? 0 : floatval($comida_extra['data']['subtotal']) );
+    $igv      += (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['igv']) ? 0 : floatval($comida_extra['data']['igv']) );
 
     // SUMAS TOTALES - OTRA FACTURA --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -841,13 +889,23 @@ class Resumenfacturas
     FROM otra_factura AS of, proveedor p
     WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha";
     $otra_factura = ejecutarConsultaSimpleFila($sql9);
+
+    if ($otra_factura['status'] == false) { return $otra_factura; } 
     
-    $total    += (empty($otra_factura)) ? 0 : ( empty($otra_factura['total']) ? 0 : floatval($otra_factura['total']) );
-    $subtotal += (empty($otra_factura)) ? 0 : ( empty($otra_factura['subtotal']) ? 0 : floatval($otra_factura['subtotal']) );
-    $igv      += (empty($otra_factura)) ? 0 : ( empty($otra_factura['igv']) ? 0 : floatval($otra_factura['igv']) );
+    $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
+    $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
+    $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
 
 
-    $data = array( "total" => $total, "subtotal" => $subtotal, "igv" => $igv,  );
+    $data = array( 
+      "status"=> true,
+      "message"=> 'todo oka',
+      "data"=> [
+        "total" => $total, 
+        "subtotal" => $subtotal, 
+        "igv" => $igv,  
+      ]      
+    );
 
     return $data ;
   }  
@@ -859,9 +917,10 @@ class Resumenfacturas
 
     $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado = '1' AND estado_delete = '1';";
     $proveedor = ejecutarConsultaArray($sql);    
+    if ($proveedor['status'] == false) { return $proveedor; }
 
-    if ( !empty($proveedor) ) {
-      foreach ($proveedor as $key => $value) {
+    if ( !empty($proveedor['data']) ) {
+      foreach ($proveedor['data'] as $key => $value) {
         $data[] = array(
           "id" =>  $value['idproveedor'],
           "razon_social" =>  $value['razon_social'],
@@ -872,9 +931,10 @@ class Resumenfacturas
     
     $sql2 = "SELECT ruc, razon_social FROM otro_gasto WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
     $otro_gasto = ejecutarConsultaArray($sql2);
+    if ($otro_gasto['status'] == false) { return $otro_gasto; }
 
-    if ( !empty($otro_gasto) ) {
-      foreach ($otro_gasto as $key => $value) {
+    if ( !empty($otro_gasto['data']) ) {
+      foreach ($otro_gasto['data'] as $key => $value) {
         $data[] = array(
           "id" =>  '',
           "razon_social" =>  $value['razon_social'],
@@ -885,9 +945,10 @@ class Resumenfacturas
 
     $sql2 = "SELECT ruc, razon_social  FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
     $hospedaje = ejecutarConsultaArray($sql2);
+    if ($hospedaje['status'] == false) { return $hospedaje; }
 
-    if ( !empty($hospedaje) ) {
-      foreach ($hospedaje as $key => $value) {
+    if ( !empty($hospedaje['data']) ) {
+      foreach ($hospedaje['data'] as $key => $value) {
         $data[] = array(
           "id" =>  '',
           "razon_social" =>  $value['razon_social'],
@@ -898,9 +959,10 @@ class Resumenfacturas
 
     $sql2 = "SELECT ruc, razon_social  FROM comida_extra WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
     $comida_extra = ejecutarConsultaArray($sql2);
+    if ($comida_extra['status'] == false) { return $comida_extra; }
 
-    if ( !empty($comida_extra) ) {
-      foreach ($comida_extra as $key => $value) {
+    if ( !empty($comida_extra['data']) ) {
+      foreach ($comida_extra['data'] as $key => $value) {
         $data[] = array(
           "id" =>  '',
           "razon_social" =>  $value['razon_social'],
@@ -908,20 +970,29 @@ class Resumenfacturas
         );
       }      
     } 
-
-    return $data;
+    $retorno = array( 
+      "status"=> true,
+      "message"=> 'todo oka',
+      "data"=>   $data
+    );
+    return $retorno;
   }  
 
 }
 
-function validar_url(  $host, $ruta, $file )  {
-  $tipo='nube_host';
-  $armar_ruta = "";
-  if ($tipo == 'local_host') { $armar_ruta = "http://localhost/admin_sevens/" . $ruta . $file; } else { if ($tipo == 'nube_host') { $armar_ruta = $host . $ruta . $file; } }
+function validar_url( $host, $ruta, $file )  {
 
-  if (empty($armar_ruta)) {
-    return false;
-  }
+  //$tipo = $_SERVER['HTTP_HOST']; $armar_ruta = "";
+
+  // if ($tipo == 'localhost') { 
+  //   $armar_ruta = "http://localhost/admin_sevens/" . $ruta . $file; 
+  // } else { 
+  //   $armar_ruta = $host . $ruta . $file;  
+  // }
+
+  $armar_ruta = $host . $ruta . $file;  
+
+  if (empty($armar_ruta)) { return false; }
 
   // get_headers() realiza una petición GET por defecto,
   // cambiar el método predeterminadao a HEAD

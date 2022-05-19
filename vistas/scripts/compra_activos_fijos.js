@@ -853,27 +853,22 @@ function mostrar_compra_general(idcompra_af_general) {
 
   table_show_hide(2);
 
-  $.post("../ajax/compra_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (data, status) {
+  $.post("../ajax/compra_activos_fijos.php?op=ver_compra_editar", { idcompra_af_general: idcompra_af_general }, function (e, status) {
     
-    data = JSON.parse(data); console.log(data);
+    e = JSON.parse(e); console.log(e);
     
-    if (data.length === 0) {      
-
-      toastr.error("<h3>Error.</h3> Este registro tiene errores, o esta vacio");     
-
-    } else {
-      
-      if (data.tipo_comprobante == "Factura") {
+    if (e.status == true) {      
+      if (e.data.tipo_comprobante == "Factura") {
         $(".content-igv").show();
         $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descripcion").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-serie-comprobante").show();
-      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
+      } else if (e.data.tipo_comprobante == "Boleta" || e.data.tipo_comprobante == "Nota de venta") {
         $(".content-serie-comprobante").show();
         $(".content-igv").hide();
         $(".content-tipo-comprobante").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
         $(".content-descripcion").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-      } else if (data.tipo_comprobante == "Ninguno") {
+      } else if (e.data.tipo_comprobante == "Ninguno") {
         $(".content-serie-comprobante").hide();
         $(".content-serie-comprobante").val("");
         $(".content-igv").hide();
@@ -884,22 +879,23 @@ function mostrar_compra_general(idcompra_af_general) {
         //$(".content-descripcion").removeClass("col-lg-7").addClass("col-lg-4");
       }
 
-      $("#idcompra_af_general").val(data.idcompra_af_general);
-      $("#idproveedor").val(data.idproveedor).trigger("change");
-      $("#fecha_compra").val(data.fecha_compra);
-      $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-      $("#serie_comprobante").val(data.serie_comprobante).trigger("change");
-      $("#val_igv").val(data.val_igv);
-      $("#descripcion").val(data.descripcion);
-      $("#glosa").val(data.glosa).trigger("change");
+      $("#idcompra_af_general").val(e.data.idcompra_af_general);
+      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+      $("#fecha_compra").val(e.data.fecha_compra);
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+      $("#serie_comprobante").val(e.data.serie_comprobante).trigger("change");
+      $("#val_igv").val(e.data.val_igv);
+      $("#descripcion").val(e.data.descripcion);
+      $("#glosa").val(e.data.glosa).trigger("change");
 
-      if (data.producto.length === 0) {
-         
+      if (e.data.producto.length === 0) {         
         toastr.error(`<p class="h5">Sin productos.</p> Este registro no tiene productos para mostrar`);  
-
+        $(".subtotal").html("S/ 0.00");
+        $(".igv_comp").html("S/ 0.00");
+        $(".total").html("S/ 0.00");
       } else { 
 
-        data.producto.forEach((element, index) => {
+        e.data.producto.forEach((element, index) => {
 
           var img = "";
 
@@ -946,12 +942,14 @@ function mostrar_compra_general(idcompra_af_general) {
 
         modificarSubtotales();  
         $('[data-toggle="tooltip"]').tooltip();            
-      }      
-    }
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-  });
+      }
+       
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+    } else {
+      ver_errores(e);            
+    }    
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //MOSTRAR - EDITAR LA COMPRA DE ACTIVOS PROYECTO
@@ -1609,7 +1607,7 @@ function tblaActivosFijos() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/compra_activos_fijos.php?op=tblaActivosFijos",
+      url: "../ajax/ajax_general.php?op=tblaActivosFijos",
       type: "get",
       dataType: "json",
       error: function (e) {

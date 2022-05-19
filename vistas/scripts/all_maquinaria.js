@@ -29,6 +29,9 @@ function init() {
 
 //Función limpiar
 function limpiar_form_maquinaria() {
+
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
   $("#idmaquinaria").val("");
   $("#nombre_maquina").val(""); 
   $("#codigo_m").val(""); 
@@ -148,7 +151,7 @@ function guardaryeditar(e) {
     success: function (e) {
       e = JSON.parse(e);  console.log(e);   
       if (e.status) {
-				
+				Swal.fire("Correcto!", "Guardado correctamente", "success");
 	      tabla.ajax.reload(null, false);
 	      tabla2.ajax.reload(null, false);
          
@@ -156,9 +159,13 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-maquinaria").modal("hide");
 
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
 			}else{
 				ver_errores(e);
 			}
+    },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });

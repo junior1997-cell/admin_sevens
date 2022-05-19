@@ -102,6 +102,9 @@ function doc5_eliminar() {
 
 //Función limpiar
 function limpiar_form_trabajador() {
+
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
   $("#idtrabajador").val("");
   $("#tipo_documento option[value='DNI']").attr("selected", true);
   $("#nombre").val(""); 
@@ -273,6 +276,8 @@ function guardar_y_editar_trabajador(e) {
 
         $("#modal-agregar-trabajador").modal("hide");
 
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
 			}else{
         ver_errores(e);
 			}
@@ -296,6 +301,7 @@ function guardar_y_editar_trabajador(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
       $("#barra_progress").text("0%");
     },

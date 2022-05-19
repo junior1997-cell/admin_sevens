@@ -22,42 +22,43 @@
         case 'listar_resumen_rh':
 
           $rspta = $resumen_rh->resumen_rh();
-          $cont = 1;
-          //Vamos a declarar un array
-          $data = [];
+          
+          $data = []; $cont = 1;
 
-          foreach ($rspta['data'] as $key => $value) {
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';   
 
-            $btn_tipo = (empty($value['comprobante'])) ? 'btn-outline-info' : 'btn-info';       
-            
-            $data[] = [
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data']['datos'] as $key => $value) {             
 
-              "0" => $cont++,
-              "1" => $value['modulo'],
-              "2" => '<span class="text-primary font-weight-bold">' . $value['trabajador_razon_social'] . '</span>',
-              "3" =>'S/ '.number_format($value['total'], 2, ".", ",") ,
-              "4" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante( \'' . $value['comprobante'] .'\', \''. $value['ruta']  . '\', \''. $value['trabajador_razon_social']  . '\')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-
+              $documento = (empty($value['comprobante'])) ? '<center> <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacío" ><i class="fas fa-file-invoice fa-lg"></i></button> </center>' : '<center> <button class="btn btn-info btn-sm" onclick="modal_comprobante( \'' . $value['comprobante'] .'\', \''. $value['ruta'] .'\', \''. $value['carpeta'] .'\', \''. $value['subcarpeta'] .'\', \''. $value['trabajador_razon_social'] . '\' )" data-toggle="tooltip" data-original-title="Ver Comprobante"><i class="fas fa-file-invoice fa-lg"></i></button> </center>';   
+              
+              $data[] = [  
+                "0" => $cont++,
+                "1" => $value['modulo'],
+                "2" => '<span class="text-primary font-weight-bold">' . $value['trabajador_razon_social'] . '</span>',
+                "3" =>'S/ '.number_format($value['total'], 2, ".", ",") ,
+                "4" => $documento.$toltip,
+              ];
+            }
+  
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
             ];
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
 
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "aaData" => $data,
-          ];
-          echo json_encode($results);
-         
-
         break;
-
 
         case 'data_recibos_honorarios':                  
 
           $rspta = $resumen_rh->resumen_rh();
           
-          echo json_encode($rspta['data_recibos_honorarios']);
+          echo json_encode($rspta, true);
 
         break;
 
@@ -65,7 +66,7 @@
 
           $rspta = $resumen_rh->resumen_rh();
           
-          echo json_encode($rspta['monto_total_rh']);
+          echo json_encode($rspta, true);
 
         break;
       

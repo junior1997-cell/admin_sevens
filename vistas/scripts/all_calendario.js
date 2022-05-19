@@ -54,6 +54,9 @@ function color_muestra() {
 
 //Función limpiar
 function limpiar() {
+
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+
   $('#idcalendario').val("");
   $('#fecha_feriado').val("");
   $('#text_color').val('#ffffff');
@@ -331,6 +334,7 @@ function guardaryeditar(e) {
 
 	      listar();  $("#modal-agregar-calendario").modal("hide"); limpiar();        
 
+        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
 			}else{
         ver_errores(e);
 			}
@@ -353,6 +357,7 @@ function guardaryeditar(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
       $("#barra_progress").text("0%");
     },

@@ -13,6 +13,7 @@ function init() {
 
 //Función limpiar 
 function limpiar_c_af() {
+  $("#guardar_registro_categoria_af").html('Guardar Cambios').removeClass('disabled');
   $("#idcategoria_insumos_af").val("");
   $("#nombre_categoria_af").val(""); 
 
@@ -87,6 +88,8 @@ function guardaryeditar_c_insumos_af(e) {
 
         $("#modal-agregar-categorias-af").modal("hide");
 
+        $("#guardar_registro_categoria_af").html('Guardar Cambios').removeClass('disabled');
+
 			}else{
 				ver_errores(e);
 			}
@@ -109,6 +112,7 @@ function guardaryeditar_c_insumos_af(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_categoria_af").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_categoria_af").css({ width: "0%",  });
       $("#barra_progress_categoria_af").text("0%");
     },

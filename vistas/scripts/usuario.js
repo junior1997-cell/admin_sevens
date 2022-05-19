@@ -103,7 +103,7 @@ function doc5_eliminar() {
  
 //Función limpiar
 function limpiar_form_usuario() {
-
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
   // Agregamos la validacion
   $("#trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });  
   $("#password").rules('add', { required: true, messages: {  required: "Campo requerido" } });
@@ -202,17 +202,55 @@ function guardar_y_editar_usuario(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-usuario")[0]);
 
-  /*url, formData, callback_limpiar, callback_true, name_progress, table_reload_1, table_reload_2 = false, table_reload_3 = false, 
-  table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false,
-  table_reload_9 = false*/
+  $.ajax({
+    url: "../ajax/usuario.php?op=guardar_y_editar_usuario",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) { 
+      try {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
+          tabla.ajax.reload(null, false);
+          show_hide_form(1); limpiar_form_usuario(); sw_success('Correcto!', "Usuario guardado correctamente." );
+          $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+        } else {
+          ver_errores(d);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }             
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
 
-  crud_guardar_editar_card_xhr(
-    "../ajax/usuario.php?op=guardar_y_editar_usuario", 
-    formData, 
-    'usuario',
-    function(){ tabla.ajax.reload(null, false); }, 
-    function(){ show_hide_form(1); limpiar_form_usuario(); sw_success('Correcto!', "Usuario guardado correctamente." ); },  
-  );
+      xhr.upload.addEventListener( "progress", function (evt) {
+
+        if (evt.lengthComputable) {
+          var prct = (evt.loaded / evt.total) * 100;
+          prct = Math.round(prct);
+
+          $("#barra_progress_usuario").css({ width: prct + "%", });
+
+          $("#barra_progress_usuario").text(prct + "%");
+
+        }
+      }, false );
+
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#div_barra_progress_usuario").show();
+      $("#barra_progress_usuario").css({ width: "0%",  });
+      $("#barra_progress_usuario").text("0%");
+    },
+    complete: function () {
+      $("#div_barra_progress_usuario").hide();
+      $("#barra_progress_usuario").css({ width: "0%", });
+      $("#barra_progress_usuario").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
 }
 
 function mostrar(idusuario) {
@@ -285,6 +323,8 @@ function eliminar(idusuario, nombre) {
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   T R A B A J A D O R  ::::::::::::::::::::::::::::::::::::::::::::::::::::
 function limpiar_form_trabajador() {
 
+  $("#guardar_registro_trabajador").html('Guardar Cambios').removeClass('disabled');
+
   $(".tooltip").removeClass("show").addClass("hidde");
 
   $("#idtrabajador_trab").val("");
@@ -336,10 +376,8 @@ function limpiar_form_trabajador() {
 //Función para guardar o editar
 function guardar_y_editar_trabajador(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  console.log('llegue aqui 1');
   var formData = new FormData($("#form-trabajador")[0]);
   $("#div_barra_progress_trabajador").show();
-  console.log('llegue aqui 2');
 
   $.ajax({
     url: "../ajax/usuario.php?op=guardar_y_editar_trabajador",
@@ -348,41 +386,23 @@ function guardar_y_editar_trabajador(e) {
     contentType: false,
     processData: false,
     success: function (e) { 
+      try {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
 
-      var d = JSON.parse(e); console.log(d);
-
-      if (d.status) {
-
-        if ( d.message == 'noduplicado' ) {
-
-          lista_select2("../ajax/usuario.php?op=select2Trabajador", '#trabajador', d.id_tabla);
+          lista_select2("../ajax/usuario.php?op=select2Trabajador", '#trabajador', e.id_tabla);
           
           sw_success('Correcto!', "Trabajador guardado correctamente." );      
-  
-          limpiar_form_trabajador();
-  
-          $("#modal-agregar-trabajador").modal("hide");
-  
-        } else if (d.message == 'duplicado') {  
 
-          var trabajador = "";
-  
-          d.data.forEach(key => {
-            trabajador = trabajador.concat(`<li class="text-left font-size-13px">
-              <b>Razón Social: </b>${key.nombres} <br>
-              <b>${key.tipo_documento}: </b>${key.numero_documento} <br>
-              <b>Papelera: </b>${( key.estado==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO')} <br>
-              <b>Eliminado: </b>${( key.estado_delete==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO')} <br>
-              <hr class="m-t-2px m-b-2px">
-            </li>`);
-          });
-  
-          trabajador = `<ul>${trabajador}</ul>`;     
-          Swal.fire("El Trabajador Existe!", trabajador, "info");
+          limpiar_form_trabajador();
+
+          $("#modal-agregar-trabajador").modal("hide");
+    
+          $("#guardar_registro_trabajador").html('Guardar Cambios').removeClass('disabled');
+        } else {
+          ver_errores(d);
         }
-      } else {
-        ver_errores(d);
-      }      
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }             
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -403,6 +423,7 @@ function guardar_y_editar_trabajador(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_trabajador").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#div_barra_progress_trabajador").show();
       $("#barra_progress_trabajador").css({ width: "0%",  });
       $("#barra_progress_trabajador").text("0%");

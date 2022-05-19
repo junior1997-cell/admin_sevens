@@ -48,81 +48,71 @@ class Compra_insumos
     if ( !empty($idcompra_proyecto) ) {
       //Eliminamos todos los permisos asignados para volverlos a registrar
       $sqldel = "DELETE FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
-      ejecutarConsulta($sqldel);
+      $delete_compra = ejecutarConsulta($sqldel);
+      if ($delete_compra['status'] == false) { return $delete_compra; }
 
       $sql = "UPDATE compra_por_proyecto SET idproyecto = '$idproyecto', idproveedor = '$idproveedor', fecha_compra = '$fecha_compra',
       tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie_comprobante', val_igv = '$val_igv', descripcion = '$descripcion',
       glosa = '$glosa', total = '$total_venta', subtotal = '$subtotal_compra', igv = '$igv_compra', tipo_gravada = '$tipo_gravada',
       estado_detraccion = '$estado_detraccion' WHERE idcompra_proyecto = '$idcompra_proyecto'";
-      ejecutarConsulta($sql);
+      $update_compra = ejecutarConsulta($sql);
+      if ($update_compra['status'] == false) { return $update_compra; }
 
       $num_elementos = 0;
-      $sw = true;
 
       while ($num_elementos < count($idproducto)) {
         $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
         $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto) 
         VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
-        ejecutarConsulta($sql_detalle) or ($sw = false);
+        $detalle_compra = ejecutarConsulta($sql_detalle);
+        if ($detalle_compra['status'] == false) { return $detalle_compra; }
 
         $num_elementos = $num_elementos + 1;
       }
+      return $detalle_compra; 
+    } else { 
+      return $retorno = ['status'=>false, 'mesage'=>'no hay nada', 'data'=>'sin data', ]; 
     }
-
-    if ( !empty($idcompra_proyecto) ) { return $sw; } else { return false; }
   }
 
   public function mostrar_compra_para_editar($id_compras_x_proyecto) {
 
-    $sql = "SELECT  cpp.idcompra_proyecto, 
-    cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, 
-    cpp.tipo_comprobante , 
-    cpp.serie_comprobante,
-    cpp.val_igv, 
-    cpp.descripcion ,    
-    cpp.glosa , 
-    cpp.subtotal, 
-    cpp.igv , 
-    cpp.total ,
-    cpp.estado_detraccion ,
-    cpp.estado
+    $sql = "SELECT  cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.val_igv, 
+    cpp.descripcion, cpp.glosa, cpp.subtotal, cpp.igv, cpp.total, cpp.estado_detraccion, cpp.estado
     FROM compra_por_proyecto as cpp
     WHERE idcompra_proyecto='$id_compras_x_proyecto';";
 
     $compra = ejecutarConsultaSimpleFila($sql);
+    if ($compra['status'] == false) { return $compra; }
 
-    $sql_2 = "SELECT 	dc.idproducto as idproducto,
-		dc.ficha_tecnica_producto,
-		dc.cantidad,
-		dc.precio_sin_igv , dc.igv, dc.precio_con_igv,
-		dc.descuento ,
-		p.nombre as nombre_producto, p.imagen,
-    dc.unidad_medida, dc.color
+    $sql_2 = "SELECT 	dc.idproducto, dc.ficha_tecnica_producto, dc.cantidad, dc.precio_sin_igv, dc.igv, dc.precio_con_igv,
+		dc.descuento,	p.nombre as nombre_producto, p.imagen, dc.unidad_medida, dc.color
 		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c
 		WHERE idcompra_proyecto='$id_compras_x_proyecto' AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
     AND p.idunidad_medida = um.idunidad_medida;";
 
     $producto = ejecutarConsultaArray($sql_2);
+    if ($producto['status'] == false) { return $producto;  }
 
     $results = [
-      "idcompra_x_proyecto" => $compra['idcompra_proyecto'],      
-      "idproyecto" => $compra['idproyecto'],
-      "idproveedor" => $compra['idproveedor'],
-      "fecha_compra" => $compra['fecha_compra'],
-      "tipo_comprobante" => $compra['tipo_comprobante'],
-      "serie_comprobante" => $compra['serie_comprobante'],
-      "val_igv" => $compra['val_igv'],
-      "descripcion" => $compra['descripcion'],
-      "glosa" => $compra['glosa'],
-      "subtotal" => $compra['subtotal'],
-      "igv" => $compra['igv'],
-      "total" => $compra['total'],
-      "estado_detraccion" => $compra['estado_detraccion'],
-      "estado" => $compra['estado'],
-      "producto" => $producto,
+      "idcompra_x_proyecto" => $compra['data']['idcompra_proyecto'],      
+      "idproyecto" => $compra['data']['idproyecto'],
+      "idproveedor" => $compra['data']['idproveedor'],
+      "fecha_compra" => $compra['data']['fecha_compra'],
+      "tipo_comprobante" => $compra['data']['tipo_comprobante'],
+      "serie_comprobante" => $compra['data']['serie_comprobante'],
+      "val_igv" => $compra['data']['val_igv'],
+      "descripcion" => $compra['data']['descripcion'],
+      "glosa" => $compra['data']['glosa'],
+      "subtotal" => $compra['data']['subtotal'],
+      "igv" => $compra['data']['igv'],
+      "total" => $compra['data']['total'],
+      "estado_detraccion" => $compra['data']['estado_detraccion'],
+      "estado" => $compra['data']['estado'],
+      "producto" => $producto['data'],
     ];
 
-    return $results;
+    return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results] ;
   }
 
   //Implementamos un método para desactivar categorías

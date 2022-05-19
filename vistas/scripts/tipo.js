@@ -19,6 +19,7 @@ function init() {
 
 //Función limpiar
 function limpiar_tipo() {
+  $("#guardar_registro_tipo").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
   $("#idtipo_trabajador").val("");
   $("#nombre_tipo").val(""); 
@@ -97,7 +98,7 @@ function guardaryeditar_tipo(e) {
         $("#modal-agregar-tipo").modal("hide");
         
         lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#idtipo_trabjador_c', null);
-
+        $("#guardar_registro_tipo").html('Guardar Cambios').removeClass('disabled');
 			}else{
 				ver_errores(e);	
 			}
@@ -120,6 +121,7 @@ function guardaryeditar_tipo(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro_tipo").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress_tipo").css({ width: "0%",  });
       $("#barra_progress_tipo").text("0%");
     },

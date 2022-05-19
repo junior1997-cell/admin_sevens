@@ -12,63 +12,69 @@ class Resumen_activos_fijos_general
   //Implementar un método para listar los registros
   public function listar_tbla_principal_general($clacificacion) {
     $data_productos = [];
-    $sql_1 = "SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color, p.modelo
+    $sql_1 = "SELECT p.idproducto, p.nombre, p.imagen, p.precio_total as precio_actual, um.nombre_medida, c.nombre_color, p.modelo
 		FROM producto as p, unidad_medida as um, color as c
-		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af='$clacificacion'";
+		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af='$clacificacion' ORDER BY p.nombre ASC";
 
     $producto = ejecutarConsultaArray($sql_1);
 
-    if (!empty($producto)) {
-      foreach ($producto as $key => $value) {
-        $cantidad = 0;
-        $descuento = 0;
-        $subtotal = 0;
-        $promedio_precio = 0;
-        $promedio_total = 0;
+    if ($producto['status']) {
+      if (!empty($producto['data'])) {
+        foreach ($producto['data'] as $key => $value) {
+          $cantidad = 0;
+          $descuento = 0;
+          $subtotal = 0;
+          $promedio_precio = 0;
+          $promedio_total = 0;
+  
+          $idproducto = $value['idproducto'];
+          $sql_2 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
+          FROM `detalle_compra` WHERE idproducto=$idproducto";
+          $compra_p = ejecutarConsultaSimpleFila($sql_2);
+          if ( $compra_p['status'] == false ) { return $compra_p; }
 
-        $idproducto = $value['idproducto'];
-        $sql_2 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
-				FROM `detalle_compra` WHERE idproducto=$idproducto";
-        $compra_p = ejecutarConsultaSimpleFila($sql_2);
-
-        $cantidad += empty($compra_p['cantidad']) ? 0 : floatval($compra_p['cantidad']);
-        $descuento += empty($compra_p['descuento']) ? 0 : floatval($compra_p['descuento']);
-        $subtotal += empty($compra_p['subtotal']) ? 0 : floatval($compra_p['subtotal']);
-        $promedio_precio += empty($compra_p['promedio_precio']) ? 0 : floatval($compra_p['promedio_precio']);
-
-        $sql_3 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
-				FROM `detalle_compra_af_g` WHERE idproducto=$idproducto";
-        $compra_af_g = ejecutarConsultaSimpleFila($sql_3);
-
-        $cantidad += empty($compra_af_g['cantidad']) ? 0 : floatval($compra_af_g['cantidad']);
-        $descuento += empty($compra_af_g['descuento']) ? 0 : floatval($compra_af_g['descuento']);
-        $subtotal += empty($compra_af_g['subtotal']) ? 0 : floatval($compra_af_g['subtotal']);
-        $promedio_precio += empty($compra_af_g['promedio_precio']) ? 0 : floatval($compra_af_g['promedio_precio']);
-
-        if ($compra_p['promedio_precio'] != 0 && $compra_af_g['promedio_precio']) {
-          $promedio_total = $promedio_precio / 2;
-        } else {
-          $promedio_total = $promedio_precio;
-        }
-
-        if ($cantidad > 0) {
-          $data_productos[] = [
-            "idproducto" => $value['idproducto'],
-            "nombre_producto" => $value['nombre'],
-            "modelo" => $value['modelo'],
-            "imagen" => $value['imagen'],
-            "precio_actual" => $value['precio_actual'],
-            "nombre_medida" => $value['nombre_medida'],
-            "nombre_color" => $value['nombre_color'],
-            "cantidad" => $cantidad,
-            "descuento" => $descuento,
-            "subtotal" => $subtotal,
-            "promedio_precio" => $promedio_total,
-          ];
+          $cantidad += empty($compra_p['data']['cantidad']) ? 0 : floatval($compra_p['data']['cantidad']);
+          $descuento += empty($compra_p['data']['descuento']) ? 0 : floatval($compra_p['data']['descuento']);
+          $subtotal += empty($compra_p['data']['subtotal']) ? 0 : floatval($compra_p['data']['subtotal']);
+          $promedio_precio += empty($compra_p['data']['promedio_precio']) ? 0 : floatval($compra_p['data']['promedio_precio']);
+  
+          $sql_3 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
+          FROM `detalle_compra_af_g` WHERE idproducto=$idproducto";
+          $compra_af_g = ejecutarConsultaSimpleFila($sql_3);
+          if ( $compra_af_g['status'] == false ) { return $compra_af_g; }
+  
+          $cantidad += empty($compra_af_g['data']['cantidad']) ? 0 : floatval($compra_af_g['data']['cantidad']);
+          $descuento += empty($compra_af_g['data']['descuento']) ? 0 : floatval($compra_af_g['data']['descuento']);
+          $subtotal += empty($compra_af_g['data']['subtotal']) ? 0 : floatval($compra_af_g['data']['subtotal']);
+          $promedio_precio += empty($compra_af_g['data']['promedio_precio']) ? 0 : floatval($compra_af_g['data']['promedio_precio']);
+  
+          if ($compra_p['data']['promedio_precio'] != 0 && $compra_af_g['data']['promedio_precio']) {
+            $promedio_total = $promedio_precio / 2;
+          } else {
+            $promedio_total = $promedio_precio;
+          }
+  
+          if ($cantidad > 0) {
+            $data_productos[] = [
+              "idproducto" => $value['idproducto'],
+              "nombre_producto" => $value['nombre'],
+              "modelo" => $value['modelo'],
+              "imagen" => $value['imagen'],
+              "precio_actual" => $value['precio_actual'],
+              "nombre_medida" => $value['nombre_medida'],
+              "nombre_color" => $value['nombre_color'],
+              "cantidad" => $cantidad,
+              "descuento" => $descuento,
+              "subtotal" => $subtotal,
+              "promedio_precio" => $promedio_total,
+            ];
+          }          
         }
       }
+      return $retorno = ["status" => true, "message" => 'Todo oka', "data" => $data_productos,];
+    } else {
+      return $producto;
     }
-    return $data_productos;
   }
 
   public function ver_precios_y_mas($idproducto) {
@@ -82,22 +88,26 @@ class Resumen_activos_fijos_general
 
     $compra_af_general = ejecutarConsultaArray($sql_1);
 
-    if (!empty($compra_af_general)) {
-      foreach ($compra_af_general as $key => $value) {
-        $data[] = [
-          'idproyecto' => '',
-          'idcompra' => $value['idcompra_af_general'],
-          'fecha_compra' => $value['fecha_compra'],
-          'ficha_tecnica' => $value['ficha_tecnica'],
-          'nombre_producto' => $value['nombre_producto'],
-          'cantidad' => $value['cantidad'],
-          'precio_con_igv' => $value['precio_con_igv'],
-          'descuento' => $value['descuento'],
-          'subtotal' => $value['subtotal'],
-          'proveedor' => $value['proveedor'],
-          'modulo' => 'Compras de activo fijo',
-        ];
+    if ($compra_af_general['status']) {
+      if (!empty($compra_af_general['data'])) {
+        foreach ($compra_af_general['data'] as $key => $value) {
+          $data[] = [
+            'idproyecto' => '',
+            'idcompra' => $value['idcompra_af_general'],
+            'fecha_compra' => $value['fecha_compra'],
+            'ficha_tecnica' => $value['ficha_tecnica'],
+            'nombre_producto' => $value['nombre_producto'],
+            'cantidad' => $value['cantidad'],
+            'precio_con_igv' => $value['precio_con_igv'],
+            'descuento' => $value['descuento'],
+            'subtotal' => $value['subtotal'],
+            'proveedor' => $value['proveedor'],
+            'modulo' => 'Compras de Activo Fijo',
+          ];
+        }
       }
+    } else {
+      return $compra_af_general;
     }
 
     $sql_2 = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
@@ -109,26 +119,29 @@ class Resumen_activos_fijos_general
 
     $compras_proyecto = ejecutarConsultaArray($sql_2);
 
-    if (!empty($compras_proyecto)) {
-      foreach ($compras_proyecto as $key => $value) {
-        $data[] = [
-          'idproyecto' => $value['idproyecto'],
-          'idcompra' => $value['idcompra_proyecto'],
-          'fecha_compra' => $value['fecha_compra'],
-          'ficha_tecnica' => $value['ficha_tecnica'],
-          'nombre_producto' => $value['nombre_producto'],
-          'cantidad' => $value['cantidad'],
-          'precio_con_igv' => $value['precio_con_igv'],
-          'descuento' => $value['descuento'],
-          'subtotal' => $value['subtotal'],
-          'proveedor' => $value['proveedor'],
-          'modulo' => 'Compras',
-        ];
+    if ($compras_proyecto['status']) {
+      if (!empty($compras_proyecto['data'])) {
+        foreach ($compras_proyecto['data'] as $key => $value) {
+          $data[] = [
+            'idproyecto' => $value['idproyecto'],
+            'idcompra' => $value['idcompra_proyecto'],
+            'fecha_compra' => $value['fecha_compra'],
+            'ficha_tecnica' => $value['ficha_tecnica'],
+            'nombre_producto' => $value['nombre_producto'],
+            'cantidad' => $value['cantidad'],
+            'precio_con_igv' => $value['precio_con_igv'],
+            'descuento' => $value['descuento'],
+            'subtotal' => $value['subtotal'],
+            'proveedor' => $value['proveedor'],
+            'modulo' => 'Compras de Insumo',
+          ];
+        }
       }
+    } else {
+      return $compras_proyecto;
     }
 
-     
-    return $data;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka', 'data'=> $data,];
   }
 
   public function suma_total_compras($clacificacion) {
@@ -139,94 +152,108 @@ class Resumen_activos_fijos_general
     $sql_1 = "SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color
 		FROM producto as p, unidad_medida as um, color as c
 		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af='$clacificacion'";
-
     $producto = ejecutarConsultaArray($sql_1);
 
-    if (!empty($producto)) {
-      foreach ($producto as $key => $value) {
-        $idproducto = $value['idproducto'];
-        $sql_2 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
-				FROM `detalle_compra` WHERE idproducto=$idproducto";
-        $compra_p = ejecutarConsultaSimpleFila($sql_2);
+    if ($producto['status']) {
+      if (!empty($producto['data'])) {
+        foreach ($producto['data'] as $key => $value) {
 
-        $cantidad += empty($compra_p['cantidad']) ? 0 : floatval($compra_p['cantidad']);
-        $subtotal += empty($compra_p['subtotal']) ? 0 : floatval($compra_p['subtotal']);
-
-        $sql_3 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
-				FROM `detalle_compra_af_g` WHERE idproducto=$idproducto";
-        $compra_af_g = ejecutarConsultaSimpleFila($sql_3);
-
-        $cantidad += empty($compra_af_g['cantidad']) ? 0 : floatval($compra_af_g['cantidad']);
-        $subtotal += empty($compra_af_g['subtotal']) ? 0 : floatval($compra_af_g['subtotal']);
+          $idproducto = $value['idproducto'];
+          $sql_2 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
+          FROM `detalle_compra` WHERE idproducto=$idproducto";
+          $compra_p = ejecutarConsultaSimpleFila($sql_2);
+          if ($compra_p['status'] == false) { return $compra_p; }
+  
+          $cantidad += empty($compra_p['data']['cantidad']) ? 0 : floatval($compra_p['data']['cantidad']);
+          $subtotal += empty($compra_p['data']['subtotal']) ? 0 : floatval($compra_p['data']['subtotal']);
+  
+          $sql_3 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
+          FROM `detalle_compra_af_g` WHERE idproducto=$idproducto";
+          $compra_af_g = ejecutarConsultaSimpleFila($sql_3);
+          if ($compra_af_g['status'] == false) { return $compra_af_g; }
+  
+          $cantidad += empty($compra_af_g['data']['cantidad']) ? 0 : floatval($compra_af_g['data']['cantidad']);
+          $subtotal += empty($compra_af_g['data']['subtotal']) ? 0 : floatval($compra_af_g['data']['subtotal']);
+        }
       }
 
-      $data_totales = [
-        "total_cantidad" => $cantidad,
-        "total_monto" => $subtotal,
-      ];
+      $data_totales = [ "total_cantidad" => $cantidad, "total_monto" => $subtotal, ];
+
+      return $retorno = [ "status" => true, "message" =>'todo ok', "data" => $data_totales ];
+
+    } else {
+      return $producto;
     }
-    return $data_totales;
+    
   }
 
   public function sumas_factura_x_material( $idproducto_) {
     $data_productos = [];
+    $cantidad = 0;
+    $descuento = 0;
+    $subtotal = 0;
+    $promedio_precio = 0;
+    $promedio_total = 0;
+
     $sql_1 = "SELECT p.idproducto,p.nombre,p.imagen,p.precio_total as precio_actual,um.nombre_medida, c.nombre_color, p.modelo
 		FROM producto as p, unidad_medida as um, color as c
 		WHERE p.idunidad_medida=um.idunidad_medida AND p.idcolor=c.idcolor AND p.idproducto = '$idproducto_'";
 
     $producto = ejecutarConsultaSimpleFila($sql_1);
 
-    if (!empty($producto)) {
-      
-      $cantidad = 0;
-      $descuento = 0;
-      $subtotal = 0;
-      $promedio_precio = 0;
-      $promedio_total = 0;
-
-      $idproducto = $producto['idproducto'];
-      $sql_2 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
-      FROM `detalle_compra` WHERE idproducto=$idproducto";
-      $compra_p = ejecutarConsultaSimpleFila($sql_2);
-
-      $cantidad += empty($compra_p['cantidad']) ? 0 : floatval($compra_p['cantidad']);
-      $descuento += empty($compra_p['descuento']) ? 0 : floatval($compra_p['descuento']);
-      $subtotal += empty($compra_p['subtotal']) ? 0 : floatval($compra_p['subtotal']);
-      $promedio_precio += empty($compra_p['promedio_precio']) ? 0 : floatval($compra_p['promedio_precio']);
-
-      $sql_3 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
-      FROM `detalle_compra_af_g` WHERE idproducto=$idproducto";
-      $compra_af_g = ejecutarConsultaSimpleFila($sql_3);
-
-      $cantidad += empty($compra_af_g['cantidad']) ? 0 : floatval($compra_af_g['cantidad']);
-      $descuento += empty($compra_af_g['descuento']) ? 0 : floatval($compra_af_g['descuento']);
-      $subtotal += empty($compra_af_g['subtotal']) ? 0 : floatval($compra_af_g['subtotal']);
-      $promedio_precio += empty($compra_af_g['promedio_precio']) ? 0 : floatval($compra_af_g['promedio_precio']);
-
-      if ($compra_p['promedio_precio'] != 0 && $compra_af_g['promedio_precio']) {
-        $promedio_total = $promedio_precio / 2;
-      } else {
-        $promedio_total = $promedio_precio;
+    if ($producto['status']) {
+      if (!empty($producto['data'])) {
+  
+        $idproducto = $producto['data']['idproducto'];
+        $sql_2 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
+        FROM `detalle_compra` WHERE idproducto=$idproducto";
+        $compra_p = ejecutarConsultaSimpleFila($sql_2);
+        if ($compra_p['status'] == false) { return $compra_p; }
+  
+        $cantidad += empty($compra_p['data']['cantidad']) ? 0 : floatval($compra_p['data']['cantidad']);
+        $descuento += empty($compra_p['data']['descuento']) ? 0 : floatval($compra_p['data']['descuento']);
+        $subtotal += empty($compra_p['data']['subtotal']) ? 0 : floatval($compra_p['data']['subtotal']);
+        $promedio_precio += empty($compra_p['data']['promedio_precio']) ? 0 : floatval($compra_p['data']['promedio_precio']);
+  
+        $sql_3 = "SELECT SUM(`cantidad`) as cantidad, SUM(`descuento`) as descuento, SUM(`subtotal`)  as subtotal,  AVG(`precio_con_igv`) AS promedio_precio 
+        FROM `detalle_compra_af_g` WHERE idproducto=$idproducto";
+        $compra_af_g = ejecutarConsultaSimpleFila($sql_3);
+        if ($compra_af_g['status'] == false) { return $compra_af_g; }
+  
+        $cantidad += empty($compra_af_g['data']['cantidad']) ? 0 : floatval($compra_af_g['data']['cantidad']);
+        $descuento += empty($compra_af_g['data']['descuento']) ? 0 : floatval($compra_af_g['data']['descuento']);
+        $subtotal += empty($compra_af_g['data']['subtotal']) ? 0 : floatval($compra_af_g['data']['subtotal']);
+        $promedio_precio += empty($compra_af_g['data']['promedio_precio']) ? 0 : floatval($compra_af_g['data']['promedio_precio']);
+  
+        if ($compra_p['data']['promedio_precio'] != 0 && $compra_af_g['data']['promedio_precio']) {
+          $promedio_total = $promedio_precio / 2;
+        } else {
+          $promedio_total = $promedio_precio;
+        }
+  
+        if ($cantidad > 0) {
+          $data_productos = [
+            "idproducto" => $producto['data']['idproducto'],
+            "nombre_producto" => $producto['data']['nombre'],
+            "modelo" => $producto['data']['modelo'],
+            "imagen" => $producto['data']['imagen'],
+            "precio_actual" => $producto['data']['precio_actual'],
+            "nombre_medida" => $producto['data']['nombre_medida'],
+            "nombre_color" => $producto['data']['nombre_color'],
+            "cantidad" => $cantidad,
+            "descuento" => strval($descuento),
+            "subtotal" =>$subtotal,
+            "precio_promedio" => $promedio_total,
+          ];
+        }        
       }
 
-      if ($cantidad > 0) {
-        $data_productos = [
-          "idproducto" => $producto['idproducto'],
-          "nombre_producto" => $producto['nombre'],
-          "modelo" => $producto['modelo'],
-          "imagen" => $producto['imagen'],
-          "precio_actual" => $producto['precio_actual'],
-          "nombre_medida" => $producto['nombre_medida'],
-          "nombre_color" => $producto['nombre_color'],
-          "cantidad" => $cantidad,
-          "descuento" => strval($descuento),
-          "subtotal" =>$subtotal,
-          "precio_promedio" => $promedio_total,
-        ];
-      }
-      
+      return $retorno = [ "status" => true, "message" =>'todo ok', "data" => $data_productos];
+
+    } else {
+      return $producto;
     }
-    return $data_productos;
+    
   }
 
   //.METODOS PARA EDITAR COMPRA POR PROYECTO

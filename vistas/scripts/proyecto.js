@@ -95,7 +95,8 @@ function permanente_pago_obrero() {
 }
 
 //Función limpiar
-function limpiar() {  
+function limpiar() {
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');  
   $(".show_hide_select_1").show(); 
   $(".show_hide_select_2").hide();
   $(".show_hide_select_2").html('');
@@ -291,23 +292,23 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (data) {
-      data = JSON.parse(data);  console.log(data);  
-      if (data) {
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e) {
 
-        tabla.ajax.reload(null, false);	
+          tabla.ajax.reload(null, false);	
 
-        Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	      
-         
-				limpiar(); tablero();
+          Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	      
+          
+          limpiar(); tablero();
 
-        $("#modal-agregar-proyecto").modal("hide");        
-
-			}else{
-
-        ver_errores(data);
-				 
-			}
+          $("#modal-agregar-proyecto").modal("hide");        
+          $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+        }else{
+          ver_errores(e);				 
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); } 
     },
     xhr: function () {
 
@@ -327,6 +328,7 @@ function guardaryeditar(e) {
       return xhr;
     },
     beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
       $("#barra_progress").text("0%");
     },
