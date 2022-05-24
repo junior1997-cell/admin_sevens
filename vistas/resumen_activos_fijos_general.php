@@ -545,9 +545,6 @@
                   <!-- /.row -->
                 </div>
                 <!-- /.container-fluid -->
-                
-
-                
 
                 <!-- ══════════════════════════════════════ P R O V E E D O R ══════════════════════════════════════ -->
                 <!-- MODAL - agregar proveedores -->
@@ -704,6 +701,8 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success float-right" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                        <button type="button" class="btn btn-info" onclick="$('.detalle_de_compra').print({addGlobalStyles : true,});"><i class="fas fa-print"></i> Imprimir</button>
                       </div>
                     </div>
                   </div>
@@ -1015,6 +1014,11 @@
         <!-- /.content-wrapper --> 
 
         <?php require 'script.php'; ?>
+        
+        <!-- table export -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <script type="text/javascript" src="scripts/resumen_activos_fijos_general.js"></script>      
 

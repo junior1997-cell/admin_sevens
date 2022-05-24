@@ -118,8 +118,8 @@ function tbla_principal() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },     
+      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [11,12], visible: false, searchable: false, },    
     ],
   }).DataTable();
 

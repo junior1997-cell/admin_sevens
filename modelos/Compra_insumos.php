@@ -190,7 +190,7 @@ class Compra_insumos
     $sql = "SELECT cpp.idcompra_proyecto as idcompra_proyecto, 
 		cpp.idproyecto , 
 		cpp.idproveedor , 
-		p.razon_social , 
+		p.razon_social , p.tipo_documento, p.ruc, p.direccion, p.telefono, 
 		cpp.fecha_compra , 
 		cpp.tipo_comprobante , 
 		cpp.serie_comprobante , 
@@ -221,9 +221,9 @@ class Compra_insumos
     dp.precio_con_igv ,
 		dp.descuento ,
     dp.subtotal ,
-		p.nombre as nombre, p.imagen
-		FROM detalle_compra  dp, producto as p
-		WHERE idcompra_proyecto='$id_compra' AND  dp.idproducto=p.idproducto";
+		p.nombre as nombre, p.imagen, um.abreviacion
+		FROM detalle_compra  dp, producto as p, unidad_medida as um
+		WHERE p.idunidad_medida = um.idunidad_medida AND idcompra_proyecto='$id_compra' AND  dp.idproducto=p.idproducto";
 
     return ejecutarConsulta($sql);
   }

@@ -339,7 +339,9 @@ function tbla_principal_herramienta() {
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
 	  order: [[ 0, "asc" ]],//Ordenar (columna,orden)
-    columnDefs:[ { "targets": [ 10,11 ], "visible": false, "searchable": false }, ]
+    columnDefs:[       
+      { "targets": [ 10,11 ], "visible": false, "searchable": false }, 
+    ]
 	}).DataTable();
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras", {'id_categoria_suma':4}, function (e, status) {
@@ -989,17 +991,13 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
         console.log(e.responseText);	ver_errores(e)
       }
     },
-    createdRow: function (row, data, ixdex) {          
-
+    createdRow: function (row, data, ixdex) {
       // columna: Cantidad
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-
       // columna: Precio promedio
       if (data[6] != '') { $("td", row).eq(6).addClass("text-right h5"); }
-
       // columna: Precio actual
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
-      
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }      
       if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
     },
 		language: {
@@ -1008,7 +1006,10 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
-		order: [[ 0, "asc" ]]//Ordenar (columna,orden)
+		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs:[       
+      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+    ]
 	}).DataTable();  
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=sumas_factura_x_material", { 'idproducto': idproducto }, function (e, status) {
@@ -1916,6 +1917,19 @@ function ver_img_activo(img, nombre) {
   $("#ver_img_activo").attr("src", `${img}`);
   $(".nombre-img-activo").html(nombre);
   $("#modal-ver-img-activo").modal("show");
+}
+
+function export_excel_detalle_factura() {
+  $tabla = document.querySelector("#tabla_detalle_factura");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+
 }
 
 init();

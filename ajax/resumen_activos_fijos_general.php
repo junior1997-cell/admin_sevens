@@ -174,7 +174,7 @@ if (!isset($_SESSION["nombre"])) {
                 ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' .  $reg['idcompra'] . ', \'' . $op_proyecto . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>',
               "2" => $reg['modulo'],
               "3" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',
-              "4" => date("d/m/Y", strtotime($reg['fecha_compra'])),
+              "4" => $reg['fecha_compra'],
               "5" => $reg['cantidad'],
               "6" => '<b class="h5 font-weight-bold">' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
               "7" => 'S/ ' . number_format($reg['descuento'], 2, ".", ","),
@@ -295,7 +295,7 @@ if (!isset($_SESSION["nombre"])) {
         }         
 
         echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-          <table class="table table-striped table-bordered table-condensed table-hover">
+          <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
             <thead style="background-color:#127ab6ba">
               <th class="text-center p-10px">F.T.</th>
               <th class="p-10px">Material</th>
@@ -309,17 +309,29 @@ if (!isset($_SESSION["nombre"])) {
             </thead>
             <tbody>'.$tbody.'</tbody>          
             <tfoot>
-              <td colspan="7"></td>
-              <th class="text-right">
-                <h6>'.$rspta['data']['tipo_gravada'].'</h6>
-                <h6>IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
-                <h5 class="font-weight-bold">TOTAL</h5>
-              </th>
-              <th class="text-right">
-                <h6 class="font-weight-bold">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
-                <h6 class="font-weight-bold">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
-                <h5 class="font-weight-bold">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
-              </th>
+              <tr>
+                <td class="p-0" colspan="7"></td>
+                <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                <td class="p-0 text-right">
+                  <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0" colspan="7"></td>
+                <td class="p-0 text-right">
+                  <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                </td>
+                <td class="p-0 text-right">
+                  <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0" colspan="7"></td>
+                <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                <td class="p-0 text-right">
+                  <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                </td>
+              </tr>
             </tfoot>
           </table>
         </div> ';
@@ -437,7 +449,7 @@ if (!isset($_SESSION["nombre"])) {
         }         
 
         echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-          <table class="table table-striped table-bordered table-condensed table-hover">
+          <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
             <thead style="background-color:#ff6c046b">
               <th class="text-center p-10px">F.T.</th>
               <th class="p-10px">Material</th>
@@ -451,17 +463,29 @@ if (!isset($_SESSION["nombre"])) {
             </thead>
             <tbody>'.$tbody.'</tbody>          
             <tfoot>
-              <td colspan="7"></td>
-              <th class="text-right">
-                <h6>'.$rspta['data']['tipo_gravada'].'</h6>
-                <h6>IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
-                <h5 class="font-weight-bold">TOTAL</h5>
-              </th>
-              <th class="text-right">
-                <h6 class="font-weight-bold">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
-                <h6 class="font-weight-bold">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
-                <h5 class="font-weight-bold">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
-              </th>
+              <tr>
+                <td class="p-0" colspan="7"></td>
+                <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                <td class="p-0 text-right">
+                  <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0" colspan="7"></td>
+                <td class="p-0 text-right">
+                  <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                </td>
+                <td class="p-0 text-right">
+                  <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0" colspan="7"></td>
+                <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                <td class="p-0 text-right">
+                  <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                </td>
+              </tr>
             </tfoot>
           </table>
         </div> ';

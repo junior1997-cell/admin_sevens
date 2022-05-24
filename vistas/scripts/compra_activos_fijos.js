@@ -315,16 +315,7 @@ function tbla_principal() {
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [      
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [10], visible: false, searchable: false, },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
-      { targets: [13], visible: false, searchable: false, },
-      { targets: [14], visible: false, searchable: false, },
-      { targets: [15], visible: false, searchable: false, },
-      { targets: [16], visible: false, searchable: false, },
-      { targets: [17], visible: false, searchable: false, },
-      { targets: [18], visible: false, searchable: false, },
-
+      { targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
     ],
   }).DataTable();
 
@@ -958,39 +949,53 @@ function mostrar_compra_proyecto(params) {
 }
 
 //DETALLE - COMRAS ACTIVOS FIJOS GENERAL
-function ver_detalle_compras_general(idcompra_af_general) {
+function ver_detalle_compras_activo_fijo(idcompra_af_general) {
   $(".tooltip").removeClass("show").addClass("hidde");
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
-  $("#modal-ver-compras-general").modal("show");
+  $("#print_pdf_compra").addClass('disabled');
+  $("#excel_compra").addClass('disabled');
 
-  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_general&idcompra_af_general=" + idcompra_af_general, function (r) {
+  $("#modal-ver-compras-general").modal("show"); 
+
+  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_activo_fijo&idcompra_af_general=" + idcompra_af_general, function (r) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
     $('[data-toggle="tooltip"]').tooltip();
     $("#cargando-9-fomulario").show();
     $("#cargando-10-fomulario").hide();
-  });
+
+    $("#print_pdf_compra").removeClass('disabled');
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_af_general}&op=activo_fijo` );
+    $("#excel_compra").removeClass('disabled');
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //DETALLE - COMRAS ACTIVOS FIJOS PROYECTO
-function ver_detalle_compras_proyecto(id_compra) {
+function ver_detalle_compras_insumo(id_compra) {
   $(".tooltip").removeClass("show").addClass("hidde");
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
+  $("#print_pdf_compra").addClass('disabled');
+  $("#excel_compra").addClass('disabled');
+
   $("#modal-ver-compras-general").modal("show");
   
-  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_proyecto&id_compra=" + id_compra, function (r) {
+  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_insumo&id_compra=" + id_compra, function (r) {
 
     $(".detalle_de_compra_general").html(r); //console.log(r);
 
     $('[data-toggle="tooltip"]').tooltip();
     $("#cargando-9-fomulario").show();
     $("#cargando-10-fomulario").hide();
-  });
+
+    $("#print_pdf_compra").removeClass('disabled');
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id_compra}&op=insumo`);
+    $("#excel_compra").removeClass('disabled');
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 
@@ -2095,4 +2100,17 @@ function fecha_actual() {
   var today = now.getFullYear() + "-" + month + "-" + day;
   console.log(today);
   $("#fecha_compra").val(today);
+}
+
+function export_excel_detalle_factura() {
+  $tabla = document.querySelector("#tabla_detalle_factura");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+
 }

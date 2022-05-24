@@ -217,7 +217,7 @@ function desactivar(idmaquinaria) {
     
         tabla.ajax.reload(null, false);
 	      tabla2.ajax.reload(null, false);
-      });      
+      }).fail( function(e) { ver_errores(e); } );    
     }
   });   
 }

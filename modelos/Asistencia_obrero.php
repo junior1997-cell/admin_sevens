@@ -24,43 +24,47 @@ class Asistencia_obrero
       // $pruebas = $key['fecha_asistida'];
       // buscamos la existencia de una asistencia
       $sql_1 = "SELECT idasistencia_trabajador FROM asistencia_trabajador WHERE idtrabajador_por_proyecto='" . $key['id_trabajador'] . "' AND fecha_asistencia = '" . $key['fecha_asistida'] . "';";
-
       $buscar_asistencia = ejecutarConsultaSimpleFila($sql_1);
+      if ($buscar_asistencia['status'] == false) {  return $buscar_asistencia; }
 
-      if (empty($buscar_asistencia)) {
+      if (empty($buscar_asistencia['data']['data'])) {
         // insertamos un nuevo registro
         $sql_2 = "INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia)			
 				VALUES ('" . $key['id_trabajador'] . "', '" . $key['horas_normal_dia'] . "', '" . $key['pago_normal_dia'] . "', '" .
         $key['horas_extras_dia'] . "', '" . $key['pago_horas_extras'] . "', '" . $key['fecha_asistida'] . "', '" . $key['nombre_dia'] . "' )";
+        $new_registro = ejecutarConsulta($sql_2);
+        if ($new_registro['status'] == false) {  return $new_registro; }
 
-        ejecutarConsulta($sql_2) or ($sw = false);
       } else {
         # editamos el registro existente
         $sql_3 =  "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto='" . $key['id_trabajador'] . "', horas_normal_dia='" . $key['horas_normal_dia'] .
           "', pago_normal_dia='" . $key['pago_normal_dia'] . "', horas_extras_dia='" . $key['horas_extras_dia'] .
           "', pago_horas_extras='" . $key['pago_horas_extras'] . "', fecha_asistencia = '" . $key['fecha_asistida'] .
-          "', nombre_dia = '" . $key['nombre_dia'] . "' WHERE idasistencia_trabajador='" . $buscar_asistencia['idasistencia_trabajador'] . "';";
+          "', nombre_dia = '" . $key['nombre_dia'] . "' WHERE idasistencia_trabajador='" . $buscar_asistencia['data']['idasistencia_trabajador'] . "';";
+        $edita_registro = ejecutarConsulta($sql_3);
+        if ($edita_registro['status'] == false) {  return $edita_registro; }
 
-        ejecutarConsulta($sql_3) or ($sw = false);
-        // $pruebas = $buscar_asistencia['idasistencia_trabajador'];
+        // $pruebas = $buscar_asistencia['data']['idasistencia_trabajador'];
       }
     }
 
+    $retorno = "";
     // registramos o editamos las "resumen q s asistencia"
     foreach ($data_resumen_qs as $indice => $keys) {
       $sql_4 = "SELECT idresumen_q_s_asistencia FROM resumen_q_s_asistencia 
       WHERE idtrabajador_por_proyecto = '" . $keys['id_trabajador'] . "' AND fecha_q_s_inicio = '" . $keys['fecha_q_s_inicio'] . "';";
-
       $buscar_extras = ejecutarConsultaSimpleFila($sql_4);
+      if ($buscar_extras['status'] == false) {  return $buscar_extras; }
 
-      if (empty($buscar_extras)) {
+      if (empty($buscar_extras['data'])) {
         # insertamos un nuevo registro
         $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, pago_quincenal) 
 				VALUES ('" . $keys['id_trabajador'] . "', '" . $keys['num_semana'] . "', '" . $keys['fecha_q_s_inicio'] . "', '" . $keys['fecha_q_s_fin'] .
         "', '" . $keys['total_hn'] . "', '" . $keys['total_he'] . "', '" . $keys['dias_asistidos'] . "', '" . $keys['sabatical'] . "', '" .
         $keys['pago_parcial_hn'] . "', '" . $keys['pago_parcial_he'] . "', '" . $keys['adicional_descuento'] . "', '" . $keys['pago_quincenal'] . "')";
+        $retorno =  ejecutarConsulta($sql_5);
+        if ($retorno['status'] == false) {  return $retorno; }
 
-        ejecutarConsulta($sql_5) or ($sw = false);
       } else {
         # editamos el registro encontrado
         $sql_6 = "UPDATE resumen_q_s_asistencia SET  idtrabajador_por_proyecto='" . $keys['id_trabajador'] . "', numero_q_s='" . $keys['num_semana'] .
@@ -69,11 +73,11 @@ class Asistencia_obrero
         "', pago_parcial_hn='" . $keys['pago_parcial_hn'] . "', pago_parcial_he='" . $keys['pago_parcial_he'] . "', 
         adicional_descuento='" . $keys['adicional_descuento'] . "', pago_quincenal='" . $keys['pago_quincenal'] .
         "' WHERE idresumen_q_s_asistencia = '" . $buscar_extras['idresumen_q_s_asistencia'] . "';";
-        ejecutarConsulta($sql_6) or ($sw = false);
+        $retorno = ejecutarConsulta($sql_6);
+        if ($retorno['status'] == false) {  return $retorno; }
       }
     }
-
-    return $sw;
+    return $retorno;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
@@ -86,7 +90,7 @@ class Asistencia_obrero
 
   //Implementar un método para listar asistencia
   public function tbla_principal($nube_idproyecto) {
-    $trabajdor_resumen = [];
+    $data_array = Array();
     $sql = "SELECT atr.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, 
 		t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tpp.sueldo_hora, tpp.sueldo_mensual, tpp.sueldo_diario,
 		SUM(atr.horas_normal_dia) AS total_horas_normal, SUM(atr.horas_extras_dia) AS total_horas_extras, 
@@ -98,18 +102,17 @@ class Asistencia_obrero
 		GROUP BY tpp.idtrabajador_por_proyecto ORDER BY t.nombres ASC;";
     $agrupar_trabajdor = ejecutarConsultaArray($sql);
 
-    foreach ($agrupar_trabajdor as $key => $value) {
-      $sql_2 =
-        "SELECT SUM(adicional_descuento) AS adicional_descuento, SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
+    if ($agrupar_trabajdor['status'] == false) {  return $agrupar_trabajdor; }
+
+    foreach ($agrupar_trabajdor['data'] as $key => $value) {
+      $sql_2 = "SELECT SUM(adicional_descuento) AS adicional_descuento, SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
 			SUM(total_dias_asistidos) AS total_dias_asistidos, SUM(pago_quincenal) AS pago_quincenal
 			FROM resumen_q_s_asistencia 
-			WHERE  estado = '1' AND estado_delete = '1' AND idtrabajador_por_proyecto = '" .
-        $value['idtrabajador_por_proyecto'] .
-        "';";
-
+			WHERE  estado = '1' AND estado_delete = '1' AND idtrabajador_por_proyecto = '" . $value['idtrabajador_por_proyecto'] . "';";
       $sab = ejecutarConsultaSimpleFila($sql_2);
+      if ($sab['status'] == false) {  return $sab; }
 
-      $data_array = [
+      $data_array[] = [
         'idtrabajador_por_proyecto' => $value['idtrabajador_por_proyecto'],
         'idtrabajador' => $value['idtrabajador'],
         'nombre' => $value['nombre'],
@@ -119,20 +122,18 @@ class Asistencia_obrero
         'sueldo_hora' => $value['sueldo_hora'],
         'sueldo_diario' => $value['sueldo_diario'],
         'sueldo_mensual' => $value['sueldo_mensual'],
-        'total_horas_normal' => empty($sab) ? 0 : (empty($sab['total_hn']) ? 0 : floatval($sab['total_hn'])),
-        'total_horas_extras' => empty($sab) ? 0 : (empty($sab['total_he']) ? 0 : floatval($sab['total_he'])),
+        'total_horas_normal' => empty($sab['data']) ? 0 : (empty($sab['data']['total_hn']) ? 0 : floatval($sab['data']['total_hn'])),
+        'total_horas_extras' => empty($sab['data']) ? 0 : (empty($sab['data']['total_he']) ? 0 : floatval($sab['data']['total_he'])),
         'estado' => $value['estado'],
         'fecha_inicio_proyect' => $value['fecha_inicio_proyect'],
         'cargo' => $value['cargo'],
-        'total_sabatical' => empty($sab) ? 0 : (empty($sab['total_sabatical']) ? 0 : floatval($sab['total_sabatical'])),
-        'pago_quincenal' => empty($sab) ? 0 : (empty($sab['pago_quincenal']) ? 0 : floatval($sab['pago_quincenal'])),
-        'adicional_descuento' => empty($sab) ? 0 : (empty($sab['adicional_descuento']) ? 0 : floatval($sab['adicional_descuento'])),
-      ];
-
-      array_push($trabajdor_resumen, $data_array);
+        'total_sabatical' => empty($sab['data']) ? 0 : (empty($sab['data']['total_sabatical']) ? 0 : floatval($sab['data']['total_sabatical'])),
+        'pago_quincenal' => empty($sab['data']) ? 0 : (empty($sab['data']['pago_quincenal']) ? 0 : floatval($sab['data']['pago_quincenal'])),
+        'adicional_descuento' => empty($sab['data']) ? 0 : (empty($sab['data']['adicional_descuento']) ? 0 : floatval($sab['data']['adicional_descuento'])),
+      ];       
     }
 
-    return json_encode($trabajdor_resumen, true);
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $data_array, ];
   }
 
   public function total_acumulado_trabajadores($id_proyecto) {
@@ -165,6 +166,7 @@ class Asistencia_obrero
 		WHERE tpp.idtrabajador = t.idtrabajador  AND ct.idcargo_trabajador = tpp.idcargo_trabajador AND ct.idtipo_trabjador = tp.idtipo_trabajador 
 		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY t.nombres ASC ;";
     $trabajador = ejecutarConsultaArray($sql2);
+    if ($trabajador['status'] == false) {  return $trabajador; }
 
     $data = [];
     $extras = "";
@@ -184,20 +186,21 @@ class Asistencia_obrero
     $pago_quincenal = "";
     $estado_envio_contador = "";
 
-    foreach ($trabajador as $indice => $key) {
+    foreach ($trabajador['data'] as $indice => $key) {
       $id_trabajador_proyect = $key['idtrabajador_por_proyecto'];
 
       // extraemos la asistencia por trabajador
       $sql3 = "SELECT * FROM asistencia_trabajador  AS atr 
 			WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
       $asistencia = ejecutarConsultaArray($sql3);
+      if ($asistencia['status'] == false) {  return $asistencia; }
 
       $sql4 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal, estado_envio_contador 
 			FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_trabajador_proyect' AND fecha_q_s_inicio = '$f1';";
-
       $extras = ejecutarConsultaSimpleFila($sql4);
+      if ($extras['status'] == false) {  return $extras; }
 
-      if (empty($extras)) {
+      if (empty($extras['data'])) {
         $idresumen_q_s_asistencia = "";
         $fecha_q_s_inicio = "";
         $total_hn = 0;
@@ -213,20 +216,20 @@ class Asistencia_obrero
         $pago_quincenal = 0;
         $estado_envio_contador = "";
       } else {
-        $idresumen_q_s_asistencia = $extras['idresumen_q_s_asistencia'];
-        $fecha_q_s_inicio = $extras['fecha_q_s_inicio'];
-        $total_hn = $extras['total_hn'];
-        $total_he = $extras['total_he'];
-        $total_dias_asistidos = $extras['total_dias_asistidos'];
-        $sabatical = $extras['sabatical'];
-        $sabatical_manual_1 = $extras['sabatical_manual_1'];
-        $sabatical_manual_2 = $extras['sabatical_manual_2'];
-        $pago_parcial_hn = $extras['pago_parcial_hn'];
-        $pago_parcial_he = $extras['pago_parcial_he'];
-        $adicional_descuento = $extras['adicional_descuento'];
-        $descripcion_descuento = $extras['descripcion_descuento'];
-        $pago_quincenal = $extras['pago_quincenal'];
-        $estado_envio_contador = $extras['estado_envio_contador'];
+        $idresumen_q_s_asistencia = $extras['data']['idresumen_q_s_asistencia'];
+        $fecha_q_s_inicio = $extras['data']['fecha_q_s_inicio'];
+        $total_hn = $extras['data']['total_hn'];
+        $total_he = $extras['data']['total_he'];
+        $total_dias_asistidos = $extras['data']['total_dias_asistidos'];
+        $sabatical = $extras['data']['sabatical'];
+        $sabatical_manual_1 = $extras['data']['sabatical_manual_1'];
+        $sabatical_manual_2 = $extras['data']['sabatical_manual_2'];
+        $pago_parcial_hn = $extras['data']['pago_parcial_hn'];
+        $pago_parcial_he = $extras['data']['pago_parcial_he'];
+        $adicional_descuento = $extras['data']['adicional_descuento'];
+        $descripcion_descuento = $extras['data']['descripcion_descuento'];
+        $pago_quincenal = $extras['data']['pago_quincenal'];
+        $estado_envio_contador = $extras['data']['estado_envio_contador'];
       }
 
       $data[] = [
@@ -239,7 +242,7 @@ class Asistencia_obrero
         "sueldo_mensual" => $key['sueldo_mensual'],
         "sueldo_diario" => $key['sueldo_diario'],
         "sueldo_hora" => $key['sueldo_hora'],
-        "asistencia" => $asistencia,
+        "asistencia" => $asistencia['data'],
 
         'idresumen_q_s_asistencia' => $idresumen_q_s_asistencia,
         'fecha_registro' => $fecha_q_s_inicio,
@@ -272,7 +275,7 @@ class Asistencia_obrero
       $pago_quincenal = "";
     }
 
-    return $data;
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $data];
   }
 
   // :::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O   C O N T A D O R  ::::::::::::::::::::::::::::::::::::::
@@ -284,31 +287,32 @@ class Asistencia_obrero
   }
 
   public function quitar_editar_pago_al_contador_todos($array_pago_contador, $estado_envio_contador) {
-    $data_conta = json_decode($array_pago_contador, true);
-    $sw = true;
+    //$data_conta = json_decode($array_pago_contador, true);
+    $sw = "";
 
-    foreach ($data_conta as $key => $value) { 
+    foreach ($array_pago_contador as $key => $value) { 
 
       $idresumen_q_s_asistencia = $value['idresumen_q_s_asistencia'];
 
       $sql = "UPDATE resumen_q_s_asistencia SET estado_envio_contador= '$estado_envio_contador'
       WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
-      ejecutarConsulta($sql) or ($sw = false);
+      $sw = ejecutarConsulta($sql);
+      if ($sw['status'] == false) {  return $sw; }
     }
     
-    return $sw;
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $sw];
   }
 
   // :::::::::::::::::::::::::::::::::::: S E C C I O N   S A B A T I C A L  ::::::::::::::::::::::::::::::::::::::
 
   public function insertar_quitar_editar_sabatical_manual($idresumen_q_s_asistencia, $fecha_asistida, $sueldo_x_hora, $fecha_q_s_inicio, $fecha_q_s_fin, $numero_q_s, $id_trabajador_x_proyecto, $numero_sabado, $estado_sabatical_manual) {
     $horas = 0; $pago_normal = 0;
-    $sw = true;
     $sabatical = 0; $total_dias = 0; $total_hn = 0; $pago_parcial_hn = 0; $pago_quincenal = 0;
 
     // buscamos la: ASISTENCIA
     $sql_1 = "SELECT atr.idasistencia_trabajador FROM asistencia_trabajador AS atr WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_x_proyecto' AND atr.fecha_asistencia = '$fecha_asistida';";
     $buscando_asist = ejecutarConsultaSimpleFila($sql_1);
+    if ($buscando_asist['status'] == false) {  return $buscando_asist; }
 
     if ($estado_sabatical_manual == '1') {
       $horas = 8;
@@ -319,35 +323,39 @@ class Asistencia_obrero
     }
 
     // validamos la insercion en: ASISTENCIA TRABAJDOR
-    if (empty($buscando_asist)) {
+    if (empty($buscando_asist['data'])) {
       $sql_2 = "INSERT INTO asistencia_trabajador(idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia) 
 			VALUES ('$id_trabajador_x_proyecto','$horas','$pago_normal','0', '0', '$fecha_asistida', 'Sábado')";
-      ejecutarConsulta($sql_2) or ($sw = false);
+      $insert_asistencia = ejecutarConsulta($sql_2) ;
+      if ($insert_asistencia['status'] == false) {  return $insert_asistencia; }
     } else {
-      $sql_3 =
-        "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto = '$id_trabajador_x_proyecto', horas_normal_dia = '$horas', 
+      $sql_3 = "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto = '$id_trabajador_x_proyecto', horas_normal_dia = '$horas', 
 			pago_normal_dia = '$pago_normal', horas_extras_dia  = '0', pago_horas_extras = '0', fecha_asistencia = '$fecha_asistida', nombre_dia = 'Sábado'
-			WHERE idasistencia_trabajador = '" .
-        $buscando_asist['idasistencia_trabajador'] .
-        "';";
-      ejecutarConsulta($sql_3) or ($sw = false);
+			WHERE idasistencia_trabajador = '" . $buscando_asist['data']['idasistencia_trabajador'] . "';";
+      $update_asistencia = ejecutarConsulta($sql_3);
+      if ($update_asistencia['status'] == false) {  return $update_asistencia; }
     }
 
+     
     // validamos la insercion en el: RESUMEN Q S ASISTENCIA
     if (empty($idresumen_q_s_asistencia)) {
       $sql_4 = "INSERT INTO resumen_q_s_asistencia( idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, sabatical,  sabatical_manual_$numero_sabado, total_dias_asistidos, total_hn, pago_parcial_hn, pago_quincenal) 
       VALUES ('$id_trabajador_x_proyecto', '$numero_q_s', '$fecha_q_s_inicio', '$fecha_q_s_fin', '1',  '$estado_sabatical_manual', '1', '8', $pago_normal, $pago_normal );";
-      ejecutarConsulta($sql_4) or ($sw = false);
+      $insert_resumen = ejecutarConsulta($sql_4);
+      
+      return $insert_resumen;
+
     } else {
       $sql_5 = "SELECT sabatical, total_dias_asistidos, total_hn, pago_parcial_hn, pago_quincenal FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
       $cant_sab = ejecutarConsultaSimpleFila($sql_5);
+      if ($cant_sab['status'] == false) {  return $cant_sab; }
 
-      if (!empty($cant_sab)) {        
-        $sabatical        = empty($cant_sab['sabatical']) ? 0 : floatval($cant_sab['sabatical']);
-        $total_dias       = empty($cant_sab['total_dias_asistidos']) ? 0 : floatval($cant_sab['total_dias_asistidos']); 
-        $total_hn         = empty($cant_sab['total_hn']) ? 0 : floatval($cant_sab['total_hn']); 
-        $pago_parcial_hn  = empty($cant_sab['pago_parcial_hn']) ? 0 : floatval($cant_sab['pago_parcial_hn']); 
-        $pago_quincenal   = empty($cant_sab['pago_quincenal']) ? 0 : floatval($cant_sab['pago_quincenal']);
+      if (!empty($cant_sab['data'])) {        
+        $sabatical        = empty($cant_sab['data']['sabatical']) ? 0 : floatval($cant_sab['data']['sabatical']);
+        $total_dias       = empty($cant_sab['data']['total_dias_asistidos']) ? 0 : floatval($cant_sab['data']['total_dias_asistidos']); 
+        $total_hn         = empty($cant_sab['data']['total_hn']) ? 0 : floatval($cant_sab['data']['total_hn']); 
+        $pago_parcial_hn  = empty($cant_sab['data']['pago_parcial_hn']) ? 0 : floatval($cant_sab['data']['pago_parcial_hn']); 
+        $pago_quincenal   = empty($cant_sab['data']['pago_quincenal']) ? 0 : floatval($cant_sab['data']['pago_quincenal']);
       }
 
       if ($estado_sabatical_manual == '1') {
@@ -395,15 +403,16 @@ class Asistencia_obrero
 			numero_q_s = '$numero_q_s', sabatical = '$sabatical', sabatical_manual_$numero_sabado = '$estado_sabatical_manual',
       total_dias_asistidos = '$total_dias', total_hn = '$total_hn', pago_parcial_hn = '$pago_parcial_hn', pago_quincenal = '$pago_quincenal'
 			WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
-      ejecutarConsulta($sql_6) or ($sw = false);
-    }
+      $update_resumen = ejecutarConsulta($sql_6);
 
-    return $sw;
+      return $update_resumen; 
+
+    }     
   }
 
   public function insertar_quitar_sabatical_manual_todos($sabatical_trabajador, $estado_sabatical_manual) {
     $data_sabatical = json_decode($sabatical_trabajador, true);
-    $sw = true;
+    $retorno = "";
 
     if (!empty($data_sabatical)) {
       foreach ($data_sabatical as $key => $value) {
@@ -421,6 +430,7 @@ class Asistencia_obrero
         $sql_1 = "SELECT atr.idasistencia_trabajador FROM asistencia_trabajador AS atr 
 				WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_x_proyecto' AND atr.fecha_asistencia = '$fecha_asistida';";
         $buscando_asist = ejecutarConsultaSimpleFila($sql_1);
+        if ($buscando_asist['status'] == false) {  return $buscando_asist; }
 
         $horas = 0;
         $pago_normal = 0;
@@ -439,30 +449,34 @@ class Asistencia_obrero
         if (empty($buscando_asist)) {
           $sql_2 = "INSERT INTO asistencia_trabajador(idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia) 
 					VALUES ('$id_trabajador_x_proyecto','$horas','$pago_normal','0', '0', '$fecha_asistida', 'Sábado')";
-          ejecutarConsulta($sql_2) or ($sw = false);
+          $insert_asistencia = ejecutarConsulta($sql_2);
+          if ($insert_asistencia['status'] == false) {  return $insert_asistencia; }
         } else {
           $sql_3 = "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto = '$id_trabajador_x_proyecto', horas_normal_dia = '$horas', 
 					pago_normal_dia = '$pago_normal', horas_extras_dia  = '0', pago_horas_extras = '0', fecha_asistencia = '$fecha_asistida', 
           nombre_dia = 'Sábado'
 					WHERE idasistencia_trabajador = '" . $buscando_asist['idasistencia_trabajador'] . "';";
-          ejecutarConsulta($sql_3) or ($sw = false);
+          $update_asistencia = ejecutarConsulta($sql_3);
+          if ($update_asistencia['status'] == false) {  return $update_asistencia; }
         }
 
         // validamos la insercion en el: RESUMEN Q S ASISTENCIA
         if (empty($idresumen_q_s_asistencia)) {
           $sql_4 = "INSERT INTO resumen_q_s_asistencia( idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, sabatical,  sabatical_manual_$numero_sabado, total_dias_asistidos, total_hn, pago_parcial_hn, pago_quincenal) 
           VALUES ('$id_trabajador_x_proyecto', '$numero_q_s', '$fecha_q_s_inicio', '$fecha_q_s_fin', '1',  '$estado_sabatical_manual', '1', '8', $pago_normal, $pago_normal );";
-          ejecutarConsulta($sql_4) or ($sw = false);
+          $retorno = ejecutarConsulta($sql_4);
+          if ($retorno['status'] == false) {  return $retorno; }
         } else {
           $sql_5 = "SELECT sabatical, total_dias_asistidos, total_hn, pago_parcial_hn, pago_quincenal FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
           $cant_sab = ejecutarConsultaSimpleFila($sql_5);
+          if ($cant_sab['status'] == false) {  return $cant_sab; } 
 
-          if (!empty($cant_sab)) {        
-            $sabatical        = empty($cant_sab['sabatical']) ? 0 : floatval($cant_sab['sabatical']);
-            $total_dias       = empty($cant_sab['total_dias_asistidos']) ? 0 : floatval($cant_sab['total_dias_asistidos']); 
-            $total_hn         = empty($cant_sab['total_hn']) ? 0 : floatval($cant_sab['total_hn']); 
-            $pago_parcial_hn  = empty($cant_sab['pago_parcial_hn']) ? 0 : floatval($cant_sab['pago_parcial_hn']); 
-            $pago_quincenal   = empty($cant_sab['pago_quincenal']) ? 0 : floatval($cant_sab['pago_quincenal']);
+          if (!empty($cant_sab['data'])) {        
+            $sabatical        = empty($cant_sab['data']['sabatical']) ? 0 : floatval($cant_sab['data']['sabatical']);
+            $total_dias       = empty($cant_sab['data']['total_dias_asistidos']) ? 0 : floatval($cant_sab['data']['total_dias_asistidos']); 
+            $total_hn         = empty($cant_sab['data']['total_hn']) ? 0 : floatval($cant_sab['data']['total_hn']); 
+            $pago_parcial_hn  = empty($cant_sab['data']['pago_parcial_hn']) ? 0 : floatval($cant_sab['data']['pago_parcial_hn']); 
+            $pago_quincenal   = empty($cant_sab['data']['pago_quincenal']) ? 0 : floatval($cant_sab['data']['pago_quincenal']);
           }
 
           if ($estado_sabatical_manual == '1') {
@@ -510,16 +524,15 @@ class Asistencia_obrero
           numero_q_s = '$numero_q_s', sabatical = '$sabatical', sabatical_manual_$numero_sabado = '$estado_sabatical_manual',
           total_dias_asistidos = '$total_dias', total_hn = '$total_hn', pago_parcial_hn = '$pago_parcial_hn', pago_quincenal = '$pago_quincenal'
           WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
-          ejecutarConsulta($sql_6) or ($sw = false);
+          $retorno = ejecutarConsulta($sql_6);
+          if ($retorno['status'] == false) {  return $retorno; }
         }
       }
-    }
 
-    if (!empty($data_sabatical)) {
-      return $sw;
-    } else {
-      return false;
-    }
+      return $retorno;
+    }else{
+      return  $retorno = ['status' => false, 'message' => 'todo oka ps', 'data' => []];
+    }   
   }
 
   // :::::::::::::::::::::::::::::::::::: S E C C I O N   D I A S   P O R   T R A B A J A D O R ::::::::::::::::::::::::::::::::::::::
@@ -537,14 +550,9 @@ class Asistencia_obrero
   public function editar_dia($idasistencia_trabajador, $trabajador, $horas_trabajo, $pago_dia, $horas_extras, $pago_horas_extras, $sabatical) {
     //var_dump($idasistencia_trabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 
-    $sql = "UPDATE asistencia_trabajador SET 
-		idtrabajador='$trabajador',
-		horas_trabajador='$horas_trabajo',
-		pago_dia='$pago_dia',
-		horas_extras_dia='$horas_extras',
-		pago_horas_extras='$pago_horas_extras',
-		sabatical='$sabatical'
-		WHERE idasistencia_trabajador='$idasistencia_trabajador'";
+    $sql = "UPDATE asistencia_trabajador SET idtrabajador='$trabajador', horas_trabajador='$horas_trabajo',	pago_dia='$pago_dia',
+		horas_extras_dia='$horas_extras',	pago_horas_extras='$pago_horas_extras',	sabatical='$sabatical'
+    WHERE idasistencia_trabajador='$idasistencia_trabajador'";
 
     return ejecutarConsulta($sql);
   }
@@ -658,7 +666,6 @@ class Asistencia_obrero
   // obtebnemos los "DOC JUSTIFICACION para eliminar
   public function imgJustificacion($id) {
     $sql = "SELECT doc_justificacion FROM asistencia_trabajador WHERE idasistencia_trabajador = '$id'";
-
     return ejecutarConsulta($sql);
   }
 }

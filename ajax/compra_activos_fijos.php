@@ -238,7 +238,7 @@
           
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
 
               $saldo = floatval($reg['total']) - floatval($reg['deposito']);  
@@ -275,15 +275,15 @@
   
               $data[] = [
                 "0" => $cont++,
-                "1" => empty($reg['idproyecto']) ? ($reg['estado'] == '1'  ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_general(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                "1" => empty($reg['idproyecto']) ? ($reg['estado'] == '1'  ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_activo_fijo(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                       ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_general(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
                       ' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' . $reg['idtabla'] .', \''.encodeCadenaHtml($reg['razon_social']).' - '.date("d/m/Y", strtotime($reg['fecha_compra'])).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
-                    : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_general(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
+                    : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_activo_fijo(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
                       ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>')
-                  : ($reg['estado'] == '1' ? '<button class="btn btn-info btn-sm " onclick="ver_detalle_compras_proyecto(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                  : ($reg['estado'] == '1' ? '<button class="btn btn-info btn-sm " onclick="ver_detalle_compras_insumo(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                       ' <button class="btn btn-warning btn-sm" disabled onclick="mostrar_compra_proyecto(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
                       ' <button class="btn btn-danger  btn-sm" disabled onclick="eliminar_compra(' . $reg['idtabla'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'
-                    : '<button class="btn btn-info btn-sm" disabled onclick="ver_detalle_compras_proyecto(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
+                    : '<button class="btn btn-info btn-sm" disabled onclick="ver_detalle_compras_insumo(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
                       ' <button class="btn btn-success btn-sm" disabled onclick="des_anular_af_p(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                 "2" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg['descripcion'] . '</textarea>',      
                 "3" => $reg['fecha_compra'],
@@ -329,7 +329,7 @@
       
         break;
             
-        case 'ver_detalle_compras_general':
+        case 'ver_detalle_compras_activo_fijo':
           
           //Recibimos el idingreso
           $idcompra_af_general = $_GET['idcompra_af_general'];
@@ -400,9 +400,9 @@
               <td class="text-center p-6px">' . $ficha . '</td>
               <td class="text-left p-6px">
                 <div class="user-block text-nowrap">
-                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img_product.'" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" alt="user image" data-toggle="tooltip" data-original-title="Ver img" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
-                  <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
-                  <span class="description"><b>Color: </b>' . $reg->color . '</span>
+                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img_product.'" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" alt="user image" data-toggle="tooltip" data-original-title="Ver img" onerror="this.src=\'../dist/svg/404-v2.svg\';" >'.
+                  '<span class="username"> <p class="mb-0 ">' . $reg->nombre . '</p></span>
+                  <span class="description"> <b>Color: </b>' . $reg->color . '</span>
                 </div>
               </td>
               <td class="text-left p-6px">' . $reg->unidad_medida . '</td>
@@ -416,7 +416,7 @@
           }         
 
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-            <table class="table table-striped table-bordered table-condensed table-hover">
+            <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead class="bg-color-127ab6ba">
                 <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
                 <th class="p-10px">Material</th>
@@ -430,17 +430,29 @@
               </thead>
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
-                <td colspan="7"></td>
-                <th class="text-right">
-                  <h6>'.$rspta['data']['tipo_gravada'].'</h6>
-                  <h6>IGV('.( ( empty($rspta['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
-                  <h5 class="font-weight-bold">TOTAL</h5>
-                </th>
-                <th class="text-right">
-                  <h6 class="font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
-                  <h6 class="font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
-                  <h5 class="font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
-                </th>
+                <tr>
+                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                  </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                  <td class="p-0 text-right">
+                    <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                  </td>
+                </tr>
               </tfoot>
             </table>
           </div> ';
@@ -496,8 +508,8 @@
             foreach ($rspta['data'] as $key => $value) {
               $data[] = [
                 "0" => $cont++,
-                "1" => empty($value['idproyecto']) ? '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras_general(' . $value['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>'
-                  : '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras_proyecto(' . $value['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
+                "1" => empty($value['idproyecto']) ? '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras_activo_fijo(' . $value['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>'
+                  : '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras_insumo(' . $value['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
                 "2" => $value['fecha_compra'],
                 "3" => '<div class="user-block">'.
                   '<span class="username ml-0" ><p class="text-primary m-b-02rem"  >' . (empty($value['idproyecto']) ? 'General' : $value['codigo_proyecto']) . '</p></span>                                   
@@ -534,14 +546,6 @@
             echo json_encode( $rspta, true);
           }
       
-        break;
-      
-        case 'formato_banco':
-                
-          $rspta=$proveedor->formato_banco($_POST["idbanco"]);
-          //Codificar el resultado utilizando json
-          echo json_encode( $rspta, true);
-          
         break;
 
         // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
@@ -757,7 +761,7 @@
       
         // :::::::::::::::::::::::::: C O M P R A S   D E  I N S U M O S ::::::::::::::::::::::::::
             
-        case 'ver_detalle_compras_proyecto':
+        case 'ver_detalle_compras_insumo':
           
           $rspta = $compra->ver_compra($_GET['id_compra']);
           $rspta2 = $compra->ver_detalle_compra($_GET['id_compra']);
@@ -825,9 +829,9 @@
               <td class="text-center p-6px">' . $ficha . '</td>
               <td class="text-left p-6px">
                 <div class="user-block text-nowrap">
-                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img_product.'" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" alt="user image" data-toggle="tooltip" data-original-title="Ver img" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
-                  <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
-                  <span class="description"><b>Color: </b>' . $reg->color . '</span>
+                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img_product.'" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" alt="user image" data-toggle="tooltip" data-original-title="Ver img" onerror="this.src=\'../dist/svg/404-v2.svg\';" >'.
+                  '<span class="username"> <p class="mb-0 ">' . $reg->nombre . '</p></span>
+                  <span class="description"> <b>Color: </b>' . $reg->color . '</span>
                 </div>
               </td>
               <td class="text-left p-6px">' . $reg->unidad_medida . '</td>
@@ -841,7 +845,7 @@
           }         
 
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-            <table class="table table-striped table-bordered table-condensed table-hover">
+            <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead class="bg-color-ff6c046b">
                 <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
                 <th class="p-10px">Material</th>
@@ -855,17 +859,29 @@
               </thead>
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
-                <td colspan="7"></td>
-                <th class="text-right">
-                  <h6>'.$rspta['data']['tipo_gravada'].'</h6>
-                  <h6>IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
-                  <h5 class="font-weight-bold">TOTAL</h5>
-                </th>
-                <th class="text-right">
-                  <h6 class="font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
-                  <h6 class="font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
-                  <h5 class="font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
-                </th>
+                <tr>
+                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                  </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                  <td class="p-0 text-right">
+                    <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                  </td>
+                </tr>
               </tfoot>
             </table>
           </div> ';
@@ -893,20 +909,20 @@
   }
 
   // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a($fecha) {
+  function format_d_m_a($fecha) {
 
-  $fecha_convert = "";
+    $fecha_convert = "";
 
-  if (!empty($fecha) || $fecha != '0000-00-00') {
+    if (!empty($fecha) || $fecha != '0000-00-00') {
 
-    $fecha_expl = explode("-", $fecha);
+      $fecha_expl = explode("-", $fecha);
 
-    $fecha_convert = $fecha_expl[2] . "-" . $fecha_expl[1] . "-" . $fecha_expl[0];
+      $fecha_convert = $fecha_expl[2] . "-" . $fecha_expl[1] . "-" . $fecha_expl[0];
 
-  } 
+    } 
 
-  return $fecha_convert;
-}
+    return $fecha_convert;
+  }
 
   ob_end_flush();
 ?>

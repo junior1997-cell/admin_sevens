@@ -505,7 +505,8 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-success" onclick="$('.detalle_de_compra_general').print({addGlobalStyles : true,});"><i class="fas fa-print"></i> Imprimir</button>
+                          <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                          <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
                         </div>
                       </div>
                     </div>
@@ -1181,10 +1182,12 @@
           require 'footer.php';
           ?>
         </div>
-        <?php          
-          require 'script.php';
-        ?>
-        
+        <?php require 'script.php'; ?>
+        <!-- table export -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>        
+
         <script type="text/javascript" src="scripts/compra_activos_fijos.js"></script>
         
         <script>

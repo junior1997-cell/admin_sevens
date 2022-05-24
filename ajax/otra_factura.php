@@ -127,7 +127,7 @@
                     <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . $reg->tipo_comprobante . '</p> </span>
                     <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                   </div>',
-                "4" => date("d/m/Y", strtotime($reg->fecha_emision)),
+                "4" => $reg->fecha_emision,
                 "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
                 "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
                 "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),

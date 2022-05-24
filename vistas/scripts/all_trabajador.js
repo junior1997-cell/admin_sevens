@@ -984,7 +984,7 @@ function formato_banco() {
       $("#c_bancaria").inputmask(`${format_cta}`);
 
       $("#cci").inputmask(`${format_cci}`);
-    });    
+    }).fail( function(e) { ver_errores(e); } );  
   }  
 }
 

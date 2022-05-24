@@ -69,7 +69,6 @@
 <!-- Print DIV -->
 <script src="../plugins/print-jquery/jQuery.print.min.js"></script>
 
-
 <!-- Consola alerta -->
 <script src="../dist/js/consola_alerta.js"></script>
 

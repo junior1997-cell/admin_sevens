@@ -15,37 +15,43 @@ function init() {
 
   ver_quincenas(localStorage.getItem('nube_idproyecto'));  
 
-
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
 
   // Formato para telefono
-  $("[data-mask]").inputmask();
-
-  $("#doc7_i").click(function() {  $('#doc7').trigger('click'); });
-  $("#doc7").change(function(e) {  addDocs2(e,$("#doc7").attr("id")) });
+  $("[data-mask]").inputmask();  
 
 }
+
+$("#doc7_i").click(function() {  $('#doc7').trigger('click'); });
+$("#doc7").change(function(e) {  addImageApplication(e,$("#doc7").attr("id")) });
+
+// Eliminamos el doc 6
+function doc7_eliminar() {
+
+	$("#doc7").val("");
+
+	$("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+	$("#doc7_nombre").html("");
+}
+
 function mostrar_form_table(estados) {
 
   if (estados=='1') {
-
     $('#tab-seleccione').hide(); 
     $('#tab-contenido').hide(); 
     $('#tab-info').show();
     $('#card-regresar').hide();
   } else {
-
     if (estados=='2') {
-
       $('#tab-seleccione').show(); 
       $('#tab-contenido').show(); 
       $('#tab-info').hide();
       $('#card-regresar').show();
-    }
-    
+    }    
   }
-
 }
+
 // ver las echas de quincenas
 function ver_quincenas(nube_idproyecto) {
 
@@ -152,162 +158,6 @@ function ver_quincenas(nube_idproyecto) {
   });
 }
 
-// funcinoa para sumar dias
-sumaFecha = function(d, fecha)
-{
-  var Fecha = new Date();
-  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
-  // console.log(sFecha);
-  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
-  var aFecha = sFecha.split(sep);
-  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
-  fecha= new Date(fecha);
-  fecha.setDate(fecha.getDate()+parseInt(d));
-  var anno=fecha.getFullYear();
-  var mes= fecha.getMonth()+1;
-  var dia= fecha.getDate();
-  mes = (mes < 10) ? ("0" + mes) : mes;
-  dia = (dia < 10) ? ("0" + dia) : dia;
-  var fechaFinal = dia+sep+mes+sep+anno;
-  return (fechaFinal);
-}
-
-/* PREVISUALIZAR LAS IMAGENES */
-function addDocs2(e,id) {
-
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-	var file = e.target.files[0], imageType = /application.*/;
-	
-	if (e.target.files[0]) {
-    // console.log(extrae_extencion(file.name));
-		var sizeByte = file.size;
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 10000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(imageType)){
-			// return;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: mi-documento.xlsx',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-			$("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		}else{
-
-			if (sizekiloBytes <= 40960) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-
-          // cargamos la imagen adecuada par el archivo
-				  if ( extrae_extencion(file.name) == "xls") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "xlsx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "csv" ) {
-                $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              }else{
-                if ( extrae_extencion(file.name) == "xlsm" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');  
-                }else{  
-                  if ( extrae_extencion(file.name) == "pdf" ) {
-                    $("#"+id+"_ver").html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');    
-                  }else{    
-                    if ( extrae_extencion(file.name) == "doc" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "docx" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                      } else {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }          
-
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
-              '<i>' + file.name + '</i>'+
-              '</div>'+
-              '<div class="col-md-12">'+
-                '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'El documento: '+file.name.toUpperCase()+' es aceptado.',
-            showConfirmButton: false,
-            timer: 1500
-          });
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'El documento: '+file.name.toUpperCase()+' es muy pesado. Tamaño máximo 40mb',
-          showConfirmButton: false,
-          timer: 1500
-        })
-
-        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-		}
-	}else{
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    })
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-		$("#"+id+"_nombre").html("");
-	}	
-}
-
-// Eliminamos el doc 6
-function doc7_eliminar() {
-
-	$("#doc7").val("");
-
-	$("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-	$("#doc7_nombre").html("");
-}
-
 //Función limpiar
 function limpiar() {
   $("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
@@ -332,9 +182,7 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-
-    success: function (datos) {
-             
+    success: function (datos) {             
       if (datos == 'ok') {	
 
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");			 
@@ -348,9 +196,7 @@ function guardaryeditar(e) {
        // fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'))
 
 			}else{
-
         Swal.fire("Error!", datos, "error");
-
 			}
     },
 
@@ -380,56 +226,51 @@ function guardaryeditar(e) {
 }
 
 function l_m(){  
-
-  $("#barra_progress").css({"width":'0%'});
-  
+  $("#barra_progress").css({"width":'0%'});  
   $("#barra_progress").text("0%");  
 }
 
 //Función Listar - tabla principal
 function listar_tbla_principal(nube_idproyecto) {
-  console.log(nube_idproyecto);
+
   tabla_principal = $('#tabla-principal').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    "ajax":{
+    ajax:{
       url: `../ajax/valorizacion.php?op=listar_tbla_principal&nube_idproyecto=${nube_idproyecto}`,
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {
       // columna: sueldo mensual
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-nowrap');
-      }
-           
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-nowrap'); }           
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();  
 }
 
 function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
   $(".nombre_documento").html("");
-  var va
   // exraemos la fecha de HOY
   var tiempoTranscurrido = Date.now();
   var hoy = new Date(tiempoTranscurrido);
@@ -641,7 +482,7 @@ function modal_comprobante(doc_valorizacion,indice,nombre,numero_q_s,) {
 
 }
 
-function editar(idtabla,indice,nombre,doc,fecha_i,fecha_f,numero_q_s) {
+function editar(idtabla, indice, nombre, doc, fecha_i, fecha_f, numero_q_s) {
   limpiar();
   $('#title-modal-1').html(indice+' '+nombre);
 
@@ -657,52 +498,10 @@ function editar(idtabla,indice,nombre,doc,fecha_i,fecha_f,numero_q_s) {
 
   if (doc != "") {
 
-    $("#doc_old_7").val(doc);
-
+    $("#doc_old_7").val(doc);    
     // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(doc) == "xls") {
-      $("#doc7_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-    } else {
-      if (extrae_extencion(doc) == "xlsx") {
-        $("#doc7_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-      } else {
-        if (extrae_extencion(doc) == "csv") {
-          $("#doc7_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-        } else {
-          if (extrae_extencion(doc) == "xlsm") {
-            $("#doc7_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(doc) == "pdf") {
-              $("#doc7_ver").html('<iframe src="../dist/docs/valorizacion/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-            } else {
-              if (extrae_extencion(doc) == "dwg") {
-                $("#doc7_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
-                  $("#doc7_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(doc) == "jpeg" || extrae_extencion(doc) == "jpg" || extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" || extrae_extencion(doc) == "gif" || extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" || extrae_extencion(doc) == "tif" || extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "svg" ||  extrae_extencion(doc) == "bmp"  ) {
-                    $("#doc7_ver").html('<img src=".../dist/docs/valorizacion/' + doc + '" alt="" width="50%" >');
-                  } else {
-                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
-                      $("#doc7_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                    } else {
-                      $("#doc7_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
+    $("#doc7_ver").html(doc_view_extencion(doc, valorizacion, '', '100%', '210'));    
   }
-
 }
 
 function eliminar(nombre_tabla,nombre_columna,idtabla) {
@@ -752,16 +551,9 @@ function eliminar(nombre_tabla,nombre_columna,idtabla) {
 
 init();
 
-$(function () {
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-      guardaryeditar(e);
-
-    },
-  });
+$(function () {  
 
   $("#form-valorizacion").validate({
 
@@ -778,121 +570,26 @@ $(function () {
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
-   unhighlight: function (element, errorClass, validClass) {
-
+    unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
+    },
 
+    submitHandler: function (e) {
+      guardaryeditar(e);
     },
 
   });
 });
 
-function extrae_extencion(filename) {
-  return filename.split('.').pop();
-}
-
-// recargar un doc para ver
-function re_visualizacion() {
-
-  $("#doc7_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  pdffile=document.getElementById("doc7").files[0];
-
-  antiguopdf=$("#doc_old_7").val();
-
-  if(pdffile === undefined){
-
-    var dr = antiguopdf;
-
-    if (dr == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-		  $("#doc7_nombre").html("");
-
-    } else {
-
-      $("#doc7_ver").html('<iframe src="../dist/docs/valorizacion/'+dr+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-    }
-
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "xls") {
-
-      $("#doc7_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-
-    } else {
-
-      if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-
-        $("#doc7_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-
-      }else{
-
-        if ( extrae_extencion(pdffile.name) == "csv" ) {
-
-          $("#doc7_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-
-        }else{
-
-          if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-
-            $("#doc7_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-
-          }else{
-
-            if ( extrae_extencion(pdffile.name) == "pdf" ) {
-
-              $("#doc7_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-              toastr.success('Documento vizualizado correctamente!!!')
-
-            }else{
-
-              $("#doc7_ver").html('<img src="../dist/svg/logo-excel.svg" alt="" width="50%" >');
-
-              toastr.success('Documento vizualizado correctamente!!!')
-            }
-          }
-        }
-      }
-    }   
-    	
-    console.log(pdffile);
-
-  }
-}
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 // captura las fechas de quincenas y trae los datos
 function fecha_quincena(fecha_i, fecha_f, i) {
@@ -5264,22 +4961,6 @@ function subir_doc_respuesta(idvalorizacion, indice) {
   $("#indice").val(indice);
   
   $("#modal-agregar-valorizacion").modal('show'); 
-}
-
-// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
-
-  let splits = fecha.split("-"); //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
-}
-
-// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
-function format_a_m_d(fecha) {
-
-  let splits = fecha.split("-"); //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
 }
 
 function sumar_mes(fecha) {

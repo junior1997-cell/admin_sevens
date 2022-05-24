@@ -18,6 +18,15 @@ sumaFecha = function(d, fecha){
   return (fechaFinal);
 }
 
+// Extrae los nombres de dias de semana "Abreviado"
+function extraer_dia_semana(fecha) {
+  const fechaComoCadena = fecha; // día fecha
+  const dias = ['lu', 'ma', 'mi', 'ju', 'vi', 'sa', 'do']; //
+  const numeroDia = new Date(fechaComoCadena).getDay();
+  const nombreDia = dias[numeroDia];
+  return nombreDia;
+}
+
 // extrae los nombres de dias de semana "Completo"
 function extraer_dia_semana_completo(fecha) {
 
@@ -570,32 +579,42 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
   // cargamos la imagen adecuada par el archivo
   if ( extrae_extencion(filename) == "xls") {
 
-    html = `<img src="../dist/svg/xls.svg" alt="" width="${width}" height="${height}" >`;
+    html = `<img src="../dist/svg/xls.svg" alt="" width="${width}"  >`;
     extencion = extrae_extencion(filename);
 
   } else if ( extrae_extencion(filename) == "xlsx" ) {    
 
-    html = `<img src="../dist/svg/xlsx.svg" alt="" width="${width}" height="${height}" >`;
+    html = `<img src="../dist/svg/xlsx.svg" alt="" width="${width}"  >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "csv" ) {
 
-    html = `<img src="../dist/svg/csv.svg" alt="" width="${width}" height="${height}" >`;
+    html = `<img src="../dist/svg/csv.svg" alt="" width="${width}"  >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "xlsm" ) {
 
-    html = `<img src="../dist/svg/xlsm.svg" alt="" width="${width}" height="${height}" >`;
+    html = `<img src="../dist/svg/xlsm.svg" alt="" width="${width}"  >`;
     extencion = extrae_extencion(filename);
 
-  }else if ( extrae_extencion(filename) == "docx" ) {
+  }else if ( extrae_extencion(filename) == "docx" ||  extrae_extencion(filename) == "docm"  || extrae_extencion(filename) == "dot" ||  extrae_extencion(filename) == "dotx" ||  extrae_extencion(filename) == "dotm") {
 
-    html = `<img src="../dist/svg/docx.svg" alt="" width="${width}" height="${height}" >`;
+    html = `<img src="../dist/svg/docx.svg" alt="" width="${width}"  >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "doc") {
 
-    html = `<img src="../dist/svg/doc.svg" alt="" width="${width}" height="${height}" >`;
+    html = `<img src="../dist/svg/doc.svg" alt="" width="${width}"  >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "dwg") {
+
+    html = `<img src="../dist/svg/dwg.svg" alt="" width="${width}"  >`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "zip" || extrae_extencion(filename) == "rar" || extrae_extencion(filename) == "iso") {
+
+    html = `<img src="../dist/img/default/zip.png" alt="" width="${width}"  >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "pdf" ) {
@@ -609,11 +628,10 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
 
-    html = `<img src="${ruta}" alt="" width="${width}" height="${height}" onerror="this.src='../dist/svg/404-v2.svg';" >`;
+    html = `<img src="${ruta}" alt="" width="${width}"  onerror="this.src='../dist/svg/404-v2.svg';" >`;
     extencion = extrae_extencion(filename);
     
   }else{
-    //height="${height}"
     html = `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="${width}" >`;
     extencion = extrae_extencion(filename);
     

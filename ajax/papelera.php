@@ -21,9 +21,9 @@
       $papelera = new Papelera();
 
       // DATA
-      $nombre_tabla     = isset($_POST["nombre_tabla"])? limpiarCadena($_POST["nombre_tabla"]):"";
-      $nombre_id_tabla 	= isset($_POST["nombre_id_tabla"])? limpiarCadena($_POST["nombre_id_tabla"]):""; 
-      $id_tabla 		    = isset($_POST["id_tabla"])? limpiarCadena($_POST["id_tabla"]):""; 
+      $nombre_tabla     = isset($_GET["nombre_tabla"])? limpiarCadena($_GET["nombre_tabla"]):"";
+      $nombre_id_tabla 	= isset($_GET["nombre_id_tabla"])? limpiarCadena($_GET["nombre_id_tabla"]):""; 
+      $id_tabla 		    = isset($_GET["id_tabla"])? limpiarCadena($_GET["id_tabla"]):""; 
 
       switch ($_GET["op"]){
 
@@ -64,7 +64,7 @@
 
           $rspta=$papelera->recuperar($nombre_tabla, $nombre_id_tabla, $id_tabla);
 
-          echo $rspta ? "ok" : "NO se puede anular";
+          echo json_encode( $rspta, true) ;
 
         break;
 
@@ -72,7 +72,7 @@
 
           $rspta=$papelera->eliminar_permanente( $nombre_tabla, $nombre_id_tabla, $id_tabla );
 
-          echo $rspta ? "ok" : "NO se puede ReActivar";
+          echo json_encode($rspta, true) ;
 
         break;         
         

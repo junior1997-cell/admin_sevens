@@ -17,8 +17,10 @@ class Papelera
     $sql_1 = "SELECT idbancos,  nombre, formato_cta, formato_cci, formato_detracciones, alias, created_at, updated_at, estado FROM bancos WHERE estado = '0' AND estado_delete= '1';";
     $banco = ejecutarConsultaArray($sql_1);
 
-    if (!empty($banco)) {
-      foreach ($banco as $key => $value1) {
+    if ($banco['status'] == false) { return $banco; }
+
+    if (!empty($banco['data'])) {
+      foreach ($banco['data'] as $key => $value1) {
         $data[] = array(
           'nombre_tabla'    => 'bancos',
           'nombre_id_tabla' => 'idbancos',
@@ -40,8 +42,10 @@ class Papelera
     $sql_2 = "SELECT idcargo_trabajador,  nombre, estado, created_at, updated_at FROM cargo_trabajador WHERE estado = '0' AND estado_delete = '1';";
     $cargo_trabajador = ejecutarConsultaArray($sql_2);
 
-    if (!empty($cargo_trabajador)) {
-      foreach ($cargo_trabajador as $key => $value2) {
+    if ($cargo_trabajador['status'] == false) { return $cargo_trabajador; }
+
+    if (!empty($cargo_trabajador['data'])) {
+      foreach ($cargo_trabajador['data'] as $key => $value2) {
         $data[] = array(
           'nombre_tabla'    => 'cargo_trabajador',
           'nombre_id_tabla' => 'idcargo_trabajador',
@@ -61,8 +65,10 @@ class Papelera
     WHERE cpt.estado = '0' AND cpt.estado_delete = '1' AND cpt.idproyecto = '$nube_idproyecto' AND cpt.idproyecto=p.idproyecto";
     $carpeta_plano_otro = ejecutarConsultaArray($sql_3);
 
-    if (!empty($carpeta_plano_otro)) {
-      foreach ($carpeta_plano_otro as $key => $value3) {
+    if ($carpeta_plano_otro['status'] == false) { return $carpeta_plano_otro; }
+
+    if (!empty($carpeta_plano_otro['data'])) {
+      foreach ($carpeta_plano_otro['data'] as $key => $value3) {
         $data[] = array(
           'nombre_tabla'    => 'carpeta_plano_otro',
           'nombre_id_tabla' => 'idcarpeta',
@@ -80,8 +86,10 @@ class Papelera
     $sql_4 = "SELECT idcategoria_insumos_af, nombre, estado, created_at, updated_at FROM categoria_insumos_af WHERE estado = '0' AND estado_delete = '1';";
     $categoria_insumos_af = ejecutarConsultaArray($sql_4);
 
-    if (!empty($categoria_insumos_af)) {
-      foreach ($categoria_insumos_af as $key => $value4) {
+    if ($categoria_insumos_af['status'] == false) { return $categoria_insumos_af; }
+
+    if (!empty($categoria_insumos_af['data'])) {
+      foreach ($categoria_insumos_af['data'] as $key => $value4) {
         $data[] = array(
           'nombre_tabla'    => 'categoria_insumos_af',
           'nombre_id_tabla' => 'idcategoria_insumos_af',
@@ -99,8 +107,10 @@ class Papelera
     $sql_5 = "SELECT idcolor, nombre_color, estado, created_at, updated_at FROM color WHERE estado = '0' AND estado_delete = '1';";
     $color = ejecutarConsultaArray($sql_5);
 
-    if (!empty($color)) {
-      foreach ($color as $key => $value5) {
+    if ($color['status'] == false) { return $color; }
+
+    if (!empty($color['data'])) {
+      foreach ($color['data'] as $key => $value5) {
         $data[] = array(
           'nombre_tabla'    => 'color',
           'nombre_id_tabla' => 'idcolor',
@@ -121,8 +131,10 @@ class Papelera
     WHERE cx.estado = '0' AND cx.estado_delete = '1' AND cx.idproyecto ='$nube_idproyecto' AND  cx.idproyecto=p.idproyecto;";
     $comida_extra = ejecutarConsultaArray($sql_6);
 
-    if (!empty($comida_extra)) {
-      foreach ($comida_extra as $key => $value6) {
+    if ($comida_extra['status'] == false) { return $comida_extra; }
+
+    if (!empty($comida_extra['data'])) {
+      foreach ($comida_extra['data'] as $key => $value6) {
         $data[] = array(
           'nombre_tabla'    => 'comida_extra',
           'nombre_id_tabla' => 'idcomida_extra',
@@ -141,10 +153,12 @@ class Papelera
 
     $sql_7 = "SELECT idcompra_af_general, tipo_comprobante, serie_comprobante, descripcion, estado, created_at, updated_at 
     FROM compra_af_general WHERE estado = '0' AND estado_delete = '1'";
-    $comida_extra = ejecutarConsultaArray($sql_7);
+    $compra_af_general = ejecutarConsultaArray($sql_7);
 
-    if (!empty($compra_af_general)) {
-      foreach ($compra_af_general as $key => $value7) {
+    if ($compra_af_general['status'] == false) { return $compra_af_general; }
+
+    if (!empty($compra_af_general['data'])) {
+      foreach ($compra_af_general['data'] as $key => $value7) {
         $data[] = array(
           'nombre_tabla'    => 'compra_af_general',
           'nombre_id_tabla' => 'idcompra_af_general',
@@ -166,8 +180,10 @@ class Papelera
     AND cpp.idproyecto = '$nube_idproyecto';";
     $compra_por_proyecto = ejecutarConsultaArray($sql_8);
 
-    if (!empty($compra_por_proyecto)) {
-      foreach ($compra_por_proyecto as $key => $value8) {
+    if ($compra_por_proyecto['status'] == false) { return $compra_por_proyecto; }
+
+    if (!empty($compra_por_proyecto['data'])) {
+      foreach ($compra_por_proyecto['data'] as $key => $value8) {
         $data[] = array(
           'nombre_tabla'    => 'compra_por_proyecto',
           'nombre_id_tabla' => 'idcompra_proyecto',
@@ -191,8 +207,10 @@ class Papelera
     AND f.idproyecto = '$nube_idproyecto';";
     $factura_m = ejecutarConsultaArray($sql_9);
 
-    if (!empty($factura_m)) {
-      foreach ($factura_m as $key => $value9) {
+    if ($factura_m['status'] == false) { return $factura_m; }
+
+    if (!empty($factura_m['data'])) {
+      foreach ($factura_m['data'] as $key => $value9) {
         $data[] = array(
           'nombre_tabla'    => 'factura',
           'nombre_id_tabla' => 'idfactura',
@@ -214,11 +232,12 @@ class Papelera
     FROM factura AS f, maquinaria AS m, proyecto AS p
     WHERE f.idmaquinaria = m.idmaquinaria AND m.tipo = '2' AND f.estado = '0' AND f.estado_delete = '1' AND 
     f.idproyecto = '$nube_idproyecto' AND  f.idproyecto=p.idproyecto;";
-
     $factura_e = ejecutarConsultaArray($sql_10);
 
-    if (!empty($factura_e)) {
-      foreach ($factura_e as $key => $value10) {
+    if ($factura_e['status'] == false) { return $factura_e; }
+
+    if (!empty($factura_e['data'])) {
+      foreach ($factura_e['data'] as $key => $value10) {
         $data[] = array(
           'nombre_tabla'    => 'factura',
           'nombre_id_tabla' => 'idfactura',
@@ -241,8 +260,10 @@ class Papelera
     WHERE fb.idsemana_break = sb.idsemana_break AND fb.estado = '0' AND fb.estado_delete = '1' AND sb.idproyecto = '$nube_idproyecto'  AND sb.idproyecto = p.idproyecto";
     $factura_break = ejecutarConsultaArray($sql_11);
 
-    if (!empty($factura_break)) {
-      foreach ($factura_break as $key => $value11) {
+    if ($factura_break['status'] == false) { return $factura_break; }
+
+    if (!empty($factura_break['data'])) {
+      foreach ($factura_break['data'] as $key => $value11) {
         $data[] = array(
           'nombre_tabla'    => 'factura',
           'nombre_id_tabla' => 'idfactura_break',
@@ -266,8 +287,10 @@ class Papelera
     WHERE fp.idpension = p.idpension  AND p.idproyecto = proy.idproyecto AND p.idproveedor = prov.idproveedor AND fp.estado = '0' AND fp.estado_delete = '1' AND p.idproyecto = '$nube_idproyecto'  ;";
     $factura_pension = ejecutarConsultaArray($sql_12);
 
-    if (!empty($factura_pension)) {
-      foreach ($factura_pension as $key => $value12) {
+    if ($factura_pension['status'] == false) { return $factura_pension; }
+
+    if (!empty($factura_pension['data'])) {
+      foreach ($factura_pension['data'] as $key => $value12) {
         $data[] = array(
           'nombre_tabla'    => 'factura_pension',
           'nombre_id_tabla' => 'idfactura_pension',
@@ -290,8 +313,10 @@ class Papelera
     WHERE  h.idproyecto = p.idproyecto AND h.estado = '0' AND h.estado_delete = '1' AND h.idproyecto = '$nube_idproyecto' ;";
     $hospedaje = ejecutarConsultaArray($sql_13);
 
-    if (!empty($hospedaje)) {
-      foreach ($hospedaje as $key => $value13) {
+    if ($hospedaje['status'] == false) { return $hospedaje; }
+
+    if (!empty($hospedaje['data'])) {
+      foreach ($hospedaje['data'] as $key => $value13) {
         $data[] = array(
           'nombre_tabla'    => 'hospedaje',
           'nombre_id_tabla' => 'idhospedaje',
@@ -313,8 +338,10 @@ class Papelera
     WHERE m.idproveedor = p.idproveedor AND m.estado = '0' AND m.estado_delete = '1';";
     $maquinaria = ejecutarConsultaArray($sql_14);
 
-    if (!empty($maquinaria)) {
-      foreach ($maquinaria as $key => $value14) {
+    if ($maquinaria['status'] == false) { return $maquinaria; }
+
+    if (!empty($maquinaria['data'])) {
+      foreach ($maquinaria['data'] as $key => $value14) {
         $data[] = array(
           'nombre_tabla'    => 'maquinaria',
           'nombre_id_tabla' => 'idmaquinaria',
@@ -334,8 +361,10 @@ class Papelera
     $sql_15 = "SELECT idocupacion, nombre_ocupacion, estado, created_at, updated_at FROM ocupacion WHERE estado  = '0' AND estado_delete = '1';";
     $ocupacion = ejecutarConsultaArray($sql_15);
 
-    if (!empty($ocupacion)) {
-      foreach ($ocupacion as $key => $value15) {
+    if ($ocupacion['status'] == false) { return $ocupacion; }
+
+    if (!empty($ocupacion['data'])) {
+      foreach ($ocupacion['data'] as $key => $value15) {
         $data[] = array(
           'nombre_tabla'    => 'ocupacion',
           'nombre_id_tabla' => 'idocupacion',
@@ -355,8 +384,10 @@ class Papelera
     WHERE os.estado = '0' AND os.estado_delete = '1' AND  os.idproyecto  = '$nube_idproyecto' AND os.idproyecto = p.idproyecto;";
     $otro_servicio = ejecutarConsultaArray($sql_16);
 
-    if (!empty($otro_servicio)) {
-      foreach ($otro_servicio as $key => $value16) {
+    if ($otro_servicio['status'] == false) { return $otro_servicio; }
+
+    if (!empty($otro_servicio['data'])) {
+      foreach ($otro_servicio['data'] as $key => $value16) {
         $data[] = array(
           'nombre_tabla'    => 'otro_servicio',
           'nombre_id_tabla' => 'idotro_servicio',
@@ -378,8 +409,10 @@ class Papelera
     tpp.idproyecto = '$nube_idproyecto' AND pqso.estado = '0' AND pqso.estado_delete = '1' AND tpp.idproyecto = p.idproyecto; ";
     $pagos_q_s_obrero = ejecutarConsultaArray($sql_17);
 
-    if (!empty($pagos_q_s_obrero)) {
-      foreach ($pagos_q_s_obrero as $key => $value17) {
+    if ($pagos_q_s_obrero['status'] == false) { return $pagos_q_s_obrero; }
+
+    if (!empty($pagos_q_s_obrero['data'])) {
+      foreach ($pagos_q_s_obrero['data'] as $key => $value17) {
         $data[] = array(
           'nombre_tabla'    => 'pagos_q_s_obrero',
           'nombre_id_tabla' => 'idpagos_q_s_obrero',
@@ -404,8 +437,10 @@ class Papelera
     AND tpp.idtrabajador = t.idtrabajador AND pxma.estado = '0' AND pxma.estado_delete = '1' AND tpp.idproyecto = '$nube_idproyecto' AND tpp.idproyecto = p.idproyecto;";
     $pagos_x_mes_administrador = ejecutarConsultaArray($sql_18);
 
-    if (!empty($pagos_x_mes_administrador)) {
-      foreach ($pagos_x_mes_administrador as $key => $value18) {
+    if ($pagos_x_mes_administrador['status'] == false) { return $pagos_x_mes_administrador; }
+
+    if (!empty($pagos_x_mes_administrador['data'])) {
+      foreach ($pagos_x_mes_administrador['data'] as $key => $value18) {
         $data[] = array(
           'nombre_tabla'    => 'pagos_x_mes_administrador',
           'nombre_id_tabla' => 'idpagos_x_mes_administrador',
@@ -427,8 +462,10 @@ class Papelera
     FROM pago_af_general WHERE  estado='0' AND estado_delete='1'";
     $pago_af_general = ejecutarConsultaArray($sql_19);
 
-    if (!empty($pago_af_general)) {
-      foreach ($pago_af_general as $key => $value19) {
+    if ($pagos_x_mes_administrador['status'] == false) { return $pagos_x_mes_administrador; }
+
+    if (!empty($pago_af_general['data'])) {
+      foreach ($pago_af_general['data'] as $key => $value19) {
         $data[] = array(
           'nombre_tabla'    => 'pago_af_general',
           'nombre_id_tabla' => 'idpago_af_general',
@@ -450,11 +487,12 @@ class Papelera
     pc.tipo_pago, pc.numero_operacion
     FROM pago_compras as pc, compra_por_proyecto as cpp, proyecto as p
     WHERE pc.estado='0' AND pc.estado_delete='1' AND cpp.idproyecto='$nube_idproyecto' AND pc.idcompra_proyecto=cpp.idcompra_proyecto AND cpp.idproyecto=p.idproyecto";
-
     $pago_compras = ejecutarConsultaArray($sql_20);
 
-    if (!empty($pago_compras)) {
-      foreach ($pago_compras as $key => $value20) {
+    if ($pago_compras['status'] == false) { return $pago_compras; }
+
+    if (!empty($pago_compras['data'])) {
+      foreach ($pago_compras['data'] as $key => $value20) {
         $data[] = array(
           'nombre_tabla'    => 'pago_compras',
           'nombre_id_tabla' => 'idpago_compras',
@@ -476,11 +514,12 @@ class Papelera
     ps.created_at, ps.updated_at, p.nombre_codigo
     FROM pago_servicio AS ps, maquinaria AS m, proyecto AS p 
     WHERE ps.estado='0' AND ps.estado_delete=1 AND  m.idmaquinaria=ps.id_maquinaria  AND m.tipo=1 AND ps.idproyecto=p.idproyecto AND ps.idproyecto='$nube_idproyecto'";
-
     $pago_servicio_maquina = ejecutarConsultaArray($sql21);
 
-    if (!empty($pago_servicio_maquina)) {
-      foreach ($pago_servicio_maquina as $key => $value21) {
+    if ($pago_servicio_maquina['status'] == false) { return $pago_servicio_maquina; }
+
+    if (!empty($pago_servicio_maquina['data'])) {
+      foreach ($pago_servicio_maquina['data'] as $key => $value21) {
         $data[] = array(
           'nombre_tabla'    => 'pago_servicio',
           'nombre_id_tabla' => 'idpago_servicio',
@@ -502,11 +541,12 @@ class Papelera
      ps.created_at,  ps.updated_at, p.nombre_codigo
     FROM pago_servicio AS ps, maquinaria AS m, proyecto AS p 
     WHERE ps.estado='0' AND ps.estado_delete=1 AND  m.idmaquinaria=ps.id_maquinaria  AND m.tipo=2 AND ps.idproyecto=p.idproyecto AND ps.idproyecto='$nube_idproyecto'";
-
     $pago_servicio_equipo = ejecutarConsultaArray($sql22);
 
-    if (!empty($pago_servicio_equipo)) {
-      foreach ($pago_servicio_equipo as $key => $value22) {
+    if ($pago_servicio_equipo['status'] == false) { return $pago_servicio_equipo; }
+
+    if (!empty($pago_servicio_equipo['data'])) {
+      foreach ($pago_servicio_equipo['data'] as $key => $value22) {
         $data[] = array(
           'nombre_tabla'    => 'pago_servicio',
           'nombre_id_tabla' => 'idpago_servicio',
@@ -528,11 +568,12 @@ class Papelera
      ps.created_at, ps.updated_at, p.nombre_codigo
     FROM pago_subcontrato AS ps, subcontrato as s, proyecto as p
     WHERE ps.estado='0' AND ps.estado_delete='1' AND ps.idsubcontrato=s.idsubcontrato AND s.idproyecto=p.idproyecto AND s.idproyecto='$nube_idproyecto'";
-
     $pago_subcontrato = ejecutarConsultaArray($sql23);
 
-    if (!empty($pago_subcontrato)) {
-      foreach ($pago_subcontrato as $key => $value23) {
+    if ($pago_subcontrato['status'] == false) { return $pago_subcontrato; }
+
+    if (!empty($pago_subcontrato['data'])) {
+      foreach ($pago_subcontrato['data'] as $key => $value23) {
         $data[] = array(
           'nombre_tabla'    => 'pago_subcontrato',
           'nombre_id_tabla' => 'idpago_subcontrato',
@@ -554,11 +595,12 @@ class Papelera
     ps.created_at, ps.updated_at, p.nombre_codigo
     FROM planilla_seguro as ps, proyecto as p
     WHERE ps.idproyecto=p.idproyecto AND ps.estado='0' AND ps.estado_delete='1' AND ps.idproyecto='$nube_idproyecto'";
-
     $planilla_seguro = ejecutarConsultaArray($sql24);
 
-    if (!empty($planilla_seguro)) {
-      foreach ($planilla_seguro as $key => $value24) {
+    if ($planilla_seguro['status'] == false) { return $planilla_seguro; }
+
+    if (!empty($planilla_seguro['data'])) {
+      foreach ($planilla_seguro['data'] as $key => $value24) {
         $data[] = array(
           'nombre_tabla'    => 'planilla_seguro',
           'nombre_id_tabla' => 'idplanilla_seguro',
@@ -578,11 +620,12 @@ class Papelera
     $sql25 = "SELECT po.idplano_otro, po.nombre, po.descripcion, po.created_at, po.updated_at, p.nombre_codigo , cpo.nombre as nombre_capeta
     FROM plano_otro AS po, carpeta_plano_otro AS cpo, proyecto AS p 
     WHERE  po.estado='0' AND po.estado_delete='1' AND po.id_carpeta=cpo.idcarpeta AND cpo.idproyecto=p.idproyecto AND  cpo.idproyecto='$nube_idproyecto'";
-
     $plano_otro = ejecutarConsultaArray($sql25);
 
-    if (!empty($plano_otro)) {
-      foreach ($plano_otro as $key => $value25) {
+    if ($plano_otro['status'] == false) { return $plano_otro; }
+
+    if (!empty($plano_otro['data'])) {
+      foreach ($plano_otro['data'] as $key => $value25) {
         $data[] = array(
           'nombre_tabla'    => 'plano_otro',
           'nombre_id_tabla' => 'idplano_otro',
@@ -601,11 +644,12 @@ class Papelera
     $sql26 = "SELECT p.idproducto, p.nombre, p.descripcion, p.precio_total, p.created_at, p.updated_at, c.nombre_color
     FROM producto as p, color AS c 
     WHERE p.idcolor = c.idcolor AND p.estado='0' AND p.estado_delete='1' AND p.idcategoria_insumos_af = '1'";
-
     $producto_insumo = ejecutarConsultaArray($sql26);
 
-    if (!empty($producto_insumo)) {
-      foreach ($producto_insumo as $key => $value26) {
+    if ($producto_insumo['status'] == false) { return $producto_insumo; }
+
+    if (!empty($producto_insumo['data'])) {
+      foreach ($producto_insumo['data'] as $key => $value26) {
         $data[] = array(
           'nombre_tabla'    => 'producto',
           'nombre_id_tabla' => 'idproducto',
@@ -625,11 +669,12 @@ class Papelera
     $sql27 = "SELECT p.idproducto, p.nombre, p.descripcion, p.precio_total, p.created_at, p.updated_at, c.nombre_color, ciaf.nombre AS categoria
     FROM producto as p, color AS c, categoria_insumos_af AS ciaf  
     WHERE p.idcolor = c.idcolor AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af  AND p.estado='0' AND p.estado_delete='1' AND p.idcategoria_insumos_af != '1'";
+    $producto_activo_fijo = ejecutarConsultaArray($sql27);
 
-    $producto_insumo = ejecutarConsultaArray($sql27);
+    if ($producto_activo_fijo['status'] == false) { return $producto_activo_fijo; }
 
-    if (!empty($producto_insumo)) {
-      foreach ($producto_insumo as $key => $value27) {
+    if (!empty($producto_activo_fijo['data'])) {
+      foreach ($producto_activo_fijo['data'] as $key => $value27) {
         $data[] = array(
           'nombre_tabla'    => 'producto',
           'nombre_id_tabla' => 'idproducto',
@@ -648,11 +693,12 @@ class Papelera
     }
 
     $sql28 = "SELECT idproveedor,razon_social, ruc, created_at,updated_at FROM proveedor WHERE estado='0'AND estado_delete=1";
-
     $proveedor = ejecutarConsultaArray($sql28);
 
-    if (!empty($proveedor)) {
-      foreach ($proveedor as $key => $value28) {
+    if ($proveedor['status'] == false) { return $proveedor; }
+
+    if (!empty($proveedor['data'])) {
+      foreach ($proveedor['data'] as $key => $value28) {
         $data[] = array(
           'nombre_tabla'    => 'proveedor',
           'nombre_id_tabla' => 'idproveedor',
@@ -671,11 +717,12 @@ class Papelera
     $sql29 = "SELECT s.idservicio, s.descripcion, s.costo_parcial, s.unidad_medida, s.created_at, s.updated_at, m.nombre, p.nombre_codigo
     FROM servicio AS s, maquinaria AS m, proyecto AS p
     WHERE s.estado='0' AND s.estado_delete='1' AND s.idmaquinaria=m.idmaquinaria AND s.idproyecto=p.idproyecto AND m.tipo='1' AND s.idproyecto='$nube_idproyecto'";
-
     $servicio_maquina = ejecutarConsultaArray($sql29);
 
-    if (!empty($servicio_maquina)) {
-      foreach ($servicio_maquina as $key => $value29) {
+    if ($servicio_maquina['status'] == false) { return $servicio_maquina; }
+
+    if (!empty($servicio_maquina['data'])) {
+      foreach ($servicio_maquina['data'] as $key => $value29) {
         $data[] = array(
           'nombre_tabla'    => 'servicio',
           'nombre_id_tabla' => 'idservicio',
@@ -695,11 +742,12 @@ class Papelera
     $sql30 = "SELECT s.idservicio, s.descripcion, s.costo_parcial, s.unidad_medida, s.created_at, s.updated_at, m.nombre, p.nombre_codigo
     FROM servicio AS s, maquinaria AS m, proyecto AS p
     WHERE s.estado='0' AND s.estado_delete='1' AND s.idmaquinaria=m.idmaquinaria AND s.idproyecto=p.idproyecto AND m.tipo='2' AND s.idproyecto='$nube_idproyecto'";
-
     $servicio_equipo = ejecutarConsultaArray($sql30);
 
-    if (!empty($servicio_equipo)) {
-      foreach ($servicio_equipo as $key => $value30) {
+    if ($servicio_equipo['status'] == false) { return $servicio_equipo; }
+
+    if (!empty($servicio_equipo['data'])) {
+      foreach ($servicio_equipo['data'] as $key => $value30) {
         $data[] = array(
           'nombre_tabla'    => 'servicio',
           'nombre_id_tabla' => 'idservicio',
@@ -720,11 +768,12 @@ class Papelera
     sb.updated_at, prov.razon_social, p.nombre_codigo
     FROM subcontrato as sb, proveedor as prov , proyecto as p
     WHERE sb.estado='0' AND sb.estado_delete=1 AND sb.idproveedor=prov.idproveedor AND sb.idproyecto=p.idproyecto AND sb.idproyecto='$nube_idproyecto'";
-
     $subcontrato = ejecutarConsultaArray($sql31);
 
-    if (!empty($subcontrato)) {
-      foreach ($subcontrato as $key => $value31) {
+    if ($subcontrato['status'] == false) { return $subcontrato; }
+
+    if (!empty($subcontrato['data'])) {
+      foreach ($subcontrato['data'] as $key => $value31) {
         $data[] = array(
           'nombre_tabla'    => 'subcontrato',
           'nombre_id_tabla' => 'idsubcontrato',
@@ -742,11 +791,12 @@ class Papelera
     }
 
     $sql32 = "SELECT idtipo_trabajador, nombre, created_at, updated_at FROM tipo_trabajador WHERE estado='0' AND estado_delete='1'";
-
     $tipo_trabajador = ejecutarConsultaArray($sql32);
 
-    if (!empty($tipo_trabajador)) {
-      foreach ($tipo_trabajador as $key => $value32) {
+    if ($tipo_trabajador['status'] == false) { return $tipo_trabajador; }
+
+    if (!empty($tipo_trabajador['data'])) {
+      foreach ($tipo_trabajador['data'] as $key => $value32) {
         $data[] = array(
           'nombre_tabla'    => 'tipo_trabajador',
           'nombre_id_tabla' => 'idtipo_trabajador',
@@ -763,11 +813,12 @@ class Papelera
 
     $sql33 = "SELECT idtrabajador, nombres, tipo_documento, numero_documento, ruc, created_at, updated_at, descripcion_expulsion 
     FROM trabajador WHERE estado='0' AND estado_delete='1'";
-
     $trabajador = ejecutarConsultaArray($sql33);
 
-    if (!empty($trabajador)) {
-      foreach ($trabajador as $key => $value33) {
+    if ($trabajador['status'] == false) { return $trabajador; }
+
+    if (!empty($trabajador['data'])) {
+      foreach ($trabajador['data'] as $key => $value33) {
         $data[] = array(
           'nombre_tabla'    => 'trabajador',
           'nombre_id_tabla' => 'idtrabajador',
@@ -789,11 +840,12 @@ class Papelera
     FROM trabajador_por_proyecto as tpp,  proyecto as p, trabajador as t, cargo_trabajador as ctr
     WHERE tpp.idcargo_trabajador = ctr.idcargo_trabajador AND  tpp.idproyecto=p.idproyecto AND tpp.idtrabajador=t.idtrabajador AND
     tpp.estado='0' AND tpp.estado_delete='1' AND tpp.idproyecto='$nube_idproyecto'";
-
     $trabajador_por_proyecto = ejecutarConsultaArray($sql34);
 
-    if (!empty($trabajador_por_proyecto)) {
-      foreach ($trabajador_por_proyecto as $key => $value34) {
+    if ($trabajador_por_proyecto['status'] == false) { return $trabajador_por_proyecto; }
+
+    if (!empty($trabajador_por_proyecto['data'])) {
+      foreach ($trabajador_por_proyecto['data'] as $key => $value34) {
         $data[] = array(
           'nombre_tabla'    => 'trabajador_por_proyecto',
           'nombre_id_tabla' => 'idtrabajador_por_proyecto',
@@ -816,11 +868,12 @@ class Papelera
     t.created_at , t.updated_at, p.nombre_codigo
     FROM transporte as t, proyecto as p, proveedor as prov
     WHERE   t.idproyecto=p.idproyecto AND t.idproveedor = prov.idproveedor AND t.estado='0'  AND t.estado_delete='1' AND t.idproyecto='$nube_idproyecto'";
-
     $transporte = ejecutarConsultaArray($sql35);
 
-    if (!empty($transporte)) {
-      foreach ($transporte as $key => $value35) {
+    if ($transporte['status'] == false) { return $transporte; }
+
+    if (!empty($transporte['data'])) {
+      foreach ($transporte['data'] as $key => $value35) {
         $data[] = array(
           'nombre_tabla'    => 'transporte',
           'nombre_id_tabla' => 'idtransporte',
@@ -838,11 +891,12 @@ class Papelera
     }
     
     $sql36 = "SELECT idunidad_medida, nombre_medida, abreviacion, created_at, updated_at FROM unidad_medida WHERE  estado='0' AND estado_delete=1";
-
     $unidad_medida = ejecutarConsultaArray($sql36);
 
-    if (!empty($unidad_medida)) {
-      foreach ($unidad_medida as $key => $value36) {
+    if ($transporte['status'] == false) { return $transporte; }
+
+    if (!empty($unidad_medida['data'])) {
+      foreach ($unidad_medida['data'] as $key => $value36) {
         $data[] = array(
           'nombre_tabla'    => 'unidad_medida',
           'nombre_id_tabla' => 'idunidad_medida',
@@ -858,11 +912,12 @@ class Papelera
     }
         
     $sql37 = "SELECT u.idusuario, u.cargo, u.created_at, u.updated_at, t.nombres FROM usuario as u, trabajador as t WHERE u.estado='0' AND u.estado_delete='1' AND u.idtrabajador=t.idtrabajador";
-
     $usuario = ejecutarConsultaArray($sql37);
 
-    if (!empty($usuario)) {
-      foreach ($usuario as $key => $value37) {
+    if ($usuario['status'] == false) { return $usuario; }
+
+    if (!empty($usuario['data'])) {
+      foreach ($usuario['data'] as $key => $value37) {
         $data[] = array(
           'nombre_tabla'    => 'usuario',
           'nombre_id_tabla' => 'idusuario',
@@ -880,11 +935,12 @@ class Papelera
   of.created_at, of.updated_at,p.razon_social
     FROM otra_factura as of, proveedor as p
     WHERE of.estado='0' AND of.estado_delete='1' AND of.idproveedor=p.idproveedor";
-
     $otra_factura = ejecutarConsultaArray($sql38);
 
-    if (!empty($otra_factura)) {
-      foreach ($otra_factura as $key => $value38) {
+    if ($otra_factura['status'] == false) { return $otra_factura; }
+
+    if (!empty($otra_factura['data'])) {
+      foreach ($otra_factura['data'] as $key => $value38) {
         $data[] = array(
           'nombre_tabla'    => 'otra_factura',
           'nombre_id_tabla' => 'idotra_factura',
@@ -928,11 +984,12 @@ class Papelera
     $sql40 = "SELECT sb.idsemana_break,sb.numero_semana, sb.fecha_inicial, sb.fecha_final, sb.total, sb.created_at, sb.updated_at, p.nombre_codigo
     FROM semana_break as sb, proyecto as p 
     WHERE sb.estado=0 AND sb.estado_delete=1 AND sb.idproyecto=p.idproyecto AND sb.idproyecto='$nube_idproyecto'";
-
     $semana_break = ejecutarConsultaArray($sql40);
 
-    if (!empty($semana_break)) {
-      foreach ($semana_break as $key => $value40) {
+    if ($semana_break['status'] == false) { return $semana_break; }
+
+    if (!empty($semana_break['data'])) {
+      foreach ($semana_break['data'] as $key => $value40) {
         $data[] = array(
           'nombre_tabla'    => 'semana_break',
           'nombre_id_tabla' => 'idsemana_break',
@@ -951,11 +1008,12 @@ class Papelera
     $sql41 = "SELECT sp.idsemana_pension, sp.fecha_inicio, sp.fecha_fin, sp.numero_semana, sp.created_at, sp.updated_at, ser_p.nombre_servicio, p.nombre_codigo, prov.razon_social
     FROM semana_pension as sp, servicio_pension ser_p, pension as pen, proyecto as p, proveedor as prov
     WHERE sp.estado='0' AND sp.estado_delete='1' AND sp.idservicio_pension=ser_p.idservicio_pension AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
-
     $semana_pension = ejecutarConsultaArray($sql41);
 
-    if (!empty($semana_pension)) {
-      foreach ($semana_pension as $key => $value41) {
+    if ($semana_pension['status'] == false) { return $semana_pension; }
+
+    if (!empty($semana_pension['data'])) {
+      foreach ($semana_pension['data'] as $key => $value41) {
         $data[] = array(
           'nombre_tabla'    => 'semana_pension',
           'nombre_id_tabla' => 'idsemana_pension',
@@ -976,11 +1034,12 @@ class Papelera
     $sql42 = "SELECT ser_p.idservicio_pension, ser_p.nombre_servicio, ser_p.precio, ser_p.created_at, ser_p.updated_at, p.nombre_codigo, prov.razon_social
     FROM servicio_pension  as ser_p, pension as pen, proyecto as p, proveedor as prov 
     WHERE ser_p.estado='0' AND ser_p.estado_delete='1' AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
-
     $servicio_pension = ejecutarConsultaArray($sql42);
 
-    if (!empty($servicio_pension)) {
-      foreach ($servicio_pension as $key => $value42) {
+    if ($servicio_pension['status'] == false) { return $servicio_pension; }
+
+    if (!empty($servicio_pension['data'])) {
+      foreach ($servicio_pension['data'] as $key => $value42) {
         $data[] = array(
           'nombre_tabla'    => 'servicio_pension',
           'nombre_id_tabla' => 'idservicio_pension',
@@ -998,11 +1057,12 @@ class Papelera
 
    $sql43 = "SELECT v.idvalorizacion,v.nombre, v.fecha_inicio, v.fecha_fin, v.created_at, v.updated_at, p.nombre_codigo FROM valorizacion as v, proyecto as p
    WHERE v.estado='0' AND v.estado_delete='1' AND v.idproyecto=p.idproyecto AND v.idproyecto='$nube_idproyecto'";
-
     $valorizacion = ejecutarConsultaArray($sql43);
 
-    if (!empty($valorizacion)) {
-      foreach ($valorizacion as $key => $value43) {
+    if ($valorizacion['status'] == false) { return $valorizacion; }
+
+    if (!empty($valorizacion['data'])) {
+      foreach ($valorizacion['data'] as $key => $value43) {
         $data[] = array(
           'nombre_tabla'    => 'valorizacion',
           'nombre_id_tabla' => 'idvalorizacion',
@@ -1021,11 +1081,12 @@ class Papelera
     fpa.created_at, fpa.updated_at, t.nombres, p.nombre_codigo
     FROM fechas_mes_pagos_administrador AS fpa, trabajador_por_proyecto as tpp, trabajador as t, proyecto as p
     WHERE fpa.estado='0' AND fpa.estado_delete='1' AND fpa.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND tpp.idtrabajador=t.idtrabajador AND tpp.idproyecto=p.idproyecto AND tpp.idproyecto='$nube_idproyecto'";
-
     $fechas_mes_pagos_administrador = ejecutarConsultaArray($sql44);
 
-    if (!empty($fechas_mes_pagos_administrador)) {
-      foreach ($fechas_mes_pagos_administrador as $key => $value44) {
+    if ($fechas_mes_pagos_administrador['status'] == false) { return $fechas_mes_pagos_administrador; }
+
+    if (!empty($fechas_mes_pagos_administrador['data'])) {
+      foreach ($fechas_mes_pagos_administrador['data'] as $key => $value44) {
         $data[] = array(
           'nombre_tabla'    => 'fechas_mes_pagos_administrador',
           'nombre_id_tabla' => 'idfechas_mes_pagos_administrador',
@@ -1048,11 +1109,12 @@ class Papelera
     oi.val_igv, oi.tipo_gravada, oi.estado, oi.estado_delete, oi.created_at, oi.updated_at, p.nombre_codigo
     FROM otro_ingreso AS oi, proveedor AS prov, proyecto AS p
     WHERE oi.idproveedor = prov.idproveedor AND oi.idproyecto = p.idproyecto AND oi.estado='0' AND oi.estado_delete ='1' AND oi.idproyecto='$nube_idproyecto'";
+    $otro_ingreso = ejecutarConsultaArray($sql45);
 
-    $fechas_mes_pagos_administrador = ejecutarConsultaArray($sql45);
+    if ($otro_ingreso['status'] == false) { return $otro_ingreso; }
 
-    if (!empty($fechas_mes_pagos_administrador)) {
-      foreach ($fechas_mes_pagos_administrador as $key => $value45) {
+    if (!empty($otro_ingreso['data'])) {
+      foreach ($otro_ingreso['data'] as $key => $value45) {
         $data[] = array(
           'nombre_tabla'    => 'otro_ingreso',
           'nombre_id_tabla' => 'idotro_ingreso',

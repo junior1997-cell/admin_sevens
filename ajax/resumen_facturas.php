@@ -34,7 +34,7 @@
               
               $data[] = [
                 "0" => $cont++,
-                "1" => format_d_m_a( $value['fecha'] ),
+                "1" => $value['fecha'],
                 "2" => '<center>'.$value['tipo_comprobante'].'</center>',
                 "3" => $value['serie_comprobante'],
                 "4" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',

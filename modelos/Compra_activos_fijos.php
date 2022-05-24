@@ -414,7 +414,7 @@ class Compra_activos_fijos
   //mostrar detalles uno a uno de la factura
   public function ver_compra_general($idcompra_af_general) {
     $sql = "SELECT cafg.idcompra_af_general, cafg.idproveedor, cafg.fecha_compra,	cafg.tipo_comprobante, cafg.serie_comprobante,
-		cafg.descripcion, cafg.subtotal, cafg.igv,	cafg.total,	p.razon_social, p.telefono,	cafg.estado, cafg.glosa, cafg.tipo_gravada, cafg.val_igv
+		cafg.descripcion, cafg.subtotal, cafg.igv,	cafg.total,	p.razon_social, p.tipo_documento, p.ruc, p.direccion, p.telefono,	cafg.estado, cafg.glosa, cafg.tipo_gravada, cafg.val_igv
     FROM compra_af_general as cafg, proveedor as p 
 		WHERE  cafg.idcompra_af_general='$idcompra_af_general' AND cafg.idproveedor=p.idproveedor";
 
@@ -424,9 +424,9 @@ class Compra_activos_fijos
   //lismatamos los detalles
   public function ver_detalle_compra_general($id_compra_afg) {
     $sql = "SELECT dcafg.idproducto, dcafg.ficha_tecnica_producto as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,	dcafg.cantidad, dcafg.precio_sin_igv,	
-    dcafg.igv, dcafg.precio_con_igv, dcafg.descuento, dcafg.subtotal,	p.nombre, p.imagen, dcafg.unidad_medida, dcafg.color
-		FROM detalle_compra_af_g as dcafg, producto as p
-		WHERE dcafg.idcompra_af_general='$id_compra_afg' AND  dcafg.idproducto=p.idproducto";
+    dcafg.igv, dcafg.precio_con_igv, dcafg.descuento, dcafg.subtotal,	p.nombre, p.imagen, dcafg.unidad_medida, dcafg.color, um.abreviacion
+		FROM detalle_compra_af_g as dcafg, producto as p, unidad_medida as um
+		WHERE p.idunidad_medida = um.idunidad_medida AND dcafg.idcompra_af_general='$id_compra_afg' AND  dcafg.idproducto=p.idproducto";
 
     return ejecutarConsulta($sql);
   }

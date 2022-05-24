@@ -15,7 +15,9 @@ ob_start();
 
       require_once "../modelos/Asistencia_obrero.php";
 
-      $asistencia_obrero=new Asistencia_obrero();      
+      $asistencia_obrero=new Asistencia_obrero();  
+      
+      $date_now = date("d-m-Y g.i-a");
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
       $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
@@ -39,7 +41,7 @@ ob_start();
                      
           $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $resumen_qs, $fecha_i, $fecha_f);
 
-          echo $rspta ? "ok" : "No se pudieron registrar todos los datos del trabajador";          
+          echo json_encode($rspta, true);        
           
         break;        
 
@@ -47,7 +49,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->mostrar($idasistencia_trabajador);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
 
         break;        
 
@@ -61,7 +63,7 @@ ob_start();
           $rspta=$asistencia_obrero->ver_detalle_quincena($f1,$f2,$nube_idproyect);
 
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);		
+          echo json_encode($rspta, true);		
         break;
         
         // listamos los botones de la quincena o semana
@@ -71,7 +73,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->listarquincenas_botones($nube_idproyecto);
           
-          echo json_encode($rspta);	 //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);	 //Codificar el resultado utilizando json
 
         break;
 
@@ -86,7 +88,7 @@ ob_start();
 
           $jornal_diario = '';  $sueldo_acumudado=''; $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
-          foreach (json_decode($rspta, true) as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $ver_asistencia="'".$value['idtrabajador_por_proyecto']."','".$value['fecha_inicio_proyect']."'";
 
@@ -131,7 +133,7 @@ ob_start();
             "data"=>$data
           );
 
-          echo json_encode($results);
+          echo json_encode($results, true);
           // echo $rspta;
 
         break;
@@ -139,43 +141,45 @@ ob_start();
         case 'suma_total_acumulado':
           $rspta=$asistencia_obrero->total_acumulado_trabajadores($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
         break;               
 
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O   C O N T A D O R  ::::::::::::::::::::::::::::::::::::::
 
         case 'agregar_quitar_pago_al_contador':
 
-          if (empty($_POST["idresumen_q_s_asistencia"])) {
+          if (empty($_GET["idresumen_q_s_asistencia"])) {
 
-            $rspta = false;
+            $rspta = ['status'=>false, 'message'=>'salio error pe', 'data' => [] ];
 
-            echo $rspta ? "ok" : "No se pudieron registrar el pago al contador"; 
+            echo json_encode($rspta, true);
 
           } else {
 
-            $rspta = $asistencia_obrero->quitar_editar_pago_al_contador($_POST["idresumen_q_s_asistencia"], $_POST["estado_envio_contador"]);
+            $rspta = $asistencia_obrero->quitar_editar_pago_al_contador($_GET["idresumen_q_s_asistencia"], $_GET["estado_envio_contador"]);
 
-            echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";
+            echo json_encode($rspta, true);
           }
           
         break; 
 
-        case 'agregar_quitar_pago_al_contador_todos':          
+        case 'agregar_quitar_pago_al_contador_todos':
+          $_post = json_decode(file_get_contents('php://input'),true);
+          $array_pago_contador = $_post["array_pago_contador"];
+          $estado_envio_contador = $_post["estado_envio_contador"];
+          $rspta = $asistencia_obrero->quitar_editar_pago_al_contador_todos($array_pago_contador, $estado_envio_contador);
 
-          $rspta = $asistencia_obrero->quitar_editar_pago_al_contador_todos($_POST["array_pago_contador"], $_POST["estado_envio_contador"]);
-
-          echo $rspta ? "ok" : "No se pudieron realizar los cambios del pago al contador";          
+          echo json_encode($rspta, true);       
           
         break; 
 
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   S A B A T I C A L  ::::::::::::::::::::::::::::::::::::::
 
         case 'agregar_quitar_sabatical_manual':
+          $_post = json_decode(file_get_contents('php://input'),true);
+          $rspta = $asistencia_obrero->insertar_quitar_editar_sabatical_manual($_post["idresumen_q_s_asistencia"], $_post["fecha_asist"], $_post["sueldo_x_hora"], $_post["fecha_q_s_inicio"], $_post["fecha_q_s_fin"], $_post["numero_q_s"], $_post["id_trabajador_x_proyecto"], $_post["numero_sabado"], $_post["estado_sabatical_manual"] );
 
-          $rspta = $asistencia_obrero->insertar_quitar_editar_sabatical_manual($_POST["idresumen_q_s_asistencia"], $_POST["fecha_asist"], $_POST["sueldo_x_hora"], $_POST["fecha_q_s_inicio"], $_POST["fecha_q_s_fin"], $_POST["numero_q_s"], $_POST["id_trabajador_x_proyecto"], $_POST["numero_sabado"], $_POST["estado_sabatical_manual"] );
-
-          echo $rspta ? "ok" : "No se pudieron GUARDAR el sabatical.";          
+          echo json_encode($rspta, true);
           
         break;
 
@@ -183,13 +187,15 @@ ob_start();
 
           if ( empty( json_decode($_POST["sabatical_trabajador"], true) ) ) {
 
-            echo "No hay trabajadores para asignar los sabaticales"; 
+            $rspta = ['status'=>false, 'message'=>'salio error pe', 'data' => [] ];
+
+            echo json_encode($rspta, true);
 
           } else {
 
             $rspta = $asistencia_obrero->insertar_quitar_sabatical_manual_todos($_POST["sabatical_trabajador"], $_POST["estado_sabatical_manual"] );
 
-            echo $rspta ? "ok" : "No se pudieron GUARDAR los sabaticales";
+            echo json_encode($rspta, true);
           }
           
         break;
@@ -206,7 +212,7 @@ ob_start();
           
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
-          while ($reg=$rspta->fetch_object()){
+          while ($reg=$rspta['data']->fetch_object()){
 
             $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
@@ -235,14 +241,14 @@ ob_start();
             "data"=>$data
           );
 
-          echo json_encode($results);
+          echo json_encode($results, true);
         break;
 
         case 'desactivar_dia':
 
           $rspta=$asistencia_obrero->desactivar_dia($idasistencia_trabajador);
 
-          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
+          echo json_encode($rspta, true);
 
         break;
 
@@ -250,7 +256,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->activar_dia($idasistencia_trabajador);
 
-          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+          echo json_encode($rspta, true);
 
         break;  
 
@@ -271,7 +277,7 @@ ob_start();
 
             $ext_doc1  = explode(".", $_FILES["doc1"]["name"]);
               
-            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+            $doc1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/asistencia_obrero/justificacion/" . $doc1);
             
@@ -282,7 +288,7 @@ ob_start();
 
             $rspta = '0';
             
-            echo $rspta ? "ok" : "No se logro registrar la justificación";
+            echo json_encode($rspta, true);
 
           }else {
 
@@ -291,7 +297,7 @@ ob_start();
 
               $datos_f1 = $asistencia_obrero->imgJustificacion($idasistencia_trabajador_j);
 
-              $doc1_ant = $datos_f1->fetch_object()->doc_justificacion;
+              $doc1_ant = $datos_f1['data']->fetch_object()->doc_justificacion;
 
               if ( !empty($doc1_ant) ) {
 
@@ -302,7 +308,7 @@ ob_start();
             // editamos un recibo x honorario existente
             $rspta=$asistencia_obrero->editar_justificacion($idasistencia_trabajador_j, $detalle_j, $doc1);
             
-            echo $rspta ? "ok" : "La justificación no se pudo actualizar";
+            echo json_encode($rspta, true);
           }
 
         break;
@@ -311,7 +317,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->mostrar_justificacion($_POST["idasistencia_trabajador"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
 
         break;
 
@@ -326,49 +332,54 @@ ob_start();
           $data= Array(); 
           
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          
-          while ($reg=$rspta->fetch_object()){
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-            $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+          if ($rspta['status'] == true) {
+            while ($reg=$rspta['data']->fetch_object()){            
 
-            $pago = ($reg->fecha_pago_obrero = 'quincenal') ? 'Quincena' : 'Semana ' ;
-
-            $opciones = "'$reg->idresumen_q_s_asistencia', '$pago' ";
-
-            $data[]=array(
-              "0"=> '<center>' . ($reg->estado ? '<button class="btn btn-danger btn-sm" onclick="desactivar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Desactivar"><i class="fas fa-trash-alt"></i></button>' :
-                '<button class="btn btn-success btn-sm" onclick="activar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Activar"><i class="fas fa-check"></i></button>') . '</center>' ,
-               
-              "1"=> '<center><b>' . $reg->numero_q_s . '</b> ─ '. format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin) . '</center>',
-              "2"=> $reg->total_hn . ' / ' . $reg->total_he,
-              "3"=> '<center>' . $reg->total_dias_asistidos . '</center>',
-              "4"=> 'S/ '. number_format($reg->pago_parcial_hn, 2, '.', ',') . ' / ' . number_format($reg->pago_parcial_he, 2, '.', ','),
-              "5"=> 'S/ '. number_format($reg->adicional_descuento, 2, '.', ','),
-              "6"=> '<center>' . $reg->sabatical . '</center>',
-              "7"=> 'S/ '. number_format($reg->pago_quincenal, 2, '.', ','),
-              "8"=> '<center>' . ($reg->estado_envio_contador ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>') . '</center>' ,
-              "9"=> '<center>' . ($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . '</center>'.$toltip,
-              "10"=> $reg->trabajdor,
-              "11"=> $reg->tipo_documento . ': ' . $reg->numero_documento,
-              "12"=> $reg->numero_q_s
+              $pago = ($reg->fecha_pago_obrero = 'quincenal') ? 'Quincena' : 'Semana ' ;
+  
+              $opciones = "'$reg->idresumen_q_s_asistencia', '$pago' ";
+  
+              $data[]=array(
+                "0"=> '<center>' . ($reg->estado ? '<button class="btn btn-danger btn-sm" onclick="desactivar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Desactivar"><i class="fas fa-trash-alt"></i></button>' :
+                  '<button class="btn btn-success btn-sm" onclick="activar_qs('. $opciones .')" data-toggle="tooltip" data-original-title="Activar"><i class="fas fa-check"></i></button>') . '</center>' ,
+                 
+                "1"=> '<center><b>' . $reg->numero_q_s . '</b> ─ '. format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin) . '</center>',
+                "2"=> $reg->total_hn . ' / ' . $reg->total_he,
+                "3"=> '<center>' . $reg->total_dias_asistidos . '</center>',
+                "4"=> 'S/ '. number_format($reg->pago_parcial_hn, 2, '.', ',') . ' / ' . number_format($reg->pago_parcial_he, 2, '.', ','),
+                "5"=> 'S/ '. number_format($reg->adicional_descuento, 2, '.', ','),
+                "6"=> '<center>' . $reg->sabatical . '</center>',
+                "7"=> 'S/ '. number_format($reg->pago_quincenal, 2, '.', ','),
+                "8"=> '<center>' . ($reg->estado_envio_contador ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>') . '</center>' ,
+                "9"=> '<center>' . ($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . '</center>'.$toltip,
+                "10"=> $reg->trabajdor,
+                "11"=> $reg->tipo_documento . ': ' . $reg->numero_documento,
+                "12"=> $reg->numero_q_s
+              );
+            }
+  
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data
             );
+  
+            echo json_encode($results, true);
+
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
-
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data
-          );
-
-          echo json_encode($results);
+          
         break;
 
         case 'suma_qs_individual':           
 
           $rspta=$asistencia_obrero->suma_qs_individual($_POST["idtrabajadorproyecto"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);		
+          echo json_encode($rspta, true);		
 
         break;
 
@@ -376,7 +387,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->desactivar_qs($_POST["idresumen_q_s_asistencia"]);
 
-          echo $rspta ? "ok" : "Semana no se puede desactivar";	
+          echo json_encode($rspta, true);
 
         break;
 
@@ -384,7 +395,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->activar_qs($_POST["idresumen_q_s_asistencia"]);
 
-          echo $rspta ? "ok" : "Semana no se puede activar";
+          echo json_encode($rspta, true);
 
         break;
 
@@ -397,13 +408,13 @@ ob_start();
 
             $rspta = $asistencia_obrero->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
 
-            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento"; 
+            echo json_encode($rspta, true);
 
           } else {
 
             $rspta = $asistencia_obrero->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
 
-            echo $rspta ? "ok" : "No se pudieron registrar la descripcion del descuento";
+            echo json_encode($rspta, true);
           }
           
         break;
@@ -412,7 +423,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->descripcion_adicional_descuento($_POST["id_adicional"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
         break;
 
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   F E C H A S   A C T I V I D A D ::::::::::::::::::::::::::::::::::::::
@@ -420,7 +431,7 @@ ob_start();
 
           $rspta=$asistencia_obrero->fechas_actividad($_POST["id_proyecto"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
         break;
 
         case 'guardar_y_editar_fechas_actividad':
@@ -428,16 +439,16 @@ ob_start();
           // registramos un nuevo: recibo x honorario
           if (empty($id_proyecto_f)){
 
-            $rspta = '0';
+            $rspta = ['status' => false, 'message' => 'salio error pe', 'data' => [],];
             
-            echo $rspta ? "ok" : "No se logro registrar la justificación";
+            echo json_encode($rspta, true);
 
           }else {             
 
             // editamos un recibo x honorario existente
             $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_d_m_a($fecha_inicio_actividad), format_d_m_a($fecha_fin_actividad), $plazo_actividad);
             
-            echo $rspta ? "ok" : "La fechas no se pudo actualizar";
+            echo json_encode($rspta, true);
           }
 
         break;

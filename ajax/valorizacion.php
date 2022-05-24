@@ -20,6 +20,8 @@
 
       $valorizacion = new Valorizacion();
 
+      $date_now = date("d-m-Y g.i-a");
+
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";
       $indice	        = isset($_POST["indice"])? limpiarCadena($_POST["indice"]):"";
@@ -44,7 +46,7 @@
 
 						$ext1 = explode(".", $_FILES["doc7"]["name"]); $flat_doc1 = true;						
 
-            $doc  = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $doc  = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/docs/valorizacion/" . $doc ); 
 						
@@ -59,7 +61,7 @@
 
                 $datos_f1 = $valorizacion->obtenerDocP($idproyecto, 'doc1_contrato_obra');
 
-                $doc1_ant = $datos_f1->fetch_object()->doc_p;
+                $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
                 if ($doc1_ant != "") {
 
@@ -77,7 +79,7 @@
 
                   $datos_f1 = $valorizacion->obtenerDocP($idproyecto, 'doc7_cronograma_obra_valorizad');
 
-                  $doc1_ant = $datos_f1->fetch_object()->doc_p;
+                  $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
                   if ($doc1_ant != "") {
 
@@ -95,7 +97,7 @@
 
                     $datos_f1 = $valorizacion->obtenerDocP($idproyecto, 'doc2_entrega_terreno');
 
-                    $doc1_ant = $datos_f1->fetch_object()->doc_p;
+                    $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
                     if ($doc1_ant != "") {
 
@@ -113,7 +115,7 @@
 
                       $datos_f1 = $valorizacion->obtenerDocP($idproyecto, 'doc3_inicio_obra');
 
-                      $doc1_ant = $datos_f1->fetch_object()->doc_p;
+                      $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
                       if ($doc1_ant != "") {
 
@@ -131,7 +133,7 @@
 
                         $datos_f1 = $valorizacion->obtenerDocP($idproyecto, 'doc8_certificado_habilidad_ing_residnt');
 
-                        $doc1_ant = $datos_f1->fetch_object()->doc_p;
+                        $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
                         if ($doc1_ant != "") {
 
@@ -146,7 +148,7 @@
               }
             }
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Documento";
+            echo json_encode($rspta, true) ;
 
           } else {
 
@@ -165,7 +167,7 @@
   
                 $datos_f1 = $valorizacion->obtenerDocV($idvalorizacion);
   
-                $doc1_ant = $datos_f1->fetch_object()->doc_valorizacion;
+                $doc1_ant = $datos_f1['data']->fetch_object()->doc_valorizacion;
   
                 if ($doc1_ant != "") {
   
@@ -176,8 +178,7 @@
               // editamos un trabajador existente
               $rspta=$valorizacion->editar_valorizacion($idproyecto, $idvalorizacion, $indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
               
-              echo $rspta ? "ok" : "Documento no se pudo actualizar";
-              
+              echo json_encode($rspta, true) ;              
             }
           }                      
 
@@ -186,15 +187,14 @@
         case 'desactivar':
 
           $rspta=$valorizacion->desactivar( $_POST['nombre_tabla'],$_POST['nombre_columna'],$_POST['idtabla']);
-          echo $rspta ? " Desactivado" : "No se puede desactivar";
+          echo json_encode($rspta, true) ;
 
         break;
 
         case 'eliminar':
 
           $rspta=$valorizacion->eliminar($_POST['nombre_tabla'],$_POST['nombre_columna'],$_POST['idtabla']);
-          echo $rspta ? " Eliminado" : "No se puede Eliminar";
-
+          echo json_encode($rspta, true) ;
 	
         break;
             
@@ -203,7 +203,7 @@
 
           $rspta=$valorizacion->mostrar($idtrabajador);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true) ;
 
         break;
 
@@ -214,7 +214,7 @@
 
           $rspta = $valorizacion->ver_detalle_quincena($fecha_i, $fecha_f, $nube_idproyecto );
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true) ;
 
         break;
         
@@ -226,7 +226,7 @@
           $rspta=$valorizacion->listarquincenas($nube_idproyecto);
 
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);	
+          echo json_encode($rspta, true) ;	
 
         break; 
 
@@ -237,42 +237,44 @@
           $rspta=$valorizacion->tabla_principal($nube_idproyecto);
           //echo json_encode($rspta);
           $data= Array();
-          $btn_tipo="";
-          $info_eliminar='';
-          $info_editar='';
-          $parametros_ver_doc='';
-          $cont=1;                          
+          
+          $cont=1;    
+          
+          if ($rspta['status'] == true) {
+            foreach ( $rspta['data'] as $key => $value) {
 
-          foreach ( $rspta as $key => $value) {
-
-            $info_eliminar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\',';
-
-            $info_editar = '\''.$value['idtabla'].'\', \''.$value['indice'].'\',\''.$value['nombre'].'\', \''.$value['doc_valorizacion'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''.$value['numero_q_s'].'\'';
-
-            $parametros_ver_doc='\'' . $value['doc_valorizacion'] .'\', \'' . $value['indice'] .'\', \'' . $value['nombre'] .'\', \'' . $value['numero_q_s'] .'\'';
-
-            $btn_tipo = (empty($value['doc_valorizacion'])) ? 'btn-outline-info' : 'btn-info'; 
-            
-            $data[]=array(
-
-              "0"=> $cont++,
-              "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info_editar.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ($value['numero_q_s']=='General'? ' <button class="btn btn-danger btn-sm disabled"><i class="fas fa-skull-crossbones"></i></button>': 
+              $btn_tipo=""; $info_eliminar=''; $info_editar=''; $parametros_ver_doc='';
+  
+              $info_eliminar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\',';
+  
+              $info_editar = '\''.$value['idtabla'].'\', \''.$value['indice'].'\',\''.$value['nombre'].'\', \''.$value['doc_valorizacion'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''.$value['numero_q_s'].'\'';
+  
+              $parametros_ver_doc='\'' . $value['doc_valorizacion'] .'\', \'' . $value['indice'] .'\', \'' . $value['nombre'] .'\', \'' . $value['numero_q_s'] .'\'';
+  
+              $btn_tipo = (empty($value['doc_valorizacion'])) ? 'btn-outline-info' : 'btn-info'; 
+              
+              $data[]=array(
+                "0"=> $cont++,
+                "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info_editar.')"><i class="fas fa-pencil-alt"></i></button>'.
+                  ($value['numero_q_s']=='General'? ' <button class="btn btn-danger btn-sm disabled"><i class="fas fa-skull-crossbones"></i></button>': 
                 ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info_eliminar.')"><i class="fas fa-skull-crossbones"></i></button>'),
-              "2"=>'<span class="text-bold">Valorización Nº '. $value['numero_q_s'] .'</span>',  
-              "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
-              "4"=>'<span class="text-primary text-bold">'. $value['fecha_inicio'] .' - ' . $value['fecha_fin'] .'</span>',  
-              "5"=>'<center> 
-                      <button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante('.$parametros_ver_doc.')"><i class="fas fa-file-invoice fa-lg"></i> </button> 
-                    </center>',       
+                "2"=>'<span class="text-bold">Valorización Nº '. $value['numero_q_s'] .'</span>',  
+                "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
+                "4"=>'<span class="text-primary text-bold">'. $value['fecha_inicio'] .' - ' . $value['fecha_fin'] .'</span>',  
+                "5"=>'<center><button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante('.$parametros_ver_doc.')"><i class="fas fa-file-invoice fa-lg"></i> </button> </center>',       
+              );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data
             );
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
-          echo json_encode($results);
+         
         break;        
       }
 
