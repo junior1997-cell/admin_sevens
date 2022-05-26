@@ -385,7 +385,7 @@ ob_start();
 
         case 'desactivar_qs':
 
-          $rspta=$asistencia_obrero->desactivar_qs($_POST["idresumen_q_s_asistencia"]);
+          $rspta=$asistencia_obrero->desactivar_qs($_GET["idresumen_q_s_asistencia"]);
 
           echo json_encode($rspta, true);
 
@@ -393,7 +393,7 @@ ob_start();
 
         case 'activar_qs':
 
-          $rspta=$asistencia_obrero->activar_qs($_POST["idresumen_q_s_asistencia"]);
+          $rspta=$asistencia_obrero->activar_qs($_GET["idresumen_q_s_asistencia"]);
 
           echo json_encode($rspta, true);
 

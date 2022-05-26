@@ -391,7 +391,8 @@ function guardar_editar_valorizacion(e) {
         }
       }, false);
       return xhr;
-    }
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 

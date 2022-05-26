@@ -212,7 +212,7 @@ function quitar_punto(string){
   return string.replace(/\./g,'');
 }
 
-function replace_punto_a_guion(params) {
+function replace_punto_a_guion(string) {
   return string.replace(/\./g,'-');
 }
 

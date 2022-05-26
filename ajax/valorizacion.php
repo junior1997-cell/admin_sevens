@@ -48,7 +48,7 @@
 
             $doc  = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-            move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/docs/valorizacion/" . $doc ); 
+            move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc ); 
 						
 					}
 
@@ -65,7 +65,7 @@
 
                 if ($doc1_ant != "") {
 
-                  unlink("../dist/docs/valorizacion/" . $doc1_ant);
+                  unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                 }
               }
               //echo $idproyecto, $doc, 'doc1_contrato_obra';
@@ -83,7 +83,7 @@
 
                   if ($doc1_ant != "") {
 
-                    unlink("../dist/docs/valorizacion/" . $doc1_ant);
+                    unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                   }
                 }
 
@@ -101,7 +101,7 @@
 
                     if ($doc1_ant != "") {
 
-                      unlink("../dist/docs/valorizacion/" . $doc1_ant);
+                      unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                     }
                   }
 
@@ -119,7 +119,7 @@
 
                       if ($doc1_ant != "") {
 
-                        unlink("../dist/docs/valorizacion/" . $doc1_ant);
+                        unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                       }
                     }
 
@@ -137,7 +137,7 @@
 
                         if ($doc1_ant != "") {
 
-                          unlink("../dist/docs/valorizacion/" . $doc1_ant);
+                          unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                         }
                       }
 
@@ -171,7 +171,7 @@
   
                 if ($doc1_ant != "") {
   
-                  unlink("../dist/docs/valorizacion/" . $doc1_ant);
+                  unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                 }
               }
   
@@ -186,14 +186,14 @@
 
         case 'desactivar':
 
-          $rspta=$valorizacion->desactivar( $_POST['nombre_tabla'],$_POST['nombre_columna'],$_POST['idtabla']);
+          $rspta=$valorizacion->desactivar( $_GET['nombre_tabla'], $_GET['nombre_columna'], $_GET['id_tabla']);
           echo json_encode($rspta, true) ;
 
         break;
 
         case 'eliminar':
 
-          $rspta=$valorizacion->eliminar($_POST['nombre_tabla'],$_POST['nombre_columna'],$_POST['idtabla']);
+          $rspta=$valorizacion->eliminar($_GET['nombre_tabla'], $_GET['nombre_columna'], $_GET['id_tabla']);
           echo json_encode($rspta, true) ;
 	
         break;
@@ -241,11 +241,11 @@
           $cont=1;    
           
           if ($rspta['status'] == true) {
-            foreach ( $rspta['data'] as $key => $value) {
+            foreach ( $rspta['data'] as $key => $value) { 
 
               $btn_tipo=""; $info_eliminar=''; $info_editar=''; $parametros_ver_doc='';
   
-              $info_eliminar = '\''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\',';
+              $info_eliminar = '\''.encodeCadenaHtml('<del>Valorización Nº '. $value['numero_q_s'] .'</del> - <del>'. $value['indice'].' '. $value['nombre'].'</del>').'\', \''.$value['nombre_tabla'].'\', \''.$value['nombre_columna'].'\', \''.$value['idtabla'].'\'';
   
               $info_editar = '\''.$value['idtabla'].'\', \''.$value['indice'].'\',\''.$value['nombre'].'\', \''.$value['doc_valorizacion'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''.$value['numero_q_s'].'\'';
   

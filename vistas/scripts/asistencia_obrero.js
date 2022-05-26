@@ -2398,18 +2398,24 @@ function desactivar_qs(id, tipo_pago) {
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, desactivar!",
+    showLoaderOnConfirm: true,
+    preConfirm: (input) => {       
+      return fetch(`../ajax/asistencia_obrero.php?op=desactivar_qs&idresumen_q_s_asistencia=${id}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/asistencia_obrero.php?op=desactivar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
-        
-        if (e == 'ok') {
-          Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
-          tbla_principal(localStorage.getItem('nube_idproyecto')); 
-          tabla_qs_individual(idtrabajador_por_proyecto_r);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }        
-      }).fail( function(e) { ver_errores(e); } );    
+      if (result.value.status) {
+        Swal.fire("Desactivado!", `La ${tipo_pago} ha sido desactivado.`, "success");
+        tbla_principal(localStorage.getItem('nube_idproyecto')); 
+        tabla_qs_individual(idtrabajador_por_proyecto_r);
+      }else{
+        ver_errores(result.value);
+      }    
     }
   });  
   $(".tooltip").removeClass("show").addClass("hidde"); 
@@ -2426,18 +2432,24 @@ function activar_qs(id, tipo_pago) {
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, activar!",
+    showLoaderOnConfirm: true,
+    preConfirm: (input) => {       
+      return fetch(`../ajax/asistencia_obrero.php?op=activar_qs&idresumen_q_s_asistencia=${id}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/asistencia_obrero.php?op=activar_qs", { 'idresumen_q_s_asistencia': id }, function (e) {
-
-        if (e == 'ok') {
-          Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
-          tbla_principal(localStorage.getItem('nube_idproyecto')); 
-          tabla_qs_individual(idtrabajador_por_proyecto_r);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }        
-      }).fail( function(e) { ver_errores(e); } );   
+      if (result.value.status) {
+        Swal.fire("Activado!", `La ${tipo_pago} ha sido activado.`, "success");
+        tbla_principal(localStorage.getItem('nube_idproyecto')); 
+        tabla_qs_individual(idtrabajador_por_proyecto_r);
+      }else{
+        ver_errores(result.value);
+      }  
     }
   });     
   $(".tooltip").removeClass("show").addClass("hidde"); 
