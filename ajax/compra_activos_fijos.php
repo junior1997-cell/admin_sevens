@@ -5,9 +5,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
     
     if ($_SESSION['compra_activo_fijo'] == 1) {
@@ -22,7 +21,8 @@
       $activos_fijos = new Activos_fijos();
       $compra = new Compra_insumos();
 
-      $date_now = date("d-m-Y g.i-a");
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h:i:s A");
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  C O M P R A   A C T I V O S ::::::::::::::::::::::::::::::::::::::
 
@@ -389,7 +389,7 @@
               </div>
           </div>';
 
-          $tbody = "";
+          $tbody = ""; $cont = 1;
 
           while ($reg = $rspta2['data']->fetch_object()) {
 
@@ -397,6 +397,7 @@
             $img_product = '../dist/docs/material/img_perfil/'. (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen );
 
             $tbody .= '<tr class="filas">
+              <td class="text-center p-6px">' . $cont++ . '</td>
               <td class="text-center p-6px">' . $ficha . '</td>
               <td class="text-left p-6px">
                 <div class="user-block text-nowrap">
@@ -418,6 +419,7 @@
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead class="bg-color-127ab6ba">
+                <th class="text-center p-10px" >#</th>
                 <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
                 <th class="p-10px">Material</th>
                 <th class="p-10px" data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
@@ -431,14 +433,14 @@
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
                 <tr>
-                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0" colspan="8"></td>
                   <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
                   <td class="p-0 text-right">
                     <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
                   </td>
                 </tr>
                 <tr>
-                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0" colspan="8"></td>
                   <td class="p-0 text-right">
                     <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
                   </td>
@@ -447,7 +449,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0" colspan="8"></td>
                   <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
                   <td class="p-0 text-right">
                     <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
@@ -860,14 +862,14 @@
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
                 <tr>
-                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0" colspan="8"></td>
                   <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
                   <td class="p-0 text-right">
                     <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
                   </td>
                 </tr>
                 <tr>
-                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0" colspan="8"></td>
                   <td class="p-0 text-right">
                     <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
                   </td>
@@ -876,7 +878,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="p-0" colspan="7"></td>
+                  <td class="p-0" colspan="8"></td>
                   <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
                   <td class="p-0 text-right">
                     <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
@@ -899,9 +901,9 @@
       }
 
     } else {
-      require 'noacceso.php';
-    }
-    
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
+    }    
   }
 
   function quitar_guion($numero) {

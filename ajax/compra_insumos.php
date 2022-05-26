@@ -5,9 +5,8 @@ if (strlen(session_id()) < 1) {
 }
 
 if (!isset($_SESSION["nombre"])) {
-
-  header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+  $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+  echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
   if ($_SESSION['compra_insumos'] == 1) {
@@ -20,7 +19,8 @@ if (!isset($_SESSION["nombre"])) {
     $proveedor = new AllProveedor();
     $activos_fijos = new Activos_fijos();      
     
-    $date_now = date("d-m-Y g.i-a");
+    date_default_timezone_set('America/Lima');
+    $date_now = date("d-m-Y h:i:s A");
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
@@ -143,7 +143,7 @@ if (!isset($_SESSION["nombre"])) {
     
             $datos_f1 = $activos_fijos->obtenerImg($idproducto_p);
     
-            $img1_ant = $datos_f1->fetch_object()->imagen;
+            $img1_ant = $datos_f1['data']->fetch_object()->imagen;
     
             if ($img1_ant != "") {
     
@@ -179,7 +179,7 @@ if (!isset($_SESSION["nombre"])) {
         
         $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-        while ($reg = $rspta->fetch_object()) {
+        while ($reg = $rspta['data']->fetch_object()) {
     
           if (!empty($reg->imagen)) {   $img = "../dist/docs/material/img_perfil/$reg->imagen"; } else { $img = "../dist/svg/default_producto.svg"; }
     
@@ -221,14 +221,6 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta ? "ok" : "No se pudieron registrar todos los datos del proveedor";
         }
     
-      break;
-    
-      case 'formato_banco':
-               
-        $rspta=$proveedor->formato_banco($_POST["idbanco"]);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta);
-         
       break;
     
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R A  ::::::::::::::::::::::::::
@@ -279,7 +271,7 @@ if (!isset($_SESSION["nombre"])) {
 
           $datos_f1 = $compra->obtener_comprobante($comprobante_c);
     
-          $doc1_ant = $datos_f1->fetch_object()->comprobante;
+          $doc1_ant = $datos_f1['data']->fetch_object()->comprobante;
     
           if ($doc1_ant != "") {
             unlink("../dist/docs/compra_insumo/comprobante_compra/" . $doc1_ant);
@@ -508,59 +500,60 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-lg-6">
             <div class="form-group">
               <label class="font-size-15px" for="idproveedor">Proveedor</label>
-              <h5 class="form-control form-control-sm" >'.$rspta['razon_social'].'</h5>
+              <h5 class="form-control form-control-sm" >'.$rspta['data']['razon_social'].'</h5>
             </div>
           </div>
           <!-- fecha -->
           <div class="col-lg-3">
             <div class="form-group">
               <label class="font-size-15px" for="fecha_compra">Fecha </label>
-              <span class="form-control form-control-sm"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;&nbsp;'.format_d_m_a($rspta['fecha_compra']).' </span>
+              <span class="form-control form-control-sm"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;&nbsp;'.format_d_m_a($rspta['data']['fecha_compra']).' </span>
             </div>
           </div>
           <!-- fecha -->
           <div class="col-lg-3">
             <div class="form-group">
               <label class="font-size-15px" for="fecha_compra">Glosa </label>
-              <span class="form-control form-control-sm">'.$rspta['glosa'].' </span>
+              <span class="form-control form-control-sm">'.$rspta['data']['glosa'].' </span>
             </div>
           </div>
           <!-- Tipo de comprobante -->
           <div class="col-lg-3">
             <div class="form-group">
               <label class="font-size-15px" for="tipo_comprovante">Tipo Comprobante</label>
-              <span  class="form-control form-control-sm"> '. ((empty($rspta['tipo_comprobante'])) ? '- - -' :  $rspta['tipo_comprobante'])  .' </span>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['tipo_comprobante'])) ? '- - -' :  $rspta['data']['tipo_comprobante'])  .' </span>
             </div>
           </div>
           <!-- serie_comprovante-->
           <div class="col-lg-2">
             <div class="form-group">
               <label class="font-size-15px" for="serie_comprovante">N° de Comprobante</label>
-              <span  class="form-control form-control-sm"> '. ((empty($rspta['serie_comprobante'])) ? '- - -' :  $rspta['serie_comprobante']).' </span>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['serie_comprobante'])) ? '- - -' :  $rspta['data']['serie_comprobante']).' </span>
             </div>
           </div>
           <!-- IGV-->
           <div class="col-lg-1 " >
             <div class="form-group">
               <label class="font-size-15px" for="igv">IGV</label>
-              <span class="form-control form-control-sm"> '.$rspta['val_igv'].' </span>                                 
+              <span class="form-control form-control-sm"> '.$rspta['data']['val_igv'].' </span>                                 
             </div>
           </div>
           <!-- Descripcion-->
           <div class="col-lg-6">
             <div class="form-group">
               <label class="font-size-15px" for="descripcion">Descripción </label> <br />
-              <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['descripcion'])) ? '- - -' :$rspta['descripcion']).'</textarea>
+              <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['data']['descripcion'])) ? '- - -' :$rspta['data']['descripcion']).'</textarea>
             </div>
         </div>';
 
-        $tbody = "";
+        $tbody = ""; $cont = 1;
 
         while ($reg = $rspta2['data']->fetch_object()) {
 
           empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
           
           $tbody .= '<tr class="filas">
+            <td class="text-center p-6px">' . $cont++ . '</td>
             <td class="text-center p-6px">' . $ficha . '</td>
             <td class="text-left p-6px">
               <div class="user-block text-nowrap">
@@ -580,8 +573,9 @@ if (!isset($_SESSION["nombre"])) {
         }         
 
         echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-          <table class="table table-striped table-bordered table-condensed table-hover">
+          <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
             <thead style="background-color:#ff6c046b">
+              <th class="text-center p-10px" >#</th>
               <th class="text-center p-10px">F.T.</th>
               <th class="p-10px">Material</th>
               <th class="p-10px">U.M.</th>
@@ -594,17 +588,29 @@ if (!isset($_SESSION["nombre"])) {
             </thead>
             <tbody>'.$tbody.'</tbody>          
             <tfoot>
-              <td colspan="7"></td>
-              <th class="text-right">
-                <h6>'.$rspta['tipo_gravada'].'</h6>
-                <h6>IGV('.( ( empty($rspta['val_igv']) ? 0 : floatval($rspta['val_igv']) )  * 100 ).'%)</h6>
-                <h5 class="font-weight-bold">TOTAL</h5>
-              </th>
-              <th class="text-right">
-                <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
-              </th>
+              <tr>
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                  </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                  <td class="p-0 text-right">
+                    <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                  </td>
+                </tr>
             </tfoot>
           </table>
         </div> ';
@@ -926,7 +932,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $rspta=$compra->select2_proveedor();
     
-        while ($reg = $rspta->fetch_object())	{
+        while ($reg = $rspta['data']->fetch_object())	{
     
           echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social .' - '. $reg->ruc . '</option>';
     
@@ -938,7 +944,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $rspta = $compra->select2_banco();
     
-        while ($reg = $rspta->fetch_object())  {
+        while ($reg = $rspta['data']->fetch_object())  {
     
           echo '<option value=' . $reg->id . '>' . $reg->nombre . ((empty($reg->alias)) ? "" : " - $reg->alias" ) .'</option>';
         }
@@ -949,7 +955,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $rspta = $compra->select2_color();
     
-        while ($reg = $rspta->fetch_object())  {
+        while ($reg = $rspta['data']->fetch_object())  {
     
           echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
         }
@@ -960,7 +966,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $rspta = $compra->select2_unidad_medida();
     
-        while ($reg = $rspta->fetch_object())  {
+        while ($reg = $rspta['data']->fetch_object())  {
     
           echo '<option value=' . $reg->id . '>' . $reg->nombre . ' - ' . $reg->abreviacion .'</option>';
         }
@@ -971,7 +977,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $rspta = $compra->select2_categoria();
     
-        while ($reg = $rspta->fetch_object())  {
+        while ($reg = $rspta['data']->fetch_object())  {
     
           echo '<option value=' . $reg->id . '>' . $reg->nombre .'</option>';
         }
@@ -981,9 +987,9 @@ if (!isset($_SESSION["nombre"])) {
     }
 
   } else {
-    require 'noacceso.php';
-  }
-  
+    $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);
+  }  
 }
 
 function quitar_guion($numero) {

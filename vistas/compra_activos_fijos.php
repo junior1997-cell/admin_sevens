@@ -1183,7 +1183,7 @@
           ?>
         </div>
         <?php require 'script.php'; ?>
-        <!-- table export -->
+        <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>        

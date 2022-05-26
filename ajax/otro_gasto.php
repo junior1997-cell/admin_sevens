@@ -5,9 +5,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.  
-    
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
     if ($_SESSION['otro_gasto'] == 1) {
@@ -69,7 +68,7 @@
       
               $datos_ficha1 = $otro_gasto->ficha_tec($idotro_gasto);
       
-              $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
+              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
       
               if ($ficha1_ant != "") {
       
@@ -130,7 +129,7 @@
           $data = [];
           $comprobante = '';
           $cont = 1;
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
       
             empty($reg->comprobante)
@@ -196,8 +195,8 @@
       }
       
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

@@ -7,10 +7,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {    
-     
-		header("Location: ../vistas/login.html");//Validamos el acceso solo a los usuarios logueados al sistema.
-		die();
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+		echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 	} else {
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['escritorio'] == 1) {
@@ -19,7 +17,8 @@
 
       $proyecto = new Proyecto();
 
-      $date_now = date("d-m-Y g.i-a");
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h:i:s A");
 
       $idproyecto				    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):""; 
       $tipo_documento			  = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
@@ -524,7 +523,8 @@
       }
 
     }else {
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

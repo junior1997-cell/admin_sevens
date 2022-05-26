@@ -202,12 +202,12 @@ function guardaryeditar(e) {
 
           total();
 
-          $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-
         } else {
           ver_errores(e);
         }
       } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     beforeSend: function () {
       $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');

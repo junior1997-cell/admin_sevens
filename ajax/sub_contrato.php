@@ -3,10 +3,10 @@
 	if (strlen(session_id()) < 1){
 		session_start();//Validamos si existe o no la sesión
 	}
+
 	if (!isset($_SESSION["nombre"])) {
-
-		header("Location: ../vistas/login.html");//Validamos el acceso solo a los materials logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 	} else {
 		//Validamos el acceso solo al material logueado y autorizado.
 		if ($_SESSION['subcontrato']==1){
@@ -83,7 +83,7 @@
 
               $datos_ficha1 = $sub_contrato->ficha_tec($idsubcontrato);
         
-              $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
+              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
         
               if ($ficha1_ant != "") {
         
@@ -226,7 +226,7 @@
 
 					$rspta=$sub_contrato->select2_proveedor();
 
-					while ($reg = $rspta->fetch_object())	{
+					while ($reg = $rspta['data']->fetch_object())	{
 
 						echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social .' - '. $reg->ruc . '</option>';
 
@@ -270,7 +270,7 @@
 
             $datos_f1 = $sub_contrato->obtenerImg($idpago_subcontrato);
       
-            $img1_ant = $datos_f1->fetch_object()->comprobante;
+            $img1_ant = $datos_f1['data']->fetch_object()->comprobante;
       
             if ($img1_ant != "") {
             unlink("../dist/docs/sub_contrato/comprobante_pago/" . $img1_ant);
@@ -297,7 +297,7 @@
           $cont=1;
           $comprobante="";
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             
             empty($reg->comprobante)
             ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
@@ -345,7 +345,7 @@
           $cont=1;
           $comprobante="";
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             
             empty($reg->comprobante)
             ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
@@ -433,7 +433,7 @@
 				case 'select2Banco':
 					$rspta = $sub_contrato->select2_banco();
 				
-					while ($reg = $rspta->fetch_object()) {
+					while ($reg = $rspta['data']->fetch_object()) {
 					echo '<option value=' . $reg->id . '>' . $reg->nombre . (empty($reg->alias) ? "" : " - $reg->alias") . '</option>';
 					}
 				
@@ -454,11 +454,9 @@
 
 		 //Fin de las validaciones de acceso
 		} else {
-
-		require 'noacceso.php';
-
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
 		}
-
 	}	
 
 	ob_end_flush();

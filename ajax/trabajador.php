@@ -7,9 +7,8 @@
 	}
   
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
@@ -98,7 +97,7 @@
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
-          while ($reg=$rspta->fetch_object()){
+          while ($reg=$rspta['data']->fetch_object()){
             $data[]=array(
               "0"=> $cont++,
               "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
@@ -133,7 +132,7 @@
 
           $rspta = $trabajadorproyecto->select2_trabajador();
       
-          while ($reg = $rspta->fetch_object())  {
+          while ($reg = $rspta['data']->fetch_object())  {
 
             echo '<option  value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
           }
@@ -154,7 +153,7 @@
            // $idtrabajador = '8';
             $rspta=$trabajadorproyecto->select_cargo($id_tipo);
 
-            while ($reg = $rspta->fetch_object())  {
+            while ($reg = $rspta['data']->fetch_object())  {
 
               echo '<option  value=' . $reg->idcargo_trabajador  . '>' . $reg->nombre .'</option>';
             }
@@ -164,8 +163,8 @@
       }
 
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

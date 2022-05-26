@@ -27,7 +27,7 @@ class Asistencia_obrero
       $buscar_asistencia = ejecutarConsultaSimpleFila($sql_1);
       if ($buscar_asistencia['status'] == false) {  return $buscar_asistencia; }
 
-      if (empty($buscar_asistencia['data']['data'])) {
+      if (empty($buscar_asistencia['data'])) {
         // insertamos un nuevo registro
         $sql_2 = "INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia)			
 				VALUES ('" . $key['id_trabajador'] . "', '" . $key['horas_normal_dia'] . "', '" . $key['pago_normal_dia'] . "', '" .
@@ -72,7 +72,7 @@ class Asistencia_obrero
         "', total_he='" . $keys['total_he'] . "', total_dias_asistidos='" . $keys['dias_asistidos'] . "', sabatical='" . $keys['sabatical'] .
         "', pago_parcial_hn='" . $keys['pago_parcial_hn'] . "', pago_parcial_he='" . $keys['pago_parcial_he'] . "', 
         adicional_descuento='" . $keys['adicional_descuento'] . "', pago_quincenal='" . $keys['pago_quincenal'] .
-        "' WHERE idresumen_q_s_asistencia = '" . $buscar_extras['idresumen_q_s_asistencia'] . "';";
+        "' WHERE idresumen_q_s_asistencia = '" . $buscar_extras['data']['idresumen_q_s_asistencia'] . "';";
         $retorno = ejecutarConsulta($sql_6);
         if ($retorno['status'] == false) {  return $retorno; }
       }
@@ -411,11 +411,11 @@ class Asistencia_obrero
   }
 
   public function insertar_quitar_sabatical_manual_todos($sabatical_trabajador, $estado_sabatical_manual) {
-    $data_sabatical = json_decode($sabatical_trabajador, true);
+    //$data_sabatical = json_decode($sabatical_trabajador, true);
     $retorno = "";
 
-    if (!empty($data_sabatical)) {
-      foreach ($data_sabatical as $key => $value) {
+    if (!empty($sabatical_trabajador)) {
+      foreach ($sabatical_trabajador as $key => $value) {
         $idresumen_q_s_asistencia = $value['idresumen_q_s_asistencia'];
 
         $fecha_asistida = $value['fecha_asistida'];
@@ -446,7 +446,7 @@ class Asistencia_obrero
         }
 
         // validamos la insercion en: ASISTENCIA TRABAJDOR
-        if (empty($buscando_asist)) {
+        if (empty($buscando_asist['data'])) {
           $sql_2 = "INSERT INTO asistencia_trabajador(idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia) 
 					VALUES ('$id_trabajador_x_proyecto','$horas','$pago_normal','0', '0', '$fecha_asistida', 'Sábado')";
           $insert_asistencia = ejecutarConsulta($sql_2);
@@ -455,7 +455,7 @@ class Asistencia_obrero
           $sql_3 = "UPDATE asistencia_trabajador SET idtrabajador_por_proyecto = '$id_trabajador_x_proyecto', horas_normal_dia = '$horas', 
 					pago_normal_dia = '$pago_normal', horas_extras_dia  = '0', pago_horas_extras = '0', fecha_asistencia = '$fecha_asistida', 
           nombre_dia = 'Sábado'
-					WHERE idasistencia_trabajador = '" . $buscando_asist['idasistencia_trabajador'] . "';";
+					WHERE idasistencia_trabajador = '" . $buscando_asist['data']['idasistencia_trabajador'] . "';";
           $update_asistencia = ejecutarConsulta($sql_3);
           if ($update_asistencia['status'] == false) {  return $update_asistencia; }
         }
@@ -540,7 +540,7 @@ class Asistencia_obrero
   public function tbla_asis_individual($idtrabajador_x_proyecto) {
     $sql = "SELECT atra.idasistencia_trabajador, atra.idasistencia_trabajador,  atra.horas_normal_dia, atra.pago_normal_dia, atra.horas_extras_dia, 
 		atra.pago_horas_extras, atra.fecha_asistencia, atra.nombre_dia, atra.estado, t.nombres as trabajador, 
-		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil , atra.doc_justificacion
+		t.tipo_documento as tipo_doc, t.numero_documento AS num_doc, t.imagen_perfil , atra.doc_justificacion, atra.descripcion_justificacion
 		FROM asistencia_trabajador AS atra, trabajador_por_proyecto AS tp, trabajador AS t
 		WHERE atra.idtrabajador_por_proyecto = tp.idtrabajador_por_proyecto AND tp.idtrabajador = t.idtrabajador 
 		AND atra.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ORDER BY  atra.fecha_asistencia DESC; ";
@@ -646,7 +646,7 @@ class Asistencia_obrero
   public function fechas_actividad($id) {
     $sql = "SELECT idproyecto, fecha_inicio_actividad, fecha_fin_actividad, plazo_actividad
 		FROM proyecto 
-		WHERE idproyecto =  '$id'";
+		WHERE idproyecto = '$id'";
 
     return ejecutarConsultaSimpleFila($sql);
   }

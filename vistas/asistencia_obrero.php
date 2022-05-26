@@ -316,7 +316,7 @@
                   </div>
                   <!-- /.container-fluid -->
                 </div>
-                <!-- Modal agregar asistencia - :::::::::::::::::::::::::::::::::: NO SE SE USA -->
+                <!-- MODAL - agregar asistencia - :::::::::::::::::::::::::::::::::: NO SE SE USA -->
                 <div class="modal fade" id="modal-agregar-asistencia">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -383,7 +383,7 @@
                   </div>
                 </div>
 
-                <!-- Modal editar asistencia - :::::::::::::::::::::::::::::::::::: NO SE SE USA -->
+                <!-- MODAL - editar asistencia - :::::::::::::::::::::::::::::::::::: NO SE SE USA -->
                 <div class="modal fade" id="modal-editar-asistencia">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -438,7 +438,7 @@
                   </div>
                 </div>
 
-                <!-- Modal justificar asistencia -->
+                <!-- MODAL - justificar asistencia -->
                 <div class="modal fade" id="modal-justificar-asistencia">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -483,8 +483,8 @@
                                   <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                 </div>
                                 <!-- Recargar -->
-                                <div class="col-md-3 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'justificacion');">
+                                <div class="col-md-3 text-center"> 
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'asistencia_obrero', 'justificacion');">
                                     <i class="fa fa-eye"></i> PDF.
                                   </button>
                                 </div>
@@ -524,7 +524,7 @@
                   </div>
                 </div> 
                 
-                <!-- Modal adicinoal / descuento -->
+                <!-- MODAL - adicinoal / descuento -->
                 <div class="modal fade" id="modal-adicional-descuento" >
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -575,7 +575,7 @@
                   </div>
                 </div>
 
-                <!-- Modal cargando -->
+                <!-- MODAL - cargando -->
                 <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
                   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -605,7 +605,7 @@
                   </div>
                 </div>
 
-                <!-- Modal Fechas de Actividades -->
+                <!-- MODAL - Fechas de Actividades -->
                 <div class="modal fade" id="modal-agregar-fechas-actividades">
                   <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
                     <div class="modal-content">
@@ -680,7 +680,7 @@
                   </div>
                 </div> 
                 
-                <!-- Modal Horas Multiples -->
+                <!-- MODAL - Horas Multiples -->
                 <div class="modal fade" id="modal-agregar-horas-multiples" data-keyboard="false" data-backdrop="static">
                   <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
                     <div class="modal-content">

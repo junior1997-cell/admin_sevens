@@ -188,8 +188,8 @@ function modal_ficha_tec(ficha_tecnica) {
 
   $(".tooltip").removeClass("show").addClass("hidde");
 }
-//Función para guardar o editar
 
+//Función para guardar o editar
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-materiales")[0]);
@@ -201,20 +201,23 @@ function guardaryeditar(e) {
     contentType: false,
     processData: false,
     success: function (e) {
-      e = JSON.parse(e);  console.log(e);  
-      if (e.status == true) {
-        Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
 
-        tabla.ajax.reload(null, false);
+          tabla.ajax.reload(null, false);
 
-        limpiar_form_material();
+          limpiar_form_material();
 
-        $("#modal-agregar-material").modal("hide");
-
-        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-      } else {
-        ver_errores(e);
-      }
+          $("#modal-agregar-material").modal("hide");
+          
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
 

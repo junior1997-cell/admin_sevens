@@ -5,9 +5,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.  
-    
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
     if ($_SESSION['otro_gasto'] == 1) {
@@ -86,7 +85,7 @@
       
               $datos_ficha1 = $otro_ingreso->ficha_tec($idotro_ingreso);
       
-              $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
+              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
       
               if ($ficha1_ant != "") {
       
@@ -146,7 +145,7 @@
           $data = [];
           $comprobante = '';
           $cont = 1;
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             
             empty($reg->comprobante)
               ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
@@ -215,8 +214,8 @@
       }
       
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

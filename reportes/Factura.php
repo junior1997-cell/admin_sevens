@@ -205,7 +205,7 @@ class PDF_Invoice extends FPDF
     $this->SetFont("Arial", "B", 10);
     $this->Cell(10, 5, "Fecha", 0, 0, "C");
     $this->SetXY($r1 + ($r2 - $r1) / 2 - 5, $y1 + 9);
-    $this->SetFont("Arial", "", 10);
+    $this->SetFont("Arial", "B", 15);
     $this->Cell(10, 5, $date, 0, 0, "C");
   }
 

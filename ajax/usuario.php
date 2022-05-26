@@ -95,9 +95,7 @@
     break;
     
   }
-  
  
-
   require_once "../modelos/Usuario.php";
   require_once "../modelos/Permiso.php";
   require_once "../modelos/AllTrabajador.php";      

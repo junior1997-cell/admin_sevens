@@ -1193,12 +1193,19 @@ function ver_detalle_compras(idcompra_proyecto) {
   $("#cargando-5-fomulario").hide();
   $("#cargando-6-fomulario").show();
 
+  $("#print_pdf_compra").addClass('disabled');
+  $("#excel_compra").addClass('disabled');
+
   $("#modal-ver-compras").modal("show");
 
   $.post("../ajax/compra_insumos.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
     $(".detalle_de_compra").html(r); 
     $("#cargando-5-fomulario").show();
     $("#cargando-6-fomulario").hide();
+
+    $("#print_pdf_compra").removeClass('disabled');
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+    $("#excel_compra").removeClass('disabled');
   });
 }
 
@@ -3095,3 +3102,15 @@ function decodeHtml(str) {
   return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
 }
 
+function export_excel_detalle_factura() {
+  $tabla = document.querySelector("#tabla_detalle_factura");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+
+}

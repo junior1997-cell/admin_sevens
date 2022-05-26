@@ -6,9 +6,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['resumen_factura'] == 1) {    
@@ -104,7 +103,8 @@
       
       //Fin de las validaciones de acceso
     } else {
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

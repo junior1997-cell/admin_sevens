@@ -8,9 +8,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
@@ -20,7 +19,8 @@
 
       $trabajador = new AllTrabajador();
 
-      $date_now = date("d-m-Y g.i-a");
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h:i:s A");
       
       $idtrabajador	  	= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
       $nombre 		      = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
@@ -361,8 +361,8 @@
 
       //Fin de las validaciones de acceso
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

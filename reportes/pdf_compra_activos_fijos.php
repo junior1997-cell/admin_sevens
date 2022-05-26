@@ -60,17 +60,18 @@ if (!isset($_SESSION["nombre"])) {
   $pdf->addReference( utf8_decode( decodeCadenaHtml((empty($rspta['data']['descripcion'])) ? '- - -' :$rspta['data']['descripcion']) ));
 
   //Establecemos las columnas que va a tener la sección donde mostramos los detalles de la venta
-  $cols = [ "PRODUCTO" => 75, "UM" => 10, "CANT." => 15, "V/U" => 18, "IGV" => 15, "P.U." => 20, "DSCT." => 15, "SUBTOTAL" => 22];
+  $cols = [ "#" => 8, "PRODUCTO" => 70, "UM" => 10, "CANT." => 14, "V/U" => 18, "IGV" => 15, "P.U." => 20, "DSCT." => 15, "SUBTOTAL" => 20];
   $pdf->addCols($cols);
-  $cols = [ "PRODUCTO" => "L", "UM" => "C",  "CANT." => "C", "V/U" => "R", "IGV" => "R","P.U." => "R", "DSCT." => "R", "SUBTOTAL" => "R"];
+  $cols = [ "#" => "C", "PRODUCTO" => "L", "UM" => "C",  "CANT." => "C", "V/U" => "R", "IGV" => "R","P.U." => "R", "DSCT." => "R", "SUBTOTAL" => "R"];
   $pdf->addLineFormat($cols);
   $pdf->addLineFormat($cols);
   //Actualizamos el valor de la coordenada "y", que será la ubicación desde donde empezaremos a mostrar los datos
   $y = 89;
 
+  $cont = 1;
   //Obtenemos todos los detalles de la venta actual
   while ($reg = $rspta2['data']->fetch_object()) {
-    $line = [ "PRODUCTO" => utf8_decode( decodeCadenaHtml($reg->nombre)), "UM" => $reg->abreviacion, "CANT." => $reg->cantidad, "V/U" => number_format($reg->precio_sin_igv, 2, '.',','), "IGV" => number_format($reg->igv, 2, '.',','), "P.U." => number_format($reg->precio_con_igv, 2, '.',','), "DSCT." => number_format($reg->descuento, 2, '.',','), "SUBTOTAL" => number_format($reg->subtotal, 2, '.',',')];
+    $line = [ "#" => $cont++, "PRODUCTO" => utf8_decode( decodeCadenaHtml($reg->nombre)), "UM" => $reg->abreviacion, "CANT." => $reg->cantidad, "V/U" => number_format($reg->precio_sin_igv, 2, '.',','), "IGV" => number_format($reg->igv, 2, '.',','), "P.U." => number_format($reg->precio_con_igv, 2, '.',','), "DSCT." => number_format($reg->descuento, 2, '.',','), "SUBTOTAL" => number_format($reg->subtotal, 2, '.',',')];
     $size = $pdf->addLine($y, $line);
     $y += $size + 2;
   }
@@ -78,7 +79,8 @@ if (!isset($_SESSION["nombre"])) {
   //Convertimos el total en letras
   require_once "Letras.php";
   $V = new EnLetras();
-  $con_letra = strtoupper($V->ValorEnLetras("575.00", "NUEVOS SOLES"));
+  $num_total = floatval($rspta['data']['total']);
+  $con_letra = strtoupper($V->ValorEnLetras(503, "NUEVOS SOLES"));
   $pdf->addCadreTVAs("---" . $con_letra);
 
   //Mostramos el impuesto

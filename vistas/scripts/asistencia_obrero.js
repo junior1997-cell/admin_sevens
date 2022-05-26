@@ -49,7 +49,7 @@ function init() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -1803,49 +1803,6 @@ function calcular_todos_sabatical_1() {
             ver_errores(result.value);
             $(`#checkbox_sabatical_todos_1`).prop('checked', false);
           }
-          $.ajax({
-            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
-            type: "POST",
-            data:  {
-              'sabatical_trabajador': JSON.stringify(array_sabatical_1), 
-              'estado_sabatical_manual':'1',
-            },
-            success: function (datos) {
-                     
-              if (datos == 'ok') {
-        
-                datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
-                tbla_principal(localStorage.getItem('nube_idproyecto'));
-                Swal.fire("Asignado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
-                
-              }else{
-        
-                Swal.fire("Error!", datos, "error");
-              }
-            },
-            xhr: function () {
-        
-              var xhr = new window.XMLHttpRequest();
-        
-              xhr.upload.addEventListener("progress", function (evt) {
-        
-                if (evt.lengthComputable) {
-        
-                  var percentComplete = (evt.loaded / evt.total)*100;
-                  /*console.log(percentComplete + '%');*/
-                  $("#barra_progress").css({"width": percentComplete+'%'});
-        
-                  $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-        
-                  if (percentComplete === 100) {
-        
-                    setTimeout(l_m, 600);
-                  }
-                }
-              }, false);
-              return xhr;
-            }
-          });
           
         }else{
           $(`#checkbox_sabatical_todos_1`).prop('checked', false);
@@ -1862,52 +1819,34 @@ function calcular_todos_sabatical_1() {
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#d33",
         confirmButtonText: "Si, anular!",
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          return fetch(`../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'sabatical_trabajador': array_sabatical_1, 
+              'estado_sabatical_manual':'0',
+            }) ,
+          }).then(response => {
+            if (!response.ok) { throw new Error(response.statusText) }
+            return response.json()
+          }).catch(error => { Swal.showValidationMessage(`Request failed: ${error}`); })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
       }).then((result) => {
         if (result.isConfirmed) {
-           
-          $.ajax({
-            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
-            type: "POST",
-            data:  {
-              'sabatical_trabajador': JSON.stringify(array_sabatical_1), 
-              'estado_sabatical_manual':'0',
-            },
-            success: function (datos) {
-                     
-              if (datos == 'ok') {
-        
-                datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
-                tbla_principal(localStorage.getItem('nube_idproyecto'));
-                Swal.fire("Anulado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
-                
-              }else{
-        
-                Swal.fire("Error!", datos, "error");
-              }
-            },
-            xhr: function () {
-        
-              var xhr = new window.XMLHttpRequest();
-        
-              xhr.upload.addEventListener("progress", function (evt) {
-        
-                if (evt.lengthComputable) {
-        
-                  var percentComplete = (evt.loaded / evt.total)*100;
-                  /*console.log(percentComplete + '%');*/
-                  $("#barra_progress").css({"width": percentComplete+'%'});
-        
-                  $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-        
-                  if (percentComplete === 100) {
-        
-                    setTimeout(l_m, 600);
-                  }
-                }
-              }, false);
-              return xhr;
-            }
-          });
+          if (result.value.status) {
+            datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
+            tbla_principal(localStorage.getItem('nube_idproyecto'));
+            Swal.fire("Anulado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
+          } else {
+            ver_errores(result.value);
+            $(`#checkbox_sabatical_todos_1`).prop('checked', true);
+          }
                  
         }else{
           $(`#checkbox_sabatical_todos_1`).prop('checked', true);
@@ -1945,52 +1884,34 @@ function calcular_todos_sabatical_2() {
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#d33",
         confirmButtonText: "Si, asignar!",
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          return fetch(`../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'sabatical_trabajador': array_sabatical_2, 
+              'estado_sabatical_manual':'1',
+            }) ,
+          }).then(response => {
+            if (!response.ok) { throw new Error(response.statusText) }
+            return response.json()
+          }).catch(error => { Swal.showValidationMessage(`Request failed: ${error}`); })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
       }).then((result) => {
         if (result.isConfirmed) {
-
-          $.ajax({
-            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
-            type: "POST",
-            data:  {
-              'sabatical_trabajador': JSON.stringify(array_sabatical_2), 
-              'estado_sabatical_manual':'1',
-            },
-            success: function (datos) {
-                     
-              if (datos == 'ok') {
-        
-                datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
-                tbla_principal(localStorage.getItem('nube_idproyecto')); 
-                Swal.fire("Asignado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
-                
-              }else{
-        
-                Swal.fire("Error!", datos, "error");
-              }
-            },
-            xhr: function () {
-        
-              var xhr = new window.XMLHttpRequest();
-        
-              xhr.upload.addEventListener("progress", function (evt) {
-        
-                if (evt.lengthComputable) {
-        
-                  var percentComplete = (evt.loaded / evt.total)*100;
-                  /*console.log(percentComplete + '%');*/
-                  $("#barra_progress").css({"width": percentComplete+'%'});
-        
-                  $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-        
-                  if (percentComplete === 100) {
-        
-                    setTimeout(l_m, 600);
-                  }
-                }
-              }, false);
-              return xhr;
-            }
-          });
+          if (result.value.status) {
+            datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
+            tbla_principal(localStorage.getItem('nube_idproyecto')); 
+            Swal.fire("Asignado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
+          } else {
+            ver_errores(result.value);
+            $(`#checkbox_sabatical_todos_2`).prop('checked', false);
+          }
           
         }else{
           $(`#checkbox_sabatical_todos_2`).prop('checked', false);
@@ -2007,52 +1928,34 @@ function calcular_todos_sabatical_2() {
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#d33",
         confirmButtonText: "Si, anular!",
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          return fetch(`../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'sabatical_trabajador': array_sabatical_2, 
+              'estado_sabatical_manual':'0',
+            }) ,
+          }).then(response => {
+            if (!response.ok) { throw new Error(response.statusText) }
+            return response.json()
+          }).catch(error => { Swal.showValidationMessage(`Request failed: ${error}`); })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
       }).then((result) => {
         if (result.isConfirmed) {
-           
-          $.ajax({
-            url: "../ajax/asistencia_obrero.php?op=agregar_quitar_sabatical_manual_todos",
-            type: "POST",
-            data:  {
-              'sabatical_trabajador': JSON.stringify(array_sabatical_2), 
-              'estado_sabatical_manual':'0',
-            },
-            success: function (datos) {
-                     
-              if (datos == 'ok') {
-        
-                datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
-                tbla_principal(localStorage.getItem('nube_idproyecto'));
-                Swal.fire("Anulado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
-                
-              }else{
-        
-                Swal.fire("Error!", datos, "error");
-              }
-            },
-            xhr: function () {
-        
-              var xhr = new window.XMLHttpRequest();
-        
-              xhr.upload.addEventListener("progress", function (evt) {
-        
-                if (evt.lengthComputable) {
-        
-                  var percentComplete = (evt.loaded / evt.total)*100;
-                  /*console.log(percentComplete + '%');*/
-                  $("#barra_progress").css({"width": percentComplete+'%'});
-        
-                  $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-        
-                  if (percentComplete === 100) {
-        
-                    setTimeout(l_m, 600);
-                  }
-                }
-              }, false);
-              return xhr;
-            }
-          });
+          if (result.value.status) {
+            datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r); 
+            tbla_principal(localStorage.getItem('nube_idproyecto')); 
+            Swal.fire("Anulado!", `Todos los sabaticales manuales a sido guardado con éxito.`, "success");
+          } else {
+            ver_errores(result.value);
+            $(`#checkbox_sabatical_todos_2`).prop('checked', true);
+          }
                  
         }else{
           $(`#checkbox_sabatical_todos_2`).prop('checked', true);
@@ -2153,21 +2056,28 @@ function guardaryeditar_adicional_descuento(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+    success: function (e) {
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
 
-        datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
-
-        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
-
-        $("#modal-adicional-descuento").modal("hide");
-
-			}else{
-
-				Swal.fire("Error!", datos, "error");
-			}
+          datos_quincena(f1_r, f2_r, i_r, cant_dias_asistencia_r);
+  
+          Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
+  
+          $("#modal-adicional-descuento").modal("hide");          
+  
+        }else{
+  
+          Swal.fire("Error!", datos, "error");
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      
+      $("#guardar_adicional_descuento").html('Guardar Cambios').removeClass('disabled');
     },
+    beforeSend: function () {
+      $("#guardar_adicional_descuento").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+    }
   });
 }
 
@@ -2179,18 +2089,19 @@ function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
   $("#idresumen_q_s_asistencia").val(id_adicional);
   $("#idtrabajador_por_proyecto").val(id_trabjador);
   $("#fecha_q_s").val(fecha_q_s);
-  // $("#detalle_adicional").val(descripcion);
+  $("#detalle_adicional").val("");
 
   $("#modal-adicional-descuento").modal("show");
 
-  $.post("../ajax/asistencia_obrero.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(data){
-    data = JSON.parse(data);  console.log(data);  
+  $.post("../ajax/asistencia_obrero.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(e){
+    e = JSON.parse(e);  console.log(e);  
 
-    if (data != null) {
-      if (e.data.length === 0 ) {  }else{
-
-        $("#detalle_adicional").val(data.descripcion_descuento);
+    if (e.status == true) {
+      if (e.data.length === 0) { } else {
+        $("#detalle_adicional").val(e.data.descripcion_descuento);
       }
+    }else{
+      ver_errores(e);
     }     
     
     $("#cargando-5-fomulario").show(); 
@@ -2226,34 +2137,17 @@ function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proy
     createdRow: function (row, data, ixdex) { 
 
       // columna: Horas normal
-      if (data[0] != '') {
-        $("td", row).eq(0).addClass('text-center');         
-      }
-
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
       // columna: Horas normal
-      if (data[2] != '') {
-        $("td", row).eq(2).addClass('text-center');         
-      }
-
+      if (data[2] != '') { $("td", row).eq(2).addClass('text-center'); }
       // columna: Pago por horas normal
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-nowrap text-right');         
-      }
-
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-nowrap text-right'); }
       // columna: Horas normal
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass('text-center');         
-      }
-
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-center'); }
       // columna: Pago por horas extras
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-right');         
-      }   
-
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-right'); } 
       // columna: Pago por horas normal
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-nowrap');         
-      }
+      if (data[6] != '') {  $("td", row).eq(6).addClass('text-nowrap'); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -2273,7 +2167,7 @@ function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proy
 }
 
 //Función para desactivar registros
-function justificar(idasistencia,horas, estado) {
+function justificar(trabajador, idasistencia, horas, estado) {
   $('#idasistencia_trabajador_j').val(idasistencia);
 
   $('.descargar').hide();
@@ -2292,19 +2186,19 @@ function justificar(idasistencia,horas, estado) {
 
     if (horas >= 8) {
 
-      Swal.fire("No puedes Justificar!", "Este trabajador tiene 8 horas completas, las justificación es para compensar horas perdidas.", "info");
+      Swal.fire("No puedes Justificar!", `<b class="text-blue">${trabajador}</b> tiene <b>8 horas completas</b>, las justificación es para compensar horas perdidas.`, "info");
     
     } else {
 
       $("#modal-justificar-asistencia").modal("show");
 
-      $.post("../ajax/asistencia_obrero.php?op=mostrar_justificacion", { 'idasistencia_trabajador': idasistencia }, function (data, status) {
+      $.post("../ajax/asistencia_obrero.php?op=mostrar_justificacion", { 'idasistencia_trabajador': idasistencia }, function (e, status) {
         
-        data = JSON.parse(data);  console.log(data);
+        e = JSON.parse(e);  console.log(e);
 
-        $('#detalle_j').val(data.descripcion_justificacion);
+        $('#detalle_j').val(e.data.descripcion_justificacion);
 
-        if (data.doc_justificacion == '' || data.doc_justificacion == null || data.doc_justificacion == 'null') {
+        if (e.data.doc_justificacion == '' || e.data.doc_justificacion == null || e.data.doc_justificacion == 'null') {
           $('.descargar').hide();
           $('.ver_completo').hide();
           $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
@@ -2317,31 +2211,18 @@ function justificar(idasistencia,horas, estado) {
           $('.descargar').show();
           $('.ver_completo').show();
       
-          $('#descargar_rh').attr('href', `../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}`);
+          $('#descargar_rh').attr('href', `../dist/docs/asistencia_obrero/justificacion/${e.data.doc_justificacion}`);
                   
-          $('#descargar_rh').attr('download', `Justificacion`); 
-             
+          $('#descargar_rh').attr('download', `Justificacion`);              
 
-          $('#ver_completo').attr('href', `../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}`);
-          $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Recibo-por-honorario.${extrae_extencion(data.doc_justificacion)}</i></div></div>`);
+          $('#ver_completo').attr('href', `../dist/docs/asistencia_obrero/justificacion/${e.data.doc_justificacion}`);
+          $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Recibo-por-honorario.${extrae_extencion(e.data.doc_justificacion)}</i></div></div>`);
       
-          $('#doc_old_1').val(data.doc_justificacion);
+          $('#doc_old_1').val(e.data.doc_justificacion);
           $('#doc1').val('');
+
+          $("#doc1_ver").html(doc_view_extencion(e.data.doc_justificacion, 'asistencia_obrero', 'justificacion', '100%', '310'));
       
-          if ( extrae_extencion(data.doc_justificacion) == "pdf" ) {
-            $("#doc1_ver").html(`<iframe src="../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-          } else {
-            if ( extrae_extencion(data.doc_justificacion) == "jpeg" || extrae_extencion(data.doc_justificacion) == "jpg" || extrae_extencion(data.doc_justificacion) == "jpe" ||
-              extrae_extencion(data.doc_justificacion) == "jfif" || extrae_extencion(data.doc_justificacion) == "gif" || extrae_extencion(data.doc_justificacion) == "png" ||
-              extrae_extencion(data.doc_justificacion) == "tiff" || extrae_extencion(data.doc_justificacion) == "tif" || extrae_extencion(data.doc_justificacion) == "webp" ||
-              extrae_extencion(data.doc_justificacion) == "bmp" || extrae_extencion(data.doc_justificacion) == "svg" ) {
-      
-              $("#doc1_ver").html(`<img src="../dist/docs/asistencia_obrero/justificacion/${data.doc_justificacion}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-              
-            } else {
-              $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-            }      
-          }
         }
 
       }).fail( function(e) { ver_errores(e); } );
@@ -2359,22 +2240,27 @@ function guardar_y_editar_justificar(e) {
     data: formData,
     contentType: false,
     processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e); 
+        if (e.status == true) {        
 
-    success: function (datos) {
-             
-      if (datos == 'ok') {        
+          Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
 
-        Swal.fire("Correcto!", "Descripción registrada correctamente", "success");
+          $("#modal-justificar-asistencia").modal("hide");
 
-        $("#modal-justificar-asistencia").modal("hide");
+          tabla_horas.ajax.reload(null, false);
 
-        tabla_horas.ajax.reload(null, false);
-
-			}else{
-
-				Swal.fire("Error!", datos, "error");
-			}
+        }else{
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      $("#guardar_registro_justificacion").html('Guardar Cambios').removeClass('disabled');
+      
     },
+    beforeSend: function () {
+      $("#guardar_registro_justificacion").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+    }
   });
 }
 
@@ -2470,31 +2356,33 @@ function tabla_qs_individual(idtrabajador_por_proyecto) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "desc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [10],  visible: false,  searchable: false,  },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
+      { targets: [10,11,12],  visible: false,  searchable: false,  },
     ],
   }).DataTable();
 
   //Suma ACUMULADO
-  $.post("../ajax/asistencia_obrero.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=suma_qs_individual", { 'idtrabajadorproyecto': idtrabajador_por_proyecto }, function (e, status) {
 
-    data =JSON.parse(data); //console.log(data);
-
-    if (data) {
-      $(".thead_num").html(`Num. ${data.fecha_pago_obrero}`);
-      $(".thead_fecha").html(`Fechas ${data.fecha_pago_obrero}`);
-      $(".thead_pago").html(`Pago ${data.fecha_pago_obrero}`);
-      $(".suma_qs_dias_asistidos").html(`<b>${formato_miles(data.total_dias_asistidos)}</b> `);
-      $(".suma_qs_adicional").html(`S/ <b>${formato_miles(data.adicional_descuento)}</b> `);
-      $(".suma_qs_sabatical").html(`<b>${formato_miles(data.sabatical)}</b> `);
-      $(".suma_qs_pago_quincenal").html(`S/ <b>${formato_miles(data.pago_quincenal)}</b> `);
+    e =JSON.parse(e); console.log(e);
+    if (e.status == true) {
+      if (e.data.length === 0) {
+        $(".suma_qs_dias_asistidos").html(`0.00`);
+        $(".suma_qs_adicional").html(`S/ 0.00`);
+        $(".suma_qs_sabatical").html(`0.00`);
+        $(".suma_qs_pago_quincenal").html(`S/ 0.00`);
+      } else {
+        $(".thead_num").html(`Num. ${e.data.fecha_pago_obrero}`);
+        $(".thead_fecha").html(`Fechas ${e.data.fecha_pago_obrero}`);
+        $(".thead_pago").html(`Pago ${e.data.fecha_pago_obrero}`);
+        $(".suma_qs_dias_asistidos").html(`<b>${formato_miles(e.data.total_dias_asistidos)}</b> `);
+        $(".suma_qs_adicional").html(`S/ <b>${formato_miles(e.data.adicional_descuento)}</b> `);
+        $(".suma_qs_sabatical").html(`<b>${formato_miles(e.data.sabatical)}</b> `);
+        $(".suma_qs_pago_quincenal").html(`S/ <b>${formato_miles(e.data.pago_quincenal)}</b> `);
+        
+      }
     } else {
-      $(".suma_qs_dias_asistidos").html(`0.00`);
-      $(".suma_qs_adicional").html(`S/ 0.00`);
-      $(".suma_qs_sabatical").html(`0.00`);
-      $(".suma_qs_pago_quincenal").html(`S/ 0.00`);
-    }
+      ver_errores(e);
+    }    
   }).fail( function(e) { ver_errores(e); } );
   
 }
@@ -2567,14 +2455,14 @@ function limpiar_form_fechas_actividades(params) {
   $('#fecha_fin_actividad').val("");
   $('#plazo_actividad').val("");
 
-  $.post("../ajax/asistencia_obrero.php?op=fechas_actividad", { 'id_proyecto': localStorage.getItem('nube_idproyecto') }, function (data, status) {
+  $.post("../ajax/asistencia_obrero.php?op=fechas_actividad", { 'id_proyecto': localStorage.getItem('nube_idproyecto') }, function (e, status) {
     
-    data = JSON.parse(data);  console.log(data);
+    e = JSON.parse(e);  //console.log(e);
 
-    $('#fecha_inicio_actividad').val(format_d_m_a(data.fecha_inicio_actividad));
-    $('#fecha_fin_actividad').val(format_d_m_a(data.fecha_fin_actividad));
-    $('#plazo_actividad').val(data.plazo_actividad);
-    $('.plazo_actividad').html(data.plazo_actividad);
+    $('#fecha_inicio_actividad').val(format_d_m_a(e.data.fecha_inicio_actividad));
+    $('#fecha_fin_actividad').val(format_d_m_a(e.data.fecha_fin_actividad));
+    $('#plazo_actividad').val(e.data.plazo_actividad);
+    $('.plazo_actividad').html(e.data.plazo_actividad);
 
     $("#cargando-7-fomulario").show();
     $("#cargando-8-fomulario").hide();
@@ -2626,8 +2514,11 @@ function guardar_y_editar_fechas_actividades(e) {
           ver_errores(e);
         }
       } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
-
+      $("#guardar_registro_fechas_actividades").html('Guardar Cambios').removeClass('disabled');
     },
+    beforeSend: function () {
+      $("#guardar_registro_fechas_actividades").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+    }
   });
 }
 
@@ -2818,6 +2709,27 @@ var delay = (function(){
   return function(callback, ms){ clearTimeout (timer); timer = setTimeout(callback, ms); };
 })();
 
+
+
+// SCROLL - IR AL INICIO
+$('.ir_a_top').on('click', function (e) { $('html, body').animate({ scrollTop: '0px' }, 600); /*Scrollea hasta abajo de la página*/ });
+
+// SCROLL - IR AL LA DERECHA
+$('.ir_a_right').on('click', function (e) { var posicion = $("#ver_asistencia").width(); $("#ver_asistencia").animate({ scrollLeft:posicion }, 600); });
+
+// SCROLL - IR AL LA IZQUIERDA
+$('.ir_a_left').on('click', function (e) { $("#ver_asistencia").animate({ scrollLeft: '0px' }, 600); });
+
+// SCROLL - IR AL FINAL
+$('.ir_a_bottom').on('click', function (e) { $('html, body').animate({ scrollTop: $(document).height() }, 600); /*Scrollea hasta abajo de la página*/ });
+
+// SCROLL - IR AL CENTRO
+function pocision_scroll_btn() {
+  var posicion = parseFloat($("#lista_quincenas").width())/2;
+  console.log(posicion);
+  $("#lista_quincenas").animate({ scrollLeft:posicion }, 600); 
+}
+
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function convertir_a_hora(hora_n) {
 
@@ -2838,25 +2750,6 @@ function convertir_a_hora(hora_n) {
 function agregar_hora_all() {
   var hora_all = $("#hora_all").val();
   $('input[type=time][name="horas_trabajo[]"]').val(hora_all);
-}
-
-// SCROLL - IR AL INICIO
-$('.ir_a_top').on('click', function (e) { $('html, body').animate({ scrollTop: '0px' }, 600); /*Scrollea hasta abajo de la página*/ });
-
-// SCROLL - IR AL LA DERECHA
-$('.ir_a_right').on('click', function (e) { var posicion = $("#ver_asistencia").width(); $("#ver_asistencia").animate({ scrollLeft:posicion }, 600); });
-
-// SCROLL - IR AL LA IZQUIERDA
-$('.ir_a_left').on('click', function (e) { $("#ver_asistencia").animate({ scrollLeft: '0px' }, 600); });
-
-// SCROLL - IR AL FINAL
-$('.ir_a_bottom').on('click', function (e) { $('html, body').animate({ scrollTop: $(document).height() }, 600); /*Scrollea hasta abajo de la página*/ });
-
-// SCROLL - IR AL CENTRO
-function pocision_scroll_btn() {
-  var posicion = parseFloat($("#lista_quincenas").width())/2;
-  console.log(posicion);
-  $("#lista_quincenas").animate({ scrollLeft:posicion }, 600); 
 }
 
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------

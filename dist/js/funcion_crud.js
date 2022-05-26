@@ -468,7 +468,51 @@ function ver_errores(e) {
   }else if (e.status == 'duplicado') {
     console.group("Error"); console.warn('Duplicado Error BD -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Estos datos ya existen 😅!`, e.data, "error");   
-  
+
+  }else if (e.status == 'login') {
+    console.warn('--- Tu sesion se ha terminado!!');
+    Swal.fire({
+      title: '<strong>Tu sesion se ha terminado!!</strong>',
+      icon: 'info',
+      html: `Inicia <b>sesion</b> nuevamente , <a href="//sweetalert2.github.io">links.</a>`,
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: '<i class="fas fa-sign-out-alt"></i> Salir!',
+      confirmButtonAriaLabel: 'Thumbs up, great!',
+      cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+      cancelButtonAriaLabel: 'Thumbs down'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('Saliendo...', '<i class="fas fa-spinner fa-pulse"></i> Redireccionando...', 'success');
+        window.location.href = `${window.location.host=='localhost'?'http://localhost/admin_sevens':window.location.origin}`;
+      } else {
+        Swal.fire('Cerrando sesion', '<i class="fas fa-spinner fa-pulse"></i> De igual manera vamos a cerrar la sesión, jijijiji...', 'success');
+        window.location.href = `${window.location.host=='localhost'?'http://localhost/admin_sevens':window.location.origin}`;
+      }
+    });
+
+  }else if (e.status == 'nopermiso') {
+    console.warn('--- Tu no tienes permiso!!');
+    Swal.fire({
+      title: '<strong>No tienes permiso!!</strong>',
+      icon: 'info',
+      html: `Puedes pedir a tu administrador que de acceso o regresa al </b>, <a href="//sweetalert2.github.io">home</a>`,
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Great!',
+      confirmButtonAriaLabel: 'Thumbs up, great!',
+      cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+      cancelButtonAriaLabel: 'Thumbs down'
+    }).then((result) => {
+      if (result.isConfirmed) {        
+        window.location.href = `${window.location.host=='localhost'?'http://localhost/admin_sevens/vistas/escritorio.php':window.location.origin+'/vistas/escritorio.php'}`;
+      } else {
+        window.location.href = `${window.location.host=='localhost'?'http://localhost/admin_sevens/vistas/escritorio.php':window.location.origin+'/vistas/escritorio.php'}`;
+      }
+    });
+
   } else {
     console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");

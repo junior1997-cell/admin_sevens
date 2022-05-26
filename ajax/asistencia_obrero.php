@@ -6,9 +6,8 @@ ob_start();
 	}
   
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['asistencia_obrero'] == 1) {
@@ -17,7 +16,9 @@ ob_start();
 
       $asistencia_obrero=new Asistencia_obrero();  
       
-      $date_now = date("d-m-Y g.i-a");
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h:i:s A");
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
       $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
@@ -184,8 +185,8 @@ ob_start();
         break;
 
         case 'agregar_quitar_sabatical_manual_todos':
-
-          if ( empty( json_decode($_POST["sabatical_trabajador"], true) ) ) {
+          $_post = json_decode(file_get_contents('php://input'),true);
+          if ( empty( $_post["sabatical_trabajador"] ) ) {
 
             $rspta = ['status'=>false, 'message'=>'salio error pe', 'data' => [] ];
 
@@ -193,7 +194,7 @@ ob_start();
 
           } else {
 
-            $rspta = $asistencia_obrero->insertar_quitar_sabatical_manual_todos($_POST["sabatical_trabajador"], $_POST["estado_sabatical_manual"] );
+            $rspta = $asistencia_obrero->insertar_quitar_sabatical_manual_todos($_post["sabatical_trabajador"], $_post["estado_sabatical_manual"] );
 
             echo json_encode($rspta, true);
           }
@@ -212,17 +213,16 @@ ob_start();
           
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
-          while ($reg=$rspta['data']->fetch_object()){
+          while ($reg=$rspta['data']->fetch_object()){              
 
-            $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
-
-            $justificacion = "$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
-
+            $justificacion = "'".encodeCadenaHtml($reg->trabajador)."',$reg->idasistencia_trabajador, $reg->horas_normal_dia, '$reg->estado'";
+            $imagen_perfil = (empty($reg->imagen_perfil) ? '../dist/svg/user_default.svg' : "../dist/docs/all_trabajador/perfil/$reg->imagen_perfil" );
+            
             $data[]=array(
-              "0"=> (empty($reg->doc_justificacion)) ? '<button class="btn btn-outline-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>' : '<button class="btn btn-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificarse"><i class="far fa-flag"></i></button>',
+              "0"=> (empty($reg->descripcion_justificacion)) ? '<button class="btn btn-outline-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificacion Vacía"><i class="far fa-flag"></i></button>' : '<button class="btn btn-info btn-sm" onclick="justificar('.$justificacion.')" data-toggle="tooltip" data-original-title="Justificado"><i class="far fa-flag"></i></button>',
               "1"=> '<div class="user-block text-nowrap">
-                <img class="img-circle" src="../dist/img/usuarios/'. $reg->imagen_perfil .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > '.$reg->trabajador .'</p></span>
+                <img class="img-circle" src="'.$imagen_perfil.'" alt="User Image" onerror="'.$imagen_error.'">
+                <span class="username" ><p class="text-primary m-b-02rem" > '.$reg->trabajador .'</p></span>
                 <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
               </div>',
               "2"=> $reg->horas_normal_dia,
@@ -230,7 +230,7 @@ ob_start();
               "4"=> $reg->horas_extras_dia,
               "5"=> 'S/ '. $reg->pago_horas_extras,
               "6"=> '<b>Fecha: </b>'. format_d_m_a($reg->fecha_asistencia) ."<br> <b>Día: </b>". $reg->nombre_dia,
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip : '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
+              "7"=>($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip
             );
           }
 
@@ -420,10 +420,14 @@ ob_start();
         break;
 
         case 'descripcion_adicional_descuento':
-
-          $rspta=$asistencia_obrero->descripcion_adicional_descuento($_POST["id_adicional"]);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta, true);
+          if ( empty($_POST["id_adicional"]) ) {
+            $rspta = ['status'=>true, 'message'=>'no hay id, que lastima', 'data'=>[], ];
+            echo json_encode($rspta, true);
+          } else {
+            $rspta=$asistencia_obrero->descripcion_adicional_descuento($_POST["id_adicional"]);
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta, true);
+          }          
         break;
 
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   F E C H A S   A C T I V I D A D ::::::::::::::::::::::::::::::::::::::
@@ -455,8 +459,8 @@ ob_start();
       } // end switch
 
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

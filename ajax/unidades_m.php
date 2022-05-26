@@ -3,85 +3,94 @@
   if (strlen(session_id()) < 1) {
     session_start(); //Validamos si existe o no la sesión
   }
-  require_once "../modelos/Unidades_m.php";
 
-  $unidades_m = new Unidades_m();
-
-  $idunidad_medida = isset($_POST["idunidad_medida"]) ? limpiarCadena($_POST["idunidad_medida"]) : "";
-  $nombre_medida = isset($_POST["nombre_medida"]) ? limpiarCadena($_POST["nombre_medida"]) : "";
-  $abreviacion = isset($_POST["abreviacion"]) ? limpiarCadena($_POST["abreviacion"]) : "";
-
-  switch ($_GET["op"]) {
-
-    case 'guardaryeditar_unidades_m':
-
-      if (empty($idunidad_medida)) {
-        $rspta = $unidades_m->insertar($nombre_medida, $abreviacion);
-        echo json_encode( $rspta, true) ;
-      } else {
-        $rspta = $unidades_m->editar($idunidad_medida, $nombre_medida, $abreviacion);
-        echo json_encode( $rspta, true) ;
-      }
-    break;
-
-    case 'desactivar_unidades_m':
-      $rspta = $unidades_m->desactivar($_GET["id_tabla"]);
-      echo json_encode( $rspta, true) ;
-    break;
+  if (!isset($_SESSION["nombre"])) {
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
+  } else {
     
-    case 'eliminar_unidades_m':
-      $rspta = $unidades_m->eliminar($_GET["id_tabla"]);
-      echo json_encode( $rspta, true) ;
-    break;
+    require_once "../modelos/Unidades_m.php";
 
-    case 'mostrar_unidades_m':
-      $rspta = $unidades_m->mostrar($idunidad_medida);
-      //Codificar el resultado utilizando json
-      echo json_encode( $rspta, true) ;
-    break;    
+    $unidades_m = new Unidades_m();
 
-    case 'tbla_unidad_medida':
-      $rspta = $unidades_m->tbla_unidad_medida();
-      //Vamos a declarar un array
-      $data = []; $cont = 1;
+    $idunidad_medida = isset($_POST["idunidad_medida"]) ? limpiarCadena($_POST["idunidad_medida"]) : "";
+    $nombre_medida = isset($_POST["nombre_medida"]) ? limpiarCadena($_POST["nombre_medida"]) : "";
+    $abreviacion = isset($_POST["abreviacion"]) ? limpiarCadena($_POST["abreviacion"]) : "";
 
-      $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+    switch ($_GET["op"]) {
 
-      if ($rspta['status']) {
-        while ($reg = $rspta['data']->fetch_object()) {
-          $data[] = [
-            "0" => $cont++,
-            "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m(' . $reg->idunidad_medida . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger  btn-sm" onclick="eliminar_unidades_m(' . $reg->idunidad_medida .', \''.encodeCadenaHtml($reg->nombre_medida).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
-              : '<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m(' . $reg->idunidad_medida . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-primary btn-sm" onclick="activar_unidades_m(' . $reg->idunidad_medida . ')"><i class="fa fa-check"></i></button>',
-            "2" => $reg->nombre_medida,
-            "3" => $reg->abreviacion,
-            "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
-          ];
+      case 'guardaryeditar_unidades_m':
+
+        if (empty($idunidad_medida)) {
+          $rspta = $unidades_m->insertar($nombre_medida, $abreviacion);
+          echo json_encode( $rspta, true) ;
+        } else {
+          $rspta = $unidades_m->editar($idunidad_medida, $nombre_medida, $abreviacion);
+          echo json_encode( $rspta, true) ;
         }
-        $results = [
-          "sEcho" => 1, //Información para el datatables
-          "iTotalRecords" => count($data), //enviamos el total registros al datatable
-          "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-          "aaData" => $data,
-        ];
-        echo json_encode( $results, true) ;
-      } else {
-        echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
-      }  
+      break;
 
-    break;
+      case 'desactivar_unidades_m':
+        $rspta = $unidades_m->desactivar($_GET["id_tabla"]);
+        echo json_encode( $rspta, true) ;
+      break;
+      
+      case 'eliminar_unidades_m':
+        $rspta = $unidades_m->eliminar($_GET["id_tabla"]);
+        echo json_encode( $rspta, true) ;
+      break;
 
-    case 'salir':
-      //Limpiamos las variables de sesión
-      session_unset();
-      //Destruìmos la sesión
-      session_destroy();
-      //Redireccionamos al login
-      header("Location: ../index.php");
+      case 'mostrar_unidades_m':
+        $rspta = $unidades_m->mostrar($idunidad_medida);
+        //Codificar el resultado utilizando json
+        echo json_encode( $rspta, true) ;
+      break;    
 
-    break;
+      case 'tbla_unidad_medida':
+        $rspta = $unidades_m->tbla_unidad_medida();
+        //Vamos a declarar un array
+        $data = []; $cont = 1;
+
+        $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
+        if ($rspta['status']) {
+          while ($reg = $rspta['data']->fetch_object()) {
+            $data[] = [
+              "0" => $cont++,
+              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m(' . $reg->idunidad_medida . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_unidades_m(' . $reg->idunidad_medida .', \''.encodeCadenaHtml($reg->nombre_medida).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
+                : '<button class="btn btn-warning btn-sm" onclick="mostrar_unidades_m(' . $reg->idunidad_medida . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-primary btn-sm" onclick="activar_unidades_m(' . $reg->idunidad_medida . ')"><i class="fa fa-check"></i></button>',
+              "2" => $reg->nombre_medida,
+              "3" => $reg->abreviacion,
+              "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+            ];
+          }
+          $results = [
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode( $results, true) ;
+        } else {
+          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+        }  
+
+      break;
+
+      case 'salir':
+        //Limpiamos las variables de sesión
+        session_unset();
+        //Destruìmos la sesión
+        session_destroy();
+        //Redireccionamos al login
+        header("Location: ../index.php");
+
+      break;
+    }
   }
+  
+  
   ob_end_flush();
 ?>

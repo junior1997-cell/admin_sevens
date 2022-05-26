@@ -304,11 +304,12 @@ function guardaryeditar(e) {
           limpiar(); tablero();
 
           $("#modal-agregar-proyecto").modal("hide");        
-          $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+          
         }else{
           ver_errores(e);				 
         }
       } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); } 
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
 
@@ -949,10 +950,12 @@ function mostrar_detalle(idproyecto) {
 
     var ruta_carpeta = window.location.host;
 
+    console.log();
+
     if (ruta_carpeta == 'localhost') {
       ruta_carpeta = 'http://localhost/admin_sevens/dist/docs/valorizacion/documento/'
     } else {
-      ruta_carpeta = 'http://admin.sevensingenieros.com/dist/docs/valorizacion/documento/';
+      ruta_carpeta = `${window.location.origin}/dist/docs/valorizacion/documento/`;
     }
 
     if (data.status) {

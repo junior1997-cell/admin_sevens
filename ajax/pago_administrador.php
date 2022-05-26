@@ -7,9 +7,8 @@
 	}
   
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
@@ -89,7 +88,7 @@
 
               $datos_f1 = $pago_administrador->obtenerDocs($idfechas_mes_pagos_administrador_pxm);
 
-              $doc1_ant = $datos_f1->fetch_object()->baucher;
+              $doc1_ant = $datos_f1['data']->fetch_object()->baucher;
 
               if ($doc1_ant != "") {
 
@@ -140,7 +139,7 @@
 
               $datos_f2 = $pago_administrador->obtenerDocs2($idfechas_mes_pagos_administrador_rh);
 
-              $doc2_ant = $datos_f2->fetch_object()->recibos_x_honorarios;
+              $doc2_ant = $datos_f2['data']->fetch_object()->recibos_x_honorarios;
 
               if ($doc2_ant != "") {
 
@@ -290,7 +289,7 @@
           $cont=1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
-          while ($reg=$rspta->fetch_object()){
+          while ($reg=$rspta['data']->fetch_object()){
             !empty($reg->baucher)
               ? ($baucher_deposito = '<center><a target="_blank" href="../dist/docs/pago_administrador/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
@@ -337,8 +336,8 @@
       }
 
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 

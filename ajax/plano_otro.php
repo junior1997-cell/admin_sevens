@@ -8,9 +8,8 @@
   }
 
   if (!isset($_SESSION["nombre"])) {
-
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-
+    $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+		echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
@@ -82,7 +81,7 @@
 
               $datos_f1 = $plano_otro->obtenerDoc($idplano_otro);
 
-              $doc1_ant = $datos_f1->fetch_object()->doc;
+              $doc1_ant = $datos_f1['data']->fetch_object()->doc;
 
               if ($doc1_ant != "") {
 
@@ -170,7 +169,7 @@
           //Vamos a declarar un array
           $data= Array();         
           $cont = 1;
-          while ($reg=$rspta->fetch_object()){           
+          while ($reg=$rspta['data']->fetch_object()){           
             
             $docs= "'$reg->nombre', '$reg->idcarpeta'";
 
@@ -210,7 +209,7 @@
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           $cont=1;
-          while ($reg=$rspta->fetch_object()){
+          while ($reg=$rspta['data']->fetch_object()){
 
             $exten1 = explode(".", $reg->doc );  $exten2 = end($exten1); $img = ""; //$descripcion="";
             
@@ -294,8 +293,8 @@
 
       //Fin de las validaciones de acceso
     } else {
-
-      require 'noacceso.php';
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+      echo json_encode($retorno);
     }
   }
 
