@@ -207,7 +207,7 @@
             $icons = "";
             $cont = 1;
             //$c_parcial = 0;
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
               //$parametros="'$reg->idservicio','$reg->idproyecto'";
               $rspta2 = $serviciomaquina->pago_servicio($reg->idmaquinaria, $reg->idproyecto);
               $rspta3 = $serviciomaquina->monto_factura($reg->idmaquinaria, $reg->idproyecto);
@@ -339,7 +339,7 @@
             $data = [];
             $cont = 1;
 
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
               //empty($fecha_recojo)?setlocale(LC_ALL,"es_ES").''.date('l d-m-Y', strtotime($reg->fecha_entrega)):$reg->fecha_entrega.'/'.$reg->fecha_recojo,
               if (empty($reg->fecha_recojo) || $reg->fecha_recojo == '0000-00-00') {
                 $fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
@@ -421,7 +421,7 @@
       case 'select2_servicio':
         $rspta = $serviciomaquina->select2_servicio();
 
-        while ($reg = $rspta['data']->fetch_object()) {
+        while ($reg = $rspta->fetch_object()) {
           echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre . ' : ' . $reg->codigo_maquina . ' ---> ' . $reg->nombre_proveedor . '</option>';
         }
       break;
@@ -488,7 +488,7 @@
               if ($flat_img1 == true) {
                 $datos_f1 = $serviciomaquina->obtenerImg($idpago_servicio);
 
-                $img1_ant = $datos_f1['data']->fetch_object()->imagen;
+                $img1_ant = $datos_f1->fetch_object()->imagen;
 
                 if ($img1_ant != "") {
                   unlink("../dist/docs/servicio_maquina/comprobante_pago/" . $img1_ant);
@@ -584,7 +584,7 @@
             $imagen = '';
 
             $cont = 1;
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
               $suma = $suma + $reg->monto;
               
               empty($reg->imagen)
@@ -649,7 +649,7 @@
             $imagen = '';
             $cont = 1;
 
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
               $suma = $suma + $reg->monto;
               
               empty($reg->imagen)
@@ -798,7 +798,7 @@
               if ($flat_img1 == true) {
                 $datos_f1 = $serviciomaquina->obtenerDoc($idfactura);
 
-                $img1_ant = $datos_f1['data']->fetch_object()->imagen;
+                $img1_ant = $datos_f1->fetch_object()->imagen;
 
                 if ($img1_ant != "") {
                   unlink("../dist/docs/servicio_maquina/comprobante_servicio/" . $img1_ant);
@@ -836,7 +836,7 @@
 
             $cont = 1;
 
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
 
               $suma = $suma + $reg->monto;
               
@@ -980,7 +980,7 @@
       case 'select2Banco':
         $rspta = $serviciomaquina->select2_banco();
 
-        while ($reg = $rspta['data']->fetch_object()) {
+        while ($reg = $rspta->fetch_object()) {
           echo '<option value=' . $reg->id . '>' . $reg->nombre . (empty($reg->alias) ? "" : " - $reg->alias") . '</option>';
         }
 

@@ -83,7 +83,7 @@
 
               $datos_ficha1 = $sub_contrato->ficha_tec($idsubcontrato);
         
-              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
+              $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
         
               if ($ficha1_ant != "") {
         
@@ -226,7 +226,7 @@
 
 					$rspta=$sub_contrato->select2_proveedor();
 
-					while ($reg = $rspta['data']->fetch_object())	{
+					while ($reg = $rspta->fetch_object())	{
 
 						echo '<option value=' . $reg->idproveedor . '>' . $reg->razon_social .' - '. $reg->ruc . '</option>';
 
@@ -270,7 +270,7 @@
 
             $datos_f1 = $sub_contrato->obtenerImg($idpago_subcontrato);
       
-            $img1_ant = $datos_f1['data']->fetch_object()->comprobante;
+            $img1_ant = $datos_f1->fetch_object()->comprobante;
       
             if ($img1_ant != "") {
             unlink("../dist/docs/sub_contrato/comprobante_pago/" . $img1_ant);
@@ -297,7 +297,7 @@
           $cont=1;
           $comprobante="";
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
             
             empty($reg->comprobante)
             ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
@@ -345,7 +345,7 @@
           $cont=1;
           $comprobante="";
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
             
             empty($reg->comprobante)
             ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
@@ -433,7 +433,7 @@
 				case 'select2Banco':
 					$rspta = $sub_contrato->select2_banco();
 				
-					while ($reg = $rspta['data']->fetch_object()) {
+					while ($reg = $rspta->fetch_object()) {
 					echo '<option value=' . $reg->id . '>' . $reg->nombre . (empty($reg->alias) ? "" : " - $reg->alias") . '</option>';
 					}
 				

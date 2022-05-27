@@ -187,7 +187,7 @@
 
           $tbody = "";
 
-          while ($reg = $rspta2['data']->fetch_object()) {
+          while ($reg = $rspta2->fetch_object()) {
 
             empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
             
@@ -468,7 +468,7 @@
           //Vamos a declarar un array
           $data = [];
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
             if (empty($reg->fecha_recojo) || $reg->fecha_recojo == '0000-00-00') {
               
               $fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
@@ -793,7 +793,7 @@
           $igv = 0;
           $monto = 0;
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
             $subtotal = round($reg->subtotal, 2);
             $igv = round($reg->igv, 2);
             $monto = round($reg->monto, 2);
@@ -939,7 +939,7 @@
           //Vamos a declarar un array
           $data = [];
           $cont = 1;
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
             $data[] = [
               "0" =>
                 '<div class="user-block">
@@ -977,7 +977,7 @@
           $igv = 0;
           $monto = 0;
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
             $subtotal = round($reg->subtotal, 2);
             $igv = round($reg->igv, 2);
             $monto = round($reg->monto, 2);
@@ -1320,7 +1320,7 @@
 
           $estado = true;
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
 
             if ($estado) {
               echo '<option value="0" >Todos</option>';
@@ -1339,7 +1339,7 @@
 
           $estado = true;
 
-          while ($reg = $rspta['data']->fetch_object()) {
+          while ($reg = $rspta->fetch_object()) {
 
             if ($estado) {
               echo '<option value="0" >Todos</option>';

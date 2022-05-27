@@ -144,7 +144,7 @@
       
                   $datos_f1 = $pension->obtenerDoc($idfactura_pension );
             
-                  $img1_ant = $datos_f1['data']->fetch_object()->comprobante;
+                  $img1_ant = $datos_f1->fetch_object()->comprobante;
             
                   if ($img1_ant != "") {
             
@@ -187,7 +187,7 @@
               $monto=0;
               $cont=1;
 
-              while ($reg=$rspta['data']->fetch_object()){
+              while ($reg=$rspta->fetch_object()){
                 $subtotal=round($reg->subtotal, 2);
                 $igv=round($reg->igv, 2);
                 $monto=round($reg->monto, 2 );
@@ -372,7 +372,7 @@
           $icon="";
           $cc="";
 
-          while ($reg=$rspta['data']->fetch_object()){ 
+          while ($reg=$rspta->fetch_object()){ 
 
             $total=$pension->total_x_pension($reg->idpension);
             $rspta2=$pension->total_pago_x_pension($reg->idpension);
@@ -488,7 +488,7 @@
           //Vamos a declarar un array
           $data= Array();
           $cont=1;
-          while ($reg=$rspta['data']->fetch_object()){ 
+          while ($reg=$rspta->fetch_object()){ 
             $data[]=array(
               "0"=>$cont++,
               "1"=>'<div class="user-block">
@@ -513,7 +513,7 @@
 
            $rspta=$pension->select_proveedor();
 
-           while ($reg = $rspta['data']->fetch_object())  {
+           while ($reg = $rspta->fetch_object())  {
 
              echo '<option  value=' . $reg->idproveedor  . '>' . $reg->razon_social .' - '.$reg->direccion.'</option>';
            }

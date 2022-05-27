@@ -87,7 +87,7 @@
               if ($flat_ficha1 == true) {
                 $datos_ficha1 = $hospedaje->ficha_tec($idhospedaje);
 
-                $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
+                $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
 
                 if ($ficha1_ant != "") {
                   unlink("../dist/docs/hospedaje/comprobante/" . $ficha1_ant);
@@ -232,7 +232,7 @@
             $data = [];
             $comprobante = '';
             $cont = 1;
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
               empty($reg->comprobante)
                 ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
                 : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');

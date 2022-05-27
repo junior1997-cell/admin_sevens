@@ -61,7 +61,7 @@
               if ($flat_ficha1 == true) {
                 $datos_ficha1 = $planillas_seguros->ficha_tec($idplanilla_seguro);
 
-                $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
+                $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
 
                 if ($ficha1_ant != "") {
                   unlink("../dist/docs/planilla_seguro/comprobante/" . $ficha1_ant);
@@ -184,7 +184,7 @@
             $data = [];
             $comprobante = '';
             $cont = 1;
-            while ($reg = $rspta['data']->fetch_object()) {
+            while ($reg = $rspta->fetch_object()) {
               // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/docs/planilla_seguro/comprobante/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 
               empty($reg->comprobante)

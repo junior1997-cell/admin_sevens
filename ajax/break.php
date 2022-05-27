@@ -78,7 +78,7 @@
           //Vamos a declarar un array
           $data= Array();
           $cont = 1;
-          while ($reg=$rspta['data']->fetch_object()){ 
+          while ($reg=$rspta->fetch_object()){ 
 
             $data[]=array(
               "0"=>$cont++,
@@ -169,7 +169,7 @@
       
                   $datos_f1 = $breaks->obtenerDoc($idfactura_break);
             
-                  $img1_ant = $datos_f1['data']->fetch_object()->comprobante;
+                  $img1_ant = $datos_f1->fetch_object()->comprobante;
             
                   if ($img1_ant != "") {
             
@@ -211,7 +211,7 @@
               $monto=0;
               $cont=1;
 
-              while ($reg=$rspta['data']->fetch_object()){
+              while ($reg=$rspta->fetch_object()){
                 $subtotal=round($reg->subtotal, 2);
                 $igv=round($reg->igv, 2);
                 $monto=round($reg->monto, 2 );

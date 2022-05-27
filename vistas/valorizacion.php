@@ -30,11 +30,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['valorizacion']==1){
-            //require 'enmantenimiento.php';
+            require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="display: none !important;">
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">

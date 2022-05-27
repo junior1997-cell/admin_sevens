@@ -66,7 +66,7 @@
 
               $datos_f1 = $pagoobrero->obtenerDocs($idpagos_q_s_obrero);
 
-              $doc1_ant = $datos_f1['data']->fetch_object()->baucher;
+              $doc1_ant = $datos_f1->fetch_object()->baucher;
 
               if ($doc1_ant != "") {
 
@@ -117,7 +117,7 @@
 
               $datos_f2 = $pagoobrero->obtenerDocs2($idresumen_q_s_asistencia_rh);
 
-              $doc2_ant = $datos_f2['data']->fetch_object()->recibos_x_honorarios;
+              $doc2_ant = $datos_f2->fetch_object()->recibos_x_honorarios;
 
               if ( !empty($doc2_ant) ) {
 
@@ -221,7 +221,7 @@
           $cont = 1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           
-          while ($reg=$rspta['data']->fetch_object()){
+          while ($reg=$rspta->fetch_object()){
             !empty($reg->baucher)
               ? ($baucher_deposito = '<center><a target="_blank" href="../dist/docs/pago_obrero/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
               : ($baucher_deposito = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
@@ -278,7 +278,7 @@
 
           $rspta = $pagoobrero->select2_trabajador();
       
-          while ($reg = $rspta['data']->fetch_object())  {
+          while ($reg = $rspta->fetch_object())  {
 
             echo '<option value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
           }
