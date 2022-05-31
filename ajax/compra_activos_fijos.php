@@ -768,7 +768,7 @@
           $rspta = $compra->ver_compra($_GET['id_compra']);
           $rspta2 = $compra->ver_detalle_compra($_GET['id_compra']);
 
-          $subtotal = 0;    $ficha = ''; 
+          $subtotal = 0;  $ficha = ''; 
 
           echo '<!-- Tipo de Empresa -->
             <div class="col-lg-6">
@@ -820,7 +820,7 @@
               </div>
           </div>';
 
-          $tbody = "";
+          $tbody = ""; $cont = 1;
 
           while ($reg = $rspta2['data']->fetch_object()) {
             empty($reg->ficha_tecnica_old) ? ($ficha =  (empty($reg->ficha_tecnica_new) ? '<i class="far fa-file-pdf fa-lg text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i>' : '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica_new . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-lg text-primary"></i></a>' )  ) : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica_old . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
@@ -828,6 +828,7 @@
             $img_product = '../dist/docs/material/img_perfil/'. (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen );
 
             $tbody .= '<tr class="filas">
+              <td class="text-center p-6px">' . $cont++ . '</td>              
               <td class="text-center p-6px">' . $ficha . '</td>
               <td class="text-left p-6px">
                 <div class="user-block text-nowrap">
@@ -849,6 +850,7 @@
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead class="bg-color-ff6c046b">
+                <th class="text-center p-10px" >#</th>
                 <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
                 <th class="p-10px">Material</th>
                 <th class="p-10px" data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
