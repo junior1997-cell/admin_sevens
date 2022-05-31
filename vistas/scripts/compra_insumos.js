@@ -28,20 +28,15 @@ function init() {
 
   tbla_principal(localStorage.getItem("nube_idproyecto"));
 
-  fecha_actual();
-
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
-  
-  $.post("../ajax/compra_insumos.php?op=select2Banco", function (r) {  $("#banco_pago").html(r); $("#banco_prov").html(r); });
-  
-  $.post("../ajax/compra_insumos.php?op=select2Color", function (r) { $("#color_p").html(r); });
-
-  $.post("../ajax/compra_insumos.php?op=select2UnidaMedida", function (r) { $("#unidad_medida_p").html(r); });
-
-  $.post("../ajax/compra_insumos.php?op=select2Categoria", function (r) { $("#categoria_insumos_af_p").html(r); });  
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af_p', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
@@ -59,13 +54,13 @@ function init() {
 
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
 
-  $("#glosa").select2({ theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
+  $("#glosa").select2({templateResult: templateGlosa, theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
 
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione Comprobante", allowClear: true, });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - PAGO COMPRAS ══════════════════════════════════════
 
-  $("#banco_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });  
+  $("#banco_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });  
 
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione una forma de pago", allowClear: true, });
 
@@ -73,27 +68,51 @@ function init() {
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - PROVEEDOR ══════════════════════════════════════
 
-  $("#banco_prov").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
+  $("#banco_prov").select2({templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
   
   // ══════════════════════════════════════ INITIALIZE SELECT2 - MATERIAL ══════════════════════════════════════
 
   $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
 
-  $("#color_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  $("#color_p").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
 
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
+
+  no_select_tomorrow("#fecha_compra");
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
 
+function templateBanco (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/banco/logo/${state.title}`: '../dist/docs/banco/logo/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
+
+function templateColor (state) {
+  if (!state.id) { return state.text; }
+  var color_bg = state.title != '' ? `${state.title}`: '#ffffff00';   
+  var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2"><i class="fas fa-square"></i><i class="fas fa-square"></i></b>${state.text}</span>`);
+  return $state;
+}
+
+function templateGlosa (state) {
+  if (!state.id) { return state.text; }  
+  var $state = $(`<span ><b class="mr-2"><i class="${state.title}"></i></b>${state.text}</span>`);
+  return $state;
+}
+
 //vaucher - pago
 $("#doc3_i").click(function () { $("#doc3").trigger("click"); });
-$("#doc3").change(function (e) { addDocs(e, $("#doc3").attr("id")); });
+$("#doc3").change(function (e) { addImageApplication(e, $("#doc3").attr("id")); });
 
 //factura - compra
 $("#doc1_i").click(function () {  $("#doc1").trigger("click"); });
-$("#doc1").change(function (e) { addDocs(e, $("#doc1").attr("id")); });
+$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id")); });
 
 // Perfil - material
 $("#foto2_i").click(function () {  $("#foto2").trigger("click"); });
@@ -101,23 +120,19 @@ $("#foto2").change(function (e) { addImage(e, $("#foto2").attr("id")); });
 
 //ficha tecnica - material
 $("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
-$("#doc2").change(function(e) {  addDocs(e,$("#doc2").attr("id")) });
+$("#doc2").change(function(e) {  addImageApplication(e,$("#doc2").attr("id")) });
 
 // Eliminamos el COMPROBANTE - PAGO
 function doc3_eliminar() {
   $("#doc3").val("");
-
   $("#doc3_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
   $("#doc3_nombre").html("");
 }
 
 // Eliminamos el COMPROBANTE - COMPRA
 function doc1_eliminar() {
   $("#doc1").val("");
-
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
   $("#doc1_nombre").html("");
 }
 
@@ -125,9 +140,7 @@ function doc1_eliminar() {
 function foto2_eliminar() {
   $("#foto2").val("");
   $("#ver_pdf").html("");
-
   $("#foto2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
-
   $("#foto2_nombre").html("");
   $("#foto2_i").show();
 }
@@ -135,23 +148,11 @@ function foto2_eliminar() {
 // Eliminamos el doc FICHA TECNICA - MATERIAL
 function doc2_eliminar() {
   $("#doc2").val("");
-
   $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
   $("#doc2_nombre").html("");
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   C O M P R A S :::::::::::::::::::::::::::::::::::::::::::::
-
-function fecha_actual() {
-  //Obtenemos la fecha actual
-  var now = new Date();
-  var day = ("0" + now.getDate()).slice(-2);
-  var month = ("0" + (now.getMonth() + 1)).slice(-2);
-  var today = now.getFullYear() + "-" + month + "-" + day;
-  //console.log(today);
-  $("#fecha_compra").val(today);
-}
 
 //Función limpiar
 function limpiar_form_compra() {
@@ -253,28 +254,16 @@ function tbla_principal(nube_idproyecto) {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
-    },
-     
+    },     
     createdRow: function (row, data, ixdex) {
       //console.log(data);
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass('text-nowrap');
-      }
-
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass('text-center');
-      }
-
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass('text-right');
-      }
-
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-center'); }
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
       if (data[9] != "") {
-
         var num = parseFloat(quitar_formato_miles(data[9])); //console.log(num);
-
         if (num > 0) {
           $("td", row).eq(8).addClass('bg-warning text-right');
         } else if (num == 0) {
@@ -282,8 +271,7 @@ function tbla_principal(nube_idproyecto) {
         } else if (num < 0) {
           $("td", row).eq(8).addClass('bg-danger text-right');
         }
-      }
-      
+      }      
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -294,13 +282,14 @@ function tbla_principal(nube_idproyecto) {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [8],  visible: false,  searchable: false,  },
-      { targets: [11], visible: false, searchable: false, },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [8,11],  visible: false,  searchable: false,  },
     ],
   }).DataTable();
 
@@ -317,7 +306,7 @@ function tbla_principal(nube_idproyecto) {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {
@@ -335,6 +324,7 @@ function tbla_principal(nube_idproyecto) {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -363,7 +353,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     language: {
@@ -375,6 +365,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -385,8 +376,6 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
 //Función para guardar o editar - COMPRAS
 function guardar_y_editar_compras(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  // $("#tabla-compra").hide();
-  // $("#agregar_compras").show();
   var formData = new FormData($("#form-compras")[0]);
 
   var swal2_header = `<img class="swal2-image bg-color-252e38 b-radio-7px p-15px m-10px" src="../dist/gif/cargando.gif">`;
@@ -467,96 +456,29 @@ function guardar_y_editar_compras(e) {
         }
       });
     }
-  });
-  
-}
-
-//Función para desactivar registros
-function anular(idcompra_proyecto) {
-  Swal.fire({
-    title: "¿Está Seguro de  Anular la compra?",
-    html: "Anulando  compra!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Anular!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_insumos.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
-        if (e == "ok") {
-          Swal.fire("Desactivado!", "Tu Compra sido enviado a la PAPELERA.", "success");
-
-          tabla_compra.ajax.reload(null, false);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-      });
-    }
-  });
-}
-
-function des_anular(idcompra_proyecto) {
-  Swal.fire({
-    title: "¿Está Seguro de ReActivar esta Compra?",
-    html: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_insumos.php?op=des_anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
-        Swal.fire("ReActivado!", "Compra ha sido activado.", "success");
-        tabla_compra.ajax.reload(null, false);
-      });
-    }
-  });
+  });  
 }
 
 //Función para eliminar registros
-function eliminar_compra(idcompra_proyecto) {
-  Swal.fire({
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-  }).then((result) => {
+function eliminar_compra(idcompra_proyecto, nombre) {
 
-    if (result.isConfirmed) {
+  $(".tooltip").removeClass("show").addClass("hidde");
 
-      $.post("../ajax/compra_insumos.php?op=anular", { idcompra_proyecto: idcompra_proyecto }, function (e) {
-        if (e == "ok") {
-          Swal.fire("Papelera!", "Tu Compra sido enviado a la <b>PAPELERA</b>.", "success");
+  crud_eliminar_papelera(
+    "../ajax/compra_insumos.php?op=anular",
+    "../ajax/compra_insumos.php?op=eliminar_compra", 
+    idcompra_proyecto, 
+    "!Elija una opción¡", 
+    `<b class="text-danger">${nombre}</b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu compra ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu compra ha sido Eliminado.' ) }, 
+    function(){ tabla_compra.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
 
-          tabla_compra.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-      });
-      
-    }else if (result.isDenied) {
-
-      $.post("../ajax/compra_insumos.php?op=eliminar_compra", { idcompra_proyecto: idcompra_proyecto }, function (e) {
-        if (e == "ok") {
-          Swal.fire("ELIMINADO!", "Tu compra a sido <b>ELIMINADO</b> permanentemente.", "success");
-
-          tabla_compra.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false);
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-      });
-
-    }
-
-  });
 }
 
 function comprobante_compras(idcompra_proyecto, doc) {
@@ -567,50 +489,9 @@ function comprobante_compras(idcompra_proyecto, doc) {
   $("#doc_old_1").val("doc");
   if (doc != "") {
     $("#doc_old_1").val(doc);
-
+    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%' ));
     // cargamos la imagen adecuada par el archivo
-    if (extrae_extencion(doc) == "xls") {
-      $("#doc1_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-    } else {
-      if (extrae_extencion(doc) == "xlsx") {
-        $("#doc1_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-      } else {
-        if (extrae_extencion(doc) == "csv") {
-          $("#doc1_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-        } else {
-          if (extrae_extencion(doc) == "xlsm") {
-            $("#doc1_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-          } else {
-            if (extrae_extencion(doc) == "pdf") {
-              $("#doc1_ver").html('<iframe src="../dist/docs/compra/comprobante_compra/' + doc + '" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-            } else {
-              if (extrae_extencion(doc) == "dwg") {
-                $("#doc1_ver").html('<img src="../dist/svg/dwg.svg" alt="" width="50%" >');
-              } else {
-                if (extrae_extencion(doc) == "zip" || extrae_extencion(doc) == "rar" || extrae_extencion(doc) == "iso") {
-                  $("#doc1_ver").html('<img src="../dist/img/default/zip.png" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(doc) == "jpeg" || extrae_extencion(doc) == "jpg" || extrae_extencion(doc) == "jpe" ||
-                    extrae_extencion(doc) == "jfif" || extrae_extencion(doc) == "gif" || extrae_extencion(doc) == "png" ||
-                    extrae_extencion(doc) == "tiff" || extrae_extencion(doc) == "tif" || extrae_extencion(doc) == "webp" ||
-                    extrae_extencion(doc) == "svg" ||  extrae_extencion(doc) == "bmp"  ) {
-                    $("#doc1_ver").html('<img src="../dist/docs/compra/comprobante_compra/' + doc + '" alt="" width="50%" >');
-                  } else {
-                    if (extrae_extencion(doc) == "docx" || extrae_extencion(doc) == "docm" || extrae_extencion(doc) == "dotx" || extrae_extencion(doc) == "dotm" || extrae_extencion(doc) == "doc" || extrae_extencion(doc) == "dot") {
-                      $("#doc1_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-                    } else {
-                      $("#doc1_ver").html('<img src="../dist/svg/doc_default.svg" alt="" width="50%" >');
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    //ver_completo descargar comprobante subir
-
+    
     $(".ver_completo").val(doc);
 
     //ver_completo descargar comprobante subir
@@ -628,8 +509,6 @@ function comprobante_compras(idcompra_proyecto, doc) {
     $("#descargar_comprob").attr("href", "../dist/docs/compra/comprobante_compra/" + doc);
   } else {
     $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    // $("#doc1_nombre").html("");
 
     $("#doc_old_1").val("");
 
@@ -675,7 +554,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
       var img_p = "";
 
       if (img == "" || img == null) {
-        img_p = "../dist/svg/default_producto.svg";
+        img_p = `../dist/docs/material/img_perfil/producto-sin-foto.svg`;
       } else {
         img_p = `../dist/docs/material/img_perfil/${img}`;
       }
@@ -690,7 +569,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${img}', '${encodeHtml(nombre)}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -1017,9 +896,8 @@ function guardaryeditar_comprobante(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-
-      if (datos == "ok") {
+    success: function (e) {
+      if (e.status == true) {
 
         Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
@@ -1030,7 +908,7 @@ function guardaryeditar_comprobante(e) {
         $("#modal-comprobantes-compra").modal("hide");
       } else {
 
-        Swal.fire("Error!", datos, "error");
+        ver_errores(e);
       }
     },
     xhr: function () {
@@ -1081,23 +959,23 @@ function mostrar_compra(idcompra_proyecto) {
   detalles = 0;
   ver_form_add();
 
-  $.post("../ajax/compra_insumos.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {
     
-    data = JSON.parse(data); // console.log(data);
+    e = JSON.parse(e); // console.log(e);
 
-    if (data) {
+    if (e) {
 
-      if (data.tipo_comprobante == "Factura") {
+      if (e.data.tipo_comprobante == "Factura") {
         $(".content-igv").show();
         $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
         $(".content-descripcion").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
         $(".content-serie-comprobante").show();
-      } else if (data.tipo_comprobante == "Boleta" || data.tipo_comprobante == "Nota de venta") {
+      } else if (e.data.tipo_comprobante == "Boleta" || e.data.tipo_comprobante == "Nota de venta") {
         $(".content-serie-comprobante").show();
         $(".content-igv").hide();
         $(".content-tipo-comprobante").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
         $(".content-descripcion").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-      } else if (data.tipo_comprobante == "Ninguno") {
+      } else if (e.data.tipo_comprobante == "Ninguno") {
         $(".content-serie-comprobante").hide();
         $(".content-serie-comprobante").val("");
         $(".content-igv").hide();
@@ -1108,17 +986,17 @@ function mostrar_compra(idcompra_proyecto) {
         //$(".content-descripcion").removeClass("col-lg-7").addClass("col-lg-4");
       }
 
-      $("#idproyecto").val(data.idproyecto);
-      $("#idcompra_proyecto").val(data.idcompra_x_proyecto);
-      $("#idproveedor").val(data.idproveedor).trigger("change");
-      $("#fecha_compra").val(data.fecha_compra);
-      $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-      $("#serie_comprobante").val(data.serie_comprobante).trigger("change");
-      $("#val_igv").val(data.val_igv);
-      $("#descripcion").val(data.descripcion);
-      $("#glosa").val(data.glosa).trigger("change");
+      $("#idproyecto").val(e.data.idproyecto);
+      $("#idcompra_proyecto").val(e.data.idcompra_x_proyecto);
+      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+      $("#fecha_compra").val(e.data.fecha_compra);
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+      $("#serie_comprobante").val(e.data.serie_comprobante).trigger("change");
+      $("#val_igv").val(e.data.val_igv);
+      $("#descripcion").val(e.data.descripcion);
+      $("#glosa").val(e.data.glosa).trigger("change");
 
-      if (data.estado_detraccion == 0) {
+      if (e.data.estado_detraccion == 0) {
         $("#estado_detraccion").val("0");
         $('#my-switch_detracc').prop('checked', false); 
       } else {
@@ -1126,14 +1004,14 @@ function mostrar_compra(idcompra_proyecto) {
         $('#my-switch_detracc').prop('checked', true); 
       }
 
-      if (data.producto) {
+      if (e.data.producto) {
 
-        data.producto.forEach((element, index) => {
+        e.data.producto.forEach((element, index) => {
 
           var img = "";
 
           if (element.imagen == "" || element.imagen == null) {
-            img = "../dist/svg/default_producto.svg";
+            img = `../dist/docs/material/img_perfil/producto-sin-foto.svg`;
           } else {
             img = `../dist/docs/material/img_perfil/${element.imagen}`;
           }
@@ -1148,7 +1026,7 @@ function mostrar_compra(idcompra_proyecto) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/default_producto.svg';" onclick="ver_img_material('${element.imagen}', '${encodeHtml(element.nombre_producto)}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                 <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
@@ -1258,26 +1136,30 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/compra_insumos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/ajax_general.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (e, status) {
       
-      data = JSON.parse(data);  // console.log(data);
+      e = JSON.parse(e);  // console.log(e);
 
-      $(".chargue-format-1").html("Cuenta Bancaria");
-      $(".chargue-format-2").html("CCI");
-      $(".chargue-format-3").html("Cuenta Detracciones");
+      if (e.status == true) {
+        $(".chargue-format-1").html("Cuenta Bancaria");
+        $(".chargue-format-2").html("CCI");
+        $(".chargue-format-3").html("Cuenta Detracciones");
 
-      $("#c_bancaria_prov").prop("readonly", false);
-      $("#cci_prov").prop("readonly", false);
-      $("#c_detracciones_prov").prop("readonly", false);
+        $("#c_bancaria_prov").prop("readonly", false);
+        $("#cci_prov").prop("readonly", false);
+        $("#c_detracciones_prov").prop("readonly", false);
 
-      var format_cta = decifrar_format_banco(data.formato_cta);
-      var format_cci = decifrar_format_banco(data.formato_cci);
-      var formato_detracciones = decifrar_format_banco(data.formato_detracciones);
-      // console.log(format_cta, formato_detracciones);
+        var format_cta = decifrar_format_banco(e.data.formato_cta);
+        var format_cci = decifrar_format_banco(e.data.formato_cci);
+        var formato_detracciones = decifrar_format_banco(e.data.formato_detracciones);
+        // console.log(format_cta, formato_detracciones);
 
-      $("#c_bancaria_prov").inputmask(`${format_cta}`);
-      $("#cci_prov").inputmask(`${format_cci}`);
-      $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
+        $("#c_bancaria_prov").inputmask(`${format_cta}`);
+        $("#cci_prov").inputmask(`${format_cci}`);
+        $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
+      } else {
+        ver_errores(e);
+      }      
     });
   }
 }
@@ -1311,9 +1193,8 @@ function guardar_proveedor(e) {
     data: formData,
     contentType: false,
     processData: false,
-
-    success: function (datos) {
-      if (datos == "ok") {
+    success: function (e) {
+      if (e.status == true) {
         // toastr.success("proveedor registrado correctamente");
         Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
          
@@ -1325,8 +1206,7 @@ function guardar_proveedor(e) {
         $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
 
       } else {
-        // toastr.error(datos);
-        Swal.fire("Error!", datos, "error");
+        ver_errores(e);
       }
     },
   });
@@ -1370,18 +1250,13 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {
       //console.log(data);
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-left');
-      }  
-      
-      if (data[7] != '') {
-        $("td", row).eq(7).addClass('text-right');
-      }  
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-left'); } 
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); }  
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -1392,6 +1267,7 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1445,7 +1321,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     language: {
@@ -1457,6 +1333,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1475,7 +1352,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     language: {
@@ -1487,6 +1364,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1504,6 +1382,8 @@ function limpiar_form_pago_compra() {
   $("#idpago_compras").val("");   
   $("#descripcion_pago").val("");
   $("#idpago_compra").val("");
+
+  no_select_tomorrow("#fecha_pago");
 
   $("#doc_old_3").val("");
   $("#doc3").val("");  
@@ -1524,22 +1404,26 @@ function most_datos_prov_pago(idcompra_proyecto) {
 
   $("#banco_pago").val("").trigger("change");
 
-  $.post("../ajax/compra_insumos.php?op=most_datos_prov_pago", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=most_datos_prov_pago", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {
 
-    data = JSON.parse(data);   //console.log(data);
+    e = JSON.parse(e);   //console.log(e);
 
-    $("#idproyecto_pago").val(data.idproyecto);
-    $("#idcompra_proyecto_p").val(data.idcompra_proyecto);
-    $("#idproveedor_pago").val(data.idproveedor);
-    $("#beneficiario_pago").val(data.razon_social);
-    $("#h4_mostrar_beneficiario").html(data.razon_social);
-    $("#banco_pago").val(data.idbancos).trigger("change");
-    $("#tipo_pago").val('Proveedor').trigger("change");
-    $("#titular_cuenta_pago").val(data.titular_cuenta);
-    localStorage.setItem("nubecompra_c_b", data.cuenta_bancaria);
-    localStorage.setItem("nubecompra_c_d", data.cuenta_detracciones);
+    if (e.status == true) {
+      $("#idproyecto_pago").val(e.data.idproyecto);
+      $("#idcompra_proyecto_p").val(e.data.idcompra_proyecto);
+      $("#idproveedor_pago").val(e.data.idproveedor);
+      $("#beneficiario_pago").val(e.data.razon_social);
+      $("#h4_mostrar_beneficiario").html(e.data.razon_social);
+      $("#banco_pago").val(e.data.idbancos).trigger("change");
+      $("#tipo_pago").val('Proveedor').trigger("change");
+      $("#titular_cuenta_pago").val(e.data.titular_cuenta);
+      localStorage.setItem("nubecompra_c_b", e.data.cuenta_bancaria);
+      localStorage.setItem("nubecompra_c_d", e.data.cuenta_detracciones);
 
-    if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(data.cuenta_bancaria);}
+      if ($("#tipo_pago").select2("val") == "Proveedor") {$("#cuenta_destino_pago").val(e.data.cuenta_bancaria);}
+    } else {
+      ver_errores(e);
+    }    
   });
 }
 
@@ -1573,9 +1457,8 @@ function guardaryeditar_pago(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-
-      if (datos == "ok") {
+    success: function (e) {
+      if (e.status == true) {
          
         Swal.fire("Correcto!", "Pago guardado correctamente", "success");	    
 
@@ -1597,8 +1480,7 @@ function guardaryeditar_pago(e) {
 
         limpiar_form_pago_compra();
       } else {
-
-        Swal.fire("Error!", datos, "error");	
+        ver_errores(e);
       }
     },
   });
@@ -1609,11 +1491,11 @@ function total_pagos(idcompra_proyecto) {
 
   $("#monto_total").html("");
 
-  $.post("../ajax/compra_insumos.php?op=suma_total_pagos", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {    
+  $.post("../ajax/compra_insumos.php?op=suma_total_pagos", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {    
 
-    data = JSON.parse(data);  //console.log(data);
+    e = JSON.parse(e);  //console.log(e);
 
-    $("#monto_total").html(formato_miles(data.total_monto));
+    $("#monto_total").html(formato_miles(e.data.total_monto));
   });
 }
 
@@ -1623,9 +1505,9 @@ function total_pagos_detracc(idcompra_proyecto) {
   $("#monto_total_prov").html("");
 
   //tabla 2 proveedor
-  $.post("../ajax/compra_insumos.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {   
+  $.post("../ajax/compra_insumos.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {   
 
-    data = JSON.parse(data); //console.log(data);
+    e = JSON.parse(e); //console.log(e);
 
     var inputValue = 0;
     var x = 0;
@@ -1634,13 +1516,13 @@ function total_pagos_detracc(idcompra_proyecto) {
 
     inputValue = parseFloat(quitar_formato_miles($(".t_proveedor").val()));
 
-    $("#monto_total_prov").html(formato_miles(data.total_montoo));
-    x = (data.total_montoo * 90) / inputValue;
+    $("#monto_total_prov").html(formato_miles(e.data.total_montoo));
+    x = (e.data.total_montoo * 90) / inputValue;
     $("#porcnt_prove").html(redondearExp(x, 2) + " %");
 
     diferencia = 90 - x; console.log(inputValue+'xxxxxxxxxxxxxxxxxxxxx');
 
-    x_saldo = (diferencia * data.total_montoo) / x;
+    x_saldo = (diferencia * e.data.total_montoo) / x;
 
     if (x_saldo == 0) {
       $("#saldo_p").html("0.00");
@@ -1652,25 +1534,25 @@ function total_pagos_detracc(idcompra_proyecto) {
   });
 
   //tabla 2 detracion
-  $.post("../ajax/compra_insumos.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {
     $("#monto_total_detracc").html("");
     var valor_tt_detrcc = 0;
     var x_detrcc = 0;
     var x_saldo_detrcc = 0;
     var diferencia_detrcc = 0;
 
-    data = JSON.parse(data); //  console.log(data);
+    e = JSON.parse(e); //  console.log(e);
 
     valor_tt_detrcc = parseFloat(quitar_formato_miles($(".t_detaccion").val()));
 
-    $("#monto_total_detracc").html(formato_miles(data.total_montoo));
+    $("#monto_total_detracc").html(formato_miles(e.data.total_montoo));
 
-    x_detrcc = (data.total_montoo * 10) / valor_tt_detrcc;
+    x_detrcc = (e.data.total_montoo * 10) / valor_tt_detrcc;
     $("#porcnt_detrcc").html(redondearExp(x_detrcc, 2) + " %");
 
     diferencia_detrcc = 10 - x_detrcc;
 
-    x_saldo_detrcc = (diferencia_detrcc * data.total_montoo) / x_detrcc;
+    x_saldo_detrcc = (diferencia_detrcc * e.data.total_montoo) / x_detrcc;
 
     if (x_saldo_detrcc == 0) {
       $("#saldo_d").html("0.00");
@@ -1693,28 +1575,28 @@ function mostrar_pagos(idpago_compras) {
   $("#forma_pago").val("").trigger("change");
   $("#tipo_pago").val("").trigger("change");
 
-  $.post("../ajax/compra_insumos.php?op=mostrar_pagos", { idpago_compras: idpago_compras }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=mostrar_pagos", { idpago_compras: idpago_compras }, function (e, status) {
     
-    data = JSON.parse(data);  console.log(data);
+    e = JSON.parse(e);  console.log(e);
 
-    $("#idproveedor_pago").val(data.idproveedor);
-    $("#idcompra_proyecto_p").val(data.idcompra_proyecto);
-    // $("#maquinaria_pago").html(data.nombre_maquina);
-    $("#beneficiario_pago").val(data.beneficiario);
-    $("#h4_mostrar_beneficiario").html(data.beneficiario);
-    $("#cuenta_destino_pago").val(data.cuenta_destino);
-    $("#banco_pago").val(data.id_banco).trigger("change");
-    $("#titular_cuenta_pago").val(data.titular_cuenta);
-    $("#forma_pago").val(data.forma_pago).trigger("change");
-    $("#tipo_pago").val(data.tipo_pago).trigger("change");
-    $("#fecha_pago").val(data.fecha_pago);
-    $("#monto_pago").val(data.monto);
-    $("#numero_op_pago").val(data.numero_operacion);
-    $("#descripcion_pago").val(data.descripcion);
-    $("#idpago_compras").val(data.idpago_compras);
+    $("#idproveedor_pago").val(e.data.idproveedor);
+    $("#idcompra_proyecto_p").val(e.data.idcompra_proyecto);
+    // $("#maquinaria_pago").html(e.data.nombre_maquina);
+    $("#beneficiario_pago").val(e.data.beneficiario);
+    $("#h4_mostrar_beneficiario").html(e.data.beneficiario);
+    $("#cuenta_destino_pago").val(e.data.cuenta_destino);
+    $("#banco_pago").val(e.data.id_banco).trigger("change");
+    $("#titular_cuenta_pago").val(e.data.titular_cuenta);
+    $("#forma_pago").val(e.data.forma_pago).trigger("change");
+    $("#tipo_pago").val(e.data.tipo_pago).trigger("change");
+    $("#fecha_pago").val(e.data.fecha_pago);
+    $("#monto_pago").val(e.data.monto);
+    $("#numero_op_pago").val(e.data.numero_operacion);
+    $("#descripcion_pago").val(e.data.descripcion);
+    $("#idpago_compras").val(e.data.idpago_compras);
     
     // COMPROBANTE COMPRA
-    if (data.imagen == "" || data.imagen == null  ) {
+    if (e.data.imagen == "" || e.data.imagen == null  ) {
 
       $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
@@ -1724,23 +1606,23 @@ function mostrar_pagos(idpago_compras) {
 
     } else {
 
-      $("#doc_old_3").val(data.imagen); 
+      $("#doc_old_3").val(e.data.imagen); 
 
-      $("#doc3_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(data.imagen)}</i></div></div>`);
+      $("#doc3_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.imagen)}</i></div></div>`);
       
       // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.imagen) == "pdf" ) {
+      if ( extrae_extencion(e.data.imagen) == "pdf" ) {
 
-        $("#doc3_ver").html('<iframe src="../dist/docs/compra/comprobante_pago/'+data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc3_ver").html('<iframe src="../dist/docs/compra/comprobante_pago/'+e.data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
       }else{
         if (
-          extrae_extencion(data.imagen) == "jpeg" || extrae_extencion(data.imagen) == "jpg" || extrae_extencion(data.imagen) == "jpe" ||
-          extrae_extencion(data.imagen) == "jfif" || extrae_extencion(data.imagen) == "gif" || extrae_extencion(data.imagen) == "png" ||
-          extrae_extencion(data.imagen) == "tiff" || extrae_extencion(data.imagen) == "tif" || extrae_extencion(data.imagen) == "webp" ||
-          extrae_extencion(data.imagen) == "bmp" || extrae_extencion(data.imagen) == "svg" ) {
+          extrae_extencion(e.data.imagen) == "jpeg" || extrae_extencion(e.data.imagen) == "jpg" || extrae_extencion(e.data.imagen) == "jpe" ||
+          extrae_extencion(e.data.imagen) == "jfif" || extrae_extencion(e.data.imagen) == "gif" || extrae_extencion(e.data.imagen) == "png" ||
+          extrae_extencion(e.data.imagen) == "tiff" || extrae_extencion(e.data.imagen) == "tif" || extrae_extencion(e.data.imagen) == "webp" ||
+          extrae_extencion(e.data.imagen) == "bmp" || extrae_extencion(e.data.imagen) == "svg" ) {
 
-          $("#doc3_ver").html(`<img src="../dist/docs/compra/comprobante_pago/${data.imagen}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          $("#doc3_ver").html(`<img src="../dist/docs/compra/comprobante_pago/${e.data.imagen}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
           
         } else {
           $("#doc3_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -1842,7 +1724,7 @@ function eliminar_pago_compra(idpago_compras) {
           }
           if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); }
         } else {
-          Swal.fire("Error!", e, "error");
+          ver_errores(e);
         }
       });
     }else if (result.isDenied) {
@@ -1859,7 +1741,7 @@ function eliminar_pago_compra(idpago_compras) {
           }
           if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); } 
         } else {
-          Swal.fire("Error!", e, "error");
+          ver_errores(e);
         }
       });
     }
@@ -1950,14 +1832,12 @@ function listarmateriales() {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); ver_errores(e);
       },
     },
     createdRow: function (row, data, ixdex) {
       // columna: sueldo mensual
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass('text-right');
-      }  
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-right'); }  
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -1968,6 +1848,7 @@ function listarmateriales() {
           1: "1 línea copiada",
         },
       },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1984,44 +1865,44 @@ function mostrar_material(idproducto, cont) {
 
   $("#modal-agregar-material-activos-fijos").modal("show");
 
-  $.post("../ajax/compra_insumos.php?op=mostrar_materiales", { 'idproducto_p': idproducto }, function (data, status) {
+  $.post("../ajax/compra_insumos.php?op=mostrar_materiales", { 'idproducto_p': idproducto }, function (e, status) {
     
-    data = JSON.parse(data); //console.log(data);    
+    e = JSON.parse(e); console.log(e);    
 
-    $("#idproducto_p").val(data.idproducto);
+    $("#idproducto_p").val(e.data.idproducto);
     $("#cont").val(cont);
 
-    $("#nombre_p").val(data.nombre);
-    $("#modelo_p").val(data.modelo);
-    $("#serie_p").val(data.serie);
-    $("#marca_p").val(data.marca);
-    $("#descripcion_p").val(data.descripcion);
+    $("#nombre_p").val(e.data.nombre);
+    $("#modelo_p").val(e.data.modelo);
+    $("#serie_p").val(e.data.serie);
+    $("#marca_p").val(e.data.marca);
+    $("#descripcion_p").val(e.data.descripcion);
 
-    $('#precio_unitario_p').val(parseFloat(data.precio_unitario).toFixed(2));
-    $("#estado_igv_p").val(parseFloat(data.estado_igv).toFixed(2));
-    $("#precio_sin_igv_p").val(parseFloat(data.precio_sin_igv).toFixed(2));
-    $("#precio_igv_p").val(parseFloat(data.precio_igv).toFixed(2));
-    $("#precio_total_p").val(parseFloat(data.precio_total).toFixed(2));
+    $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
+    $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
+    $("#precio_sin_igv_p").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
+    $("#precio_igv_p").val(parseFloat(e.data.precio_igv).toFixed(2));
+    $("#precio_total_p").val(parseFloat(e.data.precio_total).toFixed(2));
      
-    $("#unid_medida_p").val(data.idunidad_medida).trigger("change");
-    $("#color_p").val(data.idcolor).trigger("change");  
-    $("#categoria_insumos_af_p").val(data.idcategoria_insumos_af).trigger("change");    
+    $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
+    $("#color_p").val(e.data.idcolor).trigger("change");  
+    $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
 
-    if (data.estado_igv == "1") {
+    if (e.data.estado_igv == "1") {
       $("#my-switch_igv").prop("checked", true);
     } else {
       $("#my-switch_igv").prop("checked", false);
     }
      
-    if (data.imagen != "") {
+    if (e.data.imagen != "") {
       
-      $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + data.imagen);
+      $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);
 
-      $("#foto2_actual").val(data.imagen);
+      $("#foto2_actual").val(e.data.imagen);
     }
 
     // FICHA TECNICA
-    if (data.ficha_tecnica == "" || data.ficha_tecnica == null  ) {
+    if (e.data.ficha_tecnica == "" || e.data.ficha_tecnica == null  ) {
 
       $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
@@ -2031,28 +1912,12 @@ function mostrar_material(idproducto, cont) {
 
     } else {
 
-      $("#doc_old_2").val(data.ficha_tecnica); 
+      $("#doc_old_2").val(e.data.ficha_tecnica); 
 
-      $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(data.ficha_tecnica)}</i></div></div>`);
+      $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.ficha_tecnica)}</i></div></div>`);
       
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.ficha_tecnica) == "pdf" ) {
-
-        $("#doc2_ver").html('<iframe src="../dist/docs/material/ficha_tecnica/'+data.ficha_tecnica+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-      }else{
-        if (
-          extrae_extencion(data.ficha_tecnica) == "jpeg" || extrae_extencion(data.ficha_tecnica) == "jpg" || extrae_extencion(data.ficha_tecnica) == "jpe" ||
-          extrae_extencion(data.ficha_tecnica) == "jfif" || extrae_extencion(data.ficha_tecnica) == "gif" || extrae_extencion(data.ficha_tecnica) == "png" ||
-          extrae_extencion(data.ficha_tecnica) == "tiff" || extrae_extencion(data.ficha_tecnica) == "tif" || extrae_extencion(data.ficha_tecnica) == "webp" ||
-          extrae_extencion(data.ficha_tecnica) == "bmp" || extrae_extencion(data.ficha_tecnica) == "svg" ) {
-
-          $("#doc2_ver").html(`<img src="../dist/docs/material/ficha_tecnica/${data.ficha_tecnica}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-          
-        } else {
-          $("#doc2_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-        }        
-      }      
+      $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%', '210'));
+      
     } 
 
     $("#cargando-9-fomulario").show();
@@ -2109,18 +1974,24 @@ function guardar_y_editar_materiales(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-      if (datos == "ok") {
+    success: function (e) {
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Producto creado correctamente", "success");
+          tablamateriales.ajax.reload(null, false);
+          actualizar_producto();
+          $("#modal-agregar-material-activos-fijos").modal("hide");
 
-        Swal.fire("Correcto!", "Producto creado correctamente", "success");
-        tablamateriales.ajax.reload(null, false);
-        actualizar_producto();
-        $("#modal-agregar-material-activos-fijos").modal("hide");
-
-      } else {
-        Swal.fire("Error!", datos, "error");
-      }
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      $("#guardar_registro_material").html('Guardar Cambios').removeClass('disabled');
     },
+    beforeSend: function () {
+      $("#guardar_registro_material").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+    }
   });
 }
 
@@ -2205,7 +2076,7 @@ function actualizar_producto() {
 
   var nombre_p = $("#nombre_p").val();  
   var precio_total_p = $("#precio_total_p").val();
-  var unid_medida_p = $("#unidad_medida_p").find(':selected').text();
+  var unidad_medida_p = $("#unidad_medida_p").find(':selected').text();
   var color_p = $("#color_p").find(':selected').text();  
 
   if (idproducto == "" || idproducto == null) {
@@ -2214,8 +2085,8 @@ function actualizar_producto() {
     $(`.nombre_producto_${cont}`).html(nombre_p); 
     $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
     $(`.color_${cont}`).val(color_p); 
-    $(`.unidad_medida_${cont}`).html(unid_medida_p); 
-    $(`.unidad_medida_${cont}`).val(unid_medida_p);
+    $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
+    $(`.unidad_medida_${cont}`).val(unidad_medida_p);
     $(`.precio_con_igv_${cont}`).val(precio_total_p);    
   } 
   
@@ -2427,7 +2298,7 @@ $(function () {
       nombre_p: { required: true, minlength:3, maxlength:200},
       categoria_insumos_af_p: { required: true },
       color_p: { required: true },
-      unid_medida_p: { required: true },
+      unidad_medida_p: { required: true },
       modelo_p: { minlength: 3 },
       precio_unitario_p: { required: true },
       descripcion_p: { minlength: 3 },
@@ -2436,7 +2307,7 @@ $(function () {
       nombre_p: { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
       categoria_insumos_af_p: { required: "Campo requerido", },
       color_p: { required: "Campo requerido" },
-      unid_medida_p: { required: "Campo requerido" },
+      unidad_medida_p: { required: "Campo requerido" },
       modelo_p: { minlength: "Minimo 3 caracteres", },
       precio_unitario_p: { required: "Ingresar precio compra", },      
       descripcion_p: { minlength: "Minimo 3 caracteres" },
@@ -2485,393 +2356,6 @@ function l_m(){
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-/**formato_miles */
-function formato_miles(num) {
-  if (!num || num == "NaN") return "0.00";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
-
-function quitar_formato_miles(numero) {
-  let inVal = numero.replace(/,/g, "");
-  return inVal;
-}
-
-/**Redondear */
-function redondearExp(numero, digitos) {
-  function toExp(numero, digitos) {
-    let arr = numero.toString().split("e");
-    let mantisa = arr[0],
-      exponente = digitos;
-    if (arr[1]) exponente = Number(arr[1]) + digitos;
-    return Number(mantisa + "e" + exponente.toString());
-  }
-  let entero = Math.round(toExp(Math.abs(numero), digitos));
-  return Math.sign(numero) * toExp(entero, -digitos);
-}
-
-/* PREVISUALIZAR LAS IMAGENES */
-function addImage(e, id) {
-  // colocamos cargando hasta que se vizualice
-  $("#" + id + "_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-  console.log(id);
-
-  var file = e.target.files[0], imageType = /image.*/;
-
-  if (e.target.files[0]) {
-    var sizeByte = file.size;
-
-    var sizekiloBytes = parseInt(sizeByte / 1024);
-
-    var sizemegaBytes = sizeByte / 1000000; 
-
-    if (!file.type.match(imageType)) {
-       
-      // toastr.error("Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>");
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .png .jpeg .jpg .webp etc...',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
-
-    } else {
-
-      if (sizekiloBytes <= 10240) {
-
-        var reader = new FileReader();
-
-        reader.onload = fileOnload;
-
-        function fileOnload(e) {
-
-          var result = e.target.result;
-
-          $(`#${id}_i`).attr("src", result);
-
-          $(`#${id}_nombre`).html(
-            
-            `<div class="row">
-              <div class="col-md-12"> <i> ${file.name} </i></div>
-              <div class="col-md-12">                
-                <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" >
-                  <i class="far fa-trash-alt"></i>
-                </button>
-              </div>               
-            </div>`               
-          );
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        }
-
-        reader.readAsDataURL(file);
-      } else {
-         
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: `El documento: ${file.name.toUpperCase()} es muy pesado. Tamaño máximo 10mb`,
-          showConfirmButton: false,
-          timer: 1500
-        })
-        $("#" + id + "_i").attr("src", "../dist/img/default/img_error.png");
-
-        $("#" + id).val("");
-      }
-    }
-  } else {
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    })
-
-    $("#" + id + "_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
-
-    $("#" + id + "_nombre").html("");
-  }
-}
-
-/* PREVISUALIZAR LOS DOCUMENTOS */
-function addDocs(e,id) {
-
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
-
-	var file = e.target.files[0], archivoType = /image.*|application.*/;
-	
-	if (e.target.files[0]) {
-    
-		var sizeByte = file.size; console.log(file.type);
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(archivoType) ){
-			// return;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .pdf, .png. .jpeg, .jpg, .jpe, .webp, .svg',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >'); 
-
-		}else{
-
-			if (sizekiloBytes <= 40960) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-
-          // cargamos la imagen adecuada par el archivo
-				  if ( extrae_extencion(file.name) == "doc") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "docx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "pdf" ) {
-                $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-              }else{
-                if ( extrae_extencion(file.name) == "csv" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(file.name) == "xls" ) {
-                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                  } else {
-                    if ( extrae_extencion(file.name) == "xlsx" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "xlsm" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                      } else {
-                        if (
-                          extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
-                          extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
-                          extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
-                          extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
-
-                          $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-                          
-                        } else {
-                          $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                        }
-                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } 
-					$("#"+id+"_nombre").html(`<div class="row">
-            <div class="col-md-12">
-              <i> ${file.name} </i>
-            </div>
-            <div class="col-md-12">
-              <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
-            </div>
-          </div>`);
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: `El documento: ${file.name.toUpperCase()} es muy pesado.`,
-          showConfirmButton: false,
-          timer: 1500
-        });
-
-        $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-        $("#"+id+"_nombre").html("");
-				$("#"+id).val("");
-			}
-		}
-	}else{
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    });
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-		$("#"+id+"_nombre").html("");
-    $("#"+id).val("");
-	}	
-}
-
-// recargar un doc para ver
-function re_visualizacion(id, carpeta, sub_carpeta) {
-
-  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
-
-  pdffile     = document.getElementById("doc"+id+"").files[0];
-
-  var antiguopdf  = $("#doc_old_"+id+"").val();
-
-  if(pdffile === undefined){
-
-    if (antiguopdf == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-		  $("#doc"+id+"_nombre").html("");
-
-    } else {
-      if ( extrae_extencion(antiguopdf) == "doc") {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      } else {
-        if ( extrae_extencion(antiguopdf) == "docx" ) {
-          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-        } else {
-          if ( extrae_extencion(antiguopdf) == "pdf" ) {
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/${carpeta}/${sub_carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-            toastr.success('Documento vizualizado correctamente!!!')
-          } else {
-            if ( extrae_extencion(antiguopdf) == "csv" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(antiguopdf) == "xls" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  } else {
-                    if (
-                      extrae_extencion(antiguopdf) == "jpeg" || extrae_extencion(antiguopdf) == "jpg" || extrae_extencion(antiguopdf) == "jpe" ||
-                      extrae_extencion(antiguopdf) == "jfif" || extrae_extencion(antiguopdf) == "gif" || extrae_extencion(antiguopdf) == "png" ||
-                      extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
-                      extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
-  
-                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/${carpeta}/${sub_carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
-                      toastr.success('Documento vizualizado correctamente!!!');
-                    } else {
-                      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                    }                    
-                  }
-                }
-              }
-            }
-          }
-        }
-      }      
-    }
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "doc") {
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else {
-      if ( extrae_extencion(pdffile.name) == "docx" ) {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      }else{
-        if ( extrae_extencion(pdffile.name) == "pdf" ) {
-          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="310"> </iframe>');
-          toastr.success('Documento vizualizado correctamente!!!');
-        }else{
-          if ( extrae_extencion(pdffile.name) == "csv" ) {
-            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-          } else {
-            if ( extrae_extencion(pdffile.name) == "xls" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-            } else {
-              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-              } else {
-                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
-
-                    $("#doc"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="100%" >`);
-                    toastr.success('Documento vizualizado correctamente!!!');
-                  } else {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                  }                  
-                }
-              }
-            }
-          }
-        }
-      }
-    }     	
-    console.log(pdffile);
-  }
-}
 
 function dowload_pdf() {
   toastr.success("El documento se descargara en breve!!");
@@ -2898,209 +2382,13 @@ function validando_excedentes() {
   }
 }
 
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento_prov").val();
-
-  let dni_ruc = $("#num_documento_prov").val(); 
-   
-  if (tipo_doc == "DNI") {
-
-    if (dni_ruc.length == "8") {
-
-      $.post("../ajax/ajax_general.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-
-        data = JSON.parse(data);  console.log(data);
-
-        if (data == null) {
-
-          $("#search").show();
-  
-          $("#charge").hide();
-  
-          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-          
-        } else {
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-
-          } else {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            $("#nombre_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-            $("#titular_cuenta_prov").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-            toastr.success("Persona encontrada!!!!");
-          }
-        }
-        
-      });
-    } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/ajax_general.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-
-          data = JSON.parse(data);    console.log(data);
-
-          if (data == null) {
-            $("#search").show();
-    
-            $("#charge").hide();
-    
-            toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-            
-          } else {
-
-            if (data.success == false) {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              toastr.error("Datos no encontrados en la SUNAT!!!");
-              
-            } else {
-
-              if (data.estado == "ACTIVO") {
-
-                $("#search").show();
-
-                $("#charge").hide();
-
-                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
-
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);                
-
-                data.direccion == null ? $("#direccion_prov").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion_prov").val(data.direccion);
-
-                toastr.success("Persona encontrada!!");
-
-              } else {
-
-                toastr.info("Se recomienda NO generar FACTURAS ó BOLETAS!!!");
-
-                $("#search").show();
-
-                $("#charge").hide();
-
-                data.razonSocial == null ? $("#nombre_prov").val(data.nombreComercial) : $("#nombre_prov").val(data.razonSocial);
-
-                data.razonSocial == null ? $("#titular_cuenta_prov").val(data.nombreComercial) : $("#titular_cuenta_prov").val(data.razonSocial);
-                
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);
-
-                data.direccion == null ? $("#direccion_prov").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion_prov").val(data.direccion);
-
-              }
-            }
-          }          
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-
-      } else {
-
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
-}
-
 // ver imagen grande del producto agregado a la compra
 function ver_img_material(img, nombre) {
-  $("#ver_img_material").attr("src", `../dist/docs/material/img_perfil/${img}`);
+  $("#ver_img_material").attr("src", `${img}`);
   $(".nombre-img-material").html(nombre);
   $("#modal-ver-img-material").modal("show");
 }
 
-// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
-
-  var format = "";
-
-  if (fecha == '' || fecha == null || fecha == '0000-00-00') {
-    format = "-";
-  } else {
-    let splits = fecha.split("-"); //console.log(splits);
-    format = splits[2]+'-'+splits[1]+'-'+splits[0];
-  } 
-
-  return format;
-}
-
-// Codificamos los caracteres: &, <, >, ", '
-function encodeHtml(str) {
-
-  var map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-
-  return str.replace(/[&<>"']/g, function(m) {return map[m];});
-}
-
-// Decodificamos los caracteres: &amp; &lt; &gt; &quot; &#039;
-function decodeHtml(str) {
-
-  var map = {
-    '&amp;': '&',
-    '&lt;': '<',
-    '&gt;': '>',
-    '&quot;': '"',
-    '&#039;': "'"
-  };
-
-  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(m) {return map[m];});
-}
 
 function export_excel_detalle_factura() {
   $tabla = document.querySelector("#tabla_detalle_factura");
