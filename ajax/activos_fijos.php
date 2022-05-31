@@ -16,7 +16,7 @@
       $activos_fijos = new Activos_fijos();       
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h:i:s A");
+      $date_now = date("d-m-Y h.i.s A");
 
       $idproducto     = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "" ;
       $unidad_medida  = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "" ;

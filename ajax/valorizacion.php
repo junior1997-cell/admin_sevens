@@ -20,7 +20,7 @@
       $valorizacion = new Valorizacion();
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h:i:s A");
+      $date_now = date("d-m-Y h.i.s A");
 
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";

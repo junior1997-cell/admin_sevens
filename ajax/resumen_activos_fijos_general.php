@@ -26,7 +26,7 @@
       $compra = new Compra_insumos();
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h:i:s A");
+      $date_now = date("d-m-Y h.i.s A");
 
       $op_general = "ActivosFijos";
       $op_proyecto = "Insumos";

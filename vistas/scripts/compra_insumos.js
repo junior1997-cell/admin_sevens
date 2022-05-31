@@ -234,7 +234,6 @@ function regresar() {
   $("#pagos_con_detraccion").hide();
   limpiar_form_compra();
   limpiar_form_proveedor();
-  tabla_compra.ajax.reload(null, false);
 }
 
 //TABLA - COMPRAS
@@ -418,8 +417,9 @@ function guardar_y_editar_compras(e) {
             }
           });
         },
-        success: function (datos) {
-          if (datos == "ok") {
+        success: function (e) {
+          e = JSON.parse(e);
+          if (e.status == true ) {
             // toastr.success("Usuario registrado correctamente");
             Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
@@ -505,8 +505,8 @@ function comprobante_compras(idcompra_proyecto, doc) {
     $(".descargar").show();
     $(".descargar").removeClass("col-md-4").addClass("col-md-2");
 
-    $("#ver_completo").attr("href", "../dist/docs/compra/comprobante_compra/" + doc);
-    $("#descargar_comprob").attr("href", "../dist/docs/compra/comprobante_compra/" + doc);
+    $("#ver_completo").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
+    $("#descargar_comprob").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
   } else {
     $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
@@ -897,19 +897,24 @@ function guardaryeditar_comprobante(e) {
     contentType: false,
     processData: false,
     success: function (e) {
-      if (e.status == true) {
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
 
-        Swal.fire("Correcto!", "Documento guardado correctamente", "success");
+          Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
-        tabla_compra.ajax.reload(null, false);
+          tabla_compra.ajax.reload(null, false);
 
-        limpiar_form_compra();
+          limpiar_form_compra();
 
-        $("#modal-comprobantes-compra").modal("hide");
-      } else {
+          $("#modal-comprobantes-compra").modal("hide");
+        } else {
 
-        ver_errores(e);
-      }
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+
+      $("#guardar_registro_2").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -920,18 +925,23 @@ function guardaryeditar_comprobante(e) {
             var percentComplete = (evt.loaded / evt.total) * 100;
             /*console.log(percentComplete + '%');*/
             $("#barra_progress2").css({ width: percentComplete + "%" });
-
             $("#barra_progress2").text(percentComplete.toFixed(2) + " %");
-
-            if (percentComplete === 100) {
-              l_m();
-            }
           }
         },
         false
       );
       return xhr;
     },
+    beforeSend: function () {
+      $("#guardar_registro_2").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress2").css({ width: "0%",  });
+      $("#barra_progress2").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress2").css({ width: "0%", });
+      $("#barra_progress2").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -1194,6 +1204,7 @@ function guardar_proveedor(e) {
     contentType: false,
     processData: false,
     success: function (e) {
+      e = JSON.parse(e);
       if (e.status == true) {
         // toastr.success("proveedor registrado correctamente");
         Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
@@ -1458,6 +1469,7 @@ function guardaryeditar_pago(e) {
     contentType: false,
     processData: false,
     success: function (e) {
+      e = JSON.parse(e);
       if (e.status == true) {
          
         Swal.fire("Correcto!", "Pago guardado correctamente", "success");	    
@@ -1613,7 +1625,7 @@ function mostrar_pagos(idpago_compras) {
       // cargamos la imagen adecuada par el archivo
       if ( extrae_extencion(e.data.imagen) == "pdf" ) {
 
-        $("#doc3_ver").html('<iframe src="../dist/docs/compra/comprobante_pago/'+e.data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc3_ver").html('<iframe src="../dist/docs/compra_insumo/comprobante_pago/'+e.data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
       }else{
         if (
@@ -1622,7 +1634,7 @@ function mostrar_pagos(idpago_compras) {
           extrae_extencion(e.data.imagen) == "tiff" || extrae_extencion(e.data.imagen) == "tif" || extrae_extencion(e.data.imagen) == "webp" ||
           extrae_extencion(e.data.imagen) == "bmp" || extrae_extencion(e.data.imagen) == "svg" ) {
 
-          $("#doc3_ver").html(`<img src="../dist/docs/compra/comprobante_pago/${e.data.imagen}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          $("#doc3_ver").html(`<img src="../dist/docs/compra_insumo/comprobante_pago/${e.data.imagen}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
           
         } else {
           $("#doc3_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -1762,8 +1774,8 @@ function ver_modal_vaucher(imagen, fecha_pago) {
     
     // cargamos la imagen adecuada par el archivo
     if ( extrae_extencion(imagen) == "pdf" ) {       
-      data_comprobante = `<div class="col-md-12 mt-4"><iframe src="../dist/docs/compra/comprobante_pago/${imagen}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe></div><div class="col-md-12 mt-2"><i>Voucher.${extrae_extencion(imagen)}</i></div>`;      
-      url = `../dist/docs/compra/comprobante_pago/${imagen}`;
+      data_comprobante = `<div class="col-md-12 mt-4"><iframe src="../dist/docs/compra_insumo/comprobante_pago/${imagen}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe></div><div class="col-md-12 mt-2"><i>Voucher.${extrae_extencion(imagen)}</i></div>`;      
+      url = `../dist/docs/compra_insumo/comprobante_pago/${imagen}`;
       nombre_download = `${format_d_m_a(fecha_pago)} - Comprobante`;
     }else{
       if (
@@ -1772,12 +1784,12 @@ function ver_modal_vaucher(imagen, fecha_pago) {
         extrae_extencion(imagen) == "tiff" || extrae_extencion(imagen) == "tif" || extrae_extencion(imagen) == "webp" ||
         extrae_extencion(imagen) == "bmp" || extrae_extencion(imagen) == "svg" ) {
          
-        data_comprobante = `<div class="col-md-12 mt-4"><img src="../dist/docs/compra/comprobante_pago/${imagen}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" ></div><div class="col-md-12 mt-2"><i>Voucher.${extrae_extencion(imagen)}</i></div>`;         
-        url = `../dist/docs/compra/comprobante_pago/${imagen}`;
+        data_comprobante = `<div class="col-md-12 mt-4"><img src="../dist/docs/compra_insumo/comprobante_pago/${imagen}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" ></div><div class="col-md-12 mt-2"><i>Voucher.${extrae_extencion(imagen)}</i></div>`;         
+        url = `../dist/docs/compra_insumo/comprobante_pago/${imagen}`;
         nombre_download = `${format_d_m_a(fecha_pago)} - Comprobante`;
       } else {
         data_comprobante = `<div class="col-md-12 mt-4"><img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" ></div><div class="col-md-12 mt-2"><i>Voucher.${extrae_extencion(imagen)}</i></div>`;
-        url = `../dist/docs/compra/comprobante_pago/${imagen}`;
+        url = `../dist/docs/compra_insumo/comprobante_pago/${imagen}`;
         nombre_download = `${format_d_m_a(fecha_pago)} - Comprobante`;
       }        
     }      

@@ -20,7 +20,7 @@
       $trabajador = new AllTrabajador();
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h:i:s A");
+      $date_now = date("d-m-Y h.i.s A");
       
       $idtrabajador	  	= isset($_POST["idtrabajador"])? limpiarCadena($_POST["idtrabajador"]):"";
       $nombre 		      = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";

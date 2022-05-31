@@ -619,7 +619,7 @@
                               <div class="form-group">
                                 <label>Color hexadecimal:</label>
                                 <div class="input-group my-colorpicker2">
-                                  <input type="text" name="hexadecimal" id="hexadecimal" class="form-control">
+                                  <input type="text" name="hexadecimal" id="hexadecimal" class="form-control" placeholder="#00AFB">
                                   <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fa-square fa-lg"></i></span>
                                   </div>

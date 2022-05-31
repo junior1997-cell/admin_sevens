@@ -20,24 +20,26 @@ class Compra_insumos
 		VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion')";
      
     $idventanew = ejecutarConsulta_retornarID($sql);
+    if ($idventanew['status'] == false) { return  $idventanew;}
 
     $num_elementos = 0;
-    $sw = true;
+    $compra_new = "";
 
-    if ( !empty($idventanew) ) {
+    if ( !empty($idventanew['data']) ) {
     
       while ($num_elementos < count($idproducto)) {
-
+        $id = $idventanew['data'];
         $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
 
         $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto) 
-        VALUES ('$idventanew','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
-        ejecutarConsulta($sql_detalle) or ($sw = false);
+        VALUES ('$id','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
+        $compra_new =  ejecutarConsulta($sql_detalle);
+        if ($compra_new['status'] == false) { return  $compra_new;}
 
         $num_elementos = $num_elementos + 1;
       }
     }
-    return $sw;
+    return $compra_new;
   }
 
   //Implementamos un método para editar registros
@@ -58,7 +60,7 @@ class Compra_insumos
       $update_compra = ejecutarConsulta($sql);
       if ($update_compra['status'] == false) { return $update_compra; }
 
-      $num_elementos = 0;
+      $num_elementos = 0; $detalle_compra = "";
 
       while ($num_elementos < count($idproducto)) {
         $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];

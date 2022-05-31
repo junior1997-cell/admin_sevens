@@ -18,7 +18,7 @@
       $proyecto = new Proyecto();
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h:i:s A");
+      $date_now = date("d-m-Y h.i.s A");
 
       $idproyecto				    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):""; 
       $tipo_documento			  = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";

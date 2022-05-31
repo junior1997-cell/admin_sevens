@@ -17,7 +17,7 @@ ob_start();
       $asistencia_obrero=new Asistencia_obrero();  
       
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h:i:s A");
+      $date_now = date("d-m-Y h.i.s A");
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   

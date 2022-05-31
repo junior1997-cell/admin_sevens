@@ -14,7 +14,7 @@
     $bancos = new Bancos();
 
     date_default_timezone_set('America/Lima');
-    $date_now = date("d-m-Y h:i:s A");
+    $date_now = date("d-m-Y h.i.s A");
 
     $idbancos = isset($_POST["idbancos"]) ? limpiarCadena($_POST["idbancos"]) : "";
     $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
