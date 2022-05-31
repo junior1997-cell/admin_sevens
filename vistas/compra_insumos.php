@@ -275,8 +275,8 @@
                                     <div class="form-group">
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
-                                        <option value="MATERIAL">MATERIAL</option>
-                                        <option value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                        <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
+                                        <option title="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
                                       </select>
                                     </div>
                                   </div>
@@ -663,7 +663,7 @@
                                   <label for="num_documento_prov">N° RUC / DNI</label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                       <span class="input-group-text" style="cursor: pointer;">
                                         <i class="fas fa-search text-primary" id="search"></i>
                                         <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
@@ -1070,9 +1070,9 @@
                   <!-- Modal ver grande img producto -->
                   <div class="modal fade" id="modal-ver-img-material">
                     <div class="modal-dialog modal-dialog-scrollable modal-md">
-                      <div class="modal-content">
-                        <div class="modal-header" style="background-color: #ce834926;">
-                          <h4 class="modal-title nombre-img-material">Img producto</h4>
+                      <div class="modal-content bg-color-0202022e shadow-none border-0" >
+                        <div class="modal-header">
+                          <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>
@@ -1080,7 +1080,7 @@
                         <div class="modal-body">
                           <div class="class-style" style="text-align: center;">
                             
-                            <img onerror="this.src='../dist/svg/default_producto.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
+                            <img onerror="this.src='../dist/svg/404-v2.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
                             
                           </div>
                         </div>
@@ -1121,7 +1121,7 @@
                                 <!-- Categoria -->
                                 <div class="col-lg-4">
                                   <div class="form-group">
-                                    <label for="categoria_insumos_af_p">Clasificación</label>
+                                    <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">*</sup></label>
                                     <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
                                     </select>
                                   </div>
@@ -1154,7 +1154,7 @@
                                 <!-- Color -->
                                 <div class="col-lg-6">
                                   <div class="form-group">
-                                    <label for="color_p">Color</label>
+                                    <label for="color_p">Color <sup class="text-danger">*</sup></label>
                                     <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>
@@ -1162,7 +1162,7 @@
                                 <!-- Unnidad-->
                                 <div class="col-lg-6" id="content-t-unidad">
                                   <div class="form-group">
-                                    <label for="unidad_medida_p">Unidad-medida</label>
+                                    <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">*</sup></label>
                                     <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>
