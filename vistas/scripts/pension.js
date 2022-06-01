@@ -43,11 +43,10 @@ function init() {
   listar_botoness( localStorage.getItem('nube_idproyecto') );
 
   listar( localStorage.getItem('nube_idproyecto'));
-
  
 
-  //Mostramos los proveedor
-  $.post("../ajax/pension.php?op=select_proveedor", function (r) { $("#proveedor").html(r); });
+//Mostramos los proveedor
+lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#proveedor', null);
     
   //=====Guardar pension=============
   $("#guardar_registro_pension").on("click", function (e) {$("#submit-form-pension").submit();});
@@ -83,88 +82,6 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();  
-}
-
-/* PREVISUALIZAR LAS IMAGENES */
-function addImage(e,id) {
-  // colocamos cargando hasta que se vizualice
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
-
-	console.log(id);
-
-	var file = e.target.files[0], imageType = /application.*/;
-	
-	if (e.target.files[0]) {
-
-		var sizeByte = file.size;
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (extrae_extencion(file.name)=='pdf' || extrae_extencion(file.name)=='jpeg'|| extrae_extencion(file.name)=='jpg'|| extrae_extencion(file.name)=='png'|| extrae_extencion(file.name)=='webp'){
-      
-			if (sizekiloBytes <= 10240) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-          if (extrae_extencion(file.name) =='pdf') {
-            $('#foto2_i').hide();
-           $('#ver_pdf').html('<iframe src="'+result+'" frameborder="0" scrolling="no" width="100%" height="210"></iframe>');
-          }else{
-					$("#"+id+"_i").attr("src", result);
-          $('#foto2_i').show();
-          }
-
-					$("#"+id+"_nombre").html(''+
-						'<div class="row">'+
-              '<div class="col-md-12">'+
-              file.name +
-              '</div>'+
-              '<div class="col-md-12">'+
-              '<button  class="btn btn-danger  btn-block" onclick="'+id+'_eliminar();" style="padding:0px 12px 0px 12px !important;" type="button" ><i class="far fa-trash-alt"></i></button>'+
-              '</div>'+
-            '</div>'+
-					'');
-          
-					toastr.success('Imagen aceptada.')
-        
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-
-				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb')
-
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
-
-				$("#"+id).val("");
-			}
-
-		}else{
-      // return;
-			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b> .pdf .png .jpeg .jpg .webp etc... </b>');
-
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
-
-		}
-
-	}else{
-
-		toastr.error('Seleccione una Imagen');
-
-
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto2.png");
-   
-		$("#"+id+"_nombre").html("");
-	}
 }
 
 function foto2_eliminar() {
@@ -236,44 +153,26 @@ function editarbreak() {
   
 }
 
-// Función que suma o resta días a la fecha indicada
-sumaFecha = function(d, fecha){
-  var Fecha = new Date();
-  var sFecha = fecha || (Fecha.getDate() + "/" + (Fecha.getMonth() +1) + "/" + Fecha.getFullYear());
-  var sep = sFecha.indexOf('/') != -1 ? '/' : '-';
-  var aFecha = sFecha.split(sep);
-  var fecha = aFecha[2]+'/'+aFecha[1]+'/'+aFecha[0];
-  fecha= new Date(fecha);
-  fecha.setDate(fecha.getDate()+parseInt(d));
-  var anno=fecha.getFullYear();
-  var mes= fecha.getMonth()+1;
-  var dia= fecha.getDate();
-  mes = (mes < 10) ? ("0" + mes) : mes;
-  dia = (dia < 10) ? ("0" + dia) : dia;
-  var fechaFinal = dia+sep+mes+sep+anno;
-  return (fechaFinal);
-}
-
 //Función Listar
 function listar_botoness( nube_idproyecto ) {
   var estado_fecha_1 = true;
   //array_fi_ff=[];
   //Listar semanas(botones)
-  $.post("../ajax/pension.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
+  $.post("../ajax/pension.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (e, status) {
 
-    data =JSON.parse(data); //console.log(data);
+    e =JSON.parse(e); //console.log(data);
 
     // validamos la existencia de DATOS
-    if (data) {
+    if (e.data) {
 
-      var dia_regular = 0; var weekday_regular = extraer_dia_semana(data.fecha_inicio); var estado_regular = false;
+      var dia_regular = 0; var weekday_regular = extraer_dia_semana(e.data.fecha_inicio); var estado_regular = false;
 
       if (weekday_regular == "Do") { dia_regular = -1; } else { if (weekday_regular == "Lu") { dia_regular = -2; } else { if (weekday_regular == "Ma") { dia_regular = -3; } else { if (weekday_regular == "Mi") { dia_regular = -4; } else { if (weekday_regular == "Ju") { dia_regular = -5; } else { if (weekday_regular == "Vi") { dia_regular = -6; } else { if (weekday_regular == "Sa") { dia_regular = -7; } } } } } } }
-      // console.log(data.fecha_inicio, dia_regular, weekday_regular);
+      // console.log(e.data.fecha_inicio, dia_regular, weekday_regular);
 
           $('#List_smnas_pen').html('');
 
-          var fecha = format_d_m_a(data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //data.fecha_inicio
+          var fecha = format_d_m_a(e.data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //e.data.fecha_inicio
 
           var cal_mes  = false; var i=0;  var cont=0;
 
@@ -290,9 +189,9 @@ function listar_botoness( nube_idproyecto ) {
               fecha_f = sumaFecha(7+dia_regular, fecha_i); estado_regular = true;
             }            
 
-            let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(data.fecha_fin);
+            let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(e.data.fecha_fin);
             
-            // console.log(fecha_f + ' - '+data.fecha_fin);
+            // console.log(fecha_f + ' - '+e.data.fecha_fin);
             array_fi_ff.push({'fecha_in':format_a_m_d(fecha_i),'fecha_fi':format_a_m_d(fecha_f), 'num_semana':cont });
             //array_data_fi_ff.push()
 
@@ -363,6 +262,7 @@ function guardaryeditar_semana_pension() {
       "cantidad_total_platos":$(`.span_cantidad_${element.idservicio_pension}`).text(),
       "adicional_descuento":$(`.input_adicional_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_adicional_${element.idservicio_pension}`).val(),
       "total":$(`.span_parcial_${element.idservicio_pension}`).text()=='' ?'0.00' : quitar_formato_miles($(`.span_parcial_${element.idservicio_pension}`).text()),
+      "presupuesto":$(`.input_presupuesto_${element.idservicio_pension}`).val()=='' ?'0.00' : $(`.input_presupuesto_${element.idservicio_pension}`).val(),
       "descripcion":$(`.textarea_descrip_${element.idservicio_pension}`).val(),
 
     });
@@ -377,28 +277,34 @@ function guardaryeditar_semana_pension() {
     },
     // contentType: false,
     // processData: false,
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  
 
-        datos_semana( f1_reload, f2_reload ,cont_reload, i_reload,id_pen=id_pension);
-       
-        listar( localStorage.getItem('nube_idproyecto'));
-        
-        $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
+        if (e.status == true) {
 
-        // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
-        
-       $(".progress-bar").addClass("bg-success"); $("#barra_progress").text("100% Completado!");
-            
-      }else{
+          datos_semana( f1_reload, f2_reload ,cont_reload, i_reload,id_pen=id_pension);
+         
+          listar( localStorage.getItem('nube_idproyecto'));
+          
+          $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
+  
+          // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
+          
+         $(".progress-bar").addClass("bg-success"); $("#barra_progress").text("100% Completado!");
+              
+        }else{
+  
+              $("#icono-respuesta").html(`<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`);
+  
+              $(".progress-bar").addClass("bg-danger"); $("#barra_progress").text("100% Error!");
+  
+          // Swal.fire("Error!", datos, "error");
+        }
+      } catch (err) {
+        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+      }       
 
-            $("#icono-respuesta").html(`<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`);
-
-            $(".progress-bar").addClass("bg-danger"); $("#barra_progress").text("100% Error!");
-
-        // Swal.fire("Error!", datos, "error");
-      }
     },
     xhr: function () {
 
@@ -508,8 +414,7 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
   var total_monto_x_semana=0;
   $.post("../ajax/pension.php?op=ver_datos_semana", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect,id_pen:id_pen}, function (data, status) {
         
-    data =JSON.parse(data); //console.log(data);   
-    console.log(data);
+    data =JSON.parse(data); console.log(data);   
     $("#data_table_body").html('');   
      
     $.each(data, function (index, value) {
@@ -648,9 +553,10 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
       } );
     
-      var adicional_descuento=0;  
+      var adicional_descuento=0;  var presupuesto_pension = 0;
       value.adicional_descuento=='' ? adicional_descuento='0.00' : adicional_descuento=value.adicional_descuento;
-
+      value.presupuesto=='' || value.presupuesto==null ? presupuesto_pension='0.00' : presupuesto_pension=value.presupuesto;
+      
       var total=0;
       value.total=='' ? total='0.00' : total=value.total;
       var definir_precio_actual=0;
@@ -668,7 +574,8 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
       var tabla_bloc_cantidad_4 =`<td class="text-center"> <span class="span_cantidad_${value.idservicio_pension}">${value.cantidad_total_platos}</span> </td>`;
       var tabla_bloc_adicional_5=`<td> <span class="span-visible">${parseFloat(adicional_descuento).toFixed(2)}</span> <input type="number" value="${parseFloat(adicional_descuento).toFixed(2)}" onchange="calcular_adicional(${value.idservicio_pension},${data.length})" onkeyup="calcular_adicional(${value.idservicio_pension},${data.length})" class="hidden input-visible w-70px input_adicional_${value.idservicio_pension}"> </td>`;
       var tabla_bloc_parcial_6 =`<td> <span class="span_parcial_${value.idservicio_pension} calcular_total_parcial_${index+1}">${formato_miles(parseFloat(total).toFixed(2))}</span></td>`;
-      var tabla_bloc_descripcion_7 =`<td><textarea  class="text-center textarea-visible textarea_descrip_${value.idservicio_pension} h-auto" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
+      var tabla_bloc_presupuesto_7 =`<td> <span class="span-visible">${parseFloat(presupuesto_pension).toFixed(2)}</span> <input type="number" value="${parseFloat(presupuesto_pension).toFixed(2)}" class="hidden input-visible w-70px input_presupuesto_${value.idservicio_pension}"> </td>`;
+      var tabla_bloc_descripcion_8 =`<td><textarea  class="text-center textarea-visible textarea_descrip_${value.idservicio_pension} h-auto" cols="30" rows="1" style="width: 400px;" readonly >${value.descripcion}</textarea></td>`;
 
       var tabla_bloc_HN_1 = `<tr>
               ${tabla_bloc_descrip_comida_1} 
@@ -677,7 +584,8 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
               ${tabla_bloc_cantidad_4}
               ${tabla_bloc_adicional_5} 
               ${tabla_bloc_parcial_6}
-              ${tabla_bloc_descripcion_7} 
+              ${tabla_bloc_presupuesto_7} 
+              ${tabla_bloc_descripcion_8} 
             </tr>`;      
     
       //Unimos y mostramos los bloques separados
@@ -851,30 +759,41 @@ function guardaryeditar_pension(e) {
     contentType: false,
     processData: false,
 
-    success: function (datos) {
+    success: function (e) {
+
+      try {
+        e = JSON.parse(e); 
+
+        if (e.status == true) {
+
+          toastr.success('servicio registrado correctamente')				 
+  
+          tabla.ajax.reload(null, false);
+  
+          $("#modal-agregar-pension").modal("hide");
+  
+         limpiar_pension();
+
+        }else{
+  
+          toastr.error(e)
+        } 
+
+        
+      } catch (err) {
+
+        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+      } 
              
-      if (datos == 'ok') {
-
-				toastr.success('servicio registrado correctamente')				 
-
-        tabla.ajax.reload(null, false);
-
-        $("#modal-agregar-pension").modal("hide");
-
-       limpiar_pension();
-			}else{
-
-				toastr.error(datos)
-			}
     },
   });
 }
 
 //Función Listar
 function listar(nube_idproyecto) {
+
   var sumatotal=0; var totalsaldo=0; 
- // $("#total_pension").html("");
-  //$("#total_saldo").html("");
+
   tabla=$('#tabla-resumen-break-semanal').dataTable({
     "responsive": true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
@@ -887,7 +806,7 @@ function listar(nube_idproyecto) {
         type : "get",
         dataType : "json",						
         error: function(e){
-          console.log(e.responseText);	
+          console.log(e.responseText);	ver_errores(e);
         }
       },
       createdRow: function (row, data, ixdex) {
@@ -958,10 +877,9 @@ function listar(nube_idproyecto) {
   
 }
 
-
 //Función ver detalles Detalles
 function ver_detalle_x_servicio(idpension) {
-  //console.log(numero_semana,nube_idproyecto);
+
   $("#modal-ver-detalle-semana").modal("show");
   tabla_detalle_s=$('#tabla-detalles-semanal').dataTable({
     "responsive": true,
@@ -975,7 +893,7 @@ function ver_detalle_x_servicio(idpension) {
         type : "get",
         dataType : "json",						
         error: function(e){
-          console.log(e.responseText);	
+          console.log(e.responseText);	ver_errores(e);
         }
       },
       createdRow: function (row, data, ixdex) {
@@ -998,45 +916,50 @@ function ver_detalle_x_servicio(idpension) {
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+
   }).DataTable();
+
 }
 
 //mostrar
 function mostrar_pension(idpension) {
+
   limpiar_pension();
   var array_datosselect=[];
   $("#modal-agregar-pension").modal("show");
 
+  $.post("../ajax/pension.php?op=mostrar_pension", { idpension: idpension }, function (e, status) {
 
-  $.post("../ajax/pension.php?op=mostrar_pension", { idpension: idpension }, function (data, status) {
+    e = JSON.parse(e); console.log(e);   
 
-    data = JSON.parse(data);  
-    console.log(data);   
-    $("#proveedor").val(data.idproveedor).trigger("change"); 
-    $("#idproyecto_p").val(data.idproyecto);
-    $("#idpension").val(data.idpension);
-    $("#descripcion_pension").val(data.descripcion);
+      $("#proveedor").val(e.idproveedor).trigger("change"); 
+      $("#idproyecto_p").val(e.idproyecto);
+      $("#idpension").val(e.idpension);
+      $("#descripcion_pension").val(e.descripcion);
 
-    data.servicio_pension.forEach( (value, item )=> {
+      e.servicio_pension['data'].forEach( (value, item )=> {
 
-      console.log(value.precio, value.nombre_servicio);
-      if (value.nombre_servicio=="Desayuno") {
-        $("#p_desayuno").val(value.precio);
-        array_datosselect.push(value.nombre_servicio);
-      }
-      if (value.nombre_servicio=="Almuerzo") {  
-        $("#p_almuerzo").val(value.precio);
-        array_datosselect.push(value.nombre_servicio);
-      }
+        console.log(value.precio, value.nombre_servicio);
+        if (value.nombre_servicio=="Desayuno") {
+          $("#p_desayuno").val(value.precio);
+          array_datosselect.push(value.nombre_servicio);
+        }
 
-      if (value.nombre_servicio=="Cena") {     
-        $("#p_cena").val(value.precio);
-        array_datosselect.push(value.nombre_servicio);
-      }
+        if (value.nombre_servicio=="Almuerzo") {  
+          $("#p_almuerzo").val(value.precio);
+          array_datosselect.push(value.nombre_servicio);
+        }
 
-    });
+        if (value.nombre_servicio=="Cena") {     
+          $("#p_cena").val(value.precio);
+          array_datosselect.push(value.nombre_servicio);
+        }
 
-    $("#servicio_p").val(array_datosselect).trigger("change");
+      });
+
+      $("#servicio_p").val(array_datosselect).trigger("change");
+
+ 
 
   });
 }
@@ -1066,7 +989,7 @@ function regresar() {
 }
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -1120,23 +1043,31 @@ function guardaryeditar_factura(e) {
     contentType: false,
     processData: false,
 
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+    success: function (e) {
+      try {
+        e = JSON.parse(e); 
+                      
+        if (e.status ==true) {
 
-				toastr.success('servicio registrado correctamente')				 
+          toastr.success('servicio registrado correctamente')				 
 
-        tabla.ajax.reload(null, false);
+          tabla.ajax.reload(null, false);
 
-        $("#modal-agregar-comprobante").modal("hide");
-       listar_comprobantes(localStorage.getItem('idpension_f_nube'));
-       total_monto(localStorage.getItem('idpension_f_nube'));
-       listar( localStorage.getItem('nube_idproyecto'));
-        limpiar_comprobante();
-			}else{
+          $("#modal-agregar-comprobante").modal("hide");
+        listar_comprobantes(localStorage.getItem('idpension_f_nube'));
+        total_monto(localStorage.getItem('idpension_f_nube'));
+        listar( localStorage.getItem('nube_idproyecto'));
+          limpiar_comprobante();
+        }else{
 
-				toastr.error(datos)
-			}
+          toastr.error(datos)
+        }
+        
+      } catch (err) {
+
+        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+      }
+
     },
   });
 }
@@ -1159,26 +1090,18 @@ function listar_comprobantes(idpension) {
         type : "get",
         dataType : "json",						
         error: function(e){
-          console.log(e.responseText);	
+          console.log(e.responseText);		ver_errores(e);
         }
       },
       createdRow: function (row, data, ixdex) {
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass('text-center');
-        }
+        if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
         // columna: sub total
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass('text-nowrap text-right');
-        }
+        if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
         // columna: igv
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass('text-nowrap text-right');
-        }
+        if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
         // columna: total
-        if (data[7] != '') {
-          $("td", row).eq(7).addClass('text-nowrap text-right');
-        }
+        if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
 
       },
     "language": {
@@ -1338,57 +1261,62 @@ function mostrar_comprobante(idfactura_pension ) {
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
-  $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_pension : idfactura_pension  }, function (data, status) {
+  $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_pension : idfactura_pension  }, function (e, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
-    
-    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-    $("#idfactura_pension  ").val(data.idfactura_pension);
-    $("#nro_comprobante").val(data.nro_comprobante);
-    $("#monto").val(parseFloat(data.monto).toFixed(2));
-    $("#fecha_emision").val(data.fecha_emision);
-    $("#descripcion").val(data.descripcion);
-    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
-    $("#igv").val(parseFloat(data.igv).toFixed(2));
-    $("#val_igv").val(data.val_igv); 
-    $("#tipo_gravada").val(data.tipo_gravada);
-    $("#forma_pago").val(data.forma_de_pago).trigger("change");
+    e = JSON.parse(e);  //console.log(data); 
 
-    if (data.comprobante == "" || data.comprobante == null  ) {
+    if (e.status) {
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+      $("#idfactura_pension  ").val(e.data.idfactura_pension);
+      $("#nro_comprobante").val(e.data.nro_comprobante);
+      $("#monto").val(parseFloat(e.data.monto).toFixed(2));
+      $("#fecha_emision").val(e.data.fecha_emision);
+      $("#descripcion").val(e.data.descripcion);
+      $("#subtotal").val(parseFloat(e.data.subtotal).toFixed(2));
+      $("#igv").val(parseFloat(e.data.igv).toFixed(2));
+      $("#val_igv").val(e.data.val_igv); 
+      $("#tipo_gravada").val(e.data.tipo_gravada);
+      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
 
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+      if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
-      $("#doc1_nombre").html('');
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
-      $("#doc_old_1").val(""); $("#doc1").val("");
+        $("#doc1_nombre").html('');
+
+        $("#doc_old_1").val(""); $("#doc1").val("");
+
+      } else {
+
+        $("#doc_old_1").val(e.data.comprobante); 
+
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
+        
+        // cargamos la imagen adecuada par el archivo
+        if ( extrae_extencion(e.data.comprobante) == "pdf" ) {
+
+          $("#doc1_ver").html('<iframe src="../dist/docs/pension/comprobante/'+e.data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+
+        }else{
+          if (
+            extrae_extencion(e.data.comprobante) == "jpeg" || extrae_extencion(e.data.comprobante) == "jpg" || extrae_extencion(e.data.comprobante) == "jpe" ||
+            extrae_extencion(e.data.comprobante) == "jfif" || extrae_extencion(e.data.comprobante) == "gif" || extrae_extencion(e.data.comprobante) == "png" ||
+            extrae_extencion(e.data.comprobante) == "tiff" || extrae_extencion(e.data.comprobante) == "tif" || extrae_extencion(e.data.comprobante) == "webp" ||
+            extrae_extencion(e.data.comprobante) == "bmp" || extrae_extencion(e.data.comprobante) == "svg" ) {
+
+            $("#doc1_ver").html(`<img src="../dist/docs/pension/comprobante/${e.data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+            
+          } else {
+            $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
+          }        
+        }      
+      }
+      $("#cargando-3-fomulario").show();
+      $("#cargando-4-fomulario").hide();
 
     } else {
-
-      $("#doc_old_1").val(data.comprobante); 
-
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
-      
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.comprobante) == "pdf" ) {
-
-        $("#doc1_ver").html('<iframe src="../dist/docs/pension/comprobante/'+data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-      }else{
-        if (
-          extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
-          extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
-          extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
-          extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
-
-          $("#doc1_ver").html(`<img src="../dist/docs/pension/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-          
-        } else {
-          $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-        }        
-      }      
+      ver_errores(e);
     }
-    $("#cargando-3-fomulario").show();
-    $("#cargando-4-fomulario").hide();
   });
 }
 //Función para desactivar registros
@@ -1518,16 +1446,12 @@ init();
 //pension
 $(function () {
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-      guardaryeditar_pension(e)
-
-    },
-  });
-
   // Aplicando la validacion del select cada vez que cambie
   $("#proveedor").on("change", function () { $(this).trigger("blur"); });
+
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-agregar-pension").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1565,28 +1489,12 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
      
     },
-
-
-  });
-  //agregando la validacion del select  ya que no tiene un atributo name el plugin
-  $("#proveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
-
-});
-
-//comprobantes.
-$(function () {
-  
-  $.validator.setDefaults({
-
     submitHandler: function (e) {
-      guardaryeditar_factura(e)
-      
-    },
-  });
+      guardaryeditar_pension(e)
 
-  // Aplicando la validacion del select cada vez que cambie
-  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
-  $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+    }
+
+  });
 
   $("#form-agregar-comprobante").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1629,8 +1537,16 @@ $(function () {
      
     },
 
+    submitHandler: function (e) {
+      guardaryeditar_factura(e)
+      
+    }
+
 
   });
+
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#proveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
@@ -1638,28 +1554,6 @@ $(function () {
 
 });
 
-// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
-
-  let splits = fecha.split("-"); //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
-}
-// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
-function format_a_m_d(fecha) {
-
-  let splits = fecha.split("-"); //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
-}
-//extraer_dia_semana
-function extraer_dia_semana(fecha) {
-  const fechaComoCadena = fecha; // día fecha
-  const dias = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do']; //
-  const numeroDia = new Date(fechaComoCadena).getDay();
-  const nombreDia = dias[numeroDia];
-  return nombreDia;
-}
 function pintar_boton_selecionado(i) {
   localStorage.setItem('i', i); //enviamos el ID-BOTON al localStorage
   // validamos el id para pintar el boton
@@ -1682,291 +1576,6 @@ function pintar_boton_selecionado(i) {
 //despintar_btn_select
 function despintar_btn_select() {  
   if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
-}
-//coma por miles
-function formato_miles(num) {
-  if (!num || num == "NaN") return "0.00";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
-
-function quitar_formato_miles(numero) {
-  let inVal = numero.replace(/,/g, '');
-  return inVal;
-}
-
-
-function extrae_extencion(filename) {
-  return filename.split('.').pop();
-}
-
-/* PREVISUALIZAR LOS DOCUMENTOS */
-function addDocs(e,id) {
-
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
-
-	var file = e.target.files[0], archivoType = /image.*|application.*/;
-	
-	if (e.target.files[0]) {
-    
-		var sizeByte = file.size; console.log(file.type);
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(archivoType) ){
-			// return;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .pdf, .png. .jpeg, .jpg, .jpe, .webp, .svg',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
-
-		}else{
-
-			if (sizekiloBytes <= 40960) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-
-          // cargamos la imagen adecuada par el archivo
-				  if ( extrae_extencion(file.name) == "doc") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "docx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "pdf" ) {
-                $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-              }else{
-                if ( extrae_extencion(file.name) == "csv" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(file.name) == "xls" ) {
-                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                  } else {
-                    if ( extrae_extencion(file.name) == "xlsx" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "xlsm" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                      } else {
-                        if (
-                          extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
-                          extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
-                          extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
-                          extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
-
-                          $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-                          
-                        } else {
-                          $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                        }
-                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } 
-					$("#"+id+"_nombre").html(`<div class="row">
-            <div class="col-md-12">
-              <i> ${file.name} </i>
-            </div>
-            <div class="col-md-12">
-              <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
-            </div>
-          </div>`);
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: `El documento: ${file.name.toUpperCase()} es muy pesado.`,
-          showConfirmButton: false,
-          timer: 1500
-        })
-
-        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-        $("#"+id+"_nombre").html("");
-				$("#"+id).val("");
-			}
-		}
-	}else{
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    })
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-		$("#"+id+"_nombre").html("");
-    $("#"+id).val("");
-	}	
-}
-
-// recargar un doc para ver
-function re_visualizacion(id, carpeta) {
-
-  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
-
-  pdffile     = document.getElementById("doc"+id+"").files[0];
-
-  var antiguopdf  = $("#doc_old_"+id+"").val();
-
-  if(pdffile === undefined){
-
-    if (antiguopdf == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-		  $("#doc"+id+"_nombre").html("");
-
-    } else {
-      if ( extrae_extencion(antiguopdf) == "doc") {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      } else {
-        if ( extrae_extencion(antiguopdf) == "docx" ) {
-          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-        } else {
-          if ( extrae_extencion(antiguopdf) == "pdf" ) { 
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/pension/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-            toastr.success('Documento vizualizado correctamente!!!')
-          } else {
-            if ( extrae_extencion(antiguopdf) == "csv" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(antiguopdf) == "xls" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  } else {
-                    if (
-                      extrae_extencion(antiguopdf) == "jpeg" || extrae_extencion(antiguopdf) == "jpg" || extrae_extencion(antiguopdf) == "jpe" ||
-                      extrae_extencion(antiguopdf) == "jfif" || extrae_extencion(antiguopdf) == "gif" || extrae_extencion(antiguopdf) == "png" ||
-                      extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
-                      extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
-  
-                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/pension/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
-                      toastr.success('Documento vizualizado correctamente!!!');
-                    } else {
-                      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                    }                    
-                  }
-                }
-              }
-            }
-          }
-        }
-      }      
-    }
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "doc") {
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else {
-      if ( extrae_extencion(pdffile.name) == "docx" ) {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      }else{
-        if ( extrae_extencion(pdffile.name) == "pdf" ) {
-          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="310"> </iframe>');
-          toastr.success('Documento vizualizado correctamente!!!');
-        }else{
-          if ( extrae_extencion(pdffile.name) == "csv" ) {
-            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-          } else {
-            if ( extrae_extencion(pdffile.name) == "xls" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-            } else {
-              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-              } else {
-                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
-
-                    $("#doc"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="100%" >`);
-                    toastr.success('Documento vizualizado correctamente!!!');
-                  } else {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                  }                  
-                }
-              }
-            }
-          }
-        }
-      }
-    }     	
-    console.log(pdffile);
-  }
 }
 
 

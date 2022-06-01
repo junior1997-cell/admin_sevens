@@ -145,6 +145,7 @@
                                     <th rowspan="2" colspan="1" class="text-center">Cantidad</th>
                                     <th rowspan="2" colspan="1" class="text-center">Adicional</th>
                                     <th rowspan="2" colspan="1" class="text-center">Parcial</th>
+                                    <th rowspan="2" colspan="1" class="text-center">Presupuesto</th>
                                     <th rowspan="2" colspan="1" class="text-center">Descripción</th>
                                   </tr>
                                   <tr id="bloque_fechas"></tr>
@@ -564,11 +565,7 @@
 
         <script type="text/javascript" src="scripts/pension.js"></script> 
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); });</script>
 
         <?php require 'extra_script.php'; ?>
 
