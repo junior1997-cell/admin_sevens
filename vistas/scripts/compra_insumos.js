@@ -1494,7 +1494,12 @@ function guardaryeditar_pago(e) {
       } else {
         ver_errores(e);
       }
+      $("#guardar_registro_pago").html('Guardar Cambios').removeClass('disabled');
     },
+    beforeSend: function () {
+      $("#guardar_registro_pago").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -1645,74 +1650,11 @@ function mostrar_pagos(idpago_compras) {
   });
 }
 
-//Función para desactivar registros
-function desactivar_pagos(idpago_compras) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el pago?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_insumos.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {        
+function eliminar_pago_compra(idpago_compras, nombre) {
 
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-
-        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
-
-        if (e == "ok") {
-          Swal.fire("Desactivado!", "El pago ha sido desactivado.", "success");
-          if (reload_detraccion == "si") {
-            if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
-            if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
-          } else {
-            if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
-          }
-        } else {
-          Swal.fire("Error!", e, "error");
-        }
-        
-      });
-    }
-  });
-}
-
-function activar_pagos(idpago_compras) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  Pago?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/compra_insumos.php?op=activar_pagos", { idpago_compras: idpago_compras }, function (e) {
-        Swal.fire("Activado!", "Pago ha sido activado.", "success");
-
-        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-
-        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
-
-        if (reload_detraccion == "si") {
-          if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
-          if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
-        } else {
-          if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
-        }
-      });
-    }
-  });
-}
-
-function eliminar_pago_compra(idpago_compras) {
   Swal.fire({
     title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
+    html: `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
     icon: "warning",
     showCancelButton: true,
     showDenyButton: true,
@@ -1721,41 +1663,56 @@ function eliminar_pago_compra(idpago_compras) {
     cancelButtonColor: "#6c757d",    
     confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
     denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+    showLoaderOnConfirm: true,
+    preConfirm: (input) => {       
+      return fetch(`../ajax/compra_insumos.php?op=desactivar_pagos&idpago_compras=${idpago_compras}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    showLoaderOnDeny: true,
+    preDeny: (input) => {       
+      return fetch(`../ajax/compra_insumos.php?op=eliminar_pago_compra&idpago_compras=${idpago_compras}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/compra_insumos.php?op=desactivar_pagos", { idpago_compras: idpago_compras }, function (e) {
-        if (e == "ok") {
-          Swal.fire("Papelera!", "Tu Pago sido enviado a la <b>PAPELERA</b>.", "success");
-          total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-          total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
-          if (reload_detraccion == "si") {
-            if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
-            if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
-          } else {
-            if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
-          }
-          if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); }
+      if (result.value.status) {
+        Swal.fire("Papelera!", "Tu Pago sido enviado a la <b>PAPELERA</b>.", "success");
+        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
+        if (reload_detraccion == "si") {
+          if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+          if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
         } else {
-          ver_errores(e);
+          if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
         }
-      });
+        if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); }
+        $(".tooltip").removeClass("show").addClass("hidde");
+      }else{
+        ver_errores(result.value);
+      }
     }else if (result.isDenied) {
-      $.post("../ajax/compra_insumos.php?op=eliminar_pago_compra", { idpago_compras: idpago_compras }, function (e) {
-        if (e == "ok") {
-          Swal.fire("ELIMINADO!", "Tu Pago a sido <b>ELIMINADO</b> permanentemente.", "success");
-          total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
-          total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
-          if (reload_detraccion == "si") {
-            if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
-            if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
-          } else {
-            if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
-          }
-          if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); } 
+      if (result.value.status) {
+        Swal.fire("ELIMINADO!", "Tu Pago a sido <b>ELIMINADO</b> permanentemente.", "success");
+        total_pagos(localStorage.getItem("idcompra_pago_comp_nube"));
+        total_pagos_detracc(localStorage.getItem("idcompra_pago_detracc_nub"));
+        if (reload_detraccion == "si") {
+          if (tabla_pagos2) { tabla_pagos2.ajax.reload(null, false); }
+          if (tabla_pagos3) { tabla_pagos3.ajax.reload(null, false); }
         } else {
-          ver_errores(e);
+          if (tabla_pagos1) { tabla_pagos1.ajax.reload(null, false); }
         }
-      });
+        if (tabla_compra_x_proveedor) { tabla_compra_x_proveedor.ajax.reload(null, false); }
+        $(".tooltip").removeClass("show").addClass("hidde");
+      }else{
+        ver_errores(result.value);
+      }
     }
   });
 }

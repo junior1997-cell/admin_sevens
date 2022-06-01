@@ -694,7 +694,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'desactivar_pagos':
 
-        $rspta = $compra->desactivar_pagos($idpago_compras);
+        $rspta = $compra->desactivar_pagos($_GET["idpago_compras"]);
 
         echo json_encode($rspta, true);
 
@@ -702,7 +702,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'activar_pagos':
 
-        $rspta = $compra->activar_pagos($idpago_compras);
+        $rspta = $compra->activar_pagos($_GET["idpago_compras"]);
 
         echo json_encode($rspta, true);
 
@@ -710,7 +710,7 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'eliminar_pago_compra':
         
-        $rspta = $compra->eliminar_pagos($idpago_compras);
+        $rspta = $compra->eliminar_pagos($_GET["idpago_compras"]);
     
         echo json_encode($rspta, true);
     
@@ -736,14 +736,14 @@ if (!isset($_SESSION["nombre"])) {
               "0" =>$cont++,
               "1" => $reg->estado
                 ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pago_compra(' . $reg->idpago_compras . ')"><i class="fas fa-skull-crossbones"></i> </button>'      
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pago_compra(' . $reg->idpago_compras .', \''.$reg->beneficiario. '\')"><i class="fas fa-skull-crossbones"></i> </button>'      
                   : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
                   ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
               "2" => $reg->forma_pago,
               "3" => '<div class="user-block">
-                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
-                <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
-                <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+                <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
+                <span class="description ml-0"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
+                <span class="description ml-0"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
               </div>',             
               "4" => $reg->fecha_pago,
               "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
