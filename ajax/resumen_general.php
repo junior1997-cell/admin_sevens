@@ -1372,6 +1372,119 @@
 
         break;
 
+        // TABLA
+        case 'tbla_sub_contrato':
+
+          $data = Array(); $datatable = Array();
+
+          $deuda = $_POST['deuda'];
+
+          $t_monto = 0;
+          $t_pagos = 0;
+          $t_saldo = 0;   
+          $saldo_x_fila = 0;
+
+          $rspta = $resumen_general->tabla_sub_contrato($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor'],);
+          //echo json_encode($rspta, true);
+          foreach ($rspta['data'] as $key => $value) {
+
+            $saldo_x_fila = floatval($value['costo_parcial']) - floatval($value['total_deposito']);
+            
+            if ( !empty($value['comprobante']) ) {
+              $comprobante = '<a target="_blank"  href="../dist/docs/sub_contrato/comprobante_subcontrato/'.$value['comprobante'].'"> <i class="far fa-file-pdf"  style="font-size: 23px;"></i></a>';
+            } else {
+              $comprobante = '<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>';
+            }
+
+            if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => $value['razon_social'], 
+                '2' => format_d_m_a($value['fecha_subcontrato']),
+                '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
+                '4' => $comprobante,
+                '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['costo_parcial']);
+              $t_pagos += floatval($value['total_deposito']);
+              $t_saldo += floatval($saldo_x_fila);
+            } else {
+              if ($deuda == 'sindeuda') {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['razon_social'], 
+                  '2' => format_d_m_a($value['fecha_subcontrato']),
+                  '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
+                  '4' => $comprobante,
+                  '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                  '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['costo_parcial']);
+                $t_pagos += floatval($value['total_deposito']);
+                $t_saldo += floatval($saldo_x_fila);
+              }else{
+                if ($deuda == 'condeuda') {
+                  if ($saldo_x_fila > 0) {
+                    $datatable[] = array(
+                      '0' => $key+1, 
+                      '1' => $value['razon_social'], 
+                      '2' => format_d_m_a($value['fecha_subcontrato']),
+                      '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
+                      '4' => $comprobante,
+                      '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                      '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    );
+          
+                    $t_monto += floatval($value['costo_parcial']);
+                    $t_pagos += floatval($value['total_deposito']);
+                    $t_saldo += floatval($saldo_x_fila);
+                  }
+                }else{
+                  if ($deuda == 'conexcedente') {
+                    if ($saldo_x_fila < 0) {
+                      $datatable[] = array(
+                        '0' => $key+1, 
+                        '1' => $value['razon_social'], 
+                        '2' => format_d_m_a($value['fecha_subcontrato']),
+                        '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
+                        '4' => $comprobante,
+                        '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
+                        '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                        '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                      );
+            
+                      $t_monto += floatval($value['costo_parcial']);
+                      $t_pagos += floatval($value['total_deposito']);
+                      $t_saldo += floatval($saldo_x_fila);
+                    }
+                  }
+                }
+              }
+            }                  
+          }
+
+          $data = array(
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
+          );
+
+          //Codificar el resultado utilizando json
+          echo json_encode($data, true);
+
+        break;
+
         // Select2 - Proveedores
         case 'select2_proveedores':
 

@@ -10,8 +10,9 @@ var tabla_8 = $("#tabla8_pension").DataTable();
 var tabla_9 = $("#tabla9_per_adm").DataTable();
 var tabla_10 = $("#tabla10_per_obr").DataTable();
 var tabla_11 = $("#tabla11_otros_gastos").DataTable();
+var tabla_12 = $("#tabla12_sub_contrato").DataTable();
 
-var tabla_12 = $("#tabla12_all_sumas").DataTable();
+var tabla_20 = $("#tabla20_all_sumas").DataTable();
 
 var monto_compras = 0, pago_compras = 0, saldo_compras = 0;
 var monto_serv_maq = 0, pago_serv_maq = 0, saldo_serv_maq = 0;
@@ -24,6 +25,7 @@ var monto_pension = 0, pago_pension = 0, saldo_pension = 0;
 var monto_adm = 0, pago_adm = 0, saldo_adm = 0;
 var monto_obrero = 0, pago_obrero = 0, saldo_obrero = 0;
 var monto_otros_gastos = 0, pago_otros_gastos = 0, saldo_otros_gastos = 0;
+var monto_sub_contrato = 0, pago_sub_contrato = 0, saldo_sub_contrato = 0;
 
 var monto_all = 0;
 var deposito_all = 0;
@@ -150,7 +152,7 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       order: [[0, "asc"]], //Ordenar (columna,orden)
     }).DataTable();
     
-    $('.cargando-compras').removeClass('bg-danger').addClass('backgff9100').html('Compras');
+    $('.cargando-compras').removeClass('bg-danger').addClass('backgff9100').html('Compras de Insumos');
     console.log(monto_compras, pago_compras, saldo_compras);
 
     tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
@@ -1232,6 +1234,99 @@ function tbla_otros_gastos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaj
     }).DataTable();
 
     $('.cargando-otros-gastos').removeClass('bg-danger').addClass('backgff9100').html('Otros Gastos');
+    
+    tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+  }).fail( function(e) { ver_errores(e); } );
+  
+}
+
+// TABLA - SUB CONTRATO - -------------------------------------------------------
+function tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_sub_contrato", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+    
+    e = JSON.parse(e); //console.log(e);   
+
+    $("#monto_sub_contrato").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_sub_contrato").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_sub_contrato").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_sub_contrato = e.data.t_monto.toFixed(2); 
+    pago_sub_contrato = e.data.t_pagos.toFixed(2); 
+    saldo_sub_contrato = e.data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_sub_contrato_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_sub_contrato_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_sub_contrato_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(e.data.t_monto);
+    deposito_all += parseFloat(e.data.t_pagos);
+    saldo_all += parseFloat(e.data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    tabla_12.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#sub_contrato').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_12 = $("#tabla12_sub_contrato").dataTable({
+      responsive: true,
+      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: e.data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
+        // columna: fecha
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
+        // columna: detalle
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
+        // columna: montos
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right");  }          
+        // columna: depositos  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else{              
+            if ( parseFloat(numero) > 0 ) {
+              $("td", row).eq(7).addClass("text-right bg-warning");
+            } else {
+              if ( parseFloat(numero) == 0 ) {
+                $("td", row).eq(7).addClass("text-right bg-success");
+              }
+            }
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: {
+          copyTitle: "Tabla Copiada",
+          copySuccess: {
+            _: "%d líneas copiadas",
+            1: "1 línea copiada",
+          },
+        },
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+    }).DataTable();
+
+    $('.cargando-sub-contrato').removeClass('bg-danger').addClass('backgff9100').html('Sub Contrato');
 
     table_all_sumas();
   }).fail( function(e) { ver_errores(e); } );
@@ -1246,7 +1341,7 @@ function table_all_sumas() {
   var insert_table = [    
     {
       '0': '1', '1': '--', '2': '--', '3': '--',
-      '4': 'Compras',
+      '4': 'Compras de Insumos',
       '5': formato_miles(monto_compras),
       '6': formato_miles(pago_compras),
       '7': formato_miles(saldo_compras),
@@ -1321,13 +1416,20 @@ function table_all_sumas() {
       '6': formato_miles(pago_otros_gastos),
       '7': formato_miles(saldo_otros_gastos),
     },
+    {
+      '0': '12', '1': '--', '2': '--', '3': '--',
+      '4': 'Sub Contrato',
+      '5': formato_miles(monto_sub_contrato),
+      '6': formato_miles(pago_sub_contrato),
+      '7': formato_miles(saldo_sub_contrato),
+    },
   ];
 
-  tabla_12.destroy(); // Destruye las tablas de datos en el contexto actual.
+  tabla_20.destroy(); // Destruye las tablas de datos en el contexto actual.
 
-  $('#tbody12_all_sumas').empty(); // Vacía en caso de que las columnas cambien
+  $('#tbody20_all_sumas').empty(); // Vacía en caso de que las columnas cambien
     
-  tabla_12 = $("#tabla12_all_sumas").dataTable({
+  tabla_20 = $("#tabla20_all_sumas").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
@@ -1342,7 +1444,7 @@ function table_all_sumas() {
 
         // console.log(data[4]);
 
-        if (data[4] == 'Compras') {
+        if (data[4] == 'Compras de Insumos') {
           $("td", row).eq(5).removeClass('text-right monto_compras_all').addClass('text-right monto_compras_all');
           $("td", row).eq(6).removeClass('text-right pago_compras_all').addClass('text-right pago_compras_all');
           $("td", row).eq(7).removeClass('text-right saldo_compras_all').addClass('text-right saldo_compras_all');
@@ -1400,7 +1502,19 @@ function table_all_sumas() {
           $("td", row).eq(5).removeClass('text-right monto_obrero_all').addClass('text-right monto_obrero_all');
           $("td", row).eq(6).removeClass('text-right pago_obrero_all').addClass('text-right pago_obrero_all');
           $("td", row).eq(7).removeClass('text-right saldo_obrero_all').addClass('text-right saldo_obrero_all');    
-        }   
+        }
+        
+        if (data[4] == 'Otros Gastos') {
+          $("td", row).eq(5).removeClass('text-right monto_otros_gastos_all').addClass('text-right monto_otros_gastos_all');
+          $("td", row).eq(6).removeClass('text-right pago_otros_gastos_all').addClass('text-right pago_otros_gastos_all');
+          $("td", row).eq(7).removeClass('text-right saldo_otros_gastos_all').addClass('text-right saldo_otros_gastos_all');    
+        }
+
+        if (data[4] == 'Sub Contrato') {
+          $("td", row).eq(5).removeClass('text-right monto_sub_contrato_all').addClass('text-right monto_sub_contrato_all');
+          $("td", row).eq(6).removeClass('text-right pago_sub_contrato_all').addClass('text-right pago_sub_contrato_all');
+          $("td", row).eq(7).removeClass('text-right saldo_sub_contrato_all').addClass('text-right saldo_sub_contrato_all');    
+        }
       }  
 
       // columna: montos
@@ -1477,7 +1591,7 @@ function filtros() {
 
   console.log(fecha_1, fecha_2, id_trabajador, id_proveedor, deuda);
   
-  $('.cargando-compras').removeClass('backgff9100').addClass('bg-danger').html('Compras - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.cargando-compras').removeClass('backgff9100').addClass('bg-danger').html('Compras de Insumos - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   $('.cargando-maquinas').removeClass('backgff9100').addClass('bg-danger').html('Servicios-Maquinaria - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
@@ -1499,6 +1613,8 @@ function filtros() {
   
   $('.cargando-otros-gastos').removeClass('backgff9100').addClass('bg-danger').html('Otros Gastos - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
   
+  $('.cargando-sub-contrato').removeClass('backgff9100').addClass('bg-danger').html('Sub Contrato - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
   $('.cargando-sumas').removeClass('backgff9100').addClass('bg-danger').html('Sumas totales - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   // ejecutamos las funcioes a filtrar

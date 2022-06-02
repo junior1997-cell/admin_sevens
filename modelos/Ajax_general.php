@@ -122,6 +122,11 @@
       return ejecutarConsulta($sql);
     }
 
+    public function select2_categoria_all() {
+      $sql = "SELECT idcategoria_insumos_af as id, nombre FROM categoria_insumos_af WHERE estado='1' AND estado_delete = '1' ORDER BY nombre ASC;";
+      return ejecutarConsulta($sql);
+    }
+
     /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
     public function tblaActivosFijos() {
       $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 

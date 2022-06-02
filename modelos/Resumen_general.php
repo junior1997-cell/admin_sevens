@@ -567,6 +567,73 @@ class Resumen_general
     return ejecutarConsultaArray($sql);
   }
 
+  // TABLA
+  public function tabla_sub_contrato($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
+
+    $list_subcontrato= Array();  $filtro_fecha = "";   $filtro_proveedor = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND s.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else {
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_filtro_2'";
+        }     
+      }      
+    }
+
+    $sql = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
+    s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, p.ruc
+    FROM subcontrato AS s, proveedor as p
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha 
+		ORDER BY s.fecha_subcontrato DESC";
+    $sub_contrato = ejecutarConsultaArray($sql);
+    if ($sub_contrato['status'] == false) {  return $sub_contrato;}
+
+    if (!empty($sub_contrato['data'])) {			
+			foreach ($sub_contrato['data'] as $key => $value) {
+
+				$id=$value['idsubcontrato'];
+
+				$sql_2="SELECT SUM(monto) as total_deposito FROM pago_subcontrato WHERE idsubcontrato='$id' AND estado='1' AND  estado_delete='1';";
+				$total_deposito= ejecutarConsultaSimpleFila($sql_2);
+        if ($total_deposito['status'] == false) {  return $total_deposito;}
+
+				$list_subcontrato[]= array(
+
+					"idsubcontrato"      => $value['idsubcontrato'],
+					"idproyecto"     	 => $value['idproyecto'],
+					"idproveedor"        => $value['idproveedor'],
+					"tipo_comprobante"   => $value['tipo_comprobante'],
+					"forma_de_pago"      => $value['forma_de_pago'],
+					"numero_comprobante" => $value['numero_comprobante'],
+					"fecha_subcontrato"  => $value['fecha_subcontrato'],
+					"subtotal"           => empty($value['subtotal']) ? 0 : $value['subtotal']  ,
+					"igv"                => empty($value['igv']) ? 0 : $value['igv']  ,
+					"costo_parcial"      => empty($value['costo_parcial']) ? 0 : $value['costo_parcial']  ,
+					"descripcion"        => $value['descripcion'],
+					"comprobante"        => $value['comprobante'],
+          "razon_social"        => $value['razon_social'],
+
+					"total_deposito"     => ($retVal_2 = empty($total_deposito['data']) ? 0 : ($retVal_3 = empty($total_deposito['data']['total_deposito']) ? 0 : $total_deposito['data']['total_deposito'])),
+
+				);	
+				
+			}
+		}
+
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$list_subcontrato];
+    
+  }
+
   // SELECT2
   public function select_proveedores()  {
     $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado = '1' AND estado_delete = '1'";

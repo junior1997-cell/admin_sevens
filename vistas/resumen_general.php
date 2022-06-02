@@ -110,7 +110,7 @@
                               <table id="tabla1_compras" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-compras text-center w-300px clas_pading backgff9100">Compras</th>
+                                    <th colspan="8" class="cargando-compras text-center w-300px clas_pading backgff9100">Compras de Insumos</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
@@ -467,10 +467,43 @@
                                 </tfoot>
                               </table>
 
+                              <br>
+
+                              <!-- Sub Contrato -->
+                              <table id="tabla12_sub_contrato" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="cargando-sub-contrato text-center w-300px clas_pading backgff9100">Sub Contrato</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
+                                    <th class="text-center clas_pading">FECHA</th>
+                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="sub_contrato"></tbody>                                 
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_sub_contrato"></th>
+                                    <th class="clas_pading text-right" id="pago_sub_contrato"></th>
+                                    <th class="clas_pading text-right" id="saldo_sub_contrato"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
                               <br />
 
                               <!--SUMAS TOTALES-->
-                              <table id="tabla12_all_sumas" class="display" style="width: 100%;">
+                              <table id="tabla20_all_sumas" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
                                     <th colspan="8" class="cargando-sumas text-center w-300px clas_pading backgff9100">Sumas totales</th>
@@ -487,13 +520,13 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="tbody12_all_sumas">
+                                <tbody id="tbody20_all_sumas">
                                   <tr>
                                     <td>--</td>
                                     <td>--</td>
                                     <td>--</td>
                                     <td>--</td>
-                                    <td>Compras</td>
+                                    <td>Compras de Insumos</td>
                                     <td class="text-right monto_compras_all">0.00</td>
                                     <td class="text-right pago_compras_all">0.00</td>
                                     <td class="text-right saldo_compras_all">0.00</td>
@@ -597,6 +630,16 @@
                                     <td class="text-right monto_otros_gastos_all">0.00</td>
                                     <td class="text-right pago_otros_gastos_all">0.00</td>
                                     <td class="text-right saldo_otros_gastos_all">0.00</td>
+                                  </tr>
+                                  <tr>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>Sub Contrato</td>
+                                    <td class="text-right monto_sub_contrato_all">0.00</td>
+                                    <td class="text-right pago_sub_contrato_all">0.00</td>
+                                    <td class="text-right saldo_sub_contrato_all">0.00</td>
                                   </tr>
                                 </tbody>
 

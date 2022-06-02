@@ -36,7 +36,7 @@ function init() {
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
-  lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 

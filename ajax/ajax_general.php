@@ -284,6 +284,31 @@
         }
       break;
 
+      case 'select2Categoria_all': 
+    
+        $rspta = $ajax_general->select2_categoria_all(); $cont = 1; $data = "";
+
+        if ($rspta['status']) {
+
+          foreach ($rspta['data'] as $key => $value) {  
+
+            $data .= '<option value=' . $value['id'] . '>' . $value['nombre'] .'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
+
       /* ══════════════════════════════════════ P R O D U C T O ══════════════════════════════════════ */
       case 'tblaActivosFijos':
           
