@@ -14,20 +14,16 @@ function init() {
   tbla_principal();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-
-  $.post("../ajax/ajax_general.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r); });
-
-  $.post("../ajax/ajax_general.php?op=select2Banco", function (r) { $("#banco_prov").html(r); });
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════ 
-
-  //$("#guardar_registro").on("click", function (e) { $("#submit-form-otro_ingreso").submit(); });
 
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - PROVERDOR  ══════════════════════════════════════
 
-  $("#banco_prov").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
+  $("#banco_prov").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - OTRO INGRESO  ══════════════════════════════════════
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true,   });
@@ -41,6 +37,15 @@ function init() {
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+function templateBanco (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/banco/logo/${state.title}`: '../dist/docs/banco/logo/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -117,7 +122,7 @@ function tbla_principal() {
       type: "get",
       dataType: "json",
       error: function (e) {
-        console.log(e.responseText);
+        console.log(e.responseText); verer
       },
     },
     createdRow: function (row, data, ixdex) {
@@ -169,7 +174,7 @@ function total(idproyecto) {
     data = JSON.parse(data);  console.log(data);
 
     $("#total_monto").html("S/ " + formato_miles(data.precio_parcial));
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //segun tipo de comprobante
@@ -454,20 +459,28 @@ function guardar_y_editar_otros_ingresos(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-      if (datos == "ok") {
+    success: function (e) {
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
 
-        Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
+          Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
-        tabla.ajax.reload(null, false); total(localStorage.getItem("nube_idproyecto"));
+          tabla.ajax.reload(null, false); total(localStorage.getItem("nube_idproyecto"));
 
-        limpiar_form();    
-        show_hide_form(1);
+          limpiar_form();    
+          show_hide_form(1);
 
-      } else {
-        toastr.error(datos);
-      }
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -480,29 +493,29 @@ function mostrar(idotro_ingreso) {
 
   $("#modal-agregar-otro_ingreso").modal("show");
 
-  $.post("../ajax/otro_ingreso.php?op=mostrar", { idotro_ingreso: idotro_ingreso }, function (data, status) {
+  $.post("../ajax/otro_ingreso.php?op=mostrar", { idotro_ingreso: idotro_ingreso }, function (e, status) {
     
-    data = JSON.parse(data); console.log(data);    
+    e = JSON.parse(e); console.log(e);    
 
-    $("#idproveedor").val(data.idproveedor).trigger("change");
-    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-    $("#forma_pago").val(data.forma_de_pago).trigger("change");
-    $("#glosa").val(data.glosa).trigger("change");
-    $("#idotro_ingreso").val(data.idotro_ingreso);
-    $("#fecha_i").val(data.fecha_i);
-    $("#nro_comprobante").val(data.numero_comprobante);  
-    $("#ruc").val(data.ruc);
-    $("#razon_social").val(data.razon_social);
-    $("#direccion").val(data.direccion);
+    $("#idproveedor").val(e.data.idproveedor).trigger("change");
+    $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+    $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
+    $("#glosa").val(e.data.glosa).trigger("change");
+    $("#idotro_ingreso").val(e.data.idotro_ingreso);
+    $("#fecha_i").val(e.data.fecha_i);
+    $("#nro_comprobante").val(e.data.numero_comprobante);  
+    $("#ruc").val(e.data.ruc);
+    $("#razon_social").val(e.data.razon_social);
+    $("#direccion").val(e.data.direccion);
 
-    $("#subtotal").val(data.subtotal);
-    $("#igv").val(data.igv);
-    $("#val_igv").val(data.val_igv);
-    $("#tipo_gravada").val(data.tipo_gravada);
-    $("#precio_parcial").val(data.costo_parcial);
-    $("#descripcion").val(data.descripcion);    
+    $("#subtotal").val(e.data.subtotal);
+    $("#igv").val(e.data.igv);
+    $("#val_igv").val(e.data.val_igv);
+    $("#tipo_gravada").val(e.data.tipo_gravada);
+    $("#precio_parcial").val(e.data.costo_parcial);
+    $("#descripcion").val(e.data.descripcion);    
 
-    if (data.comprobante == "" || data.comprobante == null  ) {
+    if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
       $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
@@ -512,23 +525,23 @@ function mostrar(idotro_ingreso) {
 
     } else {
 
-      $("#doc_old_1").val(data.comprobante); 
+      $("#doc_old_1").val(e.data.comprobante); 
 
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
+      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
       
       // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.comprobante) == "pdf" ) {
+      if ( extrae_extencion(e.data.comprobante) == "pdf" ) {
 
-        $("#doc1_ver").html('<iframe src="../dist/docs/otro_ingreso/comprobante/'+data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc1_ver").html('<iframe src="../dist/docs/otro_ingreso/comprobante/'+e.data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
 
       }else{
         if (
-          extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
-          extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
-          extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
-          extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
+          extrae_extencion(e.data.comprobante) == "jpeg" || extrae_extencion(e.data.comprobante) == "jpg" || extrae_extencion(e.data.comprobante) == "jpe" ||
+          extrae_extencion(e.data.comprobante) == "jfif" || extrae_extencion(e.data.comprobante) == "gif" || extrae_extencion(e.data.comprobante) == "png" ||
+          extrae_extencion(e.data.comprobante) == "tiff" || extrae_extencion(e.data.comprobante) == "tif" || extrae_extencion(e.data.comprobante) == "webp" ||
+          extrae_extencion(e.data.comprobante) == "bmp" || extrae_extencion(e.data.comprobante) == "svg" ) {
 
-          $("#doc1_ver").html(`<img src="../dist/docs/otro_ingreso/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
+          $("#doc1_ver").html(`<img src="../dist/docs/otro_ingreso/comprobante/${e.data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
           
         } else {
           $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -538,70 +551,88 @@ function mostrar(idotro_ingreso) {
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function ver_datos(idotro_ingreso) {
-  $("#modal-ver-transporte").modal("show");
+  $("#modal-ver-otro-gasto").modal("show");
+  $('#datos_otro_gasto').html(`<div class="row"><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div></div>`);
 
-  $.post("../ajax/otro_ingreso.php?op=verdatos", { idotro_ingreso: idotro_ingreso }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+  var comprobante=''; var btn_comprobante = '';
 
-    verdatos = `                                                                            
+  $.post("../ajax/otro_ingreso.php?op=verdatos", { idotro_ingreso: idotro_ingreso }, function (e, status) {
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.data.comprobante != '') {
+        
+      comprobante =  doc_view_extencion(e.data.comprobante, 'otro_ingreso', 'comprobante', '100%');
+      
+      btn_comprobante=`
+      <div class="row">
+        <div class="col-6"">
+          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_ingreso/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_ingreso/comprobante/${e.data.comprobante}" download="comprobante - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
+    
+    } else {
+
+      comprobante='Sin Ficha Técnica';
+      btn_comprobante='';
+
+    }
+
+    var ver_datos_html = `                                                                            
     <div class="col-12">
       <div class="card">
         <div class="card-body">
           <table class="table table-hover table-bordered">        
             <tbody>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Descripción</th>
-                <td>${data.descripcion}</td>
+                <th>Proveedor </th>
+                <td>${e.data.razon_social} <br> <b>${e.data.tipo_documento}:</b> ${e.data.ruc} </td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo clasificación</th>
-                <td>${data.tipo_viajero}</td>
+                <th>Forma Pago</th>
+                <td>${e.data.forma_de_pago}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Ruta</th>
-                <td>${data.ruta}</td>
+                <th>Tipo Comprobante</th>
+                <td>${e.data.tipo_comprobante}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo ruta</th>
-                  <td>${data.tipo_ruta}</td>
+                <th>Núm. Comprobante</th>
+                  <td>${e.data.numero_comprobante}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Fecha</th>
-                <td>${data.fecha_i}</td>
+                <th>Glosa</th>
+                <td>${e.data.glosa}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo pago </th>
-                <td>${data.forma_de_pago}</td>
+                <th>Fecha Emisión</th>
+                <td>${e.data.fecha_i}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo comprobante </th>
-                <td>${data.tipo_comprobante}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Cantidad</th>
-                <td>${data.cantidad}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Precio unitario</th>
-                <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
-              </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Subtotal</th>
-                <td>${parseFloat(data.subtotal).toFixed(2)}</td>
-              </tr>
+                <th>Sub total</th>
+                <td>${e.data.subtotal}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>IGV</th>
-                <td>${parseFloat(data.igv).toFixed(2)}</td>
+                <td>${e.data.igv}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Total</th>
-                <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
+                <th>Valor - IGV</th>
+                <td>${parseFloat(e.data.val_igv).toFixed(2)}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Monto total</th>
+                <td>${parseFloat(e.data.costo_parcial).toFixed(2)}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Comprobante</th>
+                <td> ${comprobante} <br>${btn_comprobante}</td>
               </tr>
             </tbody>
           </table>
@@ -609,52 +640,8 @@ function ver_datos(idotro_ingreso) {
       </div>
     </div>`;
 
-    $("#datostransporte").html(verdatos);
-  });
-}
-
-//Función para desactivar registros
-function desactivar(idotro_ingreso) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el registro?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/otro_ingreso.php?op=desactivar", { idotro_ingreso: idotro_ingreso }, function (e) {
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total(localStorage.getItem("nube_idproyecto"));
-      });
-    }
-  });
-}
-
-//Función para activar registros
-function activar(idotro_ingreso) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar el registro?",
-    text: "Este proveedor tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/otro_ingreso.php?op=activar", { idotro_ingreso: idotro_ingreso }, function (e) {
-        Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total(localStorage.getItem("nube_idproyecto"));
-      });
-    }
-  });
+    $("#datos_otro_gasto").html(ver_datos_html);
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para desactivar registros
@@ -683,7 +670,7 @@ function eliminar(idotro_ingreso) {
 
         tabla.ajax.reload(null, false);
         total(localStorage.getItem("nube_idproyecto"));
-      });
+      }).fail( function(e) { ver_errores(e); } );
 
     }else if (result.isDenied) {
 
@@ -693,7 +680,7 @@ function eliminar(idotro_ingreso) {
 
         tabla.ajax.reload(null, false);
         total( localStorage.getItem("nube_idproyecto"));
-      });
+      }).fail( function(e) { ver_errores(e); } );
 
     }
 
@@ -738,9 +725,9 @@ function formato_banco() {
     $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
     $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
 
-    $.post("../ajax/compra_activos_fijos.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (data, status) {
+    $.post("../ajax/ajax_general.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (e, status) {
       
-      data = JSON.parse(data);  // console.log(data);
+      e = JSON.parse(e);  // console.log(e);
 
       $(".chargue-format-1").html("Cuenta Bancaria");
       $(".chargue-format-2").html("CCI");
@@ -750,34 +737,16 @@ function formato_banco() {
       $("#cci_prov").prop("readonly", false);
       $("#c_detracciones_prov").prop("readonly", false);
 
-      var format_cta = decifrar_format_banco(data.formato_cta);
-      var format_cci = decifrar_format_banco(data.formato_cci);
-      var formato_detracciones = decifrar_format_banco(data.formato_detracciones);
+      var format_cta = decifrar_format_banco(e.data.formato_cta);
+      var format_cci = decifrar_format_banco(e.data.formato_cci);
+      var formato_detracciones = decifrar_format_banco(e.data.formato_detracciones);
       // console.log(format_cta, formato_detracciones);
 
       $("#c_bancaria_prov").inputmask(`${format_cta}`);
       $("#cci_prov").inputmask(`${format_cci}`);
       $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
-    });
+    }).fail( function(e) { ver_errores(e); } );
   }
-}
-
-function decifrar_format_banco(format) {
-
-  var array_format =  format.split("-"); var format_final = "";
-
-  array_format.forEach((item, index)=>{
-
-    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
-
-    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
-  });
-
-  var ultima_letra = format_final.slice(-1);
-   
-  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
-
-  return format_final;
 }
 
 //guardar proveedor
@@ -946,13 +915,6 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 // restringimos la fecha para no elegir mañana
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth() + 1; //January is 0!
-var yyyy = today.getFullYear();
-if (dd < 10) { dd = "0" + dd; }
-if (mm < 10) { mm = "0" + mm; }
-today = yyyy + "-" + mm + "-" + dd;
-document.getElementById("fecha_i").setAttribute("max", today);
+no_select_tomorrow('#fecha_i')
 
 init();

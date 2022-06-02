@@ -36,7 +36,7 @@
 
           $rspta = $resumen_general->tabla_compras($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = floatval($value['monto_total']) - floatval($value['monto_pago_total']);
 
@@ -117,10 +117,15 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
+            
           );
 
           //Codificar el resultado utilizando json
@@ -139,59 +144,60 @@
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="font-size-15px" for="idproveedor">Proveedor</label>
-                <h5 class="form-control form-control-sm" >'.$rspta['razon_social'].'</h5>
+                <h5 class="form-control form-control-sm" >'.$rspta['data']['razon_social'].'</h5>
               </div>
             </div>
             <!-- fecha -->
             <div class="col-lg-3">
               <div class="form-group">
                 <label class="font-size-15px" for="fecha_compra">Fecha </label>
-                <span class="form-control form-control-sm"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;&nbsp;'.format_d_m_a($rspta['fecha_compra']).' </span>
+                <span class="form-control form-control-sm"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;&nbsp;'.format_d_m_a($rspta['data']['fecha_compra']).' </span>
               </div>
             </div>
             <!-- fecha -->
             <div class="col-lg-3">
               <div class="form-group">
                 <label class="font-size-15px" for="fecha_compra">Glosa </label>
-                <span class="form-control form-control-sm">'.$rspta['glosa'].' </span>
+                <span class="form-control form-control-sm">'.$rspta['data']['glosa'].' </span>
               </div>
             </div>
             <!-- Tipo de comprobante -->
             <div class="col-lg-3">
               <div class="form-group">
                 <label class="font-size-15px" for="tipo_comprovante">Tipo Comprobante</label>
-                <span  class="form-control form-control-sm"> '. ((empty($rspta['tipo_comprobante'])) ? '- - -' :  $rspta['tipo_comprobante'])  .' </span>
+                <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['tipo_comprobante'])) ? '- - -' :  $rspta['data']['tipo_comprobante'])  .' </span>
               </div>
             </div>
             <!-- serie_comprovante-->
             <div class="col-lg-2">
               <div class="form-group">
                 <label class="font-size-15px" for="serie_comprovante">N° de Comprobante</label>
-                <span  class="form-control form-control-sm"> '. ((empty($rspta['serie_comprobante'])) ? '- - -' :  $rspta['serie_comprobante']).' </span>
+                <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['serie_comprobante'])) ? '- - -' :  $rspta['data']['serie_comprobante']).' </span>
               </div>
             </div>
             <!-- IGV-->
             <div class="col-lg-1 " >
               <div class="form-group">
                 <label class="font-size-15px" for="igv">IGV</label>
-                <span class="form-control form-control-sm"> '.$rspta['val_igv'].' </span>                                 
+                <span class="form-control form-control-sm"> '.$rspta['data']['val_igv'].' </span>                                 
               </div>
             </div>
             <!-- Descripcion-->
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="font-size-15px" for="descripcion">Descripción </label> <br />
-                <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['descripcion'])) ? '- - -' :$rspta['descripcion']).'</textarea>
+                <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['data']['descripcion'])) ? '- - -' :$rspta['data']['descripcion']).'</textarea>
               </div>
           </div>';
 
-          $tbody = "";
+          $tbody = ""; $cont = 1;
 
-          while ($reg = $rspta2->fetch_object()) {
+          while ($reg = $rspta2['data']->fetch_object()) {
 
             empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
             
             $tbody .= '<tr class="filas">
+              <td class="text-center p-6px">' . $cont++ . '</td>
               <td class="text-center p-6px">' . $ficha . '</td>
               <td class="text-left p-6px">
                 <div class="user-block text-nowrap">
@@ -211,8 +217,9 @@
           }         
 
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-            <table class="table table-striped table-bordered table-condensed table-hover">
+            <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead style="background-color:#ff6c046b">
+                <th class="text-center p-10px" >#</th>
                 <th class="text-center p-10px">F.T.</th>
                 <th class="p-10px">Material</th>
                 <th class="p-10px">U.M.</th>
@@ -225,17 +232,29 @@
               </thead>
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
-                <td colspan="7"></td>
-                <th class="text-right">
-                  <h6>Subtotal</h6>
-                  <h6>IGV</h6>
-                  <h5 class="font-weight-bold">TOTAL</h5>
-                </th>
-                <th class="text-right">
-                  <h6 class="font-weight-bold">S/ ' . number_format($rspta['subtotal'], 2, '.',',') . '</h6>
-                  <h6 class="font-weight-bold">S/ ' . number_format($rspta['igv'], 2, '.',',') . '</h6>
-                  <h5 class="font-weight-bold">S/ ' . number_format($rspta['total'], 2, '.',',') . '</h5>
-                </th>
+                <tr>
+                    <td class="p-0" colspan="8"></td>
+                    <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                    <td class="p-0 text-right">
+                      <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-0" colspan="8"></td>
+                    <td class="p-0 text-right">
+                      <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                    </td>
+                    <td class="p-0 text-right">
+                      <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-0" colspan="8"></td>
+                    <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                    <td class="p-0 text-right">
+                      <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                    </td>
+                  </tr>
               </tfoot>
             </table>
           </div> ';
@@ -260,7 +279,7 @@
 
           $rspta = $resumen_general->tabla_maquinaria_y_equipo($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor'], $tipo);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = floatval($value['costo_parcial']) - floatval($value['deposito']);
 
@@ -340,10 +359,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -367,7 +390,7 @@
 
           $rspta = $resumen_general->tabla_maquinaria_y_equipo($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor'], $tipo);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = floatval($value['costo_parcial']) - floatval($value['deposito']);
 
@@ -447,10 +470,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
           //Codificar el resultado utilizando json
           echo json_encode($data);
@@ -468,7 +495,7 @@
           //Vamos a declarar un array
           $data = [];
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             if (empty($reg->fecha_recojo) || $reg->fecha_recojo == '0000-00-00') {
               
               $fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
@@ -502,7 +529,7 @@
             "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
             "data" => $data,
           ];
-          echo json_encode($results);
+          echo json_encode($results, true);
         break;
         
         // TABLA
@@ -519,7 +546,7 @@
 
           $rspta = $resumen_general->tabla_transportes($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
           
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = 0; $comprobante ='';
 
@@ -565,10 +592,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -590,7 +621,7 @@
 
           $rspta = $resumen_general->tabla_hospedajes($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = 0;
             
@@ -636,10 +667,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -661,7 +696,7 @@
 
           $rspta = $resumen_general->tabla_comidas_extras($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = 0; $comprobante ='';
 
@@ -707,10 +742,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -732,7 +771,7 @@
 
           $rspta = $resumen_general->tabla_breaks($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = 0;
 
@@ -772,10 +811,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -793,7 +836,7 @@
           $igv = 0;
           $monto = 0;
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             $subtotal = round($reg->subtotal, 2);
             $igv = round($reg->igv, 2);
             $monto = round($reg->monto, 2);
@@ -825,7 +868,7 @@
             "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
             "data" => $data,
           ];
-          echo json_encode($results);
+          echo json_encode($results, true);
         break;
         
         // TABLA
@@ -841,7 +884,7 @@
 
           $rspta = $resumen_general->tabla_pensiones($_POST['idproyecto'], $_POST['id_proveedor']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = floatval($value['monto_total_pension']) - floatval($value['deposito']);
 
@@ -924,10 +967,14 @@
             }
           }
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
           //Codificar el resultado utilizando json
           echo json_encode($data);
@@ -939,7 +986,7 @@
           //Vamos a declarar un array
           $data = [];
           $cont = 1;
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             $data[] = [
               "0" =>
                 '<div class="user-block">
@@ -961,7 +1008,7 @@
             "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
             "aaData" => $data,
           ];
-          echo json_encode($results);
+          echo json_encode($results, true);
 
         break;
 
@@ -977,7 +1024,7 @@
           $igv = 0;
           $monto = 0;
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
             $subtotal = round($reg->subtotal, 2);
             $igv = round($reg->igv, 2);
             $monto = round($reg->monto, 2);
@@ -1014,7 +1061,7 @@
             "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
             "data" => $data,
           ];
-          echo json_encode($results);
+          echo json_encode($results, true);
         break;
         
         // TABLA
@@ -1031,7 +1078,7 @@
 
           $rspta = $resumen_general->tabla_administrativo($_POST['idproyecto'], $_POST['id_trabajador']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = floatval($value['total_montos_x_meses']) - floatval($value['deposito']);
 
@@ -1110,13 +1157,17 @@
             }
           }
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
           //Codificar el resultado utilizando json
-          echo json_encode($data);
+          echo json_encode($data, true);
 
         break;
 
@@ -1143,7 +1194,7 @@
 
           $rspta = $resumen_general->tabla_obrero($_POST['idproyecto'], $_POST['id_trabajador']);
           
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = floatval($value['pago_quincenal']) - floatval($value['deposito']);
 
@@ -1222,10 +1273,14 @@
             }
           }
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -1256,7 +1311,7 @@
 
           $rspta = $resumen_general->tabla_otros_gastos($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
 
-          foreach ($rspta as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
             $saldo_x_fila = 0;
             
@@ -1302,10 +1357,14 @@
           }
 
           $data = array(
-            't_monto' => $t_monto, 
-            't_pagos' => $t_pagos,
-            't_saldo' => $t_saldo,
-            'datatable' => $datatable
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
           );
 
           //Codificar el resultado utilizando json
@@ -1320,7 +1379,7 @@
 
           $estado = true;
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
 
             if ($estado) {
               echo '<option value="0" >Todos</option>';
@@ -1339,7 +1398,7 @@
 
           $estado = true;
 
-          while ($reg = $rspta->fetch_object()) {
+          while ($reg = $rspta['data']->fetch_object()) {
 
             if ($estado) {
               echo '<option value="0" >Todos</option>';

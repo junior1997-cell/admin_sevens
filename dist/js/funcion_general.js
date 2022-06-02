@@ -579,42 +579,42 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
   // cargamos la imagen adecuada par el archivo
   if ( extrae_extencion(filename) == "xls") {
 
-    html = `<img src="../dist/svg/xls.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/xls.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   } else if ( extrae_extencion(filename) == "xlsx" ) {    
 
-    html = `<img src="../dist/svg/xlsx.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/xlsx.svg" alt="" width="50%" height="50%"  >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "csv" ) {
 
-    html = `<img src="../dist/svg/csv.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/csv.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "xlsm" ) {
 
-    html = `<img src="../dist/svg/xlsm.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/xlsm.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "docx" ||  extrae_extencion(filename) == "docm"  || extrae_extencion(filename) == "dot" ||  extrae_extencion(filename) == "dotx" ||  extrae_extencion(filename) == "dotm") {
 
-    html = `<img src="../dist/svg/docx.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/docx.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "doc") {
 
-    html = `<img src="../dist/svg/doc.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/doc.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "dwg") {
 
-    html = `<img src="../dist/svg/dwg.svg" alt="" width="${width}"  >`;
+    html = `<img src="../dist/svg/dwg.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "zip" || extrae_extencion(filename) == "rar" || extrae_extencion(filename) == "iso") {
 
-    html = `<img src="../dist/img/default/zip.png" alt="" width="${width}"  >`;
+    html = `<img src="../dist/img/default/zip.png" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "pdf" ) {
@@ -632,7 +632,7 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
     extencion = extrae_extencion(filename);
     
   }else{
-    html = `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="${width}" >`;
+    html = `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
     
   }

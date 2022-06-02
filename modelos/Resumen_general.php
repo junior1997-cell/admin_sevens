@@ -1,6 +1,6 @@
 <?php
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion.php";
+require "../config/Conexion_v2.php";
 
 class Resumen_general
 {
@@ -36,13 +36,15 @@ class Resumen_general
 		ORDER by cpp.fecha_compra DESC";
 
     $compras = ejecutarConsultaArray($sql);
+    if ($compras['status'] == false) {  return $compras;}
 
-    if (!empty($compras)) {
-      foreach ($compras as $key => $value) {
+    if (!empty($compras['data'])) {
+      foreach ($compras['data'] as $key => $value) {
         $idcompra = $value['idcompra_proyecto'];
 
         $sql_2 = "SELECT SUM(pc.monto) as total_p FROM pago_compras as pc WHERE pc.idcompra_proyecto='$idcompra' AND pc.estado='1' GROUP BY idcompra_proyecto";
         $t_monto = ejecutarConsultaSimpleFila($sql_2);
+        if ($t_monto['status'] == false) {  return $t_monto;}
 
         $Arraycompras[] = [
           "idcompra_proyecto" => $value['idcompra_proyecto'],
@@ -53,12 +55,12 @@ class Resumen_general
           "proveedor" => $value['razon_social'],
           "descripcion" => $value['descripcion'],
 
-          "monto_pago_total" => ($retVal_2 = empty($t_monto) ? 0 : ($retVal_3 = empty($t_monto['total_p']) ? 0 : $t_monto['total_p'])),
+          "monto_pago_total" => ($retVal_2 = empty($t_monto['data']) ? 0 : ($retVal_3 = empty($t_monto['data']['total_p']) ? 0 : $t_monto['data']['total_p'])),
         ];
       }
     }
 
-    return $Arraycompras;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$Arraycompras ] ;
   }
 
   // TABLA
@@ -88,28 +90,30 @@ class Resumen_general
     GROUP BY s.idmaquinaria;";
 
     $maquinaria = ejecutarConsultaArray($sql);
+    if ($maquinaria['status'] == false) {  return $maquinaria;}
 
-    if (!empty($maquinaria)) {
-      foreach ($maquinaria as $key => $val) {
+    if (!empty($maquinaria['data'])) {
+      foreach ($maquinaria['data'] as $key => $val) {
 
         $idmaquinaria = $val['idmaquinaria']; $deposito_m = 0; $estado_deposito = false; $deposito_cubre = 0;
 
         $sql_2 = "SELECT SUM(ps.monto) as deposito FROM pago_servicio ps 
         WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1';";
         $deposito_mquina = ejecutarConsultaSimpleFila($sql_2);
+        if ($deposito_mquina['status'] == false) {  return $deposito_mquina;}
 
-        $deposito_m = (empty($deposito_mquina)) ? 0 : $retVal = (empty($deposito_mquina['deposito'])) ? 0 : floatval($deposito_mquina['deposito']);
+        $deposito_m = (empty($deposito_mquina['data'])) ? 0 : $retVal = (empty($deposito_mquina['data']['deposito'])) ? 0 : floatval($deposito_mquina['data']['deposito']);
 
         $sql_3 = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, 
         s.costo_parcial , s.fecha_entrega
         FROM servicio as s, maquinaria as m, proveedor as p 
         WHERE s.estado = '1' AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND s.idmaquinaria = '$idmaquinaria' $filtro_fecha
         AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor ORDER by s.fecha_entrega ASC;";
-
         $desglose_mquina = ejecutarConsultaArray($sql_3);
+        if ($desglose_mquina['status'] == false) {  return $desglose_mquina;}
 
-        if (!empty($desglose_mquina)) {
-          foreach ($desglose_mquina as $keys => $value) {
+        if (!empty($desglose_mquina['data'])) {
+          foreach ($desglose_mquina['data'] as $keys => $value) {
              
             if ( floatval($value['costo_parcial']) < $deposito_m) {
 
@@ -143,7 +147,7 @@ class Resumen_general
       }
     }
 
-    return $serv_maquinaria;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $serv_maquinaria];
   }
 
   //ver detallete por maquina-equipo
@@ -273,27 +277,31 @@ class Resumen_general
 		WHERE p.estado='1' AND p.estado_delete='1' AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor 
 		$filtro_proveedor";
     $pension = ejecutarConsultaArray($sql);
+    if ($pension['status'] == false) {  return $pension;}
 
-    if (!empty($pension)) {
-      foreach ($pension as $key => $value) {
+    if (!empty($pension['data'])) {
+      foreach ($pension['data'] as $key => $value) {
         $idpension = $value['idpension'];
 
         $total_monto = 0;
 
         $sql_2 = "SELECT sp.idservicio_pension FROM servicio_pension As sp, pension AS p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
         $servicio_pension = ejecutarConsulta($sql_2);
+        if ($servicio_pension['status'] == false) {  return $servicio_pension;}
 
         $sql_3 = "SELECT SUM(monto) as total_deposito FROM factura_pension WHERE estado=1 AND idpension='$idpension'";
         $deposito = ejecutarConsultaSimpleFila($sql_3);         
+        if ($deposito['status'] == false) {  return $deposito;}
 
-        foreach ($servicio_pension as $key => $valor) {
+        foreach ($servicio_pension['data'] as $key => $valor) {
           $idservicio_p = $valor['idservicio_pension'];
 
           $sql_4 = "SELECT SUM(total) as total FROM semana_pension as sp, servicio_pension as serv_p 
 					WHERE sp.idservicio_pension='$idservicio_p' AND sp.idservicio_pension=serv_p.idservicio_pension";
           $monto_semana = ejecutarConsultaSimpleFila($sql_4);
+          if ($monto_semana['status'] == false) {  return $monto_semana;}
 
-          $total_monto += $retVal_1 = (empty($monto_semana)) ? 0 : $retVal_2 = (empty($monto_semana['total'])) ? 0 : floatval($monto_semana['total']);
+          $total_monto += $retVal_1 = (empty($monto_semana['data'])) ? 0 : $retVal_2 = (empty($monto_semana['data']['total'])) ? 0 : floatval($monto_semana['data']['total']);
           
         }         
 
@@ -305,12 +313,12 @@ class Resumen_general
           "direccion" => $value['direccion'],
 
           "monto_total_pension" => $total_monto,
-          "deposito" => $retVal_3 = (empty($deposito)) ? 0 : $retVal_4 = (empty($deposito['total_deposito'])) ? 0 : $deposito['total_deposito']
+          "deposito" => $retVal_3 = (empty($deposito['data'])) ? 0 : $retVal_4 = (empty($deposito['data']['total_deposito'])) ? 0 : $deposito['data']['total_deposito']
         ];
       }
     }
 
-    return $serv_pension;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $serv_pension];
   }
 
   public function ver_detalle_x_servicio($idpension)  {
@@ -346,36 +354,37 @@ class Resumen_general
 		WHERE tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador 
 		AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador 
 		AND ct.idtipo_trabjador =tt.idtipo_trabajador  AND tpp.estado = '1' AND tpp.estado_delete = '1' $consulta_filtro";
-
     $traba_adm = ejecutarConsultaArray($sql);
+    if ($traba_adm['status'] == false) {  return $traba_adm;}
 
-    if (!empty($traba_adm)) {
-      foreach ($traba_adm as $key => $value) {
+    if (!empty($traba_adm['data'])) {
+      foreach ($traba_adm['data'] as $key => $value) {
         $pago_monto_total = 0;
 
         $idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
 
         $sql_2 = "SELECT idfechas_mes_pagos_administrador, monto_x_mes FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
         $fechas_mes_pagos_administrador = ejecutarConsultaArray($sql_2);
+        if ($fechas_mes_pagos_administrador['status'] == false) {  return $fechas_mes_pagos_administrador;}
 
         $sql_3 = "SELECT SUM(monto_x_mes) as total_montos_x_meses FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
         $total_montos_x_meses = ejecutarConsultaSimpleFila($sql_3);
+        if ($total_montos_x_meses['status'] == false) {  return $total_montos_x_meses;}
 
-        foreach ($fechas_mes_pagos_administrador as $key => $valor) {
+        foreach ($fechas_mes_pagos_administrador['data'] as $key => $valor) {
           $idfechas_mes_pagos_administrador = $valor['idfechas_mes_pagos_administrador'];
 
           $sql_4 = "SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_administrador' AND estado=1";
-
           $return_monto_pago = ejecutarConsultaSimpleFila($sql_4);
+          if ($return_monto_pago['status'] == false) {  return $return_monto_pago;}
 
-          //$pago_monto_total=$pago_monto_total+$return_monto_pago['total_monto_pago'];
-          $pago_monto_total += empty($return_monto_pago) ? 0 : ($retVal_1 = empty($return_monto_pago['total_monto_pago']) ? 0 : floatval($return_monto_pago['total_monto_pago']));
+          $pago_monto_total += empty($return_monto_pago['data']) ? 0 : ($retVal_1 = empty($return_monto_pago['data']['total_monto_pago']) ? 0 : floatval($return_monto_pago['data']['total_monto_pago']));
         }
 
-        if (empty($total_montos_x_meses['total_montos_x_meses']) || $total_montos_x_meses['total_montos_x_meses'] == null) {
+        if (empty($total_montos_x_meses['data']['total_montos_x_meses']) || $total_montos_x_meses['data']['total_montos_x_meses'] == null) {
           $m_total_x_meses = 0;
         } else {
-          $m_total_x_meses = $total_montos_x_meses['total_montos_x_meses'];
+          $m_total_x_meses = $total_montos_x_meses['data']['total_montos_x_meses'];
         }
 
         $administrativo[] = [
@@ -391,7 +400,7 @@ class Resumen_general
       }
     }
 
-    return $administrativo;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$administrativo];
   }
 
   public function r_detalle_trab_administrativo($idtrabajador_por_proyecto)  {
@@ -399,19 +408,19 @@ class Resumen_general
     $monto_total = 0;
 
     $sql = "SELECT idfechas_mes_pagos_administrador,idtrabajador_por_proyecto,fecha_inicial,fecha_final,nombre_mes,cant_dias_laborables,monto_x_mes 
-				FROM fechas_mes_pagos_administrador	WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
-
+		FROM fechas_mes_pagos_administrador	WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
     $fechas_mes_pagos_adm = ejecutarConsultaArray($sql);
+    if ($fechas_mes_pagos_adm['status'] == false) {  return $fechas_mes_pagos_adm;}
 
-    if (!empty($fechas_mes_pagos_adm)) {
-      foreach ($fechas_mes_pagos_adm as $key => $value) {
+    if (!empty($fechas_mes_pagos_adm['data'])) {
+      foreach ($fechas_mes_pagos_adm['data'] as $key => $value) {
         $idfechas_mes_pagos_adm = $value['idfechas_mes_pagos_administrador'];
 
         $sql_2 = "SELECT SUM(monto) as monto_total_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_adm' AND estado=1";
-
         $return_monto_pago = ejecutarConsultaSimpleFila($sql_2);
+        if ($return_monto_pago['status'] == false) {  return $return_monto_pago;}
 
-        $monto_total = empty($return_monto_pago) ? 0 : ($retVal_1 = empty($return_monto_pago['monto_total_pago']) ? 0 : floatval($return_monto_pago['monto_total_pago']));
+        $monto_total = empty($return_monto_pago['data']) ? 0 : ($retVal_1 = empty($return_monto_pago['data']['monto_total_pago']) ? 0 : floatval($return_monto_pago['data']['monto_total_pago']));
 
         $detalle_pagos_adm[] = [
           "fecha_inicial" => $value['fecha_inicial'],
@@ -425,7 +434,7 @@ class Resumen_general
       }
     }
 
-    return $detalle_pagos_adm;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $detalle_pagos_adm];
   }  
 
   // TABLA
@@ -447,12 +456,12 @@ class Resumen_general
 		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
 		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
 		AND tpp.idtrabajador=t.idtrabajador AND ra.estado = '1' AND ra.estado_delete='1' $consulta_filtro  ";
-
     $trabaj_obrero = ejecutarConsultaArray($sql);
+    if ($trabaj_obrero['status'] == false) {  return $trabaj_obrero;}
 
-    if (!empty($trabaj_obrero)) {
+    if (!empty($trabaj_obrero['data'])) {
       
-      foreach ($trabaj_obrero as $key => $value) {
+      foreach ($trabaj_obrero['data'] as $key => $value) {
 
         if ( !empty($value['idtrabajador_por_proyecto']) ) {
 
@@ -462,10 +471,10 @@ class Resumen_general
 					FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
 					WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
           AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
-
           $total_deposito = ejecutarConsultaSimpleFila($sql_2);
+          if ($total_deposito['status'] == false) {  return $total_deposito;}
 
-          $total_deposito_obrero = empty($total_deposito) ? 0 : ($retVal_1 = empty($total_deposito['total_deposito']) ? 0 : floatval($total_deposito['total_deposito']));
+          $total_deposito_obrero = empty($total_deposito['data']) ? 0 : ($retVal_1 = empty($total_deposito['data']['total_deposito']) ? 0 : floatval($total_deposito['data']['total_deposito']));
 
           $obrero[] = array(
             "idresumen_q_s_asistencia" => $value['idresumen_q_s_asistencia'],
@@ -479,7 +488,7 @@ class Resumen_general
       }      
     }
 
-    return $obrero;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $obrero];
 
   }
 
@@ -495,13 +504,15 @@ class Resumen_general
 		WHERE rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' AND rqsa.estado_envio_contador = '1' 
     AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.estado = '1';";
     $q_s = ejecutarConsultaArray($sql_1);
+    if ($q_s['status'] == false) {  return $q_s;}
 
-    if (!empty($q_s)) {
-      foreach ($q_s as $key => $q_s) {
+    if (!empty($q_s['data'])) {
+      foreach ($q_s['data'] as $key => $q_s) {
         $id = $q_s['idresumen_q_s_asistencia'];
 
         $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND idresumen_q_s_asistencia = '$id';";
         $depositos = ejecutarConsultaSimpleFila($sql_2);
+        if ($depositos['status'] == false) {  return $depositos;}
 
         $data[] = [
           'sueldo_hora' => ($retVal_1 = empty($q_s['sueldo_hora']) ? 0 : $q_s['sueldo_hora']),
@@ -524,12 +535,12 @@ class Resumen_general
           'estado_envio_contador' => $q_s['estado_envio_contador'],
           'recibos_x_honorarios' => $q_s['recibos_x_honorarios'],
 
-          'deposito' => ($retVal_11 = empty($depositos) ? 0 : ($retVal_12 = empty($depositos['deposito']) ? 0 : $depositos['deposito'])),
+          'deposito' => ($retVal_11 = empty($depositos['data']) ? 0 : ($retVal_12 = empty($depositos['data']['deposito']) ? 0 : $depositos['data']['deposito'])),
         ];
       }
     }
 
-    return $data;
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $data];
   }
 
   // TABLA

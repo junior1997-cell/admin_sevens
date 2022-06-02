@@ -25,11 +25,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['otro_gasto']==1){
-            require 'enmantenimiento.php';
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper" style="display: none !important;">
+            <div class="content-wrapper" >
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">
@@ -480,7 +480,7 @@
                 </div>
 
                 <!--MODAL - VER DETALLE DE OTRO INGRESO -->
-                <div class="modal fade" id="modal-ver-otro_gasto">
+                <div class="modal fade" id="modal-ver-otro-gasto">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -490,8 +490,8 @@
                         </button>
                       </div>
 
-                      <div class="modal-body">
-                        <div id="datosotro_gasto" class="class-style">
+                      <div class="modal-body"> 
+                        <div id="datos_otro_gasto" class="class-style">
                           <!-- vemos los datos del trabajador -->
                         </div>
                       </div>

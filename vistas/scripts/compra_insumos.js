@@ -1072,7 +1072,7 @@ function mostrar_compra(idcompra_proyecto) {
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //mostramos el detalle del comprobante de la compras
@@ -1094,7 +1094,7 @@ function ver_detalle_compras(idcompra_proyecto) {
     $("#print_pdf_compra").removeClass('disabled');
     $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
     $("#excel_compra").removeClass('disabled');
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Detraccion
@@ -1170,7 +1170,7 @@ function formato_banco() {
       } else {
         ver_errores(e);
       }      
-    });
+    }).fail( function(e) { ver_errores(e); } );
   }
 }
 
@@ -1435,7 +1435,7 @@ function most_datos_prov_pago(idcompra_proyecto) {
     } else {
       ver_errores(e);
     }    
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //captura_opicion tipopago
@@ -1513,7 +1513,7 @@ function total_pagos(idcompra_proyecto) {
     e = JSON.parse(e);  //console.log(e);
 
     $("#monto_total").html(formato_miles(e.data.total_monto));
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //-total pagos con detraccion
@@ -1548,7 +1548,7 @@ function total_pagos_detracc(idcompra_proyecto) {
       $("#saldo_p").html(formato_miles(redondearExp(x_saldo, 2)));
       $("#porcnt_sald_p").html(redondearExp(diferencia, 2) + " %");
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 
   //tabla 2 detracion
   $.post("../ajax/compra_insumos.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {
@@ -1578,7 +1578,7 @@ function total_pagos_detracc(idcompra_proyecto) {
       $("#saldo_d").html(formato_miles(redondearExp(x_saldo_detrcc, 2)));
       $("#porcnt_sald_d").html(redondearExp(diferencia_detrcc, 2) + " %");
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //mostrar
@@ -1647,7 +1647,7 @@ function mostrar_pagos(idpago_compras) {
       }      
     } 
 
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function eliminar_pago_compra(idpago_compras, nombre) {
@@ -1892,7 +1892,7 @@ function mostrar_material(idproducto, cont) {
     $("#cargando-9-fomulario").show();
     $("#cargando-10-fomulario").hide();
     
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función limpiar

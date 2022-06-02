@@ -96,16 +96,7 @@ function tbla_principal() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [6], visible: false, searchable: false, },  
-      { targets: [7], visible: false, searchable: false, },   
-      { targets: [8], visible: false, searchable: false, },
-      { targets: [9], visible: false, searchable: false, },
-      { targets: [10], visible: false, searchable: false, },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
-      { targets: [13], visible: false, searchable: false, },     
-      { targets: [14], visible: false, searchable: false, },
-      { targets: [15], visible: false, searchable: false, },       
+      { targets: [6,7,8,9,10,11,12,13,14,15], visible: false, searchable: false, },  
     ],
   }).DataTable();
 }

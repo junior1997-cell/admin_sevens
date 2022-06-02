@@ -74,9 +74,9 @@
 
               $razon_social = '';  $direccion = ''; $titular_cuenta = '';
 
-              if (strlen($value['razon_social']) >= 25 ) { $razon_social = substr($value['razon_social'], 0, 25).'...';  } else { $razon_social = $value['razon_social']; }
-              if (strlen($value['direccion']) >= 25 ) { $direccion = substr($value['direccion'], 0, 25).'...';  } else { $direccion = $value['direccion']; }
-              if (strlen($value['titular_cuenta']) >= 25 ) { $titular_cuenta = substr($value['titular_cuenta'], 0, 25).'...';  } else { $titular_cuenta = $value['titular_cuenta']; }
+              $razon_social = $value['razon_social'];
+              $direccion = $value['direccion']; 
+              $titular_cuenta = $value['titular_cuenta']; 
               
               $data[] = [
                 "0" => $cont++,

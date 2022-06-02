@@ -17,6 +17,9 @@
       $otro_ingreso = new Otro_ingreso();
       $proveedor = new AllProveedor();
 
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h.i.s A");
+
       $idotro_ingreso     = isset($_POST["idotro_ingreso"]) ? limpiarCadena($_POST["idotro_ingreso"]) : ""; 
       $idproyecto       = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";      
       $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";     
@@ -68,7 +71,7 @@
       
             $flat_ficha1 = true;
       
-            $comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
       
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/otro_ingreso/comprobante/" . $comprobante);
           }
@@ -77,7 +80,7 @@
             //var_dump($idproyecto,$idproveedor);
             $rspta = $otro_ingreso->insertar($idproyecto, $idproveedor , $fecha_i, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+            echo json_encode($rspta, true);
       
           } else {
             //validamos si existe comprobante para eliminarlo
@@ -95,7 +98,7 @@
       
             $rspta = $otro_ingreso->editar($idotro_ingreso, $idproyecto, $idproveedor , $fecha_i, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
             //var_dump($idotro_ingreso,$idproveedor);
-            echo $rspta ? "ok" : "No se pudo actualizar";
+            echo json_encode($rspta, true);
           }
         break;
       
@@ -103,7 +106,7 @@
       
           $rspta = $otro_ingreso->desactivar($idotro_ingreso);
       
-          echo $rspta ? " Desactivado" : "No se puede desactivar";
+          echo json_encode($rspta, true);
       
         break;
       
@@ -111,7 +114,7 @@
       
           $rspta = $otro_ingreso->activar($idotro_ingreso);
       
-          echo $rspta ? "Activado" : "No se puede activar";
+          echo json_encode($rspta, true);
       
         break;
 
@@ -119,7 +122,7 @@
       
           $rspta = $otro_ingreso->eliminar($idotro_ingreso);
       
-          echo $rspta ? "Elinado" : "No se puede Eliminar";
+          echo json_encode($rspta, true);
       
         break;
       
@@ -127,7 +130,7 @@
       
           $rspta = $otro_ingreso->mostrar($idotro_ingreso);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
       
         break;
       
@@ -135,57 +138,61 @@
       
           $rspta = $otro_ingreso->mostrar($idotro_ingreso);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
       
         break;
       
         case 'tbla_principal':
           $rspta = $otro_ingreso->tbla_principal($_GET["idproyecto"]);
           //Vamos a declarar un array
-          $data = [];
-          $comprobante = '';
-          $cont = 1;
-          while ($reg = $rspta['data']->fetch_object()) {
-            
-            empty($reg->comprobante)
-              ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-              : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(\'' . $reg->comprobante .'\', \''. $reg->fecha_i .'\', \''. $reg->tipo_comprobante .'\', \''. $reg->numero_comprobante .'\', \''. 'dist/docs/otro_ingreso/comprobante/'  . '\')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-            
-            $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
-            $data[] = [
-              "0" => $cont++,
-              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_ingreso . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_ingreso . ')"><i class="fas fa-skull-crossbones"></i> </button>':
-                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_ingreso . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_ingreso . ')"><i class="fa fa-check"></i></button>',
-              "2" => $reg->forma_de_pago,
-              "3" =>'<div class="user-block">
-                  <span class="username ml-0" > <p class="text-primary m-b-02rem">' . $reg->tipo_comprobante . '</p> </span>
-                  <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
-                </div>',
-              "4" => date("d/m/Y", strtotime($reg->fecha_i)),
-              "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
-              "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
-              "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
-              "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-              "9" => $comprobante,
-              "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+          $data = [];  $cont = 1;
+
+          if ($rspta['status'] == true) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              
+              $comprobante = empty($reg->comprobante) ? ( '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>') : ('<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(\'' . $reg->comprobante .'\', \''. $reg->fecha_i .'\', \''. $reg->tipo_comprobante .'\', \''. $reg->numero_comprobante .'\', \''. 'dist/docs/otro_ingreso/comprobante/'  . '\')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+              
+              $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
+              $data[] = [
+                "0" => $cont++,
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_ingreso . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_ingreso . ')"><i class="fas fa-skull-crossbones"></i> </button>'.
+                    ' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg->idotro_ingreso.')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
+                    '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_ingreso . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_ingreso . ')"><i class="fa fa-check"></i></button>',
+                "2" => $reg->forma_de_pago,
+                "3" =>'<div class="user-block">
+                    <span class="username ml-0" > <p class="text-primary m-b-02rem">' . $reg->tipo_comprobante . '</p> </span>
+                    <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
+                  </div>',
+                "4" => date("d/m/Y", strtotime($reg->fecha_i)),
+                "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
+                "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
+                "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
+                "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "9" => $comprobante,
+                "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+              ];
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
             ];
-          }
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-          ];
-          echo json_encode($results);
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }         
+          
         break;
       
         case 'total':
       
           $rspta = $otro_ingreso->total($idproyecto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
       
         break;
 

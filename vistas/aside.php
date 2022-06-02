@@ -483,6 +483,16 @@
             <p class="font-size-14px">CONTABLE Y FINANCIERO<i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
+            <!-- RESUMEN DE GASTOS -->
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="resumen_gasto.php" class="nav-link pl-2" id="lResumenGastos">
+                <i class="nav-icon fas fa-comments-dollar"></i>
+                <p>
+                  Resumen de Gastos               
+                </p>
+              </a>
+            </li>
+
             <?php if ($_SESSION['pago_trabajador']==1) {  ?>          
               <!-- PAGOS DE TRABAJADORES -->
               <li class="nav-item ver-otros-modulos-1  b-radio-3px" id="bloc_PagosTrabajador">
@@ -512,7 +522,8 @@
                 </ul>
               </li>
             <?php  }  ?>
-
+            
+            <!-- PRESTAMOS -->
             <li class="nav-item ver-otros-modulos-1">
               <a href="prestamo.php" class="nav-link pl-2" id="lPrestamo">
                 <i class="nav-icon fas fa-university"></i>
