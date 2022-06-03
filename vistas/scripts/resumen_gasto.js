@@ -47,13 +47,13 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
 		},
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[2] != '') { $("td", row).eq(2).addClass('text-center text-nowrap'); }   
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }   
       // columna: sub total
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); }
       // columna: igv
-      if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); }  
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }  
       // columna: total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right');  }      
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right');  }      
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -70,7 +70,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
     ],
   }).DataTable();
   
@@ -84,7 +84,7 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
   $('.btn-zip').addClass('disabled');
   $.post("../ajax/resumen_gasto.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (e, status) {
     
-    e = JSON.parse(e);  console.log(e); 
+    e = JSON.parse(e);  //console.log(e); 
 
     if (e.status == true) {
       $('.total-total').html(`S/ ${formato_miles(parseFloat(e.data.total).toFixed(2))}`);
@@ -164,7 +164,7 @@ function filtros() {
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
 
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
-  console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+  //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
   tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante)
 }
@@ -233,6 +233,7 @@ function descargar_zip_comprobantes() {
 }
 
 function mostrar_detalle_compras(id, modulo) {
+  $(".tooltip").removeClass("show").addClass("hidde");
   console.log(id ,modulo);
   if (modulo == 'COMPRAS ACTIVO FIJO') {
     $("#cargando-1-fomulario").hide();
@@ -275,6 +276,41 @@ function mostrar_detalle_compras(id, modulo) {
       toastr.error("No modifique el codigo fuente por favor ​😠​!!!");
     }
   }
+}
+
+function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  console.log(name_tabla, name_id_tabla, id_tabla, op);
+  Swal.fire({
+    title: `¿Está seguro de ${op} V°B°?`,
+    html: "Tu <b>nombre</b> quedara como evidencia de esta <b>afirmacion</b> !!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Guardar!",
+    preConfirm: (input) => {
+      return fetch(`../ajax/compra_activos_fijos.php?op=visto_bueno&name_tabla=${name_tabla}&name_id_tabla=${name_id_tabla}&id_tabla=${id_tabla}&accion=${accion}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+    },
+    showLoaderOnConfirm: true,
+  }).then((result) => {
+    console.log(result);
+    if (result.isConfirmed) {
+      if (result.value.status){        
+        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+        if (tabla) { tabla.ajax.reload(null, false); } 
+        if (tabla_comp_prov) { tabla_comp_prov.ajax.reload(null, false); }
+        limpiar_form_compra(); table_show_hide(1);
+        cont = 0;        
+      } else {
+        ver_errores(result);
+      }      
+    }
+  });
 }
 
 init();

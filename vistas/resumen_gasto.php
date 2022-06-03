@@ -119,6 +119,7 @@
                                 <tr> 
                                   <th class="text-center">#</th> 
                                   <th class="text-center">OP</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Aprobado por:">V°B°</th>
                                   <th class="text-center">Fecha</th>
                                   <th>Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
@@ -134,6 +135,7 @@
                                 <tr> 
                                   <th class="text-center text-black-50">#</th> 
                                   <th class="text-center">OP</th>
+                                  <th class="text-center">V°B°</th>
                                   <th class="text-center text-black-50">Fecha</th>
                                   <th class="text-black-50">Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
@@ -228,7 +230,7 @@
                             <br />
                             <h4>Cargando...</h4>
                           </div>
-                        </div>
+                        </div> 
 
                       </div>
                       <div class="modal-footer justify-content-between">

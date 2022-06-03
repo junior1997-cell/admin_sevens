@@ -1919,7 +1919,7 @@ function limpiar_materiales() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
-  $("#unidad_medida_p").val(4).trigger("change");
+  $("#unidad_medida_p").val("").trigger("change");
   $("#color_p").val(1).trigger("change");
   $("#categoria_insumos_af_p").val("").trigger("change");
 

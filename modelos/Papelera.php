@@ -10,8 +10,7 @@ class Papelera
   }
 
   //INSERTAR - DEPOSTOS
-  public function tabla_principal($nube_idproyecto)
-  {
+  public function tabla_principal($nube_idproyecto) {
     $data = Array();   
 
     $sql_1 = "SELECT idbancos,  nombre, formato_cta, formato_cci, formato_detracciones, alias, created_at, updated_at, estado FROM bancos WHERE estado = '0' AND estado_delete= '1';";
@@ -931,8 +930,8 @@ class Papelera
         );
       }
     }
-  $sql38 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.descripcion,
-  of.created_at, of.updated_at,p.razon_social
+    $sql38 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.descripcion,
+    of.created_at, of.updated_at,p.razon_social
     FROM otra_factura as of, proveedor as p
     WHERE of.estado='0' AND of.estado_delete='1' AND of.idproveedor=p.idproveedor";
     $otra_factura = ejecutarConsultaArray($sql38);

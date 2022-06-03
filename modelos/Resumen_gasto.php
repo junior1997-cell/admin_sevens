@@ -50,6 +50,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idcompra_proyecto'],
+          "bd_nombre_tabla"   => 'compra_por_proyecto',
+          "bd_nombre_id_tabla"=> 'idcompra_proyecto',
           "fecha"             => $value['fecha_compra'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
           "serie_comprobante" => $value['serie_comprobante'],
@@ -118,6 +120,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => '',
           "idtabla"           => $value['idcompra_af_general'],
+          "bd_nombre_tabla"   => 'compra_af_general',
+          "bd_nombre_id_tabla"=> 'idcompra_af_general',
           "fecha"             => $value['fecha_compra'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
           "serie_comprobante" => $value['serie_comprobante'],
@@ -183,8 +187,10 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idfactura'],
+          "bd_nombre_tabla"   => 'factura',
+          "bd_nombre_id_tabla"=> 'idfactura',
           "fecha"             => $value['fecha_emision'],
-          "tipo_comprobante"  => 'FT',
+          "tipo_comprobante"  => 'Factura',
           "serie_comprobante" => $value['codigo'],
           "proveedor"         => $value['razon_social'],
           "total"             => $value['monto'],          
@@ -247,6 +253,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idsubcontrato'],
+          "bd_nombre_tabla"   => 'subcontrato',
+          "bd_nombre_id_tabla"=> 'idsubcontrato',
           "fecha"             => $value['fecha_subcontrato'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' :$value['tipo_comprobante'] ) ,
           "serie_comprobante" => $value['numero_comprobante'],
@@ -311,6 +319,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idplanilla_seguro'],
+          "bd_nombre_tabla"   => 'planilla_seguro',
+          "bd_nombre_id_tabla"=> 'idplanilla_seguro',
           "fecha"             => $value['fecha_p_s'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' :$value['tipo_comprobante'] ),
           "serie_comprobante" => $value['numero_comprobante'],
@@ -375,6 +385,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idotro_gasto'],
+          "bd_nombre_tabla"   => 'otro_gasto',
+          "bd_nombre_id_tabla"=> 'idotro_gasto',
           "fecha"             => $value['fecha_g'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' :$value['tipo_comprobante'] ),
           "serie_comprobante" => $value['numero_comprobante'],
@@ -440,6 +452,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idtransporte'],
+          "bd_nombre_tabla"   => 'transporte',
+          "bd_nombre_id_tabla"=> 'idtransporte',
           "fecha"             => $value['fecha_viaje'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
           "serie_comprobante" => $value['numero_comprobante'],
@@ -505,6 +519,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idhospedaje'],
+          "bd_nombre_tabla"   => 'hospedaje',
+          "bd_nombre_id_tabla"=> 'idhospedaje',
           "fecha"             => $value['fecha_comprobante'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' :$value['tipo_comprobante'] ) ,
           "serie_comprobante" => $value['numero_comprobante'],
@@ -572,6 +588,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idfactura_pension'],
+          "bd_nombre_tabla"   => 'factura_pension',
+          "bd_nombre_id_tabla"=> 'idfactura_pension',
           "fecha"             => $value['fecha_emision'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
           "serie_comprobante" => $value['nro_comprobante'],
@@ -639,6 +657,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idfactura_break'],
+          "bd_nombre_tabla"   => 'factura_break',
+          "bd_nombre_id_tabla"=> 'idfactura_break',
           "fecha"             => $value['fecha_emision'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
           "serie_comprobante" => $value['nro_comprobante'],
@@ -704,6 +724,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idcomida_extra'],
+          "bd_nombre_tabla"   => 'comida_extra',
+          "bd_nombre_id_tabla"=> 'idcomida_extra',
           "fecha"             => $value['fecha_comida'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ) ,
           "serie_comprobante" => $value['numero_comprobante'],
@@ -770,6 +792,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idotro_ingreso'],
+          "bd_nombre_tabla"   => 'otro_ingreso',
+          "bd_nombre_id_tabla"=> 'idotro_ingreso',
           "fecha"             => $value['fecha_i'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
           "serie_comprobante" => $value['numero_comprobante'],
@@ -835,6 +859,8 @@ class ResumenGasto
         $data[] = array(
         	"idproyecto"        => '',
           "idtabla"           => $value['idotra_factura'],
+          "bd_nombre_tabla"   => 'otra_factura',
+          "bd_nombre_id_tabla"=> 'idotra_factura',
           "fecha"             => $value['fecha_emision'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
           "serie_comprobante" => $value['numero_comprobante'],
@@ -1380,6 +1406,19 @@ class ResumenGasto
       "data"=>   $data
     );
     return $retorno;
+  }
+  
+  public function visto_bueno($nombre_tabla, $nombre_id_tabla, $id_tabla, $accion) {
+
+    $id_user_vb = $_SESSION["idusuario"]; $nombre_user_vb = $_SESSION["nombre"]; $imagen_user_vb = $_SESSION["imagen"];
+
+    if ($accion == 'agregar') {
+      $sql = "UPDATE $nombre_tabla SET estado='1', 'id_user_vb' = '$id_user_vb', 'nombre_user_vb' = '$nombre_user_vb', 'imagen_user_vb' = '$imagen_user_vb' WHERE $nombre_id_tabla ='$id_tabla' ";
+      return ejecutarConsulta($sql);
+    } else if ($accion == 'quitar') {
+      $sql = "UPDATE $nombre_tabla SET estado='1', 'id_user_vb' = '', 'nombre_user_vb' = '', 'imagen_user_vb' ='' WHERE $nombre_id_tabla ='$id_tabla'";
+      return ejecutarConsulta($sql);
+    } 
   }
   
 }

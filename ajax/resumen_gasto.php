@@ -30,6 +30,7 @@
           // echo json_encode($rspta);
           //Vamos a declarar un array
           $data = []; $cont = 1;   
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';        
           
           if ($rspta['status'] == true) {
@@ -39,15 +40,17 @@
               
               $data[] = [
                 "0" => $cont++,
-                "1" =>  ($value['detalle']==true ? '<button class="btn btn-info btn-sm" data-toggle="tooltip" data-original-title="Ver detalle" onclick="mostrar_detalle_compras('.$value['idtabla'].', \''.encodeCadenaHtml($value['modulo']).'\')"><i class="fas fa-eye"></i></button>': '<button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacio" ><i class="fas fa-eye"></i></button>'),
-                "2" => $value['fecha'],
-                "3" => '<b>'.$value['tipo_comprobante'] .'</b> ─ '. $value['serie_comprobante'],
-                "4" => $value['modulo'],
-                "5" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',
-                "6" => number_format($value['total'], 2, ".", ",") ,
-                "7" => number_format($value['subtotal'], 2, ".", ","),
-                "8" => number_format($value['igv'], 2, ".", ","),
-                "9" => $documento.$toltip,                
+                "1" => '<div class="text-nowrap"> ' . ($value['detalle']==true ? '<button class="btn btn-info btn-sm" data-toggle="tooltip" data-original-title="Ver detalle" onclick="mostrar_detalle_compras('.$value['idtabla'].', \''.encodeCadenaHtml($value['modulo']).'\')"><i class="fas fa-eye"></i></button>': '<button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacio" ><i class="fas fa-eye"></i></button>').
+                ($value['idtabla'] ? ' <button class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="visto_bueno(\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'agregar\')" ><i class="fas fa-check"></i></button>' : ' <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Quitar visto bueno" onclick="visto_bueno(\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'quitar\')" ><i class="fas fa-eye"></i></button>' ).'</div>',
+                "2" => '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/' .  '" data-toggle="tooltip" data-original-title="Hola caistas" alt="User Image" onerror="' . $imagen_error . '">',
+                "3" => $value['fecha'],
+                "4" => '<b>'.$value['tipo_comprobante'] .'</b> ─ '. $value['serie_comprobante'],
+                "5" => $value['modulo'],
+                "6" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',
+                "7" => number_format($value['total'], 2, ".", ",") ,
+                "8" => number_format($value['subtotal'], 2, ".", ","),
+                "9" => number_format($value['igv'], 2, ".", ","),
+                "10" => $documento.$toltip,                
               ];
             }
   
@@ -78,6 +81,11 @@
           
           echo json_encode($rspta, true);
 
+        break;
+
+        case 'visto_bueno':
+          $rspta = $resumen_gasto->visto_bueno($_POST['name_tabla'], $_POST['name_id_tabla'], $_POST['id_tabla'], $_POST['accion']);
+          echo json_encode($rspta, true);
         break;
 
         case 'ver_detalle_compras_ActivosFijos':
@@ -334,6 +342,7 @@
           </div> ';
 
         break;
+        
 
         // Select2 - Proveedores
         case 'select2Proveedor':
