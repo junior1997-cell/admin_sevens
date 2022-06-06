@@ -123,11 +123,12 @@
                                   <th class="text-center">Fecha</th>
                                   <th>Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
-                                  <th>Razón social</th>
-                                  <th class="text-center">Total</th> 
-                                  <th class="text-center">Subtotal</th>                                
+                                  <th>Razón social</th>                                  
+                                  <th class="text-center ">Subtotal</th>                                
                                   <th class="text-center">IGV</th>
-                                  <th class="text-center">CFDI.</th>                                                  
+                                  <th class="text-center">Total</th> 
+                                  <th class="text-center">CFDI.</th>  
+                                  <th class="text-center">Estado</th>                                                   
                                 </tr>
                               </thead>
                               <tbody> </tbody>
@@ -139,11 +140,12 @@
                                   <th class="text-center text-black-50">Fecha</th>
                                   <th class="text-black-50">Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
-                                  <th class="text-black-50">Razón social</th>
-                                  <th class="text-right text-nowrap total-total">Total</th>  
+                                  <th class="text-black-50">Razón social</th>                                  
                                   <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
                                   <th class="text-right text-nowrap total-igv">IGV</th>
+                                  <th class="text-right text-nowrap total-total">Total</th>  
                                   <th class="text-center text-black-50">CFDI.</th>
+                                  <th class="text-center">Estado</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -187,21 +189,22 @@
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body">
+                      <div class="modal-body"> 
                         <ol>
-                          <li>COMPRAS INSUMOS</li>
-                          <li>COMPRAS ACTIVOS FIJOS <small class="text-red">(sin proyecto)</small></li>
-                          <li>MAQUINA Y/O EQUIPO</li>
-                          <li>SUB CONTRATO</li>
-                          <li>PLANILLA SEGURO</li>
-                          <li>OTRO GASTO</li>
-                          <li>TRANSPORTE</li>
-                          <li>HOSPEDAJE</li>
-                          <li>PENSION</li>
-                          <li>BREAK</li>
-                          <li>COMIDA EXTRA</li>
-                          <!-- <li>OTRA FACTURA <small class="text-red">(sin proyecto)</small></li> -->
-                          <li>OTRO INGRESO</li>
+                          <li class="m-b-04rem"><i class="fas fa-shopping-cart nav-icon"></i> COMPRAS INSUMOS</li>
+                          <!-- <li>COMPRAS ACTIVOS FIJOS <small class="text-red">(sin proyecto)</small></li> -->
+                          <li class="m-b-04rem"><img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO MAQUINA </li>
+                          <li class="m-b-04rem"><img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO EQUIPO</li>
+                          <li class="m-b-04rem"><i class="nav-icon fas fa-hands-helping"></i> SUB CONTRATO</li>
+                          <li class="m-b-04rem"><img src="../dist/svg/negro-planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > PLANILLA SEGURO</li>
+                          <li class="m-b-04rem"><i class="nav-icon fas fa-network-wired"></i> OTRO GASTO</li>
+                          <li class="m-b-04rem"><i class="fas fa-shuttle-van nav-icon"></i> TRANSPORTE</li>
+                          <li class="m-b-04rem"><i class="fas fa-hotel nav-icon"></i> HOSPEDAJE</li>
+                          <li class="m-b-04rem"><i class="fas fa-utensils nav-icon"></i> PENSION</li>
+                          <li class="m-b-04rem"><i class="fas fa-hamburger nav-icon"></i> BREAK</li>
+                          <li class="m-b-04rem"><i class="fas fa-drumstick-bite nav-icon"></i> COMIDA EXTRA</li>
+                          <!-- <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(sin proyecto)</small></li> -->
+                          <!-- <li>OTRO INGRESO</li> -->
                         </ol>
                       </div>
                     </div>
@@ -213,14 +216,14 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Detalle Compra</h4>
+                        <h4 class="modal-title nombre-title-detalle-modal">Detalle</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
 
                       <div class="modal-body">
-                        <div class="row detalle_de_compra" id="cargando-1-fomulario">                            
+                        <div class="row detalle_de_modulo" id="cargando-1-fomulario"> 
                           <!--detalle de la compra-->
                         </div>
 
@@ -257,9 +260,15 @@
 
         <?php  require 'script.php'; ?> 
 
+        <!-- ZIP -->
         <script src="../plugins/jszip/jszip.js"></script>
         <script src="../plugins/jszip/dist/jszip-utils.js"></script>
         <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
+
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <script type="text/javascript" src="scripts/resumen_gasto.js"></script>
 

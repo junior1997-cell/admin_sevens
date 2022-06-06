@@ -1,4 +1,4 @@
-var tabla;
+var tabla_principal;
 
 //Función que se ejecuta al inicio
 function init() {  
@@ -36,7 +36,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6,7,8,], } }, "colvis"],
+    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, "colvis"],
     ajax:	{
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type : "get",
@@ -47,13 +47,15 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
 		},
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }   
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
       // columna: sub total
       if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); }
       // columna: igv
       if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }  
       // columna: total
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right');  }      
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right');  }
+      // columna: 4
+      if (data[11] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -70,7 +72,8 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
-      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [11], visible: false, searchable: false },
     ],
   }).DataTable();
   
@@ -232,65 +235,19 @@ function descargar_zip_comprobantes() {
   }).fail( function(e) { ver_errores(e); } ); 
 }
 
-function mostrar_detalle_compras(id, modulo) {
+function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $(".tooltip").removeClass("show").addClass("hidde");
-  console.log(id ,modulo);
-  if (modulo == 'COMPRAS ACTIVO FIJO') {
-    $("#cargando-1-fomulario").hide();
-    $("#cargando-2-fomulario").show();
-
-    $("#print_pdf_compra").addClass('disabled');
-    $("#excel_compra").addClass('disabled');
-
-    $("#modal-ver-compras").modal("show");
-
-    $.post("../ajax/resumen_gasto.php?op=ver_detalle_compras_ActivosFijos&id_compra=" + id, function (r) {
-      $(".detalle_de_compra").html(r); 
-      $("#cargando-1-fomulario").show();
-      $("#cargando-2-fomulario").hide();
-
-      $("#print_pdf_compra").removeClass('disabled');
-      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id}&op=activo_fijo` );
-      $("#excel_compra").removeClass('disabled');
-    });
-  } else {
-    if (modulo == 'COMPRAS INSUMOS') {
-      $("#cargando-1-fomulario").hide();
-      $("#cargando-2-fomulario").show();
-
-      $("#print_pdf_compra").addClass('disabled');
-      $("#excel_compra").addClass('disabled');
-
-      $("#modal-ver-compras").modal("show");
-
-      $.post("../ajax/resumen_gasto.php?op=ver_detalle_compras_Insumos&id_compra=" + id, function (r) {
-        $(".detalle_de_compra").html(r); 
-        $("#cargando-1-fomulario").show();
-        $("#cargando-2-fomulario").hide();
-
-        $("#print_pdf_compra").removeClass('disabled');
-        $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id}&op=insumo` );
-        $("#excel_compra").removeClass('disabled');
-      });
-    } else {
-      toastr.error("No modifique el codigo fuente por favor ​😠​!!!");
-    }
-  }
-}
-
-function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion) {
-  $(".tooltip").removeClass("show").addClass("hidde");
-  console.log(name_tabla, name_id_tabla, id_tabla, op);
+  console.log(name_tabla, name_id_tabla, id_tabla, accion);
   Swal.fire({
-    title: `¿Está seguro de ${op} V°B°?`,
-    html: "Tu <b>nombre</b> quedara como evidencia de esta <b>afirmacion</b> !!",
+    title: `¿Está seguro de ${accion} V°B°?`,
+    html: `<i class="text-success" >${nombre_agregar_quitar}</i> <br> Tu <b>nombre</b> se ${accion}a como evidencia de esta <b>afirmacion</b> !!`,
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, Guardar!",
+    confirmButtonText: `Si, ${accion}!`,
     preConfirm: (input) => {
-      return fetch(`../ajax/compra_activos_fijos.php?op=visto_bueno&name_tabla=${name_tabla}&name_id_tabla=${name_id_tabla}&id_tabla=${id_tabla}&accion=${accion}`).then(response => {
+      return fetch(`../ajax/resumen_gasto.php?op=visto_bueno&name_tabla=${name_tabla}&name_id_tabla=${name_id_tabla}&id_tabla=${id_tabla}&accion=${accion}`).then(response => {
         //console.log(response);
         if (!response.ok) { throw new Error(response.statusText) }
         return response.json();
@@ -301,11 +258,8 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion) {
     console.log(result);
     if (result.isConfirmed) {
       if (result.value.status){        
-        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
-        if (tabla) { tabla.ajax.reload(null, false); } 
-        if (tabla_comp_prov) { tabla_comp_prov.ajax.reload(null, false); }
-        limpiar_form_compra(); table_show_hide(1);
-        cont = 0;        
+        Swal.fire("Correcto!", "Visto bueno asignado", "success");
+        if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
       } else {
         ver_errores(result);
       }      
@@ -313,6 +267,1135 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion) {
   });
 }
 
+// .....::::::::::::::::::::::::::::::::::::: D E T A L L E S   D E   M O D U L O S  :::::::::::::::::::::::::::::::::::::::..
+
+function detalle_compra_insumo(id_tabla) {
+  
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').show();
+  $("#excel_compra").addClass('disabled').show();
+  $(".nombre-title-detalle-modal").html('Detalle - Compra de Insumo');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-xl').removeClass('modal-md');
+  $("#modal-ver-compras").modal("show");
+
+  $.post(`../ajax/resumen_gasto.php?op=detalle_compra_insumo`,{'id_tabla':id_tabla}, function (r) {
+    $(".detalle_de_modulo").html(r); 
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+
+    $("#print_pdf_compra").removeClass('disabled');
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id_tabla}&op=insumo` );
+    $("#excel_compra").removeClass('disabled');
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_servicio_maquina(id_tabla) {
+  
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Servicio maquina');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_servicio_maquina", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'servicio_maquina', 'comprobante_servicio', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/servicio_maquina/comprobante_servicio/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/servicio_maquina/comprobante_servicio/${e.data.comprobante}" download="Factura-${e.data.codigo} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td>${e.data.razon_social}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Maquina:</th> 
+                  <td>${e.data.nombre_maquina}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>Factura - ${e.data.codigo}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_emision)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${e.data.subtotal}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${e.data.igv}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${e.data.total}</td>
+                </tr>                                               
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Notal</th>
+                  <td>${e.data.nota}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_servicio_equipo(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Servicio equipo');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_servicio_equipo", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'servicio_equipo', 'comprobante_servicio', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/servicio_equipo/comprobante_servicio/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/servicio_equipo/comprobante_servicio/${e.data.comprobante}" download="Factura-${e.data.codigo} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td>${e.data.razon_social}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Equipo:</th> 
+                  <td>${e.data.nombre_maquina}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>Factura - ${e.data.codigo}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_emision)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                               
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Nota</th>
+                  <td>${e.data.nota}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_sub_contrato(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Sub Contrato');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_sub_contrato", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'sub_contrato', 'comprobante_subcontrato', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/sub_contrato/comprobante_subcontrato/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/sub_contrato/comprobante_subcontrato/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>${e.data.tipo_documento}</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_subcontrato)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_planilla_seguro(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Planilla Seguro');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_planilla_seguro", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'planilla_seguro', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/planilla_seguro/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/planilla_seguro/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>                 
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_p_s)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_otro_gasto(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Otro Gasto');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_otro_gasto", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'otro_gasto', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_gasto/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_gasto/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>Ruc</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_g)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_transporte(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Transporte');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_transporte", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'transporte', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/transporte/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/transporte/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>Ruc</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_viaje)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Cantidad</th>
+                  <td>${ e.data.cantidad}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Precio unitario</th>
+                  <td>${ formato_miles(e.data.precio_unitario)}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo viajero</th>
+                  <td>${e.data.tipo_viajero}</td>
+                </tr>    
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo ruta</th>
+                  <td>${e.data.tipo_ruta}</td>
+                </tr>    
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Ruta</th>
+                  <td>${e.data.ruta}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_hospedaje(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Hospedaje');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_hospedaje", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'hospedaje', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>Ruc</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_comprobante)}</td>
+                </tr> 
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha estadia:</th>
+                  <td>${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</td>
+                </tr> 
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Cantidad:</th>
+                  <td>${ e.data.cantidad}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Unidad:</th>
+                  <td>${ e.data.unidad}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Precio unitario:</th>
+                  <td>${ e.data.precio_unitario}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV:</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal:</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV:</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total:</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa:</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada:</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción:</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante:</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_pension(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Pensión');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_pension", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'pension', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/pension/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/pension/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.nro_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>${e.data.tipo_documento}</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.nro_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_emision)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_break(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Breack');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_break", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'break', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/break/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/break/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.nro_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>Ruc</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.nro_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_emision)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_comida_extra(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Comida extra');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_comida_extra", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'comida_extra', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/comida_extra/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/comida_extra/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>Ruc</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_comida)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.total)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_otro_ingreso(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Otro Ingreso');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+}
+
+function detalle_otra_factura(id_tabla) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Otra Factura');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+}
+
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function export_excel_detalle_factura() {
+  $tabla = document.querySelector("#tabla_detalle_factura");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+
+}

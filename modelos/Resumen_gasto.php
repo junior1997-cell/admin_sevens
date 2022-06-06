@@ -9,7 +9,7 @@ class ResumenGasto
   {
   }
 
-  public function facturas_compras($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+  public function tabla_principal($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
     $data = Array(); $data_comprobante = Array(); $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
@@ -37,7 +37,8 @@ class ResumenGasto
     // var_dump($filtro_proveedor , $filtro_fecha ,$filtro_comprobante); die();
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
-    cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante
+    cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante,
+    cpp.id_user_vb, cpp.nombre_user_vb, cpp.imagen_user_vb, cpp.estado_user_vb
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND  cpp.idproyecto = $idproyecto
     $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
@@ -66,7 +67,11 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante_compra',
           "ruta"              => 'dist/docs/compra_insumo/comprobante_compra/',
           "modulo"            => 'COMPRAS INSUMOS',
-          "detalle"            => true,
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
+          "detalle"           => true,
         );
 
         if (!empty($value['comprobante'])) {
@@ -84,76 +89,76 @@ class ResumenGasto
     }
 
     // FACTURAS - COMPRAS ACTIVO FIJO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+    // $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND cafg.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND cafg.fecha_compra = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND cafg.fecha_compra = '$fecha_2'";
-        }     
-      }      
-    }    
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND cafg.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else {
+    //   if (!empty($fecha_1)) {
+    //     $filtro_fecha = "AND cafg.fecha_compra = '$fecha_1'";
+    //   }else{
+    //     if (!empty($fecha_2)) {
+    //       $filtro_fecha = "AND cafg.fecha_compra = '$fecha_2'";
+    //     }     
+    //   }      
+    // }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND cafg.tipo_comprobante = '$comprobante'"; 
-    } 
+    // if ( empty($comprobante) ) { } else {
+    //   $filtro_comprobante = "AND cafg.tipo_comprobante = '$comprobante'"; 
+    // } 
 
-    // var_dump($filtro_proveedor , $filtro_fecha ,$filtro_comprobante); die();
+    // // var_dump($filtro_proveedor , $filtro_fecha ,$filtro_comprobante); die();
 
-    $sql = "SELECT cafg.idcompra_af_general , cafg.fecha_compra, cafg.tipo_comprobante,	cafg.serie_comprobante, cafg.descripcion, 
-    cafg.total, cafg.subtotal, cafg.igv,  p.razon_social, cafg.glosa, cafg.tipo_gravada, cafg.comprobante
-		FROM compra_af_general as cafg, proveedor as p 
-		WHERE cafg.idproveedor=p.idproveedor AND cafg.estado = '1' AND cafg.estado_delete = '1' 
-    $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cafg.fecha_compra DESC;";
-    $compra = ejecutarConsultaArray($sql);
+    // $sql = "SELECT cafg.idcompra_af_general , cafg.fecha_compra, cafg.tipo_comprobante,	cafg.serie_comprobante, cafg.descripcion, 
+    // cafg.total, cafg.subtotal, cafg.igv,  p.razon_social, cafg.glosa, cafg.tipo_gravada, cafg.comprobante
+		// FROM compra_af_general as cafg, proveedor as p 
+		// WHERE cafg.idproveedor=p.idproveedor AND cafg.estado = '1' AND cafg.estado_delete = '1' 
+    // $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cafg.fecha_compra DESC;";
+    // $compra = ejecutarConsultaArray($sql);
 
-    if ($compra['status'] == false) { return $compra; }
+    // if ($compra['status'] == false) { return $compra; }
 
-    if (!empty($compra['data'])) {
-      foreach ($compra['data'] as $key => $value) {
-        $data[] = array(
-        	"idproyecto"        => '',
-          "idtabla"           => $value['idcompra_af_general'],
-          "bd_nombre_tabla"   => 'compra_af_general',
-          "bd_nombre_id_tabla"=> 'idcompra_af_general',
-          "fecha"             => $value['fecha_compra'],
-          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
-          "serie_comprobante" => $value['serie_comprobante'],
-          "proveedor"         => $value['razon_social'],
-          "total"             => $value['total'],          
-          "subtotal"          => $value['subtotal'],
-          "igv"               => $value['igv'],
-          "glosa"             => $value['glosa'],
-          "tipo_gravada"      => $value['tipo_gravada'],
-          "comprobante"       => $value['comprobante'],
-          "carpeta"           => 'compra_activo_fijo',
-          "subcarpeta"        => 'comprobante_compra',
-          "ruta"              => 'dist/docs/compra_activo_fijo/comprobante_compra/',
-          "modulo"            => 'COMPRAS ACTIVO FIJO',
-          "detalle"            => true,
-        );
+    // if (!empty($compra['data'])) {
+    //   foreach ($compra['data'] as $key => $value) {
+    //     $data[] = array(
+    //     	"idproyecto"        => '',
+    //       "idtabla"           => $value['idcompra_af_general'],
+    //       "bd_nombre_tabla"   => 'compra_af_general',
+    //       "bd_nombre_id_tabla"=> 'idcompra_af_general',
+    //       "fecha"             => $value['fecha_compra'],
+    //       "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
+    //       "serie_comprobante" => $value['serie_comprobante'],
+    //       "proveedor"         => $value['razon_social'],
+    //       "total"             => $value['total'],          
+    //       "subtotal"          => $value['subtotal'],
+    //       "igv"               => $value['igv'],
+    //       "glosa"             => $value['glosa'],
+    //       "tipo_gravada"      => $value['tipo_gravada'],
+    //       "comprobante"       => $value['comprobante'],
+    //       "carpeta"           => 'compra_activo_fijo',
+    //       "subcarpeta"        => 'comprobante_compra',
+    //       "ruta"              => 'dist/docs/compra_activo_fijo/comprobante_compra/',
+    //       "modulo"            => 'COMPRAS ACTIVO FIJO',
+    //       "detalle"            => true,
+    //     );
 
-        if (!empty($value['comprobante'])) {
-          if ( validar_url( $scheme_host, 'dist/docs/compra_activo_fijo/comprobante_compra/', $value['comprobante']) ) {
-            $data_comprobante[] = array(
-              "comprobante"    => $value['comprobante'],
-              "carpeta"        => 'compra_activo_fijo',
-              "subcarpeta"     => 'comprobante_compra',
-              "host"           => $host,
-              "ruta_file"      => $scheme_host.'dist/docs/compra_activo_fijo/comprobante_compra/'.$value['comprobante'],
-            );
-          }          
-        }        
-      }
-    }
+    //     if (!empty($value['comprobante'])) {
+    //       if ( validar_url( $scheme_host, 'dist/docs/compra_activo_fijo/comprobante_compra/', $value['comprobante']) ) {
+    //         $data_comprobante[] = array(
+    //           "comprobante"    => $value['comprobante'],
+    //           "carpeta"        => 'compra_activo_fijo',
+    //           "subcarpeta"     => 'comprobante_compra',
+    //           "host"           => $host,
+    //           "ruta_file"      => $scheme_host.'dist/docs/compra_activo_fijo/comprobante_compra/'.$value['comprobante'],
+    //         );
+    //       }          
+    //     }        
+    //   }
+    // }
 
-    // FACTURAS - SERVICIO MAQUINA Y/O EQUIPO ════════════════════════════════════════════════════════════════════════════════════════════════════════
+    // FACTURAS - SERVICIO MAQUINA ════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -173,10 +178,10 @@ class ResumenGasto
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
-    f.nota, mq.nombre, prov.razon_social, f.descripcion, f.imagen
+    f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-    AND f.estado = '1' AND f.estado_delete = '1' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY f.fecha_emision DESC;";
     $maquinaria_equipo =  ejecutarConsultaArray($sql2);
 
@@ -202,7 +207,11 @@ class ResumenGasto
           "carpeta"           => 'servicio_maquina',
           "subcarpeta"        => 'comprobante_servicio',
           "ruta"              => 'dist/docs/servicio_maquina/comprobante_servicio/',
-          "modulo"              => 'MAQUINA Y/O EQUIPO',
+          "modulo"              => 'SERVICIO MAQUINA',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"            => false,
         );
         if (!empty($value['imagen'])) {
@@ -219,6 +228,80 @@ class ResumenGasto
         }
       }
     }
+
+    // FACTURAS - SERVICIO EQUIPO ════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND f.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND f.fecha_emision = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND f.fecha_emision = '$fecha_2'";
+        }     
+      }      
+    }    
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; 
+    } 
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+
+    $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
+    f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
+    FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
+    WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
+    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    ORDER BY f.fecha_emision DESC;";
+    $maquinaria_equipo =  ejecutarConsultaArray($sql2);
+
+    if ($maquinaria_equipo['status'] == false) { return $maquinaria_equipo; }
+
+    if (!empty($maquinaria_equipo['data'])) {
+      foreach ($maquinaria_equipo['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idfactura'],
+          "bd_nombre_tabla"   => 'factura',
+          "bd_nombre_id_tabla"=> 'idfactura',
+          "fecha"             => $value['fecha_emision'],
+          "tipo_comprobante"  => 'Factura',
+          "serie_comprobante" => $value['codigo'],
+          "proveedor"         => $value['razon_social'],
+          "total"             => $value['monto'],          
+          "subtotal"          => $value['subtotal'],
+          "igv"               => $value['igv'],
+          "glosa"             => 'EQUIPO',
+          "tipo_gravada"      => 'GRAVADA',
+          "comprobante"       => $value['imagen'],
+          "carpeta"           => 'servicio_equipo',
+          "subcarpeta"        => 'comprobante_servicio',
+          "ruta"              => 'dist/docs/servicio_equipo/comprobante_servicio/',
+          "modulo"              => 'SERVICIO EQUIPO',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
+          "detalle"            => false,
+        );
+        if (!empty($value['imagen'])) {
+          if (validar_url( $scheme_host, 'dist/docs/servicio_equipo/comprobante_servicio/', $value['imagen'])) {
+            $data_comprobante[] = array(
+              "comprobante"       => $value['imagen'],
+              "carpeta"           => 'servicio_equipo',
+              "subcarpeta"        => 'comprobante_servicio',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/servicio_equipo/comprobante_servicio/'.$value['imagen'],
+            );
+          }
+          
+        }
+      }
+    }
+
+
     // FACTURAS - SUB CONTRATO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
@@ -241,15 +324,16 @@ class ResumenGasto
     }
     
     $sql3 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
-    s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, p.ruc
+    s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, 
+    p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb    
     FROM subcontrato AS s, proveedor as p
     WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
-    $otro_gasto =  ejecutarConsultaArray($sql3);
+    $sub_contrato =  ejecutarConsultaArray($sql3);
 
-    if ($otro_gasto['status'] == false) { return $otro_gasto; }
+    if ($sub_contrato['status'] == false) { return $sub_contrato; }
 
-    if (!empty($otro_gasto['data'])) {
-      foreach ($otro_gasto['data'] as $key => $value) {
+    if (!empty($sub_contrato['data'])) {
+      foreach ($sub_contrato['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idsubcontrato'],
@@ -269,6 +353,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante_subcontrato',
           "ruta"              => 'dist/docs/sub_contrato/comprobante_subcontrato/',
           "modulo"            => 'SUB CONTRATO',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -306,16 +394,17 @@ class ResumenGasto
     }
 
     $sql3 = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
-    ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante
+    ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante,
+    ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb
     FROM planilla_seguro as ps, proyecto as p
     WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' 
     AND ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ps.fecha_p_s DESC;";
-    $otro_gasto =  ejecutarConsultaArray($sql3);
+    $planilla_seguro =  ejecutarConsultaArray($sql3);
 
-    if ($otro_gasto['status'] == false) { return $otro_gasto; }
+    if ($planilla_seguro['status'] == false) { return $planilla_seguro; }
 
-    if (!empty($otro_gasto['data'])) {
-      foreach ($otro_gasto['data'] as $key => $value) {
+    if (!empty($planilla_seguro['data'])) {
+      foreach ($planilla_seguro['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idplanilla_seguro'],
@@ -335,6 +424,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/planilla_seguro/comprobante/',
           "modulo"            => 'PLANILLA SEGURO',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -373,7 +466,7 @@ class ResumenGasto
     }
 
     $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, tipo_comprobante, numero_comprobante, fecha_g, 
-    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
+    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
     FROM otro_gasto 
     WHERE  estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
     $otro_gasto =  ejecutarConsultaArray($sql3);
@@ -401,6 +494,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/otro_gasto/comprobante/',
           "modulo"            => 'OTRO GASTO',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -438,8 +535,8 @@ class ResumenGasto
       $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, 
-    t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada
+    $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, t.precio_parcial, 
+    t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada, t.id_user_vb, t.nombre_user_vb, t.imagen_user_vb, t.estado_user_vb
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND  t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
@@ -468,6 +565,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/transporte/comprobante/',
           "modulo"            => 'TRANSPORTE',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -506,7 +607,7 @@ class ResumenGasto
     }
 
     $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
-    precio_parcial, glosa, comprobante , tipo_gravada
+    precio_parcial, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
     FROM hospedaje 
     WHERE estado = '1' AND estado_delete = '1' AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
@@ -535,6 +636,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/hospedaje/comprobante/',
           "modulo"            => 'HOSPEDAJE',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -573,7 +678,7 @@ class ResumenGasto
     }
 
     $sql6 = "SELECT p.idproyecto, fp.idfactura_pension, prov.razon_social, fp.tipo_comprobante, fp.nro_comprobante, fp.fecha_emision, 
-    fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa , fp.tipo_gravada
+    fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa, fp.tipo_gravada, fp.id_user_vb, fp.nombre_user_vb, fp.imagen_user_vb, fp.estado_user_vb
 		FROM factura_pension as fp, pension as p, proveedor as prov
 		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
     AND fp.estado = '1' AND fp.estado_delete = '1' AND  p.idproyecto = $idproyecto
@@ -604,6 +709,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/pension/comprobante/',
           "modulo"            => 'PENSION',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -620,7 +729,7 @@ class ResumenGasto
       }
     }
 
-    // FACTURAS - BRACK ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    // FACTURAS - BREACK ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -642,7 +751,7 @@ class ResumenGasto
     }
 
     $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social,  
-    fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante, fb.tipo_gravada
+    fb.monto, fb.subtotal, fb.igv, fb.glosa, fb.comprobante, fb.tipo_gravada, fb.id_user_vb, fb.nombre_user_vb, fb.imagen_user_vb, fb.estado_user_vb
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break  
     AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' AND  sb.idproyecto = $idproyecto
@@ -673,6 +782,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/break/comprobante/',
           "modulo"            => 'BREAK',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"            => false,
         );
         if (!empty($value['comprobante'])) {
@@ -711,7 +824,7 @@ class ResumenGasto
     }
 
     $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
-    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
+    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
@@ -740,6 +853,10 @@ class ResumenGasto
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/comida_extra/comprobante/',
           "modulo"            => 'COMIDA EXTRA',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
         );
         if (!empty($value['comprobante'])) {
@@ -756,140 +873,148 @@ class ResumenGasto
       }
     }
     // FACTURAS - OTRO INGRESO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+    // $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND oi.fecha_i BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND oi.fecha_i = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND oi.fecha_i = '$fecha_2'";
-        }     
-      }      
-    }    
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND oi.fecha_i BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else {
+    //   if (!empty($fecha_1)) {
+    //     $filtro_fecha = "AND oi.fecha_i = '$fecha_1'";
+    //   }else{
+    //     if (!empty($fecha_2)) {
+    //       $filtro_fecha = "AND oi.fecha_i = '$fecha_2'";
+    //     }     
+    //   }      
+    // }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND oi.ruc = '$id_proveedor'"; }
+    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND oi.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND oi.tipo_comprobante = '$comprobante'"; 
-    }
+    // if ( empty($comprobante) ) { } else {
+    //   $filtro_comprobante = "AND oi.tipo_comprobante = '$comprobante'"; 
+    // }
 
-    $sql9 = "SELECT oi.idotro_ingreso, oi.idproyecto, oi.idproveedor, oi.ruc, oi.razon_social, oi.direccion, oi.tipo_comprobante, 
-    oi.numero_comprobante, oi.forma_de_pago, oi.fecha_i, oi.subtotal, oi.igv, oi.costo_parcial, oi.descripcion, oi.glosa, 
-    oi.comprobante, oi.val_igv, oi.tipo_gravada
-    FROM otro_ingreso as oi, proyecto as p
-    WHERE oi.idproyecto = p.idproyecto AND oi.estado = '1' AND oi.estado_delete = '1' 
-    AND oi.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
-    ORDER BY oi.fecha_i DESC;";
-    $otra_factura =  ejecutarConsultaArray($sql9);
+    // $sql9 = "SELECT oi.idotro_ingreso, oi.idproyecto, oi.idproveedor, oi.ruc, oi.razon_social, oi.direccion, oi.tipo_comprobante, 
+    // oi.numero_comprobante, oi.forma_de_pago, oi.fecha_i, oi.subtotal, oi.igv, oi.costo_parcial, oi.descripcion, oi.glosa, 
+    // oi.comprobante, oi.val_igv, oi.tipo_gravada, oi.id_user_vb, oi.nombre_user_vb, oi.imagen_user_vb, oi.estado_user_vb
+    // FROM otro_ingreso as oi, proyecto as p
+    // WHERE oi.idproyecto = p.idproyecto AND oi.estado = '1' AND oi.estado_delete = '1' 
+    // AND oi.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    // ORDER BY oi.fecha_i DESC;";
+    // $otra_factura =  ejecutarConsultaArray($sql9);
 
-    if ($otra_factura['status'] == false) { return $otra_factura; }
+    // if ($otra_factura['status'] == false) { return $otra_factura; }
 
-    if (!empty($otra_factura['data'])) {
-      foreach ($otra_factura['data'] as $key => $value) {
-        $data[] = array(
-        	"idproyecto"        => $value['idproyecto'],
-          "idtabla"           => $value['idotro_ingreso'],
-          "bd_nombre_tabla"   => 'otro_ingreso',
-          "bd_nombre_id_tabla"=> 'idotro_ingreso',
-          "fecha"             => $value['fecha_i'],
-          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
-          "serie_comprobante" => $value['numero_comprobante'],
-          "proveedor"         => $value['razon_social'],
-          "total"             => $value['costo_parcial'],
-          "igv"               => $value['igv'],
-          "subtotal"          => $value['subtotal'],
-          "glosa"             => $value['glosa'],
-          "tipo_gravada"      => $value['tipo_gravada'],
-          "comprobante"       => $value['comprobante'],
-          "carpeta"           => 'otro_ingreso',
-          "subcarpeta"        => 'comprobante',
-          "ruta"              => 'dist/docs/otro_ingreso/comprobante/',
-          "modulo"            => 'OTRO INGRESO',
-          "detalle"           => false,
-        );
-        if (!empty($value['comprobante'])) {
-          if ( validar_url( $scheme_host, 'dist/docs/otro_ingreso/comprobante/', $value['comprobante']) ) {
-            $data_comprobante[] = array(
-              "comprobante"       => $value['comprobante'],
-              "carpeta"           => 'otro_ingreso',
-              "subcarpeta"        => 'comprobante',
-              "host"              => $host,
-              "ruta_file"         => $scheme_host.'dist/docs/otro_ingreso/comprobante/'.$value['comprobante'],
-            );
-          }          
-        }
-      }
-    }
+    // if (!empty($otra_factura['data'])) {
+    //   foreach ($otra_factura['data'] as $key => $value) {
+    //     $data[] = array(
+    //     	"idproyecto"        => $value['idproyecto'],
+    //       "idtabla"           => $value['idotro_ingreso'],
+    //       "bd_nombre_tabla"   => 'otro_ingreso',
+    //       "bd_nombre_id_tabla"=> 'idotro_ingreso',
+    //       "fecha"             => $value['fecha_i'],
+    //       "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
+    //       "serie_comprobante" => $value['numero_comprobante'],
+    //       "proveedor"         => $value['razon_social'],
+    //       "total"             => $value['costo_parcial'],
+    //       "igv"               => $value['igv'],
+    //       "subtotal"          => $value['subtotal'],
+    //       "glosa"             => $value['glosa'],
+    //       "tipo_gravada"      => $value['tipo_gravada'],
+    //       "comprobante"       => $value['comprobante'],
+    //       "carpeta"           => 'otro_ingreso',
+    //       "subcarpeta"        => 'comprobante',
+    //       "ruta"              => 'dist/docs/otro_ingreso/comprobante/',
+    //       "modulo"            => 'OTRO INGRESO',
+    //       "id_user_vb"        => $value['id_user_vb'],
+    //       "nombre_user_vb"    => $value['nombre_user_vb'],
+    //       "imagen_user_vb"    => $value['imagen_user_vb'],
+    //       "estado_user_vb"    => $value['estado_user_vb'],
+    //       "detalle"           => false,
+    //     );
+    //     if (!empty($value['comprobante'])) {
+    //       if ( validar_url( $scheme_host, 'dist/docs/otro_ingreso/comprobante/', $value['comprobante']) ) {
+    //         $data_comprobante[] = array(
+    //           "comprobante"       => $value['comprobante'],
+    //           "carpeta"           => 'otro_ingreso',
+    //           "subcarpeta"        => 'comprobante',
+    //           "host"              => $host,
+    //           "ruta_file"         => $scheme_host.'dist/docs/otro_ingreso/comprobante/'.$value['comprobante'],
+    //         );
+    //       }          
+    //     }
+    //   }
+    // }
 
     // FACTURAS - OTRA FACTURA ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+    // $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
-        }     
-      }      
-    }    
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else {
+    //   if (!empty($fecha_1)) {
+    //     $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
+    //   }else{
+    //     if (!empty($fecha_2)) {
+    //       $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
+    //     }     
+    //   }      
+    // }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
-    }
+    // if ( empty($comprobante) ) { } else {
+    //   $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
+    // }
 
-    $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, of.costo_parcial, 
-    of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada
-    FROM otra_factura AS of, proveedor p
-    WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
-    ORDER BY of.fecha_emision DESC;";
-    $otra_factura =  ejecutarConsultaArray($sql9);
+    // $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, of.costo_parcial, 
+    // of.subtotal, of.igv, of.glosa, of.comprobante, of.tipo_gravada, of.id_user_vb, of.nombre_user_vb, of.imagen_user_vb, of.estado_user_vb
+    // FROM otra_factura AS of, proveedor p
+    // WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
+    // ORDER BY of.fecha_emision DESC;";
+    // $otra_factura =  ejecutarConsultaArray($sql9);
 
-    if ($otra_factura['status'] == false) { return $otra_factura; }
+    // if ($otra_factura['status'] == false) { return $otra_factura; }
 
-    if (!empty($otra_factura['data'])) {
-      foreach ($otra_factura['data'] as $key => $value) {
-        $data[] = array(
-        	"idproyecto"        => '',
-          "idtabla"           => $value['idotra_factura'],
-          "bd_nombre_tabla"   => 'otra_factura',
-          "bd_nombre_id_tabla"=> 'idotra_factura',
-          "fecha"             => $value['fecha_emision'],
-          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
-          "serie_comprobante" => $value['numero_comprobante'],
-          "proveedor"         => $value['razon_social'],
-          "total"             => $value['costo_parcial'],
-          "igv"               => $value['igv'],
-          "subtotal"          => $value['subtotal'],
-          "glosa"             => $value['glosa'],
-          "tipo_gravada"      => $value['tipo_gravada'],
-          "comprobante"       => $value['comprobante'],
-          "carpeta"           => 'otra_factura',
-          "subcarpeta"        => 'comprobante',
-          "ruta"              => 'dist/docs/otra_factura/comprobante/',
-          "modulo"            => 'OTRA FACTURA',
-          "detalle"           => false,
-        );
-        if (!empty($value['comprobante'])) {
-          if ( validar_url( $scheme_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
-            $data_comprobante[] = array(
-              "comprobante"       => $value['comprobante'],
-              "carpeta"           => 'otra_factura',
-              "subcarpeta"        => 'comprobante',
-              "host"              => $host,
-              "ruta_file"         => $scheme_host.'dist/docs/otra_factura/comprobante/'.$value['comprobante'],
-            );
-          }          
-        }
-      }
-    }
+    // if (!empty($otra_factura['data'])) {
+    //   foreach ($otra_factura['data'] as $key => $value) {
+    //     $data[] = array(
+    //     	"idproyecto"        => '',
+    //       "idtabla"           => $value['idotra_factura'],
+    //       "bd_nombre_tabla"   => 'otra_factura',
+    //       "bd_nombre_id_tabla"=> 'idotra_factura',
+    //       "fecha"             => $value['fecha_emision'],
+    //       "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
+    //       "serie_comprobante" => $value['numero_comprobante'],
+    //       "proveedor"         => $value['razon_social'],
+    //       "total"             => $value['costo_parcial'],
+    //       "igv"               => $value['igv'],
+    //       "subtotal"          => $value['subtotal'],
+    //       "glosa"             => $value['glosa'],
+    //       "tipo_gravada"      => $value['tipo_gravada'],
+    //       "comprobante"       => $value['comprobante'],
+    //       "carpeta"           => 'otra_factura',
+    //       "subcarpeta"        => 'comprobante',
+    //       "ruta"              => 'dist/docs/otra_factura/comprobante/',
+    //       "modulo"            => 'OTRA FACTURA',
+    //       "id_user_vb"        => $value['id_user_vb'],
+    //       "nombre_user_vb"    => $value['nombre_user_vb'],
+    //       "imagen_user_vb"    => $value['imagen_user_vb'],
+    //       "estado_user_vb"    => $value['estado_user_vb'],
+    //       "detalle"           => false,
+    //     );
+    //     if (!empty($value['comprobante'])) {
+    //       if ( validar_url( $scheme_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
+    //         $data_comprobante[] = array(
+    //           "comprobante"       => $value['comprobante'],
+    //           "carpeta"           => 'otra_factura',
+    //           "subcarpeta"        => 'comprobante',
+    //           "host"              => $host,
+    //           "ruta_file"         => $scheme_host.'dist/docs/otra_factura/comprobante/'.$value['comprobante'],
+    //         );
+    //       }          
+    //     }
+    //   }
+    // }
 
     $retorno = array(
       "status"=> true,
@@ -1413,12 +1538,110 @@ class ResumenGasto
     $id_user_vb = $_SESSION["idusuario"]; $nombre_user_vb = $_SESSION["nombre"]; $imagen_user_vb = $_SESSION["imagen"];
 
     if ($accion == 'agregar') {
-      $sql = "UPDATE $nombre_tabla SET estado='1', 'id_user_vb' = '$id_user_vb', 'nombre_user_vb' = '$nombre_user_vb', 'imagen_user_vb' = '$imagen_user_vb' WHERE $nombre_id_tabla ='$id_tabla' ";
+      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb = '$id_user_vb', nombre_user_vb = '$nombre_user_vb', 
+      imagen_user_vb = '$imagen_user_vb', estado_user_vb = '1'
+      WHERE $nombre_id_tabla ='$id_tabla' ";
       return ejecutarConsulta($sql);
     } else if ($accion == 'quitar') {
-      $sql = "UPDATE $nombre_tabla SET estado='1', 'id_user_vb' = '', 'nombre_user_vb' = '', 'imagen_user_vb' ='' WHERE $nombre_id_tabla ='$id_tabla'";
+      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb = '', nombre_user_vb = '', imagen_user_vb ='', estado_user_vb = '0'
+      WHERE $nombre_id_tabla ='$id_tabla'";
       return ejecutarConsulta($sql);
     } 
+  }
+
+  // detalle_servicio_maquina
+  public function detalle_servicio_maquina($id) {
+    $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
+    f.nota, f.descripcion, f.imagen as comprobante
+    FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
+    WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
+    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND  f.idfactura = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_servicio_equipo
+  public function detalle_servicio_equipo($id) {
+    $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
+    f.nota, f.descripcion, f.imagen as comprobante
+    FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
+    WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
+    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' AND  f.idfactura = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_sub_contrato($id) {
+    $sql = "SELECT p.razon_social, p.tipo_documento, p.ruc, s.forma_de_pago, s.tipo_comprobante, s.numero_comprobante, s.fecha_subcontrato, 
+    s.val_igv, s.subtotal, s.igv, s.costo_parcial as total, s.descripcion, s.glosa, s.comprobante    
+    FROM subcontrato AS s, proveedor as p
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.idsubcontrato = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_planilla_seguro($id) {
+    $sql = "SELECT ps.forma_de_pago, ps.tipo_comprobante, ps.numero_comprobante, ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial as total, 
+     ps.val_igv, ps.tipo_gravada, ps.comprobante, ps.descripcion
+    FROM planilla_seguro as ps, proyecto as p
+    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' AND ps.idplanilla_seguro = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_otro_gasto($id) {
+    $sql = "SELECT  razon_social, ruc, forma_de_pago, tipo_comprobante, numero_comprobante, fecha_g, subtotal, val_igv, igv, glosa, 
+    costo_parcial as total, tipo_gravada, comprobante, descripcion
+    FROM otro_gasto 
+    WHERE  estado = '1' AND estado_delete = '1' AND idotro_gasto = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_transporte($id) {
+    $sql = "SELECT t.idtransporte, t.idproyecto, p.razon_social, p.tipo_documento, p.ruc, t.forma_de_pago, t.tipo_comprobante, t.numero_comprobante,
+    t.fecha_viaje, t.cantidad, t.precio_unitario, t.subtotal, t.igv, t.val_igv, t.precio_parcial as total,  t.comprobante , t.glosa , t.tipo_gravada, 
+    t.tipo_viajero, t.tipo_ruta, t.ruta, t.descripcion
+    FROM transporte AS t, proveedor AS p
+    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND  t.idtransporte = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_hospedaje($id) {
+    $sql = "SELECT  idhospedaje, idproyecto, razon_social, ruc, forma_de_pago, tipo_comprobante, numero_comprobante, fecha_comprobante, cantidad, 
+    unidad, precio_unitario, subtotal, igv, val_igv, precio_parcial as total, glosa, comprobante, tipo_gravada, descripcion, fecha_inicio, fecha_fin
+    FROM hospedaje 
+    WHERE estado = '1' AND estado_delete = '1' AND  idhospedaje = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_pension($id) {
+    $sql = "SELECT p.idproyecto, fp.idfactura_pension, prov.razon_social, prov.tipo_documento, prov.ruc, fp.forma_de_pago, fp.tipo_comprobante, 
+    fp.nro_comprobante, fp.fecha_emision, fp.subtotal, fp.igv, fp.val_igv, fp.monto as total, fp.comprobante, fp.glosa, fp.tipo_gravada, fp.descripcion
+    FROM factura_pension as fp, pension as p, proveedor as prov
+    WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
+    AND fp.estado = '1' AND fp.estado_delete = '1' AND  fp.idfactura_pension = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_break($id) {
+    $sql = "SELECT sb.idproyecto, fb.idfactura_break, fb.razon_social, fb.ruc, fb.forma_de_pago, fb.fecha_emision, fb.tipo_comprobante, 
+    fb.nro_comprobante, fb.subtotal, fb.igv, fb.val_igv, fb.monto as total, fb.glosa, fb.comprobante, fb.tipo_gravada, fb.descripcion
+    FROM factura_break as fb, semana_break as sb
+    WHERE  fb.idsemana_break = sb.idsemana_break  
+    AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' AND  fb.idfactura_break = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_comida_extra($id) {
+    $sql = "SELECT idproyecto, idcomida_extra, razon_social, ruc, forma_de_pago, fecha_comida, tipo_comprobante, numero_comprobante, 
+    subtotal, igv, val_igv, costo_parcial as total, glosa, comprobante, tipo_gravada, descripcion
+    FROM comida_extra
+    WHERE  estado = '1' AND estado_delete = '1' AND idcomida_extra = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
   }
   
 }
