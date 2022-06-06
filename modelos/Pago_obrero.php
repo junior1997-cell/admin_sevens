@@ -44,17 +44,17 @@ Class PagoObrero
 	{
 		$data = Array();
 
-		$sql_1="SELECT t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento, t.cuenta_bancaria_format AS cuenta_bancaria, 
+		$sql_1="SELECT t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento, t.cuenta_bancaria_format AS cuenta_bancaria, ban.nombre as banco, 
 		tt.nombre AS nombre_tipo, ct.nombre AS nombre_cargo, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
 		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.sabatical) AS sabatical, 
 		SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, 
 		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
-		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct, bancos as ban
 		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 
-		AND tpp.idtrabajador = t.idtrabajador AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  
+		AND tpp.idtrabajador = t.idtrabajador AND t.idbancos = ban.idbancos AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  
 		AND p.idproyecto = tpp.idproyecto AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' 
-		AND tpp.idproyecto = '$nube_idproyecto' 
+		AND tpp.idproyecto = '$nube_idproyecto'  
 		GROUP BY rqsa.idtrabajador_por_proyecto ORDER BY t.nombres;";
 		$trabajdor = ejecutarConsultaArray($sql_1);
 
@@ -77,6 +77,7 @@ Class PagoObrero
 					'imagen_perfil' 	=> $value['imagen_perfil'],
 					'tipo_documento' 	=> $value['tipo_documento'],
 					'numero_documento' 	=> $value['numero_documento'],
+					'banco'         	=> $value['banco'],
 					'cuenta_bancaria' 	=> $value['cuenta_bancaria'],
 					'nombre_tipo' 		=> $value['nombre_tipo'],
 					'nombre_cargo' 		=> $value['nombre_cargo'],

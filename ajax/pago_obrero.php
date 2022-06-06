@@ -174,19 +174,21 @@
               
               "2"=>$value['total_hn'].' / '. $value['total_he'],
               "3"=>$value['sabatical'],              
-              "4"=>'S/ '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
-              "5"=>'S/ '.  number_format($value['pago_quincenal'], 2, '.', ','),
-              "6"=>'<div class="justify-content-between "> 
+              "4"=>$value['banco'],              
+              "5"=>$value['cuenta_bancaria'],             
+              "6"=>'S/ '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
+              "7"=>'S/ '.  number_format($value['pago_quincenal'], 2, '.', ','),
+              "8"=>'<div class="justify-content-between "> 
                 <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' )">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/ '.number_format($value['total_deposito'], 2, '.', ',').'</button>
               </div>',
-              "7"=>'S/ ' . number_format($saldo, 2, '.', ','),
-              "8"=>$value['sum_estado_envio_contador'], 
-              "9"=>format_d_m_a($value['fecha_inicio']),
-              "10"=> $date_actual,
-              "11"=>format_d_m_a($value['fecha_fin']),              
+              "9"=>'S/ ' . number_format($saldo, 2, '.', ','),
+              "10"=>$value['sum_estado_envio_contador'], 
+              "11"=>format_d_m_a($value['fecha_inicio']),
+              "12"=> $date_actual,
+              "13"=>format_d_m_a($value['fecha_fin']),              
             );
           }
           $results = array(

@@ -883,10 +883,10 @@ function format_a_m_d(fecha) {
 }
 
 // quitamos las comas de miles de un numero
-function quitar_formato_miles(numero) {
+/*function quitar_formato_miles(numero) {
   let inVal = numero.replace(/,/g, '');
   return inVal;
-}
+}*/
 
 // damos formato de miles a un numero
 function formato_miles(num) {
