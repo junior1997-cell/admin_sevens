@@ -1066,36 +1066,36 @@ class ResumenGasto
     $igv      += (empty($compra['data'])) ? 0 : ( empty($compra['data']['igv']) ? 0 : floatval($compra['data']['igv']) );
 
     // SUMAS TOTALES - COMPRAS DE ACTIVO FIJO --------------------------------------------------------------------------------
-    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+    // $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND cafg.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND cafg.fecha_compra = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND cafg.fecha_compra = '$fecha_2'";
-        }     
-      }      
-    }    
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND cafg.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else {
+    //   if (!empty($fecha_1)) {
+    //     $filtro_fecha = "AND cafg.fecha_compra = '$fecha_1'";
+    //   }else{
+    //     if (!empty($fecha_2)) {
+    //       $filtro_fecha = "AND cafg.fecha_compra = '$fecha_2'";
+    //     }     
+    //   }      
+    // }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND cafg.tipo_comprobante = '$comprobante'"; 
-    }
+    // if ( empty($comprobante) ) { } else {
+    //   $filtro_comprobante = "AND cafg.tipo_comprobante = '$comprobante'"; 
+    // }
 
-    $sql = "SELECT SUM(cafg.total) AS total, SUM(cafg.subtotal) AS subtotal, SUM(cafg.igv) AS igv
-    FROM compra_af_general  AS cafg, proveedor p
-    WHERE cafg.idproveedor = p.idproveedor AND cafg.estado = '1' AND cafg.estado_delete = '1'  $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
-    $compra = ejecutarConsultaSimpleFila($sql);
+    // $sql = "SELECT SUM(cafg.total) AS total, SUM(cafg.subtotal) AS subtotal, SUM(cafg.igv) AS igv
+    // FROM compra_af_general  AS cafg, proveedor p
+    // WHERE cafg.idproveedor = p.idproveedor AND cafg.estado = '1' AND cafg.estado_delete = '1'  $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
+    // $compra = ejecutarConsultaSimpleFila($sql);
 
-    if ($compra['status'] == false) { return $compra; }
+    // if ($compra['status'] == false) { return $compra; }
 
-    $total    += (empty($compra['data'])) ? 0 : ( empty($compra['data']['total']) ? 0 : floatval($compra['data']['total']) );
-    $subtotal += (empty($compra['data'])) ? 0 : ( empty($compra['data']['subtotal']) ? 0 : floatval($compra['data']['subtotal']) );
-    $igv      += (empty($compra['data'])) ? 0 : ( empty($compra['data']['igv']) ? 0 : floatval($compra['data']['igv']) );
+    // $total    += (empty($compra['data'])) ? 0 : ( empty($compra['data']['total']) ? 0 : floatval($compra['data']['total']) );
+    // $subtotal += (empty($compra['data'])) ? 0 : ( empty($compra['data']['subtotal']) ? 0 : floatval($compra['data']['subtotal']) );
+    // $igv      += (empty($compra['data'])) ? 0 : ( empty($compra['data']['igv']) ? 0 : floatval($compra['data']['igv']) );
      
     // SUMAS TOTALES - MAQUINARIA EQUIPO --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -1389,67 +1389,67 @@ class ResumenGasto
 
     // SUMAS TOTALES - OTRO INGRESO --------------------------------------------------------------------------------
 
-    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+    // $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND oi.fecha_i BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND oi.fecha_i = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND oi.fecha_i = '$fecha_2'";
-        }     
-      }      
-    }    
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND oi.fecha_i BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else {
+    //   if (!empty($fecha_1)) {
+    //     $filtro_fecha = "AND oi.fecha_i = '$fecha_1'";
+    //   }else{
+    //     if (!empty($fecha_2)) {
+    //       $filtro_fecha = "AND oi.fecha_i = '$fecha_2'";
+    //     }     
+    //   }      
+    // }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND oi.ruc = '$id_proveedor'"; }
+    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND oi.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND oi.tipo_comprobante = '$comprobante'"; 
-    }
+    // if ( empty($comprobante) ) { } else {
+    //   $filtro_comprobante = "AND oi.tipo_comprobante = '$comprobante'"; 
+    // }
 
-    $sql9 = "SELECT SUM(oi.subtotal) as subtotal, SUM(oi.igv) as igv, SUM(oi.costo_parcial) as total
-    FROM otro_ingreso as oi, proyecto as p
-    WHERE oi.idproyecto = p.idproyecto AND oi.estado = '1' AND oi.estado_delete = '1' AND  oi.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha";
-    $otra_factura = ejecutarConsultaSimpleFila($sql9);
+    // $sql9 = "SELECT SUM(oi.subtotal) as subtotal, SUM(oi.igv) as igv, SUM(oi.costo_parcial) as total
+    // FROM otro_ingreso as oi, proyecto as p
+    // WHERE oi.idproyecto = p.idproyecto AND oi.estado = '1' AND oi.estado_delete = '1' AND  oi.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha";
+    // $otra_factura = ejecutarConsultaSimpleFila($sql9);
 
-    if ($otra_factura['status'] == false) { return $otra_factura; } 
+    // if ($otra_factura['status'] == false) { return $otra_factura; } 
     
-    $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
-    $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
-    $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
+    // $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
+    // $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
+    // $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
 
     // SUMAS TOTALES - OTRA FACTURA --------------------------------------------------------------------------------
-    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+    // $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
-        }     
-      }      
-    }    
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else {
+    //   if (!empty($fecha_1)) {
+    //     $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
+    //   }else{
+    //     if (!empty($fecha_2)) {
+    //       $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
+    //     }     
+    //   }      
+    // }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
-    }
-    $sql9 = "SELECT SUM(of.costo_parcial) AS total, SUM(of.subtotal) AS subtotal, SUM(of.igv) AS igv
-    FROM otra_factura AS of, proveedor p
-    WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha";
-    $otra_factura = ejecutarConsultaSimpleFila($sql9);
+    // if ( empty($comprobante) ) { } else {
+    //   $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
+    // }
+    // $sql9 = "SELECT SUM(of.costo_parcial) AS total, SUM(of.subtotal) AS subtotal, SUM(of.igv) AS igv
+    // FROM otra_factura AS of, proveedor p
+    // WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha";
+    // $otra_factura = ejecutarConsultaSimpleFila($sql9);
 
-    if ($otra_factura['status'] == false) { return $otra_factura; } 
+    // if ($otra_factura['status'] == false) { return $otra_factura; } 
     
-    $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
-    $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
-    $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
+    // $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
+    // $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
+    // $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
 
 
     $data = array( 

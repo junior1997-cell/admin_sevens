@@ -42,57 +42,42 @@ function init() {
 
   listar_botoness( localStorage.getItem('nube_idproyecto') );
 
-  listar( localStorage.getItem('nube_idproyecto'));
- 
+  tbla_principal( localStorage.getItem('nube_idproyecto')); 
 
-//Mostramos los proveedor
-lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#proveedor', null);
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#proveedor', null);
     
-  //=====Guardar pension=============
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_pension").on("click", function (e) {$("#submit-form-pension").submit();});
-
-  //=====Guardar factura=============
   $("#guardar_registro_comprobaante").on("click", function (e) {$("#submit-form-comprobante").submit();});
 
-  //Factura
-  $("#foto2_i").click(function() { $('#foto2').trigger('click'); });
-  $("#foto2").change(function(e) { addImage(e,$("#foto2").attr("id")) });
-
-  //Initialize Select2 Elements
-  $("#tipo_comprobante").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione tipo comprobante",
-    allowClear: true,
-  });
-
-  $("#forma_pago").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione una forma de pago",
-    allowClear: true,
-  });
   
-  //pension agregar 
-  $("#proveedor").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccionar",
-    allowClear: true,
-  });
-
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  //Initialize Select2 Elements
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione tipo comprobante", allowClear: true, });
+  $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione una forma de pago", allowClear: true, });  
+  $("#proveedor").select2({ theme: "bootstrap4", placeholder: "Seleccionar", allowClear: true, });
   $("#servicio_p").select2();
+
+  // Bloquemos las fechas has hoy
+  no_select_tomorrow('#fecha_emision');
 
   // Formato para telefono
   $("[data-mask]").inputmask();  
 }
 
-function foto2_eliminar() {
+// abrimos el navegador de archivos
+$("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
+$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
-	$("#foto2").val("");
-	$("#ver_pdf").html("");
+// Eliminamos el doc 1
+function doc1_eliminar() {
 
-	$("#foto2_i").attr("src", "../dist/img/default/img_defecto2.png");
+	$("#doc1").val("");
 
-	$("#foto2_nombre").html("");
-  $('#foto2_i').show();
+	$("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc1_nombre").html("");
 }
 
 function mostrar_form_table(estados) {
@@ -121,11 +106,7 @@ function mostrar_form_table(estados) {
       $("#mostrar-tabla").hide();
       $("#tabla-registro").show();
       
-     // $("#detalle_asistencia").hide();
-      
     } else {
-     // $("#List_smnas_pen").hide(); 
-
       $("#card-registrar").hide();
       $("#card-regresar").show();
       $("#card-editar").hide();
@@ -133,24 +114,9 @@ function mostrar_form_table(estados) {
       $("#tabla-asistencia-trab").hide();
       $("#tabla-registro").hide();
       $("#detalle_asistencia").show();
-      $("#tabla-comprobantes").hide();
-      
+      $("#tabla-comprobantes").hide();      
     }
   }
-}
-
-function editarbreak() {
-   // ocultamos los span
-   $(".span-visible").hide();
-   // mostramos los inputs
-   $(".input-visible").show();
-   $(".textarea-visible").attr("readonly", false);
- 
-   $("#card-editar").hide();
-   $("#card-guardar").show();
-
-
-  
 }
 
 //Función Listar
@@ -218,7 +184,7 @@ function listar_botoness( nube_idproyecto ) {
       </div>`);
     }
     //console.log(array_fi_ff);
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 //funcion para ingresar la fecha para rellenar los días de las pensiones
 function ingresar_a_pension(idpension,idproyecto,razon_social) {
@@ -285,7 +251,7 @@ function guardaryeditar_semana_pension() {
 
           datos_semana( f1_reload, f2_reload ,cont_reload, i_reload,id_pen=id_pension);
          
-          listar( localStorage.getItem('nube_idproyecto'));
+          tbla_principal( localStorage.getItem('nube_idproyecto'));
           
           $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );
   
@@ -339,10 +305,10 @@ function cerrar_modal() {
   $(".progress-bar").addClass("progress-bar-striped");
 }
 
-////////////////////////////datos_semana////////////////////////////////////////////////
+// .....:::::::::::::::::::::::::::::::::::::  S E M A N A   P E N S I O N  :::::::::::::::::::::::::::::::::::::::..
 function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
-   f1_reload=f1;  f2_reload=f2;  i_reload  = i;  cont_reload  = cont;
+  f1_reload=f1;  f2_reload=f2;  i_reload  = i;  cont_reload  = cont;
 
   // ocultamos las tablas
   mostrar_form_table(2);
@@ -448,7 +414,6 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
 
         for (i = 1; i <=7+dia_regular; i++) {
           //console.log('i');
-          console.log(i); 
           var estado_fecha = false; var fecha_asist = "";  var platos_x_dia=0; var iddetalle_pension='';
 
           // buscamos las fechas asistidas
@@ -597,48 +562,39 @@ function datos_semana(f1, f2, i, cont,id_pen=id_pension) {
     $("#tabla-registro").show();
     $('#cargando-registro-pension').hide();
     
-  }); //end post - ver_datos_semana
+  }).fail( function(e) { ver_errores(e); } ); //end post - ver_datos_semana
 
 
   $('[data-toggle="tooltip"]').tooltip();  
 
   count_dias_asistidos = 0;  horas_nomr_total = 0;   horas_extr_total = 0;
 }
+
 // Calculamos las: Horas normal/extras,	Días asistidos,	Sueldo Mensual,	Jornal,	Sueldo hora,	Sabatical,	Pago parcial,	Adicional/descuento,	Pago quincenal
 function calcular_platos(idservicio_pension,fecha_asist,can_servicios) {
 
   //variables
-   var platos_x_servicio = 0; var parcial_x_servicio=0; var total_parcial=0; var adicional_descuento=0; var precio=0;
+  var platos_x_servicio = 0; var parcial_x_servicio=0; var total_parcial=0; var adicional_descuento=0; var precio=0;
 
   // calcular pago quincenal
   for (let index = 1; index <= 7; index++) {
-
     // console.log( $(`.input_HN_${id_trabajador}_${index}`).val());    console.log( $(`.input_HE_${id_trabajador}_${index}`).val());
-
     if (parseFloat($(`.input_dia_${idservicio_pension}_${index}`).val()) > 0 ) {
-
       platos_x_servicio = platos_x_servicio + parseFloat($(`.input_dia_${idservicio_pension}_${index}`).val());
-
     }
-
   }
 
   // validamos el adicional descuento 
   if (parseFloat($(`.input_adicional_${idservicio_pension}`).val()) >= 0 || parseFloat($(`.input_adicional_${idservicio_pension}`).val()) <= 0 ) {
-
-    adicional_descuento =   parseFloat($(`.input_adicional_${idservicio_pension}`).val());     
-
+    adicional_descuento =   parseFloat($(`.input_adicional_${idservicio_pension}`).val()); 
   } else {
-
     adicional_descuento = 0;
-
     toastr.error(`El dato adicional:: <h3 class=""> ${$(`.input_adicional_${idservicio_pension}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
   }
+
   //capturamos el precio
   if (parseFloat($(`.input_precio_${idservicio_pension}`).val()) >= 0) {
-
-    precio =   parseFloat($(`.input_precio_${idservicio_pension}`).val());     
-
+    precio =   parseFloat($(`.input_precio_${idservicio_pension}`).val());
   }
 
   parcial_x_servicio= (precio*platos_x_servicio)+adicional_descuento; 
@@ -651,7 +607,6 @@ function calcular_platos(idservicio_pension,fecha_asist,can_servicios) {
   for (let k = 1; k <= parseInt(can_servicios); k++) {    
     //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
     total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text())); 
-
   }
 
   // console.log(suma_total_quincena);
@@ -684,12 +639,10 @@ function calcular_adicional(idservicio_pension,can_servicios) {
 
   for (let k = 1; k <= parseInt(can_servicios); k++) {    
     //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
-    total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text())); 
-
+    total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text()));
   }
 
   $(`#parcial_total_x_semana`).html(formato_miles(total_parcial.toFixed(2)));
-
 }
 
 function calcular_precios(idservicio_pension,can_servicios) {
@@ -702,34 +655,23 @@ function calcular_precios(idservicio_pension,can_servicios) {
 
   if (parseFloat($(`.input_adicional_${idservicio_pension}`).val()) >= 0 || parseFloat($(`.input_adicional_${idservicio_pension}`).val()) <= 0 ) {
 
-    adicional_descuento =   parseFloat($(`.input_adicional_${idservicio_pension}`).val());     
-
+    adicional_descuento =   parseFloat($(`.input_adicional_${idservicio_pension}`).val());
   } else {
-
     adicional_descuento = 0;
-
     toastr.error(`El dato adicional:: <h3 class=""> ${$(`.input_adicional_${idservicio_pension}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);    
   }
 
   parcial_actual= (reg_precio_actual*can_platos)+adicional_descuento;
-
 
   $(`.span_parcial_${idservicio_pension}`).html(parcial_actual); 
 
   for (let k = 1; k <= parseInt(can_servicios); k++) {    
     //console.log($(`.val_pago_quincenal_${k}`).text(), k); 
     total_parcial = total_parcial + parseFloat(quitar_formato_miles($(`.calcular_total_parcial_${k}`).text())); 
-
   }
-
   $(`#parcial_total_x_semana`).html(formato_miles(total_parcial.toFixed(2)));
-
-
-
-
 }
-
-//----------------------Pension--------------------------------------
+// .....:::::::::::::::::::::::::::::::::::::  P E N S I O N  :::::::::::::::::::::::::::::::::::::::..
 function limpiar_pension() {
 
   $("#idpension").val("");
@@ -758,123 +700,120 @@ function guardaryeditar_pension(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (e) {
-
       try {
         e = JSON.parse(e); 
-
         if (e.status == true) {
-
-          toastr.success('servicio registrado correctamente')				 
-  
-          tabla.ajax.reload(null, false);
-  
-          $("#modal-agregar-pension").modal("hide");
-  
+          toastr.success('servicio registrado correctamente');  
+          tabla.ajax.reload(null, false);  
+          $("#modal-agregar-pension").modal("hide");  
          limpiar_pension();
-
-        }else{
-  
-          toastr.error(e)
+        }else{  
+          ver_errores(e);
         } 
-
-        
       } catch (err) {
-
         console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
-      } 
-             
+      }     
+      $("#guardar_registro_pension").html('Guardar Cambios').removeClass('disabled');         
     },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_pension").css({"width": percentComplete+'%'});
+          $("#barra_progress_pension").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_pension").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_pension").css({ width: "0%",  });
+      $("#barra_progress_pension").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_pension").css({ width: "0%", });
+      $("#barra_progress_pension").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
 //Función Listar
-function listar(nube_idproyecto) {
+function tbla_principal(nube_idproyecto) {
 
   var sumatotal=0; var totalsaldo=0; 
 
   tabla=$('#tabla-resumen-break-semanal').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/pension.php?op=listar_pensiones&nube_idproyecto='+nube_idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	ver_errores(e);
-        }
-      },
-      createdRow: function (row, data, ixdex) {
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass('text-center text-nowrap');
-        }
-        if (data[1] != '') {
-          $("td", row).eq(1).addClass('text-center text-nowrap');
-        }
-        if (data[3]!="") {
-          $("td", row).eq(4).addClass('text-right');
-          sumatotal += parseFloat(data[4]);
-        } else {
-          sumatotal +=0;
-        }
-        if (data[5]) {
-          $("td", row).eq(5).addClass('text-nowrap');
-          $("td", row).eq(6).addClass('text-nowrap');
-          
-        }
-        if (data[7]!="") {$("td", row).eq(7).addClass('text-right');}
-        //console.log(data);
-        if (quitar_formato_miles(data[7]) > 0) {
-          $("td", row).eq(7).css({
-            "background-color": "#ffc107",
-            color: "black",
-          });
-          
-        } else if (quitar_formato_miles(data[7]) == 0) {
-          $("td", row).eq(7).css({
-            "background-color": "#28a745",
-            color: "white",
-          });
-        } else {
-          $("td", row).eq(7).css({
-            "background-color": "#ff5252",
-            color: "white",
-          });
-          
-        }
-        if (data[7]!="") {
-          var saldo=quitar_formato_miles(data[7]);
-        }
-        totalsaldo += parseFloat(saldo);
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,6,7], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,6,7], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,6,7], } }, {extend: "colvis"} ,
+    ],
+    ajax:{
+      url: '../ajax/pension.php?op=tabla_principal&nube_idproyecto='+nube_idproyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center text-nowrap');  }
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-center text-nowrap'); }
+      if (data[3]!="") { $("td", row).eq(4).addClass('text-right');  sumatotal += parseFloat(data[4]);  } else { sumatotal +=0; }
+      if (data[5]) { $("td", row).eq(5).addClass('text-nowrap'); $("td", row).eq(6).addClass('text-nowrap');  }
+      if (data[7]!="") {$("td", row).eq(7).addClass('text-right');}
+      //console.log(data);
+      if (quitar_formato_miles(data[7]) > 0) {
+        $("td", row).eq(7).css({ "background-color": "#ffc107", color: "black", });          
+      } else if (quitar_formato_miles(data[7]) == 0) {
+        $("td", row).eq(7).css({ "background-color": "#28a745", color: "white",  });
+      } else {
+        $("td", row).eq(7).css({ "background-color": "#ff5252", color: "white", });          
+      }
+      if (data[7]!="") {  var saldo=quitar_formato_miles(data[7]); }
+      totalsaldo += parseFloat(saldo);
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 
-  $.post("../ajax/pension.php?op=total_pension", { idproyecto: nube_idproyecto }, function (data, status) {
-
-    data = JSON.parse(data); //console.log(data);   
-    $("#total_pension").html(formato_miles(data.total));
-    $("#total_saldo").html(formato_miles(totalsaldo));
-  });
-  
+  $.post("../ajax/pension.php?op=total_pension", { idproyecto: nube_idproyecto }, function (e, status) {
+    e = JSON.parse(e); console.log(e);   
+    if (e.status == true) {
+      $("#total_pension").html(formato_miles(e.data.total));
+      $("#total_deposito").html(formato_miles(e.data.total_deposito));
+      if (es_numero(e.data.total) && es_numero(e.data.total_deposito) ) {
+        var saldo = e.data.total - e.data.total_deposito;
+        $("#total_saldo").html(`${formato_miles(saldo)}`);
+      } else {
+        $("#total_saldo").html(`0`);
+      }
+      
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );  
 }
 
 //Función ver detalles Detalles
@@ -882,47 +821,45 @@ function ver_detalle_x_servicio(idpension) {
 
   $("#modal-ver-detalle-semana").modal("show");
   tabla_detalle_s=$('#tabla-detalles-semanal').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/pension.php?op=ver_detalle_x_servicio&idpension='+idpension,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	ver_errores(e);
-        }
-      },
-      createdRow: function (row, data, ixdex) {
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass('text-center');
-        }
-
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', ],
+    ajax:{
+      url: '../ajax/pension.php?op=ver_detalle_x_servicio&idpension='+idpension,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
-
 }
 
 //mostrar
 function mostrar_pension(idpension) {
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
 
   limpiar_pension();
   var array_datosselect=[];
@@ -932,39 +869,40 @@ function mostrar_pension(idpension) {
 
     e = JSON.parse(e); console.log(e);   
 
-      $("#proveedor").val(e.idproveedor).trigger("change"); 
-      $("#idproyecto_p").val(e.idproyecto);
-      $("#idpension").val(e.idpension);
-      $("#descripcion_pension").val(e.descripcion);
+    $("#proveedor").val(e.idproveedor).trigger("change"); 
+    $("#idproyecto_p").val(e.idproyecto);
+    $("#idpension").val(e.idpension);
+    $("#descripcion_pension").val(e.descripcion);
 
-      e.servicio_pension['data'].forEach( (value, item )=> {
+    e.servicio_pension['data'].forEach( (value, item )=> {
 
-        console.log(value.precio, value.nombre_servicio);
-        if (value.nombre_servicio=="Desayuno") {
-          $("#p_desayuno").val(value.precio);
-          array_datosselect.push(value.nombre_servicio);
-        }
+      console.log(value.precio, value.nombre_servicio);
+      if (value.nombre_servicio=="Desayuno") {
+        $("#p_desayuno").val(value.precio);
+        array_datosselect.push(value.nombre_servicio);
+      }
 
-        if (value.nombre_servicio=="Almuerzo") {  
-          $("#p_almuerzo").val(value.precio);
-          array_datosselect.push(value.nombre_servicio);
-        }
+      if (value.nombre_servicio=="Almuerzo") {  
+        $("#p_almuerzo").val(value.precio);
+        array_datosselect.push(value.nombre_servicio);
+      }
 
-        if (value.nombre_servicio=="Cena") {     
-          $("#p_cena").val(value.precio);
-          array_datosselect.push(value.nombre_servicio);
-        }
+      if (value.nombre_servicio=="Cena") {     
+        $("#p_cena").val(value.precio);
+        array_datosselect.push(value.nombre_servicio);
+      }
 
-      });
+    });
 
-      $("#servicio_p").val(array_datosselect).trigger("change");
+    $("#servicio_p").val(array_datosselect).trigger("change");
 
- 
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
 
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
-//--------------------Comprobantes----------------------------------
+// .....:::::::::::::::::::::::::::::::::::::  C O M P R O B A N T E    P E N S I O N  :::::::::::::::::::::::::::::::::::::::..
 function ocultar() {
 
   $("#regresar_aprincipal").show();
@@ -987,19 +925,7 @@ function regresar() {
   $("#guardar").hide();
   $("#guardar_pension").show();
 }
-// abrimos el navegador de archivos
-$("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
-// Eliminamos el doc 1
-function doc1_eliminar() {
-
-	$("#doc1").val("");
-
-	$("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-	$("#doc1_nombre").html("");
-}
 
 //Función limpiar-factura
 function limpiar_comprobante() {
@@ -1031,6 +957,7 @@ function limpiar_comprobante() {
     $(".is-invalid").removeClass("error is-invalid");
 
 }
+
 //Guardar y editar
 function guardaryeditar_factura(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -1042,33 +969,50 @@ function guardaryeditar_factura(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (e) {
       try {
-        e = JSON.parse(e); 
-                      
+        e = JSON.parse(e);                       
         if (e.status ==true) {
-
-          toastr.success('servicio registrado correctamente')				 
-
+          toastr.success('servicio registrado correctamente');
           tabla.ajax.reload(null, false);
-
           $("#modal-agregar-comprobante").modal("hide");
-        listar_comprobantes(localStorage.getItem('idpension_f_nube'));
-        total_monto(localStorage.getItem('idpension_f_nube'));
-        listar( localStorage.getItem('nube_idproyecto'));
+          listar_comprobantes(localStorage.getItem('idpension_f_nube'));
+          total_monto(localStorage.getItem('idpension_f_nube'));
+          tbla_principal( localStorage.getItem('nube_idproyecto'));
           limpiar_comprobante();
         }else{
-
-          toastr.error(datos)
-        }
-        
+          ver_errores(e);
+        }        
       } catch (err) {
-
         console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
       }
-
+      $("#guardar_registro_comprobaante").html('Guardar Cambios').removeClass('disabled');
     },
+    xhr: function () {
+
+      var xhr = new window.XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", function (evt) {
+
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_comprobante_pension").css({"width": percentComplete+'%'});
+          $("#barra_progress_comprobante_pension").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_comprobaante").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_comprobante_pension").css({ width: "0%",  });
+      $("#barra_progress_comprobante_pension").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_comprobante_pension").css({ width: "0%", });
+      $("#barra_progress_comprobante_pension").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -1079,44 +1023,47 @@ function listar_comprobantes(idpension) {
   $("#idpension_f").val(idpension);
   
   tabla=$('#t-comprobantes').dataTable({  
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-        url: '../ajax/pension.php?op=listar_comprobantes&idpension='+idpension,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);		ver_errores(e);
-        }
-      },
-      createdRow: function (row, data, ixdex) {
-        // columna: #
-        if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
-        // columna: sub total
-        if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
-        // columna: igv
-        if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
-        // columna: total
-        if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
-
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
+    ajax:{
+      url: '../ajax/pension.php?op=listar_comprobantes&idpension='+idpension,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);		ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
+      // columna: sub total
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
+      // columna: igv
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
+      // columna: total
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
           _: '%d líneas copiadas',
           1: '1 línea copiada'
         }
-      }
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+    ],
   }).DataTable();
   total_monto(localStorage.getItem('idpension_f_nube'));
 }
@@ -1126,57 +1073,40 @@ function comprob_factura() {
   var monto = parseFloat($('#monto').val());
 
   if ($("#tipo_comprobante").select2("val")=="" || $("#tipo_comprobante").select2("val")==null) {
-
     $("#subtotal").val("");
     $("#igv").val(""); 
     $("#val_igv").val("0"); 
     $("#tipo_gravada").val("NO GRAVADA"); 
     $("#val_igv").prop("readonly",true);
   }else{
-
     if ($("#tipo_comprobante").select2("val") =="Factura") {
-
       $("#tipo_gravada").val("GRAVADA");
-
       calculandototales_fact();
-
     } else {
-
       if ($("#tipo_comprobante").select2("val")!="Factura") {
-
         $("#subtotal").val(monto.toFixed(2));
         $("#igv").val("0.00");
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA"); 
         $("#val_igv").prop("readonly",true);
       } else {
-
         $("#subtotal").val('0.00');
         $("#igv").val("0.00");
         $("#val_igv").val("0"); 
         $("#tipo_gravada").val("NO GRAVADA"); 
         $("#val_igv").prop("readonly",true);
       }
-
     }
-
-  }
-  
+  }  
 }
 
 function validando_igv() {
-
   if ($("#tipo_comprobante").select2("val") == "Factura") {
-
     $("#val_igv").prop("readonly",false);
     $("#val_igv").val(0.18); 
-
   }else {
-
     $("#val_igv").val(0); 
-
-  }
-  
+  }  
 }
 
 function calculandototales_fact() {
@@ -1186,22 +1116,17 @@ function calculandototales_fact() {
   var val_igv = $('#val_igv').val();
 
   if (precio_parcial == null || precio_parcial == "") {
-
     $("#subtotal").val(0);
     $("#igv").val(0); 
-
   } else {
  
     var subtotal = 0;
     var igv = 0;
 
     if (val_igv == null || val_igv == "") {
-
       $("#subtotal").val(parseFloat(precio_parcial));
       $("#igv").val(0);
-
     }else{
-
       $("subtotal").val("");
       $("#igv").val("");
 
@@ -1210,11 +1135,8 @@ function calculandototales_fact() {
 
       $("#subtotal").val(parseFloat(subtotal).toFixed(2));
       $("#igv").val(parseFloat(igv).toFixed(2));
-
     }
-
-  }  
-
+  }
 }
 
 function quitar_igv_del_precio(precio , igv, tipo ) {
@@ -1223,7 +1145,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 
   switch (tipo) {
     case 'decimal':
-
       if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
         precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
       }else{
@@ -1232,7 +1153,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
     break;
 
     case 'entero':
-
       if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
         precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
       }else{
@@ -1248,7 +1168,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   
   return precio_sin_igv; 
 }
-
 
 //mostrar
 function mostrar_comprobante(idfactura_pension ) {
@@ -1291,25 +1210,9 @@ function mostrar_comprobante(idfactura_pension ) {
         $("#doc_old_1").val(e.data.comprobante); 
 
         $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
-        
         // cargamos la imagen adecuada par el archivo
-        if ( extrae_extencion(e.data.comprobante) == "pdf" ) {
-
-          $("#doc1_ver").html('<iframe src="../dist/docs/pension/comprobante/'+e.data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-        }else{
-          if (
-            extrae_extencion(e.data.comprobante) == "jpeg" || extrae_extencion(e.data.comprobante) == "jpg" || extrae_extencion(e.data.comprobante) == "jpe" ||
-            extrae_extencion(e.data.comprobante) == "jfif" || extrae_extencion(e.data.comprobante) == "gif" || extrae_extencion(e.data.comprobante) == "png" ||
-            extrae_extencion(e.data.comprobante) == "tiff" || extrae_extencion(e.data.comprobante) == "tif" || extrae_extencion(e.data.comprobante) == "webp" ||
-            extrae_extencion(e.data.comprobante) == "bmp" || extrae_extencion(e.data.comprobante) == "svg" ) {
-
-            $("#doc1_ver").html(`<img src="../dist/docs/pension/comprobante/${e.data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-            
-          } else {
-            $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-          }        
-        }      
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'pension', 'comprobante', '100%', '210' ));       
+             
       }
       $("#cargando-3-fomulario").show();
       $("#cargando-4-fomulario").hide();
@@ -1317,52 +1220,26 @@ function mostrar_comprobante(idfactura_pension ) {
     } else {
       ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
+
 //Función para desactivar registros
-function eliminar_comprobante(idfactura_pension) {
+function eliminar_comprobante(idfactura_pension, nombre) {
 
-  Swal.fire({
-
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      //Desactivar
-      $.post("../ajax/pension.php?op=desactivar_comprobante", {idfactura_pension:idfactura_pension}, function (e) {
-
-        Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
-        total_monto(localStorage.getItem('idpension_f_nube'));
-        tabla.ajax.reload(null, false);
-        listar( localStorage.getItem('nube_idproyecto'));
-      });  
-
-
-    }else if (result.isDenied) {
-
-      // Eliminar
-      $.post("../ajax/pension.php?op=eliminar_comprobante", {idfactura_pension:idfactura_pension}, function (e) {
-
-        Swal.fire("Eliminado!", "Comprobante a ha sido Eliminado.", "success");
-        total_monto(localStorage.getItem('idpension_f_nube'));
-        tabla.ajax.reload(null, false);
-        listar( localStorage.getItem('nube_idproyecto'));
-      }); 
-
-    }
-
-  });
+  crud_eliminar_papelera(
+    "../ajax/pension.php?op=desactivar_comprobante",
+    "../ajax/pension.php?op=eliminar_comprobante", 
+    idfactura_pension, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ total_monto(localStorage.getItem('idpension_f_nube')); tabla.ajax.reload(null, false); },
+    function(){ tbla_principal( localStorage.getItem('nube_idproyecto')); },
+    false, 
+    false,
+    false
+  );
 
 }
 
@@ -1382,18 +1259,16 @@ function activar_comprobante(idfactura_pension ) {
         Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
         total_monto(localStorage.getItem('idpension_f_nube'));
         tabla.ajax.reload(null, false);
-        listar(localStorage.getItem('nube_idproyecto'));
-      });
-      
+        tbla_principal(localStorage.getItem('nube_idproyecto'));
+      }).fail( function(e) { ver_errores(e); } );      
     }
-  }); 
- 
+  });  
 }
 
 function ver_modal_comprobante(comprobante){
   var comprobante = comprobante;
-var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-//console.log(extencion);
+  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+  //console.log(extencion);
   $('#ver_fact_pdf').html('');
   $('#img-factura').attr("src", "");
   $('#modal-ver-comprobante').modal("show");
@@ -1402,9 +1277,7 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
     $('#ver_fact_pdf').hide();
     $('#img-factura').show();
     $('#img-factura').attr("src", "../dist/docs/pension/comprobante/" +comprobante);
-
     $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
-
   }else{
     $('#img-factura').hide();
     $('#ver_fact_pdf').show();
@@ -1416,34 +1289,21 @@ var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
 //-total Pagos
 function total_monto(idpension) {
-  $.post("../ajax/pension.php?op=total_monto", { idpension:idpension }, function (data, status) {
-    $("#monto_total_f").html("00.0");
-    data = JSON.parse(data); 
-   console.log(data);
-   num= data.total;
-    if (!num || num == 'NaN') return '0.00';
-    if (num == 'Infinity') return '&#x221e;';
-    num = num.toString().replace(/\$|\,/g, '');
-    if (isNaN(num))
-        num = "0";
-    sign = (num == (num = Math.abs(num)));
-    num = Math.floor(num * 100 + 0.50000000001);
-    cents = num % 100;
-    num = Math.floor(num / 100).toString();
-    if (cents < 10)
-        cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
-        num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3));
-        total_mont_f= (((sign) ? '' : '-') + num + '.' + cents);
-
-    $("#monto_total_f").html('S/ '+total_mont_f);
-
-  });
+  $("#monto_total_f").html("00.0");
+  $.post("../ajax/pension.php?op=total_monto", { idpension:idpension }, function (e, status) {    
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) {
+      $("#monto_total_f").html('S/ '+ formato_miles(e.data.total));
+    } else {
+      ver_errores(e);
+    } 
+  }).fail( function(e) { ver_errores(e); } );
 }
 
-
 init();
-//pension
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
+
 $(function () {
 
   // Aplicando la validacion del select cada vez que cambie
@@ -1460,38 +1320,31 @@ $(function () {
       'servicio_p[]':{required: true}
     },
     messages: {
-      //====================
       proveedor: {
         required: "Campo requerido", 
       },
       'servicio_p[]': {
         required: "Campo requerido", 
       },
-
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-     
+      $(element).removeClass("is-invalid").addClass("is-valid");     
     },
     submitHandler: function (e) {
-      guardaryeditar_pension(e)
-
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardaryeditar_pension(e);
     }
 
   });
@@ -1499,50 +1352,41 @@ $(function () {
   $("#form-agregar-comprobante").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      forma_pago:{required: true},
+      forma_pago:     {required: true},
       tipo_comprobante:{required: true},
-      monto:{required: true},
-      fecha_emision:{required: true},
-      descripcion:{minlength: 1},
-      foto2_i:{required: true},
-      val_igv: { required: true, number: true, min:0, max:1 },
-      // terms: { required: true },
+      monto:          {required: true},
+      fecha_emision:  {required: true},
+      descripcion:    {minlength: 1},
+      foto2_i:        {required: true},
+      val_igv:        { required: true, number: true, min:0, max:1 },
     },
     messages: {
-      //====================
-      forma_pago: { required: "Seleccionar una forma de pago", },
-      tipo_comprobante: { required: "Seleccionar un tipo de comprobante", },
-      monto: { required: "Por favor ingresar el monto", },
-      fecha_emision: { required: "Por favor ingresar la fecha de emisión", },
-      val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
+      forma_pago:     { required: "Seleccionar una forma de pago", },
+      tipo_comprobante:{ required: "Seleccionar un tipo de comprobante", },
+      monto:          { required: "Por favor ingresar el monto", },
+      fecha_emision:  { required: "Por favor ingresar la fecha de emisión", },
+      val_igv:        { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
-      $(element).removeClass("is-invalid").addClass("is-valid");
-     
+      $(element).removeClass("is-invalid").addClass("is-valid");     
     },
 
     submitHandler: function (e) {
-      guardaryeditar_factura(e)
-      
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardaryeditar_factura(e);      
     }
-
-
   });
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
@@ -1553,6 +1397,9 @@ $(function () {
   $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
 });
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
 
 function pintar_boton_selecionado(i) {
   localStorage.setItem('i', i); //enviamos el ID-BOTON al localStorage
@@ -1573,10 +1420,20 @@ function pintar_boton_selecionado(i) {
     $("#boton-"+i).addClass('click-boton');
   }
 }
+
 //despintar_btn_select
 function despintar_btn_select() {  
   if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
 }
 
+function editarbreak() {
+  // ocultamos los span
+  $(".span-visible").hide();
+  // mostramos los inputs
+  $(".input-visible").show();
+  $(".textarea-visible").attr("readonly", false);
 
+  $("#card-editar").hide();
+  $("#card-guardar").show();  
+}
 

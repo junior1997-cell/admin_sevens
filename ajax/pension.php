@@ -21,6 +21,8 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
       //============Comprobantes========================
       $idpension_f         = isset($_POST["idpension_f"])? limpiarCadena($_POST["idpension_f"]):"";
       $idfactura_pension   = isset($_POST["idfactura_pension"])? limpiarCadena($_POST["idfactura_pension"]):"";
@@ -144,29 +146,23 @@
               $subtotal=round($reg->subtotal, 2);
               $igv=round($reg->igv, 2);
               $monto=round($reg->monto, 2 );
-              if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
-              empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
-              $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
+              
+              $comprobante= empty($reg->comprobante)?'<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':'<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
+               
               $data[]=array(
                 "0"=>$cont++,
                 "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_comprobante('.$reg->idfactura_pension  .')"><i class="fas fa-skull-crossbones"></i></button>':
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_comprobante('.$reg->idfactura_pension  .', \''. $reg->tipo_comprobante .' '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'\')"><i class="fas fa-skull-crossbones"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-check"></i></button>',
-                
-                "2"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago, 
-                "3"=>'<div class="user-block">
-                      <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg->tipo_comprobante.'</p> </span>
-                      <span class="description" style="margin-left: 0px !important;">N° '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'</span>         
-                    </div>',			
-                "4"=>date("d/m/Y", strtotime($reg->fecha_emision)),
+                ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->idfactura_pension  .')"><i class="fa fa-check"></i></button>',                
+                "2"=>$reg->fecha_emision,
+                "3"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago, 
+                "4"=>'<span class="text-nowrap"><b class="text-primary">'.$reg->tipo_comprobante.'</b> - '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'</span>',
                 "5"=>'S/ '.number_format($subtotal, 2, '.', ','), 
                 "6"=>'S/ '.number_format($igv, 2, '.', ','),
                 "7"=>'S/ '.number_format($monto, 2, '.', ','),
                 "8"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "9"=>$comprobante,
-                "10"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>'.$toltip:
-                '<span class="text-center badge badge-danger">Desactivado</span>'.$toltip
+                "9"=>$comprobante . $toltip
                 );
 
             }
@@ -188,15 +184,15 @@
 
         case 'desactivar_comprobante':
 
-          $rspta=$pension->desactivar_comprobante($idfactura_pension);
+          $rspta=$pension->desactivar_comprobante($_GET["id_tabla"]);
           echo json_encode($rspta,true);
 		
         break;
       
         case 'activar_comprobante':
 
-          $rspta=$pension->activar_comprobante($idfactura_pension );
-            echo $rspta ? "Comprobante Restablecido" : "Comprobante no se pudo Restablecido";
+          $rspta=$pension->activar_comprobante($_GET["id_tabla"]);
+          echo json_encode($rspta,true);
 	
         break;
 
@@ -239,9 +235,9 @@
 
         break;
 
-        case 'listar_pensiones':
+        case 'tabla_principal':
 
-          $rspta=$pension->listar_pensiones($_GET['nube_idproyecto']);
+          $rspta=$pension->tabla_principal($_GET['nube_idproyecto']);
           //Vamos a declarar un array
           $data= Array();
           $total=0;
@@ -268,28 +264,17 @@
                 $nombre=" Pagar";
                 $icon="dollar-sign";
                 $cc="danger";
-
-              }else{
-                                    
-                if ($saldo<$total && $saldo>"0" ) {
-
-                  $c="warning";
-                  $nombre=" Pagar";
-                  $icon="dollar-sign";
-                  $cc="warning";
-
-                  } else {
-                      if ($saldo<="0" || $saldo=="0") {
-
-                          $c="success";
-                          $nombre=" Ver";
-                          $info="info";
-                          $icon="eye";
-                          $cc="success";
-                      }else{
-                      }
-                      //$estado = '<span class="text-center badge badge-success">Terminado</span>';
-                  }  
+              }else if ($saldo<$total && $saldo>"0" ) {
+                $c="warning";
+                $nombre=" Pagar";
+                $icon="dollar-sign";
+                $cc="warning";
+              } else if ($saldo<="0" || $saldo=="0") {               
+                $c="success";
+                $nombre=" Ver";
+                $info="info";
+                $icon="eye";
+                $cc="success"; 
               }
 
               $data[]=array(

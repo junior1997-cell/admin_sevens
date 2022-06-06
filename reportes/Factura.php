@@ -345,11 +345,13 @@ class PDF_Invoice extends FPDF
     $colX = $r1;
     $colonnes = $tab;
     foreach ($tab as $key => $value) {
+      $this->SetFont("Arial", "B", 9);
       $this->SetXY($colX, $y1 + 2);
       $this->Cell($value, 1, $key, 0, 0, "C");
       $colX += $value;
-      $this->Line($colX, $y1, $colX, $y1 + $y2);
+      $this->Line($colX, $y1, $colX, $y1 + $y2);      
     }
+    
     // while (list($lib, $pos) = each($tab)) {
     //   $this->SetXY($colX, $y1 + 2);
     //   $this->Cell($pos, 1, $lib, 0, 0, "C");
@@ -415,6 +417,7 @@ class PDF_Invoice extends FPDF
 
     reset($colonnes);
     foreach ($colonnes as $key => $value) {
+      $this->SetFont("Arial", "", 9);
       $longCell = $value - 2;
       $texte = $tab[$key];
       $length = $this->GetStringWidth($texte);
@@ -425,6 +428,7 @@ class PDF_Invoice extends FPDF
       if ($maxSize < $this->GetY()) {
         $maxSize = $this->GetY();
       }
+      
       $ordonnee += $value;
     }
     // while (list($lib, $pos) = each($colonnes)) {

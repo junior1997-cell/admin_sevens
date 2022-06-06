@@ -60,7 +60,7 @@ if (!isset($_SESSION["nombre"])) {
   $pdf->addReference( utf8_decode( decodeCadenaHtml((empty($rspta['data']['descripcion'])) ? '- - -' :$rspta['data']['descripcion']) ));
 
   //Establecemos las columnas que va a tener la sección donde mostramos los detalles de la venta
-  $cols = [ "#" => 8, "PRODUCTO" => 70, "UM" => 10, "CANT." => 14, "V/U" => 18, "IGV" => 15, "P.U." => 20, "DSCT." => 15, "SUBTOTAL" => 20];
+  $cols = [ "#" => 8, "PRODUCTO" => 70, "UM" => 13, "CANT." => 14, "V/U" => 18, "IGV" => 14, "P.U." => 20, "DSCT." => 13, "SUBTOTAL" => 20];
   $pdf->addCols($cols);
   $cols = [ "#" => "C", "PRODUCTO" => "L", "UM" => "C",  "CANT." => "C", "V/U" => "R", "IGV" => "R","P.U." => "R", "DSCT." => "R", "SUBTOTAL" => "R"];
   $pdf->addLineFormat($cols);
@@ -80,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
   require_once "Letras.php";
   $V = new EnLetras();
   $num_total = floatval($rspta['data']['total']);
-  $con_letra = strtoupper($V->ValorEnLetras(503, "NUEVOS SOLES"));
+  $con_letra = strtoupper($V->ValorEnLetras(503, "SOLES"));
   $pdf->addCadreTVAs("---" . $con_letra);
 
   //Mostramos el impuesto

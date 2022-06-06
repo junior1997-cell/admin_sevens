@@ -119,6 +119,12 @@ function formato_miles(num) {
   return (sign ? "" : "-") + num + "." + cents;
 }
 
+function es_numero(num) {
+  if (!num || num == "NaN") return false;
+  if (num == "Infinity") return false;
+  if (isNaN(num)){ return false } else { return true };
+}
+
 // Quitar formato de miles
 function quitar_formato_miles(num) {
   let inVal = 0;

@@ -558,6 +558,8 @@ $("#my-switch_igv").on("click ", function (e) {
 
 init();
 
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
+
 $(function () {   
 
   $('#unid_medida').on('change', function() { $(this).trigger('blur'); });
