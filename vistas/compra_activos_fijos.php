@@ -967,7 +967,7 @@
                                 <!-- Nombre -->
                                 <div class="col-12 col-sm-6 col-md-12 col-lg-8">
                                   <div class="form-group">
-                                    <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
+                                    <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
                                     <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
                                   </div>
                                 </div>
@@ -975,7 +975,7 @@
                                 <!-- Categoria -->
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
-                                    <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">*</sup></label>
+                                    <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                     <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
                                     </select>
                                   </div>
@@ -1008,7 +1008,7 @@
                                 <!-- Color -->
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                   <div class="form-group">
-                                    <label for="color_p">Color <sup class="text-danger">*</sup></label>
+                                    <label for="color_p">Color <sup class="text-danger">(unico*)</sup></label>
                                     <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>
@@ -1016,7 +1016,7 @@
                                 <!-- Unnidad-->
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                   <div class="form-group">
-                                    <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">*</sup></label>
+                                    <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                     <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>

@@ -137,7 +137,7 @@
                               <!-- Nombre -->
                               <div class="col-12 col-sm-6 col-md-12 col-lg-8">
                                 <div class="form-group">
-                                  <label for="nombre">Nombre <sup class="text-danger">*</sup></label>
+                                  <label for="nombre">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del activo." />
                                 </div>
                               </div>
@@ -145,7 +145,7 @@
                               <!-- Categoria -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="categoria_insumos_af">Clasificación</label>
+                                  <label for="categoria_insumos_af">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                   <select name="categoria_insumos_af" id="categoria_insumos_af" class="form-control select2" style="width: 100%;"> 
                                   </select>
                                 </div>
@@ -178,7 +178,7 @@
                               <!-- Color -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="color">Color</label>
+                                  <label for="color">Color <sup class="text-danger">(unico*)</sup></label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
@@ -186,7 +186,7 @@
                               <!-- Unnidad de medida-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                 <div class="form-group">
-                                  <label for="Unidad-medida">Unidad-medida</label>
+                                  <label for="Unidad-medida">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>

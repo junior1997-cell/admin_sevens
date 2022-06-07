@@ -139,7 +139,7 @@
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                                 <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">*</sup></label>
+                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
                                 </div>
                               </div>
@@ -171,7 +171,7 @@
                               <!-- Color -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="color">Color <sup class="text-danger">*</sup></label>
+                                  <label for="color">Color <sup class="text-danger">(unico*)</sup></label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
@@ -180,7 +180,7 @@
                               <!-- Unnidad de medida  -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="Unidad-medida">Unidad-medida <sup class="text-danger">*</sup></label>
+                                  <label for="Unidad-medida">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
