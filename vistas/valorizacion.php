@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Valorización</title>
+        <title>Valorización | Admin Sevens</title>
 
         <?php $title = "Valorización"; require 'head.php'; ?>
 
@@ -30,11 +30,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['valorizacion']==1){
-            require 'enmantenimiento.php';
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper" style="display: none !important;">
+            <div class="content-wrapper" >
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">

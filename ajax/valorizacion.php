@@ -158,7 +158,7 @@
               // Registramos docs en valorización
               $rspta=$valorizacion->insertar_valorizacion($idproyecto, $indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
               
-              echo $rspta ? "ok" : "No se pudieron registrar todos los datos del Documento";
+              echo json_encode($rspta, true) ;
               
             }else {
   
