@@ -172,15 +172,15 @@
                  
               </div>',
               
-              "2"=>$value['total_hn'].' / '. $value['total_he'],
-              "3"=>$value['sabatical'],              
-              "4"=>$value['banco'],              
-              "5"=>$value['cuenta_bancaria'],             
+              "2"=>$value['banco'],
+              "3"=>$value['cuenta_bancaria'],            
+              "4"=>$value['total_hn'].' / '. $value['total_he'],      
+              "5"=>$value['sabatical'],           
               "6"=>'S/ '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
               "7"=>'S/ '.  number_format($value['pago_quincenal'], 2, '.', ','),
               "8"=>'<div class="justify-content-between "> 
-                <button class="btn btn-info btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' )">
-                  <i class="far fa-eye"></i> Detalle
+                <button class="btn '.$btn_depositos.' btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' )">
+                  <i class="far fa-eye"></i> Pagar
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/ '.number_format($value['total_deposito'], 2, '.', ',').'</button>
               </div>',

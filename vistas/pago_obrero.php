@@ -96,13 +96,13 @@
                                 <tr> 
                                   <th class="text-center">#</th> 
                                   <th>Trabajdor</th>                              
-                                  <th class="text-center">Horas <br> Normal/Extra</th>
-                                  <th>Sabaticales</th>  
                                   <th>Banco</th>                                
-                                  <th>Cuenta</th>                               
+                                  <th>Cuenta</th>   
+                                  <th class="text-center">Horas <br> Normal/Extra</th>
+                                  <th>Sabaticales</th>                              
                                   <th>Sueldo Mensual</th>                                
                                   <th class="text-center" data-toggle="tooltip" data-original-title="Pagos que a estado acumulando con sus dias de asistencia.">Pago a <br> realizar</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Despositos que se ha estado enviando a trabajador.">Pago <br> realizado</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Despositos que se ha estado enviando a trabajador.">Pago <br> Acumulado</th>
                                   <th>Saldo</th>
                                   <th class="text-center" data-toggle="tooltip" data-original-title="Cantidad de semanas enviadas a pagar.">Cant <br> S/Q</th>
                                   <th>Fecha inicio</th>
@@ -116,11 +116,11 @@
                               <tfoot>
                                 <tr> 
                                   <th class="text-center text-gray">#</th>                                 
-                                  <th class="text-gray">Trabajdor</th>                                 
-                                  <th class="text-center text-gray">Horas Nrm/Extr</th>
-                                  <th>Sabaticales</th>                                
+                                  <th class="text-gray">Trabajdor</th>                                                              
                                   <th>Banco</th>                                
                                   <th>Cuenta</th>
+                                  <th class="text-center text-gray">Horas Nrm/Extr</th>
+                                  <th>Sabaticales</th>   
                                   <!-- <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>   -->                            
                                   <th class="text-center text-gray">Sueldo Mensual</th>                                
                                   <th class="text-right"><h5 class="pago_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
