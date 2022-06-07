@@ -129,6 +129,7 @@
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id hospedaje -->
                               <input type="hidden" name="idcomida_extra" id="idcomida_extra" />
+                              <input type="hidden" name="tipo_documento" id="tipo_documento" value="RUC"/>
 
                               <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
                               <div class="col-lg-6">
@@ -156,10 +157,10 @@
                               <!-- RUC style="display: none;"-->
                               <div class="col-lg-4 div_ruc" style="display: none;">
                                 <div class="form-group">
-                                  <label for="ruc">R.U.C</label>
+                                  <label for="num_documento">R.U.C</label>
                                   <div class="input-group">
-                                    <input type="number" name="ruc" class="form-control" id="ruc" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat();">
+                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec();">
                                       <span class="input-group-text" style="cursor: pointer;">
                                         <i class="fas fa-search text-primary" id="search"></i>
                                         <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
@@ -238,13 +239,22 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
                                   </div>
                                   <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comida_extra', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
                                   </div>
                                 </div>
                                 <div id="doc1_ver" class="text-center mt-4">
                                   <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
                                 </div>
                                 <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
                               </div>
                             </div>
 

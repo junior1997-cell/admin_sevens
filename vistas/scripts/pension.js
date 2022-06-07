@@ -1308,6 +1308,7 @@ $(function () {
 
   // Aplicando la validacion del select cada vez que cambie
   $("#proveedor").on("change", function () { $(this).trigger("blur"); });
+  $("#servicio_p").on("change", function () { $(this).trigger("blur"); });
 
   // Aplicando la validacion del select cada vez que cambie
   $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
@@ -1391,6 +1392,7 @@ $(function () {
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#proveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#servicio_p").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });

@@ -220,17 +220,12 @@ function guardaryeditar(e) {
       $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
-
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener("progress", function (evt) {
-
         if (evt.lengthComputable) {
-
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
           $("#barra_progress").css({"width": percentComplete+'%'});
-
           $("#barra_progress").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
@@ -239,11 +234,11 @@ function guardaryeditar(e) {
     beforeSend: function () {
       $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
-      $("#barra_progress").text("0%");
+      $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
     },
     complete: function () {
       $("#barra_progress").css({ width: "0%", });
-      $("#barra_progress").text("0%");
+      $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });

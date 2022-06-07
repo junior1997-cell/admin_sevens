@@ -12,6 +12,10 @@
     require_once "../modelos/Comidas_extras.php";
 
     $comidas_extras = new Comidas_extras();
+
+    date_default_timezone_set('America/Lima');
+    $date_now = date("d-m-Y h.i.s A");
+
     //transporte.js $idproyecto,$idcomida_extra,$fecha,$precio_parcial,$descripcion //$tipo_comprobante,$nro_comprobante,$subtotal,$igv
     $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
     $idcomida_extra = isset($_POST["idcomida_extra"]) ? limpiarCadena($_POST["idcomida_extra"]) : "";
@@ -27,7 +31,7 @@
     $val_igv = isset($_POST["val_igv"]) ? limpiarCadena($_POST["val_igv"]) : "";
     $tipo_gravada = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";
 
-    $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
+    $ruc = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
     $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
     $direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
 
@@ -48,7 +52,7 @@
               $ext1 = explode(".", $_FILES["doc1"]["name"]);
               $flat_ficha1 = true;
 
-              $comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+              $comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
               move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/comida_extra/comprobante/" . $comprobante);
             }
