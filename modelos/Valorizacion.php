@@ -71,22 +71,20 @@ class Valorizacion
 		FROM valorizacion as v
 		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_inicio BETWEEN '$f1' AND '$f2';";
     $data1 = ejecutarConsultaArray($sql);
-
     if ($data1['status'] == false) { return $data1; }
 
     $sql2 = "SELECT p.idproyecto, p.doc1_contrato_obra AS doc1, p.doc2_entrega_terreno AS doc81, p.doc3_inicio_obra AS doc82, p.doc7_cronograma_obra_valorizad AS doc4, p.doc8_certificado_habilidad_ing_residnt AS doc83 
 		FROM proyecto as p 
 		WHERE p.idproyecto = '$nube_idproyect';";
     $data2 = ejecutarConsultaSimpleFila($sql2);
-
     if ($data2['status'] == false) { return $data2; }
 
     $results = [
       "status" => true,
       "message" => 'Todo oka',
       "data" => [
-        "data1" => $data1,
-        "data2" => $data2,
+        "data1" => $data1['data'],
+        "data2" => $data2['data'],
         "count_data1" => count($data1),
       ],
     ];
@@ -97,6 +95,7 @@ class Valorizacion
   public function tabla_principal($nube_idproyecto)
   {
     $data = [];
+    $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
     $sql1 = "SELECT * FROM valorizacion WHERE estado=1 AND estado_delete=1 AND idproyecto='$nube_idproyecto' ORDER BY  numero_q_s DESC, indice ASC";
     $valorizacion = ejecutarConsultaArray($sql1);
@@ -105,6 +104,7 @@ class Valorizacion
 
     if (!empty($valorizacion['data'])) {
       foreach ($valorizacion['data'] as $key => $value1) {
+        
         $data[] = [
           'nombre_tabla' => 'valorizacion',
           'idtabla' => $value1['idvalorizacion'],
@@ -219,6 +219,32 @@ class Valorizacion
 
     return ejecutarConsulta($sql);
   }
+}
+
+function validar_url( $host, $ruta, $file )  {
+  
+  $armar_ruta = $host . $ruta . $file;
+
+  if (empty($armar_ruta)) { return false; }
+
+  // get_headers() realiza una petición GET por defecto,
+  // cambiar el método predeterminadao a HEAD
+  // Ver http://php.net/manual/es/function.get-headers.php
+  stream_context_set_default([
+    'http' => [
+      'method' => 'HEAD',
+    ],
+  ]);
+  $headers = @get_headers($armar_ruta);
+  sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
+
+  // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
+  $accepted_response = [200, 301, 302];
+  if (in_array($httpcode, $accepted_response)) {
+    return true;
+  } else {
+    return false;
+  } 
 }
 
 ?>

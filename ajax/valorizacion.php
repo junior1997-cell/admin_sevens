@@ -22,6 +22,8 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';   
+
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";
       $indice	        = isset($_POST["indice"])? limpiarCadena($_POST["indice"]):"";
@@ -251,17 +253,17 @@
   
               $parametros_ver_doc='\'' . $value['doc_valorizacion'] .'\', \'' . $value['indice'] .'\', \'' . $value['nombre'] .'\', \'' . $value['numero_q_s'] .'\'';
   
-              $btn_tipo = (empty($value['doc_valorizacion'])) ? 'btn-outline-info' : 'btn-info'; 
+              $btn_tipo = (empty($value['doc_valorizacion']) ? 'btn-outline-info' : 'btn-info'); 
               
               $data[]=array(
                 "0"=> $cont++,
-                "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info_editar.')"><i class="fas fa-pencil-alt"></i></button>'.
+                "1"=>'<button class="btn btn-warning btn-sm" onclick="editar('.$info_editar.')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
                   ($value['numero_q_s']=='General'? ' <button class="btn btn-danger btn-sm disabled"><i class="fas fa-skull-crossbones"></i></button>': 
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info_eliminar.')"><i class="fas fa-skull-crossbones"></i></button>'),
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$info_eliminar.')" data-toggle="tooltip" data-original-title="Eliminar"><i class="fas fa-skull-crossbones"></i></button>'),
                 "2"=>'<span class="text-bold">Valorización Nº '. $value['numero_q_s'] .'</span>',  
                 "3"=>'<span class="text-bold">'.$value['indice'].' '. $value['nombre'] .'</span>',  
                 "4"=>'<span class="text-primary text-bold">'. $value['fecha_inicio'] .' - ' . $value['fecha_fin'] .'</span>',  
-                "5"=>'<center><button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante('.$parametros_ver_doc.')"><i class="fas fa-file-invoice fa-lg"></i> </button> </center>',       
+                "5"=>'<center><button class="btn '.$btn_tipo.' btn-sm" onclick="modal_comprobante('.$parametros_ver_doc.')" data-toggle="tooltip" data-original-title="Ver doc"><i class="fas fa-file-invoice fa-lg"></i> </button> </center>'.$toltip,       
               );
             }
             $results = array(

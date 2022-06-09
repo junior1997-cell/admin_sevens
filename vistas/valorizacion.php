@@ -151,7 +151,19 @@
                               <div class="tab-content" id="tabs-tabContent">
                                 <!-- Resumen de documentos subidos -->
                                 <div class="tab-pane fade show active" id="tabs-resumen" role="tabpanel" aria-labelledby="tabs-resumen-tab">
-                                  <!-- aqui va el resumen -->
+                                  <div class="info-box bg-warning">
+                                    <span class="info-box-icon"><i class="far fa-bookmark"></i></span>
+                                    <div class="info-box-content">
+                                      <span class="info-box-text">Documentos Subidos</span>
+                                      <span class="info-box-number total_docs_subidos">Total 0/18</span>
+                                      <div class="progress" style="height: 10px !important;"> 
+                                        <div class="progress-bar porcentaje_progress" ></div>
+                                      </div>
+                                      <span class="progress-description">
+                                        Tienes un <b class="porcentaje_numero"> 0%</b> de documentos subidos!!!
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
 
                                 <!-- 1. Copia del contrato -->
