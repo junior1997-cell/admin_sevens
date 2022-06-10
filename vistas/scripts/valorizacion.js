@@ -234,7 +234,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
   tabla_principal = $('#tabla-principal').dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -305,7 +305,7 @@ function modal_comprobante(doc_valorizacion, indice, nombre, numero_q_s,) {
             <i class="fas fa-expand"></i> Ver completo
           </a>
         </div>
-        <div class="col-lg-12 "> ${tipo_doc} </div>`
+        <div class="col-lg-12 text-center"> ${tipo_doc} </div>`
       );  
     } else {
       $('#ver-documento').html(
@@ -409,6 +409,9 @@ $(function () {
 
 // captura las fechas de quincenas y trae los datos
 function fecha_quincena(fecha_i, fecha_f, i) {
+
+  $('.icon-resumen-cargando').html('<i class="fas fa-spinner fa-pulse fa-md"></i>');
+
   var cont_valor = parseInt(i) + 1;
   //console.log(cont_valor);
   $("#nombre_titulo").html("Valorización " + cont_valor);
@@ -441,6 +444,37 @@ function fecha_quincena(fecha_i, fecha_f, i) {
     $("#boton-"+i).addClass('click-boton');
   }
 
+  // pintamos rojos los que no tienen docs
+  $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc');   
+  $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-5-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc');
+
+  $('#documento2').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-1').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-2').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-3').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-4').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento5-1').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento5-2').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('','5.2');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>` );
+  $('#documento5-2-1').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('','5.2.1');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento6').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento7').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-4').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-5').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-6').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-7').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+
+
   // traemos loa documentos por fechas de la quincena
   $.post("../ajax/valorizacion.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_i, fecha_f: fecha_f }, function (e, status) {
 
@@ -457,53 +491,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
       var format = hoy.toLocaleDateString().split("/"); //console.log(format);
       
       // validamos la data1
-      if (e.data.data1.length === 0) {
-        //console.log('data 1 no existe');
-        // pintamos rojos los que no tienen docs
-        if ($("#tabs-2-tab").hasClass("si-doc") == false || $("#tabs-2-tab").hasClass("si-doc") == true) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); }   
-        if ($("#tabs-3-1-tab").hasClass("si-doc") == false || $("#tabs-3-1-tab").hasClass("si-doc") == true ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-2-tab").hasClass("si-doc") == false || $("#tabs-3-2-tab").hasClass("si-doc") == true ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-3-tab").hasClass("si-doc") == false || $("#tabs-3-3-tab").hasClass("si-doc") == true ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-4-tab").hasClass("si-doc") == false || $("#tabs-3-4-tab").hasClass("si-doc") == true ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-5-1-tab").hasClass("si-doc") == false || $("#tabs-5-1-tab").hasClass("si-doc") == true ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-5-2-tab").hasClass("si-doc") == false || $("#tabs-5-2-tab").hasClass("si-doc") == true ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-6-tab").hasClass("si-doc") == false || $("#tabs-6-tab").hasClass("si-doc") == true ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-7-tab").hasClass("si-doc") == false || $("#tabs-7-tab").hasClass("si-doc") == true ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-4-tab").hasClass("si-doc") == false || $("#tabs-8-4-tab").hasClass("si-doc") == true ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-5-tab").hasClass("si-doc") == false || $("#tabs-8-5-tab").hasClass("si-doc") == true ) { $("#tabs-8-5-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-6-tab").hasClass("si-doc") == false || $("#tabs-8-6-tab").hasClass("si-doc") == true ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-7-tab").hasClass("si-doc") == false || $("#tabs-8-7-tab").hasClass("si-doc") == true ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); }
-        
-        $('#documento2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-3').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento5-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' );
-        $('#documento5-2-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-5').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-
-      } else {
-        // Borradmos las clases
-        $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc');    
-        $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-8-5-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); 
-        $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); 
+      if (e.data.data1.length === 0) { console.log('data 1 no existe'); } else {
+        //console.log('data 1 existe');
         
         $.each(e.data.data1, function (index, value) {
 
@@ -529,7 +518,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );  
@@ -568,7 +557,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );    
@@ -608,7 +597,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               ); 
@@ -648,7 +637,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );  
@@ -688,7 +677,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );  
@@ -728,7 +717,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );  
@@ -768,7 +757,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );
@@ -805,17 +794,17 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );    
 
               // mostramos el resumen
-              docs_total += 1;
-              porcent = (docs_total * 100 )/18;
-              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
-              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
-              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);               
+              // docs_total += 1;
+              // porcent = (docs_total * 100 )/18;
+              // $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              // $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              // $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);               
             } else {
               $('#documento5-2-1').html(
                 `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
@@ -846,7 +835,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
                 </div>`
               );   
@@ -885,7 +874,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
                 </div>`
               );   
@@ -925,7 +914,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
                 </div>`
               );  
@@ -965,7 +954,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                     <i class="fas fa-expand"></i> Ver completo
                   </a>
                 </div>
-                <div class="col-lg-12 ">
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
                 </div>`
               );   
@@ -990,22 +979,22 @@ function fecha_quincena(fecha_i, fecha_f, i) {
     
               // cargamos la imagen adecuada par el archivo
               $('#documento8-6').html(
-                `<div class="col-lg-4">}
-                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">}
-                    <i class="fas fa-file-upload"></i> Subir}
-                  </a>}
-                </div>}
-                <div class="col-lg-4">}
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
                   <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="8-6 Panel fotográfico -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
-                    <i class="fas fa-download"></i> Descargar}
-                  </a>}
-                </div>}
-                <div class="col-lg-4 mb-4">}
-                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >}
-                    <i class="fas fa-expand"></i> Ver completo}
-                  </a>}
-                </div>}
-                <div class="col-lg-12 ">}
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
                 </div>`
               );   
@@ -1024,28 +1013,29 @@ function fecha_quincena(fecha_i, fecha_f, i) {
           }
 
           if (value.indice == "8.7" ) {
+            //console.log('entramos');
             if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
               // pintamos rojos los que no tienen docs
               $("#tabs-8-7-tab").removeClass('no-doc').addClass("si-doc");     
     
               // cargamos la imagen adecuada par el archivo
               $('#documento8-7').html(
-                `<div class="col-lg-4">}
-                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">}
-                    <i class="fas fa-file-upload"></i> Subir}
-                  </a>}
-                </div>}
-                <div class="col-lg-4">}
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
                   <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="8-7 Copia del cuaderno de obra -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
-                    <i class="fas fa-download"></i> Descargar}
-                  </a>}
-                </div>}
-                <div class="col-lg-4 mb-4">}
-                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >}
-                    <i class="fas fa-expand"></i> Ver completo}
-                  </a>}
-                </div>}
-                <div class="col-lg-12 ">}
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
                   ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
                 </div>`
               );    
@@ -1057,29 +1047,16 @@ function fecha_quincena(fecha_i, fecha_f, i) {
               $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
               $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`); 
             } else {
+              //console.log('entramos 2');
               $('#documento8-7').html(
-                `<div class="col-lg-4"> ttttttttttttttttttttttttt <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
               );
             }               
           }
           
         });
 
-        // pintamos rojos los que no tienen docs
-        if ($("#tabs-2-tab").hasClass("si-doc") == false) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); } 
-        if ($("#tabs-3-1-tab").hasClass("si-doc") == false ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-3-2-tab").hasClass("si-doc") == false ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-3-3-tab").hasClass("si-doc") == false ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-3').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-3-4-tab").hasClass("si-doc") == false ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-5-1-tab").hasClass("si-doc") == false ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-5-2-tab").hasClass("si-doc") == false ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
-        if (respuestadoc5_2 == false) { $('#documento5-2-1').html('<div class="col-lg-4 "> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-6-tab").hasClass("si-doc") == false ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); $('#documento6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-7-tab").hasClass("si-doc") == false ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); $('#documento7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-4-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-5-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-5').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-6-tab").hasClass("si-doc") == false ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-7-tab").hasClass("si-doc") == false ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
+        if (respuestadoc5_2 == false) { $('#documento5-2-1').html(`<div class="col-lg-4 "> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta(${vacio}, '5.2.1');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>` ); }
       }
 
       // validamos la data2
@@ -1108,7 +1085,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 <i class="fas fa-expand"></i> Ver completo
               </a>
             </div>
-            <div class="col-lg-12 ">
+            <div class="col-lg-12 text-center">
               ${doc_view_extencion(e.data.data2.doc1, 'valorizacion', 'documento', '100%', '700')}
             </div>`
           );
@@ -1148,8 +1125,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 <i class="fas fa-expand"></i> Ver completo
               </a>
             </div>
-            <div class="col-lg-12 ">
-            ${doc_view_extencion(e.data.data2.doc4, 'valorizacion', 'documento', '100%', '100%')}
+            <div class="col-lg-12 text-center">
+            ${doc_view_extencion(e.data.data2.doc4, 'valorizacion', 'documento', '100%', '700')}
             </div>`
           );
 
@@ -1188,8 +1165,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 <i class="fas fa-expand"></i> Ver completo
               </a>
             </div>
-            <div class="col-lg-12 ">
-              ${doc_view_extencion(e.data.data2.doc81, 'valorizacion', 'documento', '100%', '100%')}
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc81, 'valorizacion', 'documento', '100%', '700')}
             </div>`
           );
 
@@ -1228,8 +1205,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 <i class="fas fa-expand"></i> Ver completo
               </a>
             </div>
-            <div class="col-lg-12 ">
-              ${doc_view_extencion(e.data.data2.doc82, 'valorizacion', 'documento', '100%', '100%')}
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc82, 'valorizacion', 'documento', '100%', '700')}
             </div>`
           );
 
@@ -1268,8 +1245,8 @@ function fecha_quincena(fecha_i, fecha_f, i) {
                 <i class="fas fa-expand"></i> Ver completo
               </a>
             </div>
-            <div class="col-lg-12 ">
-              ${doc_view_extencion(e.data.data2.doc83, 'valorizacion', 'documento', '100%', '100%')}
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc83, 'valorizacion', 'documento', '100%', '700')}
             </div>`
           ); 
 
@@ -1292,6 +1269,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
       ver_errores(e);
     }
     // $('#lista_quincenas').html('');
+    $('.icon-resumen-cargando').html('<i class="far fa-bookmark"></i>');
 
   }).fail( function(e) { ver_errores(e); } );
 }

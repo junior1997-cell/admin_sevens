@@ -110,31 +110,13 @@
                                 <a class="nav-link ml-4" id="tabs-8-2-tab" data-toggle="pill" href="#tabs-8-2" role="tab" aria-controls="tabs-8-2" aria-selected="false" onclick="add_data_form('8.2', 'Acta de inicio de obra');">
                                   8.2 Acta de inicio de obra
                                 </a>
-                                <a
-                                  class="nav-link ml-4"
-                                  id="tabs-8-3-tab"
-                                  data-toggle="pill"
-                                  href="#tabs-8-3"
-                                  role="tab"
-                                  aria-controls="tabs-8-3"
-                                  aria-selected="false"
-                                  onclick="add_data_form('8.3', 'Certificado de habilidad del ingeniero residente');"
-                                >
+                                <a class="nav-link ml-4" id="tabs-8-3-tab" data-toggle="pill" href="#tabs-8-3" role="tab" aria-controls="tabs-8-3" aria-selected="false" onclick="add_data_form('8.3', 'Certificado de habilidad del ingeniero residente');" >
                                   8.3 Certificado de habilidad del ingeniero residente
                                 </a>
                                 <a class="nav-link ml-4" id="tabs-8-4-tab" data-toggle="pill" href="#tabs-8-4" role="tab" aria-controls="tabs-8-4" aria-selected="false" onclick="add_data_form('8.4', 'Planilla del personal obrero');">
                                   8.4 Planilla del personal obrero
                                 </a>
-                                <a
-                                  class="nav-link ml-4"
-                                  id="tabs-8-5-tab"
-                                  data-toggle="pill"
-                                  href="#tabs-8-5"
-                                  role="tab"
-                                  aria-controls="tabs-8-5"
-                                  aria-selected="false"
-                                  onclick="add_data_form('8.5', 'Copia del seguro complementario contra todo riesgo');"
-                                >
+                                <a class="nav-link ml-4" id="tabs-8-5-tab" data-toggle="pill" href="#tabs-8-5" role="tab" aria-controls="tabs-8-5" aria-selected="false" onclick="add_data_form('8.5', 'Copia del seguro complementario contra todo riesgo');" >
                                   8.5 Copia del seguro complementario contra todo riesgo
                                 </a>
                                 <a class="nav-link ml-4" id="tabs-8-6-tab" data-toggle="pill" href="#tabs-8-6" role="tab" aria-controls="tabs-8-6" aria-selected="false" onclick="add_data_form('8.6', 'Panel fotográfico');">
@@ -152,7 +134,7 @@
                                 <!-- Resumen de documentos subidos -->
                                 <div class="tab-pane fade show active" id="tabs-resumen" role="tabpanel" aria-labelledby="tabs-resumen-tab">
                                   <div class="info-box bg-warning">
-                                    <span class="info-box-icon"><i class="far fa-bookmark"></i></span>
+                                    <span class="info-box-icon icon-resumen-cargando"><i class="fas fa-spinner fa-pulse fa-md"></i></span>
                                     <div class="info-box-content">
                                       <span class="info-box-text">Documentos Subidos</span>
                                       <span class="info-box-number total_docs_subidos">Total 0/18</span>
